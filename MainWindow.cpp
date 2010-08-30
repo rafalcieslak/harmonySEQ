@@ -15,8 +15,8 @@ MainWindow::MainWindow(){
     set_border_width(5);
     //set_default_size(300,500);
 
-    tempolabel.set_text("Tempo:");
-    mainnotelabel.set_text("Main Note:");
+    tempolabel.set_text(_("Tempo:");
+    mainnotelabel.set_text(_("Main Note:");
     add(vbox1);
     vbox1.pack_start(hbox_up);
     hbox_up.pack_start(mainnotelabel);

@@ -10,6 +10,7 @@
 #include "debug.h"
 #include "MainWindow.h"
 #include "Sequencer.h"
+#include "global.h"
 extern error* err;
 extern debug* dbg;
 extern MainWindow *mainwindow;
@@ -36,7 +37,7 @@ void MidiDriver::Open(){
 
     //catch for errors
     if (e < 0){
-        *err << "Failed to open sequencer.\n";
+        *err << _("Failed to open ALSA sequencer.\n");
         return;
     }
     
@@ -48,29 +49,22 @@ void MidiDriver::Open(){
 
     //catch errors
     if (output_port < 0){
-        *err << "Failed to create output port.\n";
+        *err << _("Failed to create output port.\n");
         return;
     }
-    //try to create the port we use for midi output2
-    output_port2 = snd_seq_create_simple_port(seq_handle,"harmonySEQ Dr00ms output",SND_SEQ_PORT_CAP_READ|SND_SEQ_PORT_CAP_SUBS_READ,SND_SEQ_PORT_TYPE_APPLICATION);
 
-    //catch errors
-    if (output_port2 < 0){
-        *err << "Failed to create output2 port.\n";
-        return;
-    }
     //try to create the port we use for midi output
     input_port = snd_seq_create_simple_port(seq_handle,"harmonySEQ input",SND_SEQ_PORT_CAP_WRITE|SND_SEQ_PORT_CAP_SUBS_WRITE,SND_SEQ_PORT_TYPE_APPLICATION);
 
     //catch errors
     if (input_port < 0){
-        *err << "Failed to create input port.\n";
+        *err << _("Failed to create input port.\n");
         return;
     }
 
     //if we get so far, seems everything gone well and we have now a working sequencer port.
     working = true;
-    *dbg << "Alsa midi driver init successfull.\n";
+    *dbg << _("Alsa midi driver init successfull.\n");
 }
 
 void MidiDriver::SendNoteEvent(int pitch, int volume){

@@ -14,5 +14,6 @@
 #define VERSION "0.4"
 #define ENDL "\n"
 #define TICKS_PER_QUARTERNOTE 128
+#define _(STRING) gettext(STRING)
 #endif	/* GLOBAL_H */
 

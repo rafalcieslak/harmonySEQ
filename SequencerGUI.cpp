@@ -15,7 +15,7 @@ SequencerWindow::SequencerWindow(Sequencer* prt){
 
     parent = prt;
 
-    set_title("Sequencer");
+    set_title(_("Sequencer"));
     set_border_width(0);
     set_position(Gtk::WIN_POS_CENTER);
     
@@ -43,7 +43,7 @@ SequencerWindow::SequencerWindow(Sequencer* prt){
     }
     low_hbox.pack_start(channellabel,Gtk::PACK_SHRINK);
     low_hbox.pack_start(channel_button, Gtk::PACK_SHRINK);
-    channellabel.set_text("MIDI channel:");
+    channellabel.set_text(_("MIDI channel:"));
     channel_button.set_value(1);
     channel_button.set_range(1,16);
     channel_button.set_increments(1,1);
