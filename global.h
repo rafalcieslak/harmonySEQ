@@ -8,10 +8,11 @@
 #ifndef GLOBAL_H
 #define	GLOBAL_H
 #include <gtkmm.h>
+#include <libintl.h>
+#include <locale.h>
 
 #define VERSION "0.4"
 #define ENDL "\n"
 #define TICKS_PER_QUARTERNOTE 128
-
 #endif	/* GLOBAL_H */
 

@@ -9,13 +9,13 @@
 #include <cstdio>
 #include <getopt.h>
 #include <alsa/asoundlib.h>
-
 #include "global.h"
 #include "MidiDriver.h"
 #include "debug.h"
 #include "error.h"
 #include "MainWindow.h"
 #include "Sequencer.h"
+
 
 using namespace std;
 int debugging = 0, help = 0, version = 0;
@@ -100,6 +100,12 @@ int main(int argc, char** argv) {
     g_thread_init(NULL);
     gdk_threads_init();
     Gtk::Main kit(argc, argv);
+
+    //gettext inits
+    setlocale(LC_ALL, ""); //sets the locale to user's locale
+    bindtextdomain("harmonySEQ","locale");
+    textdomain("harmonySEQ");
+
     err = new error(); //error stream is never quiet
     //prepare the signals catchers
    // signal(SIGINT,sigint);
@@ -127,7 +133,7 @@ int main(int argc, char** argv) {
                 break;
             case 'p':
                 ports_number = atoi(optarg);
-                *dbg << "setting ports number to " << ports_number << ENDL;
+                *dbg << _("setting ports number to ") << ports_number << ENDL;
                 break;
 
             case '?':
@@ -135,7 +141,7 @@ int main(int argc, char** argv) {
                     sprintf(temp,"unknown option '%c'\n", optopt);
                     *err << temp;
                 }else{
-                    sprintf(temp, "unrecognized option '%s'\n",argv[optind-1]); //a trick to tell what was the LONG option we couldn't recognize.
+                    sprintf(temp, gettext("unrecognized option '%s'\n"),argv[optind-1]); //a trick to tell what was the LONG option we couldn't recognize.
                     *err << temp;
                 }
                 help = 1;
@@ -183,7 +189,7 @@ int main(int argc, char** argv) {
 
 void print_help(){
     *dbg << "Hey, seems you wish to debug help message?" <<  "Nothing to debug, just a few printf's!";
-    printf("harmonySEQ, version %s\n",VERSION);
+    printf(_("harmonySEQ, version %s\n"),VERSION);
     printf("\n");
     printf("usage: harmonySEQ [-hdvp]\n");
     printf("\n");

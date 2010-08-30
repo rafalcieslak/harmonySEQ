@@ -22,6 +22,7 @@ public:
     Gtk::HBox hbox_up;
     Gtk::SpinButton main_note;
     Gtk::SpinButton tempo_button;
+    Gtk::Label tempolabel, mainnotelabel;
 
 };
 

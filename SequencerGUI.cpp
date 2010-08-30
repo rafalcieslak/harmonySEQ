@@ -15,7 +15,7 @@ SequencerWindow::SequencerWindow(Sequencer* prt){
 
     parent = prt;
 
-    set_title("a sequencer");
+    set_title("Sequencer");
     set_border_width(0);
     set_position(Gtk::WIN_POS_CENTER);
     
@@ -41,6 +41,14 @@ SequencerWindow::SequencerWindow(Sequencer* prt){
         sequence_scales[x]->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this,&SequencerWindow::OnSequenceChanged),x));
         box_of_sliders.pack_start(*sequence_scales[x]);
     }
+    low_hbox.pack_start(channellabel,Gtk::PACK_SHRINK);
+    low_hbox.pack_start(channel_button, Gtk::PACK_SHRINK);
+    channellabel.set_text("MIDI channel:");
+    channel_button.set_value(1);
+    channel_button.set_range(1,16);
+    channel_button.set_increments(1,1);
+    channel_button.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWindow::OnChannelChanged));
+    box_of_sliders.pack_start(low_hbox);
     add(box_of_sliders);
     
     show_all_children(1);
@@ -69,4 +77,9 @@ void SequencerWindow::UpdateValues(){
     for (int x = 0; x < NOTES_CONST_SIZE; x++) {
         note_buttons[x]->set_value(parent->GetNotes(x));
     }
+}
+
+void SequencerWindow::OnChannelChanged(){
+
+    parent->channel = channel_button.get_value();
 }

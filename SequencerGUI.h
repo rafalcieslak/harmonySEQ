@@ -19,10 +19,14 @@ public:
 private:
     void OnNotesChanged(int note);
     void OnSequenceChanged(int seq);
+    void OnChannelChanged();
     Gtk::VBox box_of_sliders;
     Gtk::HBox box_of_notes;
     Gtk::HScale *sequence_scales[8];
     Gtk::SpinButton* note_buttons[6];
+    Gtk::SpinButton channel_button;
+    Gtk::Label channellabel;
+    Gtk::HBox low_hbox;
 public:
     Sequencer *parent;
 
