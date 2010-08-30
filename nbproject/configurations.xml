@@ -39,8 +39,8 @@
                    displayName="Important Files"
                    projectFiles="false"
                    kind="IMPORTANT_FILES_FOLDER">
-      <itemPath>Makefile</itemPath>
     </logicalFolder>
+    <itemPath>Makefile</itemPath>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -65,6 +65,7 @@
           <warningLevel>2</warningLevel>
         </ccTool>
         <linkerTool>
+          <output>harmonyseq</output>
           <commandLine>-lasound</commandLine>
         </linkerTool>
       </compileType>

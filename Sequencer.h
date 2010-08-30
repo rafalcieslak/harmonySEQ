@@ -28,6 +28,7 @@ public:
 
     int channel;
     bool muted;
+    int row_in_main_window;
 
     SequencerWindow *gui_window;
     

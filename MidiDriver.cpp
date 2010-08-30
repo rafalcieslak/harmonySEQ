@@ -120,7 +120,7 @@ void MidiDriver::DeleteQueue(){
 void MidiDriver::UpdateQueue(){
     *dbg << "yep, updating the queue...\n";
     snd_seq_event_t ev;
-    for (int n = 0; n < 1; n++){
+    for (int n = 0; n < sequencers.size(); n++){
         for (unsigned int x = 0; x < sequencers[n]->sequence.size();x++){
             *dbg << sequencers[n]->notes[sequencers[n]->sequence[x]] << " ";
             snd_seq_ev_clear(&ev);

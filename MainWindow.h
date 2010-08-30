@@ -23,6 +23,19 @@ public:
     Gtk::SpinButton main_note;
     Gtk::SpinButton tempo_button;
     Gtk::Label tempolabel, mainnotelabel;
+    
+
+    class ModelColumns : public Gtk::TreeModel::ColumnRecord{
+    public:
+        ModelColumns(){add(col_ID);add(col_name);add(col_muted);}
+        Gtk::TreeModelColumn<int> col_ID;
+        Gtk::TreeModelColumn<Glib::ustring> col_name;
+        Gtk::TreeModelColumn<bool> col_muted;
+    };
+
+    ModelColumns m_columns;
+    Gtk::TreeView m_TreeView;
+    Glib::RefPtr<Gtk::ListStore> m_refTreeModel;
 
 };
 

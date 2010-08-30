@@ -11,7 +11,7 @@ CND_CONF=Debug
 CND_DISTDIR=dist
 NBTMPDIR=build/${CND_CONF}/${CND_PLATFORM}/tmp-packaging
 TMPDIRNAME=tmp-packaging
-OUTPUT_PATH=${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/harmonyseq
+OUTPUT_PATH=harmonyseq
 OUTPUT_BASENAME=harmonyseq
 PACKAGE_TOP_DIR=harmonyseq/
 

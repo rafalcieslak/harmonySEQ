@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-30 16:20+0200\n"
+"POT-Creation-Date: 2010-08-30 21:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,48 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: main.cpp:136
-msgid "setting ports number to "
-msgstr ""
-
 #: main.cpp:144
 #, c-format
 msgid "unrecognized option '%s'\n"
-msgstr ""
-
-#: main.cpp:192
-#, c-format
-msgid "harmonySEQ, version %s\n"
-msgstr ""
-
-#: MainWindow.cpp:18
-msgid "Tempo:"
-msgstr ""
-
-#: MainWindow.cpp:19
-msgid "Main Note:"
-msgstr ""
-
-#: MidiDriver.cpp:40
-msgid "Failed to open ALSA sequencer.\n"
-msgstr ""
-
-#: MidiDriver.cpp:52
-msgid "Failed to create output port.\n"
-msgstr ""
-
-#: MidiDriver.cpp:61
-msgid "Failed to create input port.\n"
-msgstr ""
-
-#: MidiDriver.cpp:67
-msgid "Alsa midi driver init successfull.\n"
-msgstr ""
-
-#: SequencerGUI.cpp:18
-msgid "Sequencer"
-msgstr ""
-
-#: SequencerGUI.cpp:46
-msgid "MIDI channel:"
 msgstr ""

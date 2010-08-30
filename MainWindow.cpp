@@ -3,6 +3,8 @@
 #include "debug.h"
 #include "global.h"
 #include "MidiDriver.h"
+#include "Sequencer.h"
+extern vector<Sequencer *> sequencers;
 extern int mainnote;
 extern debug* dbg;
 extern int running;
@@ -15,10 +17,10 @@ MainWindow::MainWindow(){
     set_border_width(5);
     //set_default_size(300,500);
 
-    tempolabel.set_text(_("Tempo:");
-    mainnotelabel.set_text(_("Main Note:");
+    tempolabel.set_text(_("Tempo:"));
+    mainnotelabel.set_text(_("Main Note:"));
     add(vbox1);
-    vbox1.pack_start(hbox_up);
+    vbox1.pack_start(hbox_up,Gtk::PACK_SHRINK);
     hbox_up.pack_start(mainnotelabel);
     hbox_up.pack_start(main_note,Gtk::PACK_SHRINK);
     main_note.set_range(0,127);
@@ -31,6 +33,54 @@ MainWindow::MainWindow(){
     tempo_button.set_value(tempo);
     tempo_button.set_increments(1,10);
     tempo_button.signal_value_changed().connect(sigc::mem_fun(*this,&MainWindow::TempoChanged));
+
+
+    vbox1.pack_start(m_TreeView,Gtk::PACK_SHRINK);
+    //creating the tree model
+    m_refTreeModel = Gtk::ListStore::create(m_columns);
+    m_TreeView.set_model(m_refTreeModel);
+
+    //initial data
+    Gtk::TreeModel::Row row = *(m_refTreeModel->append());
+
+    row[m_columns.col_ID] = 1;
+    row[m_columns.col_muted] = false;
+    row[m_columns.col_name] = "seq1";
+    sequencers[0]->row_in_main_window = 0;
+
+    row = *(m_refTreeModel->append());
+
+    row[m_columns.col_ID] = 2;
+    row[m_columns.col_muted] = true;
+    row[m_columns.col_name] = "seq2";
+    sequencers[1]->row_in_main_window = 1;
+
+    m_TreeView.append_column("ID",m_columns.col_ID);
+    m_TreeView.append_column_editable("Name",m_columns.col_name);
+    m_TreeView.append_column_editable("Muted",m_columns.col_muted);
+    
+    //Gtk::CellRenderer* cell = Gtk::manage(new Gtk::CellRendererToggle);
+    // there may be something missing
+    // like connecting the value with the toggle
+    // see http://library.gnome.org/devel/gtkmm-tutorial/stable/sec-treeview-examples.html.en
+    // if required
+
+    Gtk::TreeView::Column* pColumn = m_TreeView.get_column(0);
+    pColumn->set_sort_column(m_columns.col_ID);
+
+    pColumn = m_TreeView.get_column(1);
+    pColumn->set_sort_column(m_columns.col_name);
+
+    pColumn = m_TreeView.get_column(2);
+    pColumn->set_sort_column(m_columns.col_muted);
+    //may cause segfaults, careful!
+    for (guint i = 0; i < 3; i++) {
+        Gtk::TreeView::Column* pColumn = m_TreeView.get_column(i);
+        pColumn->set_reorderable();
+    }
+
+
+
     show_all_children(1);
 
 

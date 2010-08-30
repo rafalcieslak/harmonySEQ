@@ -118,7 +118,7 @@ int main(int argc, char** argv) {
     ports_number = 1;
     opterr = 0; //this prevents getopt from printing his error message
     int option_index; //getopt stores index here
-    while((c=getopt_long(argc,argv,"dhv",long_options,&option_index))!=-1){
+    while((c=getopt_long(argc,argv,"dhvp",long_options,&option_index))!=-1){
         switch(c){
             case 0:
                 break;
@@ -138,7 +138,7 @@ int main(int argc, char** argv) {
 
             case '?':
                 if (optopt){
-                    sprintf(temp,"unknown option '%c'\n", optopt);
+                    sprintf(temp,_("unknown option '%c'\n"), optopt);
                     *err << temp;
                 }else{
                     sprintf(temp, gettext("unrecognized option '%s'\n"),argv[optind-1]); //a trick to tell what was the LONG option we couldn't recognize.
@@ -193,10 +193,10 @@ void print_help(){
     printf("\n");
     printf("usage: harmonySEQ [-hdvp]\n");
     printf("\n");
-    printf("    -p --ports n     sets ports number to n\n");
-    printf("    -d --debug       enters debug mode, prints lots of debug messeges\n");
-    printf("    -h --help        prints this help messase and exits\n");
-    printf("    -v --version     prints the program version\n");
+    printf(_("    -p --ports n     sets ports number to n\n"
+             "    -d --debug       enters debug mode, prints lots of debug messeges\n"
+             "    -h --help        prints this help messase and exits\n"
+             "    -v --version     prints the program version\n"));
     printf("\n");
 
 
