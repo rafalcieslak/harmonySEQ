@@ -17,6 +17,7 @@ public:
     void MainNoteChanged();
     void OnUserClickedExit();
     bool on_delete_event(GdkEventAny* event);
+    void OnTreeviewRowActivated(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column);
     void TempoChanged();
     Gtk::VBox vbox1;
     Gtk::HBox hbox_up;

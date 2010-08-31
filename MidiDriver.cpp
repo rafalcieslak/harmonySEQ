@@ -120,9 +120,8 @@ void MidiDriver::DeleteQueue(){
 void MidiDriver::UpdateQueue(){
     *dbg << "yep, updating the queue...\n";
     snd_seq_event_t ev;
-    for (int n = 0; n < sequencers.size(); n++){
+    for (unsigned int n = 0; n < sequencers.size(); n++){
         for (unsigned int x = 0; x < sequencers[n]->sequence.size();x++){
-            *dbg << sequencers[n]->notes[sequencers[n]->sequence[x]] << " ";
             snd_seq_ev_clear(&ev);
             snd_seq_ev_set_note(&ev,sequencers[n]->channel,mainnote+sequencers[n]->notes[sequencers[n]->sequence[x]],100,TICKS_PER_QUARTERNOTE/2);
             snd_seq_ev_schedule_tick(&ev,queueid,0,tick+x*TICKS_PER_QUARTERNOTE/2);

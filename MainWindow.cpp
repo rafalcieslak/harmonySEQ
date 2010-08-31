@@ -73,13 +73,15 @@ MainWindow::MainWindow(){
 
     pColumn = m_TreeView.get_column(2);
     pColumn->set_sort_column(m_columns.col_muted);
+
+
     //may cause segfaults, careful!
     for (guint i = 0; i < 3; i++) {
         Gtk::TreeView::Column* pColumn = m_TreeView.get_column(i);
         pColumn->set_reorderable();
     }
 
-
+    m_TreeView.signal_row_activated().connect(sigc::mem_fun(*this,&MainWindow::OnTreeviewRowActivated));
 
     show_all_children(1);
 
@@ -94,7 +96,6 @@ MainWindow::~MainWindow(){
 void MainWindow::SetMainNote(int note){
     *dbg << "setting note\n";
     main_note.set_value(note);
-
 
 }
 
@@ -114,5 +115,23 @@ bool MainWindow::on_delete_event(GdkEventAny* event){
 void MainWindow::TempoChanged(){
     tempo = tempo_button.get_value();
     midi->SetTempo(tempo);
+
+}
+
+void MainWindow::OnTreeviewRowActivated(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column){
+    Gtk::TreeModel::iterator iter = m_refTreeModel->get_iter(path);
+    if (iter) {
+        Gtk::TreeModel::Row row = *iter;
+
+
+        ///(activated row) <row number>
+        *dbg << _("activated row ") << row[m_columns.col_ID];
+        *dbg << ", name is: " << row[m_columns.col_name] << ENDL;
+        gdk_threads_leave(); //not really sure about this thread-lock, but this the only way I found to get it to work
+        {
+             sequencers[row[m_columns.col_ID]-1]->gui_window->show();
+        }
+        gdk_threads_enter();
+    }
 
 }

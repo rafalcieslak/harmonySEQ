@@ -10,6 +10,11 @@
 #include "Sequencer.h"
 extern debug *dbg;
 
+
+extern vector<Sequencer *> sequencers;
+
+
+
 Sequencer::Sequencer()
     : sequence(SEQUENCE_CONST_SIZE,0), notes(NOTES_CONST_SIZE,0)
 {

@@ -9,7 +9,7 @@
 
 debug::debug(int debug) {
     if (debug != 0){
-        printf("Debug mode started.\n");
+        printf(_("Debug mode started.\n"));
         debug_mode = 1;
     }else{
         debug_mode = 0;
@@ -32,6 +32,13 @@ debug & operator <<(debug &dbg, const char* message){
     dbg.say(message);
     return dbg;
 }
+
+debug & operator <<(debug &dbg, Glib::ustring message){
+
+    dbg.say(message.c_str());
+    return dbg;
+}
+
 
 debug & operator <<(debug &dbg, int number){
     if(!dbg.debug_mode) return dbg;

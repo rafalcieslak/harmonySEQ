@@ -14,6 +14,8 @@ using namespace std;
 
 #define SEQUENCE_CONST_SIZE 8
 #define NOTES_CONST_SIZE 8
+
+
 class Sequencer {
 public:
     Sequencer();
