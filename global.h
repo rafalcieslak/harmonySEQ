@@ -15,5 +15,6 @@
 #define ENDL "\n"
 #define TICKS_PER_QUARTERNOTE 128
 #define _(STRING) gettext(STRING)
+#define DEFAULT_TEMPO 120
 #endif	/* GLOBAL_H */
 

@@ -14,13 +14,13 @@
 extern error* err;
 extern debug* dbg;
 extern MainWindow *mainwindow;
-extern int mainnote;
+extern int mainnote, tempo;
 extern vector<Sequencer *> sequencers;
 MidiDriver::MidiDriver() {
     working = false;
     Open();
     InitQueue();
-    SetTempo(240);
+    SetTempo(tempo);
 }
 
 MidiDriver::MidiDriver(const MidiDriver& orig) {

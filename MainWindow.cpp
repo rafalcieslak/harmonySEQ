@@ -30,7 +30,7 @@ MainWindow::MainWindow(){
     hbox_up.pack_start(tempolabel);
     hbox_up.pack_start(tempo_button,Gtk::PACK_SHRINK);
     tempo_button.set_range(30,320);
-    tempo_button.set_value(tempo);
+    tempo_button.set_value(DEFAULT_TEMPO);
     tempo_button.set_increments(1,10);
     tempo_button.signal_value_changed().connect(sigc::mem_fun(*this,&MainWindow::TempoChanged));
 
@@ -44,14 +44,14 @@ MainWindow::MainWindow(){
     Gtk::TreeModel::Row row = *(m_refTreeModel->append());
 
     row[m_columns.col_ID] = 1;
-    row[m_columns.col_muted] = false;
+    row[m_columns.col_muted] = true;
     row[m_columns.col_name] = "seq1";
     sequencers[0]->row_in_main_window = 0;
 
     row = *(m_refTreeModel->append());
 
     row[m_columns.col_ID] = 2;
-    row[m_columns.col_muted] = false;
+    row[m_columns.col_muted] = true;
     row[m_columns.col_name] = "seq2";
     sequencers[1]->row_in_main_window = 1;
 

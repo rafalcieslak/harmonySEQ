@@ -43,7 +43,7 @@ Sequencer::~Sequencer() {
 
 void Sequencer::Init(){
 
-    muted = false;
+    muted = true;
     *dbg << notes[0]<<ENDL;
     *dbg << GetNotes(0);
     gui_window = new SequencerWindow(this);
