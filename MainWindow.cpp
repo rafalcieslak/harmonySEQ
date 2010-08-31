@@ -126,7 +126,7 @@ void MainWindow::OnTreeviewRowActivated(const Gtk::TreeModel::Path& path, Gtk::T
 
         ///(activated row) <row number>
         *dbg << _("activated row ") << row[m_columns.col_ID];
-        *dbg << ", name is: " << row[m_columns.col_name] << ENDL;
+        *dbg << _(", name is: ") << row[m_columns.col_name] << ENDL;
         gdk_threads_leave(); //not really sure about this thread-lock, but this the only way I found to get it to work
         {
              sequencers[row[m_columns.col_ID]-1]->gui_window->show();
