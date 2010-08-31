@@ -159,8 +159,12 @@ int main(int argc, char** argv) {
     
     //here the non-oprion arguments should be parsed (file to load etc.), but let's leave it for now...
 
+
+    tempo = DEFAULT_TEMPO;
     //create the midi driver
     midi = new MidiDriver;
+    *dbg << "setting tempo to " << tempo << ENDL;
+    midi->SetTempo(tempo);
     //random number generator init
     srand(time(NULL));
 
