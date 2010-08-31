@@ -51,13 +51,16 @@ MainWindow::MainWindow(){
     row = *(m_refTreeModel->append());
 
     row[m_columns.col_ID] = 2;
-    row[m_columns.col_muted] = true;
+    row[m_columns.col_muted] = false;
     row[m_columns.col_name] = "seq2";
     sequencers[1]->row_in_main_window = 1;
 
     m_TreeView.append_column("ID",m_columns.col_ID);
     m_TreeView.append_column_editable("Name",m_columns.col_name);
-    m_TreeView.append_column_editable("Muted",m_columns.col_muted);
+    int col_count = m_TreeView.append_column_editable("Muted",m_columns.col_muted);
+    Gtk::CellRenderer* cell = m_TreeView.get_column_cell_renderer(col_count-1);
+    Gtk::CellRendererToggle& tgl = dynamic_cast<Gtk::CellRendererToggle&>(*cell);
+    tgl.signal_toggled().connect(mem_fun(*this,&MainWindow::OnMutedToggleToggled));
     
     //Gtk::CellRenderer* cell = Gtk::manage(new Gtk::CellRendererToggle);
     // there may be something missing
@@ -74,15 +77,19 @@ MainWindow::MainWindow(){
     pColumn = m_TreeView.get_column(2);
     pColumn->set_sort_column(m_columns.col_muted);
 
-
     //may cause segfaults, careful!
     for (guint i = 0; i < 3; i++) {
         Gtk::TreeView::Column* pColumn = m_TreeView.get_column(i);
         pColumn->set_reorderable();
     }
 
-    m_TreeView.signal_row_activated().connect(sigc::mem_fun(*this,&MainWindow::OnTreeviewRowActivated));
+    //drag and drop enabling
+    m_TreeView.enable_model_drag_source();
+    m_TreeView.enable_model_drag_dest();
 
+    //catching row selection signal
+    m_TreeView.signal_row_activated().connect(sigc::mem_fun(*this,&MainWindow::OnTreeviewRowActivated));
+    
     show_all_children(1);
 
 
@@ -134,4 +141,12 @@ void MainWindow::OnTreeviewRowActivated(const Gtk::TreeModel::Path& path, Gtk::T
         gdk_threads_enter();
     }
 
+}
+
+void MainWindow::OnMutedToggleToggled(const Glib::ustring& path){
+
+    Gtk::TreeModel::iterator iter = m_refTreeModel->get_iter(path);
+    if(!iter) return;
+    Gtk::TreeModel::Row row = *iter;
+    sequencers[row[m_columns.col_ID]-1]->muted = row[m_columns.col_muted];
 }

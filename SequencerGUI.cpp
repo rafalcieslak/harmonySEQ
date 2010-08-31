@@ -52,8 +52,8 @@ SequencerWindow::SequencerWindow(Sequencer* prt){
     add(box_of_sliders);
     
     show_all_children(1);
-    show();
-    //hide(); //hide at start, but let the children be shown
+    //show();
+    hide(); //hide at start, but let the children be shown
 }
 SequencerWindow::~SequencerWindow(){
 
