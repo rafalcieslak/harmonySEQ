@@ -106,7 +106,9 @@ int main(int argc, char** argv) {
     bindtextdomain("harmonySEQ","locale");
     textdomain("harmonySEQ");
 
-    err = new error(); //error stream is never quiet
+    err = new error(); //error stream is never quiet!
+
+    
     //prepare the signals catchers
    // signal(SIGINT,sigint);
    // signal(SIGTERM,sigint); //awww, crashes the terminal... wtf?

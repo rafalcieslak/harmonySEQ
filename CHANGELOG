@@ -1,0 +1,4 @@
+harmonyseq 0.5
+    - Sequencers may be now added
+    - Muting and name changing can be done through main window
+    - Minor fixes
