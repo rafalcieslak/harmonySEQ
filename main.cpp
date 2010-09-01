@@ -170,8 +170,8 @@ int main(int argc, char** argv) {
 
     gdk_threads_enter();
     {
-        sequencers[0] = new Sequencer(example_sequence,example_notes,"seq1");
-        sequencers[1] = new Sequencer(example_sequence2,example_notes2,"seq2");
+        sequencers[0] = new Sequencer(example_sequence,example_notes,"seq 0");
+        sequencers[1] = new Sequencer(example_sequence2,example_notes2,"seq 1");
         mainwindow = new MainWindow;
     }
     gdk_threads_leave();
@@ -192,15 +192,15 @@ int main(int argc, char** argv) {
 }
 
 void print_help(){
-    *dbg << "Hey, seems you wish to debug help message?" <<  "Nothing to debug, just a few printf's!";
-    printf(_("harmonySEQ, version %s\n"),VERSION);
-    printf("\n");
-    printf("usage: harmonySEQ [-hdvp]\n");
-    printf("\n");
-    printf(_("    -p --ports n     sets ports number to n\n"
-             "    -d --debug       enters debug mode, prints lots of debug messeges\n"
-             "    -h --help        prints this help messase and exits\n"
-             "    -v --version     prints the program version\n"));
+    *dbg << "Hey, seems you wish to debug help message?" << "Nothing to debug, just a few printf's!";
+    printf(_("harmonySEQ, version %s\n"
+            "\n"
+            "usage: harmonySEQ [-hdvp]\n"
+            "\n"
+            "    -p --ports n     sets ports number to n\n"
+            "    -d --debug       enters debug mode, prints lots of debug messeges\n"
+            "    -h --help        prints this help messase and exits\n"
+            "    -v --version     prints the program version\n"), VERSION);
     printf("\n");
 
 

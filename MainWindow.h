@@ -20,12 +20,15 @@ public:
     void OnTreeviewRowActivated(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column);
     void OnMutedToggleToggled(const Glib::ustring& path);
     void OnNameEdited(const Glib::ustring& path,const Glib::ustring& newtext);
+    void OnButtonAddClicked();
     void TempoChanged();
+    void SequencerAdded(int n);
     Gtk::VBox vbox1;
-    Gtk::HBox hbox_up;
+    Gtk::HBox hbox_up, hbox_down;
     Gtk::SpinButton main_note;
     Gtk::SpinButton tempo_button;
     Gtk::Label tempolabel, mainnotelabel;
+    Gtk::Button button_add;
     
 
     class ModelColumns : public Gtk::TreeModel::ColumnRecord{

@@ -8,10 +8,27 @@
 #include <gtkmm/widget.h>
 #include "debug.h"
 #include "Sequencer.h"
+#include "MainWindow.h"
 extern debug *dbg;
 
-
+extern MainWindow* mainwindow;
 extern vector<Sequencer *> sequencers;
+
+
+int spawn_sequencer(){
+    int n = sequencers.size();
+
+    //init and push to vector
+    char temp[20];
+    sprintf(temp,_("seq %d"),n);
+    Sequencer *new_seq = new Sequencer(temp);
+    sequencers.push_back(new_seq);
+
+    //add to main window
+    mainwindow->SequencerAdded(n);
+
+    return n;
+}
 
 
 

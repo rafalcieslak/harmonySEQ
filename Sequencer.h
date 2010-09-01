@@ -17,6 +17,7 @@ using namespace std;
 
 //the following may not work with gettext. careful!
 #define SEQUENCER_DEFAULT_NAME _("sequencer")
+int spawn_sequencer();
 
 class Sequencer {
 public:
