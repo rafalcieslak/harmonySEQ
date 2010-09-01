@@ -88,6 +88,7 @@ Sequencer::~Sequencer() {
 void Sequencer::Init(){
 
     muted = true;
+    apply_mainnote = true;
     *dbg << notes[0]<<ENDL;
     *dbg << GetNotes(0);
     gui_window = new SequencerWindow(this);
@@ -106,3 +107,13 @@ int Sequencer::GetSequence(int n){
 
     return sequence[n];
 }
+
+void Sequencer::SetMuted(bool m){muted = m; gui_window->tgl_mute.set_active(m);}
+bool Sequencer::GetMuted(){return muted;}
+void Sequencer::SetApplyMainNote(bool a){apply_mainnote = a;gui_window->tgl_apply_mainnote.set_active(a);}
+bool Sequencer::GetApplyMainNote(){return apply_mainnote;}
+void Sequencer::SetChannel(int ch){channel = ch;gui_window->channel_button.set_value((double)ch);}
+int Sequencer::GetChannel(){return channel;}
+void Sequencer::SetName(Glib::ustring nm){name = nm;gui_window->set_title(nm);}
+Glib::ustring Sequencer::GetName(){return name;}
+void Sequencer::ShowWindow(){gui_window->show();}

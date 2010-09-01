@@ -22,7 +22,7 @@ SequencerWindow::SequencerWindow(Sequencer* prt){
     box_of_sliders.pack_start(box_of_notes);
     for (int x = 0; x < 6; x++){
         note_buttons[x] = new Gtk::SpinButton;
-        note_buttons[x]->set_range(-24,24);
+        note_buttons[x]->set_range(-128,128);
         note_buttons[x]->set_increments(1,12);
         //*dbg << parent->GetNotes(0);
         note_buttons[x]->set_value(parent->GetNotes(x));
@@ -48,7 +48,18 @@ SequencerWindow::SequencerWindow(Sequencer* prt){
     channel_button.set_range(1,16);
     channel_button.set_increments(1,1);
     channel_button.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWindow::OnChannelChanged));
+    low_hbox.pack_start(toggle_vbox,Gtk::PACK_SHRINK);
+    toggle_vbox.pack_start(tgl_mute);
+    toggle_vbox.pack_start(tgl_apply_mainnote);
+    tgl_mute.set_label(_("Mute"));
+    tgl_apply_mainnote.set_label(_("Apply main note"));
+    tgl_mute.signal_toggled().connect(mem_fun(*this,&SequencerWindow::OnToggleMuteClicked));
+    tgl_mute.set_active(parent->muted);
+    tgl_apply_mainnote.signal_toggled().connect(mem_fun(*this,&SequencerWindow::OnToggleApplyMainNoteClicked));
+    tgl_apply_mainnote.set_active(parent->apply_mainnote);
     box_of_sliders.pack_start(low_hbox);
+
+
     add(box_of_sliders);
     
     show_all_children(1);
@@ -82,4 +93,15 @@ void SequencerWindow::UpdateValues(){
 void SequencerWindow::OnChannelChanged(){
 
     parent->channel = channel_button.get_value();
+}
+
+void SequencerWindow::OnToggleMuteClicked(){
+    parent->muted = tgl_mute.get_active();
+    
+
+}
+
+void SequencerWindow::OnToggleApplyMainNoteClicked(){
+    parent->apply_mainnote = tgl_apply_mainnote.get_active();
+
 }

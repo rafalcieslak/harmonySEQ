@@ -16,10 +16,6 @@ public:
     SequencerWindow(Sequencer* prt);
     virtual ~SequencerWindow();
     void UpdateValues();
-private:
-    void OnNotesChanged(int note);
-    void OnSequenceChanged(int seq);
-    void OnChannelChanged();
     Gtk::VBox box_of_sliders;
     Gtk::HBox box_of_notes;
     Gtk::HScale *sequence_scales[8];
@@ -27,6 +23,14 @@ private:
     Gtk::SpinButton channel_button;
     Gtk::Label channellabel;
     Gtk::HBox low_hbox;
+    Gtk::VBox toggle_vbox;
+    Gtk::CheckButton tgl_apply_mainnote, tgl_mute;
+private:
+    void OnNotesChanged(int note);
+    void OnSequenceChanged(int seq);
+    void OnChannelChanged();
+    void OnToggleMuteClicked();
+    void OnToggleApplyMainNoteClicked();
 public:
     Sequencer *parent;
 

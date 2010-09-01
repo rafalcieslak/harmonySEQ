@@ -19,6 +19,7 @@ public:
     bool on_delete_event(GdkEventAny* event);
     void OnTreeviewRowActivated(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column);
     void OnMutedToggleToggled(const Glib::ustring& path);
+    void OnApplyMainNoteToggleToggled(const Glib::ustring& path);
     void OnNameEdited(const Glib::ustring& path,const Glib::ustring& newtext);
     void OnButtonAddClicked();
     void TempoChanged();
@@ -33,10 +34,11 @@ public:
 
     class ModelColumns : public Gtk::TreeModel::ColumnRecord{
     public:
-        ModelColumns(){add(col_ID);add(col_name);add(col_muted);}
+        ModelColumns(){add(col_ID);add(col_name);add(col_muted);add(col_apply_mainnote);}
         Gtk::TreeModelColumn<int> col_ID;
         Gtk::TreeModelColumn<Glib::ustring> col_name;
         Gtk::TreeModelColumn<bool> col_muted;
+        Gtk::TreeModelColumn<bool> col_apply_mainnote;
     };
 
     ModelColumns m_columns;

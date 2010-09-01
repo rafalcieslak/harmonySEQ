@@ -122,12 +122,14 @@ void MidiDriver::UpdateQueue(){
     snd_seq_event_t ev;
     for (unsigned int n = 0; n < sequencers.size(); n++){
         if(sequencers[n] == NULL) continue;
-        *dbg << "sequencer " << n << " is ";
-        *dbg << ((sequencers[n]->muted)?"muted":"not muted") << ENDL;
-        if (sequencers[n]->muted) continue;
+        //*dbg << "sequencer " << n << " is ";
+        //*dbg << ((sequencers[n]->muted)?"muted":"not muted") << ENDL;
+        if (sequencers[n]->GetMuted()) continue;
         for (unsigned int x = 0; x < sequencers[n]->sequence.size();x++){
             snd_seq_ev_clear(&ev);
-            snd_seq_ev_set_note(&ev,sequencers[n]->channel-1,mainnote+sequencers[n]->notes[sequencers[n]->sequence[x]],100,TICKS_PER_QUARTERNOTE/2);
+            int note = sequencers[n]->notes[sequencers[n]->sequence[x]];
+            if(sequencers[n]->GetApplyMainNote()) note += mainnote;
+            snd_seq_ev_set_note(&ev,sequencers[n]->GetChannel()-1,note,100,TICKS_PER_QUARTERNOTE/2);
             snd_seq_ev_schedule_tick(&ev,queueid,0,tick+x*TICKS_PER_QUARTERNOTE/2);
             snd_seq_ev_set_source(&ev,output_port);
             snd_seq_ev_set_subs(&ev);

@@ -32,13 +32,26 @@ public:
     int GetSequence(int n);
     vector<int> notes;
     int GetNotes(int n);
+    void SetMuted(bool m);
+    bool GetMuted();
+    void SetApplyMainNote(bool a);
+    bool GetApplyMainNote();
+    void SetChannel(int ch);
+    int GetChannel();
+    void SetName(Glib::ustring n);
+    Glib::ustring GetName();
+    void ShowWindow();
 
-    int channel;
-    bool muted;
+
     int row_in_main_window;
-
+    friend class SequencerWindow;
+protected:
+    int channel;
+    bool apply_mainnote;
+    bool muted;
     Glib::ustring name;
     SequencerWindow *gui_window;
+
     
 private:
 
