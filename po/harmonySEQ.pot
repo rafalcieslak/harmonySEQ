@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-31 22:11+0200\n"
+"POT-Creation-Date: 2010-09-01 15:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgid ""
 "    -v --version     prints the program version\n"
 msgstr ""
 
-#: MainWindow.cpp:136
+#: MainWindow.cpp:140
 msgid ", name is: "
 msgstr ""
 
@@ -51,6 +51,10 @@ msgstr ""
 msgid "Failed to open ALSA sequencer.\n"
 msgstr ""
 
+#: MainWindow.cpp:59
+msgid "ID"
+msgstr ""
+
 #: SequencerGUI.cpp:46
 msgid "MIDI channel:"
 msgstr ""
@@ -59,21 +63,29 @@ msgstr ""
 msgid "Main Note:"
 msgstr ""
 
-#: SequencerGUI.cpp:18
-msgid "Sequencer"
+#: MainWindow.cpp:64
+msgid "Muted"
+msgstr ""
+
+#: MainWindow.cpp:60
+msgid "Name"
 msgstr ""
 
 #: MainWindow.cpp:20
 msgid "Tempo:"
 msgstr ""
 
-#: MainWindow.cpp:135
+#: MainWindow.cpp:139
 msgid "activated row "
 msgstr ""
 
 #: main.cpp:196
 #, c-format
 msgid "harmonySEQ, version %s\n"
+msgstr ""
+
+#: Sequencer.h:19
+msgid "sequencer"
 msgstr ""
 
 #: main.cpp:136
