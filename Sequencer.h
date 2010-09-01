@@ -15,12 +15,16 @@ using namespace std;
 #define SEQUENCE_CONST_SIZE 8
 #define NOTES_CONST_SIZE 8
 
+//the following may not work with gettext. careful!
+#define SEQUENCER_DEFAULT_NAME _("sequencer")
 
 class Sequencer {
 public:
     Sequencer();
+    Sequencer(Glib::ustring _name0);
     Sequencer(const Sequencer& orig);
     Sequencer(int seq[],int notes[]);
+    Sequencer(int seq[],int notes[], Glib::ustring _name);
     void Init();
     virtual ~Sequencer();
     vector<int> sequence;
@@ -32,6 +36,7 @@ public:
     bool muted;
     int row_in_main_window;
 
+    Glib::ustring name;
     SequencerWindow *gui_window;
     
 private:

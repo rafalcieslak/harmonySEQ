@@ -19,6 +19,7 @@ public:
     bool on_delete_event(GdkEventAny* event);
     void OnTreeviewRowActivated(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column);
     void OnMutedToggleToggled(const Glib::ustring& path);
+    void OnNameEdited(const Glib::ustring& path,const Glib::ustring& newtext);
     void TempoChanged();
     Gtk::VBox vbox1;
     Gtk::HBox hbox_up;

@@ -170,8 +170,8 @@ int main(int argc, char** argv) {
 
     gdk_threads_enter();
     {
-        sequencers[0] = new Sequencer(example_sequence,example_notes);
-        sequencers[1] = new Sequencer(example_sequence2,example_notes2);
+        sequencers[0] = new Sequencer(example_sequence,example_notes,"seq1");
+        sequencers[1] = new Sequencer(example_sequence2,example_notes2,"seq2");
         mainwindow = new MainWindow;
     }
     gdk_threads_leave();

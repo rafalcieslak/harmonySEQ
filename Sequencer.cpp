@@ -18,8 +18,17 @@ extern vector<Sequencer *> sequencers;
 Sequencer::Sequencer()
     : sequence(SEQUENCE_CONST_SIZE,0), notes(NOTES_CONST_SIZE,0)
 {
+    name = SEQUENCER_DEFAULT_NAME;
     Init();
 }
+
+Sequencer::Sequencer(Glib::ustring _name)
+    : sequence(SEQUENCE_CONST_SIZE,0), notes(NOTES_CONST_SIZE,0)
+{
+    name = _name;
+    Init();
+}
+
 
 Sequencer::Sequencer(int seq[],int note[])
     :  sequence(SEQUENCE_CONST_SIZE,0), notes(NOTES_CONST_SIZE,0)
@@ -32,6 +41,24 @@ Sequencer::Sequencer(int seq[],int note[])
         notes[x] = note[x];
         
     }
+    name = SEQUENCER_DEFAULT_NAME;
+    Init();
+}
+
+Sequencer::Sequencer(int seq[],int note[], Glib::ustring _name)
+    :  sequence(SEQUENCE_CONST_SIZE,0), notes(NOTES_CONST_SIZE,0)
+{
+    for (int x = 0; x < SEQUENCE_CONST_SIZE; x++){
+        sequence[x] = seq[x];
+
+    }
+    for (int x = 0; x < NOTES_CONST_SIZE; x++){
+        notes[x] = note[x];
+
+    }
+
+    
+    name = _name;
     Init();
 }
 

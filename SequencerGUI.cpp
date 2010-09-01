@@ -15,7 +15,7 @@ SequencerWindow::SequencerWindow(Sequencer* prt){
 
     parent = prt;
 
-    set_title(_("Sequencer"));
+    set_title(parent->name);
     set_border_width(0);
     set_position(Gtk::WIN_POS_CENTER);
     

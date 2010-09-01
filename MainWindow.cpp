@@ -40,25 +40,29 @@ MainWindow::MainWindow(){
     m_refTreeModel = Gtk::ListStore::create(m_columns);
     m_TreeView.set_model(m_refTreeModel);
 
+
+
     //initial data
-    Gtk::TreeModel::Row row = *(m_refTreeModel->append());
+    Gtk::TreeModel::Row row;
+    int rowcount = 0;
+    for (unsigned int x = 0; x < sequencers.size(); x++){
+        if (!sequencers[x]) continue; //seems it was removed
+        row = *(m_refTreeModel->append());
+        row[m_columns.col_ID] = x;
+        row[m_columns.col_muted] = sequencers[x]->muted;
+        row[m_columns.col_name] = sequencers[x]->name;
+        sequencers[x]->row_in_main_window = rowcount;
+        rowcount++;
 
-    row[m_columns.col_ID] = 1;
-    row[m_columns.col_muted] = true;
-    row[m_columns.col_name] = "seq1";
-    sequencers[0]->row_in_main_window = 0;
+    }
 
-    row = *(m_refTreeModel->append());
-
-    row[m_columns.col_ID] = 2;
-    row[m_columns.col_muted] = true;
-    row[m_columns.col_name] = "seq2";
-    sequencers[1]->row_in_main_window = 1;
-
-    m_TreeView.append_column("ID",m_columns.col_ID);
-    m_TreeView.append_column_editable("Name",m_columns.col_name);
-    int col_count = m_TreeView.append_column_editable("Muted",m_columns.col_muted);
+    m_TreeView.append_column(_("ID"),m_columns.col_ID);
+    int col_count = m_TreeView.append_column_editable(_("Name"),m_columns.col_name);
     Gtk::CellRenderer* cell = m_TreeView.get_column_cell_renderer(col_count-1);
+    Gtk::CellRendererText& txt = dynamic_cast<Gtk::CellRendererText&>(*cell);
+    txt.signal_edited().connect(mem_fun(*this,&MainWindow::OnNameEdited));
+    col_count = m_TreeView.append_column_editable(_("Muted"),m_columns.col_muted);
+    cell = m_TreeView.get_column_cell_renderer(col_count-1);
     Gtk::CellRendererToggle& tgl = dynamic_cast<Gtk::CellRendererToggle&>(*cell);
     tgl.signal_toggled().connect(mem_fun(*this,&MainWindow::OnMutedToggleToggled));
     
@@ -136,7 +140,7 @@ void MainWindow::OnTreeviewRowActivated(const Gtk::TreeModel::Path& path, Gtk::T
         *dbg << _(", name is: ") << row[m_columns.col_name] << ENDL;
         gdk_threads_leave(); //not really sure about this thread-lock, but this the only way I found to get it to work
         {
-             sequencers[row[m_columns.col_ID]-1]->gui_window->show();
+             sequencers[row[m_columns.col_ID]]->gui_window->show();
         }
         gdk_threads_enter();
     }
@@ -148,5 +152,14 @@ void MainWindow::OnMutedToggleToggled(const Glib::ustring& path){
     Gtk::TreeModel::iterator iter = m_refTreeModel->get_iter(path);
     if(!iter) return;
     Gtk::TreeModel::Row row = *iter;
-    sequencers[row[m_columns.col_ID]-1]->muted = row[m_columns.col_muted];
+    sequencers[row[m_columns.col_ID]]->muted = row[m_columns.col_muted];
+}
+
+void MainWindow::OnNameEdited(const Glib::ustring& path, const Glib::ustring& newtext){
+
+    Gtk::TreeModel::iterator iter = m_refTreeModel->get_iter(path);
+    if(!iter) return;
+    Gtk::TreeModel::Row row = *iter;
+    sequencers[row[m_columns.col_ID]]->name = newtext;
+    sequencers[row[m_columns.col_ID]]->gui_window->set_title(newtext);
 }
