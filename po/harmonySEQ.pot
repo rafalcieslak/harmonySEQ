@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-01 15:00+0200\n"
+"POT-Creation-Date: 2010-09-01 17:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,17 +17,12 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: main.cpp:200
-#, c-format
-msgid ""
-"    -p --ports n     sets ports number to n\n"
-"    -d --debug       enters debug mode, prints lots of debug messeges\n"
-"    -h --help        prints this help messase and exits\n"
-"    -v --version     prints the program version\n"
+#: MainWindow.cpp:160
+msgid ", name is: "
 msgstr ""
 
-#: MainWindow.cpp:140
-msgid ", name is: "
+#: MainWindow.cpp:104
+msgid "Add"
 msgstr ""
 
 #: MidiDriver.cpp:67
@@ -51,7 +46,7 @@ msgstr ""
 msgid "Failed to open ALSA sequencer.\n"
 msgstr ""
 
-#: MainWindow.cpp:59
+#: MainWindow.cpp:63
 msgid "ID"
 msgstr ""
 
@@ -59,29 +54,42 @@ msgstr ""
 msgid "MIDI channel:"
 msgstr ""
 
-#: MainWindow.cpp:21
+#: MainWindow.cpp:23
 msgid "Main Note:"
 msgstr ""
 
-#: MainWindow.cpp:64
+#: MainWindow.cpp:68
 msgid "Muted"
 msgstr ""
 
-#: MainWindow.cpp:60
+#: MainWindow.cpp:64
 msgid "Name"
 msgstr ""
 
-#: MainWindow.cpp:20
+#: MainWindow.cpp:22
 msgid "Tempo:"
 msgstr ""
 
-#: MainWindow.cpp:139
+#: MainWindow.cpp:159
 msgid "activated row "
 msgstr ""
 
 #: main.cpp:196
 #, c-format
-msgid "harmonySEQ, version %s\n"
+msgid ""
+"harmonySEQ, version %s\n"
+"\n"
+"usage: harmonySEQ [-hdvp]\n"
+"\n"
+"    -p --ports n     sets ports number to n\n"
+"    -d --debug       enters debug mode, prints lots of debug messeges\n"
+"    -h --help        prints this help messase and exits\n"
+"    -v --version     prints the program version\n"
+msgstr ""
+
+#: Sequencer.cpp:23
+#, c-format
+msgid "seq %d"
 msgstr ""
 
 #: Sequencer.h:19
