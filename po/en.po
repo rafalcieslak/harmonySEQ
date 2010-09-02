@@ -1,7 +1,7 @@
 # English translations for PACKAGE package.
 # Copyright (C) 2010 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Rafał Cieślak <rafalcieslak256@gmail.com>, 2010.
+# Rafal Cieslak <rafalcieslak256@gmail.com>, 2010.
 #
 msgid ""
 msgstr ""

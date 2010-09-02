@@ -2,6 +2,7 @@ harmonyseq 0.6
     - Options affecting sequencers can be now set either in the main window or
         in the sequencer window.
     - Sequencer channel is displayed in the main window
+    - Muted-unmuted changed to On-off
 
 harmonyseq 0.5
     - Sequencers may be now added

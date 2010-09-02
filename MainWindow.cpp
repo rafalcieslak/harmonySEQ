@@ -99,6 +99,9 @@ MainWindow::MainWindow()
     hbox_down.pack_end(button_add, Gtk::PACK_SHRINK);
     button_add.set_label(_("Add"));
     button_add.signal_clicked().connect(mem_fun(*this, &MainWindow::OnButtonAddClicked));
+    hbox_down.pack_end(button_save, Gtk::PACK_SHRINK);
+    button_save.set_label(_("Save"));
+    button_save.signal_clicked().connect(mem_fun(*this, &MainWindow::SaveToFile));
 
     show_all_children(1);
 
@@ -244,5 +247,41 @@ void MainWindow::RefreshRow(Gtk::TreeModel::iterator it){
     row[m_columns.col_name] = sequencers[x]->GetName();
     row[m_columns.col_apply_mainnote] = sequencers[x]->GetApplyMainNote();
     row[m_columns.col_channel] = sequencers[x]->GetChannel();
+
+}
+
+void MainWindow::SaveToFile(){
+    *dbg << "saiving to file!\n";
+    Gtk::FileChooserDialog dialog(_("Choose a file to save..."),Gtk::FILE_CHOOSER_ACTION_SAVE);
+    dialog.set_transient_for(*this);
+    dialog.add_button(Gtk::Stock::CANCEL,Gtk::RESPONSE_CANCEL);
+    dialog.add_button(Gtk::Stock::SAVE,Gtk::RESPONSE_OK);
+    Glib::ustring filename = dialog.get_filename();
+
+    Glib::KeyFile kf;
+
+    int result = dialog.run();
+    switch (result){
+        case Gtk::RESPONSE_OK:
+
+            kf.set_integer("Settings vol 1","volume",100);
+            kf.set_string ("Settings vol 1","volume","lol");
+            kf.set_boolean("Settings vol 1", "active",1);
+            kf.set_boolean("s2","lol",0);
+            *dbg << kf.to_data();
+            
+
+
+
+
+            break;
+        case Gtk::RESPONSE_CANCEL:
+            
+            break;
+
+        default:
+            *dbg << "unknown response returned!\n";
+        break;
+    }
 
 }

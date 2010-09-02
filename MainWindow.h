@@ -26,12 +26,15 @@ public:
     void InitTreeData();
     void RefreshRow(Gtk::TreeModel::iterator it);
     void SequencerAdded(int n);
+    void SaveToFile();
     Gtk::VBox vbox1;
     Gtk::HBox hbox_up, hbox_down;
     Gtk::SpinButton main_note;
     Gtk::SpinButton tempo_button;
     Gtk::Label tempolabel, mainnotelabel;
     Gtk::Button button_add;
+    Gtk::Button button_save;
+
     
 
     class ModelColumns : public Gtk::TreeModel::ColumnRecord{
