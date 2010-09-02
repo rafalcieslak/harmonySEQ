@@ -56,7 +56,8 @@ MainWindow::MainWindow()
         cell = m_TreeView.get_column_cell_renderer(col_count - 1);
         Gtk::CellRendererToggle& tgl2 = dynamic_cast<Gtk::CellRendererToggle&> (*cell);
         tgl2.signal_toggled().connect(mem_fun(*this, &MainWindow::OnApplyMainNoteToggleToggled));
-        col_count = m_TreeView.append_column_editable(_("Channel"), m_columns.col_channel);
+        col_count = m_TreeView.append_column(_("Channel"), m_columns.col_channel);
+
         //Gtk::TreeView::Column* pColumn = m_TreeView.get_column(col_count-1);
         //pColumn->add_attribute(cell_spin->property_adjustment(),m_columns.col_channel);
 
