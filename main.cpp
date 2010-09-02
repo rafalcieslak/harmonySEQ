@@ -172,9 +172,11 @@ int main(int argc, char** argv) {
 
     gdk_threads_enter();
     {
+        mainwindow = new MainWindow; //it is important that the main window is constructed BEFORE
+                                     //te sequencers are, since the sequeners GUI calls functions from within the mainwindow.
         sequencers[0] = new Sequencer(example_sequence,example_notes,"seq 0");
         sequencers[1] = new Sequencer(example_sequence2,example_notes2,"seq 1");
-        mainwindow = new MainWindow;
+        mainwindow->InitTreeData();
     }
     gdk_threads_leave();
 

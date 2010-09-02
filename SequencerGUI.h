@@ -29,8 +29,8 @@ private:
     void OnNotesChanged(int note);
     void OnSequenceChanged(int seq);
     void OnChannelChanged();
-    void OnToggleMuteClicked();
-    void OnToggleApplyMainNoteClicked();
+    void OnToggleMuteToggled();
+    void OnToggleApplyMainNoteToggled();
 public:
     Sequencer *parent;
 

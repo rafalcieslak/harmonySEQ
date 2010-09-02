@@ -43,24 +43,6 @@ MainWindow::MainWindow()
         m_refTreeModel = Gtk::ListStore::create(m_columns);
         m_TreeView.set_model(m_refTreeModel);
 
-
-        *dbg << "loading initial data to the treeview/n";
-        //initial data
-        Gtk::TreeModel::Row row;
-        int rowcount = 0;
-        for (unsigned int x = 0; x < sequencers.size(); x++)
-        {
-            if (!sequencers[x]) continue; //seems it was removed
-            row = *(m_refTreeModel->append());
-            row[m_columns.col_ID] = x;
-            row[m_columns.col_muted] = sequencers[x]->GetMuted();
-            row[m_columns.col_name] = sequencers[x]->GetName();
-            row[m_columns.col_apply_mainnote] = sequencers[x]->GetApplyMainNote();
-            sequencers[x]->row_in_main_window = rowcount;
-            rowcount++;
-
-        }
-
         m_TreeView.append_column(_("ID"), m_columns.col_ID);
         int col_count = m_TreeView.append_column_editable(_("Name"), m_columns.col_name);
         Gtk::CellRenderer* cell = m_TreeView.get_column_cell_renderer(col_count - 1);
@@ -106,6 +88,13 @@ MainWindow::MainWindow()
 
         //catching row selection signal
         m_TreeView.signal_row_activated().connect(sigc::mem_fun(*this, &MainWindow::OnTreeviewRowActivated));
+
+
+        *dbg << "loading initial data to the treeview/n";
+        //initial data
+        InitTreeData();
+
+
     }// </editor-fold>
     vbox1.pack_start(hbox_down, Gtk::PACK_SHRINK);
     hbox_down.pack_end(button_add, Gtk::PACK_SHRINK);
@@ -216,12 +205,41 @@ MainWindow::SequencerAdded(int n)
     row[m_columns.col_name] = sequencers[n]->GetName();
     row[m_columns.col_muted] = sequencers[n]->GetMuted();
     row[m_columns.col_apply_mainnote] = sequencers[n]->GetApplyMainNote();
-    Gtk::TreeModel::Path path(iter);
-    sequencers[n]->row_in_main_window = atoi(path.to_string().c_str());
+    sequencers[n]->row_in_main_window = iter;
 
 }
 
 void MainWindow::OnButtonAddClicked(){
     spawn_sequencer();
     
+}
+
+void MainWindow::InitTreeData(){
+    m_refTreeModel->clear();
+    Gtk::TreeModel::Row row;
+    int rowcount = 0;
+    for (unsigned int x = 0; x < sequencers.size(); x++) {
+        if (!sequencers[x]) continue; //seems it was removed
+        Gtk::TreeModel::iterator iter = m_refTreeModel->append();
+        row = *(iter);
+        row[m_columns.col_ID] = x;
+        row[m_columns.col_muted] = sequencers[x]->GetMuted();
+        row[m_columns.col_name] = sequencers[x]->GetName();
+        row[m_columns.col_apply_mainnote] = sequencers[x]->GetApplyMainNote();
+        sequencers[x]->row_in_main_window = iter;
+        rowcount++;
+
+    }
+
+}
+
+void MainWindow::RefreshRow(Gtk::TreeModel::iterator it){
+    *dbg << "refreshing row" << ENDL;
+    Gtk::TreeModel::Row row = *it;
+
+    int x = row[m_columns.col_ID];
+    row[m_columns.col_muted] = sequencers[x]->GetMuted();
+    row[m_columns.col_name] = sequencers[x]->GetName();
+    row[m_columns.col_apply_mainnote] = sequencers[x]->GetApplyMainNote();
+
 }

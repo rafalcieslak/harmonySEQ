@@ -23,6 +23,8 @@ public:
     void OnNameEdited(const Glib::ustring& path,const Glib::ustring& newtext);
     void OnButtonAddClicked();
     void TempoChanged();
+    void InitTreeData();
+    void RefreshRow(Gtk::TreeModel::iterator it);
     void SequencerAdded(int n);
     Gtk::VBox vbox1;
     Gtk::HBox hbox_up, hbox_down;

@@ -43,7 +43,8 @@ public:
     void ShowWindow();
 
 
-    int row_in_main_window;
+
+    Gtk::TreeModel::iterator row_in_main_window;
     friend class SequencerWindow;
 protected:
     int channel;
