@@ -56,13 +56,11 @@ MainWindow::MainWindow()
         cell = m_TreeView.get_column_cell_renderer(col_count - 1);
         Gtk::CellRendererToggle& tgl2 = dynamic_cast<Gtk::CellRendererToggle&> (*cell);
         tgl2.signal_toggled().connect(mem_fun(*this, &MainWindow::OnApplyMainNoteToggleToggled));
+        col_count = m_TreeView.append_column_editable(_("Channel"), m_columns.col_channel);
+        //Gtk::TreeView::Column* pColumn = m_TreeView.get_column(col_count-1);
+        //pColumn->add_attribute(cell_spin->property_adjustment(),m_columns.col_channel);
 
         *dbg << "cell connection successful\n";
-        //Gtk::CellRenderer* cell = Gtk::manage(new Gtk::CellRendererToggle);
-        // there may be something missing
-        // like connecting the value with the toggle
-        // see http://library.gnome.org/devel/gtkmm-tutorial/stable/sec-treeview-examples.html.en
-        // if required
 
         /* sorting seems to crash strange things
         Gtk::TreeView::Column* pColumn = m_TreeView.get_column(0);
@@ -205,6 +203,7 @@ MainWindow::SequencerAdded(int n)
     row[m_columns.col_name] = sequencers[n]->GetName();
     row[m_columns.col_muted] = sequencers[n]->GetMuted();
     row[m_columns.col_apply_mainnote] = sequencers[n]->GetApplyMainNote();
+    row[m_columns.col_channel] = sequencers[n]->GetChannel();
     sequencers[n]->row_in_main_window = iter;
 
 }
@@ -226,6 +225,8 @@ void MainWindow::InitTreeData(){
         row[m_columns.col_muted] = sequencers[x]->GetMuted();
         row[m_columns.col_name] = sequencers[x]->GetName();
         row[m_columns.col_apply_mainnote] = sequencers[x]->GetApplyMainNote();
+        *dbg << "channel " << sequencers[x]->GetChannel() << ENDL;
+        row[m_columns.col_channel] = sequencers[x]->GetChannel();
         sequencers[x]->row_in_main_window = iter;
         rowcount++;
 
@@ -241,5 +242,6 @@ void MainWindow::RefreshRow(Gtk::TreeModel::iterator it){
     row[m_columns.col_muted] = sequencers[x]->GetMuted();
     row[m_columns.col_name] = sequencers[x]->GetName();
     row[m_columns.col_apply_mainnote] = sequencers[x]->GetApplyMainNote();
+    row[m_columns.col_channel] = sequencers[x]->GetChannel();
 
 }

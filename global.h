@@ -11,7 +11,7 @@
 #include <libintl.h>
 #include <locale.h>
 
-#define VERSION "0.5"
+#define VERSION "0.6"
 #define ENDL "\n"
 #define TICKS_PER_QUARTERNOTE 128
 #define _(STRING) gettext(STRING)

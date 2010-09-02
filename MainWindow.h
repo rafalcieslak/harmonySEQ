@@ -36,11 +36,12 @@ public:
 
     class ModelColumns : public Gtk::TreeModel::ColumnRecord{
     public:
-        ModelColumns(){add(col_ID);add(col_name);add(col_muted);add(col_apply_mainnote);}
+        ModelColumns(){add(col_ID);add(col_name);add(col_muted);add(col_apply_mainnote);add(col_channel);}
         Gtk::TreeModelColumn<int> col_ID;
         Gtk::TreeModelColumn<Glib::ustring> col_name;
         Gtk::TreeModelColumn<bool> col_muted;
         Gtk::TreeModelColumn<bool> col_apply_mainnote;
+        Gtk::TreeModelColumn<int> col_channel;
     };
 
     ModelColumns m_columns;

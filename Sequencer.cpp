@@ -89,6 +89,7 @@ void Sequencer::Init(){
 
     muted = true;
     apply_mainnote = true;
+    channel = 1;
     *dbg << notes[0]<<ENDL;
     *dbg << GetNotes(0);
     gui_window = new SequencerWindow(this);

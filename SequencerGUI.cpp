@@ -95,6 +95,7 @@ void SequencerWindow::UpdateValues(){
 void SequencerWindow::OnChannelChanged(){
 
     parent->channel = channel_button.get_value();
+    if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
 }
 
 void SequencerWindow::OnToggleMuteToggled(){

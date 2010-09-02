@@ -1,3 +1,8 @@
+harmonyseq 0.6
+    - Options affecting sequencers can be now set either in the main window or
+        in the sequencer window.
+    - Sequencer channel is displayed in the main window
+
 harmonyseq 0.5
     - Sequencers may be now added
     - Muting and name changing can be done through main window
