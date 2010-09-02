@@ -48,7 +48,7 @@ MainWindow::MainWindow()
         Gtk::CellRenderer* cell = m_TreeView.get_column_cell_renderer(col_count - 1);
         Gtk::CellRendererText& txt = dynamic_cast<Gtk::CellRendererText&> (*cell);
         txt.signal_edited().connect(mem_fun(*this, &MainWindow::OnNameEdited));
-        col_count = m_TreeView.append_column_editable(_("Muted"), m_columns.col_muted);
+        col_count = m_TreeView.append_column_editable(_("On"), m_columns.col_muted);
         cell = m_TreeView.get_column_cell_renderer(col_count - 1);
         Gtk::CellRendererToggle& tgl = dynamic_cast<Gtk::CellRendererToggle&> (*cell);
         tgl.signal_toggled().connect(mem_fun(*this, &MainWindow::OnMutedToggleToggled));
@@ -171,7 +171,7 @@ MainWindow::OnMutedToggleToggled(const Glib::ustring& path)
     if (!iter) return;
     Gtk::TreeModel::Row row = *iter;
     *dbg << "the clicked row's ID was " << row[m_columns.col_ID] << ENDL;
-    sequencers[row[m_columns.col_ID]]->SetMuted(row[m_columns.col_muted]);
+    sequencers[row[m_columns.col_ID]]->SetOn(row[m_columns.col_muted]);
 }
 
 void MainWindow::OnApplyMainNoteToggleToggled(const Glib::ustring& path){
@@ -202,7 +202,7 @@ MainWindow::SequencerAdded(int n)
     Gtk::TreeModel::Row row = *(iter);
     row[m_columns.col_ID] = n;
     row[m_columns.col_name] = sequencers[n]->GetName();
-    row[m_columns.col_muted] = sequencers[n]->GetMuted();
+    row[m_columns.col_muted] = sequencers[n]->GetOn();
     row[m_columns.col_apply_mainnote] = sequencers[n]->GetApplyMainNote();
     row[m_columns.col_channel] = sequencers[n]->GetChannel();
     sequencers[n]->row_in_main_window = iter;
@@ -223,7 +223,7 @@ void MainWindow::InitTreeData(){
         Gtk::TreeModel::iterator iter = m_refTreeModel->append();
         row = *(iter);
         row[m_columns.col_ID] = x;
-        row[m_columns.col_muted] = sequencers[x]->GetMuted();
+        row[m_columns.col_muted] = sequencers[x]->GetOn();
         row[m_columns.col_name] = sequencers[x]->GetName();
         row[m_columns.col_apply_mainnote] = sequencers[x]->GetApplyMainNote();
         *dbg << "channel " << sequencers[x]->GetChannel() << ENDL;
@@ -240,7 +240,7 @@ void MainWindow::RefreshRow(Gtk::TreeModel::iterator it){
     Gtk::TreeModel::Row row = *it;
 
     int x = row[m_columns.col_ID];
-    row[m_columns.col_muted] = sequencers[x]->GetMuted();
+    row[m_columns.col_muted] = sequencers[x]->GetOn();
     row[m_columns.col_name] = sequencers[x]->GetName();
     row[m_columns.col_apply_mainnote] = sequencers[x]->GetApplyMainNote();
     row[m_columns.col_channel] = sequencers[x]->GetChannel();

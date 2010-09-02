@@ -56,7 +56,7 @@ SequencerWindow::SequencerWindow(Sequencer* prt){
     tgl_mute.set_label(_("Mute"));
     tgl_apply_mainnote.set_label(_("Apply main note"));
     tgl_mute.signal_toggled().connect(mem_fun(*this,&SequencerWindow::OnToggleMuteToggled));
-    tgl_mute.set_active(parent->muted);
+    tgl_mute.set_active(parent->on);
     tgl_apply_mainnote.signal_toggled().connect(mem_fun(*this,&SequencerWindow::OnToggleApplyMainNoteToggled));
     tgl_apply_mainnote.set_active(parent->apply_mainnote);
     box_of_sliders.pack_start(low_hbox);
@@ -99,7 +99,7 @@ void SequencerWindow::OnChannelChanged(){
 }
 
 void SequencerWindow::OnToggleMuteToggled(){
-    parent->muted = tgl_mute.get_active();
+    parent->on = tgl_mute.get_active();
     if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
 }
 

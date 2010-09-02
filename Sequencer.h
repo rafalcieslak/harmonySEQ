@@ -32,8 +32,8 @@ public:
     int GetSequence(int n);
     vector<int> notes;
     int GetNotes(int n);
-    void SetMuted(bool m);
-    bool GetMuted();
+    void SetOn(bool m);
+    bool GetOn();
     void SetApplyMainNote(bool a);
     bool GetApplyMainNote();
     void SetChannel(int ch);
@@ -49,7 +49,7 @@ public:
 protected:
     int channel;
     bool apply_mainnote;
-    bool muted;
+    bool on;
     Glib::ustring name;
     SequencerWindow *gui_window;
 

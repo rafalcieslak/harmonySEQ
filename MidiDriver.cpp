@@ -124,7 +124,7 @@ void MidiDriver::UpdateQueue(){
         if(sequencers[n] == NULL) continue;
         //*dbg << "sequencer " << n << " is ";
         //*dbg << ((sequencers[n]->muted)?"muted":"not muted") << ENDL;
-        if (sequencers[n]->GetMuted()) continue;
+        if (!sequencers[n]->GetOn()) continue;
         for (unsigned int x = 0; x < sequencers[n]->sequence.size();x++){
             snd_seq_ev_clear(&ev);
             int note = sequencers[n]->notes[sequencers[n]->sequence[x]];
