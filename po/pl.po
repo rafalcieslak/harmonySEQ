@@ -7,37 +7,31 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-08-31 22:11+0200\n"
-"PO-Revision-Date: 2010-09-01 00:09+0000\n"
+"POT-Creation-Date: 2010-09-01 20:46+0200\n"
+"PO-Revision-Date: 2010-09-01 18:58+0000\n"
 "Last-Translator: rafal cieslak <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-01 04:24+0000\n"
+"X-Launchpad-Export-Date: 2010-09-02 04:14+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: main.cpp:200
-#, c-format
-msgid ""
-"    -p --ports n     sets ports number to n\n"
-"    -d --debug       enters debug mode, prints lots of debug messeges\n"
-"    -h --help        prints this help messase and exits\n"
-"    -v --version     prints the program version\n"
-msgstr ""
-"    -p --ports n     ustawia ilość portów na n\n"
-"    -d --debug       włącza tryb Debug, wyświetla mnóstwo komunikatów na "
-"temat pracy programu\n"
-"    -h --help        wyświetla tę wiadomość pomocy\n"
-"    -v --version     wyświetla wersję programu\n"
-
-#: MainWindow.cpp:136
+#: MainWindow.cpp:168
 msgid ", name is: "
 msgstr ", nazwa to: "
+
+#: MainWindow.cpp:112
+msgid "Add"
+msgstr "Dodaj"
 
 #: MidiDriver.cpp:67
 msgid "Alsa midi driver init successfull.\n"
 msgstr "Inicjacja sterownika MIDI powiodła się.\n"
+
+#: SequencerGUI.cpp:55
+msgid "Apply main note"
+msgstr "Stosuj główną nutę"
 
 #: debug.cpp:12
 #, c-format
@@ -56,41 +50,103 @@ msgstr "Nie udało się otworzyć portu wyjściowego.\n"
 msgid "Failed to open ALSA sequencer.\n"
 msgstr "Nie udało się otworzyć sekwencera ALSA.\n"
 
+#: MainWindow.cpp:64
+msgid "ID"
+msgstr "ID"
+
 #: SequencerGUI.cpp:46
 msgid "MIDI channel:"
 msgstr "Kanał MIDI"
 
-#: MainWindow.cpp:21
+#: MainWindow.cpp:73
+msgid "MN"
+msgstr "GN"
+
+#: MainWindow.cpp:23
 msgid "Main Note:"
 msgstr "Nuta główna:"
 
-#: SequencerGUI.cpp:18
-msgid "Sequencer"
-msgstr "Sekwencer"
+#: SequencerGUI.cpp:54
+msgid "Mute"
+msgstr "Wycisz"
 
-#: MainWindow.cpp:20
+#: MainWindow.cpp:69
+msgid "Muted"
+msgstr "Wyciszony"
+
+#: MainWindow.cpp:65
+msgid "Name"
+msgstr "Nazwa"
+
+#: MainWindow.cpp:22
 msgid "Tempo:"
 msgstr "Tempo:"
 
-#: MainWindow.cpp:135
+#: MainWindow.cpp:167
 msgid "activated row "
 msgstr "aktywowano wiersz "
 
-#: main.cpp:196
+#: main.cpp:198
 #, c-format
-msgid "harmonySEQ, version %s\n"
-msgstr "harmonySEQ, wersja %s\n"
+msgid ""
+"harmonySEQ, version %s\n"
+"\n"
+"usage: harmonySEQ [-hdvp]\n"
+"\n"
+"    -p --ports n     sets ports number to n\n"
+"    -d --debug       enters debug mode, prints lots of debug messeges\n"
+"    -h --help        prints this help messase and exits\n"
+"    -v --version     prints the program version\n"
+msgstr ""
+"harmonySEQ, wersja %s\n"
+"\n"
+"użycie: harmonySEQ [-hdvp]\n"
+"\n"
+"    -p --ports n     ustawia ilość portów na n\n"
+"    -d --debug       włącza tryb Debug, wyświetla mnóstwo komunikatów o "
+"pracy programu\n"
+"    -h --help        wyświetla tę wiadomość pomocy\n"
+"    -v --version     wyświetla wersję programu\n"
 
-#: main.cpp:136
+#: Sequencer.cpp:23
+#, c-format
+msgid "seq %d"
+msgstr "seq %d"
+
+#: Sequencer.h:19
+msgid "sequencer"
+msgstr "sekwencer"
+
+#: main.cpp:138
 msgid "setting ports number to "
 msgstr "ustaw ilość portów na "
 
-#: main.cpp:141
+#: main.cpp:143
 #, c-format
 msgid "unknown option '%c'\n"
 msgstr "nieznana opcja '%c'\n"
 
-#: main.cpp:144
+#: main.cpp:146
 #, c-format
 msgid "unrecognized option '%s'\n"
 msgstr "nierozpoznana opcja '%s'\n"
+
+#, c-format
+#~ msgid "harmonySEQ, version %s\n"
+#~ msgstr "harmonySEQ, wersja %s\n"
+
+#~ msgid "Sequencer"
+#~ msgstr "Sekwencer"
+
+#, c-format
+#~ msgid ""
+#~ "    -p --ports n     sets ports number to n\n"
+#~ "    -d --debug       enters debug mode, prints lots of debug messeges\n"
+#~ "    -h --help        prints this help messase and exits\n"
+#~ "    -v --version     prints the program version\n"
+#~ msgstr ""
+#~ "    -p --ports n     ustawia ilość portów na n\n"
+#~ "    -d --debug       włącza tryb Debug, wyświetla mnóstwo komunikatów na "
+#~ "temat pracy programu\n"
+#~ "    -h --help        wyświetla tę wiadomość pomocy\n"
+#~ "    -v --version     wyświetla wersję programu\n"
