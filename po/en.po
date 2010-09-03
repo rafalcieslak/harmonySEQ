@@ -7,21 +7,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-01 20:46+0200\n"
-"PO-Revision-Date: 2010-09-02 16:02+0200\n"
-"Last-Translator: Rafa Cielak <rafalcieslak256@gmail.com>\n"
+"POT-Creation-Date: 2010-09-02 19:02+0200\n"
+"PO-Revision-Date: 2010-09-02 22:57+0000\n"
+"Last-Translator: rafal cieslak <Unknown>\n"
 "Language-Team: English\n"
-"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ASCII\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Launchpad-Export-Date: 2010-09-03 04:10+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+"Language: en\n"
 
-#: MainWindow.cpp:168
+#: MainWindow.cpp:156
 msgid ", name is: "
 msgstr ", name is: "
 
-#: MainWindow.cpp:112
+#: MainWindow.cpp:100
 msgid "Add"
 msgstr "Add"
 
@@ -29,9 +30,13 @@ msgstr "Add"
 msgid "Alsa midi driver init successfull.\n"
 msgstr "Alsa midi driver init successfull.\n"
 
-#: SequencerGUI.cpp:55
+#: SequencerGUI.cpp:57
 msgid "Apply main note"
 msgstr "Apply main note"
+
+#: MainWindow.cpp:59
+msgid "Channel"
+msgstr ""
 
 #: debug.cpp:12
 #, c-format
@@ -50,15 +55,15 @@ msgstr "Failed to create output port.\n"
 msgid "Failed to open ALSA sequencer.\n"
 msgstr "Failed to open ALSA sequencer.\n"
 
-#: MainWindow.cpp:64
+#: MainWindow.cpp:46
 msgid "ID"
 msgstr "ID"
 
-#: SequencerGUI.cpp:46
+#: SequencerGUI.cpp:48
 msgid "MIDI channel:"
 msgstr "MIDI channel:"
 
-#: MainWindow.cpp:73
+#: MainWindow.cpp:55
 msgid "MN"
 msgstr "MN"
 
@@ -66,27 +71,27 @@ msgstr "MN"
 msgid "Main Note:"
 msgstr "Main Note:"
 
-#: SequencerGUI.cpp:54
+#: SequencerGUI.cpp:56
 msgid "Mute"
 msgstr "Mute"
 
-#: MainWindow.cpp:69
-msgid "Muted"
-msgstr "Muted"
-
-#: MainWindow.cpp:65
+#: MainWindow.cpp:47
 msgid "Name"
 msgstr "Name"
+
+#: MainWindow.cpp:51
+msgid "On"
+msgstr ""
 
 #: MainWindow.cpp:22
 msgid "Tempo:"
 msgstr "Tempo:"
 
-#: MainWindow.cpp:167
+#: MainWindow.cpp:155
 msgid "activated row "
 msgstr "activated row "
 
-#: main.cpp:198
+#: main.cpp:200
 #, c-format
 msgid ""
 "harmonySEQ, version %s\n"
@@ -129,3 +134,6 @@ msgstr "unknown option '%c'\n"
 #, c-format
 msgid "unrecognized option '%s'\n"
 msgstr "unrecognized option '%s'\n"
+
+#~ msgid "Muted"
+#~ msgstr "Muted"
