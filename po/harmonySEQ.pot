@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-02 19:02+0200\n"
+"POT-Creation-Date: 2010-09-03 21:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: MainWindow.cpp:156
+#: MainWindow.cpp:164
 msgid ", name is: "
 msgstr ""
 
-#: MainWindow.cpp:100
+#: MainWindow.cpp:102
 msgid "Add"
 msgstr ""
 
@@ -33,13 +33,31 @@ msgstr ""
 msgid "Apply main note"
 msgstr ""
 
-#: MainWindow.cpp:59
+#: MainWindow.cpp:61
 msgid "Channel"
+msgstr ""
+
+#: MainWindow.cpp:318
+msgid "Choose a file to open..."
+msgstr ""
+
+#: MainWindow.cpp:260
+msgid "Choose a file to save..."
 msgstr ""
 
 #: debug.cpp:12
 #, c-format
 msgid "Debug mode started.\n"
+msgstr ""
+
+#: MainWindow.cpp:278
+#, c-format
+msgid "ERROR - error while opening file %s to write.\n"
+msgstr ""
+
+#: MainWindow.cpp:334
+#, c-format
+msgid "ERROR - error while trying to read %s\n"
 msgstr ""
 
 #: MidiDriver.cpp:61
@@ -54,7 +72,7 @@ msgstr ""
 msgid "Failed to open ALSA sequencer.\n"
 msgstr ""
 
-#: MainWindow.cpp:46
+#: MainWindow.cpp:48
 msgid "ID"
 msgstr ""
 
@@ -62,31 +80,35 @@ msgstr ""
 msgid "MIDI channel:"
 msgstr ""
 
-#: MainWindow.cpp:55
+#: MainWindow.cpp:57
 msgid "MN"
 msgstr ""
 
-#: MainWindow.cpp:23
+#: MainWindow.cpp:25
 msgid "Main Note:"
 msgstr ""
 
-#: SequencerGUI.cpp:56
-msgid "Mute"
-msgstr ""
-
-#: MainWindow.cpp:47
+#: MainWindow.cpp:49
 msgid "Name"
 msgstr ""
 
-#: MainWindow.cpp:51
+#: MainWindow.cpp:53 SequencerGUI.cpp:56
 msgid "On"
 msgstr ""
 
-#: MainWindow.cpp:22
+#: MainWindow.cpp:108
+msgid "Open"
+msgstr ""
+
+#: MainWindow.cpp:105
+msgid "Save"
+msgstr ""
+
+#: MainWindow.cpp:24
 msgid "Tempo:"
 msgstr ""
 
-#: MainWindow.cpp:155
+#: MainWindow.cpp:163
 msgid "activated row "
 msgstr ""
 
