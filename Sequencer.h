@@ -13,7 +13,7 @@
 using namespace std;
 
 #define SEQUENCE_CONST_SIZE 8
-#define NOTES_CONST_SIZE 8
+#define NOTES_CONST_SIZE 6
 
 //the following may not work with gettext. careful!
 #define SEQUENCER_DEFAULT_NAME _("sequencer")
@@ -41,6 +41,7 @@ public:
     void SetName(Glib::ustring n);
     Glib::ustring GetName();
     void ShowWindow();
+    void UpdateGui();
 
 
 

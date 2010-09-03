@@ -118,3 +118,4 @@ int Sequencer::GetChannel(){return channel;}
 void Sequencer::SetName(Glib::ustring nm){name = nm;gui_window->set_title(nm);}
 Glib::ustring Sequencer::GetName(){return name;}
 void Sequencer::ShowWindow(){gui_window->show();}
+void Sequencer::UpdateGui(){gui_window->UpdateValues();}

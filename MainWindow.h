@@ -27,6 +27,7 @@ public:
     void RefreshRow(Gtk::TreeModel::iterator it);
     void SequencerAdded(int n);
     void SaveToFile();
+    void LoadFromFile();
     Gtk::VBox vbox1;
     Gtk::HBox hbox_up, hbox_down;
     Gtk::SpinButton main_note;
@@ -34,6 +35,7 @@ public:
     Gtk::Label tempolabel, mainnotelabel;
     Gtk::Button button_add;
     Gtk::Button button_save;
+    Gtk::Button button_open;
 
     
 

@@ -11,7 +11,7 @@
 #### Compiler and tool definitions shared by all build targets #####
 CCC = g++
 CXX = g++
-BASICOPTS = -g -m64
+BASICOPTS = -g -m64 -lgthread-2.0
 CCFLAGS = $(BASICOPTS) -lasound `pkg-config --cflags --libs gtkmm-2.4`
 CXXFLAGS = $(BASICOPTS) -Wall -lasound  `pkg-config --cflags --libs gtkmm-2.4`
 CCADMIN = 

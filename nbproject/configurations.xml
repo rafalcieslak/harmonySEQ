@@ -61,7 +61,7 @@
           <incDir>
             <pElem>.</pElem>
           </incDir>
-          <commandLine>`pkg-config --libs --cflags gtkmm-2.4`</commandLine>
+          <commandLine>`pkg-config --libs --cflags gtkmm-2.4` -fno-stack-protector</commandLine>
           <warningLevel>2</warningLevel>
         </ccTool>
         <linkerTool>

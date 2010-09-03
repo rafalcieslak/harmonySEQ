@@ -97,7 +97,7 @@ void threadb::th2(){
 int main(int argc, char** argv) {
     //gtk inits
     Glib::thread_init();
-    g_thread_init(NULL);
+    //g_thread_init(NULL);
     gdk_threads_init();
     Gtk::Main kit(argc, argv);
 

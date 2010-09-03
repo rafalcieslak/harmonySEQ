@@ -46,8 +46,8 @@ OBJECTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=-m64 `pkg-config --libs --cflags gtkmm-2.4` 
-CXXFLAGS=-m64 `pkg-config --libs --cflags gtkmm-2.4` 
+CCFLAGS=-m64 `pkg-config --libs --cflags gtkmm-2.4` -fno-stack-protector 
+CXXFLAGS=-m64 `pkg-config --libs --cflags gtkmm-2.4` -fno-stack-protector 
 
 # Fortran Compiler Flags
 FFLAGS=
