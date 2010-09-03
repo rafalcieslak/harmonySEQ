@@ -1,3 +1,6 @@
+harmonyseq 0.7
+    - Saving and loading files
+
 harmonyseq 0.6
     - Options affecting sequencers can be now set either in the main window or
         in the sequencer window.
