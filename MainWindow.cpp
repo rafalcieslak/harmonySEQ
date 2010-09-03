@@ -1,12 +1,14 @@
 
 #include "MainWindow.h"
 #include "debug.h"
+#include "error.h"
 #include "global.h"
 #include "MidiDriver.h"
 #include "Sequencer.h"
 extern vector<Sequencer *> sequencers;
 extern int mainnote;
 extern debug* dbg;
+extern error* err;
 extern int running;
 extern int tempo;
 extern MidiDriver* midi;
@@ -256,24 +258,46 @@ void MainWindow::SaveToFile(){
     dialog.set_transient_for(*this);
     dialog.add_button(Gtk::Stock::CANCEL,Gtk::RESPONSE_CANCEL);
     dialog.add_button(Gtk::Stock::SAVE,Gtk::RESPONSE_OK);
-    Glib::ustring filename = dialog.get_filename();
 
     Glib::KeyFile kf;
 
     int result = dialog.run();
+    Glib::ustring filename = dialog.get_filename();
+    int n = 1;
+    char tempx[30], temp[100];
+    ofstream output_file;
+
     switch (result){
         case Gtk::RESPONSE_OK:
 
-            kf.set_integer("Settings vol 1","volume",100);
-            kf.set_string ("Settings vol 1","volume","lol");
-            kf.set_boolean("Settings vol 1", "active",1);
-            kf.set_boolean("s2","lol",0);
+
+            output_file.open(filename.c_str(),ios_base::trunc);
+            if(!output_file.good()){
+                sprintf(temp,_("ERROR - error while opening file %s to write.\n"),filename.c_str());
+                *err << temp;
+
+            }
+
+            kf.set_double(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_TEMPO,tempo);
+            kf.set_integer(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_MAINNOTE,mainnote);
+            kf.set_integer(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_SEQ_NUM,sequencers.size());
+
+            for (int x = 0; x < sequencers.size(); x++){
+                sprintf(temp,FILE_GROUP_TEMPLATE_SEQ,x);
+                kf.set_string(temp,FILE_KEY_SEQ_NAME,sequencers[x]->GetName());
+                kf.set_boolean(temp,FILE_KEY_SEQ_ON,sequencers[x]->GetOn());
+                kf.set_integer(temp,FILE_KEY_SEQ_CHANNEL,sequencers[x]->GetChannel());
+                kf.set_boolean(temp,FILE_KEY_SEQ_APPLY_MAIN_NOTE,sequencers[x]->GetApplyMainNote());
+                kf.set_integer_list(temp,FILE_KEY_SEQ_SEQUENCE,sequencers[x]->sequence);
+                kf.set_integer_list(temp,FILE_KEY_SEQ_NOTES,sequencers[x]->notes);
+
+            }
+
+
             *dbg << kf.to_data();
-            
+            output_file << kf.to_data().c_str();
 
-
-
-
+            output_file.close();
             break;
         case Gtk::RESPONSE_CANCEL:
             

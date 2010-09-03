@@ -18,7 +18,7 @@ error::~error() {
 }
 
 void error::say(const char* message){
-    fputs("ERROR - ",stdout);
+    //fputs("ERROR - ",stdout);
     fputs(message,stdout);
 
 }

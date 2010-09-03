@@ -53,7 +53,7 @@ SequencerWindow::SequencerWindow(Sequencer* prt){
     low_hbox.pack_start(toggle_vbox,Gtk::PACK_SHRINK);
     toggle_vbox.pack_start(tgl_mute);
     toggle_vbox.pack_start(tgl_apply_mainnote);
-    tgl_mute.set_label(_("Mute"));
+    tgl_mute.set_label(_("On"));
     tgl_apply_mainnote.set_label(_("Apply main note"));
     tgl_mute.signal_toggled().connect(mem_fun(*this,&SequencerWindow::OnToggleMuteToggled));
     tgl_mute.set_active(parent->on);
