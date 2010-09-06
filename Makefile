@@ -23,27 +23,26 @@ SRCS =  main.cpp\
         
 OBJS	= $(SRCS:.cpp=.o)
 
-BUILD_DIR = build
 
-OBD =   $(BUILD_DIR)/main.o\
-        $(BUILD_DIR)/MainWindow.o \
-        $(BUILD_DIR)/MidiDriver.o \
-        $(BUILD_DIR)/Sequencer.o \
-        $(BUILD_DIR)/SequencerGUI.o \
-        $(BUILD_DIR)/error.o \
-        $(BUILD_DIR)/debug.o \
-        $(BUILD_DIR)/Files.o
+OBD =   main.o\
+        MainWindow.o \
+        MidiDriver.o \
+        Sequencer.o \
+        SequencerGUI.o \
+        error.o \
+        debug.o \
+        Files.o
 
 all: $(APP)
 
 .cpp.o:
-	$(CC) $(CFLAGS) -c $< -o $(BUILD_DIR)/$@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 
-$(APP):	$(OBJS)
+$(APP):	$(OBD)
 	$(CC) $(OBD) $(LDFLAGS) -o $(APP)
 
 clean:
-	rm -f *.o  *~ $(APP) $(BUILD_DIR)/*.o
+	rm -f *.o  *~ $(APP)
 
 
