@@ -85,28 +85,39 @@ MainWindow::MainWindow()
 
         *dbg << "cell connection successful\n";
 
-        /* sorting seems to crash strange things
-        Gtk::TreeView::Column* pColumn = m_TreeView.get_column(0);
-        pColumn->set_sort_column(m_columns.col_ID);
 
-        pColumn = m_TreeView.get_column(1);
+        Gtk::TreeView::Column* pColumn;
+        int tricky = 0;
+        pColumn = m_TreeView.get_column(tricky);
+        if(debugging){
+            pColumn->set_sort_column(m_columns.col_ID);
+            tricky++;
+            pColumn = m_TreeView.get_column(tricky);
+        }
+
         pColumn->set_sort_column(m_columns.col_name);
-
-        pColumn = m_TreeView.get_column(2);
+        tricky++;
+        pColumn = m_TreeView.get_column(tricky);
         pColumn->set_sort_column(m_columns.col_muted);
+        tricky++;
+        pColumn = m_TreeView.get_column(tricky);
+        pColumn->set_sort_column(m_columns.col_apply_mainnote);
+        tricky++;
+        pColumn = m_TreeView.get_column(tricky);
+        pColumn->set_sort_column(m_columns.col_channel);
 
-         */
+         
         //may cause segfaults, beware!
-        for (guint i = 0; i < 3; i++)
+        /*for (guint i = 0; i < 3; i++)
         {
             Gtk::TreeView::Column* pColumn = m_TreeView.get_column(i);
-            pColumn->set_reorderable();
-        }
+            pColumn->set_reorderable(false);
+        }*/
 
         //drag and drop enabling
         m_TreeView.enable_model_drag_source();
         m_TreeView.enable_model_drag_dest();
-
+        
         //catching row selection signal
         m_TreeView.signal_row_activated().connect(sigc::mem_fun(*this, &MainWindow::OnTreeviewRowActivated));
 
@@ -239,7 +250,8 @@ MainWindow::AddSequencerRow(int n)
     row[m_columns.col_muted] = sequencers[n]->GetOn();
     row[m_columns.col_apply_mainnote] = sequencers[n]->GetApplyMainNote();
     row[m_columns.col_channel] = sequencers[n]->GetChannel();
-    sequencers[n]->row_in_main_window = iter;
+    Gtk::TreeRowReference rowref(m_refTreeModel,m_refTreeModel->get_path(iter));
+    sequencers[n]->row_in_main_window = rowref;
     return iter;
 }
 
@@ -259,17 +271,19 @@ void MainWindow::InitTreeData(){
         row[m_columns.col_apply_mainnote] = sequencers[x]->GetApplyMainNote();
         *dbg << "channel " << sequencers[x]->GetChannel() << ENDL;
         row[m_columns.col_channel] = sequencers[x]->GetChannel();
-        sequencers[x]->row_in_main_window = iter;
+        Gtk::TreeRowReference rowref(m_refTreeModel,m_refTreeModel->get_path(iter));
+        sequencers[x]->row_in_main_window = rowref;
         rowcount++;
 
     }
 
 }
 
-void MainWindow::RefreshRow(Gtk::TreeModel::iterator it){
+void MainWindow::RefreshRow(Gtk::TreeRowReference rowref){
     *dbg << "refreshing row" << ENDL;
-    Gtk::TreeModel::Row row = *it;
+    Gtk::TreeModel::Row row = *(m_refTreeModel->get_iter(rowref.get_path()));
 
+    *dbg << "row got" << ENDL;
     int x = row[m_columns.col_ID];
     row[m_columns.col_muted] = sequencers[x]->GetOn();
     row[m_columns.col_name] = sequencers[x]->GetName();

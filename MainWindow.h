@@ -40,7 +40,7 @@ public:
     void OnButtonAddClicked();
     void TempoChanged();
     void InitTreeData();
-    void RefreshRow(Gtk::TreeModel::iterator it);
+    void RefreshRow(Gtk::TreeRowReference it);
     Gtk::TreeModel::iterator AddSequencerRow(int n);
     void OnSaveClicked();
     void OnLoadClicked();
