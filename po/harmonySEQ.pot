@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-03 21:47+0200\n"
+"POT-Creation-Date: 2010-09-06 19:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: MainWindow.cpp:164
+#: MainWindow.cpp:173
 msgid ", name is: "
 msgstr ""
 
-#: MainWindow.cpp:102
+#: MainWindow.cpp:109
 msgid "Add"
 msgstr ""
 
@@ -33,16 +33,20 @@ msgstr ""
 msgid "Apply main note"
 msgstr ""
 
-#: MainWindow.cpp:61
+#: MainWindow.cpp:64
 msgid "Channel"
 msgstr ""
 
-#: MainWindow.cpp:318
+#: Files.cpp:77
 msgid "Choose a file to open..."
 msgstr ""
 
-#: MainWindow.cpp:260
+#: Files.cpp:17
 msgid "Choose a file to save..."
+msgstr ""
+
+#: MainWindow.cpp:117
+msgid "Clone"
 msgstr ""
 
 #: debug.cpp:12
@@ -50,12 +54,12 @@ msgstr ""
 msgid "Debug mode started.\n"
 msgstr ""
 
-#: MainWindow.cpp:278
+#: Files.cpp:35
 #, c-format
 msgid "ERROR - error while opening file %s to write.\n"
 msgstr ""
 
-#: MainWindow.cpp:334
+#: Files.cpp:93
 #, c-format
 msgid "ERROR - error while trying to read %s\n"
 msgstr ""
@@ -72,7 +76,7 @@ msgstr ""
 msgid "Failed to open ALSA sequencer.\n"
 msgstr ""
 
-#: MainWindow.cpp:48
+#: MainWindow.cpp:50
 msgid "ID"
 msgstr ""
 
@@ -80,35 +84,39 @@ msgstr ""
 msgid "MIDI channel:"
 msgstr ""
 
-#: MainWindow.cpp:57
+#: MainWindow.cpp:60
 msgid "MN"
 msgstr ""
 
-#: MainWindow.cpp:25
+#: MainWindow.cpp:27
 msgid "Main Note:"
 msgstr ""
 
-#: MainWindow.cpp:49
+#: MainWindow.cpp:52
 msgid "Name"
 msgstr ""
 
-#: MainWindow.cpp:53 SequencerGUI.cpp:56
+#: MainWindow.cpp:56 SequencerGUI.cpp:56
 msgid "On"
 msgstr ""
 
-#: MainWindow.cpp:108
+#: MainWindow.cpp:113
 msgid "Open"
 msgstr ""
 
-#: MainWindow.cpp:105
+#: MainWindow.cpp:115
+msgid "Remove"
+msgstr ""
+
+#: MainWindow.cpp:111
 msgid "Save"
 msgstr ""
 
-#: MainWindow.cpp:24
+#: MainWindow.cpp:26
 msgid "Tempo:"
 msgstr ""
 
-#: MainWindow.cpp:163
+#: MainWindow.cpp:172
 msgid "activated row "
 msgstr ""
 
