@@ -212,7 +212,7 @@ MainWindow::OnNameEdited(const Glib::ustring& path, const Glib::ustring& newtext
     sequencers[row[m_columns.col_ID]]->SetName(newtext);
 }
 
-void
+Gtk::TreeModel::iterator
 MainWindow::AddSequencerRow(int n)
 {
     *dbg << "wooho! sequener " << n << " was just added, and we have to add it now to a new row in the list!" << ENDL;
@@ -224,13 +224,10 @@ MainWindow::AddSequencerRow(int n)
     row[m_columns.col_apply_mainnote] = sequencers[n]->GetApplyMainNote();
     row[m_columns.col_channel] = sequencers[n]->GetChannel();
     sequencers[n]->row_in_main_window = iter;
-
+    return iter;
 }
 
-void MainWindow::OnButtonAddClicked(){
-    spawn_sequencer();
-    
-}
+
 
 void MainWindow::InitTreeData(){
     m_refTreeModel->clear();
@@ -297,7 +294,19 @@ void MainWindow::OnRemoveClicked(){
 
 }
 
-void MainWindow::OnCloneClicked(){
+void MainWindow::OnButtonAddClicked(){
+    Gtk::TreeModel::iterator iter = spawn_sequencer();
+    m_TreeView.get_selection()->select(iter);
 
+}
+
+void MainWindow::OnCloneClicked(){
+    Gtk::TreeModel::iterator iter = *(m_TreeView.get_selection())->get_selected();
+    if(!iter) return;
+    Gtk::TreeModel::Row row = *iter;
+    int id = row[m_columns.col_ID];
+
+    iter = clone_sequencer(id);
+    m_TreeView.get_selection()->select(iter);
 
 }

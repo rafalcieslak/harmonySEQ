@@ -15,7 +15,7 @@ extern MainWindow* mainwindow;
 extern vector<Sequencer *> sequencers;
 
 
-int spawn_sequencer(){
+Gtk::TreeModel::iterator spawn_sequencer(){
     int n = sequencers.size();
 
     //init and push to vector
@@ -25,9 +25,19 @@ int spawn_sequencer(){
     sequencers.push_back(new_seq);
 
     //add to main window
-    mainwindow->AddSequencerRow(n);
+    return mainwindow->AddSequencerRow(n);
 
-    return n;
+    
+}
+
+Gtk::TreeModel::iterator clone_sequencer(int orig){
+    int n = sequencers.size();
+    
+    Sequencer *new_seq = new Sequencer(sequencers[orig]);
+    sequencers.push_back(new_seq);
+
+    return mainwindow->AddSequencerRow(n);
+
 }
 
 
@@ -79,7 +89,17 @@ Sequencer::Sequencer(int seq[],int note[], Glib::ustring _name)
     Init();
 }
 
-Sequencer::Sequencer(const Sequencer& orig) {
+Sequencer::Sequencer(const Sequencer *orig) {
+    name = orig->name;
+    on = orig->on;
+    notes = orig->notes;
+    sequence = orig->sequence;
+    channel = orig->channel;
+    apply_mainnote = orig->apply_mainnote;
+    gui_window = new SequencerWindow(this);
+
+
+
 }
 
 Sequencer::~Sequencer() {

@@ -17,13 +17,20 @@ using namespace std;
 
 //the following may not work with gettext. careful!
 #define SEQUENCER_DEFAULT_NAME _("sequencer")
-int spawn_sequencer();
+
+
+
+
+
+
+Gtk::TreeModel::iterator spawn_sequencer();
+Gtk::TreeModel::iterator clone_sequencer(int orig);
 
 class Sequencer {
 public:
     Sequencer();
     Sequencer(Glib::ustring _name0);
-    Sequencer(const Sequencer& orig);
+    Sequencer(const Sequencer* orig);
     Sequencer(int seq[],int notes[]);
     Sequencer(int seq[],int notes[], Glib::ustring _name);
     void Init();

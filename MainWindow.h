@@ -25,7 +25,7 @@ public:
     void TempoChanged();
     void InitTreeData();
     void RefreshRow(Gtk::TreeModel::iterator it);
-    void AddSequencerRow(int n);
+    Gtk::TreeModel::iterator AddSequencerRow(int n);
     void OnSaveClicked();
     void OnLoadClicked();
     void OnRemoveClicked();
