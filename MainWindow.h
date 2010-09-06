@@ -25,9 +25,11 @@ public:
     void TempoChanged();
     void InitTreeData();
     void RefreshRow(Gtk::TreeModel::iterator it);
-    void SequencerAdded(int n);
+    void AddSequencerRow(int n);
     void OnSaveClicked();
     void OnLoadClicked();
+    void OnRemoveClicked();
+    void OnCloneClicked();
     Gtk::VBox vbox1;
     Gtk::HBox hbox_up, hbox_down;
     Gtk::SpinButton main_note;
@@ -36,6 +38,8 @@ public:
     Gtk::Button button_add;
     Gtk::Button button_save;
     Gtk::Button button_open;
+    Gtk::Button button_remove;
+    Gtk::Button button_clone;
 
     
 

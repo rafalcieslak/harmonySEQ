@@ -25,7 +25,7 @@ int spawn_sequencer(){
     sequencers.push_back(new_seq);
 
     //add to main window
-    mainwindow->SequencerAdded(n);
+    mainwindow->AddSequencerRow(n);
 
     return n;
 }

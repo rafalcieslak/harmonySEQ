@@ -11,8 +11,9 @@ extern int mainnote;
 extern debug* dbg;
 extern error* err;
 extern int running;
-extern int tempo;
+extern double tempo;
 extern MidiDriver* midi;
+extern int debugging;
 
 MainWindow::MainWindow()
 {
@@ -46,7 +47,8 @@ MainWindow::MainWindow()
         m_refTreeModel = Gtk::ListStore::create(m_columns);
         m_TreeView.set_model(m_refTreeModel);
 
-        m_TreeView.append_column(_("ID"), m_columns.col_ID);
+        if(debugging) m_TreeView.append_column(_("ID"), m_columns.col_ID);
+        
         int col_count = m_TreeView.append_column_editable(_("Name"), m_columns.col_name);
         Gtk::CellRenderer* cell = m_TreeView.get_column_cell_renderer(col_count - 1);
         Gtk::CellRendererText& txt = dynamic_cast<Gtk::CellRendererText&> (*cell);
@@ -100,14 +102,20 @@ MainWindow::MainWindow()
     }// </editor-fold>
     vbox1.pack_start(hbox_down, Gtk::PACK_SHRINK);
     hbox_down.pack_end(button_add, Gtk::PACK_SHRINK);
+    hbox_down.pack_end(button_clone, Gtk::PACK_SHRINK);
+    hbox_down.pack_end(button_remove, Gtk::PACK_SHRINK);
+    hbox_down.pack_end(button_save, Gtk::PACK_SHRINK);
+    hbox_down.pack_end(button_open, Gtk::PACK_SHRINK);
     button_add.set_label(_("Add"));
     button_add.signal_clicked().connect(mem_fun(*this, &MainWindow::OnButtonAddClicked));
-    hbox_down.pack_end(button_save, Gtk::PACK_SHRINK);
     button_save.set_label(_("Save"));
     button_save.signal_clicked().connect(mem_fun(*this, &MainWindow::OnSaveClicked));
-    hbox_down.pack_end(button_open, Gtk::PACK_SHRINK);
     button_open.set_label(_("Open"));
     button_open.signal_clicked().connect(mem_fun(*this, &MainWindow::OnLoadClicked));
+    button_remove.set_label(_("Remove"));
+    button_remove.signal_clicked().connect(mem_fun(*this, &MainWindow::OnRemoveClicked));
+    button_clone.set_label(_("Clone"));
+    button_clone.signal_clicked().connect(mem_fun(*this, &MainWindow::OnCloneClicked));
 
     show_all_children(1);
 
@@ -138,6 +146,7 @@ MainWindow::MainNoteChanged()
 bool
 MainWindow::on_delete_event(GdkEventAny* event)
 {
+    
     *dbg << "user clicked X\n";
     running = 0;
     return 0;
@@ -204,7 +213,7 @@ MainWindow::OnNameEdited(const Glib::ustring& path, const Glib::ustring& newtext
 }
 
 void
-MainWindow::SequencerAdded(int n)
+MainWindow::AddSequencerRow(int n)
 {
     *dbg << "wooho! sequener " << n << " was just added, and we have to add it now to a new row in the list!" << ENDL;
     Gtk::TreeModel::iterator iter = m_refTreeModel->append();
@@ -257,11 +266,38 @@ void MainWindow::RefreshRow(Gtk::TreeModel::iterator it){
 }
 
 void MainWindow::OnLoadClicked(){
-    LoadFromFile();
 
+    Files::LoadFromFile();
+
+    
+    InitTreeData();
+    SetMainNote(mainnote);
+    tempo_button.set_value(tempo);
+    //erasing smallers the treeview, but not the window.
+    resize(2,2); //resizing to a tiny size, but the window won't get that small, it will be big enough to show all widgets.
 }
 
 void MainWindow::OnSaveClicked(){
-    SaveToFile();
+    Files::SaveToFile();
+
+}
+
+void MainWindow::OnRemoveClicked(){
+    Gtk::TreeModel::iterator iter = *(m_TreeView.get_selection())->get_selected();
+    if(!iter) return;
+    Gtk::TreeModel::Row row = *iter;
+    int id = row[m_columns.col_ID];
+    *dbg << "removing row of id " << id << ENDL;
+    
+    m_refTreeModel->erase(iter);
+    //erasing smallers the treeview, but not the window.
+    resize(2,2); //resizing to a tiny size, but the window won't get that small, it will be big enough to show all widgets.
+    delete sequencers[id];
+    sequencers[id] = NULL;
+
+}
+
+void MainWindow::OnCloneClicked(){
+
 
 }

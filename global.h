@@ -12,7 +12,7 @@
 #include <locale.h>
 #include <fstream>
 
-#define VERSION "0.7"
+#define VERSION "0.8"
 #define ENDL "\n"
 #define TICKS_PER_QUARTERNOTE 128
 #define _(STRING) gettext(STRING)
