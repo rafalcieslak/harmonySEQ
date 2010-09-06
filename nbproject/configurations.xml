@@ -68,7 +68,7 @@
           <warningLevel>2</warningLevel>
         </ccTool>
         <linkerTool>
-          <output>harmonyseq</output>
+          <output>harmonySEQ</output>
           <commandLine>-lasound</commandLine>
         </linkerTool>
       </compileType>

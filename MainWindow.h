@@ -10,6 +10,9 @@
 #define	MAINWINDOW_H
 class MainWindow: public Gtk::Window{
 
+#define FLASH_INTERVAL 50
+    //in ms
+
 public:
     MainWindow();
     virtual ~MainWindow();
@@ -30,6 +33,9 @@ public:
     void OnLoadClicked();
     void OnRemoveClicked();
     void OnCloneClicked();
+    void FlashTempoStart();
+    bool FlashTempoEnd();
+    //void on_realize();
     Gtk::VBox vbox1;
     Gtk::HBox hbox_up, hbox_down;
     Gtk::SpinButton main_note;
@@ -40,6 +46,7 @@ public:
     Gtk::Button button_open;
     Gtk::Button button_remove;
     Gtk::Button button_clone;
+
 
     
 

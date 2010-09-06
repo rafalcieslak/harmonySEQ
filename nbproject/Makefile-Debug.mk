@@ -61,10 +61,10 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-Debug.mk harmonyseq
+	"${MAKE}"  -f nbproject/Makefile-Debug.mk harmonySEQ
 
-harmonyseq: ${OBJECTFILES}
-	${LINK.cc} -lasound -o harmonyseq ${OBJECTFILES} ${LDLIBSOPTIONS} 
+harmonySEQ: ${OBJECTFILES}
+	${LINK.cc} -lasound -o harmonySEQ ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
 ${OBJECTDIR}/SequencerGUI.o: SequencerGUI.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -112,7 +112,7 @@ ${OBJECTDIR}/debug.o: debug.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r build/Debug
-	${RM} harmonyseq
+	${RM} harmonySEQ
 
 # Subprojects
 .clean-subprojects:

@@ -3,6 +3,7 @@ harmonyseq 0.8
     - Sequencers may be now removed
     - ID's hidden in non-debug mode
     - Sequencers cab be now cloned
+    - Flashing tempo indicator
 
 harmonyseq 0.7
     - Saving and loading files

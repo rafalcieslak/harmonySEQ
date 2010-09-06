@@ -119,7 +119,6 @@ MainWindow::MainWindow()
 
     show_all_children(1);
 
-
 }
 
 MainWindow::~MainWindow()
@@ -304,9 +303,20 @@ void MainWindow::OnCloneClicked(){
     Gtk::TreeModel::iterator iter = *(m_TreeView.get_selection())->get_selected();
     if(!iter) return;
     Gtk::TreeModel::Row row = *iter;
-    int id = row[m_columns.col_ID];
+    int id = row[m_columns.col_ID]; 
 
     iter = clone_sequencer(id);
     m_TreeView.get_selection()->select(iter);
 
+    FlashTempoStart();
+}
+
+void MainWindow::FlashTempoStart(){
+    tempo_button.modify_base(Gtk::STATE_NORMAL,Gdk::Color("red"));
+    Glib::signal_timeout().connect(mem_fun(*this,&MainWindow::FlashTempoEnd),FLASH_INTERVAL);
+}
+
+bool MainWindow::FlashTempoEnd(){
+    tempo_button.unset_base(Gtk::STATE_NORMAL);
+    return false; //do not repeat the timeout
 }

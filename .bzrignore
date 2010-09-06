@@ -3,3 +3,11 @@ dist
 nbproject
 harmonyseq
 harmonySEQ
+debug.o
+error.o
+Files.o
+main.o
+MainWindow.o
+MidiDriver.o
+SequencerGUI.o
+Sequencer.o

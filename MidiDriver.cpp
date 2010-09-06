@@ -170,7 +170,12 @@ void MidiDriver::ProcessInput(){
                 break;
             case SND_SEQ_EVENT_ECHO:
                 *dbg << "ECHO!\n";
+                gdk_threads_enter(); //to interact with gui thread we MUST lock it's thread
+                mainwindow->FlashTempoStart();
+                gdk_threads_leave(); //freeing lock
+
                 UpdateQueue();
+                
                 break;
             case SND_SEQ_EVENT_CONTROLLER:
                 if (ev->data.control.param == 17){
