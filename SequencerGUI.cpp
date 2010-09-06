@@ -19,7 +19,7 @@
 
 
 #include "SequencerGUI.h"
-#include "debug.h"
+#include "messages.h"
 #include "Sequencer.h"
 #include "MainWindow.h"
 extern MainWindow *mainwindow;

@@ -19,8 +19,7 @@
 
 
 #include "MidiDriver.h"
-#include "error.h"
-#include "debug.h"
+#include "messages.h"
 #include "MainWindow.h"
 #include "Sequencer.h"
 #include "global.h"

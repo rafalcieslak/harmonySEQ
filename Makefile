@@ -17,8 +17,7 @@ SRCS =  main.cpp\
         MidiDriver.cpp \
         Sequencer.cpp \
         SequencerGUI.cpp \
-        error.cpp \
-        debug.cpp \
+        messages.cpp \
         Files.cpp
         
 OBJS	= $(SRCS:.cpp=.o)
@@ -29,8 +28,7 @@ OBD =   main.o\
         MidiDriver.o \
         Sequencer.o \
         SequencerGUI.o \
-        error.o \
-        debug.o \
+        messages.o \
         Files.o
 
 all: $(APP)

@@ -25,12 +25,10 @@
       <itemPath>Sequencer.h</itemPath>
       <itemPath>SequencerGUI.cpp</itemPath>
       <itemPath>SequencerGUI.h</itemPath>
-      <itemPath>debug.cpp</itemPath>
-      <itemPath>debug.h</itemPath>
-      <itemPath>error.cpp</itemPath>
-      <itemPath>error.h</itemPath>
       <itemPath>global.h</itemPath>
       <itemPath>main.cpp</itemPath>
+      <itemPath>messages.cpp</itemPath>
+      <itemPath>messages.h</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"

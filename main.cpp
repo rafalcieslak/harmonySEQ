@@ -24,8 +24,7 @@
 #include <alsa/asoundlib.h>
 #include "global.h"
 #include "MidiDriver.h"
-#include "debug.h"
-#include "error.h"
+#include "messages.h"
 #include "MainWindow.h"
 #include "Sequencer.h"
 

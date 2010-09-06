@@ -21,8 +21,7 @@
 #include "Files.h"
 #include "Sequencer.h"
 #include "MainWindow.h"
-#include "debug.h"
-#include "error.h"
+#include "messages.h"
 extern int mainnote;
 extern vector<Sequencer *> sequencers;
 extern MainWindow *mainwindow;

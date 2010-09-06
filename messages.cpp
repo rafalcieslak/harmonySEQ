@@ -17,7 +17,7 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "debug.h"
+#include "messages.h"
 
 debug::debug(int debug) {
     if (debug != 0){
@@ -58,4 +58,32 @@ debug & operator <<(debug &dbg, int number){
     sprintf(temp,"%d",number);
     dbg.say(temp);
     return dbg;
+}
+//================================================
+
+error::error() {
+
+}
+
+error::error(const error& orig) {
+}
+
+error::~error() {
+}
+
+void error::say(const char* message){
+    //fputs("ERROR - ",stdout);
+    fputs(message,stdout);
+
+}
+error & operator <<(error &err, const char* message){
+    err.say(message);
+    return err;
+}
+
+error & operator <<(error &err, int number){
+    char temp[20];
+    sprintf(temp,"%d",number);
+    err.say(temp);
+    return err;
 }
