@@ -37,6 +37,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/MainWindow.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/MidiDriver.o \
+	${OBJECTDIR}/Files.o \
 	${OBJECTDIR}/Sequencer.o \
 	${OBJECTDIR}/error.o \
 	${OBJECTDIR}/debug.o
@@ -85,6 +86,11 @@ ${OBJECTDIR}/MidiDriver.o: MidiDriver.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/MidiDriver.o MidiDriver.cpp
+
+${OBJECTDIR}/Files.o: Files.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/Files.o Files.cpp
 
 ${OBJECTDIR}/Sequencer.o: Sequencer.cpp 
 	${MKDIR} -p ${OBJECTDIR}

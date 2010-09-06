@@ -26,8 +26,8 @@ public:
     void InitTreeData();
     void RefreshRow(Gtk::TreeModel::iterator it);
     void SequencerAdded(int n);
-    void SaveToFile();
-    void LoadFromFile();
+    void OnSaveClicked();
+    void OnLoadClicked();
     Gtk::VBox vbox1;
     Gtk::HBox hbox_up, hbox_down;
     Gtk::SpinButton main_note;

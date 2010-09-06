@@ -31,7 +31,8 @@ OBJS_harmonyseq =  \
 	$(TARGETDIR_harmonyseq)/SequencerGUI.o \
 	$(TARGETDIR_harmonyseq)/MainWindow.o \
 	$(TARGETDIR_harmonyseq)/Sequencer.o \
-	$(TARGETDIR_harmonyseq)/debug.o
+	$(TARGETDIR_harmonyseq)/debug.o \
+	$(TARGETDIR_harmonyseq)/Files.o
 USERLIBS_harmonyseq = $(SYSLIBS_harmonyseq) 
 DEPLIBS_harmonyseq =  
 LDLIBS_harmonyseq = $(USERLIBS_harmonyseq)
@@ -64,6 +65,9 @@ $(TARGETDIR_harmonyseq)/Sequencer.o: $(TARGETDIR_harmonyseq) Sequencer.cpp
 $(TARGETDIR_harmonyseq)/debug.o: $(TARGETDIR_harmonyseq) debug.cpp
 	$(COMPILE.cc) $(CCFLAGS_harmonyseq) $(CPPFLAGS_harmonyseq) -o $@ debug.cpp
 
+$(TARGETDIR_harmonyseq)/Files.o: $(TARGETDIR_harmonyseq) Files.cpp
+	$(COMPILE.cc) $(CCFLAGS_harmonyseq) $(CPPFLAGS_harmonyseq) -o $@ Files.cpp
+
 
 
 #### Clean target deletes all generated files ####
@@ -76,7 +80,8 @@ clean:
 		$(TARGETDIR_harmonyseq)/SequencerGUI.o \
 		$(TARGETDIR_harmonyseq)/MainWindow.o \
 		$(TARGETDIR_harmonyseq)/Sequencer.o \
-		$(TARGETDIR_harmonyseq)/debug.o
+		$(TARGETDIR_harmonyseq)/debug.o \
+		$(TARGETDIR_harmonyseq)/Files.o
 	$(CCADMIN)
 	rm -f -r $(TARGETDIR_harmonyseq)
 
