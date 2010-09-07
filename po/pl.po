@@ -7,21 +7,21 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-09-03 21:47+0200\n"
-"PO-Revision-Date: 2010-09-05 17:42+0000\n"
+"POT-Creation-Date: 2010-09-06 19:28+0200\n"
+"PO-Revision-Date: 2010-09-06 18:16+0000\n"
 "Last-Translator: rafal cieslak <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-06 05:22+0000\n"
+"X-Launchpad-Export-Date: 2010-09-07 05:13+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: MainWindow.cpp:164
+#: MainWindow.cpp:173
 msgid ", name is: "
 msgstr ", nazwa to: "
 
-#: MainWindow.cpp:102
+#: MainWindow.cpp:109
 msgid "Add"
 msgstr "Dodaj"
 
@@ -33,29 +33,33 @@ msgstr "Inicjacja sterownika MIDI powiodła się.\n"
 msgid "Apply main note"
 msgstr "Stosuj główną nutę"
 
-#: MainWindow.cpp:61
+#: MainWindow.cpp:64
 msgid "Channel"
 msgstr "Kanał"
 
-#: MainWindow.cpp:318
+#: Files.cpp:77
 msgid "Choose a file to open..."
 msgstr "Wybierz plik do otwarcia..."
 
-#: MainWindow.cpp:260
+#: Files.cpp:17
 msgid "Choose a file to save..."
 msgstr "Wybierz plik do zapisu..."
+
+#: MainWindow.cpp:117
+msgid "Clone"
+msgstr "Klonuj"
 
 #: debug.cpp:12
 #, c-format
 msgid "Debug mode started.\n"
 msgstr "Włączono tryb Debug.\n"
 
-#: MainWindow.cpp:278
+#: Files.cpp:35
 #, c-format
 msgid "ERROR - error while opening file %s to write.\n"
 msgstr "BŁĄD - błąd podczas otwierania pliku %s do zapisu.\n"
 
-#: MainWindow.cpp:334
+#: Files.cpp:93
 #, c-format
 msgid "ERROR - error while trying to read %s\n"
 msgstr "BŁĄD - błąd podczas czytania pliku %s\n"
@@ -72,7 +76,7 @@ msgstr "Nie udało się otworzyć portu wyjściowego.\n"
 msgid "Failed to open ALSA sequencer.\n"
 msgstr "Nie udało się otworzyć sekwencera ALSA.\n"
 
-#: MainWindow.cpp:48
+#: MainWindow.cpp:50
 msgid "ID"
 msgstr "ID"
 
@@ -80,35 +84,39 @@ msgstr "ID"
 msgid "MIDI channel:"
 msgstr "Kanał MIDI"
 
-#: MainWindow.cpp:57
+#: MainWindow.cpp:60
 msgid "MN"
 msgstr "GN"
 
-#: MainWindow.cpp:25
+#: MainWindow.cpp:27
 msgid "Main Note:"
 msgstr "Nuta główna:"
 
-#: MainWindow.cpp:49
+#: MainWindow.cpp:52
 msgid "Name"
 msgstr "Nazwa"
 
-#: MainWindow.cpp:53 SequencerGUI.cpp:56
+#: MainWindow.cpp:56 SequencerGUI.cpp:56
 msgid "On"
 msgstr "Wł."
 
-#: MainWindow.cpp:108
+#: MainWindow.cpp:113
 msgid "Open"
 msgstr "Otwórz"
 
-#: MainWindow.cpp:105
+#: MainWindow.cpp:115
+msgid "Remove"
+msgstr "Usuń"
+
+#: MainWindow.cpp:111
 msgid "Save"
 msgstr "Zapisz"
 
-#: MainWindow.cpp:24
+#: MainWindow.cpp:26
 msgid "Tempo:"
 msgstr "Tempo:"
 
-#: MainWindow.cpp:163
+#: MainWindow.cpp:172
 msgid "activated row "
 msgstr "aktywowano wiersz "
 
