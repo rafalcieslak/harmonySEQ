@@ -24,12 +24,28 @@
 #include <libintl.h>
 #include <locale.h>
 #include <fstream>
-
-#define VERSION "0.8"
+#include <vector>
+using namespace std;
+#define VERSION "0.9"
 #define ENDL "\n"
 #define TICKS_PER_QUARTERNOTE 128
+#define TICKS_PER_NOTE (4*TICKS_PER_QUARTERNOTE)
 #define _(STRING) gettext(STRING)
 #define DEFAULT_TEMPO 240.0
+
+#define FLASH_INTERVAL 50
+    //in ms
+
+#define SEQUENCE_DEFAULT_SIZE 8
+#define NOTES_CONST_SIZE 6
+
+//the following may not work with gettext. careful!
+#define SEQUENCER_DEFAULT_NAME _("sequencer")
+
+#define RESOLUTIONS_NUM 7
+#define RESOLUTIONS {1,2,4,8,16,32,64}
+#define LENGTHS_NUM 7
+#define LENGHTS {0.125,0.25,0.5,1.0,2.0,4.0,8.0}
 
 #define FILE_GROUP_SYSTEM "System"
 #define FILE_KEY_SYSTEM_TEMPO "tempo"

@@ -23,8 +23,6 @@
 #define	MAINWINDOW_H
 class MainWindow: public Gtk::Window{
 
-#define FLASH_INTERVAL 50
-    //in ms
 
 public:
     MainWindow();

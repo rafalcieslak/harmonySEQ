@@ -19,6 +19,7 @@
 
 
 #include <gtkmm/widget.h>
+#include <assert.h>
 #include "messages.h"
 #include "Sequencer.h"
 #include "MainWindow.h"
@@ -26,6 +27,9 @@ extern debug *dbg;
 
 extern MainWindow* mainwindow;
 extern vector<Sequencer *> sequencers;
+
+int resolutions[7] = RESOLUTIONS;
+double lengths[7] = LENGHTS;
 
 
 Gtk::TreeModel::iterator spawn_sequencer(){
@@ -53,17 +57,17 @@ Gtk::TreeModel::iterator clone_sequencer(int orig){
 
 }
 
-
+//======begin sequencer class===============
 
 Sequencer::Sequencer()
-    : sequence(SEQUENCE_CONST_SIZE,0), notes(NOTES_CONST_SIZE,0)
+    : sequence(SEQUENCE_DEFAULT_SIZE,0), notes(NOTES_CONST_SIZE,0)
 {
     name = SEQUENCER_DEFAULT_NAME;
     Init();
 }
 
 Sequencer::Sequencer(Glib::ustring _name)
-    : sequence(SEQUENCE_CONST_SIZE,0), notes(NOTES_CONST_SIZE,0)
+    : sequence(SEQUENCE_DEFAULT_SIZE,0), notes(NOTES_CONST_SIZE,0)
 {
     name = _name;
     Init();
@@ -71,9 +75,9 @@ Sequencer::Sequencer(Glib::ustring _name)
 
 
 Sequencer::Sequencer(int seq[],int note[])
-    :  sequence(SEQUENCE_CONST_SIZE,0), notes(NOTES_CONST_SIZE,0)
+    :  sequence(SEQUENCE_DEFAULT_SIZE,0), notes(NOTES_CONST_SIZE,0)
 {
-    for (int x = 0; x < SEQUENCE_CONST_SIZE; x++){
+    for (int x = 0; x < SEQUENCE_DEFAULT_SIZE; x++){
         sequence[x] = seq[x];
         
     }
@@ -86,9 +90,9 @@ Sequencer::Sequencer(int seq[],int note[])
 }
 
 Sequencer::Sequencer(int seq[],int note[], Glib::ustring _name)
-    :  sequence(SEQUENCE_CONST_SIZE,0), notes(NOTES_CONST_SIZE,0)
+    :  sequence(SEQUENCE_DEFAULT_SIZE,0), notes(NOTES_CONST_SIZE,0)
 {
-    for (int x = 0; x < SEQUENCE_CONST_SIZE; x++){
+    for (int x = 0; x < SEQUENCE_DEFAULT_SIZE; x++){
         sequence[x] = seq[x];
 
     }
@@ -110,8 +114,8 @@ Sequencer::Sequencer(const Sequencer *orig) {
     channel = orig->channel;
     apply_mainnote = orig->apply_mainnote;
     gui_window = new SequencerWindow(this);
-
-
+    length = orig->length;
+    resolution = orig->resolution;
 
 }
 
@@ -123,6 +127,8 @@ void Sequencer::Init(){
     on = false;
     apply_mainnote = true;
     channel = 1;
+    length = 1;
+    resolution = SEQUENCE_DEFAULT_SIZE;
     *dbg << notes[0]<<ENDL;
     *dbg << GetNotes(0);
     gui_window = new SequencerWindow(this);
@@ -131,17 +137,45 @@ void Sequencer::Init(){
 
 }
 
-int Sequencer::GetNotes(int n){
-    
-    return notes[n];
+void Sequencer::SetResolution(int res){
+    if (res == resolution) return;
+    if (res < resolution){
+        //the new resolution is smaller
+        vector<int> new_sequence(res,0);
+        int ratio = resolution/res;
+        *dbg << "ensmalling resolution ratio = " << ratio << ENDL;
+        assert(ratio>=1);
+        int x = 0, i = 0;
+        for (; x < resolution;x+=ratio){
+            new_sequence[i++] = sequence[x];
+        }
+
+        sequence = new_sequence;
+        resolution = res;
+        
+    } else {
+        //the new resolution is larger
+        vector<int> new_sequence(res,0);
+        int ratio = res/resolution;
+        *dbg << "enlarging resolution ratio = " << ratio << ENDL;
+        int x = 0;
+        for (int p =0; p < resolution;p++){
+            for (int i = 0; i < ratio;i++){
+                new_sequence[x++]=sequence[p];
+            }
+        }
+        sequence=new_sequence;
+        resolution = res;
+    }
+
 
 }
 
-int Sequencer::GetSequence(int n){
 
-    return sequence[n];
-}
 
+
+int Sequencer::GetNotes(int n){return notes[n];}
+int Sequencer::GetSequence(int n){return sequence[n];}
 void Sequencer::SetOn(bool m){on = m; gui_window->tgl_mute.set_active(m);}
 bool Sequencer::GetOn(){return on;}
 void Sequencer::SetApplyMainNote(bool a){apply_mainnote = a;gui_window->tgl_apply_mainnote.set_active(a);}

@@ -25,16 +25,6 @@
 
 using namespace std;
 
-#define SEQUENCE_CONST_SIZE 8
-#define NOTES_CONST_SIZE 6
-
-//the following may not work with gettext. careful!
-#define SEQUENCER_DEFAULT_NAME _("sequencer")
-
-
-
-
-
 
 Gtk::TreeModel::iterator spawn_sequencer();
 Gtk::TreeModel::iterator clone_sequencer(int orig);
@@ -46,8 +36,14 @@ public:
     Sequencer(const Sequencer* orig);
     Sequencer(int seq[],int notes[]);
     Sequencer(int seq[],int notes[], Glib::ustring _name);
-    void Init();
     virtual ~Sequencer();
+    
+    void Init();
+
+
+    void SetResolution(int res);
+    double length;
+    int resolution;
     vector<int> sequence;
     int GetSequence(int n);
     vector<int> notes;
@@ -74,7 +70,6 @@ protected:
     bool on;
     Glib::ustring name;
     SequencerWindow *gui_window;
-
     
 private:
 

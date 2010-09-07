@@ -29,23 +29,42 @@ public:
     SequencerWindow(Sequencer* prt);
     virtual ~SequencerWindow();
     void UpdateValues();
+    Gtk::VBox main_vbox;
     Gtk::VBox box_of_sliders;
     Gtk::HBox box_of_notes;
-    Gtk::HScale *sequence_scales[8];
+    Gtk::HBox upper_box;
+    vector<Gtk::HScale *> sequence_scales;
     Gtk::SpinButton* note_buttons[6];
     Gtk::SpinButton channel_button;
     Gtk::Label channellabel;
     Gtk::HBox low_hbox;
     Gtk::VBox toggle_vbox;
     Gtk::CheckButton tgl_apply_mainnote, tgl_mute;
+    Gtk::ComboBox resolution_box;
+    Gtk::ComboBox lenght_box;
+    void InitSeqSliders();
+    Sequencer *parent;
+
+
 private:
     void OnNotesChanged(int note);
     void OnSequenceChanged(int seq);
     void OnChannelChanged();
     void OnToggleMuteToggled();
     void OnToggleApplyMainNoteToggled();
-public:
-    Sequencer *parent;
+    void OnResolutionChanged();
+
+    class ModelColumns : public Gtk::TreeModel::ColumnRecord {
+    public:
+        ModelColumns() {
+            add(resol);
+        }
+        Gtk::TreeModelColumn<int> resol;
+    };
+    ModelColumns m_Columns_resol;
+
+    Glib::RefPtr<Gtk::ListStore> m_refTreeModel_res;
+
 
 };
 
