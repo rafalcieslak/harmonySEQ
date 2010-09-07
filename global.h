@@ -53,6 +53,8 @@ using namespace std;
 #define FILE_KEY_SYSTEM_SEQ_NUM "sequencers_number"
 
 #define FILE_GROUP_TEMPLATE_SEQ "Seq %d"
+#define FILE_KEY_SEQ_RESOLUTION "resolution"
+#define FILE_KEY_SEQ_LENGTH "length"
 #define FILE_KEY_SEQ_ON "on"
 #define FILE_KEY_SEQ_APPLY_MAIN_NOTE "apply_mn"
 #define FILE_KEY_SEQ_CHANNEL "channel"

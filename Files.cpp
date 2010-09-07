@@ -69,6 +69,8 @@ void SaveToFile(){
                 kf.set_boolean(temp,FILE_KEY_SEQ_ON,sequencers[x]->GetOn());
                 kf.set_integer(temp,FILE_KEY_SEQ_CHANNEL,sequencers[x]->GetChannel());
                 kf.set_boolean(temp,FILE_KEY_SEQ_APPLY_MAIN_NOTE,sequencers[x]->GetApplyMainNote());
+                kf.set_integer(temp,FILE_KEY_SEQ_RESOLUTION,sequencers[x]->resolution);
+                kf.set_double(temp,FILE_KEY_SEQ_LENGTH,sequencers[x]->length);
                 kf.set_integer_list(temp,FILE_KEY_SEQ_SEQUENCE,sequencers[x]->sequence);
                 kf.set_integer_list(temp,FILE_KEY_SEQ_NOTES,sequencers[x]->notes);
 
@@ -135,7 +137,9 @@ void LoadFromFile(){
                 sequencers[x]->SetOn(kf.get_boolean(temp,FILE_KEY_SEQ_ON));
                 sequencers[x]->SetChannel(kf.get_integer(temp,FILE_KEY_SEQ_CHANNEL));
                 sequencers[x]->SetApplyMainNote(kf.get_boolean(temp,FILE_KEY_SEQ_APPLY_MAIN_NOTE));
-
+                sequencers[x]->resolution = kf.get_integer(temp,FILE_KEY_SEQ_RESOLUTION);
+                sequencers[x]->length = kf.get_double(temp,FILE_KEY_SEQ_LENGTH);
+                
                 sequencers[x]->sequence.clear();
                 std::vector<int> sequence = kf.get_integer_list(temp,FILE_KEY_SEQ_SEQUENCE);
                 for (unsigned int n = 0; n < sequence.size(); n++){

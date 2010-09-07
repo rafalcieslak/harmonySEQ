@@ -1,6 +1,7 @@
 harmonyseq 0.9
 	- Sequencers can be now safely dragged.
 	- Sorting by columns implemented.
+	- Sequences may have different resolutions
 
 harmonyseq 0.8
     - File access rearanged

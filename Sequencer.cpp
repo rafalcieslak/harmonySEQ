@@ -51,6 +51,7 @@ Gtk::TreeModel::iterator clone_sequencer(int orig){
     int n = sequencers.size();
     
     Sequencer *new_seq = new Sequencer(sequencers[orig]);
+    new_seq->SetOn(0);
     sequencers.push_back(new_seq);
 
     return mainwindow->AddSequencerRow(n);
@@ -110,12 +111,12 @@ Sequencer::Sequencer(const Sequencer *orig) {
     name = orig->name;
     on = orig->on;
     notes = orig->notes;
+    resolution = orig->resolution;
     sequence = orig->sequence;
     channel = orig->channel;
     apply_mainnote = orig->apply_mainnote;
-    gui_window = new SequencerWindow(this);
     length = orig->length;
-    resolution = orig->resolution;
+    gui_window = new SequencerWindow(this);
 
 }
 
@@ -139,6 +140,7 @@ void Sequencer::Init(){
 
 void Sequencer::SetResolution(int res){
     if (res == resolution) return;
+    
     if (res < resolution){
         //the new resolution is smaller
         vector<int> new_sequence(res,0);

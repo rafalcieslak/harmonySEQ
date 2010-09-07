@@ -105,10 +105,16 @@ void SequencerWindow::OnSequenceChanged(int seq){
 }
 
 void SequencerWindow::UpdateValues(){
-    if((int)sequence_scales.size()!=parent->resolution) sequence_scales.resize(parent->resolution);
-    for (int x = 0; x < parent->resolution; x++){
-        sequence_scales[x]->set_value(parent->sequence[x]);
+
+    //finding a num to a res should be linear!
+    int resolutions[RESOLUTIONS_NUM] = RESOLUTIONS;
+    char temp[10];
+    for (int x = 0; x < RESOLUTIONS_NUM; x++){
+        sprintf(temp,"%d",x);
+        Gtk::TreeModel::Row row = *(m_refTreeModel_res->get_iter(temp));
+        if (resolutions[x] == (row[m_Columns_resol.resol])){resolution_box.set_active(x);continue;}
     }
+    InitSeqSliders();
     for (int x = 0; x < NOTES_CONST_SIZE; x++) {
         note_buttons[x]->set_value(parent->GetNotes(x));
     }
