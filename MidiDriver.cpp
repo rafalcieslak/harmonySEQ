@@ -141,7 +141,7 @@ void MidiDriver::UpdateQueue(){
             int duration = ((double)(TICKS_PER_NOTE / sequencers[n]->resolution))*sequencers[n]->length;
             int local_tick = tick;
             for (int i = 0; i < howmanytimes; i++){
-                for (unsigned int x = 0; x < sequencers[n]->resolution; x++) {
+                for (int x = 0; x < sequencers[n]->resolution; x++) {
                     snd_seq_ev_clear(&ev);
                     int note = sequencers[n]->notes[sequencers[n]->sequence[x]];
                     *dbg << note << " ";
@@ -159,8 +159,24 @@ void MidiDriver::UpdateQueue(){
 
         }else{
             //length is larger than 1, we play one sequence over many tacts.
-            *err << "sequencer " << n << " is trying to use length larger than one; this is not implemented yet, skipping.\n";
+            int duration = ((double)(TICKS_PER_NOTE / sequencers[n]->resolution))*sequencers[n]->length;
+            int startnote = sequencers[n]->last_played_note;
+            *dbg << "startnote = " << startnote <<ENDL;
+            int x;
+            for (x = 0; x < (double)sequencers[n]->resolution/sequencers[n]->length;x++){
+                    *dbg << "x = " << x << ENDL;
+                    snd_seq_ev_clear(&ev);
+                    int note = sequencers[n]->notes[sequencers[n]->sequence[(startnote+x)%sequencers[n]->resolution]];
+                    if (sequencers[n]->GetApplyMainNote()) note += mainnote;
+                    snd_seq_ev_set_note(&ev, sequencers[n]->GetChannel() - 1, note, 100, duration);
+                    snd_seq_ev_schedule_tick(&ev, queueid, 0, tick + x * duration);
+                    snd_seq_ev_set_source(&ev, output_port);
+                    snd_seq_ev_set_subs(&ev);
+                    snd_seq_event_output_direct(seq_handle, &ev);
 
+            }
+            //remember last note
+            sequencers[n]->last_played_note = (startnote+x)%sequencers[n]->resolution;
         }
     }
     tick+=TICKS_PER_QUARTERNOTE*4;

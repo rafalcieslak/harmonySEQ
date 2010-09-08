@@ -117,7 +117,7 @@ Sequencer::Sequencer(const Sequencer *orig) {
     apply_mainnote = orig->apply_mainnote;
     length = orig->length;
     gui_window = new SequencerWindow(this);
-
+    last_played_note = orig->last_played_note;
 }
 
 Sequencer::~Sequencer() {
@@ -129,6 +129,7 @@ void Sequencer::Init(){
     apply_mainnote = true;
     channel = 1;
     length = 1;
+    last_played_note = 0;
     resolution = SEQUENCE_DEFAULT_SIZE;
     *dbg << notes[0]<<ENDL;
     *dbg << GetNotes(0);
