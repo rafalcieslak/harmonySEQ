@@ -29,7 +29,7 @@ extern MainWindow* mainwindow;
 extern vector<Sequencer *> sequencers;
 
 int resolutions[7] = RESOLUTIONS;
-double lengths[7] = LENGHTS;
+double lengths[7] = LENGTHS;
 
 
 Gtk::TreeModel::RowReference spawn_sequencer(){

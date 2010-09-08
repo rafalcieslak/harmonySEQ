@@ -66,6 +66,8 @@ SequencerWindow::SequencerWindow(Sequencer* prt){
     main_vbox.pack_start(low_hbox);
 
     //lengths selector
+    upper_box.pack_start(reslabel,Gtk::PACK_SHRINK);
+    reslabel.set_text(_("Resolution:"));
     upper_box.pack_start(resolution_box,Gtk::PACK_SHRINK);
     m_refTreeModel_res = Gtk::ListStore::create(m_Columns_resol);
     resolution_box.set_model(m_refTreeModel_res);
@@ -79,6 +81,25 @@ SequencerWindow::SequencerWindow(Sequencer* prt){
     }
     resolution_box.pack_start(m_Columns_resol.resol);
     resolution_box.signal_changed().connect(mem_fun(*this,&SequencerWindow::OnResolutionChanged));
+    
+    
+    upper_box.pack_start(lenlabel,Gtk::PACK_SHRINK);
+    lenlabel.set_text(_("Length:"));
+    upper_box.pack_start(length_box,Gtk::PACK_SHRINK);
+    m_refTreeModel_len = Gtk::ListStore::create(m_Columns_len);
+    length_box.set_model(m_refTreeModel_len);
+
+    char temp[10];
+    double lengths[7] = LENGTHS;
+    for (int x = 0; x < LENGTHS_NUM; x++){
+        Gtk::TreeModel::Row row = *(m_refTreeModel_len->append());
+        row[m_Columns_len.len] = lengths[x];
+        sprintf(temp,"%g",lengths[x]);
+        row[m_Columns_len.text] = temp;
+        if(parent->length==lengths[x]) length_box.set_active(x);
+    }
+    length_box.pack_start(m_Columns_len.text);
+    length_box.signal_changed().connect(mem_fun(*this,&SequencerWindow::OnLengthChanged));
     
     add(main_vbox);
     
@@ -103,7 +124,7 @@ void SequencerWindow::OnSequenceChanged(int seq){
 }
 
 void SequencerWindow::UpdateValues(){
-//TODO: const
+//TODO const
     //finding a num to a res should be const complexity!
     int resolutions[RESOLUTIONS_NUM] = RESOLUTIONS;
     char temp[10];
@@ -143,7 +164,8 @@ void SequencerWindow::OnResolutionChanged(){
 
     parent->SetResolution(row[m_Columns_resol.resol]);
     InitSeqSliders();
-    //sequence_scales.clear();
+    
+    if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
 }
 
 void SequencerWindow::InitSeqSliders(){
@@ -167,5 +189,14 @@ void SequencerWindow::InitSeqSliders(){
         box_of_sliders.pack_start(*sequence_scales[x]);
     }
     realize();
+
+}
+
+void SequencerWindow::OnLengthChanged(){
+    Gtk::TreeModel::Row row = *(length_box.get_active());
+    *dbg << "setting length\n";
+    parent->length = row[m_Columns_len.len];
+    *dbg << "will refresh row\n";
+    if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
 
 }

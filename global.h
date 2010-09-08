@@ -48,7 +48,7 @@ using namespace std;
 #define RESOLUTIONS_NUM 7
 #define RESOLUTIONS {1,2,4,8,16,32,64}
 #define LENGTHS_NUM 7
-#define LENGHTS {0.125,0.25,0.5,1.0,2.0,4.0,8.0}
+#define LENGTHS {0.125,0.25,0.5,1.0,2.0,4.0,8.0}
 
 #define FILE_GROUP_SYSTEM "System"
 #define FILE_KEY_SYSTEM_TEMPO "tempo"

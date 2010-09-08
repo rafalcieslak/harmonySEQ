@@ -76,7 +76,7 @@ MainWindow::MainWindow()
         tgl2.signal_toggled().connect(mem_fun(*this, &MainWindow::OnApplyMainNoteToggleToggled));
         col_count = m_TreeView.append_column(_("Chan"), m_columns.col_channel);
         col_count = m_TreeView.append_column(_("Res"), m_columns.col_res);
-        //col_count = m_TreeView.append_column(_("Len"), m_columns.col_len);
+        col_count = m_TreeView.append_column_numeric(_("Len"), m_columns.col_len,"%g");
 
         //Gtk::TreeView::Column* pColumn = m_TreeView.get_column(col_count-1);
         //pColumn->add_attribute(cell_spin->property_adjustment(),m_columns.col_channel);
@@ -258,8 +258,9 @@ void MainWindow::InitTreeData(){
         row[m_columns.col_muted] = sequencers[x]->GetOn();
         row[m_columns.col_name] = sequencers[x]->GetName();
         row[m_columns.col_apply_mainnote] = sequencers[x]->GetApplyMainNote();
-        *dbg << "channel " << sequencers[x]->GetChannel() << ENDL;
         row[m_columns.col_channel] = sequencers[x]->GetChannel();
+        row[m_columns.col_res] = sequencers[x]->resolution;
+        row[m_columns.col_len] = sequencers[x]->length;
         Gtk::TreeRowReference rowref(m_refTreeModel,m_refTreeModel->get_path(iter));
         sequencers[x]->row_in_main_window = rowref;
         rowcount++;
@@ -278,6 +279,8 @@ void MainWindow::RefreshRow(Gtk::TreeRowReference rowref){
     row[m_columns.col_name] = sequencers[x]->GetName();
     row[m_columns.col_apply_mainnote] = sequencers[x]->GetApplyMainNote();
     row[m_columns.col_channel] = sequencers[x]->GetChannel();
+    row[m_columns.col_res] = sequencers[x]->resolution;
+    row[m_columns.col_len] = sequencers[x]->length; 
 
 }
 

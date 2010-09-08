@@ -41,8 +41,11 @@ public:
     Gtk::VBox toggle_vbox;
     Gtk::CheckButton tgl_apply_mainnote, tgl_mute;
     Gtk::ComboBox resolution_box;
-    Gtk::ComboBox lenght_box;
+    Gtk::ComboBox length_box;
+    Gtk::Label reslabel, lenlabel;
     void InitSeqSliders();
+
+
     Sequencer *parent;
 
 
@@ -53,6 +56,7 @@ private:
     void OnToggleMuteToggled();
     void OnToggleApplyMainNoteToggled();
     void OnResolutionChanged();
+    void OnLengthChanged();
 
     class ModelColumns : public Gtk::TreeModel::ColumnRecord {
     public:
@@ -65,6 +69,17 @@ private:
 
     Glib::RefPtr<Gtk::ListStore> m_refTreeModel_res;
 
+    class ModelColumns2 : public Gtk::TreeModel::ColumnRecord {
+    public:
+        ModelColumns2() {
+            add(len); add(text);
+        }
+        Gtk::TreeModelColumn<double> len;
+        Gtk::TreeModelColumn<Glib::ustring> text;
+    };
+    ModelColumns2 m_Columns_len;
+
+    Glib::RefPtr<Gtk::ListStore> m_refTreeModel_len;
 
 };
 
