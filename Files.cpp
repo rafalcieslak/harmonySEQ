@@ -132,6 +132,7 @@ void LoadFromFile(){
                 sequencers[x]->SetChannel(kf.get_integer(temp,FILE_KEY_SEQ_CHANNEL));
                 sequencers[x]->SetApplyMainNote(kf.get_boolean(temp,FILE_KEY_SEQ_APPLY_MAIN_NOTE));
                 sequencers[x]->resolution = kf.get_integer(temp,FILE_KEY_SEQ_RESOLUTION);
+                *dbg << "resolution set to " << sequencers[x]->resolution << ENDL;
                 sequencers[x]->length = kf.get_double(temp,FILE_KEY_SEQ_LENGTH);
                 
                 sequencers[x]->sequence.clear();

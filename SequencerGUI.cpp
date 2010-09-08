@@ -131,9 +131,15 @@ void SequencerWindow::UpdateValues(){
     for (int x = 0; x < RESOLUTIONS_NUM; x++){
         sprintf(temp,"%d",x);
         Gtk::TreeModel::Row row = *(m_refTreeModel_res->get_iter(temp));
-        if (resolutions[x] == (row[m_Columns_resol.resol])){resolution_box.set_active(x);continue;}
+        if (resolutions[x] == (parent->resolution)){resolution_box.set_active(x);continue;}
     }
 
+    double lengths[7] = LENGTHS;
+    for (int x = 0; x < LENGTHS_NUM; x++){
+        sprintf(temp,"%d",x);
+        Gtk::TreeModel::Row row = *(m_refTreeModel_len->get_iter(temp));
+        if(parent->length==lengths[x]) length_box.set_active(x);
+    }
 
     InitSeqSliders();
 

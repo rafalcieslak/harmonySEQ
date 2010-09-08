@@ -129,19 +129,38 @@ void MidiDriver::UpdateQueue(){
     snd_seq_event_t ev;
     for (unsigned int n = 0; n < sequencers.size(); n++){
         if(sequencers[n] == NULL) continue;
-        //*dbg << "sequencer " << n << " is ";
-        //*dbg << ((sequencers[n]->muted)?"muted":"not muted") << ENDL;
+        *dbg << "sequencer " << n << " is ";
+        *dbg << ((sequencers[n]->GetOn())?"on":"off") << ENDL;
         if (!sequencers[n]->GetOn()) continue;
-        for (unsigned int x = 0; x < sequencers[n]->resolution;x++){
-            snd_seq_ev_clear(&ev);
-            int note = sequencers[n]->notes[sequencers[n]->sequence[x]];
-            *dbg << note << " ";
-            if(sequencers[n]->GetApplyMainNote()) note += mainnote;
-            snd_seq_ev_set_note(&ev,sequencers[n]->GetChannel()-1,note,100,TICKS_PER_NOTE/sequencers[n]->resolution);
-            snd_seq_ev_schedule_tick(&ev,queueid,0,tick+x*(TICKS_PER_NOTE/sequencers[n]->resolution));
-            snd_seq_ev_set_source(&ev,output_port);
-            snd_seq_ev_set_subs(&ev);
-            snd_seq_event_output_direct(seq_handle,&ev);
+        //ok, and here we proceed all notes from one sequencer.
+        //first check the length:
+        if (sequencers[n]->length<=1){
+            //length is smaller or equal to 1, we play the same sequence several times in a tact
+            double howmanytimes = (double)1.0/(sequencers[n]->length);
+            *dbg << "howmanytimes = " << howmanytimes << ENDL;
+            int duration = ((double)(TICKS_PER_NOTE / sequencers[n]->resolution))*sequencers[n]->length;
+            int local_tick = tick;
+            for (int i = 0; i < howmanytimes; i++){
+                for (unsigned int x = 0; x < sequencers[n]->resolution; x++) {
+                    snd_seq_ev_clear(&ev);
+                    int note = sequencers[n]->notes[sequencers[n]->sequence[x]];
+                    *dbg << note << " ";
+                    if (sequencers[n]->GetApplyMainNote()) note += mainnote;
+                    snd_seq_ev_set_note(&ev, sequencers[n]->GetChannel() - 1, note, 100, duration);
+                    snd_seq_ev_schedule_tick(&ev, queueid, 0, local_tick + x * duration);
+                    snd_seq_ev_set_source(&ev, output_port);
+                    snd_seq_ev_set_subs(&ev);
+                    snd_seq_event_output_direct(seq_handle, &ev);
+                }
+                local_tick += (double)TICKS_PER_NOTE*sequencers[n]->length;
+            }
+
+           *dbg << ENDL;
+
+        }else{
+            //length is larger than 1, we play one sequence over many tacts.
+            *err << "sequencer " << n << " is trying to use length larger than one; this is not implemented yet, skipping.\n";
+
         }
     }
     tick+=TICKS_PER_QUARTERNOTE*4;

@@ -238,6 +238,8 @@ MainWindow::AddSequencerRow(int n)
     row[m_columns.col_muted] = sequencers[n]->GetOn();
     row[m_columns.col_apply_mainnote] = sequencers[n]->GetApplyMainNote();
     row[m_columns.col_channel] = sequencers[n]->GetChannel();
+    row[m_columns.col_res] = sequencers[n]->resolution;
+    row[m_columns.col_len] = sequencers[n]->length;
     Gtk::TreeRowReference rowref(m_refTreeModel,m_refTreeModel->get_path(iter));
     sequencers[n]->row_in_main_window = rowref;
     return rowref;
@@ -246,7 +248,7 @@ MainWindow::AddSequencerRow(int n)
 
 
 void MainWindow::InitTreeData(){
-    *dbg << "loading initial data to the treeview/n";
+    *dbg << "loading initial data to the treeview\n";
     m_refTreeModel->clear();
     Gtk::TreeModel::Row row;
     int rowcount = 0;
