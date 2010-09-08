@@ -20,14 +20,13 @@
 
 #ifndef SEQUENCER_H
 #define	SEQUENCER_H
-#include <vector>
+#include "global.h"
 #include "SequencerGUI.h"
-
 using namespace std;
 
 
-Gtk::TreeModel::iterator spawn_sequencer();
-Gtk::TreeModel::iterator clone_sequencer(int orig);
+Gtk::TreeModel::RowReference spawn_sequencer();
+Gtk::TreeModel::RowReference clone_sequencer(int orig);
 
 class Sequencer {
 public:

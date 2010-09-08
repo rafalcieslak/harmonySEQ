@@ -18,18 +18,11 @@ SRCS =  main.cpp\
         Sequencer.cpp \
         SequencerGUI.cpp \
         messages.cpp \
-        Files.cpp
+        Files.cpp \
+	global.cpp
         
 OBJS	= $(SRCS:.cpp=.o)
 
-
-OBD =   main.o\
-        MainWindow.o \
-        MidiDriver.o \
-        Sequencer.o \
-        SequencerGUI.o \
-        messages.o \
-        Files.o
 
 all: $(APP)
 
@@ -37,8 +30,8 @@ all: $(APP)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 
-$(APP):	$(OBD)
-	$(CC) $(OBD) $(LDFLAGS) -o $(APP)
+$(APP):	$(OBJS)
+	$(CC) $(OBJS) $(LDFLAGS) -o $(APP)
 
 clean:
 	rm -f *.o  *~ $(APP)

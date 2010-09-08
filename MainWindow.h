@@ -27,26 +27,43 @@ class MainWindow: public Gtk::Window{
 public:
     MainWindow();
     virtual ~MainWindow();
-    void SetMainNote(int note);
-    void MainNoteChanged();
-    void OnUserClickedExit();
+
+    //when user presses exit
     bool on_delete_event(GdkEventAny* event);
-    void OnTreeviewRowActivated(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column);
-    void OnMutedToggleToggled(const Glib::ustring& path);
-    void OnApplyMainNoteToggleToggled(const Glib::ustring& path);
-    void OnNameEdited(const Glib::ustring& path,const Glib::ustring& newtext);
+    
+    //buttons functions
     void OnButtonAddClicked();
-    void TempoChanged();
-    void InitTreeData();
-    void RefreshRow(Gtk::TreeRowReference it);
-    Gtk::TreeModel::iterator AddSequencerRow(int n);
     void OnSaveClicked();
     void OnLoadClicked();
     void OnRemoveClicked();
     void OnCloneClicked();
+
+    //called when user changes values from gui
+    void MainNoteChanged();
+    void TempoChanged();
+    
+    //called every tempo, starts the animation
     void FlashTempoStart();
+    //ends the animation after timeout
     bool FlashTempoEnd();
-    //void on_realize();
+
+    //clears the treemodel and inits a new, according to sequencers vector
+    void InitTreeData();
+
+    //adds a single row, when a new sequencer is spawned
+    Gtk::TreeModel::RowReference AddSequencerRow(int n);
+
+    //refreshes a single row, when some of it's settings had changed
+    void RefreshRow(Gtk::TreeRowReference it);
+
+    //reacts on double click on a row
+    void OnTreeviewRowActivated(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column);
+
+    //reacts on settings changes from main window
+    void OnMutedToggleToggled(const Glib::ustring& path);
+    void OnApplyMainNoteToggleToggled(const Glib::ustring& path);
+    void OnNameEdited(const Glib::ustring& path,const Glib::ustring& newtext);
+
     Gtk::VBox vbox1;
     Gtk::HBox hbox_up, hbox_down;
     Gtk::SpinButton main_note;
@@ -59,16 +76,18 @@ public:
     Gtk::Button button_clone;
 
 
-    
+private:
 
     class ModelColumns : public Gtk::TreeModel::ColumnRecord{
     public:
-        ModelColumns(){add(col_ID);add(col_name);add(col_muted);add(col_apply_mainnote);add(col_channel);}
+        ModelColumns(){add(col_ID);add(col_name);add(col_muted);add(col_apply_mainnote);add(col_channel);add(col_res);add(col_len);}
         Gtk::TreeModelColumn<int> col_ID;
         Gtk::TreeModelColumn<Glib::ustring> col_name;
         Gtk::TreeModelColumn<bool> col_muted;
         Gtk::TreeModelColumn<bool> col_apply_mainnote;
         Gtk::TreeModelColumn<int> col_channel;
+        Gtk::TreeModelColumn<int> col_res;
+        Gtk::TreeModelColumn<double> col_len;
     };
 
     ModelColumns m_columns;

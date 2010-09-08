@@ -25,6 +25,9 @@
 #include <locale.h>
 #include <fstream>
 #include <vector>
+#include <alsa/asoundlib.h>
+#include <cstdlib>
+#include <cstdio>
 using namespace std;
 #define VERSION "0.9"
 #define ENDL "\n"
@@ -61,5 +64,23 @@ using namespace std;
 #define FILE_KEY_SEQ_NAME "name"
 #define FILE_KEY_SEQ_SEQUENCE "sequence"
 #define FILE_KEY_SEQ_NOTES "notes"
+
+#ifndef I_DO_NOT_WANT_EXTERNS_FROM_GLOBAL_H
+class Sequencer;
+class debug;
+class error;
+class MidiDriver;
+class MainWindow;
+extern vector<Sequencer *> sequencers;
+extern int mainnote;
+extern double tempo;
+extern int ports_number;
+extern int running;
+extern debug* dbg;
+extern error* err;
+extern MidiDriver* midi;
+extern MainWindow* mainwindow;
+#endif
+
 #endif	/* GLOBAL_H */
 

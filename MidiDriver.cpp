@@ -23,11 +23,6 @@
 #include "MainWindow.h"
 #include "Sequencer.h"
 #include "global.h"
-extern error* err;
-extern debug* dbg;
-extern MainWindow *mainwindow;
-extern int mainnote, tempo;
-extern vector<Sequencer *> sequencers;
 MidiDriver::MidiDriver() {
     working = false;
     Open();
@@ -176,7 +171,7 @@ void MidiDriver::ProcessInput(){
                     mainnote = ev->data.note.note;
 
                     gdk_threads_enter(); //to interact with gui thread we MUST lock it's thread
-                    mainwindow->SetMainNote(mainnote);
+                    mainwindow->main_note.set_value(mainnote);
                     gdk_threads_leave(); //freeing lock
                 }
                 *dbg << "noteoff! (of pitch " << ev->data.note.note << ")\n";

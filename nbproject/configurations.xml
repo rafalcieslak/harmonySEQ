@@ -25,6 +25,7 @@
       <itemPath>Sequencer.h</itemPath>
       <itemPath>SequencerGUI.cpp</itemPath>
       <itemPath>SequencerGUI.h</itemPath>
+      <itemPath>global.cpp</itemPath>
       <itemPath>global.h</itemPath>
       <itemPath>main.cpp</itemPath>
       <itemPath>messages.cpp</itemPath>

@@ -22,12 +22,6 @@
 #include "Sequencer.h"
 #include "MainWindow.h"
 #include "messages.h"
-extern int mainnote;
-extern vector<Sequencer *> sequencers;
-extern MainWindow *mainwindow;
-extern debug* dbg;
-extern error* err;
-extern double tempo;
 
 namespace Files {
     

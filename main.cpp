@@ -18,33 +18,19 @@
 */
 
 #include <gtkmm.h>
-#include <cstdlib>
-#include <cstdio>
 #include <getopt.h>
-#include <alsa/asoundlib.h>
 #include "global.h"
 #include "MidiDriver.h"
 #include "messages.h"
 #include "MainWindow.h"
 #include "Sequencer.h"
 
-
-using namespace std;
 int debugging = 0, help = 0, version = 0;
-debug* dbg;
-error* err;
-int mainnote = 60;
 int example_notes[6] = {-1,0,2,3,0,0}, example_notes2[6] = {2,3,5,7,0,0};
-double tempo = DEFAULT_TEMPO;
 int example_sequence[8] = {0,1,3,2,1,2,3,1}, example_sequence2[8] = {0,1,3,2,1,2,3,1};
-vector<Sequencer *> sequencers(2);
-MidiDriver* midi;
-int ports_number;
-int running = 1;
 void print_help();
 void end_program();
-void sigint(int sig);
-MainWindow* mainwindow;
+
 //for getopt
 static struct option long_options[]={
     {"debug",no_argument,&debugging,1},
@@ -234,10 +220,4 @@ void end_program(){
     delete dbg;
     delete err;
     exit(0);
-}
-
-void sigint(int sig){
-    *dbg << "SIGINT caught!\n";
-    end_program();
-
 }

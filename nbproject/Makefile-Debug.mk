@@ -39,7 +39,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/MidiDriver.o \
 	${OBJECTDIR}/Files.o \
 	${OBJECTDIR}/Sequencer.o \
-	${OBJECTDIR}/messages.o
+	${OBJECTDIR}/messages.o \
+	${OBJECTDIR}/global.o
 
 
 # C Compiler Flags
@@ -99,6 +100,11 @@ ${OBJECTDIR}/messages.o: messages.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/messages.o messages.cpp
+
+${OBJECTDIR}/global.o: global.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/global.o global.cpp
 
 # Subprojects
 .build-subprojects:

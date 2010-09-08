@@ -23,13 +23,9 @@
 #include "MidiDriver.h"
 #include "Sequencer.h"
 #include "Files.h"
-extern vector<Sequencer *> sequencers;
-extern int mainnote;
-extern debug* dbg;
-extern error* err;
+
+//externs from main.cpp
 extern int running;
-extern double tempo;
-extern MidiDriver* midi;
 extern int debugging;
 
 MainWindow::MainWindow()
@@ -78,7 +74,9 @@ MainWindow::MainWindow()
         cell = m_TreeView.get_column_cell_renderer(col_count - 1);
         Gtk::CellRendererToggle& tgl2 = dynamic_cast<Gtk::CellRendererToggle&> (*cell);
         tgl2.signal_toggled().connect(mem_fun(*this, &MainWindow::OnApplyMainNoteToggleToggled));
-        col_count = m_TreeView.append_column(_("Channel"), m_columns.col_channel);
+        col_count = m_TreeView.append_column(_("Chan"), m_columns.col_channel);
+        col_count = m_TreeView.append_column(_("Res"), m_columns.col_res);
+        //col_count = m_TreeView.append_column(_("Len"), m_columns.col_len);
 
         //Gtk::TreeView::Column* pColumn = m_TreeView.get_column(col_count-1);
         //pColumn->add_attribute(cell_spin->property_adjustment(),m_columns.col_channel);
@@ -98,21 +96,21 @@ MainWindow::MainWindow()
         pColumn->set_sort_column(m_columns.col_name);
         tricky++;
         pColumn = m_TreeView.get_column(tricky);
-        pColumn->set_sort_column(m_columns.col_muted);
+        //pColumn->set_sort_column(m_columns.col_muted);
+        pColumn->set_fixed_width(10);
         tricky++;
         pColumn = m_TreeView.get_column(tricky);
-        pColumn->set_sort_column(m_columns.col_apply_mainnote);
+        //pColumn->set_sort_column(m_columns.col_apply_mainnote);
+        pColumn->set_fixed_width(10);
         tricky++;
         pColumn = m_TreeView.get_column(tricky);
-        pColumn->set_sort_column(m_columns.col_channel);
-
-         
-        //may cause segfaults, beware!
-        /*for (guint i = 0; i < 3; i++)
-        {
-            Gtk::TreeView::Column* pColumn = m_TreeView.get_column(i);
-            pColumn->set_reorderable(false);
-        }*/
+        //pColumn->set_sort_column(m_columns.col_channel);
+        tricky++;
+        pColumn = m_TreeView.get_column(tricky);
+        //pColumn->set_sort_column(m_columns.col_res);
+        //tricky++;
+        //pColumn = m_TreeView.get_column(tricky);
+        //pColumn->set_sort_column(m_columns.col_len);
 
         //drag and drop enabling
         m_TreeView.enable_model_drag_source();
@@ -120,9 +118,9 @@ MainWindow::MainWindow()
         
         //catching row selection signal
         m_TreeView.signal_row_activated().connect(sigc::mem_fun(*this, &MainWindow::OnTreeviewRowActivated));
+        
 
 
-        *dbg << "loading initial data to the treeview/n";
         //initial data
         InitTreeData();
 
@@ -154,26 +152,16 @@ MainWindow::~MainWindow()
 
 }
 
-void
-MainWindow::SetMainNote(int note)
-{
-    *dbg << "setting note\n";
-    main_note.set_value(note);
-
-}
 
 void
 MainWindow::MainNoteChanged()
 {
     mainnote = main_note.get_value();
-
-
 }
 
 bool
 MainWindow::on_delete_event(GdkEventAny* event)
 {
-    
     *dbg << "user clicked X\n";
     running = 0;
     return 0;
@@ -239,7 +227,7 @@ MainWindow::OnNameEdited(const Glib::ustring& path, const Glib::ustring& newtext
     sequencers[row[m_columns.col_ID]]->SetName(newtext);
 }
 
-Gtk::TreeModel::iterator
+Gtk::TreeModel::RowReference
 MainWindow::AddSequencerRow(int n)
 {
     *dbg << "wooho! sequener " << n << " was just added, and we have to add it now to a new row in the list!" << ENDL;
@@ -252,12 +240,13 @@ MainWindow::AddSequencerRow(int n)
     row[m_columns.col_channel] = sequencers[n]->GetChannel();
     Gtk::TreeRowReference rowref(m_refTreeModel,m_refTreeModel->get_path(iter));
     sequencers[n]->row_in_main_window = rowref;
-    return iter;
+    return rowref;
 }
 
 
 
 void MainWindow::InitTreeData(){
+    *dbg << "loading initial data to the treeview/n";
     m_refTreeModel->clear();
     Gtk::TreeModel::Row row;
     int rowcount = 0;
@@ -298,7 +287,7 @@ void MainWindow::OnLoadClicked(){
 
     
     InitTreeData();
-    SetMainNote(mainnote);
+    main_note.set_value(mainnote);
     tempo_button.set_value(tempo);
     //erasing smallers the treeview, but not the window.
     resize(2,2); //resizing to a tiny size, but the window won't get that small, it will be big enough to show all widgets.
@@ -325,7 +314,10 @@ void MainWindow::OnRemoveClicked(){
 }
 
 void MainWindow::OnButtonAddClicked(){
-    Gtk::TreeModel::iterator iter = spawn_sequencer();
+
+    Gtk::TreeModel::RowReference rowref = spawn_sequencer();
+
+    Gtk::TreeModel::iterator iter = rowref.get_model()->get_iter(rowref.get_path());
     m_TreeView.get_selection()->select(iter);
 
 }
@@ -336,7 +328,8 @@ void MainWindow::OnCloneClicked(){
     Gtk::TreeModel::Row row = *iter;
     int id = row[m_columns.col_ID]; 
 
-    iter = clone_sequencer(id);
+    Gtk::TreeModel::RowReference rowref = clone_sequencer(id);
+    iter = rowref.get_model()->get_iter(rowref.get_path());
     m_TreeView.get_selection()->select(iter);
 
     FlashTempoStart();

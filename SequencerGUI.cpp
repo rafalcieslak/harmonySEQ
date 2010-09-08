@@ -23,8 +23,6 @@
 #include "Sequencer.h"
 #include "MainWindow.h"
 #include "global.h"
-extern MainWindow *mainwindow;
-extern debug *dbg;
 
 SequencerWindow::SequencerWindow(Sequencer* prt){
     *dbg << "constructing new SequencerWindow\n";
@@ -105,8 +103,8 @@ void SequencerWindow::OnSequenceChanged(int seq){
 }
 
 void SequencerWindow::UpdateValues(){
-
-    //finding a num to a res should be linear!
+//TODO: const
+    //finding a num to a res should be const complexity!
     int resolutions[RESOLUTIONS_NUM] = RESOLUTIONS;
     char temp[10];
     for (int x = 0; x < RESOLUTIONS_NUM; x++){
@@ -114,7 +112,10 @@ void SequencerWindow::UpdateValues(){
         Gtk::TreeModel::Row row = *(m_refTreeModel_res->get_iter(temp));
         if (resolutions[x] == (row[m_Columns_resol.resol])){resolution_box.set_active(x);continue;}
     }
+
+
     InitSeqSliders();
+
     for (int x = 0; x < NOTES_CONST_SIZE; x++) {
         note_buttons[x]->set_value(parent->GetNotes(x));
     }
