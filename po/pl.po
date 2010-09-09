@@ -7,120 +7,136 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-09-06 19:28+0200\n"
-"PO-Revision-Date: 2010-09-07 09:04+0000\n"
+"POT-Creation-Date: 2010-09-08 21:11+0200\n"
+"PO-Revision-Date: 2010-09-08 19:24+0000\n"
 "Last-Translator: rafal cieslak <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-08 05:08+0000\n"
+"X-Launchpad-Export-Date: 2010-09-09 05:10+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: MainWindow.cpp:173
+#: MainWindow.cpp:189
 msgid ", name is: "
 msgstr ", nazwa to: "
 
-#: MainWindow.cpp:109
+#: MainWindow.cpp:135
 msgid "Add"
 msgstr "Dodaj"
 
-#: MidiDriver.cpp:67
+#: MidiDriver.cpp:74
 msgid "Alsa midi driver init successfull.\n"
 msgstr "Inicjacja sterownika MIDI powiodła się.\n"
 
-#: SequencerGUI.cpp:57
+#: SequencerGUI.cpp:61
 msgid "Apply main note"
 msgstr "Stosuj główną nutę"
 
-#: MainWindow.cpp:64
-msgid "Channel"
-msgstr "Kanał"
+#: MainWindow.cpp:77
+msgid "Chan"
+msgstr "Kan"
 
-#: Files.cpp:77
+#: Files.cpp:92
 msgid "Choose a file to open..."
 msgstr "Wybierz plik do otwarcia..."
 
-#: Files.cpp:17
+#: Files.cpp:30
 msgid "Choose a file to save..."
 msgstr "Wybierz plik do zapisu..."
 
-#: MainWindow.cpp:117
+#: MainWindow.cpp:143
 msgid "Clone"
 msgstr "Klonuj"
 
-#: debug.cpp:12
+#: messages.cpp:24
 #, c-format
 msgid "Debug mode started.\n"
 msgstr "Włączono tryb Debug.\n"
 
-#: Files.cpp:35
+#: Files.cpp:48
 #, c-format
 msgid "ERROR - error while opening file %s to write.\n"
 msgstr "BŁĄD - błąd podczas otwierania pliku %s do zapisu.\n"
 
-#: Files.cpp:93
+#: Files.cpp:108
 #, c-format
 msgid "ERROR - error while trying to read %s\n"
 msgstr "BŁĄD - błąd podczas czytania pliku %s\n"
 
-#: MidiDriver.cpp:61
+#: MidiDriver.cpp:68
 msgid "Failed to create input port.\n"
 msgstr "Nie udało się otworzyć portu wejściowego.\n"
 
-#: MidiDriver.cpp:52
+#: MidiDriver.cpp:59
 msgid "Failed to create output port.\n"
 msgstr "Nie udało się otworzyć portu wyjściowego.\n"
 
-#: MidiDriver.cpp:40
+#: MidiDriver.cpp:47
 msgid "Failed to open ALSA sequencer.\n"
 msgstr "Nie udało się otworzyć sekwencera ALSA.\n"
 
-#: MainWindow.cpp:50
+#: MainWindow.cpp:63
 msgid "ID"
 msgstr "ID"
 
-#: SequencerGUI.cpp:48
+#: MainWindow.cpp:79
+msgid "Len"
+msgstr "Dł"
+
+#: SequencerGUI.cpp:87
+msgid "Length:"
+msgstr "Długość:"
+
+#: SequencerGUI.cpp:52
 msgid "MIDI channel:"
 msgstr "Kanał MIDI"
 
-#: MainWindow.cpp:60
+#: MainWindow.cpp:73
 msgid "MN"
 msgstr "GN"
 
-#: MainWindow.cpp:27
+#: MainWindow.cpp:40
 msgid "Main Note:"
 msgstr "Nuta główna:"
 
-#: MainWindow.cpp:52
+#: MainWindow.cpp:65
 msgid "Name"
 msgstr "Nazwa"
 
-#: MainWindow.cpp:56 SequencerGUI.cpp:56
+#: MainWindow.cpp:69 SequencerGUI.cpp:60
 msgid "On"
 msgstr "Wł."
 
-#: MainWindow.cpp:113
+#: MainWindow.cpp:139
 msgid "Open"
 msgstr "Otwórz"
 
-#: MainWindow.cpp:115
+#: MainWindow.cpp:141
 msgid "Remove"
 msgstr "Usuń"
 
-#: MainWindow.cpp:111
+#: MainWindow.cpp:78
+msgid "Res"
+msgstr "Roz"
+
+#: SequencerGUI.cpp:70
+msgid "Resolution:"
+msgstr "Rozdzielczość:"
+
+#: MainWindow.cpp:137
 msgid "Save"
 msgstr "Zapisz"
 
-#: MainWindow.cpp:26
+#: MainWindow.cpp:39
 msgid "Tempo:"
 msgstr "Tempo:"
 
-#: MainWindow.cpp:172
+#: MainWindow.cpp:188
 msgid "activated row "
 msgstr "aktywowano wiersz "
 
-#: main.cpp:200
+#: main.cpp:198
 #, c-format
 msgid ""
 "harmonySEQ, version %s\n"
@@ -142,25 +158,25 @@ msgstr ""
 "    -h --help        wyświetla tę wiadomość pomocy\n"
 "    -v --version     wyświetla wersję programu\n"
 
-#: Sequencer.cpp:23
+#: Sequencer.cpp:40
 #, c-format
 msgid "seq %d"
 msgstr "seq %d"
 
-#: Sequencer.h:19
+#: global.h:46
 msgid "sequencer"
 msgstr "sekwencer"
 
-#: main.cpp:138
+#: main.cpp:136
 msgid "setting ports number to "
 msgstr "ustaw ilość portów na "
 
-#: main.cpp:143
+#: main.cpp:141
 #, c-format
 msgid "unknown option '%c'\n"
 msgstr "nieznana opcja '%c'\n"
 
-#: main.cpp:146
+#: main.cpp:144
 #, c-format
 msgid "unrecognized option '%s'\n"
 msgstr "nierozpoznana opcja '%s'\n"
@@ -190,3 +206,6 @@ msgstr "nierozpoznana opcja '%s'\n"
 
 #~ msgid "Mute"
 #~ msgstr "Wycisz"
+
+#~ msgid "Channel"
+#~ msgstr "Kanał"
