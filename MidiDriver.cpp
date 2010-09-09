@@ -80,19 +80,26 @@ void MidiDriver::SendNoteEvent(int pitch, int volume){
     snd_seq_ev_set_source(&ev,output_port);
     snd_seq_ev_set_subs(&ev);
     snd_seq_ev_set_direct(&ev);
-
-    //determine event type
-    if(volume == 0) snd_seq_ev_set_noteon(&ev,1,pitch,volume);
-    else snd_seq_ev_set_noteon(&ev,1,pitch,volume);
+    snd_seq_ev_set_noteon(&ev,1,pitch,volume);
 
     snd_seq_event_output(seq_handle,&ev);
     snd_seq_drain_output(seq_handle);
 
 }
 
+void MidiDriver::PassEvent(snd_seq_event_t* ev){
+    *dbg << "passing an event...";
+    snd_seq_ev_set_source(ev,output_port);
+    snd_seq_ev_set_subs(ev);
+    snd_seq_ev_set_direct(ev);
+    snd_seq_event_output(seq_handle,ev);
+    snd_seq_drain_output(seq_handle);
+
+}
+
 void MidiDriver::InitQueue(){
     queueid = snd_seq_alloc_named_queue(seq_handle,"harmonySEQ queue");
-    snd_seq_set_client_pool_output(seq_handle,64);
+    snd_seq_set_client_pool_output(seq_handle,2048);
     tick = 0;
 }
 
@@ -198,6 +205,7 @@ void MidiDriver::ProcessInput(){
 
         do {
         snd_seq_event_input(seq_handle,&ev);
+        if(passing_midi&&ev->type!=SND_SEQ_EVENT_ECHO) {PassEvent(ev);continue;}
         *dbg << "We got an event!!!! And the type is....";
         switch (ev->type){
             case SND_SEQ_EVENT_NOTEON:

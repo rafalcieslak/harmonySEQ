@@ -33,6 +33,7 @@ public:
     int tick;
     MidiDriver();
     void SendNoteEvent(int pitch, int volume);
+    void PassEvent(snd_seq_event_t *ev);
     void Open();
     void InitQueue();
     void SetTempo(double bpm);

@@ -143,6 +143,12 @@ MainWindow::MainWindow()
     button_clone.set_label(_("Clone"));
     button_clone.signal_clicked().connect(mem_fun(*this, &MainWindow::OnCloneClicked));
 
+    vbox1.pack_start(pass_toggle,Gtk::PACK_SHRINK);
+    pass_toggle.set_label(_("Pass MIDI events"));
+    pass_toggle.set_active(passing_midi);
+    pass_toggle.signal_clicked().connect(mem_fun(*this,&MainWindow::OnPassToggleClicked));
+
+    signal_key_press_event().connect(mem_fun(*this,&MainWindow::OnKeyPress));
     show_all_children(1);
 
 }
@@ -348,4 +354,20 @@ void MainWindow::FlashTempoStart(){
 bool MainWindow::FlashTempoEnd(){
     tempo_button.unset_base(Gtk::STATE_NORMAL);
     return false; //do not repeat the timeout
+}
+
+void MainWindow::OnPassToggleClicked(){
+    passing_midi = pass_toggle.get_active();
+
+
+}
+
+bool MainWindow::OnKeyPress(GdkEventKey* event){
+    *dbg << "keypress\n";
+    if(event->keyval == GDK_P){
+        passing_midi = !passing_midi;
+        pass_toggle.set_active(passing_midi);
+
+    }
+    return 1;
 }

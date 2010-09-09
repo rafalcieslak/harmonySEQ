@@ -80,6 +80,7 @@ extern debug* dbg;
 extern error* err;
 extern MidiDriver* midi;
 extern MainWindow* mainwindow;
+extern int passing_midi;
 #endif
 
 #endif	/* GLOBAL_H */

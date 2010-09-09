@@ -19,12 +19,25 @@
 
 #include <gtkmm.h>
 #include <getopt.h>
+#define I_DO_NOT_WANT_EXTERNS_FROM_GLOBAL_H
 #include "global.h"
+#undef I_DO_NOT_WANT_EXTERNS_FROM_GLOBAL_H
 #include "MidiDriver.h"
 #include "messages.h"
 #include "MainWindow.h"
 #include "Sequencer.h"
-
+//global objects
+vector<Sequencer *> sequencers(2);
+int mainnote = 60;
+double tempo = DEFAULT_TEMPO;
+int ports_number;
+int running = 1;
+debug* dbg;
+error* err;
+MidiDriver* midi;
+MainWindow* mainwindow;
+int passing_midi;
+//-/
 int debugging = 0, help = 0, version = 0;
 int example_notes[6] = {-1,0,2,3,0,0}, example_notes2[6] = {2,3,5,7,0,0};
 int example_sequence[8] = {0,1,3,2,1,2,3,1}, example_sequence2[8] = {0,1,3,2,1,2,3,1};
@@ -36,11 +49,11 @@ static struct option long_options[]={
     {"debug",no_argument,&debugging,1},
     {"help",no_argument,&help,1},
     {"version",no_argument,&version,1},
+    {"pass-midi",no_argument,&passing_midi,1},
     {"ports",required_argument,0,'p'},
     {0,0,0,0}
 
 };
-
 
 // <editor-fold defaultstate="collapsed" desc="thread classes">
 
@@ -116,6 +129,7 @@ int main(int argc, char** argv) {
     debugging = 0; //by default
     help = 0;
     ports_number = 1;
+    passing_midi = 0;
     opterr = 0; //this prevents getopt from printing his error message
     int option_index; //getopt stores index here
     while((c=getopt_long(argc,argv,"dhvp",long_options,&option_index))!=-1){
@@ -203,6 +217,7 @@ void print_help(){
             "    -d --debug       enters debug mode, prints lots of debug messeges\n"
             "    -h --help        prints this help messase and exits\n"
             "    -v --version     prints the program version\n"), VERSION);
+    printf(_("       --pass-midi   passes the midi events through the program by default\n"));
     printf("\n");
 
 

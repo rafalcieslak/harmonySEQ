@@ -64,6 +64,9 @@ public:
     void OnApplyMainNoteToggleToggled(const Glib::ustring& path);
     void OnNameEdited(const Glib::ustring& path,const Glib::ustring& newtext);
 
+
+    void OnPassToggleClicked();
+    bool OnKeyPress(GdkEventKey* event);
     Gtk::VBox vbox1;
     Gtk::HBox hbox_up, hbox_down;
     Gtk::SpinButton main_note;
@@ -74,6 +77,7 @@ public:
     Gtk::Button button_open;
     Gtk::Button button_remove;
     Gtk::Button button_clone;
+    Gtk::CheckButton pass_toggle;
 
 
 private:
