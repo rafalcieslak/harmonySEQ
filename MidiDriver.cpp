@@ -216,6 +216,7 @@ void MidiDriver::ProcessInput(){
                     gdk_threads_enter(); //to interact with gui thread we MUST lock it's thread
                     mainwindow->main_note.set_value(mainnote);
                     gdk_threads_leave(); //freeing lock
+                    
                 }
                 *dbg << "noteoff! (of pitch " << ev->data.note.note << ")\n";
                 break;

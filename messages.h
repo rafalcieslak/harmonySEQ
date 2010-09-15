@@ -20,8 +20,6 @@
 
 #ifndef DEBUG_H
 #define	DEBUG_H
-#include <cstdio>
-#include <cstdlib>
 #include "global.h"
 class debug {
 public:
@@ -50,5 +48,6 @@ error & operator <<(error &err, int number);
 debug & operator <<(debug &dbg, const char* message);
 debug & operator <<(debug &dbg, int number);
 debug & operator <<(debug &dbg, Glib::ustring message);
+debug & operator <<(debug &dbg, std::string message);
 #endif	/* DEBUG_H */
 

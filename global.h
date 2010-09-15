@@ -28,6 +28,7 @@
 #include <alsa/asoundlib.h>
 #include <cstdlib>
 #include <cstdio>
+#include <string>
 using namespace std;
 #define VERSION "0.9"
 #define ENDL "\n"
@@ -71,6 +72,7 @@ class debug;
 class error;
 class MidiDriver;
 class MainWindow;
+class Event;
 extern vector<Sequencer *> sequencers;
 extern int mainnote;
 extern double tempo;
@@ -81,6 +83,9 @@ extern error* err;
 extern MidiDriver* midi;
 extern MainWindow* mainwindow;
 extern int passing_midi;
+extern std::map<string, int> keymap_stoi;
+extern std::map<int, string> keymap_itos;
+extern vector<Event *> events;
 #endif
 
 #endif	/* GLOBAL_H */

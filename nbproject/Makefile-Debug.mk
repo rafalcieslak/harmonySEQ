@@ -37,8 +37,10 @@ OBJECTFILES= \
 	${OBJECTDIR}/MainWindow.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/MidiDriver.o \
+	${OBJECTDIR}/EventsWindow.o \
 	${OBJECTDIR}/Files.o \
 	${OBJECTDIR}/Sequencer.o \
+	${OBJECTDIR}/Event.o \
 	${OBJECTDIR}/messages.o \
 	${OBJECTDIR}/global.o
 
@@ -86,6 +88,11 @@ ${OBJECTDIR}/MidiDriver.o: MidiDriver.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/MidiDriver.o MidiDriver.cpp
 
+${OBJECTDIR}/EventsWindow.o: EventsWindow.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/EventsWindow.o EventsWindow.cpp
+
 ${OBJECTDIR}/Files.o: Files.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
@@ -95,6 +102,11 @@ ${OBJECTDIR}/Sequencer.o: Sequencer.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/Sequencer.o Sequencer.cpp
+
+${OBJECTDIR}/Event.o: Event.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/Event.o Event.cpp
 
 ${OBJECTDIR}/messages.o: messages.cpp 
 	${MKDIR} -p ${OBJECTDIR}

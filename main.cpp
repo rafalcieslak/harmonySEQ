@@ -19,15 +19,19 @@
 
 #include <gtkmm.h>
 #include <getopt.h>
+
 #define I_DO_NOT_WANT_EXTERNS_FROM_GLOBAL_H
 #include "global.h"
 #undef I_DO_NOT_WANT_EXTERNS_FROM_GLOBAL_H
 #include "MidiDriver.h"
 #include "messages.h"
 #include "MainWindow.h"
+#include "EventsWindow.h"
 #include "Sequencer.h"
+#include "Event.h"
 //global objects
 vector<Sequencer *> sequencers(2);
+vector<Event *> events(2);
 int mainnote = 60;
 double tempo = DEFAULT_TEMPO;
 int ports_number;
@@ -36,7 +40,10 @@ debug* dbg;
 error* err;
 MidiDriver* midi;
 MainWindow* mainwindow;
+EventsWindow* eventswindow;
 int passing_midi;
+std::map<string, int> keymap_stoi;
+std::map<int, string> keymap_itos;
 //-/
 int debugging = 0, help = 0, version = 0;
 int example_notes[6] = {-1,0,2,3,0,0}, example_notes2[6] = {2,3,5,7,0,0};
@@ -73,6 +80,34 @@ threadb::threadb() {
 
 threadb::~threadb() {
 }// </editor-fold>
+void InitKeyMap()
+{
+    char temp[30];
+    //keys for numbers 0-10
+    for (int i = 0; i < 10; i++) {
+        sprintf(temp, "%d", i);
+        keymap_itos[48 + i] = temp;
+        keymap_stoi[temp] = 48 + i;
+    }
+
+    //function keys F1-F12
+    for (int i = 1; i <= 12; i++) {
+        sprintf(temp, "F%d", i);
+        keymap_itos[65469 + i] = temp;
+        keymap_stoi[temp] = 65469 + i;
+
+    }
+
+    //keys a-z
+    temp[1] = NULL;
+    for (int i = 97; i < 123; i++) {
+        temp[0] = i;
+        keymap_itos[i] = temp;
+        keymap_stoi[temp] = i;
+
+    }
+}
+
 
 void threadb::th1(){
 //midi processing thread
@@ -182,13 +217,22 @@ int main(int argc, char** argv) {
     //random number generator init
     srand(time(NULL));
 
+    InitKeyMap();
+
     gdk_threads_enter();
     {
         mainwindow = new MainWindow; //it is important that the main window is constructed BEFORE
-                                     //te sequencers are, since the sequeners GUI calls functions from within the mainwindow.
+                                     //te sequencers are, since the sequeners GUI calls functions from within the mainwindow*.
         sequencers[0] = new Sequencer(example_sequence,example_notes,"seq 0");
         sequencers[1] = new Sequencer(example_sequence2,example_notes2,"seq 1");
         mainwindow->InitTreeData();
+
+        eventswindow = new EventsWindow;
+        events[0] = new Event(Event::EVENT_TYPE_KEYBOARD,keymap_stoi.find("F12")->second,0);
+        events[1] = new Event(Event::EVENT_TYPE_NOTE,60,0);
+        events.push_back(new Event(Event::EVENT_TYPE_KEYBOARD,keymap_stoi.find("p")->second,0));
+        eventswindow->InitTreeData();
+        eventswindow->show();
     }
     gdk_threads_leave();
 
@@ -231,6 +275,7 @@ void end_program(){
         midi->DeleteQueue();
     }
     delete mainwindow;
+    delete eventswindow;
     delete midi;
     delete dbg;
     delete err;

@@ -17,10 +17,12 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <gtkmm.h>
-#include <gtkmm/window.h>
 #ifndef MAINWINDOW_H
 #define	MAINWINDOW_H
+
+#include <gtkmm.h>
+#include <gtkmm/window.h>
+#include "global.h"
 class MainWindow: public Gtk::Window{
 
 
@@ -78,7 +80,6 @@ public:
     Gtk::Button button_remove;
     Gtk::Button button_clone;
     Gtk::CheckButton pass_toggle;
-
 
 private:
 

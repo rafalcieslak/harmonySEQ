@@ -19,7 +19,9 @@ SRCS =  main.cpp\
         SequencerGUI.cpp \
         messages.cpp \
         Files.cpp \
-	global.cpp
+	global.cpp \
+	Event.cpp \
+	EventsWindow.cpp
         
 OBJS	= $(SRCS:.cpp=.o)
 

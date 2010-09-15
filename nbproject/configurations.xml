@@ -15,6 +15,10 @@
                    displayName="Source Files"
                    projectFiles="true"
                    kind="SOURCE_LOGICAL_FOLDER">
+      <itemPath>Event.cpp</itemPath>
+      <itemPath>Event.h</itemPath>
+      <itemPath>EventsWindow.cpp</itemPath>
+      <itemPath>EventsWindow.h</itemPath>
       <itemPath>Files.cpp</itemPath>
       <itemPath>Files.h</itemPath>
       <itemPath>MainWindow.cpp</itemPath>

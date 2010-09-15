@@ -51,6 +51,11 @@ debug & operator <<(debug &dbg, Glib::ustring message){
     return dbg;
 }
 
+debug & operator <<(debug &dbg, std::string message){
+
+    dbg.say(message.c_str());
+    return dbg;
+}
 
 debug & operator <<(debug &dbg, int number){
     if(!dbg.debug_mode) return dbg;

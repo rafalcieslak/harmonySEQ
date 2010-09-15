@@ -28,6 +28,9 @@
 extern int running;
 extern int debugging;
 
+
+
+
 MainWindow::MainWindow()
 {
     char temp[30];
@@ -78,10 +81,7 @@ MainWindow::MainWindow()
         col_count = m_TreeView.append_column(_("Res"), m_columns.col_res);
         col_count = m_TreeView.append_column_numeric(_("Len"), m_columns.col_len,"%g");
 
-        //Gtk::TreeView::Column* pColumn = m_TreeView.get_column(col_count-1);
-        //pColumn->add_attribute(cell_spin->property_adjustment(),m_columns.col_channel);
 
-        *dbg << "cell connection successful\n";
 
 
         Gtk::TreeView::Column* pColumn;
@@ -122,8 +122,8 @@ MainWindow::MainWindow()
 
 
         //initial data
-        InitTreeData();
-
+        //InitTreeData();
+        /*is called from main()*/
 
     }// </editor-fold>
     vbox1.pack_start(hbox_down, Gtk::PACK_SHRINK);
@@ -148,7 +148,14 @@ MainWindow::MainWindow()
     pass_toggle.set_active(passing_midi);
     pass_toggle.signal_clicked().connect(mem_fun(*this,&MainWindow::OnPassToggleClicked));
 
+
+
+
+    add_events(Gdk::KEY_PRESS_MASK);
     signal_key_press_event().connect(mem_fun(*this,&MainWindow::OnKeyPress));
+
+
+
     show_all_children(1);
 
 }
@@ -363,11 +370,14 @@ void MainWindow::OnPassToggleClicked(){
 }
 
 bool MainWindow::OnKeyPress(GdkEventKey* event){
-    *dbg << "keypress\n";
-    if(event->keyval == GDK_P){
-        passing_midi = !passing_midi;
-        pass_toggle.set_active(passing_midi);
+    //*dbg << "triggered " << event->keyval << "\n";
+    std::map<int,string>::iterator iter;
+    iter = keymap_itos.find(event->keyval);
+    if(iter != keymap_itos.end()){
+        *dbg << "Pressed key '" << iter->second << "'.\n";
 
-    }
+    }else
+        *dbg << "Unknown key pressed\n";
+
     return 1;
 }
