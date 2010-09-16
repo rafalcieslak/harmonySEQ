@@ -23,6 +23,7 @@
 #include "MainWindow.h"
 #include "Sequencer.h"
 #include "global.h"
+#include "Event.h"
 MidiDriver::MidiDriver() {
     working = false;
     Open();
@@ -132,19 +133,19 @@ void MidiDriver::DeleteQueue(){
 }
 
 void MidiDriver::UpdateQueue(){
-    *dbg << "yep, updating the queue...\n";
+    //*dbg << "yep, updating the queue...\n";
     snd_seq_event_t ev;
     for (unsigned int n = 0; n < sequencers.size(); n++){
         if(sequencers[n] == NULL) continue;
-        *dbg << "sequencer " << n << " is ";
-        *dbg << ((sequencers[n]->GetOn())?"on":"off") << ENDL;
+        //*dbg << "sequencer " << n << " is ";
+        //*dbg << ((sequencers[n]->GetOn())?"on":"off") << ENDL;
         if (!sequencers[n]->GetOn()) continue;
         //ok, and here we proceed all notes from one sequencer.
         //first check the length:
         if (sequencers[n]->length<=1){
             //length is smaller or equal to 1, we play the same sequence several times in a tact
             double howmanytimes = (double)1.0/(sequencers[n]->length);
-            *dbg << "howmanytimes = " << howmanytimes << ENDL;
+            //*dbg << "howmanytimes = " << howmanytimes << ENDL;
             int duration = ((double)(TICKS_PER_NOTE / sequencers[n]->resolution))*sequencers[n]->length;
             int local_tick = tick;
             for (int i = 0; i < howmanytimes; i++){
@@ -168,10 +169,10 @@ void MidiDriver::UpdateQueue(){
             //length is larger than 1, we play one sequence over many tacts.
             int duration = ((double)(TICKS_PER_NOTE / sequencers[n]->resolution))*sequencers[n]->length;
             int startnote = sequencers[n]->last_played_note;
-            *dbg << "startnote = " << startnote <<ENDL;
+            //*dbg << "startnote = " << startnote <<ENDL;
             int x;
             for (x = 0; x < (double)sequencers[n]->resolution/sequencers[n]->length;x++){
-                    *dbg << "x = " << x << ENDL;
+                    //*dbg << "x = " << x << ENDL;
                     snd_seq_ev_clear(&ev);
                     int note = sequencers[n]->notes[sequencers[n]->sequence[(startnote+x)%sequencers[n]->resolution]];
                     if (sequencers[n]->GetApplyMainNote()) note += mainnote;
@@ -206,16 +207,18 @@ void MidiDriver::ProcessInput(){
         do {
         snd_seq_event_input(seq_handle,&ev);
         if(passing_midi&&ev->type!=SND_SEQ_EVENT_ECHO) {PassEvent(ev);continue;}
-        *dbg << "We got an event!!!! And the type is....";
+        //*dbg << "We got an event!!!! And the type is....";
         switch (ev->type){
             case SND_SEQ_EVENT_NOTEON:
                 if (ev->data.note.velocity != 0) {
                 *dbg << "noteon! (of pitch " << ev->data.note.note << ")\n";
                     mainnote = ev->data.note.note;
 
+                    FindAndProcessEvents(Event::EVENT_TYPE_NOTE,ev->data.note.note,ev->data.note.channel);
+                    /*freezed to implement the events system
                     gdk_threads_enter(); //to interact with gui thread we MUST lock it's thread
                     mainwindow->main_note.set_value(mainnote);
-                    gdk_threads_leave(); //freeing lock
+                    gdk_threads_leave(); //freeing lock*/
                     
                 }
                 *dbg << "noteoff! (of pitch " << ev->data.note.note << ")\n";
@@ -243,6 +246,8 @@ void MidiDriver::ProcessInput(){
                 }else{
                     *dbg << "controller!\n";
                 }
+                
+                FindAndProcessEvents(Event::EVENT_TYPE_CONTROLLER,ev->data.control.param,ev->data.control.channel);
                 break;
             case SND_SEQ_EVENT_PITCHBEND:
                 //pass it through

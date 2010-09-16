@@ -19,7 +19,6 @@
 
 #include "Event.h"
 
-
 Event::Event(){
     type = 0;
     arg1 = 0;
@@ -72,4 +71,48 @@ std::string Event::GetLabel(){
     }
     a+=".";
     return a;
+}
+
+
+void Event::Trigger(){
+    *dbg << "triggered event ==";
+    *dbg << GetLabel() << "== :-)\n";
+
+}
+
+
+void FindAndProcessEvents(Event::EventTypes ev,int arg1, int arg2){
+    for (unsigned int x = 0; x < events.size();x++){
+        if (events[x]==NULL) continue;
+        if (events[x]->type == ev){
+            switch (ev){
+                case Event::EVENT_TYPE_KEYBOARD: //args: keycode
+                    if (arg1 == events[x]->arg1) //checking whether key is correct
+                        events[x]->Trigger();
+                    break;
+                case Event::EVENT_TYPE_NOTE:    //args: note channel
+                    if (arg1 == events[x]->arg1 && (events[x]->arg2 == 0 || events[x]->arg2 == arg2))
+                        events[x]->Trigger();
+                    break;
+                case Event::EVENT_TYPE_CONTROLLER: //args: controller channel
+                    if (arg1 == events[x]->arg1 && (events[x]->arg2 == 0 || events[x]->arg2 == arg2))
+                        events[x]->Trigger();
+
+                    break;
+                case Event::EVENT_TYPE_NONE:
+                    *err << _("Error - empty event would be triggered.\n");
+            }
+
+        }
+    }
+
+
+}
+
+
+
+void TriggerEvent(int number){
+    if (events[number]!=NULL) events[number]->Trigger();
+
+
 }

@@ -29,6 +29,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <string>
+#include "messages.h"
 using namespace std;
 #define VERSION "0.9"
 #define ENDL "\n"

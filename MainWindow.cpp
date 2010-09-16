@@ -23,6 +23,7 @@
 #include "MidiDriver.h"
 #include "Sequencer.h"
 #include "Files.h"
+#include "Event.h"
 
 //externs from main.cpp
 extern int running;
@@ -378,6 +379,8 @@ bool MainWindow::OnKeyPress(GdkEventKey* event){
 
     }else
         *dbg << "Unknown key pressed\n";
+
+    FindAndProcessEvents(Event::EVENT_TYPE_KEYBOARD,event->keyval);
 
     return 1;
 }

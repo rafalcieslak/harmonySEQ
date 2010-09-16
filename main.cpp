@@ -231,6 +231,8 @@ int main(int argc, char** argv) {
         events[0] = new Event(Event::EVENT_TYPE_KEYBOARD,keymap_stoi.find("F12")->second,0);
         events[1] = new Event(Event::EVENT_TYPE_NOTE,60,0);
         events.push_back(new Event(Event::EVENT_TYPE_KEYBOARD,keymap_stoi.find("p")->second,0));
+        events.push_back(new Event(Event::EVENT_TYPE_NOTE,72,1));
+        events.push_back(new Event(Event::EVENT_TYPE_CONTROLLER,2,0));
         eventswindow->InitTreeData();
         eventswindow->show();
     }

@@ -20,6 +20,9 @@
 #ifndef EVENT_H
 #define	EVENT_H
 #include "global.h"
+
+
+
 class Event {
 public:
     Event();
@@ -28,6 +31,8 @@ public:
     virtual ~Event();
 
     int type;
+
+    void Trigger();
 
     enum EventTypes{
         EVENT_TYPE_NONE,        //no arguments
@@ -47,5 +52,7 @@ private:
 
 };
 
+void FindAndProcessEvents(Event::EventTypes ev,int arg1 = 0, int arg2 = 0);
+void TriggerEvent(int number);
 #endif	/* EVENT_H */
 
