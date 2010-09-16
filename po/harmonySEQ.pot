@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-08 21:11+0200\n"
+"POT-Creation-Date: 2010-09-16 18:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,15 +17,21 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: MainWindow.cpp:189
+#: main.cpp:277
+#, c-format
+msgid ""
+"       --pass-midi   passes the midi events through the program by default\n"
+msgstr ""
+
+#: MainWindow.cpp:210
 msgid ", name is: "
 msgstr ""
 
-#: MainWindow.cpp:135
+#: EventsWindow.cpp:34 MainWindow.cpp:139
 msgid "Add"
 msgstr ""
 
-#: MidiDriver.cpp:74
+#: MidiDriver.cpp:75
 msgid "Alsa midi driver init successfull.\n"
 msgstr ""
 
@@ -33,7 +39,7 @@ msgstr ""
 msgid "Apply main note"
 msgstr ""
 
-#: MainWindow.cpp:77
+#: MainWindow.cpp:81
 msgid "Chan"
 msgstr ""
 
@@ -45,7 +51,7 @@ msgstr ""
 msgid "Choose a file to save..."
 msgstr ""
 
-#: MainWindow.cpp:143
+#: MainWindow.cpp:148
 msgid "Clone"
 msgstr ""
 
@@ -64,23 +70,39 @@ msgstr ""
 msgid "ERROR - error while trying to read %s\n"
 msgstr ""
 
-#: MidiDriver.cpp:68
+#: EventsWindow.cpp:81
+msgid "Error - cannot colorize triggered event: row is empty.\n"
+msgstr ""
+
+#: Event.cpp:106
+msgid "Error - empty event would be triggered.\n"
+msgstr ""
+
+#: EventsWindow.cpp:42
+msgid "Event"
+msgstr ""
+
+#: MainWindow.cpp:151
+msgid "Events"
+msgstr ""
+
+#: MidiDriver.cpp:69
 msgid "Failed to create input port.\n"
 msgstr ""
 
-#: MidiDriver.cpp:59
+#: MidiDriver.cpp:60
 msgid "Failed to create output port.\n"
 msgstr ""
 
-#: MidiDriver.cpp:47
+#: MidiDriver.cpp:48
 msgid "Failed to open ALSA sequencer.\n"
 msgstr ""
 
-#: MainWindow.cpp:63
+#: EventsWindow.cpp:40 MainWindow.cpp:67
 msgid "ID"
 msgstr ""
 
-#: MainWindow.cpp:79
+#: MainWindow.cpp:83
 msgid "Len"
 msgstr ""
 
@@ -92,31 +114,35 @@ msgstr ""
 msgid "MIDI channel:"
 msgstr ""
 
-#: MainWindow.cpp:73
+#: MainWindow.cpp:77
 msgid "MN"
 msgstr ""
 
-#: MainWindow.cpp:40
+#: MainWindow.cpp:44
 msgid "Main Note:"
 msgstr ""
 
-#: MainWindow.cpp:65
+#: MainWindow.cpp:69
 msgid "Name"
 msgstr ""
 
-#: MainWindow.cpp:69 SequencerGUI.cpp:60
+#: MainWindow.cpp:73 SequencerGUI.cpp:60
 msgid "On"
 msgstr ""
 
-#: MainWindow.cpp:139
+#: MainWindow.cpp:143
 msgid "Open"
 msgstr ""
 
-#: MainWindow.cpp:141
+#: MainWindow.cpp:155
+msgid "Pass MIDI events"
+msgstr ""
+
+#: MainWindow.cpp:145
 msgid "Remove"
 msgstr ""
 
-#: MainWindow.cpp:78
+#: MainWindow.cpp:82
 msgid "Res"
 msgstr ""
 
@@ -124,19 +150,19 @@ msgstr ""
 msgid "Resolution:"
 msgstr ""
 
-#: MainWindow.cpp:137
+#: MainWindow.cpp:141
 msgid "Save"
 msgstr ""
 
-#: MainWindow.cpp:39
+#: MainWindow.cpp:43
 msgid "Tempo:"
 msgstr ""
 
-#: MainWindow.cpp:188
+#: MainWindow.cpp:209
 msgid "activated row "
 msgstr ""
 
-#: main.cpp:198
+#: main.cpp:269
 #, c-format
 msgid ""
 "harmonySEQ, version %s\n"
@@ -154,20 +180,16 @@ msgstr ""
 msgid "seq %d"
 msgstr ""
 
-#: global.h:46
+#: global.h:53
 msgid "sequencer"
 msgstr ""
 
-#: main.cpp:136
-msgid "setting ports number to "
-msgstr ""
-
-#: main.cpp:141
+#: main.cpp:223
 #, c-format
 msgid "unknown option '%c'\n"
 msgstr ""
 
-#: main.cpp:144
+#: main.cpp:226
 #, c-format
 msgid "unrecognized option '%s'\n"
 msgstr ""
