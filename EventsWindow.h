@@ -35,6 +35,7 @@ public:
     void ColorizeRow(Gtk::TreeRowReference rowref);
     bool UncolorizeRow(Gtk::TreeRowReference rowref);
 
+    void UpdateRow(Gtk::TreeRowReference rowref);
     void OnRowChosen(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column);
     class ModelColumns : public Gtk::TreeModel::ColumnRecord{
     public:

@@ -42,6 +42,16 @@ public:
     Gtk::TreeModelColumn<int> keycode;
     Gtk::TreeModelColumn<Glib::ustring> label;
 };
+
+class ModelColumns_Channels : public Gtk::TreeModel::ColumnRecord {
+public:
+    ModelColumns_Channels() {
+        add(ch);
+        add(label);
+    }
+    Gtk::TreeModelColumn<int> ch;
+    Gtk::TreeModelColumn<Glib::ustring> label;
+};
 #ifndef I_DO_NOT_WANT_EXTERNS_FROM_EVENT_GUI
 extern ModelColumns_EventTypes m_columns_event_types;
 extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_EventTypes;
@@ -51,6 +61,7 @@ extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_KeyCodes;
 
 void InitEventTypesTreeModel();
 void InitKeyTypesTreeModel();
+void InitChannelsTreeModel();
 void InitAllTreeModels();
 
 class EventGUI :public Gtk::Window{
@@ -59,6 +70,9 @@ public:
     virtual ~EventGUI();
 
     void TypeChanged();
+    void UpdateValues();
+
+    void OnOKClicked();
     Event *parent;
 
     Gtk::VBox main_box;
@@ -72,10 +86,14 @@ public:
     Gtk::Label label_channel;
     Gtk::HBox line_controller;
     Gtk::Label label_controller;
-
+    Gtk::Button ok_button;
     
     Gtk::ComboBox Types_combo;
     Gtk::ComboBox Keys_combo;
+    Gtk::SpinButton note_spinbutton;
+    Gtk::SpinButton ctrl_spinbutton;
+    Gtk::ComboBox Channels_combo;
+
 
 
 
