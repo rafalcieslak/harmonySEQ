@@ -21,6 +21,9 @@
 #ifndef GLOBAL_H
 #define	GLOBAL_H
 #include <gtkmm.h>
+
+#include "EventsWindow.h"
+
 #include <libintl.h>
 #include <locale.h>
 #include <fstream>
@@ -39,6 +42,8 @@ using namespace std;
 #define DEFAULT_TEMPO 240.0
 
 #define FLASH_INTERVAL 50
+    //in ms
+#define EVENTS_FLASH_TIMEOUT 200
     //in ms
 
 #define SEQUENCE_DEFAULT_SIZE 8
@@ -74,6 +79,7 @@ class error;
 class MidiDriver;
 class MainWindow;
 class Event;
+class EventsWindow;
 extern vector<Sequencer *> sequencers;
 extern int mainnote;
 extern double tempo;
@@ -83,6 +89,7 @@ extern debug* dbg;
 extern error* err;
 extern MidiDriver* midi;
 extern MainWindow* mainwindow;
+extern EventsWindow* eventswindow;
 extern int passing_midi;
 extern std::map<string, int> keymap_stoi;
 extern std::map<int, string> keymap_itos;

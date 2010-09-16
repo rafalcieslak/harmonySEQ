@@ -18,7 +18,8 @@
 */
 
 #include "Event.h"
-
+#include "EventsWindow.h"
+#include "global.h"
 Event::Event(){
     type = 0;
     arg1 = 0;
@@ -77,6 +78,8 @@ std::string Event::GetLabel(){
 void Event::Trigger(){
     *dbg << "triggered event ==";
     *dbg << GetLabel() << "== :-)\n";
+    eventswindow->ColorizeRow(row_in_event_window);
+
 
 }
 
@@ -112,7 +115,9 @@ void FindAndProcessEvents(Event::EventTypes ev,int arg1, int arg2){
 
 
 void TriggerEvent(int number){
-    if (events[number]!=NULL) events[number]->Trigger();
+    if (events[number]==NULL)return;
+    
+    events[number]->Trigger();
 
 
 }

@@ -111,6 +111,7 @@ void InitKeyMap()
 
 void threadb::th1(){
 //midi processing thread
+    *dbg << "th1 started\n";
     int npfd;
     struct pollfd* pfd;
 
@@ -134,6 +135,7 @@ void threadb::th1(){
 
 void threadb::th2(){
 //gtk thread
+    *dbg << "th2 started\n";
     gdk_threads_enter();
     //pass control to gtk
     Gtk::Main::run(*mainwindow);
@@ -173,9 +175,7 @@ void InitGetText(){
 
 void StartThreads(){
 
-    threadb Th;
-    Glib::Thread * const th1 = Glib::Thread::create(sigc::mem_fun(Th, &threadb::th1), true);
-    Glib::Thread * const th2 = Glib::Thread::create(sigc::mem_fun(Th, &threadb::th2), true);
+    
 }
 
 int main(int argc, char** argv) {
@@ -253,6 +253,9 @@ int main(int argc, char** argv) {
 
     StartThreads();
 
+    threadb Th;
+    Glib::Thread * const th1 = Glib::Thread::create(sigc::mem_fun(Th, &threadb::th1), true);
+    Glib::Thread * const th2 = Glib::Thread::create(sigc::mem_fun(Th, &threadb::th2), true);
     //wait for signal to exit the program
     while (running == 1)
         usleep(10000);

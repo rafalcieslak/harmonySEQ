@@ -38,7 +38,11 @@ EventsWindow::EventsWindow(){
     m_TreeView.set_model(m_refTreeModel);
     
     m_TreeView.append_column(_("ID"),m_columns.col_ID);
-    m_TreeView.append_column(_("Event"),m_columns.col_label);
+    Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
+    int colcount = m_TreeView.append_column(_("Event"),*pRenderer);
+    Gtk::TreeViewColumn * column = m_TreeView.get_column(colcount-1);
+    column->add_attribute(pRenderer->property_cell_background(),m_columns.col_colour);
+    column->add_attribute(pRenderer->property_text(),m_columns.col_label);
 
     m_TreeView.set_headers_visible(0);//hiding the upper headers
 
@@ -61,10 +65,30 @@ void EventsWindow::InitTreeData(){
         row = *(iter);
         row[m_columns.col_ID] = x;
         row[m_columns.col_label] = events[x]->GetLabel();
+        row[m_columns.col_colour] = "white";
         Gtk::TreeRowReference rowref(m_refTreeModel, m_refTreeModel->get_path(iter));
         events[x]->row_in_event_window = rowref;
         rowcount++;
     }
 
 
+}
+
+void EventsWindow::ColorizeRow(Gtk::TreeRowReference rowref){
+    Gtk::TreeModel::Row row = *(m_refTreeModel->get_iter(rowref.get_path()));
+
+    if (!row) {
+        *err << _("Error - cannot colorize triggered event: row is empty.\n");
+        return;
+    }
+
+    row[m_columns.col_colour] = "royal blue";
+    Glib::signal_timeout().connect(sigc::bind(mem_fun(*this,&EventsWindow::UncolorizeRow),rowref),EVENTS_FLASH_TIMEOUT);
+}
+
+bool EventsWindow::UncolorizeRow(Gtk::TreeRowReference rowref){
+    Gtk::TreeModel::Row row = *(m_refTreeModel->get_iter(rowref.get_path()));
+
+    row[m_columns.col_colour] = "white";
+    return 0;
 }

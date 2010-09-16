@@ -21,6 +21,7 @@
 #define	EVENTSWINDOW_H
 #include "global.h"
 
+
 class EventsWindow : public Gtk::Window {
 public:
     EventsWindow();
@@ -31,12 +32,15 @@ public:
     Gtk::HBox lower_button_Hbox;
     Gtk::Button add_button;
 
+    void ColorizeRow(Gtk::TreeRowReference rowref);
+    bool UncolorizeRow(Gtk::TreeRowReference rowref);
 
     class ModelColumns : public Gtk::TreeModel::ColumnRecord{
     public:
-        ModelColumns(){add(col_ID);add(col_label);}
+        ModelColumns(){add(col_ID);add(col_label);add(col_colour);}
         Gtk::TreeModelColumn<int> col_ID;
         Gtk::TreeModelColumn<Glib::ustring> col_label;
+        Gtk::TreeModelColumn<Glib::ustring> col_colour;
     };
 
     ModelColumns m_columns;
