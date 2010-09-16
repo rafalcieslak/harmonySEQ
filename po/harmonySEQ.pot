@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-16 18:20+0200\n"
+"POT-Creation-Date: 2010-09-16 19:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -74,7 +74,7 @@ msgstr ""
 msgid "Error - cannot colorize triggered event: row is empty.\n"
 msgstr ""
 
-#: Event.cpp:106
+#: Event.cpp:100
 msgid "Error - empty event would be triggered.\n"
 msgstr ""
 
@@ -156,6 +156,36 @@ msgstr ""
 
 #: MainWindow.cpp:43
 msgid "Tempo:"
+msgstr ""
+
+#: Event.cpp:57
+#, c-format
+msgid "This is an empty event, that will never be triggered."
+msgstr ""
+
+#: Event.cpp:61
+#, c-format
+msgid "When controller %d on any channel is moved..."
+msgstr ""
+
+#: Event.cpp:53
+#, c-format
+msgid "When key %s is pressed..."
+msgstr ""
+
+#: Event.cpp:50
+#, c-format
+msgid "When note %d on any channel gets on..."
+msgstr ""
+
+#: Event.cpp:51
+#, c-format
+msgid "When note %d on channel %d gets on..."
+msgstr ""
+
+#: Event.cpp:62
+#, c-format
+msgid "When note %d on channel %d is moved..."
 msgstr ""
 
 #: MainWindow.cpp:209
