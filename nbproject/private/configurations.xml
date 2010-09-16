@@ -5,9 +5,10 @@
   <confs>
     <conf name="Debug" type="1">
       <gizmo_options version="3">
+        <configurationname>GizmoSimple</configurationname>
       </gizmo_options>
       <runprofile version="6">
-        <args></args>
+        <args>--debug</args>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <console-type>2</console-type>
@@ -20,6 +21,7 @@
     <conf name="Release" type="1">
       <gizmo_options version="3">
         <profileOnRun>false</profileOnRun>
+        <configurationname>GizmoSimple</configurationname>
       </gizmo_options>
       <runprofile version="6">
         <args></args>

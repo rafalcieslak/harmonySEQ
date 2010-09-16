@@ -18,10 +18,21 @@
 */
 
 #include "EventGUI.h"
-
+#include "Event.h"
 
 EventGUI::EventGUI(Event *prt){
-    
+    parent = prt;
+
+    set_title(parent->GetLabel());
+    set_border_width(0);
+    add(main_box);
+    main_box.pack_start(line_one);
+    line_one.pack_start(label_one,Gtk::PACK_SHRINK);
+    label_one.set_text(_("Type:"));
+    line_one.pack_start(Types_combo,Gtk::PACK_SHRINK);
+
+    show_all_children(1);
+    hide();
 }
 
 

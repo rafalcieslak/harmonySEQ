@@ -46,6 +46,8 @@ EventsWindow::EventsWindow(){
 
     m_TreeView.set_headers_visible(0);//hiding the upper headers
 
+    m_TreeView.signal_row_activated().connect(sigc::mem_fun(*this, &EventsWindow::OnRowChosen));
+
     show_all_children(1);
     hide();//hidden at beggining;
 }
@@ -91,4 +93,15 @@ bool EventsWindow::UncolorizeRow(Gtk::TreeRowReference rowref){
 
     row[m_columns.col_colour] = "white";
     return 0;
+}
+
+void EventsWindow::OnRowChosen(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column){
+
+    Gtk::TreeModel::iterator iter = m_refTreeModel->get_iter(path);
+    if (iter)
+    {
+        Gtk::TreeModel::Row row = *iter;
+        events[row[m_columns.col_ID]]->ShowWindow();
+    }
+
 }

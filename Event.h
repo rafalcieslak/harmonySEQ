@@ -46,6 +46,7 @@ public:
     int arg2;
 
     std::string GetLabel();
+    void ShowWindow();
 
     Gtk::TreeRowReference row_in_event_window;
 

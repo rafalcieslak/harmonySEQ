@@ -49,6 +49,7 @@ std::string Event::GetLabel(){
         case EVENT_TYPE_NOTE:
             if(arg2 == 0) sprintf(temp,_("When note %d on any channel gets on..."),arg1);
             else sprintf(temp,_("When note %d on channel %d gets on..."),arg1,arg2);
+            break;
         case EVENT_TYPE_KEYBOARD:
             sprintf(temp,_("When key %s is pressed..."),keymap_itos.find(arg1)->second.c_str());
 
@@ -104,4 +105,9 @@ void FindAndProcessEvents(Event::EventTypes ev,int arg1, int arg2){
     }
 
 
+}
+
+void Event::ShowWindow(){
+
+    gui_window->show();
 }

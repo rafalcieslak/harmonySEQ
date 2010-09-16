@@ -34,7 +34,7 @@
 #include <string>
 #include "messages.h"
 using namespace std;
-#define VERSION "0.9"
+#define VERSION "0.10"
 #define ENDL "\n"
 #define TICKS_PER_QUARTERNOTE 128
 #define TICKS_PER_NOTE (4*TICKS_PER_QUARTERNOTE)

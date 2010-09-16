@@ -23,12 +23,36 @@
 
 class Event;
 
-class EventGUI {
+class EventGUI :public Gtk::Window{
 public:
     EventGUI(Event *prt);
     virtual ~EventGUI();
 
+    void TypeChanged();
     Event *parent;
+
+    Gtk::VBox main_box;
+    Gtk::HBox line_one;
+    Gtk::Label label_one;
+    Gtk::HBox line_two;
+    Gtk::Label label_two;
+    Gtk::HBox line_three;
+    Gtk::Label label_three;
+    Gtk::ComboBox Types_combo;
+
+
+    class ModelColumns : public Gtk::TreeModel::ColumnRecord {
+    public:
+        ModelColumns() {
+            add(type); add(label);
+        }
+        Gtk::TreeModelColumn<int> type;
+        Gtk::TreeModelColumn<Glib::ustring> label;
+    };
+    ModelColumns m_columns_types;
+
+    Glib::RefPtr<Gtk::ListStore> m_refTreeModel_types;
+
 private:
 
 };

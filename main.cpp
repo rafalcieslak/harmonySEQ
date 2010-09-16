@@ -189,7 +189,7 @@ int main(int argc, char** argv) {
     InitGetText();
 
     running = 1;        //the program IS running
-    debugging = 0;      //by default
+    debugging = 1;      //by default
     help = 0;           //by default
     ports_number = 1;   //by default
     passing_midi = 0;   //by default
