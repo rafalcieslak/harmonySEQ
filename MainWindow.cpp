@@ -119,8 +119,10 @@ MainWindow::MainWindow()
         
         //catching row selection signal
         m_TreeView.signal_row_activated().connect(sigc::mem_fun(*this, &MainWindow::OnTreeviewRowActivated));
-        
 
+        //react on selection change (to determine whether it is empty)
+        Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = m_TreeView.get_selection();
+        refTreeSelection->signal_changed().connect(mem_fun(*this,&MainWindow::OnSelectionChanged));
 
         //initial data
         //InitTreeData();
@@ -133,6 +135,7 @@ MainWindow::MainWindow()
     hbox_down.pack_end(button_remove, Gtk::PACK_SHRINK);
     hbox_down.pack_end(button_save, Gtk::PACK_SHRINK);
     hbox_down.pack_end(button_open, Gtk::PACK_SHRINK);
+    hbox_down.pack_end(button_events, Gtk::PACK_SHRINK);
     button_add.set_label(_("Add"));
     button_add.signal_clicked().connect(mem_fun(*this, &MainWindow::OnButtonAddClicked));
     button_save.set_label(_("Save"));
@@ -141,8 +144,12 @@ MainWindow::MainWindow()
     button_open.signal_clicked().connect(mem_fun(*this, &MainWindow::OnLoadClicked));
     button_remove.set_label(_("Remove"));
     button_remove.signal_clicked().connect(mem_fun(*this, &MainWindow::OnRemoveClicked));
+    button_remove.set_sensitive(0);
     button_clone.set_label(_("Clone"));
     button_clone.signal_clicked().connect(mem_fun(*this, &MainWindow::OnCloneClicked));
+    button_clone.set_sensitive(0);
+    button_events.set_label(_("Events"));
+    button_events.signal_clicked().connect(mem_fun(*this, &MainWindow::OnEventsClicked));
 
     vbox1.pack_start(pass_toggle,Gtk::PACK_SHRINK);
     pass_toggle.set_label(_("Pass MIDI events"));
@@ -383,4 +390,24 @@ bool MainWindow::OnKeyPress(GdkEventKey* event){
     FindAndProcessEvents(Event::EVENT_TYPE_KEYBOARD,event->keyval);
 
     return 1;
+}
+
+void MainWindow::OnEventsClicked(){
+    eventswindow->show();
+
+}
+
+void MainWindow::OnSelectionChanged(){
+    Gtk::TreeModel::iterator iter = m_TreeView.get_selection()->get_selected();
+    if(iter){
+        //something is selected
+        button_remove.set_sensitive(1);
+        button_clone.set_sensitive(1);
+    }else{
+        //selection is empty
+        button_remove.set_sensitive(0);
+        button_clone.set_sensitive(0);
+
+    }
+
 }

@@ -158,7 +158,6 @@ void InitGuiAndDefaultData(){
         events.push_back(new Event(Event::EVENT_TYPE_NOTE,72,1));
         events.push_back(new Event(Event::EVENT_TYPE_CONTROLLER,2,0));
         eventswindow->InitTreeData();
-        eventswindow->show();
     }
     gdk_threads_leave();
     

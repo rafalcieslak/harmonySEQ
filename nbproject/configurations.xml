@@ -17,6 +17,8 @@
                    kind="SOURCE_LOGICAL_FOLDER">
       <itemPath>Event.cpp</itemPath>
       <itemPath>Event.h</itemPath>
+      <itemPath>EventGUI.cpp</itemPath>
+      <itemPath>EventGUI.h</itemPath>
       <itemPath>EventsWindow.cpp</itemPath>
       <itemPath>EventsWindow.h</itemPath>
       <itemPath>Files.cpp</itemPath>

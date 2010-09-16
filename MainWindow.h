@@ -39,6 +39,7 @@ public:
     void OnLoadClicked();
     void OnRemoveClicked();
     void OnCloneClicked();
+    void OnEventsClicked();
 
     //called when user changes values from gui
     void MainNoteChanged();
@@ -66,7 +67,7 @@ public:
     void OnApplyMainNoteToggleToggled(const Glib::ustring& path);
     void OnNameEdited(const Glib::ustring& path,const Glib::ustring& newtext);
 
-
+    void OnSelectionChanged();
     void OnPassToggleClicked();
     bool OnKeyPress(GdkEventKey* event);
     Gtk::VBox vbox1;
@@ -79,6 +80,7 @@ public:
     Gtk::Button button_open;
     Gtk::Button button_remove;
     Gtk::Button button_clone;
+    Gtk::Button button_events;
     Gtk::CheckButton pass_toggle;
 
 private:

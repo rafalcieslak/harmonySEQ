@@ -41,6 +41,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Files.o \
 	${OBJECTDIR}/Sequencer.o \
 	${OBJECTDIR}/Event.o \
+	${OBJECTDIR}/EventGUI.o \
 	${OBJECTDIR}/messages.o \
 	${OBJECTDIR}/global.o
 
@@ -108,6 +109,11 @@ ${OBJECTDIR}/Event.o: Event.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/Event.o Event.cpp
+
+${OBJECTDIR}/EventGUI.o: EventGUI.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/EventGUI.o EventGUI.cpp
 
 ${OBJECTDIR}/messages.o: messages.cpp 
 	${MKDIR} -p ${OBJECTDIR}
