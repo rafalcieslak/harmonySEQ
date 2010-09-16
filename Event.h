@@ -20,6 +20,7 @@
 #ifndef EVENT_H
 #define	EVENT_H
 #include "global.h"
+#include "EventGUI.h"
 
 
 
@@ -48,11 +49,11 @@ public:
 
     Gtk::TreeRowReference row_in_event_window;
 
+    EventGUI *gui_window;
 private:
 
 };
 
 void FindAndProcessEvents(Event::EventTypes ev,int arg1 = 0, int arg2 = 0);
-void TriggerEvent(int number);
 #endif	/* EVENT_H */
 

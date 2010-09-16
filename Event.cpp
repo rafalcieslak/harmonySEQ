@@ -24,12 +24,14 @@ Event::Event(){
     type = 0;
     arg1 = 0;
     arg2 = 0;
+    gui_window = new EventGUI(this);
 }
 
 Event::Event(int typ, int a1, int a2){
     type = typ;
     arg1 = a1;
     arg2 = a2;
+    gui_window = new EventGUI(this);
 }
 
 
@@ -42,35 +44,27 @@ Event::~Event(){
 
 std::string Event::GetLabel(){
     std::string a;
-    char temp[15];
-    a += "This is ";
+    char temp[50];
     switch(type){
         case EVENT_TYPE_NOTE:
-            a += "a note ";
-            sprintf(temp,"%d",arg1);
-            a += temp;
-            a += " event";
-            break;
+            if(arg2 == 0) sprintf(temp,_("When note %d on any channel gets on..."),arg1);
+            else sprintf(temp,_("When note %d on channel %d gets on..."),arg1,arg2);
         case EVENT_TYPE_KEYBOARD:
-            a += "a ";
-            a += keymap_itos.find(arg1)->second;
-            a += " key event";
+            sprintf(temp,_("When key %s is pressed..."),keymap_itos.find(arg1)->second.c_str());
 
             break;
         case EVENT_TYPE_NONE:
-            a += "an empty event";
+            sprintf(temp,_("This is an empty event, that will never be triggered."));
 
             break;
         case EVENT_TYPE_CONTROLLER:
-            a += "a controller ";
-            sprintf(temp,"%d",arg1);
-            a += temp;
-            a += " event";
+            if(arg2 == 0) sprintf(temp,_("When controller %d on any channel is moved..."),arg1);
+            else sprintf(temp,_("When note %d on channel %d is moved..."),arg1,arg2);
 
             break;
 
     }
-    a+=".";
+    a = temp;
     return a;
 }
 
@@ -108,16 +102,6 @@ void FindAndProcessEvents(Event::EventTypes ev,int arg1, int arg2){
 
         }
     }
-
-
-}
-
-
-
-void TriggerEvent(int number){
-    if (events[number]==NULL)return;
-    
-    events[number]->Trigger();
 
 
 }
