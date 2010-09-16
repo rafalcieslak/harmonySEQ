@@ -140,31 +140,66 @@ void threadb::th2(){
     gdk_threads_leave();
 }
 
-int main(int argc, char** argv) {
-    //gtk inits
-    Glib::thread_init();
-    //g_thread_init(NULL);
-    gdk_threads_init();
-    Gtk::Main kit(argc, argv);
+void InitGuiAndDefaultData(){
+    gdk_threads_enter();
+    {
+        mainwindow = new MainWindow; //it is important that the main window is constructed BEFORE
+                                     //te sequencers are, since the sequeners GUI calls functions from within the mainwindow*.
+        sequencers[0] = new Sequencer(example_sequence,example_notes,"seq 0");
+        sequencers[1] = new Sequencer(example_sequence2,example_notes2,"seq 1");
+        mainwindow->InitTreeData();
+
+        eventswindow = new EventsWindow;
+        events[0] = new Event(Event::EVENT_TYPE_KEYBOARD,keymap_stoi.find("F12")->second,0);
+        events[1] = new Event(Event::EVENT_TYPE_NOTE,60,0);
+        events.push_back(new Event(Event::EVENT_TYPE_KEYBOARD,keymap_stoi.find("p")->second,0));
+        events.push_back(new Event(Event::EVENT_TYPE_NOTE,72,1));
+        events.push_back(new Event(Event::EVENT_TYPE_CONTROLLER,2,0));
+        eventswindow->InitTreeData();
+        eventswindow->show();
+    }
+    gdk_threads_leave();
+    
+}
+
+void InitGetText(){
 
     //gettext inits
     setlocale(LC_ALL, ""); //sets the locale to user's locale
     bindtextdomain("harmonySEQ","locale");
     textdomain("harmonySEQ");
 
-    err = new error(); //error stream is never quiet!
+}
 
-    
-    //prepare the signals catchers
-   // signal(SIGINT,sigint);
-   // signal(SIGTERM,sigint); //awww, crashes the terminal... wtf?
+void StartThreads(){
 
+    threadb Th;
+    Glib::Thread * const th1 = Glib::Thread::create(sigc::mem_fun(Th, &threadb::th1), true);
+    Glib::Thread * const th2 = Glib::Thread::create(sigc::mem_fun(Th, &threadb::th2), true);
+}
+
+int main(int argc, char** argv) {
+    //gtk inits
+    Glib::thread_init();
+    gdk_threads_init();
+    Gtk::Main kit(argc, argv);
+
+    //random number generator init
+    srand(time(NULL));
+
+    InitGetText();
+
+    running = 1;        //the program IS running
+    debugging = 0;      //by default
+    help = 0;           //by default
+    ports_number = 1;   //by default
+    passing_midi = 0;   //by default
+    tempo = DEFAULT_TEMPO;
+    err = new error();  //error stream is never quiet!
+
+   
     //first, parse the arguments
     char c, temp[100];
-    debugging = 0; //by default
-    help = 0;
-    ports_number = 1;
-    passing_midi = 0;
     opterr = 0; //this prevents getopt from printing his error message
     int option_index; //getopt stores index here
     while((c=getopt_long(argc,argv,"dhvp",long_options,&option_index))!=-1){
@@ -182,7 +217,6 @@ int main(int argc, char** argv) {
                 break;
             case 'p':
                 ports_number = atoi(optarg);
-                *dbg << _("setting ports number to ") << ports_number << ENDL;
                 break;
 
             case '?':
@@ -209,40 +243,15 @@ int main(int argc, char** argv) {
     //here the non-oprion arguments should be parsed (file to load etc.), but let's leave it for now...
 
 
-    tempo = DEFAULT_TEMPO;
     //create the midi driver
     midi = new MidiDriver;
-    *dbg << "setting tempo to " << tempo << ENDL;
     midi->SetTempo(tempo);
-    //random number generator init
-    srand(time(NULL));
 
     InitKeyMap();
 
-    gdk_threads_enter();
-    {
-        mainwindow = new MainWindow; //it is important that the main window is constructed BEFORE
-                                     //te sequencers are, since the sequeners GUI calls functions from within the mainwindow*.
-        sequencers[0] = new Sequencer(example_sequence,example_notes,"seq 0");
-        sequencers[1] = new Sequencer(example_sequence2,example_notes2,"seq 1");
-        mainwindow->InitTreeData();
+    InitGuiAndDefaultData();
 
-        eventswindow = new EventsWindow;
-        events[0] = new Event(Event::EVENT_TYPE_KEYBOARD,keymap_stoi.find("F12")->second,0);
-        events[1] = new Event(Event::EVENT_TYPE_NOTE,60,0);
-        events.push_back(new Event(Event::EVENT_TYPE_KEYBOARD,keymap_stoi.find("p")->second,0));
-        events.push_back(new Event(Event::EVENT_TYPE_NOTE,72,1));
-        events.push_back(new Event(Event::EVENT_TYPE_CONTROLLER,2,0));
-        eventswindow->InitTreeData();
-        eventswindow->show();
-    }
-    gdk_threads_leave();
-
-    threadb Th;
-    running = 1; //the program IS running
-    Glib::Thread * const th1 = Glib::Thread::create(sigc::mem_fun(Th, &threadb::th1), true);
-    Glib::Thread * const th2 = Glib::Thread::create(sigc::mem_fun(Th, &threadb::th2), true);
-
+    StartThreads();
 
     //wait for signal to exit the program
     while (running == 1)
