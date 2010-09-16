@@ -5,7 +5,7 @@
   <confs>
     <conf name="Debug" type="1">
       <gizmo_options version="3">
-        <configurationname>GizmoSimple</configurationname>
+        <configurationname>GizmoSunStudioStandard</configurationname>
       </gizmo_options>
       <runprofile version="6">
         <args>--debug</args>

@@ -23,6 +23,36 @@
 
 class Event;
 
+class ModelColumns_EventTypes : public Gtk::TreeModel::ColumnRecord {
+public:
+    ModelColumns_EventTypes() {
+        add(type);
+        add(label);
+    }
+    Gtk::TreeModelColumn<int> type;
+    Gtk::TreeModelColumn<Glib::ustring> label;
+};
+
+class ModelColumns_KeyCodes : public Gtk::TreeModel::ColumnRecord {
+public:
+    ModelColumns_KeyCodes() {
+        add(keycode);
+        add(label);
+    }
+    Gtk::TreeModelColumn<int> keycode;
+    Gtk::TreeModelColumn<Glib::ustring> label;
+};
+#ifndef I_DO_NOT_WANT_EXTERNS_FROM_EVENT_GUI
+extern ModelColumns_EventTypes m_columns_event_types;
+extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_EventTypes;
+extern ModelColumns_KeyCodes m_columns_key_codes;
+extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_KeyCodes;
+#endif
+
+void InitEventTypesTreeModel();
+void InitKeyTypesTreeModel();
+void InitAllTreeModels();
+
 class EventGUI :public Gtk::Window{
 public:
     EventGUI(Event *prt);
@@ -32,26 +62,24 @@ public:
     Event *parent;
 
     Gtk::VBox main_box;
-    Gtk::HBox line_one;
-    Gtk::Label label_one;
-    Gtk::HBox line_two;
-    Gtk::Label label_two;
-    Gtk::HBox line_three;
-    Gtk::Label label_three;
+    Gtk::HBox line_type;
+    Gtk::Label label_type;
+    Gtk::HBox line_key;
+    Gtk::Label label_key;
+    Gtk::HBox line_note;
+    Gtk::Label label_note;
+    Gtk::HBox line_channel;
+    Gtk::Label label_channel;
+    Gtk::HBox line_controller;
+    Gtk::Label label_controller;
+
+    
     Gtk::ComboBox Types_combo;
+    Gtk::ComboBox Keys_combo;
 
 
-    class ModelColumns : public Gtk::TreeModel::ColumnRecord {
-    public:
-        ModelColumns() {
-            add(type); add(label);
-        }
-        Gtk::TreeModelColumn<int> type;
-        Gtk::TreeModelColumn<Glib::ustring> label;
-    };
-    ModelColumns m_columns_types;
 
-    Glib::RefPtr<Gtk::ListStore> m_refTreeModel_types;
+
 
 private:
 

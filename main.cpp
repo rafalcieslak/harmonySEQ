@@ -29,6 +29,7 @@
 #include "EventsWindow.h"
 #include "Sequencer.h"
 #include "Event.h"
+#include "EventGUI.h"
 //global objects
 vector<Sequencer *> sequencers(2);
 vector<Event *> events(2);
@@ -189,7 +190,7 @@ int main(int argc, char** argv) {
     InitGetText();
 
     running = 1;        //the program IS running
-    debugging = 1;      //by default
+    debugging = 0;      //by default
     help = 0;           //by default
     ports_number = 1;   //by default
     passing_midi = 0;   //by default
@@ -247,6 +248,8 @@ int main(int argc, char** argv) {
     midi->SetTempo(tempo);
 
     InitKeyMap();
+
+    InitAllTreeModels();
 
     InitGuiAndDefaultData();
 
