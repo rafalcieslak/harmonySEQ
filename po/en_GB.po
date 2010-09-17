@@ -1,7 +1,7 @@
 # English translations for PACKAGE package.
 # Copyright (C) 2010 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Rafał Cieślak <cielak@cielak-laptop>, 2010.
+# Rafal Cieslak <cielak@cielak-laptop>, 2010.
 #
 msgid ""
 msgstr ""
@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-09-16 19:01+0200\n"
 "PO-Revision-Date: 2010-09-16 19:56+0200\n"
-"Last-Translator: Rafa Cielak <cielak@cielak-laptop>\n"
+"Last-Translator: Rafal Cieslak <cielak@cielak-laptop>\n"
 "Language-Team: English (British)\n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
