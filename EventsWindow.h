@@ -31,10 +31,14 @@ public:
     Gtk::VBox main_Vbox;
     Gtk::HBox lower_button_Hbox;
     Gtk::Button add_button;
+    Gtk::Button remove_button;
 
     void ColorizeRow(Gtk::TreeRowReference rowref);
     bool UncolorizeRow(Gtk::TreeRowReference rowref);
 
+    void OnAddClicked();
+    void OnRemoveClicked();
+    void OnSelectionChanged();
     void UpdateRow(Gtk::TreeRowReference rowref);
     void OnRowChosen(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column);
     class ModelColumns : public Gtk::TreeModel::ColumnRecord{

@@ -33,6 +33,9 @@ EventGUI::EventGUI(Event *prt){
 
     set_title(parent->GetLabel());
     set_border_width(5);
+    set_transient_for(*eventswindow);
+    set_position(Gtk::WIN_POS_CENTER_ON_PARENT);
+    set_modal(1);
     add(main_box);
     main_box.set_spacing(5);
     //preparing
@@ -62,6 +65,8 @@ EventGUI::EventGUI(Event *prt){
     ctrl_spinbutton.set_range(0.0,127.0);
     note_spinbutton.set_increments(1.0,16.0);
     ctrl_spinbutton.set_increments(1.0,16.0);
+    note_spinbutton.signal_value_changed().connect(mem_fun(*this,&EventGUI::OnNoteChanged));
+    ctrl_spinbutton.signal_value_changed().connect(mem_fun(*this,&EventGUI::OnCtrlChanged));
 
     label_type.set_text(_("Type:"));
     label_channel.set_text(_("Channel:"));
@@ -71,13 +76,18 @@ EventGUI::EventGUI(Event *prt){
 
     Types_combo.pack_start(m_columns_event_types.label);
     Types_combo.set_active(parent->type);
-    Types_combo.signal_changed().connect(mem_fun(*this,&EventGUI::TypeChanged));
+    Types_combo.signal_changed().connect(mem_fun(*this,&EventGUI::OnTypeChanged));
     Keys_combo.pack_start(m_columns_key_codes.label);
+    Keys_combo.signal_changed().connect(mem_fun(*this,&EventGUI::OnKeyChanged));
     Channels_combo.pack_start(m_columns_channels.label);
+    Channels_combo.signal_changed().connect(mem_fun(*this,&EventGUI::OnChannelChanged));
 
     main_box.pack_start(ok_button,Gtk::PACK_SHRINK);
     ok_button.set_label(_("OK"));
     ok_button.signal_clicked().connect(mem_fun(*this,&EventGUI::OnOKClicked));
+
+    //UpdateValues();
+    signal_show().connect(mem_fun(*this,&EventGUI::UpdateValues));
 
     show_all_children(1);
     TypeChanged(); // to hide some of widgets according to the type
@@ -117,32 +127,106 @@ void EventGUI::TypeChanged(){
     resize(2,2);
 }
 
-void EventGUI::OnOKClicked(){
+void EventGUI::OnTypeChanged(){
     Gtk::TreeModel::Row row = *(Types_combo.get_active());
     int type = row[m_columns_event_types.type];
     parent->type = type;
-    switch (type){
+    TypeChanged();
+    switch (parent->type){
         case Event::EVENT_TYPE_NONE:
 
             break;
         case Event::EVENT_TYPE_KEYBOARD:
-            parent->arg1 = (*(Keys_combo.get_active()))[m_columns_key_codes.keycode];
+            Keys_combo.set_active(0);
             break;
         case Event::EVENT_TYPE_NOTE:
-            parent->arg1 = note_spinbutton.get_value();
-            parent->arg2 = (*(Channels_combo.get_active()))[m_columns_channels.ch];
+            note_spinbutton.set_value(0.0);
+            parent->arg1=0;
+            Channels_combo.set_active(0);
             break;
         case Event::EVENT_TYPE_CONTROLLER:
-            parent->arg1 =ctrl_spinbutton.get_value();
-            parent->arg2 = (*(Channels_combo.get_active()))[m_columns_channels.ch];
+            ctrl_spinbutton.set_value(0.0);
+            parent->arg1=0;
+            Channels_combo.set_active(0);
             break;
+
     }
-    
     eventswindow->UpdateRow(parent->row_in_event_window);
+}
+
+
+
+void EventGUI::OnChannelChanged(){
+    if(parent->type == Event::EVENT_TYPE_CONTROLLER || parent->type == Event::EVENT_TYPE_NOTE){
+
+            parent->arg2 = (*(Channels_combo.get_active()))[m_columns_channels.ch];
+        
+    }else *err << _("Error: channel has changed, while event is not MIDI-type.") << ENDL;
+
+    eventswindow->UpdateRow(parent->row_in_event_window);
+}
+
+void EventGUI::OnKeyChanged(){
+    if(parent->type == Event::EVENT_TYPE_KEYBOARD){
+            parent->arg1 = (*(Keys_combo.get_active()))[m_columns_key_codes.keycode];
+    }else *err << _("Error: key has changed, while event is not key-type.") << ENDL;
+
+    eventswindow->UpdateRow(parent->row_in_event_window);
+}
+
+void EventGUI::OnCtrlChanged(){
+    if(parent->type == Event::EVENT_TYPE_CONTROLLER){
+        parent->arg1 = ctrl_spinbutton.get_value();
+    }else *err << _("Error: controller has changed, while event is not ctrl-type.") << ENDL;
+
+    eventswindow->UpdateRow(parent->row_in_event_window);
+
+}
+
+void EventGUI::OnNoteChanged(){
+    if(parent->type == Event::EVENT_TYPE_NOTE){
+        parent->arg1 = note_spinbutton.get_value();
+    }else *err << _("Error: note has changed, while event is not note-type.") << ENDL;
+
+    eventswindow->UpdateRow(parent->row_in_event_window);
+
+}
+void EventGUI::OnOKClicked(){
     hide();
 }
 
 void EventGUI::UpdateValues(){
+    Gtk::TreeModel::iterator it = m_refTreeModel_EventTypes->get_iter("0");
+    Gtk::TreeModel::Row row;
+    for (;it;it++){
+        row = *it;
+        if (row[m_columns_event_types.type] == parent->type)
+            Types_combo.set_active(it);
+    }
+    switch (parent->type){
+        case Event::EVENT_TYPE_NONE:
+
+            break;
+        case Event::EVENT_TYPE_KEYBOARD:
+            it = m_refTreeModel_KeyCodes->get_iter("0");
+
+            for (; it; it++) {
+                row = *it;
+                if(row[m_columns_key_codes.keycode]==parent->arg1)
+                    Keys_combo.set_active(it);
+            }
+
+            break;
+        case Event::EVENT_TYPE_NOTE:
+            note_spinbutton.set_value(parent->arg1);
+            Channels_combo.set_active(parent->arg2);
+            break;
+        case Event::EVENT_TYPE_CONTROLLER:
+            ctrl_spinbutton.set_value(parent->arg1);
+            Channels_combo.set_active(parent->arg2);
+            break;
+
+    }
 
 
 }

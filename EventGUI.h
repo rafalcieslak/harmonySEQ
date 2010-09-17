@@ -94,6 +94,11 @@ public:
     Gtk::SpinButton ctrl_spinbutton;
     Gtk::ComboBox Channels_combo;
 
+    void OnTypeChanged();
+    void OnKeyChanged();
+    void OnNoteChanged();
+    void OnCtrlChanged();;
+    void OnChannelChanged();
 
 
 

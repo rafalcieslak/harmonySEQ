@@ -44,7 +44,7 @@ Event::~Event(){
 
 std::string Event::GetLabel(){
     std::string a;
-    char temp[50];
+    char temp[100];
     switch(type){
         case EVENT_TYPE_NOTE:
             if(arg2 == 0) sprintf(temp,_("When note %d on any channel gets on..."),arg1);
@@ -60,7 +60,7 @@ std::string Event::GetLabel(){
             break;
         case EVENT_TYPE_CONTROLLER:
             if(arg2 == 0) sprintf(temp,_("When controller %d on any channel is moved..."),arg1);
-            else sprintf(temp,_("When note %d on channel %d is moved..."),arg1,arg2);
+            else sprintf(temp,_("When controller %d on channel %d is moved..."),arg1,arg2);
 
             break;
 
