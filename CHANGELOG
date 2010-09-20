@@ -1,3 +1,6 @@
+harmonyseq 0.10
+	- Events implemented.
+
 harmonyseq 0.9
 	- Sequencers can be now safely dragged.
 	- Sorting by several columns implemented (olny several, since it widens the columns).

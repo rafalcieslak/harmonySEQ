@@ -81,8 +81,7 @@ MainWindow::MainWindow()
         col_count = m_TreeView.append_column(_("Chan"), m_columns.col_channel);
         col_count = m_TreeView.append_column(_("Res"), m_columns.col_res);
         col_count = m_TreeView.append_column_numeric(_("Len"), m_columns.col_len,"%g");
-
-
+        col_count = m_TreeView.append_column(_("Vol"), m_columns.col_vol);
 
 
         Gtk::TreeView::Column* pColumn;
@@ -248,8 +247,7 @@ MainWindow::OnNameEdited(const Glib::ustring& path, const Glib::ustring& newtext
     sequencers[row[m_columns.col_ID]]->SetName(newtext);
 }
 
-Gtk::TreeModel::RowReference
-MainWindow::AddSequencerRow(int n)
+Gtk::TreeModel::RowReference MainWindow::AddSequencerRow(int n)
 {
     *dbg << "wooho! sequener " << n << " was just added, and we have to add it now to a new row in the list!" << ENDL;
     Gtk::TreeModel::iterator iter = m_refTreeModel->append();
@@ -261,6 +259,7 @@ MainWindow::AddSequencerRow(int n)
     row[m_columns.col_channel] = sequencers[n]->GetChannel();
     row[m_columns.col_res] = sequencers[n]->resolution;
     row[m_columns.col_len] = sequencers[n]->length;
+    row[m_columns.col_vol] = sequencers[n]->GetVolume();
     Gtk::TreeRowReference rowref(m_refTreeModel,m_refTreeModel->get_path(iter));
     sequencers[n]->row_in_main_window = rowref;
     return rowref;
@@ -284,6 +283,7 @@ void MainWindow::InitTreeData(){
         row[m_columns.col_channel] = sequencers[x]->GetChannel();
         row[m_columns.col_res] = sequencers[x]->resolution;
         row[m_columns.col_len] = sequencers[x]->length;
+        row[m_columns.col_vol] = sequencers[x]->GetVolume();
         Gtk::TreeRowReference rowref(m_refTreeModel,m_refTreeModel->get_path(iter));
         sequencers[x]->row_in_main_window = rowref;
         rowcount++;
@@ -303,7 +303,8 @@ void MainWindow::RefreshRow(Gtk::TreeRowReference rowref){
     row[m_columns.col_apply_mainnote] = sequencers[x]->GetApplyMainNote();
     row[m_columns.col_channel] = sequencers[x]->GetChannel();
     row[m_columns.col_res] = sequencers[x]->resolution;
-    row[m_columns.col_len] = sequencers[x]->length; 
+    row[m_columns.col_len] = sequencers[x]->length;
+    row[m_columns.col_vol] = sequencers[x]->GetVolume();
 
 }
 

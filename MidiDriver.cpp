@@ -154,7 +154,7 @@ void MidiDriver::UpdateQueue(){
                     int note = sequencers[n]->notes[sequencers[n]->sequence[x]];
                     *dbg << note << " ";
                     if (sequencers[n]->GetApplyMainNote()) note += mainnote;
-                    snd_seq_ev_set_note(&ev, sequencers[n]->GetChannel() - 1, note, 100, duration);
+                    snd_seq_ev_set_note(&ev, sequencers[n]->GetChannel() - 1, note, sequencers[n]->GetVolume(), duration);
                     snd_seq_ev_schedule_tick(&ev, queueid, 0, local_tick + x * duration);
                     snd_seq_ev_set_source(&ev, output_port);
                     snd_seq_ev_set_subs(&ev);
@@ -176,7 +176,7 @@ void MidiDriver::UpdateQueue(){
                     snd_seq_ev_clear(&ev);
                     int note = sequencers[n]->notes[sequencers[n]->sequence[(startnote+x)%sequencers[n]->resolution]];
                     if (sequencers[n]->GetApplyMainNote()) note += mainnote;
-                    snd_seq_ev_set_note(&ev, sequencers[n]->GetChannel() - 1, note, 100, duration);
+                    snd_seq_ev_set_note(&ev, sequencers[n]->GetChannel() - 1, note, sequencers[n]->GetVolume(), duration);
                     snd_seq_ev_schedule_tick(&ev, queueid, 0, tick + x * duration);
                     snd_seq_ev_set_source(&ev, output_port);
                     snd_seq_ev_set_subs(&ev);

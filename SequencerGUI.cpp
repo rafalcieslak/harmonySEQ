@@ -46,15 +46,25 @@ SequencerWindow::SequencerWindow(Sequencer* prt){
 
     main_vbox.pack_start(box_of_sliders);
     InitSeqSliders();
-
-    low_hbox.pack_start(channellabel,Gtk::PACK_SHRINK);
-    low_hbox.pack_start(channel_button, Gtk::PACK_SHRINK);
-    channellabel.set_text(_("MIDI channel:"));
-    channel_button.set_value(1);
-    channel_button.set_range(1,16);
-    channel_button.set_increments(1,1);
-    channel_button.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWindow::OnChannelChanged));
+    low_hbox.pack_start(spinners_vbox,Gtk::PACK_SHRINK);
     low_hbox.pack_start(toggle_vbox,Gtk::PACK_SHRINK);
+    spinners_vbox.pack_start(line_one, Gtk::PACK_SHRINK);
+    spinners_vbox.pack_start(line_two, Gtk::PACK_SHRINK);
+    line_one.pack_end(channel_button,Gtk::PACK_SHRINK);
+    line_one.pack_end(channellabel,Gtk::PACK_SHRINK);
+    line_two.pack_end(volume_button,Gtk::PACK_SHRINK);
+    line_two.pack_end(volumelabel,Gtk::PACK_SHRINK);
+    channellabel.set_text(_("MIDI channel:"));
+    volumelabel.set_text(_("Volume:"));
+    volume_button.set_range(0,127);
+    channel_button.set_range(1,16);
+    volume_button.set_increments(1,16);
+    channel_button.set_increments(1,1);
+    volume_button.set_value(parent->GetVolume());
+    volume_button.property_value() = (double)parent->GetVolume();
+    channel_button.set_value(parent->GetChannel());
+    volume_button.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWindow::OnVolumeChanged));
+    channel_button.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWindow::OnChannelChanged));
     toggle_vbox.pack_start(tgl_mute);
     toggle_vbox.pack_start(tgl_apply_mainnote);
     tgl_mute.set_label(_("On"));
@@ -130,14 +140,14 @@ void SequencerWindow::UpdateValues(){
     char temp[10];
     for (int x = 0; x < RESOLUTIONS_NUM; x++){
         sprintf(temp,"%d",x);
-        Gtk::TreeModel::Row row = *(m_refTreeModel_res->get_iter(temp));
+        //Gtk::TreeModel::Row row = *(m_refTreeModel_res->get_iter(temp));
         if (resolutions[x] == (parent->resolution)){resolution_box.set_active(x);continue;}
     }
 
     double lengths[7] = LENGTHS;
     for (int x = 0; x < LENGTHS_NUM; x++){
         sprintf(temp,"%d",x);
-        Gtk::TreeModel::Row row = *(m_refTreeModel_len->get_iter(temp));
+        //Gtk::TreeModel::Row row = *(m_refTreeModel_len->get_iter(temp));
         if(parent->length==lengths[x]) length_box.set_active(x);
     }
 
@@ -163,6 +173,11 @@ void SequencerWindow::OnToggleApplyMainNoteToggled(){
     parent->apply_mainnote = tgl_apply_mainnote.get_active();
     if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
 
+}
+
+void SequencerWindow::OnVolumeChanged(){
+    parent->volume = volume_button.get_value();
+    if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
 }
 
 void SequencerWindow::OnResolutionChanged(){
@@ -194,7 +209,6 @@ void SequencerWindow::InitSeqSliders(){
         sequence_scales[x]->show();
         box_of_sliders.pack_start(*sequence_scales[x]);
     }
-    realize();
 
 }
 

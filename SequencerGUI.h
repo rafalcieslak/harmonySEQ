@@ -36,8 +36,13 @@ public:
     vector<Gtk::HScale *> sequence_scales;
     Gtk::SpinButton* note_buttons[6];
     Gtk::SpinButton channel_button;
+    Gtk::SpinButton volume_button;
     Gtk::Label channellabel;
+    Gtk::Label volumelabel;
     Gtk::HBox low_hbox;
+    Gtk::HBox line_one;
+    Gtk::HBox line_two;
+    Gtk::VBox spinners_vbox;
     Gtk::VBox toggle_vbox;
     Gtk::CheckButton tgl_apply_mainnote, tgl_mute;
     Gtk::ComboBox resolution_box;
@@ -53,6 +58,7 @@ private:
     void OnNotesChanged(int note);
     void OnSequenceChanged(int seq);
     void OnChannelChanged();
+    void OnVolumeChanged();
     void OnToggleMuteToggled();
     void OnToggleApplyMainNoteToggled();
     void OnResolutionChanged();

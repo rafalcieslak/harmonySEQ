@@ -87,7 +87,7 @@ private:
 
     class ModelColumns : public Gtk::TreeModel::ColumnRecord{
     public:
-        ModelColumns(){add(col_ID);add(col_name);add(col_muted);add(col_apply_mainnote);add(col_channel);add(col_res);add(col_len);}
+        ModelColumns(){add(col_ID);add(col_name);add(col_muted);add(col_apply_mainnote);add(col_channel);add(col_res);add(col_len);add(col_vol);}
         Gtk::TreeModelColumn<int> col_ID;
         Gtk::TreeModelColumn<Glib::ustring> col_name;
         Gtk::TreeModelColumn<bool> col_muted;
@@ -95,6 +95,7 @@ private:
         Gtk::TreeModelColumn<int> col_channel;
         Gtk::TreeModelColumn<int> col_res;
         Gtk::TreeModelColumn<double> col_len;
+        Gtk::TreeModelColumn<int> col_vol;
     };
 
     ModelColumns m_columns;

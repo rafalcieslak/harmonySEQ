@@ -31,7 +31,7 @@ Glib::RefPtr<Gtk::ListStore> m_refTreeModel_Channels;
 EventGUI::EventGUI(Event *prt){
     parent = prt;
 
-    set_title(parent->GetLabel());
+    set_title(_("Event"));
     set_border_width(5);
     set_transient_for(*eventswindow);
     set_position(Gtk::WIN_POS_CENTER_ON_PARENT);

@@ -57,7 +57,8 @@ public:
     Glib::ustring GetName();
     void ShowWindow();
     void UpdateGui();
-
+    int GetVolume();
+    void SetVolume(int v);
     int last_played_note;
 
     Gtk::TreeRowReference row_in_main_window;
@@ -66,6 +67,7 @@ protected:
     int channel;
     bool apply_mainnote;
     bool on;
+    int volume;
     Glib::ustring name;
     SequencerWindow *gui_window;
     

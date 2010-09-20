@@ -116,6 +116,7 @@ Sequencer::Sequencer(const Sequencer *orig) {
     channel = orig->channel;
     apply_mainnote = orig->apply_mainnote;
     length = orig->length;
+    volume = orig->volume;
     gui_window = new SequencerWindow(this);
     last_played_note = orig->last_played_note;
 }
@@ -129,6 +130,7 @@ void Sequencer::Init(){
     apply_mainnote = true;
     channel = 1;
     length = 1;
+    volume = SEQUENCE_DEFAULT_VOLUME;
     last_played_note = 0;
     resolution = SEQUENCE_DEFAULT_SIZE;
     *dbg << notes[0]<<ENDL;
@@ -187,5 +189,8 @@ void Sequencer::SetChannel(int ch){channel = ch;gui_window->channel_button.set_v
 int Sequencer::GetChannel(){return channel;}
 void Sequencer::SetName(Glib::ustring nm){name = nm;gui_window->set_title(nm);}
 Glib::ustring Sequencer::GetName(){return name;}
+int Sequencer::GetVolume(){return volume;}
+void Sequencer::SetVolume(int v){volume = v;}
+
 void Sequencer::ShowWindow(){gui_window->show();}
 void Sequencer::UpdateGui(){gui_window->UpdateValues();}
