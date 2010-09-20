@@ -1,5 +1,6 @@
 harmonyseq 0.10
 	- Events implemented.
+	- Variable volume.
 
 harmonyseq 0.9
 	- Sequencers can be now safely dragged.
