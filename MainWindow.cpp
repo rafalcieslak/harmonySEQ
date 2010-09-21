@@ -299,7 +299,6 @@ void MainWindow::RefreshRow(Gtk::TreeRowReference rowref){
     *dbg << "refreshing row" << ENDL;
     Gtk::TreeModel::Row row = *(m_refTreeModel->get_iter(rowref.get_path()));
 
-    *dbg << "row got" << ENDL;
     int x = row[m_columns.col_ID];
     row[m_columns.col_muted] = sequencers[x]->GetOn();
     row[m_columns.col_name] = sequencers[x]->GetName();
