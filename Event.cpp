@@ -46,19 +46,19 @@ std::string Event::GetLabel(){
     std::string a;
     char temp[100];
     switch(type){
-        case EVENT_TYPE_NOTE:
+        case NOTE:
             if(arg2 == 0) sprintf(temp,_("When note %d on any channel gets on..."),arg1);
             else sprintf(temp,_("When note %d on channel %d gets on..."),arg1,arg2);
             break;
-        case EVENT_TYPE_KEYBOARD:
+        case KEYBOARD:
             sprintf(temp,_("When key %s is pressed..."),keymap_itos.find(arg1)->second.c_str());
 
             break;
-        case EVENT_TYPE_NONE:
+        case NONE:
             sprintf(temp,_("This is an empty event, that will never be triggered."));
 
             break;
-        case EVENT_TYPE_CONTROLLER:
+        case CONTROLLER:
             if(arg2 == 0) sprintf(temp,_("When controller %d on any channel is moved..."),arg1);
             else sprintf(temp,_("When controller %d on channel %d is moved..."),arg1,arg2);
 
@@ -84,20 +84,20 @@ void FindAndProcessEvents(Event::EventTypes ev,int arg1, int arg2){
         if (events[x]==NULL) continue;
         if (events[x]->type == ev){
             switch (ev){
-                case Event::EVENT_TYPE_KEYBOARD: //args: keycode
+                case Event::KEYBOARD: //args: keycode
                     if (arg1 == events[x]->arg1) //checking whether key is correct
                         events[x]->Trigger();
                     break;
-                case Event::EVENT_TYPE_NOTE:    //args: note channel
+                case Event::NOTE:    //args: note channel
                     if (arg1 == events[x]->arg1 && (events[x]->arg2 == 0 || events[x]->arg2 == arg2))
                         events[x]->Trigger();
                     break;
-                case Event::EVENT_TYPE_CONTROLLER: //args: controller channel
+                case Event::CONTROLLER: //args: controller channel
                     if (arg1 == events[x]->arg1 && (events[x]->arg2 == 0 || events[x]->arg2 == arg2))
                         events[x]->Trigger();
 
                     break;
-                case Event::EVENT_TYPE_NONE:
+                case Event::NONE:
                     *err << _("Error - empty event would be triggered.\n");
             }
 

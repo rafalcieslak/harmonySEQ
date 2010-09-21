@@ -388,7 +388,7 @@ bool MainWindow::OnKeyPress(GdkEventKey* event){
     }else
         *dbg << "Unknown key pressed\n";
 
-    FindAndProcessEvents(Event::EVENT_TYPE_KEYBOARD,event->keyval);
+    FindAndProcessEvents(Event::KEYBOARD,event->keyval);
 
     return 1;
 }

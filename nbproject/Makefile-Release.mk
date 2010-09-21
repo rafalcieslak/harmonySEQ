@@ -33,6 +33,7 @@ OBJECTDIR=build/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/Action.o \
 	${OBJECTDIR}/SequencerGUI.o \
 	${OBJECTDIR}/MainWindow.o \
 	${OBJECTDIR}/main.o \
@@ -69,6 +70,11 @@ LDLIBSOPTIONS=
 build/Release/GNU-Linux-x86/tests/TestFiles/f1: ${OBJECTFILES}
 	${MKDIR} -p build/Release/GNU-Linux-x86/tests/TestFiles
 	${LINK.cc} -lasound -o ${TESTDIR}/TestFiles/f1 -s ${OBJECTFILES} ${LDLIBSOPTIONS} 
+
+${OBJECTDIR}/Action.o: Action.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/Action.o Action.cpp
 
 ${OBJECTDIR}/SequencerGUI.o: SequencerGUI.cpp 
 	${MKDIR} -p ${OBJECTDIR}

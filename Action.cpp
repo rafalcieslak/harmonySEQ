@@ -17,47 +17,29 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef EVENT_H
-#define	EVENT_H
-#include "global.h"
-#include "EventGUI.h"
 #include "Action.h"
 
 
+Action::Action(ActionTypes t, int a1, int a2){
+    type = t;
+    arg1 = a1;
+    arg2 = a2;
+}
 
-class Event {
-public:
-    Event();
-    Event(int typ, int a1, int a2);
-    Event(const Event& orig);
-    virtual ~Event();
 
-    int type;
+Action::Action(const Action& orig){
+}
 
-    void Trigger();
 
-    enum EventTypes{
-        NONE = 0,        //no arguments
-        KEYBOARD = 1,    //keyboard key code
-        NOTE = 2,        //note pitch, channel [0 - all]
-        CONTROLLER = 3   //ctrl num, channel [0 - all]
-    };
+Action::~Action(){
+}
 
-    int arg1;
-    int arg2;
+void Action::Trigger(){
 
-    std::string GetLabel();
-    void ShowWindow();
 
-    vector<Action*> actions;
+}
 
-    Gtk::TreeRowReference row_in_event_window;
+Glib::ustring Action::GetLabel(){
+    return "An action";
 
-    EventGUI *gui_window;
-private:
-
-};
-
-void FindAndProcessEvents(Event::EventTypes ev,int arg1 = 0, int arg2 = 0);
-#endif	/* EVENT_H */
-
+}

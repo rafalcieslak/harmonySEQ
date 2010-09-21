@@ -108,18 +108,18 @@ void EventGUI::TypeChanged(){
     line_channel.hide();
 
     switch (type){
-        case Event::EVENT_TYPE_NONE:
+        case Event::NONE:
 
             break;
-        case Event::EVENT_TYPE_CONTROLLER:
+        case Event::CONTROLLER:
             line_controller.show();
             line_channel.show();
             break;
-        case Event::EVENT_TYPE_NOTE:
+        case Event::NOTE:
             line_note.show();
             line_channel.show();
             break;
-        case Event::EVENT_TYPE_KEYBOARD:
+        case Event::KEYBOARD:
             line_key.show();
             break;
 
@@ -133,18 +133,18 @@ void EventGUI::OnTypeChanged(){
     parent->type = type;
     TypeChanged();
     switch (parent->type){
-        case Event::EVENT_TYPE_NONE:
+        case Event::NONE:
 
             break;
-        case Event::EVENT_TYPE_KEYBOARD:
+        case Event::KEYBOARD:
             Keys_combo.set_active(0);
             break;
-        case Event::EVENT_TYPE_NOTE:
+        case Event::NOTE:
             note_spinbutton.set_value(0.0);
             parent->arg1=0;
             Channels_combo.set_active(0);
             break;
-        case Event::EVENT_TYPE_CONTROLLER:
+        case Event::CONTROLLER:
             ctrl_spinbutton.set_value(0.0);
             parent->arg1=0;
             Channels_combo.set_active(0);
@@ -157,7 +157,7 @@ void EventGUI::OnTypeChanged(){
 
 
 void EventGUI::OnChannelChanged(){
-    if(parent->type == Event::EVENT_TYPE_CONTROLLER || parent->type == Event::EVENT_TYPE_NOTE){
+    if(parent->type == Event::CONTROLLER || parent->type == Event::NOTE){
 
             parent->arg2 = (*(Channels_combo.get_active()))[m_columns_channels.ch];
         
@@ -167,7 +167,7 @@ void EventGUI::OnChannelChanged(){
 }
 
 void EventGUI::OnKeyChanged(){
-    if(parent->type == Event::EVENT_TYPE_KEYBOARD){
+    if(parent->type == Event::KEYBOARD){
             parent->arg1 = (*(Keys_combo.get_active()))[m_columns_key_codes.keycode];
     }else *err << _("Error: key has changed, while event is not key-type.") << ENDL;
 
@@ -175,7 +175,7 @@ void EventGUI::OnKeyChanged(){
 }
 
 void EventGUI::OnCtrlChanged(){
-    if(parent->type == Event::EVENT_TYPE_CONTROLLER){
+    if(parent->type == Event::CONTROLLER){
         parent->arg1 = ctrl_spinbutton.get_value();
     }else *err << _("Error: controller has changed, while event is not ctrl-type.") << ENDL;
 
@@ -184,7 +184,7 @@ void EventGUI::OnCtrlChanged(){
 }
 
 void EventGUI::OnNoteChanged(){
-    if(parent->type == Event::EVENT_TYPE_NOTE){
+    if(parent->type == Event::NOTE){
         parent->arg1 = note_spinbutton.get_value();
     }else *err << _("Error: note has changed, while event is not note-type.") << ENDL;
 
@@ -204,10 +204,10 @@ void EventGUI::UpdateValues(){
             Types_combo.set_active(it);
     }
     switch (parent->type){
-        case Event::EVENT_TYPE_NONE:
+        case Event::NONE:
 
             break;
-        case Event::EVENT_TYPE_KEYBOARD:
+        case Event::KEYBOARD:
             it = m_refTreeModel_KeyCodes->get_iter("0");
 
             for (; it; it++) {
@@ -217,11 +217,11 @@ void EventGUI::UpdateValues(){
             }
 
             break;
-        case Event::EVENT_TYPE_NOTE:
+        case Event::NOTE:
             note_spinbutton.set_value(parent->arg1);
             Channels_combo.set_active(parent->arg2);
             break;
-        case Event::EVENT_TYPE_CONTROLLER:
+        case Event::CONTROLLER:
             ctrl_spinbutton.set_value(parent->arg1);
             Channels_combo.set_active(parent->arg2);
             break;
@@ -238,16 +238,16 @@ void InitEventTypesTreeModel(){
 
     m_refTreeModel_EventTypes = Gtk::ListStore::create(m_columns_event_types);
     Gtk::TreeModel::Row row = *(m_refTreeModel_EventTypes->append());
-    row[m_columns_event_types.type] = Event::EVENT_TYPE_NONE;
+    row[m_columns_event_types.type] = Event::NONE;
     row[m_columns_event_types.label] = _("Empty");
     row = *(m_refTreeModel_EventTypes->append());
-    row[m_columns_event_types.type] = Event::EVENT_TYPE_KEYBOARD;
+    row[m_columns_event_types.type] = Event::KEYBOARD;
     row[m_columns_event_types.label] = _("Keyboard");
     row = *(m_refTreeModel_EventTypes->append());
-    row[m_columns_event_types.type] = Event::EVENT_TYPE_NOTE;
+    row[m_columns_event_types.type] = Event::NOTE;
     row[m_columns_event_types.label] = _("Note");
     row = *(m_refTreeModel_EventTypes->append());
-    row[m_columns_event_types.type] = Event::EVENT_TYPE_CONTROLLER;
+    row[m_columns_event_types.type] = Event::CONTROLLER;
     row[m_columns_event_types.label] = _("Controller");
 }
 

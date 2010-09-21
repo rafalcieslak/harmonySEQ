@@ -214,7 +214,7 @@ void MidiDriver::ProcessInput(){
                 *dbg << "noteon! (of pitch " << ev->data.note.note << ")\n";
                     mainnote = ev->data.note.note;
 
-                    FindAndProcessEvents(Event::EVENT_TYPE_NOTE,ev->data.note.note,ev->data.note.channel+1);
+                    FindAndProcessEvents(Event::NOTE,ev->data.note.note,ev->data.note.channel+1);
                     /*freezed to implement the events system
                     gdk_threads_enter(); //to interact with gui thread we MUST lock it's thread
                     mainwindow->main_note.set_value(mainnote);
@@ -247,7 +247,7 @@ void MidiDriver::ProcessInput(){
                     *dbg << "controller!\n";
                 }
                 
-                FindAndProcessEvents(Event::EVENT_TYPE_CONTROLLER,ev->data.control.param,ev->data.control.channel+1);
+                FindAndProcessEvents(Event::CONTROLLER,ev->data.control.param,ev->data.control.channel+1);
                 break;
             case SND_SEQ_EVENT_PITCHBEND:
                 //pass it through

@@ -124,7 +124,7 @@ void EventsWindow::OnAddClicked(){
 
     Gtk::TreeModel::iterator iter = m_refTreeModel->append();
     Gtk::TreeModel::Row row = *(iter);
-    events.push_back(new Event(Event::EVENT_TYPE_NONE,0,0));
+    events.push_back(new Event(Event::NONE,0,0));
     row[m_columns.col_ID] = events.size()-1;
     row[m_columns.col_label] = events[events.size()-1]->GetLabel();
     row[m_columns.col_colour] = "white";

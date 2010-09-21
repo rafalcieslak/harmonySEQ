@@ -33,6 +33,7 @@ OBJECTDIR=build/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/Action.o \
 	${OBJECTDIR}/SequencerGUI.o \
 	${OBJECTDIR}/MainWindow.o \
 	${OBJECTDIR}/main.o \
@@ -68,6 +69,11 @@ LDLIBSOPTIONS=
 
 harmonySEQ: ${OBJECTFILES}
 	${LINK.cc} -lasound -o harmonySEQ ${OBJECTFILES} ${LDLIBSOPTIONS} 
+
+${OBJECTDIR}/Action.o: Action.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/Action.o Action.cpp
 
 ${OBJECTDIR}/SequencerGUI.o: SequencerGUI.cpp 
 	${MKDIR} -p ${OBJECTDIR}

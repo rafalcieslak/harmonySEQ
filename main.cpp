@@ -153,11 +153,11 @@ void InitGuiAndDefaultData(){
         mainwindow->InitTreeData();
 
         eventswindow = new EventsWindow;
-        events[0] = new Event(Event::EVENT_TYPE_KEYBOARD,keymap_stoi.find("F12")->second,0);
-        events[1] = new Event(Event::EVENT_TYPE_NOTE,60,0);
-        events.push_back(new Event(Event::EVENT_TYPE_KEYBOARD,keymap_stoi.find("p")->second,0));
-        events.push_back(new Event(Event::EVENT_TYPE_NOTE,72,1));
-        events.push_back(new Event(Event::EVENT_TYPE_CONTROLLER,2,0));
+        events[0] = new Event(Event::KEYBOARD,keymap_stoi.find("F12")->second,0);
+        events[1] = new Event(Event::NOTE,60,0);
+        events.push_back(new Event(Event::KEYBOARD,keymap_stoi.find("p")->second,0));
+        events.push_back(new Event(Event::NOTE,72,1));
+        events.push_back(new Event(Event::CONTROLLER,2,0));
         eventswindow->InitTreeData();
     }
     gdk_threads_leave();
