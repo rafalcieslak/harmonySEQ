@@ -32,13 +32,13 @@ EventsWindow::EventsWindow(){
     main_Vbox.pack_start(lower_button_Hbox);
     lower_button_Hbox.pack_end(add_button);
     lower_button_Hbox.pack_end(remove_button);
-    add_button.set_label(_("Add"));
+    add_button.set_label(_("Add Event"));
     add_button.signal_clicked().connect(mem_fun(*this,&EventsWindow::OnAddClicked));
     remove_button.set_label(_("Remove"));
     remove_button.set_sensitive(0);
     remove_button.signal_clicked().connect(mem_fun(*this,&EventsWindow::OnRemoveClicked));
 
-    m_refTreeModel = Gtk::ListStore::create(m_columns);
+    m_refTreeModel = Gtk::TreeStore::create(m_columns);
     m_TreeView.set_model(m_refTreeModel);
     
     m_TreeView.append_column(_("ID"),m_columns.col_ID);
@@ -54,6 +54,7 @@ EventsWindow::EventsWindow(){
     m_TreeView.signal_row_activated().connect(sigc::mem_fun(*this, &EventsWindow::OnRowChosen));
     Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = m_TreeView.get_selection();
     refTreeSelection->signal_changed().connect(mem_fun(*this, &EventsWindow::OnSelectionChanged));
+    m_TreeView.signal_row_collapsed().connect(mem_fun(*this, &EventsWindow::OnRowCollapsed));
     m_TreeView.signal_key_press_event().connect(&FindAndProcessEventsKeyPress);
     m_TreeView.set_enable_search(0);
     show_all_children(1);
@@ -68,7 +69,6 @@ void EventsWindow::InitTreeData(){
 
     m_refTreeModel->clear();
     Gtk::TreeModel::Row row;
-    int rowcount = 0;
     for (unsigned int x = 0; x < events.size(); x++) {
         if (!events[x]) continue; //seems it was removed
         Gtk::TreeModel::iterator iter = m_refTreeModel->append();
@@ -78,13 +78,25 @@ void EventsWindow::InitTreeData(){
         row[m_columns.col_colour] = "white";
         Gtk::TreeRowReference rowref(m_refTreeModel, m_refTreeModel->get_path(iter));
         events[x]->row_in_event_window = rowref;
-        rowcount++;
+        //actions
+        for (unsigned int c = 0; c < events[x]->actions.size();c++){
+            if(!events[x]->actions[c]) continue;
+            Gtk::TreeModel::iterator iter_child = m_refTreeModel->append(row.children());
+            Gtk::TreeModel::Row row_child = *iter_child;
+            row_child[m_columns.col_ID] = c;
+            row_child[m_columns.col_label] = events[x]->actions[c]->GetLabel();
+            row_child[m_columns.col_colour] = "beige";
+            Gtk::TreeRowReference rowref_child(m_refTreeModel, m_refTreeModel->get_path(iter_child));
+            events[x]->actions[c]->row_in_event_window = rowref_child;
+        }
+        
+
     }
 
 
 }
 
-void EventsWindow::ColorizeRow(Gtk::TreeRowReference rowref){
+void EventsWindow::ColorizeEvent(Gtk::TreeRowReference rowref){
     Gtk::TreeModel::Row row = *(m_refTreeModel->get_iter(rowref.get_path()));
 
     if (!row) {
@@ -93,16 +105,33 @@ void EventsWindow::ColorizeRow(Gtk::TreeRowReference rowref){
     }
 
     row[m_columns.col_colour] = "royal blue";
-    Glib::signal_timeout().connect(sigc::bind(mem_fun(*this,&EventsWindow::UncolorizeRow),rowref),EVENTS_FLASH_TIMEOUT);
+    Glib::signal_timeout().connect(sigc::bind(mem_fun(*this,&EventsWindow::UncolorizeEvent),rowref),EVENTS_FLASH_TIMEOUT);
 }
 
-bool EventsWindow::UncolorizeRow(Gtk::TreeRowReference rowref){
+bool EventsWindow::UncolorizeEvent(Gtk::TreeRowReference rowref){
     Gtk::TreeModel::Row row = *(m_refTreeModel->get_iter(rowref.get_path()));
 
     row[m_columns.col_colour] = "white";
     return 0;
 }
+void EventsWindow::ColorizeAction(Gtk::TreeRowReference rowref){
+    Gtk::TreeModel::Row row = *(m_refTreeModel->get_iter(rowref.get_path()));
 
+    if (!row) {
+        *err << _("Error - cannot colorize triggered action: row is empty.\n");
+        return;
+    }
+
+    row[m_columns.col_colour] = "light blue";
+    Glib::signal_timeout().connect(sigc::bind(mem_fun(*this,&EventsWindow::UncolorizeAction),rowref),EVENTS_FLASH_TIMEOUT);
+}
+
+bool EventsWindow::UncolorizeAction(Gtk::TreeRowReference rowref){
+    Gtk::TreeModel::Row row = *(m_refTreeModel->get_iter(rowref.get_path()));
+
+    row[m_columns.col_colour] = "beige";
+    return 0;
+}
 void EventsWindow::OnRowChosen(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column){
 
     Gtk::TreeModel::iterator iter = m_refTreeModel->get_iter(path);
@@ -163,4 +192,9 @@ void EventsWindow::OnSelectionChanged(){
 
     }
 
+}
+
+void EventsWindow::OnRowCollapsed(const Gtk::TreeModel::iterator& iter, const Gtk::TreeModel::Path& path){
+
+    resize(2,2);
 }

@@ -33,14 +33,17 @@ public:
     Gtk::Button add_button;
     Gtk::Button remove_button;
 
-    void ColorizeRow(Gtk::TreeRowReference rowref);
-    bool UncolorizeRow(Gtk::TreeRowReference rowref);
+    void ColorizeEvent(Gtk::TreeRowReference rowref);
+    bool UncolorizeEvent(Gtk::TreeRowReference rowref);
+    void ColorizeAction(Gtk::TreeRowReference rowref);
+    bool UncolorizeAction(Gtk::TreeRowReference rowref);
 
     void OnAddClicked();
     void OnRemoveClicked();
     void OnSelectionChanged();
     void UpdateRow(Gtk::TreeRowReference rowref);
     void OnRowChosen(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column);
+    void OnRowCollapsed(const Gtk::TreeModel::iterator& iter, const Gtk::TreeModel::Path& path);
     class ModelColumns : public Gtk::TreeModel::ColumnRecord{
     public:
         ModelColumns(){add(col_ID);add(col_label);add(col_colour);}
@@ -51,7 +54,7 @@ public:
 
     ModelColumns m_columns;
     Gtk::TreeView m_TreeView;
-    Glib::RefPtr<Gtk::ListStore> m_refTreeModel;
+    Glib::RefPtr<Gtk::TreeStore> m_refTreeModel;
 
 private:
 

@@ -73,7 +73,7 @@ std::string Event::GetLabel(){
 void Event::Trigger(){
     *dbg << "triggered event ==";
     *dbg << GetLabel() << "== :-)\n";
-    eventswindow->ColorizeRow(row_in_event_window);
+    eventswindow->ColorizeEvent(row_in_event_window);
 
     for (unsigned int i = 0; i < actions.size(); i++){
         if (!actions[i]) continue; //it was removed

@@ -19,6 +19,7 @@
 
 #include "Action.h"
 #include "Sequencer.h"
+#include "MainWindow.h"
 
 
 Action::Action(ActionTypes t, int a1, int a2){
@@ -37,6 +38,8 @@ Action::~Action(){
 
 void Action::Trigger(int data){
     *dbg << "-- Action triggered '" << GetLabel() << "'.\n";
+    eventswindow->ColorizeAction(row_in_event_window);
+
     switch (type){
         case SEQ_TOGGLE:
             if (!sequencers[arg1]) break;
@@ -52,11 +55,13 @@ void Action::Trigger(int data){
             break;
 
         case MAINOTE_SET:
+            mainwindow->main_note.set_value((double)arg1);
             mainnote = arg1;
             break;
 
         case TEMPO_SET:
-            tempo = arg2;
+            mainwindow->tempo_button.set_value((double)arg1);
+            tempo = arg1;
             break;
 
         case SEQ_VOLUME_SET:
@@ -70,6 +75,33 @@ void Action::Trigger(int data){
 }
 
 Glib::ustring Action::GetLabel(){
-    return "An action";
 
+    char temp[100];
+    switch (type){
+        case SEQ_TOGGLE:
+            sprintf(temp,_("Toggle sequencer %d"),arg1);
+            break;
+        case SEQ_OFF:
+            sprintf(temp,_("Switch sequencer %d OFF"),arg1);
+            break;
+        case SEQ_ON:
+            sprintf(temp,_("Switch sequencer %d ON"),arg1);
+            break;
+
+        case MAINOTE_SET:
+            sprintf(temp,_("Set main note to %d"),arg1);
+            break;
+
+        case TEMPO_SET:
+            sprintf(temp,_("Set tempo to %d"),arg1);
+            break;
+
+        case SEQ_VOLUME_SET:
+            sprintf(temp,_("Set volume of sequencer %d to %d"),arg1,arg2);
+
+        case NONE:
+            sprintf(temp,_("(empty event)"));
+            break;
+    }
+    return temp;
 }
