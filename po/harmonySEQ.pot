@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-17 23:12+0200\n"
+"POT-Creation-Date: 2010-09-21 19:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,17 +17,17 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: main.cpp:280
+#: main.cpp:284
 #, c-format
 msgid ""
 "       --pass-midi   passes the midi events through the program by default\n"
 msgstr ""
 
-#: MainWindow.cpp:210
+#: MainWindow.cpp:212
 msgid ", name is: "
 msgstr ""
 
-#: EventsWindow.cpp:35 MainWindow.cpp:139
+#: EventsWindow.cpp:35 MainWindow.cpp:141
 msgid "Add"
 msgstr ""
 
@@ -39,7 +39,7 @@ msgstr ""
 msgid "Alsa midi driver init successfull.\n"
 msgstr ""
 
-#: SequencerGUI.cpp:61
+#: SequencerGUI.cpp:71
 msgid "Apply main note"
 msgstr ""
 
@@ -51,7 +51,7 @@ msgstr ""
 msgid "Channel:"
 msgstr ""
 
-#: Files.cpp:92
+#: Files.cpp:95
 msgid "Choose a file to open..."
 msgstr ""
 
@@ -59,7 +59,7 @@ msgstr ""
 msgid "Choose a file to save..."
 msgstr ""
 
-#: MainWindow.cpp:148
+#: MainWindow.cpp:150
 msgid "Clone"
 msgstr ""
 
@@ -81,7 +81,7 @@ msgstr ""
 msgid "ERROR - error while opening file %s to write.\n"
 msgstr ""
 
-#: Files.cpp:108
+#: Files.cpp:111
 #, c-format
 msgid "ERROR - error while trying to read %s\n"
 msgstr ""
@@ -90,11 +90,11 @@ msgstr ""
 msgid "Empty"
 msgstr ""
 
-#: EventsWindow.cpp:90
+#: EventsWindow.cpp:91
 msgid "Error - cannot colorize triggered event: row is empty.\n"
 msgstr ""
 
-#: Event.cpp:101
+#: Event.cpp:111
 msgid "Error - empty event would be triggered.\n"
 msgstr ""
 
@@ -114,11 +114,11 @@ msgstr ""
 msgid "Error: note has changed, while event is not note-type."
 msgstr ""
 
-#: EventsWindow.cpp:46
+#: EventGUI.cpp:34 EventsWindow.cpp:46
 msgid "Event"
 msgstr ""
 
-#: MainWindow.cpp:151
+#: MainWindow.cpp:153
 msgid "Events"
 msgstr ""
 
@@ -150,11 +150,11 @@ msgstr ""
 msgid "Len"
 msgstr ""
 
-#: SequencerGUI.cpp:87
+#: SequencerGUI.cpp:97
 msgid "Length:"
 msgstr ""
 
-#: SequencerGUI.cpp:52
+#: SequencerGUI.cpp:57
 msgid "MIDI channel:"
 msgstr ""
 
@@ -182,19 +182,19 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
-#: MainWindow.cpp:73 SequencerGUI.cpp:60
+#: MainWindow.cpp:73 SequencerGUI.cpp:70
 msgid "On"
 msgstr ""
 
-#: MainWindow.cpp:143
+#: MainWindow.cpp:145
 msgid "Open"
 msgstr ""
 
-#: MainWindow.cpp:155
+#: MainWindow.cpp:157
 msgid "Pass MIDI events"
 msgstr ""
 
-#: EventsWindow.cpp:37 MainWindow.cpp:145
+#: EventsWindow.cpp:37 MainWindow.cpp:147
 msgid "Remove"
 msgstr ""
 
@@ -202,11 +202,11 @@ msgstr ""
 msgid "Res"
 msgstr ""
 
-#: SequencerGUI.cpp:70
+#: SequencerGUI.cpp:80
 msgid "Resolution:"
 msgstr ""
 
-#: MainWindow.cpp:141
+#: MainWindow.cpp:143
 msgid "Save"
 msgstr ""
 
@@ -221,6 +221,14 @@ msgstr ""
 
 #: EventGUI.cpp:71
 msgid "Type:"
+msgstr ""
+
+#: MainWindow.cpp:84
+msgid "Vol"
+msgstr ""
+
+#: SequencerGUI.cpp:58
+msgid "Volume:"
 msgstr ""
 
 #: Event.cpp:62
@@ -248,11 +256,11 @@ msgstr ""
 msgid "When note %d on channel %d gets on..."
 msgstr ""
 
-#: MainWindow.cpp:209
+#: MainWindow.cpp:211
 msgid "activated row "
 msgstr ""
 
-#: main.cpp:272
+#: main.cpp:276
 #, c-format
 msgid ""
 "harmonySEQ, version %s\n"
@@ -270,16 +278,16 @@ msgstr ""
 msgid "seq %d"
 msgstr ""
 
-#: global.h:53
+#: global.h:58
 msgid "sequencer"
 msgstr ""
 
-#: main.cpp:224
+#: main.cpp:228
 #, c-format
 msgid "unknown option '%c'\n"
 msgstr ""
 
-#: main.cpp:227
+#: main.cpp:231
 #, c-format
 msgid "unrecognized option '%s'\n"
 msgstr ""
