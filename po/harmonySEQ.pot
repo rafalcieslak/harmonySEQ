@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-21 19:43+0200\n"
+"POT-Creation-Date: 2010-09-21 20:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,12 +23,21 @@ msgid ""
 "       --pass-midi   passes the midi events through the program by default\n"
 msgstr ""
 
+#: Action.cpp:103
+#, c-format
+msgid "(empty event)"
+msgstr ""
+
 #: MainWindow.cpp:212
 msgid ", name is: "
 msgstr ""
 
-#: EventsWindow.cpp:35 MainWindow.cpp:141
+#: MainWindow.cpp:141
 msgid "Add"
+msgstr ""
+
+#: EventsWindow.cpp:35
+msgid "Add Event"
 msgstr ""
 
 #: EventGUI.cpp:270
@@ -90,7 +99,11 @@ msgstr ""
 msgid "Empty"
 msgstr ""
 
-#: EventsWindow.cpp:91
+#: EventsWindow.cpp:121
+msgid "Error - cannot colorize triggered action: row is empty.\n"
+msgstr ""
+
+#: EventsWindow.cpp:103
 msgid "Error - cannot colorize triggered event: row is empty.\n"
 msgstr ""
 
@@ -210,6 +223,31 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
+#: Action.cpp:92
+#, c-format
+msgid "Set main note to %d"
+msgstr ""
+
+#: Action.cpp:96
+#, c-format
+msgid "Set tempo to %d"
+msgstr ""
+
+#: Action.cpp:100
+#, c-format
+msgid "Set volume of sequencer %d to %d"
+msgstr ""
+
+#: Action.cpp:85
+#, c-format
+msgid "Switch sequencer %d OFF"
+msgstr ""
+
+#: Action.cpp:88
+#, c-format
+msgid "Switch sequencer %d ON"
+msgstr ""
+
 #: MainWindow.cpp:43
 msgid "Tempo:"
 msgstr ""
@@ -217,6 +255,11 @@ msgstr ""
 #: Event.cpp:58
 #, c-format
 msgid "This is an empty event, that will never be triggered."
+msgstr ""
+
+#: Action.cpp:82
+#, c-format
+msgid "Toggle sequencer %d"
 msgstr ""
 
 #: EventGUI.cpp:71
