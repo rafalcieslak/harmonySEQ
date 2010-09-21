@@ -54,7 +54,8 @@ EventsWindow::EventsWindow(){
     m_TreeView.signal_row_activated().connect(sigc::mem_fun(*this, &EventsWindow::OnRowChosen));
     Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = m_TreeView.get_selection();
     refTreeSelection->signal_changed().connect(mem_fun(*this, &EventsWindow::OnSelectionChanged));
-
+    m_TreeView.signal_key_press_event().connect(&FindAndProcessEventsKeyPress);
+    m_TreeView.set_enable_search(0);
     show_all_children(1);
     hide();//hidden at beggining;
 }

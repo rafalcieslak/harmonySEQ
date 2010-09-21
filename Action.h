@@ -40,6 +40,9 @@ public:
     Action(const Action& orig);
     virtual ~Action();
 
+    
+
+
 
 
     ActionTypes type;
@@ -47,7 +50,7 @@ public:
     int arg1;
     int arg2;
     
-    void Trigger();
+    void Trigger(int data = 0);
     Glib::ustring GetLabel();
 
 private:

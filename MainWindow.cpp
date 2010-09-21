@@ -115,7 +115,10 @@ MainWindow::MainWindow()
         //drag and drop enabling
         m_TreeView.enable_model_drag_source();
         m_TreeView.enable_model_drag_dest();
-        
+
+        //forbids to typesearch
+        m_TreeView.set_enable_search(0);
+
         //catching row selection signal
         m_TreeView.signal_row_activated().connect(sigc::mem_fun(*this, &MainWindow::OnTreeviewRowActivated));
 
@@ -412,3 +415,4 @@ void MainWindow::OnSelectionChanged(){
     }
 
 }
+

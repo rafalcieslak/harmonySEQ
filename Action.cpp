@@ -34,8 +34,8 @@ Action::Action(const Action& orig){
 Action::~Action(){
 }
 
-void Action::Trigger(){
-
+void Action::Trigger(int data){
+    *dbg << "-- Action triggered '" << GetLabel() << "'.\n";
 
 }
 

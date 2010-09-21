@@ -30,6 +30,7 @@
 #include "Sequencer.h"
 #include "Event.h"
 #include "EventGUI.h"
+#include "Action.h"
 //global objects
 vector<Sequencer *> sequencers(2);
 vector<Event *> events(2);
@@ -158,6 +159,9 @@ void InitGuiAndDefaultData(){
         events.push_back(new Event(Event::KEYBOARD,keymap_stoi.find("p")->second,0));
         events.push_back(new Event(Event::NOTE,72,1));
         events.push_back(new Event(Event::CONTROLLER,2,0));
+        events[2]->actions.push_back(new Action(Action::SEQ_TOGGLE,0));
+        events[2]->actions.push_back(new Action(Action::MAINOTE_SET,62));
+        events[0]->actions.push_back(new Action(Action::MAINOTE_SET,60));
         eventswindow->InitTreeData();
     }
     gdk_threads_leave();

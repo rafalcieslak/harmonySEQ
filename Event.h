@@ -59,5 +59,6 @@ private:
 };
 
 void FindAndProcessEvents(Event::EventTypes ev,int arg1 = 0, int arg2 = 0);
+bool FindAndProcessEventsKeyPress(GdkEventKey* event);
 #endif	/* EVENT_H */
 

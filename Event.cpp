@@ -75,7 +75,17 @@ void Event::Trigger(){
     *dbg << GetLabel() << "== :-)\n";
     eventswindow->ColorizeRow(row_in_event_window);
 
+    for (unsigned int i = 0; i < actions.size(); i++){
+        if (!actions[i]) continue; //it was removed
+        actions[i]->Trigger();
 
+    }
+
+}
+
+void Event::ShowWindow(){
+
+    gui_window->show();
 }
 
 
@@ -107,7 +117,18 @@ void FindAndProcessEvents(Event::EventTypes ev,int arg1, int arg2){
 
 }
 
-void Event::ShowWindow(){
 
-    gui_window->show();
+bool FindAndProcessEventsKeyPress(GdkEventKey* event){
+    //*dbg << "triggered " << event->keyval << "\n";
+    std::map<int,string>::iterator iter;
+    iter = keymap_itos.find(event->keyval);
+    if(iter != keymap_itos.end()){
+        *dbg << "Pressed key '" << iter->second << "'.\n";
+
+    }else
+        *dbg << "Unknown key pressed\n";
+
+    FindAndProcessEvents(Event::KEYBOARD,event->keyval);
+
+    return 1;
 }
