@@ -87,7 +87,9 @@ public:
     Gtk::HBox line_controller;
     Gtk::Label label_controller;
     Gtk::Button ok_button;
-    
+
+    Gtk::Label label_preview;
+    Gtk::HSeparator separator;
     Gtk::ComboBox Types_combo;
     Gtk::ComboBox Keys_combo;
     Gtk::SpinButton note_spinbutton;

@@ -35,7 +35,7 @@ EventGUI::EventGUI(Event *prt){
     set_border_width(5);
     set_transient_for(*eventswindow);
     set_position(Gtk::WIN_POS_CENTER_ON_PARENT);
-    set_modal(1);
+    //set_modal(1);
     add(main_box);
     main_box.set_spacing(5);
     //preparing
@@ -49,6 +49,8 @@ EventGUI::EventGUI(Event *prt){
     main_box.pack_start(line_note);
     main_box.pack_start(line_controller);
     main_box.pack_start(line_channel);
+    main_box.pack_start(separator);
+    main_box.pack_start(label_preview);
     line_type.pack_start(label_type,Gtk::PACK_SHRINK);
     line_key.pack_start(label_key,Gtk::PACK_SHRINK);
     line_note.pack_start(label_note,Gtk::PACK_SHRINK);
@@ -86,9 +88,9 @@ EventGUI::EventGUI(Event *prt){
     ok_button.set_label(_("OK"));
     ok_button.signal_clicked().connect(mem_fun(*this,&EventGUI::OnOKClicked));
 
-    //UpdateValues();
     signal_show().connect(mem_fun(*this,&EventGUI::UpdateValues));
 
+    label_preview.set_text(parent->GetLabel());
     show_all_children(1);
     TypeChanged(); // to hide some of widgets according to the type
     hide();
@@ -151,6 +153,7 @@ void EventGUI::OnTypeChanged(){
             break;
 
     }
+    label_preview.set_text(parent->GetLabel());
     eventswindow->UpdateRow(parent->row_in_event_window);
 }
 
@@ -163,6 +166,7 @@ void EventGUI::OnChannelChanged(){
         
     }else *err << _("Error: channel has changed, while event is not MIDI-type.") << ENDL;
 
+    label_preview.set_text(parent->GetLabel());
     eventswindow->UpdateRow(parent->row_in_event_window);
 }
 
@@ -171,6 +175,7 @@ void EventGUI::OnKeyChanged(){
             parent->arg1 = (*(Keys_combo.get_active()))[m_columns_key_codes.keycode];
     }else *err << _("Error: key has changed, while event is not key-type.") << ENDL;
 
+    label_preview.set_text(parent->GetLabel());
     eventswindow->UpdateRow(parent->row_in_event_window);
 }
 
@@ -179,6 +184,7 @@ void EventGUI::OnCtrlChanged(){
         parent->arg1 = ctrl_spinbutton.get_value();
     }else *err << _("Error: controller has changed, while event is not ctrl-type.") << ENDL;
 
+    label_preview.set_text(parent->GetLabel());
     eventswindow->UpdateRow(parent->row_in_event_window);
 
 }
@@ -188,6 +194,7 @@ void EventGUI::OnNoteChanged(){
         parent->arg1 = note_spinbutton.get_value();
     }else *err << _("Error: note has changed, while event is not note-type.") << ENDL;
 
+    label_preview.set_text(parent->GetLabel());
     eventswindow->UpdateRow(parent->row_in_event_window);
 
 }
@@ -228,6 +235,7 @@ void EventGUI::UpdateValues(){
 
     }
 
+    label_preview.set_text(parent->GetLabel());
 
 }
 
