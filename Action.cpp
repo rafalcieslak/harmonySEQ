@@ -116,3 +116,8 @@ Glib::ustring Action::GetSeqName(int n){
         sprintf(temp,_("%s"),sequencers[n]->GetName().c_str());
     return temp;
 }
+
+void Action::ShowWindow(){
+    gui_window->show();
+
+}

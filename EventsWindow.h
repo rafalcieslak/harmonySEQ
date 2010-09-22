@@ -38,18 +38,25 @@ public:
     void ColorizeAction(Gtk::TreeRowReference rowref);
     bool UncolorizeAction(Gtk::TreeRowReference rowref);
 
-    void OnAddClicked();
+    void OnAddEventClicked();
     void OnRemoveClicked();
     void OnSelectionChanged();
     void UpdateRow(Gtk::TreeRowReference rowref);
     void OnRowChosen(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column);
     void OnRowCollapsed(const Gtk::TreeModel::iterator& iter, const Gtk::TreeModel::Path& path);
+
+    enum RowType{
+        EVENT,
+        ACTION
+    };
     class ModelColumns : public Gtk::TreeModel::ColumnRecord{
     public:
-        ModelColumns(){add(col_ID);add(col_label);add(col_colour);}
+        ModelColumns(){add(col_ID);add(col_label);add(col_colour);add(col_type);add(col_prt);}
         Gtk::TreeModelColumn<int> col_ID;
         Gtk::TreeModelColumn<Glib::ustring> col_label;
         Gtk::TreeModelColumn<Glib::ustring> col_colour;
+        Gtk::TreeModelColumn<int> col_type;
+        Gtk::TreeModelColumn<int> col_prt;
     };
 
     ModelColumns m_columns;

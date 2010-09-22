@@ -27,7 +27,22 @@ public:
     ActionGUI(Action *prt);
     ActionGUI(const ActionGUI& orig);
     virtual ~ActionGUI();
-    
+    void OnShow();
+    void UpdateValues();
+    void TypeChanged();
+    void OnOKClicked();
+    void OnTypeChanged();
+
+
+    Gtk::VBox main_box;
+    Gtk::HBox line_type;
+    Gtk::Label label_type;
+    Gtk::HBox line_note;
+    Gtk::Label label_note;
+    Gtk::Button ok_button;
+
+    Gtk::Label label_preview;
+    Gtk::HSeparator separator;
     
     Action *parent;
 

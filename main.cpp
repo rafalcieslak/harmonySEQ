@@ -252,7 +252,7 @@ int main(int argc, char** argv) {
     
     //here the non-oprion arguments should be parsed (file to load etc.), but let's leave it for now...
     bool file_from_cli = false;
-    if (argc>=optind){ file = argv[optind];file_from_cli=1;}
+    if (argc>optind){ file = argv[optind];file_from_cli=1;}
 
     //create the midi driver
     midi = new MidiDriver;

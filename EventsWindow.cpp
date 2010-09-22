@@ -33,15 +33,17 @@ EventsWindow::EventsWindow(){
     lower_button_Hbox.pack_end(add_button);
     lower_button_Hbox.pack_end(remove_button);
     add_button.set_label(_("Add Event"));
-    add_button.signal_clicked().connect(mem_fun(*this,&EventsWindow::OnAddClicked));
+    add_button.signal_clicked().connect(mem_fun(*this,&EventsWindow::OnAddEventClicked));
     remove_button.set_label(_("Remove"));
     remove_button.set_sensitive(0);
     remove_button.signal_clicked().connect(mem_fun(*this,&EventsWindow::OnRemoveClicked));
 
     m_refTreeModel = Gtk::TreeStore::create(m_columns);
     m_TreeView.set_model(m_refTreeModel);
-    
+     
     m_TreeView.append_column(_("ID"),m_columns.col_ID);
+    //m_TreeView.append_column("prt",m_columns.col_prt);
+    //m_TreeView.append_column("TYPE",m_columns.col_type);
     Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
     int colcount = m_TreeView.append_column(_("Event"),*pRenderer);
     Gtk::TreeViewColumn * column = m_TreeView.get_column(colcount-1);
@@ -76,6 +78,8 @@ void EventsWindow::InitTreeData(){
         row[m_columns.col_ID] = x;
         row[m_columns.col_label] = events[x]->GetLabel();
         row[m_columns.col_colour] = "white";
+        row[m_columns.col_type] = EVENT;
+        row[m_columns.col_prt] = -1;
         Gtk::TreeRowReference rowref(m_refTreeModel, m_refTreeModel->get_path(iter));
         events[x]->row_in_event_window = rowref;
         //actions
@@ -86,10 +90,12 @@ void EventsWindow::InitTreeData(){
             row_child[m_columns.col_ID] = c;
             row_child[m_columns.col_label] = events[x]->actions[c]->GetLabel();
             row_child[m_columns.col_colour] = "beige";
+            row_child[m_columns.col_type] = ACTION;
+            row_child[m_columns.col_prt] = x;
             Gtk::TreeRowReference rowref_child(m_refTreeModel, m_refTreeModel->get_path(iter_child));
             events[x]->actions[c]->row_in_event_window = rowref_child;
         }
-        
+         
 
     }
 
@@ -138,7 +144,15 @@ void EventsWindow::OnRowChosen(const Gtk::TreeModel::Path& path, Gtk::TreeViewCo
     if (iter)
     {
         Gtk::TreeModel::Row row = *iter;
-        events[row[m_columns.col_ID]]->ShowWindow();
+        //*dbg << row[m_columns.col_label] << " - " << row[m_columns.col_ID] << " - p: " << row[m_columns.col_prt] << ENDL;
+        switch (row[m_columns.col_type]){
+            case EVENT:
+                events[row[m_columns.col_ID]]->ShowWindow();
+                break;
+            case ACTION:
+                events[row[m_columns.col_prt]]->actions[row[m_columns.col_ID]]->ShowWindow();
+                break;
+        }
     }
 
 }
@@ -150,7 +164,7 @@ void EventsWindow::UpdateRow(Gtk::TreeRowReference rowref){
     
 }
 
-void EventsWindow::OnAddClicked(){
+void EventsWindow::OnAddEventClicked(){
 
     Gtk::TreeModel::iterator iter = m_refTreeModel->append();
     Gtk::TreeModel::Row row = *(iter);
@@ -158,6 +172,8 @@ void EventsWindow::OnAddClicked(){
     row[m_columns.col_ID] = events.size()-1;
     row[m_columns.col_label] = events[events.size()-1]->GetLabel();
     row[m_columns.col_colour] = "white";
+    row[m_columns.col_type] = EVENT;
+    row[m_columns.col_prt] = -1;
     Gtk::TreeRowReference rowref(m_refTreeModel, m_refTreeModel->get_path(iter));
     events[events.size()-1]->row_in_event_window = rowref;
     events[events.size()-1]->ShowWindow();

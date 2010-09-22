@@ -56,11 +56,11 @@ public:
     Glib::ustring GetLabel();
     Glib::ustring GetSeqName(int n);
 
-    ActionGUI *gui_window;
-
+    void ShowWindow();
 
 private:
 
+    ActionGUI *gui_window;
 };
 
 #endif	/* ACTION_H */
