@@ -31,6 +31,16 @@ public:
     Gtk::TreeModelColumn<Glib::ustring> label;
 };
 
+class ModelColumns_ActionTypes : public Gtk::TreeModel::ColumnRecord {
+public:
+    ModelColumns_ActionTypes() {
+        add(type);
+        add(label);
+    }
+    Gtk::TreeModelColumn<int> type;
+    Gtk::TreeModelColumn<Glib::ustring> label;
+};
+
 class ModelColumns_KeyCodes : public Gtk::TreeModel::ColumnRecord {
 public:
     ModelColumns_KeyCodes() {
@@ -53,6 +63,8 @@ public:
 #ifndef I_DO_NOT_WANT_EXTERNS_FROM_TREE_MODELS
 extern ModelColumns_EventTypes m_columns_event_types;
 extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_EventTypes;
+extern ModelColumns_ActionTypes m_columns_action_types;
+extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_ActionTypes;
 extern ModelColumns_KeyCodes m_columns_key_codes;
 extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_KeyCodes;
 extern ModelColumns_Channels m_columns_channels;
@@ -62,6 +74,7 @@ extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_Channels;
 void InitEventTypesTreeModel();
 void InitKeyTypesTreeModel();
 void InitChannelsTreeModel();
+void InitActionTypesTreeModel();
 void InitAllTreeModels();
 
 

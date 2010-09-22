@@ -47,7 +47,7 @@ public:
     Gtk::TreeRowReference row_in_event_window;
 
 
-    ActionTypes type;
+    int type;
 
     int arg1;
     int arg2;

@@ -35,10 +35,20 @@ public:
 
 
     Gtk::VBox main_box;
+
     Gtk::HBox line_type;
     Gtk::Label label_type;
     Gtk::HBox line_note;
     Gtk::Label label_note;
+    Gtk::HBox line_seq;
+    Gtk::Label label_seq;
+    Gtk::HBox line_tempo;
+    Gtk::Label label_tempo;
+    Gtk::HBox line_volume;
+    Gtk::Label label_volume;
+
+    Gtk::ComboBox Types_combo;
+
     Gtk::Button ok_button;
 
     Gtk::Label label_preview;

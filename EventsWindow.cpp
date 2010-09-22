@@ -159,8 +159,14 @@ void EventsWindow::OnRowChosen(const Gtk::TreeModel::Path& path, Gtk::TreeViewCo
 
 void EventsWindow::UpdateRow(Gtk::TreeRowReference rowref){
     Gtk::TreeModel::Row row = *(m_refTreeModel->get_iter(rowref.get_path()));
-
-    row[m_columns.col_label] = events[row[m_columns.col_ID]]->GetLabel();
+        switch (row[m_columns.col_type]){
+            case EVENT:
+                row[m_columns.col_label] = events[row[m_columns.col_ID]]->GetLabel();
+                break;
+            case ACTION:
+                row[m_columns.col_label] = events[row[m_columns.col_prt]]->actions[row[m_columns.col_ID]]->GetLabel();
+                break;
+        }
     
 }
 

@@ -18,6 +18,7 @@
 */
 #include "ActionGUI.h"
 #include "Action.h"
+#include "TreeModels.h"
 
 
 ActionGUI::ActionGUI(Action *prt){
@@ -29,23 +30,37 @@ ActionGUI::ActionGUI(Action *prt){
     set_position(Gtk::WIN_POS_CENTER_ON_PARENT);
 
     add(main_box);
+    main_box.set_spacing(5);
 
     main_box.pack_start(line_type);
+    main_box.pack_start(line_seq);
     main_box.pack_start(line_note);
+    main_box.pack_start(line_tempo);
+    main_box.pack_start(line_volume);
     main_box.pack_start(separator);
     main_box.pack_start(label_preview);
     main_box.pack_start(ok_button);
 
-    line_type.pack_start(label_type);
+    line_type.pack_start(label_type,Gtk::PACK_SHRINK);
+    line_seq.pack_start(label_seq,Gtk::PACK_SHRINK);
+    line_note.pack_start(label_note,Gtk::PACK_SHRINK);
+    line_tempo.pack_start(label_tempo,Gtk::PACK_SHRINK);
+    line_volume.pack_start(label_volume,Gtk::PACK_SHRINK);
 
-    //
+    line_type.pack_start(Types_combo,Gtk::PACK_SHRINK);
 
     label_type.set_text(_("Type:"));
+    label_seq.set_text(_("Sequencer:"));
+    label_tempo.set_text(_("Tempo:"));
+    label_note.set_text(_("Note:"));
+    label_volume.set_text(_("Volume:"));
     ok_button.set_label(_("OK"));
     
     ok_button.signal_clicked().connect(mem_fun(*this,&ActionGUI::OnOKClicked));
 
-
+    Types_combo.set_model(m_refTreeModel_ActionTypes);
+    Types_combo.pack_start(m_columns_action_types.label);
+    Types_combo.signal_changed().connect(mem_fun(*this,&ActionGUI::OnTypeChanged));
     signal_show().connect(mem_fun(*this,&ActionGUI::OnShow));
 
     label_preview.set_text(parent->GetLabel());
@@ -79,6 +94,63 @@ void ActionGUI::UpdateValues(){
 }
 
 void ActionGUI::TypeChanged(){
+    if(!Types_combo.get_active()) return; //nothing is selected
+    Gtk::TreeModel::Row row = *(Types_combo.get_active());
+    int type = row[m_columns_action_types.type];
+    line_seq.hide();
+    line_note.hide();
+    line_tempo.hide();
+    line_volume.hide();
+    switch (type){
+        case Action::NONE:
+            break;
+        case Action::SEQ_ON:
+        case Action::SEQ_OFF:
+        case Action::SEQ_TOGGLE:
+            line_seq.show();
+            break;
+        case Action::SEQ_VOLUME_SET:
+            line_seq.show();
+            line_volume.show();
+            break;
+        case Action::MAINOTE_SET:
+            line_note.show();
+            break;
+        case Action::TEMPO_SET:
+            line_tempo.show();
+            break;
 
+
+
+    }
+    resize(2,2);
     
+}
+
+void ActionGUI::OnTypeChanged(){
+    Gtk::TreeModel::Row row = *(Types_combo.get_active());
+    int type = row[m_columns_action_types.type];
+    parent->type = type;
+    TypeChanged();
+    switch (type){
+        case Action::NONE:
+            break;
+        case Action::SEQ_ON:
+            break;
+        case Action::SEQ_OFF:
+            break;
+        case Action::SEQ_TOGGLE:
+            break;
+        case Action::SEQ_VOLUME_SET:
+            break;
+        case Action::MAINOTE_SET:
+            break;
+        case Action::TEMPO_SET:
+            break;
+
+
+
+    }
+    label_preview.set_text(parent->GetLabel());
+    eventswindow->UpdateRow(parent->row_in_event_window);
 }

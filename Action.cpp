@@ -100,7 +100,7 @@ Glib::ustring Action::GetLabel(){
 
         case SEQ_VOLUME_SET:
             sprintf(temp,_("Set volume of sequencer '%s' to %d"),GetSeqName(arg1).c_str(),arg2);
-
+            break;
         case NONE:
             sprintf(temp,_("(empty event)"));
             break;

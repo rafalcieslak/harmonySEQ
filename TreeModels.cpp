@@ -24,6 +24,8 @@
 
 ModelColumns_EventTypes m_columns_event_types;
 Glib::RefPtr<Gtk::ListStore> m_refTreeModel_EventTypes;
+ModelColumns_ActionTypes m_columns_action_types;
+Glib::RefPtr<Gtk::ListStore> m_refTreeModel_ActionTypes;
 ModelColumns_KeyCodes m_columns_key_codes;
 Glib::RefPtr<Gtk::ListStore> m_refTreeModel_KeyCodes;
 ModelColumns_Channels m_columns_channels;
@@ -44,6 +46,33 @@ void InitEventTypesTreeModel(){
     row = *(m_refTreeModel_EventTypes->append());
     row[m_columns_event_types.type] = Event::CONTROLLER;
     row[m_columns_event_types.label] = _("Controller");
+}
+
+void InitActionTypesTreeModel(){
+
+    m_refTreeModel_ActionTypes = Gtk::ListStore::create(m_columns_action_types);
+    Gtk::TreeModel::Row row = *(m_refTreeModel_ActionTypes->append());
+    row[m_columns_action_types.type] = Action::NONE;
+    row[m_columns_action_types.label] = _("Empty");
+    row = *(m_refTreeModel_ActionTypes->append());
+    row[m_columns_action_types.type] = Action::SEQ_ON;
+    row[m_columns_action_types.label] = _("Sequencer/ON");
+    row = *(m_refTreeModel_ActionTypes->append());
+    row[m_columns_action_types.type] = Action::SEQ_OFF;
+    row[m_columns_action_types.label] = _("Sequencer/OFF");
+    row = *(m_refTreeModel_ActionTypes->append());
+    row[m_columns_action_types.type] = Action::SEQ_TOGGLE;
+    row[m_columns_action_types.label] = _("Sequencer/Toggle");
+    row = *(m_refTreeModel_ActionTypes->append());
+    row[m_columns_action_types.type] = Action::SEQ_VOLUME_SET;
+    row[m_columns_action_types.label] = _("Sequencer/Set volume");
+    row = *(m_refTreeModel_ActionTypes->append());
+    row[m_columns_action_types.type] = Action::MAINOTE_SET;
+    row[m_columns_action_types.label] = _("Set main note");
+    row = *(m_refTreeModel_ActionTypes->append());
+    row[m_columns_action_types.type] = Action::TEMPO_SET;
+    row[m_columns_action_types.label] = _("Set tempo");
+
 }
 
 void InitKeyTypesTreeModel(){
@@ -75,6 +104,7 @@ void InitChannelsTreeModel(){
 
 void InitAllTreeModels(){
     InitEventTypesTreeModel();
+    InitActionTypesTreeModel();
     InitKeyTypesTreeModel();
     InitChannelsTreeModel();
 }
