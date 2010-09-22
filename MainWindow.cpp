@@ -248,6 +248,8 @@ MainWindow::OnNameEdited(const Glib::ustring& path, const Glib::ustring& newtext
     if (!iter) return;
     Gtk::TreeModel::Row row = *iter;
     sequencers[row[m_columns.col_ID]]->SetName(newtext);
+
+    eventswindow->InitTreeData();
 }
 
 Gtk::TreeModel::RowReference MainWindow::AddSequencerRow(int n)
@@ -339,6 +341,8 @@ void MainWindow::OnRemoveClicked(){
     resize(2,2); //resizing to a tiny size, but the window won't get that small, it will be big enough to show all widgets.
     delete sequencers[id];
     sequencers[id] = NULL;
+
+    eventswindow->InitTreeData();
 
 }
 

@@ -79,13 +79,13 @@ Glib::ustring Action::GetLabel(){
     char temp[100];
     switch (type){
         case SEQ_TOGGLE:
-            sprintf(temp,_("Toggle sequencer %d"),arg1);
+            sprintf(temp,_("Toggle sequencer '%s'"),GetSeqName(arg1).c_str());
             break;
         case SEQ_OFF:
-            sprintf(temp,_("Switch sequencer %d OFF"),arg1);
+            sprintf(temp,_("Switch sequencer '%s' OFF"),GetSeqName(arg1).c_str());
             break;
         case SEQ_ON:
-            sprintf(temp,_("Switch sequencer %d ON"),arg1);
+            sprintf(temp,_("Switch sequencer '%s' ON"),GetSeqName(arg1).c_str());
             break;
 
         case MAINOTE_SET:
@@ -97,11 +97,20 @@ Glib::ustring Action::GetLabel(){
             break;
 
         case SEQ_VOLUME_SET:
-            sprintf(temp,_("Set volume of sequencer %d to %d"),arg1,arg2);
+            sprintf(temp,_("Set volume of sequencer '%s' to %d"),GetSeqName(arg1).c_str(),arg2);
 
         case NONE:
             sprintf(temp,_("(empty event)"));
             break;
     }
+    return temp;
+}
+
+Glib::ustring Action::GetSeqName(int n){
+    char temp[100];
+    if (!sequencers[n])
+        sprintf(temp,_("%d (which was removed)"),n);
+    else
+        sprintf(temp,_("%s"),sequencers[n]->GetName().c_str());
     return temp;
 }

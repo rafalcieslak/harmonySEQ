@@ -53,6 +53,8 @@ public:
     
     void Trigger(int data = 0);
     Glib::ustring GetLabel();
+    Glib::ustring GetSeqName(int n);
+
 
 private:
 

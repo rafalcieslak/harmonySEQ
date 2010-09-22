@@ -93,7 +93,7 @@ void EventsWindow::InitTreeData(){
 
     }
 
-
+    resize(2,2);
 }
 
 void EventsWindow::ColorizeEvent(Gtk::TreeRowReference rowref){
