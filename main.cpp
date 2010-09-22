@@ -31,6 +31,7 @@
 #include "Event.h"
 #include "EventGUI.h"
 #include "Action.h"
+#include "Files.h"
 //global objects
 vector<Sequencer *> sequencers(2);
 vector<Event *> events(2);
@@ -44,6 +45,7 @@ MidiDriver* midi;
 MainWindow* mainwindow;
 EventsWindow* eventswindow;
 int passing_midi;
+Glib::ustring file;
 std::map<string, int> keymap_stoi;
 std::map<int, string> keymap_itos;
 //-/
@@ -177,9 +179,13 @@ void InitGetText(){
 
 }
 
-void StartThreads(){
-
-    
+bool TryToOpenFileFromCommandLine(){
+    if (!Files::LoadFile(file)){
+        mainwindow->InitTreeData();
+        eventswindow->InitTreeData();
+        return 0;
+    }
+    else return 1;
 }
 
 int main(int argc, char** argv) {
@@ -245,7 +251,8 @@ int main(int argc, char** argv) {
     if (version) {printf(VERSION);printf("\n");exit(0);} //print version
     
     //here the non-oprion arguments should be parsed (file to load etc.), but let's leave it for now...
-
+    bool file_from_cli = false;
+    if (argc>=optind){ file = argv[optind];file_from_cli=1;}
 
     //create the midi driver
     midi = new MidiDriver;
@@ -257,11 +264,11 @@ int main(int argc, char** argv) {
 
     InitGuiAndDefaultData();
 
-    StartThreads();
+    if (file_from_cli) TryToOpenFileFromCommandLine();
 
     threadb Th;
-    Glib::Thread * const th1 = Glib::Thread::create(sigc::mem_fun(Th, &threadb::th1), true);
-    Glib::Thread * const th2 = Glib::Thread::create(sigc::mem_fun(Th, &threadb::th2), true);
+    /*Glib::Thread * const th1 =*/ Glib::Thread::create(sigc::mem_fun(Th, &threadb::th1), true);
+    /*Glib::Thread * const th2 =*/  Glib::Thread::create(sigc::mem_fun(Th, &threadb::th2), true);
     //wait for signal to exit the program
     while (running == 1)
         usleep(10000);

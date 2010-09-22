@@ -25,7 +25,8 @@
 
 namespace Files{
 void SaveToFile();
-void LoadFromFile();
+void LoadFileDialog();
+bool LoadFile(Glib::ustring file);
 }
 
 

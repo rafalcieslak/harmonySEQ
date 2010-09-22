@@ -92,3 +92,12 @@ error & operator <<(error &err, int number){
     err.say(temp);
     return err;
 }
+
+
+error & operator <<(error &err, Glib::ustring message){
+
+
+    err.say(message.c_str());
+    return err;
+
+}

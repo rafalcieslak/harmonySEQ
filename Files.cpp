@@ -90,72 +90,20 @@ void SaveToFile(){
 
 }
 
-void LoadFromFile(){
-    *dbg << "loading file!\n";
+void LoadFileDialog(){
     Gtk::FileChooserDialog dialog(_("Choose a file to open..."),Gtk::FILE_CHOOSER_ACTION_OPEN);
     dialog.set_transient_for(*mainwindow);
     dialog.add_button(Gtk::Stock::CANCEL,Gtk::RESPONSE_CANCEL);
     dialog.add_button(Gtk::Stock::SAVE,Gtk::RESPONSE_OK);
 
-    Glib::KeyFile kf;
 
     int result = dialog.run();
     Glib::ustring filename = dialog.get_filename();
-    char temp[100];
-    int number;
 
 
     switch (result){
         case Gtk::RESPONSE_OK:
-            if(!kf.load_from_file(filename)){
-                sprintf(temp,_("ERROR - error while trying to read %s\n"),filename.c_str());
-                *err << temp;
-                break;
-            }
-
-            tempo = kf.get_double(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_TEMPO);
-            mainnote = kf.get_integer(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_MAINNOTE);
-            number = kf.get_integer(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_SEQ_NUM);
-
-            sequencers.clear();//woa hua hua hua!
-
-            for (int x = 0; x < number; x++){
-                sprintf(temp,FILE_GROUP_TEMPLATE_SEQ,x);
-                if (!kf.has_group(temp)) {
-                    
-                    sequencers.push_back(NULL);
-                    continue;
-                }
-
-                sequencers.push_back(new Sequencer());
-
-                *dbg << "now loading data...\n";
-                sequencers[x]->SetName(kf.get_string(temp,FILE_KEY_SEQ_NAME));
-                sequencers[x]->SetOn(kf.get_boolean(temp,FILE_KEY_SEQ_ON));
-                sequencers[x]->SetChannel(kf.get_integer(temp,FILE_KEY_SEQ_CHANNEL));
-                sequencers[x]->SetApplyMainNote(kf.get_boolean(temp,FILE_KEY_SEQ_APPLY_MAIN_NOTE));
-                sequencers[x]->resolution = kf.get_integer(temp,FILE_KEY_SEQ_RESOLUTION);
-                *dbg << "resolution set to " << sequencers[x]->resolution << ENDL;
-                sequencers[x]->length = kf.get_double(temp,FILE_KEY_SEQ_LENGTH);
-                
-                sequencers[x]->sequence.clear();
-                std::vector<int> sequence = kf.get_integer_list(temp,FILE_KEY_SEQ_SEQUENCE);
-                for (unsigned int n = 0; n < sequence.size(); n++){
-                    sequencers[x]->sequence.push_back(sequence[n]);
-
-                }
-
-                sequencers[x]->notes.clear();
-                *dbg << "now loading notes...\n";
-                std::vector<int> notes = kf.get_integer_list(temp,FILE_KEY_SEQ_NOTES);
-                for (unsigned int n = 0; n < notes.size(); n++){
-                    *dbg << notes[n] << ENDL;
-                    sequencers[x]->notes.push_back(notes[n]);
-
-                }
-                sequencers[x]->UpdateGui();
-            }
-
+            LoadFile(filename);
 
             break;
         case Gtk::RESPONSE_CANCEL:
@@ -175,4 +123,69 @@ void LoadFromFile(){
 
 }
 
+
+bool LoadFile(Glib::ustring file){
+
+    *dbg << "trying to open |" << file <<"|--\n";
+    int number;
+    Glib::KeyFile kf;
+    char temp[100];
+    try{
+        if (!kf.load_from_file(file)) {
+            sprintf(temp, _("ERROR - error while trying to read file '%s'\n"), file.c_str());
+            *err << temp;
+            return 1;
+        }
+    }catch(Glib::Error error){
+        sprintf(temp, _("ERROR - error while trying to read file '%s': "), file.c_str());
+        *err << temp;
+        *err << error.what();
+        *err << ENDL;
+        return 1;
+
+    }
+
+    tempo = kf.get_double(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_TEMPO);
+    mainnote = kf.get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_MAINNOTE);
+    number = kf.get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_SEQ_NUM);
+
+    sequencers.clear(); //woa hua hua hua!
+
+    for (int x = 0; x < number; x++) {
+        sprintf(temp, FILE_GROUP_TEMPLATE_SEQ, x);
+        if (!kf.has_group(temp)) {
+
+            sequencers.push_back(NULL);
+            continue;
+        }
+
+        sequencers.push_back(new Sequencer());
+
+        *dbg << "now loading data...\n";
+        sequencers[x]->SetName(kf.get_string(temp, FILE_KEY_SEQ_NAME));
+        sequencers[x]->SetOn(kf.get_boolean(temp, FILE_KEY_SEQ_ON));
+        sequencers[x]->SetChannel(kf.get_integer(temp, FILE_KEY_SEQ_CHANNEL));
+        sequencers[x]->SetApplyMainNote(kf.get_boolean(temp, FILE_KEY_SEQ_APPLY_MAIN_NOTE));
+        sequencers[x]->resolution = kf.get_integer(temp, FILE_KEY_SEQ_RESOLUTION);
+        sequencers[x]->length = kf.get_double(temp, FILE_KEY_SEQ_LENGTH);
+
+        sequencers[x]->sequence.clear();
+        std::vector<int> sequence = kf.get_integer_list(temp, FILE_KEY_SEQ_SEQUENCE);
+        for (unsigned int n = 0; n < sequence.size(); n++) {
+            sequencers[x]->sequence.push_back(sequence[n]);
+
+        }
+
+        sequencers[x]->notes.clear();
+        *dbg << "now loading notes...\n";
+        std::vector<int> notes = kf.get_integer_list(temp, FILE_KEY_SEQ_NOTES);
+        for (unsigned int n = 0; n < notes.size(); n++) {
+            *dbg << notes[n] << ENDL;
+            sequencers[x]->notes.push_back(notes[n]);
+
+        }
+        sequencers[x]->UpdateGui();
+    }
+    return 0;
+}
 }//namespace files

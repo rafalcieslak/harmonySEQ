@@ -45,6 +45,7 @@ private:
 
 error & operator <<(error &err, const char* message);
 error & operator <<(error &err, int number);
+error & operator <<(error &dbg, Glib::ustring message);
 debug & operator <<(debug &dbg, const char* message);
 debug & operator <<(debug &dbg, int number);
 debug & operator <<(debug &dbg, Glib::ustring message);

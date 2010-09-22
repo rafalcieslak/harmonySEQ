@@ -1,6 +1,7 @@
 harmonyseq 0.10
 	- Events and actions implemented.
 	- Variable volume.
+	- Opening files from command line.
 
 harmonyseq 0.9
 	- Sequencers can be now safely dragged.

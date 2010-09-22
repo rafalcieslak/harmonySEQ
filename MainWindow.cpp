@@ -113,8 +113,9 @@ MainWindow::MainWindow()
         //pColumn->set_sort_column(m_columns.col_len);
 
         //drag and drop enabling
-        m_TreeView.enable_model_drag_source();
-        m_TreeView.enable_model_drag_dest();
+        //m_TreeView.enable_model_drag_source();
+        //m_TreeView.enable_model_drag_dest();
+        //disabled, as it causes strange problems with TreeRowReference-s
 
         //forbids to typesearch
         m_TreeView.set_enable_search(0);
@@ -314,7 +315,7 @@ void MainWindow::RefreshRow(Gtk::TreeRowReference rowref){
 
 void MainWindow::OnLoadClicked(){
 
-    Files::LoadFromFile();
+    Files::LoadFileDialog();
 
     
     InitTreeData();
