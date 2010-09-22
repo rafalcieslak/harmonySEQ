@@ -7,17 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-09-17 23:12+0200\n"
-"PO-Revision-Date: 2010-09-20 18:12+0000\n"
+"POT-Creation-Date: 2010-09-21 20:40+0200\n"
+"PO-Revision-Date: 2010-09-21 19:01+0000\n"
 "Last-Translator: rafal cieslak <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-21 06:03+0000\n"
+"X-Launchpad-Export-Date: 2010-09-22 05:59+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: main.cpp:280
+#: main.cpp:284
 #, c-format
 msgid ""
 "       --pass-midi   passes the midi events through the program by default\n"
@@ -25,13 +25,22 @@ msgstr ""
 "       --pass-midi   włącz domyślnie przesyłanie wszystkich zdarzeń MIDI "
 "przez program.\n"
 
-#: MainWindow.cpp:210
+#: Action.cpp:103
+#, c-format
+msgid "(empty event)"
+msgstr "(puste zdarzenie)"
+
+#: MainWindow.cpp:212
 msgid ", name is: "
 msgstr ", nazwa to: "
 
-#: EventsWindow.cpp:35 MainWindow.cpp:139
+#: MainWindow.cpp:141
 msgid "Add"
 msgstr "Dodaj"
+
+#: EventsWindow.cpp:35
+msgid "Add Event"
+msgstr "Dodaj zdarzenie"
 
 #: EventGUI.cpp:270
 msgid "All"
@@ -41,7 +50,7 @@ msgstr "Wszystkie"
 msgid "Alsa midi driver init successfull.\n"
 msgstr "Inicjacja sterownika MIDI powiodła się.\n"
 
-#: SequencerGUI.cpp:61
+#: SequencerGUI.cpp:71
 msgid "Apply main note"
 msgstr "Stosuj główną nutę"
 
@@ -53,7 +62,7 @@ msgstr "Kan"
 msgid "Channel:"
 msgstr "Kanał:"
 
-#: Files.cpp:92
+#: Files.cpp:95
 msgid "Choose a file to open..."
 msgstr "Wybierz plik do otwarcia..."
 
@@ -61,7 +70,7 @@ msgstr "Wybierz plik do otwarcia..."
 msgid "Choose a file to save..."
 msgstr "Wybierz plik do zapisu..."
 
-#: MainWindow.cpp:148
+#: MainWindow.cpp:150
 msgid "Clone"
 msgstr "Klonuj"
 
@@ -83,7 +92,7 @@ msgstr "Włączono tryb Debug.\n"
 msgid "ERROR - error while opening file %s to write.\n"
 msgstr "BŁĄD - błąd podczas otwierania pliku %s do zapisu.\n"
 
-#: Files.cpp:108
+#: Files.cpp:111
 #, c-format
 msgid "ERROR - error while trying to read %s\n"
 msgstr "BŁĄD - błąd podczas czytania pliku %s\n"
@@ -92,12 +101,17 @@ msgstr "BŁĄD - błąd podczas czytania pliku %s\n"
 msgid "Empty"
 msgstr "Puste"
 
-#: EventsWindow.cpp:90
+#: EventsWindow.cpp:121
+msgid "Error - cannot colorize triggered action: row is empty.\n"
+msgstr ""
+"Błąd - nie udało się pokolorować wywołanej akcji: wiersz jest pusty.\n"
+
+#: EventsWindow.cpp:103
 msgid "Error - cannot colorize triggered event: row is empty.\n"
 msgstr ""
 "Błąd - nie można pokolorować wyzwalanego zdarzenia: wiersz jest pusty.\n"
 
-#: Event.cpp:101
+#: Event.cpp:111
 msgid "Error - empty event would be triggered.\n"
 msgstr "Błąd - puste zdarzenie miałoby zostać wywołane.\n"
 
@@ -122,11 +136,11 @@ msgid "Error: note has changed, while event is not note-type."
 msgstr ""
 "Błąd: nuta została zmieniona, podczas gdy zdarzenie nie jest typu nuty."
 
-#: EventsWindow.cpp:46
+#: EventGUI.cpp:34 EventsWindow.cpp:46
 msgid "Event"
 msgstr "Zdarzenie"
 
-#: MainWindow.cpp:151
+#: MainWindow.cpp:153
 msgid "Events"
 msgstr "Zdarzenia"
 
@@ -158,11 +172,11 @@ msgstr "Klawiatura"
 msgid "Len"
 msgstr "Dł"
 
-#: SequencerGUI.cpp:87
+#: SequencerGUI.cpp:97
 msgid "Length:"
 msgstr "Długość:"
 
-#: SequencerGUI.cpp:52
+#: SequencerGUI.cpp:57
 msgid "MIDI channel:"
 msgstr "Kanał MIDI"
 
@@ -190,19 +204,19 @@ msgstr "Nuta:"
 msgid "OK"
 msgstr "OK"
 
-#: MainWindow.cpp:73 SequencerGUI.cpp:60
+#: MainWindow.cpp:73 SequencerGUI.cpp:70
 msgid "On"
 msgstr "Wł."
 
-#: MainWindow.cpp:143
+#: MainWindow.cpp:145
 msgid "Open"
 msgstr "Otwórz"
 
-#: MainWindow.cpp:155
+#: MainWindow.cpp:157
 msgid "Pass MIDI events"
 msgstr "Przekazuj MIDI"
 
-#: EventsWindow.cpp:37 MainWindow.cpp:145
+#: EventsWindow.cpp:37 MainWindow.cpp:147
 msgid "Remove"
 msgstr "Usuń"
 
@@ -210,13 +224,38 @@ msgstr "Usuń"
 msgid "Res"
 msgstr "Roz"
 
-#: SequencerGUI.cpp:70
+#: SequencerGUI.cpp:80
 msgid "Resolution:"
 msgstr "Rozdzielczość:"
 
-#: MainWindow.cpp:141
+#: MainWindow.cpp:143
 msgid "Save"
 msgstr "Zapisz"
+
+#: Action.cpp:92
+#, c-format
+msgid "Set main note to %d"
+msgstr "Ustaw nutę główną na %d"
+
+#: Action.cpp:96
+#, c-format
+msgid "Set tempo to %d"
+msgstr "Ustaw tempo na %d"
+
+#: Action.cpp:100
+#, c-format
+msgid "Set volume of sequencer %d to %d"
+msgstr "Ustaw głośność sekwencera %d na %d"
+
+#: Action.cpp:85
+#, c-format
+msgid "Switch sequencer %d OFF"
+msgstr "Wyłącz sekwencer %d"
+
+#: Action.cpp:88
+#, c-format
+msgid "Switch sequencer %d ON"
+msgstr "Włącz sekewncer %d"
 
 #: MainWindow.cpp:43
 msgid "Tempo:"
@@ -227,9 +266,22 @@ msgstr "Tempo:"
 msgid "This is an empty event, that will never be triggered."
 msgstr "To jest puste zdarzenie, które nigdy nie zostanie wywołane."
 
+#: Action.cpp:82
+#, c-format
+msgid "Toggle sequencer %d"
+msgstr "Przełącz sekwencer %d"
+
 #: EventGUI.cpp:71
 msgid "Type:"
 msgstr "Typ:"
+
+#: MainWindow.cpp:84
+msgid "Vol"
+msgstr "Gł"
+
+#: SequencerGUI.cpp:58
+msgid "Volume:"
+msgstr "Głośność:"
 
 #: Event.cpp:62
 #, c-format
@@ -256,11 +308,11 @@ msgstr "Gdy nuta %d na dowolnym kanale zostaje włączona..."
 msgid "When note %d on channel %d gets on..."
 msgstr "Gdy nuta %d na kanale %d zostaje włączona..."
 
-#: MainWindow.cpp:209
+#: MainWindow.cpp:211
 msgid "activated row "
 msgstr "aktywowano wiersz "
 
-#: main.cpp:272
+#: main.cpp:276
 #, c-format
 msgid ""
 "harmonySEQ, version %s\n"
@@ -287,16 +339,16 @@ msgstr ""
 msgid "seq %d"
 msgstr "seq %d"
 
-#: global.h:53
+#: global.h:58
 msgid "sequencer"
 msgstr "sekwencer"
 
-#: main.cpp:224
+#: main.cpp:228
 #, c-format
 msgid "unknown option '%c'\n"
 msgstr "nieznana opcja '%c'\n"
 
-#: main.cpp:227
+#: main.cpp:231
 #, c-format
 msgid "unrecognized option '%s'\n"
 msgstr "nierozpoznana opcja '%s'\n"
