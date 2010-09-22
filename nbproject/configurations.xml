@@ -17,6 +17,8 @@
                    kind="SOURCE_LOGICAL_FOLDER">
       <itemPath>Action.cpp</itemPath>
       <itemPath>Action.h</itemPath>
+      <itemPath>ActionGUI.cpp</itemPath>
+      <itemPath>ActionGUI.h</itemPath>
       <itemPath>Event.cpp</itemPath>
       <itemPath>Event.h</itemPath>
       <itemPath>EventGUI.cpp</itemPath>
@@ -33,6 +35,8 @@
       <itemPath>Sequencer.h</itemPath>
       <itemPath>SequencerGUI.cpp</itemPath>
       <itemPath>SequencerGUI.h</itemPath>
+      <itemPath>TreeModels.cpp</itemPath>
+      <itemPath>TreeModels.h</itemPath>
       <itemPath>global.cpp</itemPath>
       <itemPath>global.h</itemPath>
       <itemPath>main.cpp</itemPath>

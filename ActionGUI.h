@@ -17,51 +17,23 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ACTION_H
-#define	ACTION_H
-
+#ifndef ACTIONGUI_H
+#define	ACTIONGUI_H
 #include "global.h"
-#include "ActionGUI.h"
+class Action;
 
-class Action {
+class ActionGUI : public Gtk::Window{
 public:
-
-    enum ActionTypes {
-        NONE = 0,
-        SEQ_OFF,
-        SEQ_ON,
-        SEQ_TOGGLE,
-        SEQ_VOLUME_SET,
-        MAINOTE_SET,
-        TEMPO_SET
-
-    };
-
-    Action(ActionTypes t, int a1 = 0, int a2 = 0);
-    Action(const Action& orig);
-    virtual ~Action();
-
+    ActionGUI(Action *prt);
+    ActionGUI(const ActionGUI& orig);
+    virtual ~ActionGUI();
     
-
-
-    Gtk::TreeRowReference row_in_event_window;
-
-
-    ActionTypes type;
-
-    int arg1;
-    int arg2;
     
-    void Trigger(int data = 0);
-    Glib::ustring GetLabel();
-    Glib::ustring GetSeqName(int n);
-
-    ActionGUI *gui_window;
-
+    Action *parent;
 
 private:
 
 };
 
-#endif	/* ACTION_H */
+#endif	/* ACTIONGUI_H */
 

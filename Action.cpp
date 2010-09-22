@@ -26,6 +26,7 @@ Action::Action(ActionTypes t, int a1, int a2){
     type = t;
     arg1 = a1;
     arg2 = a2;
+    gui_window = new ActionGUI(this);
 }
 
 
@@ -34,6 +35,7 @@ Action::Action(const Action& orig){
 
 
 Action::~Action(){
+    delete gui_window;
 }
 
 void Action::Trigger(int data){

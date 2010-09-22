@@ -16,52 +16,23 @@
     You should have received a copy of the GNU General Public License
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-#ifndef ACTION_H
-#define	ACTION_H
-
-#include "global.h"
 #include "ActionGUI.h"
 
-class Action {
-public:
 
-    enum ActionTypes {
-        NONE = 0,
-        SEQ_OFF,
-        SEQ_ON,
-        SEQ_TOGGLE,
-        SEQ_VOLUME_SET,
-        MAINOTE_SET,
-        TEMPO_SET
+ActionGUI::ActionGUI(Action *prt){
+    parent = prt;
+    set_title(_("Action"));
 
-    };
-
-    Action(ActionTypes t, int a1 = 0, int a2 = 0);
-    Action(const Action& orig);
-    virtual ~Action();
-
-    
+    set_border_width(5);
+    set_transient_for(*eventswindow);
+    set_position(Gtk::WIN_POS_CENTER_ON_PARENT);
+}
 
 
-    Gtk::TreeRowReference row_in_event_window;
+ActionGUI::ActionGUI(const ActionGUI& orig){
+}
 
 
-    ActionTypes type;
-
-    int arg1;
-    int arg2;
-    
-    void Trigger(int data = 0);
-    Glib::ustring GetLabel();
-    Glib::ustring GetSeqName(int n);
-
-    ActionGUI *gui_window;
-
-
-private:
-
-};
-
-#endif	/* ACTION_H */
+ActionGUI::~ActionGUI(){
+}
 

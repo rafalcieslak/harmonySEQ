@@ -40,6 +40,7 @@ Event::Event(const Event& orig){
 
 
 Event::~Event(){
+    delete gui_window;
 }
 
 std::string Event::GetLabel(){

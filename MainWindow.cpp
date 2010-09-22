@@ -93,7 +93,8 @@ MainWindow::MainWindow()
             pColumn = m_TreeView.get_column(tricky);
         }
 
-        pColumn->set_sort_column(m_columns.col_name);
+        //pColumn->set_sort_column(m_columns.col_name);
+        //disabled, as it causes strange problems with TreeRowReference-s
         tricky++;
         pColumn = m_TreeView.get_column(tricky);
         //pColumn->set_sort_column(m_columns.col_muted);

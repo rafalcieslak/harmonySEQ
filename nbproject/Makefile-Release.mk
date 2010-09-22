@@ -36,6 +36,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Action.o \
 	${OBJECTDIR}/SequencerGUI.o \
 	${OBJECTDIR}/MainWindow.o \
+	${OBJECTDIR}/ActionGUI.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/MidiDriver.o \
 	${OBJECTDIR}/EventsWindow.o \
@@ -44,6 +45,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Event.o \
 	${OBJECTDIR}/EventGUI.o \
 	${OBJECTDIR}/messages.o \
+	${OBJECTDIR}/TreeModels.o \
 	${OBJECTDIR}/global.o
 
 
@@ -86,6 +88,11 @@ ${OBJECTDIR}/MainWindow.o: MainWindow.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/MainWindow.o MainWindow.cpp
 
+${OBJECTDIR}/ActionGUI.o: ActionGUI.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/ActionGUI.o ActionGUI.cpp
+
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
@@ -125,6 +132,11 @@ ${OBJECTDIR}/messages.o: messages.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/messages.o messages.cpp
+
+${OBJECTDIR}/TreeModels.o: TreeModels.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/TreeModels.o TreeModels.cpp
 
 ${OBJECTDIR}/global.o: global.cpp 
 	${MKDIR} -p ${OBJECTDIR}

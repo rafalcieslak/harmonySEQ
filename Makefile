@@ -23,7 +23,9 @@ SRCS =  main.cpp\
 	Event.cpp \
 	EventsWindow.cpp \
 	EventGUI.cpp \
-	Action.cpp
+	Action.cpp \
+	ActionGUI.cpp \
+	TreeModels.cpp
         
 OBJS	= $(SRCS:.cpp=.o)
 

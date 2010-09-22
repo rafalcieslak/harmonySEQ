@@ -20,49 +20,10 @@
 #ifndef EVENTGUI_H
 #define	EVENTGUI_H
 #include "global.h"
+#include "TreeModels.h"
 
 class Event;
 
-class ModelColumns_EventTypes : public Gtk::TreeModel::ColumnRecord {
-public:
-    ModelColumns_EventTypes() {
-        add(type);
-        add(label);
-    }
-    Gtk::TreeModelColumn<int> type;
-    Gtk::TreeModelColumn<Glib::ustring> label;
-};
-
-class ModelColumns_KeyCodes : public Gtk::TreeModel::ColumnRecord {
-public:
-    ModelColumns_KeyCodes() {
-        add(keycode);
-        add(label);
-    }
-    Gtk::TreeModelColumn<int> keycode;
-    Gtk::TreeModelColumn<Glib::ustring> label;
-};
-
-class ModelColumns_Channels : public Gtk::TreeModel::ColumnRecord {
-public:
-    ModelColumns_Channels() {
-        add(ch);
-        add(label);
-    }
-    Gtk::TreeModelColumn<int> ch;
-    Gtk::TreeModelColumn<Glib::ustring> label;
-};
-#ifndef I_DO_NOT_WANT_EXTERNS_FROM_EVENT_GUI
-extern ModelColumns_EventTypes m_columns_event_types;
-extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_EventTypes;
-extern ModelColumns_KeyCodes m_columns_key_codes;
-extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_KeyCodes;
-#endif
-
-void InitEventTypesTreeModel();
-void InitKeyTypesTreeModel();
-void InitChannelsTreeModel();
-void InitAllTreeModels();
 
 class EventGUI :public Gtk::Window{
 public:
