@@ -31,12 +31,16 @@ EventsWindow::EventsWindow(){
     main_Vbox.pack_start(m_TreeView);
     main_Vbox.pack_start(lower_button_Hbox);
     lower_button_Hbox.pack_end(add_button);
+    lower_button_Hbox.pack_end(add_action_button);
     lower_button_Hbox.pack_end(remove_button);
     add_button.set_label(_("Add Event"));
     add_button.signal_clicked().connect(mem_fun(*this,&EventsWindow::OnAddEventClicked));
     remove_button.set_label(_("Remove"));
     remove_button.set_sensitive(0);
     remove_button.signal_clicked().connect(mem_fun(*this,&EventsWindow::OnRemoveClicked));
+    add_action_button.set_sensitive(0);
+    add_action_button.set_label(_("Add Action"));
+    add_action_button.signal_clicked().connect(mem_fun(*this,&EventsWindow::OnAddActionClicked));
 
     m_refTreeModel = Gtk::TreeStore::create(m_columns);
     m_TreeView.set_model(m_refTreeModel);
@@ -224,10 +228,10 @@ void EventsWindow::OnSelectionChanged(){
     Gtk::TreeModel::iterator iter = m_TreeView.get_selection()->get_selected();
     if(iter){
         remove_button.set_sensitive(1);
-
+        add_action_button.set_sensitive(1);
     }else{
         remove_button.set_sensitive(0);
-
+        add_action_button.set_sensitive(0);
 
     }
 
@@ -236,4 +240,35 @@ void EventsWindow::OnSelectionChanged(){
 void EventsWindow::OnRowCollapsed(const Gtk::TreeModel::iterator& iter, const Gtk::TreeModel::Path& path){
 
     resize(2,2);
+}
+
+void EventsWindow::OnAddActionClicked(){
+    int id;
+    Gtk::TreeModel::iterator iter = m_TreeView.get_selection()->get_selected();
+    if(!iter) return; //should not happen, button wolud not be sensitive
+
+    Gtk::TreeModel::Row row = *iter;
+    switch (row[m_columns.col_type]){
+        case EVENT:
+            id = row[m_columns.col_ID];
+            break;
+        case ACTION:
+            id = row[m_columns.col_prt];
+            break;
+    }
+
+    events[id]->actions.push_back(new Action(Action::NONE));
+    int act = events[id]->actions.size() - 1;
+    Gtk::TreeModel::iterator iter_parent = m_refTreeModel->get_iter(events[id]->row_in_event_window.get_path());
+    row = *iter_parent;
+    Gtk::TreeModel::iterator iter_new = m_refTreeModel->append(row.children());
+    row = *iter_new;
+    row[m_columns.col_type] = ACTION;
+    row[m_columns.col_prt] = id;
+    row[m_columns.col_ID] = act;
+    row[m_columns.col_label] = events[id]->actions[act]->GetLabel();
+    row[m_columns.col_colour] = "beige";
+    Gtk::TreeRowReference rowref_child(m_refTreeModel, m_refTreeModel->get_path(iter_new));
+    events[id]->actions[act]->row_in_event_window = rowref_child;
+
 }

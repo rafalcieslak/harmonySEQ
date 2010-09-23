@@ -31,6 +31,7 @@ public:
     Gtk::VBox main_Vbox;
     Gtk::HBox lower_button_Hbox;
     Gtk::Button add_button;
+    Gtk::Button add_action_button;
     Gtk::Button remove_button;
 
     void ColorizeEvent(Gtk::TreeRowReference rowref);
@@ -39,6 +40,7 @@ public:
     bool UncolorizeAction(Gtk::TreeRowReference rowref);
 
     void OnAddEventClicked();
+    void OnAddActionClicked();
     void OnRemoveClicked();
     void OnSelectionChanged();
     void UpdateRow(Gtk::TreeRowReference rowref);
