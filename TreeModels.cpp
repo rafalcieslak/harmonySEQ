@@ -22,6 +22,8 @@
 #undef I_DO_NOT_WANT_EXTERNS_FROM_TREE_MODELS
 #include "Event.h"
 
+ModelColumns_SEQUENCERS m_columns_sequencers;
+Glib::RefPtr<Gtk::ListStore> m_refTreeModel_sequencers;
 ModelColumns_EventTypes m_columns_event_types;
 Glib::RefPtr<Gtk::ListStore> m_refTreeModel_EventTypes;
 ModelColumns_ActionTypes m_columns_action_types;

@@ -48,6 +48,11 @@ ActionGUI::ActionGUI(Action *prt){
     line_volume.pack_start(label_volume,Gtk::PACK_SHRINK);
 
     line_type.pack_start(Types_combo,Gtk::PACK_SHRINK);
+    line_note.pack_start(note_button,Gtk::PACK_SHRINK);
+
+    note_button.set_range(0.0,127.0);
+    note_button.set_increments(1.0,12.0);
+    note_button.signal_value_changed().connect(mem_fun(*this,&ActionGUI::OnNoteChanged));
 
     label_type.set_text(_("Type:"));
     label_seq.set_text(_("Sequencer:"));
@@ -144,6 +149,7 @@ void ActionGUI::OnTypeChanged(){
         case Action::SEQ_VOLUME_SET:
             break;
         case Action::MAINOTE_SET:
+            note_button.set_value(60.0);
             break;
         case Action::TEMPO_SET:
             break;
@@ -153,4 +159,15 @@ void ActionGUI::OnTypeChanged(){
     }
     label_preview.set_text(parent->GetLabel());
     eventswindow->UpdateRow(parent->row_in_event_window);
+}
+
+void ActionGUI::OnNoteChanged(){
+
+    if(parent->type == Action::MAINOTE_SET){
+        parent->arg1 = note_button.get_value();
+    }else *err << _("Error: note has changed, while action is not note-type.") << ENDL;
+
+    label_preview.set_text(parent->GetLabel());
+    eventswindow->UpdateRow(parent->row_in_event_window);
+
 }

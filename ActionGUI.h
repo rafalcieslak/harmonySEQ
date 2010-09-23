@@ -32,7 +32,9 @@ public:
     void TypeChanged();
     void OnOKClicked();
     void OnTypeChanged();
-
+    void OnSeqChanged();
+    void OnTempoChanged();
+    void OnNoteChanged();
 
     Gtk::VBox main_box;
 
@@ -48,6 +50,7 @@ public:
     Gtk::Label label_volume;
 
     Gtk::ComboBox Types_combo;
+    Gtk::SpinButton note_button;
 
     Gtk::Button ok_button;
 

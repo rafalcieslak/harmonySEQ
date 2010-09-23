@@ -21,6 +21,30 @@
 #define	TREEMODELS_H
 #include "global.h"
 
+class ModelColumns_SEQUENCERS : public Gtk::TreeModel::ColumnRecord {
+public:
+
+    ModelColumns_SEQUENCERS() {
+        add(col_ID);
+        add(col_name);
+        add(col_muted);
+        add(col_apply_mainnote);
+        add(col_channel);
+        add(col_res);
+        add(col_len);
+        add(col_vol);
+    }
+    Gtk::TreeModelColumn<int> col_ID;
+    Gtk::TreeModelColumn<Glib::ustring> col_name;
+    Gtk::TreeModelColumn<bool> col_muted;
+    Gtk::TreeModelColumn<bool> col_apply_mainnote;
+    Gtk::TreeModelColumn<int> col_channel;
+    Gtk::TreeModelColumn<int> col_res;
+    Gtk::TreeModelColumn<double> col_len;
+    Gtk::TreeModelColumn<int> col_vol;
+};
+
+
 class ModelColumns_EventTypes : public Gtk::TreeModel::ColumnRecord {
 public:
     ModelColumns_EventTypes() {
@@ -69,6 +93,8 @@ extern ModelColumns_KeyCodes m_columns_key_codes;
 extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_KeyCodes;
 extern ModelColumns_Channels m_columns_channels;
 extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_Channels;
+extern ModelColumns_SEQUENCERS m_columns_sequencers;
+extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_sequencers;
 #endif
 
 void InitEventTypesTreeModel();
