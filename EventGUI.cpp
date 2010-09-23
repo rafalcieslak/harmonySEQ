@@ -25,7 +25,6 @@ EventGUI::EventGUI(Event *prt){
 
     set_title(_("Event"));
     set_border_width(5);
-    set_transient_for(*eventswindow);
     set_position(Gtk::WIN_POS_CENTER_ON_PARENT);
     //set_modal(1);
     add(main_box);
@@ -195,6 +194,7 @@ void EventGUI::OnOKClicked(){
 }
 
 void EventGUI::UpdateValues(){
+    set_transient_for(*eventswindow);
     Gtk::TreeModel::iterator it = m_refTreeModel_EventTypes->get_iter("0");
     Gtk::TreeModel::Row row;
     for (;it;it++){

@@ -26,7 +26,6 @@ ActionGUI::ActionGUI(Action *prt){
     set_title(_("Action"));
 
     set_border_width(5);
-    set_transient_for(*eventswindow);
     set_position(Gtk::WIN_POS_CENTER_ON_PARENT);
 
     add(main_box);
@@ -103,6 +102,7 @@ void ActionGUI::OnOKClicked(){
 }
 
 void ActionGUI::OnShow(){
+    set_transient_for(*eventswindow);
     UpdateValues();
 
 }

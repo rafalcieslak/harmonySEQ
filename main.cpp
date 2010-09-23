@@ -261,15 +261,15 @@ int main(int argc, char** argv) {
 
     InitAllTreeModels();
 
+    InitGui();  //Ow... better have all the main windows constructed, before any sequencer on event is.
+
     InitDefaultData();
 
     if (file_from_cli) TryToOpenFileFromCommandLine();
     //else InitDefaultData();
 
-    InitGui();  //Gui is created AFTER the data is loaded. It simplifies the
-                //process a bit, f.e. tempo shown in spinbutton is set in
-                //mainwindow's constructor according to tempo variable, that
-                //should be set when loading a file
+    mainwindow->tempo_button.set_value(tempo);
+    mainwindow->main_note.set_value(mainnote);
 
     mainwindow->InitTreeData();
     eventswindow->InitTreeData();
