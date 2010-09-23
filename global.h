@@ -73,6 +73,7 @@ using namespace std;
 #define FILE_KEY_SEQ_ON "on"
 #define FILE_KEY_SEQ_APPLY_MAIN_NOTE "apply_mn"
 #define FILE_KEY_SEQ_CHANNEL "channel"
+#define FILE_KEY_SEQ_VOLUME "volume"
 #define FILE_KEY_SEQ_NAME "name"
 #define FILE_KEY_SEQ_SEQUENCE "sequence"
 #define FILE_KEY_SEQ_NOTES "notes"

@@ -47,14 +47,14 @@ MainWindow::MainWindow()
     hbox_up.pack_start(mainnotelabel);
     hbox_up.pack_start(main_note, Gtk::PACK_SHRINK);
     main_note.set_range(0, 127);
-    main_note.set_value(60.0);
     main_note.set_increments(1, 12);
+    main_note.set_value(mainnote);
     main_note.signal_value_changed().connect(sigc::mem_fun(*this, &MainWindow::MainNoteChanged));
     hbox_up.pack_start(tempolabel);
     hbox_up.pack_start(tempo_button, Gtk::PACK_SHRINK);
     tempo_button.set_range(30, 320);
-    tempo_button.set_value(DEFAULT_TEMPO);
     tempo_button.set_increments(1, 10);
+    tempo_button.set_value(tempo);
     tempo_button.signal_value_changed().connect(sigc::mem_fun(*this, &MainWindow::TempoChanged));
 
 

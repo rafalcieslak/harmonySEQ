@@ -146,16 +146,21 @@ void threadb::th2(){
     gdk_threads_leave();
 }
 
-void InitGuiAndDefaultData(){
+void InitGui(){
     gdk_threads_enter();
     {
-        mainwindow = new MainWindow; //it is important that the main window is constructed BEFORE
-                                     //te sequencers are, since the sequeners GUI calls functions from within the mainwindow*.
+        mainwindow = new MainWindow; 
+        eventswindow = new EventsWindow;
+    }
+    gdk_threads_leave();
+    
+}
+
+void InitDefaultData(){
+    
         sequencers[0] = new Sequencer(example_sequence,example_notes,"seq 0");
         sequencers[1] = new Sequencer(example_sequence2,example_notes2,"seq 1");
-        mainwindow->InitTreeData();
-
-        eventswindow = new EventsWindow;
+    
         events[0] = new Event(Event::KEYBOARD,keymap_stoi.find("F12")->second,0);
         events[1] = new Event(Event::NOTE,60,0);
         events.push_back(new Event(Event::KEYBOARD,keymap_stoi.find("p")->second,0));
@@ -164,10 +169,6 @@ void InitGuiAndDefaultData(){
         events[2]->actions.push_back(new Action(Action::SEQ_TOGGLE,0));
         events[2]->actions.push_back(new Action(Action::MAINOTE_SET,62));
         events[0]->actions.push_back(new Action(Action::MAINOTE_SET,60));
-        eventswindow->InitTreeData();
-    }
-    gdk_threads_leave();
-    
 }
 
 void InitGetText(){
@@ -181,8 +182,6 @@ void InitGetText(){
 
 bool TryToOpenFileFromCommandLine(){
     if (!Files::LoadFile(file)){
-        mainwindow->InitTreeData();
-        eventswindow->InitTreeData();
         return 0;
     }
     else return 1;
@@ -262,9 +261,18 @@ int main(int argc, char** argv) {
 
     InitAllTreeModels();
 
-    InitGuiAndDefaultData();
+    InitDefaultData();
 
     if (file_from_cli) TryToOpenFileFromCommandLine();
+    //else InitDefaultData();
+
+    InitGui();  //Gui is created AFTER the data is loaded. It simplifies the
+                //process a bit, f.e. tempo shown in spinbutton is set in
+                //mainwindow's constructor according to tempo variable, that
+                //should be set when loading a file
+
+    mainwindow->InitTreeData();
+    eventswindow->InitTreeData();
 
     threadb Th;
     /*Glib::Thread * const th1 =*/ Glib::Thread::create(sigc::mem_fun(Th, &threadb::th1), true);
