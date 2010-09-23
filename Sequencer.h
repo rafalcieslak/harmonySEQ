@@ -27,6 +27,7 @@ using namespace std;
 
 Gtk::TreeModel::RowReference spawn_sequencer();
 Gtk::TreeModel::RowReference clone_sequencer(int orig);
+void clear_sequencers();
 
 class Sequencer {
 public:

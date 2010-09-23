@@ -49,11 +49,11 @@ void Action::Trigger(int data){
             break;
         case SEQ_OFF:
             if (!sequencers[arg1]) break;
-            sequencers[arg1]->SetOn(1);
+            sequencers[arg1]->SetOn(0);
             break;
         case SEQ_ON:
             if (!sequencers[arg1]) break;
-            sequencers[arg1]->SetOn(0);
+            sequencers[arg1]->SetOn(1);
             break;
 
         case MAINOTE_SET:
@@ -68,6 +68,7 @@ void Action::Trigger(int data){
 
         case SEQ_VOLUME_SET:
             if (!sequencers[arg1]) break;
+            *dbg << "SETTING VOLUME " << arg1 << " " << arg2 << ENDL;
             sequencers[arg1]->SetVolume(arg2);
 
         case NONE:

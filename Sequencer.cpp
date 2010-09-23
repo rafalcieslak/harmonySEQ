@@ -58,6 +58,10 @@ Gtk::TreeModel::RowReference clone_sequencer(int orig){
 
 }
 
+void clear_sequencers(){
+    sequencers.clear();
+
+}
 //======begin sequencer class===============
 
 Sequencer::Sequencer()
@@ -130,7 +134,7 @@ void Sequencer::Init(){
     apply_mainnote = true;
     channel = 1;
     length = 1;
-    volume = SEQUENCE_DEFAULT_VOLUME;
+    volume = DEFAULT_VOLUME;
     last_played_note = 0;
     resolution = SEQUENCE_DEFAULT_SIZE;
     *dbg << notes[0]<<ENDL;
@@ -190,7 +194,7 @@ int Sequencer::GetChannel(){return channel;}
 void Sequencer::SetName(Glib::ustring nm){name = nm;gui_window->set_title(nm);}
 Glib::ustring Sequencer::GetName(){return name;}
 int Sequencer::GetVolume(){return volume;}
-void Sequencer::SetVolume(int v){volume = v;}
+void Sequencer::SetVolume(int v){volume = v;gui_window->volume_button.set_value((double)v);}
 
 void Sequencer::ShowWindow(){gui_window->show();}
 void Sequencer::UpdateGui(){gui_window->UpdateValues();}

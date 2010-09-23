@@ -251,7 +251,7 @@ MainWindow::OnNameEdited(const Glib::ustring& path, const Glib::ustring& newtext
     Gtk::TreeModel::Row row = *iter;
     sequencers[row[m_columns_sequencers.col_ID]]->SetName(newtext);
 
-    eventswindow->InitTreeData();
+    eventswindow->RefreshAll();
 }
 
 Gtk::TreeModel::RowReference MainWindow::AddSequencerRow(int n)

@@ -149,7 +149,7 @@ bool LoadFile(Glib::ustring file){
     mainnote = kf.get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_MAINNOTE);
     number = kf.get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_SEQ_NUM);
 
-    sequencers.clear(); //woa hua hua hua!
+    clear_sequencers(); //woa hua hua hua!
 
     for (int x = 0; x < number; x++) {
         sprintf(temp, FILE_GROUP_TEMPLATE_SEQ, x);

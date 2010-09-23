@@ -102,6 +102,10 @@ void EventsWindow::InitTreeData(){
     resize(2,2);
 }
 
+void EventsWindow::RefreshAll(){
+    InitTreeData();
+}
+
 void EventsWindow::ColorizeEvent(Gtk::TreeRowReference rowref){
     Gtk::TreeModel::Row row = *(m_refTreeModel->get_iter(rowref.get_path()));
 
@@ -191,14 +195,27 @@ void EventsWindow::OnRemoveClicked(){
     Gtk::TreeModel::iterator iter = *(m_TreeView.get_selection())->get_selected();
     if(!iter) return;
     Gtk::TreeModel::Row row = *iter;
-    int id = row[m_columns.col_ID];
+    int id, prt;
+    switch (row[m_columns.col_type]){
+        case EVENT:
 
-    m_refTreeModel->erase(iter);
+            id = row[m_columns.col_ID];
+            m_refTreeModel->erase(iter);
 
+            delete events[id];
+            events[id] = NULL;
+            break;
+        case ACTION:
+            id = row[m_columns.col_ID];
+            prt = row[m_columns.col_prt];
+            m_refTreeModel->erase(iter);
+
+            //TODO: checck whether we cannot do the following by erasing an item from action's std::vecctor
+            delete events[prt]->actions[id];
+            events[prt]->actions[id] = NULL;
+            break;
+    }
     resize(2,2);
-    delete events[id];
-    events[id] = NULL;
-
 
 }
 

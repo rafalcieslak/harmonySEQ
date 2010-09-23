@@ -52,7 +52,7 @@ using namespace std;
 
 #define SEQUENCE_DEFAULT_SIZE 8
 #define NOTES_CONST_SIZE 6
-#define SEQUENCE_DEFAULT_VOLUME 64
+#define DEFAULT_VOLUME 100
 
 //the following may not work with gettext. careful!
 #define SEQUENCER_DEFAULT_NAME _("sequencer")

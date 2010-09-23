@@ -48,11 +48,20 @@ ActionGUI::ActionGUI(Action *prt){
     line_volume.pack_start(label_volume,Gtk::PACK_SHRINK);
 
     line_type.pack_start(Types_combo,Gtk::PACK_SHRINK);
+    line_seq.pack_start(Seqs_combo,Gtk::PACK_SHRINK);
     line_note.pack_start(note_button,Gtk::PACK_SHRINK);
+    line_tempo.pack_start(tempo_button,Gtk::PACK_SHRINK);
+    line_volume.pack_start(vol_button,Gtk::PACK_SHRINK);
 
     note_button.set_range(0.0,127.0);
     note_button.set_increments(1.0,12.0);
     note_button.signal_value_changed().connect(mem_fun(*this,&ActionGUI::OnNoteChanged));
+    tempo_button.set_range(30.0,320.0);
+    tempo_button.set_increments(1.0,20.0);
+    tempo_button.signal_value_changed().connect(mem_fun(*this,&ActionGUI::OnTempoChanged));
+    vol_button.set_range(0.0,127.0);
+    vol_button.set_increments(1.0,16.0);
+    vol_button.signal_value_changed().connect(mem_fun(*this,&ActionGUI::OnVolumeChanged));
 
     label_type.set_text(_("Type:"));
     label_seq.set_text(_("Sequencer:"));
@@ -65,7 +74,12 @@ ActionGUI::ActionGUI(Action *prt){
 
     Types_combo.set_model(m_refTreeModel_ActionTypes);
     Types_combo.pack_start(m_columns_action_types.label);
+    SetTypeCombo(parent->type); //Setting the typecombo BEFORE connecting the signal is ESSENTIAL, since otherwise when the type in Types_combo is changed (by setting it to parent->type), it emits a signal
     Types_combo.signal_changed().connect(mem_fun(*this,&ActionGUI::OnTypeChanged));
+    Seqs_combo.set_model(m_refTreeModel_sequencers);
+    Seqs_combo.pack_start(m_columns_sequencers.col_name);
+    Seqs_combo.signal_changed().connect(mem_fun(*this,&ActionGUI::OnSeqChanged));
+
     signal_show().connect(mem_fun(*this,&ActionGUI::OnShow));
 
     label_preview.set_text(parent->GetLabel());
@@ -94,6 +108,35 @@ void ActionGUI::OnShow(){
 }
 
 void ActionGUI::UpdateValues(){
+    SetTypeCombo(parent->type); 
+    TypeChanged();
+    int type = parent->type;
+    switch (type){
+        case Action::NONE:
+            break;
+        case Action::SEQ_ON:
+            SetSeqCombo(parent->arg1);
+            break;
+        case Action::SEQ_OFF:
+            SetSeqCombo(parent->arg1);
+            break;
+        case Action::SEQ_TOGGLE:
+            SetSeqCombo(parent->arg1);
+            break;
+        case Action::SEQ_VOLUME_SET:
+            SetSeqCombo(parent->arg1);
+            vol_button.set_value(parent->arg2);
+            break;
+        case Action::MAINOTE_SET:
+            note_button.set_value(parent->arg1);
+            break;
+        case Action::TEMPO_SET:
+            tempo_button.set_value(parent->arg1);
+            break;
+
+
+
+    }
 
 
 }
@@ -141,17 +184,23 @@ void ActionGUI::OnTypeChanged(){
         case Action::NONE:
             break;
         case Action::SEQ_ON:
+            Seqs_combo.set_active(0);
             break;
         case Action::SEQ_OFF:
+            Seqs_combo.set_active(0);
             break;
         case Action::SEQ_TOGGLE:
+            Seqs_combo.set_active(0);
             break;
         case Action::SEQ_VOLUME_SET:
+            Seqs_combo.set_active(0);
+            vol_button.set_value(DEFAULT_VOLUME);
             break;
         case Action::MAINOTE_SET:
             note_button.set_value(60.0);
             break;
         case Action::TEMPO_SET:
+            tempo_button.set_value(120.0);
             break;
 
 
@@ -169,5 +218,63 @@ void ActionGUI::OnNoteChanged(){
 
     label_preview.set_text(parent->GetLabel());
     eventswindow->UpdateRow(parent->row_in_event_window);
+
+}
+
+void ActionGUI::OnTempoChanged(){
+
+    if(parent->type == Action::TEMPO_SET){
+        parent->arg1 = tempo_button.get_value();
+    }else *err << _("Error: tempo has changed, while action is not tempo-type.") << ENDL;
+
+    label_preview.set_text(parent->GetLabel());
+    eventswindow->UpdateRow(parent->row_in_event_window);
+
+}
+
+void ActionGUI::OnSeqChanged(){
+    if(!Seqs_combo.get_active()) return; //empty selection
+    if(parent->type == Action::SEQ_OFF || parent->type == Action::SEQ_ON || parent->type == Action::SEQ_TOGGLE || parent->type == Action::SEQ_VOLUME_SET){
+            parent->arg1 = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
+    }else *err << _("Error: sequencer has changed, while action is not key-type.") << ENDL;
+
+    label_preview.set_text(parent->GetLabel());
+    eventswindow->UpdateRow(parent->row_in_event_window);
+
+    
+}
+
+void ActionGUI::OnVolumeChanged(){
+
+    if(parent->type == Action::SEQ_VOLUME_SET){
+        parent->arg2 = vol_button.get_value();
+    }else *err << _("Error: volume has changed, while action is not volume-type.") << ENDL;
+
+    label_preview.set_text(parent->GetLabel());
+    eventswindow->UpdateRow(parent->row_in_event_window);
+
+}
+
+void ActionGUI::SetTypeCombo(int type){
+    Gtk::TreeModel::iterator iter = m_refTreeModel_ActionTypes->get_iter("0");
+    for (;iter;iter++){
+        if ((*iter)[m_columns_action_types.type]==type){
+            Types_combo.set_active(iter);
+            break;
+        }
+
+    }
+
+}
+
+void ActionGUI::SetSeqCombo(int seq){
+    Gtk::TreeModel::iterator iter = m_refTreeModel_sequencers->get_iter("0");
+    for (;iter;iter++){
+        if ((*iter)[m_columns_sequencers.col_ID]==seq){
+            Seqs_combo.set_active(iter);
+            break;
+        }
+
+    }
 
 }

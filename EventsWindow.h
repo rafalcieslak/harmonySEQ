@@ -27,7 +27,7 @@ public:
     EventsWindow();
     virtual ~EventsWindow();
     void InitTreeData();
-    
+    void RefreshAll();
     Gtk::VBox main_Vbox;
     Gtk::HBox lower_button_Hbox;
     Gtk::Button add_button;

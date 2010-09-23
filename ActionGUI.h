@@ -35,7 +35,9 @@ public:
     void OnSeqChanged();
     void OnTempoChanged();
     void OnNoteChanged();
-
+    void OnVolumeChanged();
+    void SetTypeCombo(int type);
+    void SetSeqCombo(int seq);
     Gtk::VBox main_box;
 
     Gtk::HBox line_type;
@@ -50,7 +52,10 @@ public:
     Gtk::Label label_volume;
 
     Gtk::ComboBox Types_combo;
+    Gtk::ComboBox Seqs_combo;
     Gtk::SpinButton note_button;
+    Gtk::SpinButton tempo_button;
+    Gtk::SpinButton vol_button;
 
     Gtk::Button ok_button;
 
