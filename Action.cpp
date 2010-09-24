@@ -96,7 +96,7 @@ Glib::ustring Action::GetLabel(){
             break;
 
         case TEMPO_SET:
-            sprintf(temp,_("Set tempo to %d"),arg1);
+            sprintf(temp,_("Set tempo to %d BPM"),arg1);
             break;
 
         case SEQ_VOLUME_SET:

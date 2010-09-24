@@ -83,7 +83,7 @@ ActionGUI::ActionGUI(Action *prt){
 
     label_preview.set_text(parent->GetLabel());
     show_all_children(1);
-    TypeChanged(); // to hide some of widgets according to the type
+    ChangeVisibleLines(); // to hide some of widgets according to the type
     hide();
 
 }
@@ -109,7 +109,7 @@ void ActionGUI::OnShow(){
 
 void ActionGUI::UpdateValues(){
     SetTypeCombo(parent->type); 
-    TypeChanged();
+    ChangeVisibleLines();
     int type = parent->type;
     switch (type){
         case Action::NONE:
@@ -141,10 +141,10 @@ void ActionGUI::UpdateValues(){
 
 }
 
-void ActionGUI::TypeChanged(){
-    if(!Types_combo.get_active()) return; //nothing is selected
-    Gtk::TreeModel::Row row = *(Types_combo.get_active());
-    int type = row[m_columns_action_types.type];
+void ActionGUI::ChangeVisibleLines(){
+    //if(!Types_combo.get_active()) return; //nothing is selected
+    //Gtk::TreeModel::Row row = *(Types_combo.get_active());
+    int type = parent->type;
     line_seq.hide();
     line_note.hide();
     line_tempo.hide();
@@ -179,18 +179,29 @@ void ActionGUI::OnTypeChanged(){
     Gtk::TreeModel::Row row = *(Types_combo.get_active());
     int type = row[m_columns_action_types.type];
     parent->type = type;
-    TypeChanged();
-    switch (type){
+    ChangeVisibleLines();
+    InitType();
+
+    label_preview.set_text(parent->GetLabel());
+    if(parent->row_in_event_window) eventswindow->UpdateRow(parent->row_in_event_window);
+}
+
+void ActionGUI::InitType(){
+
+    switch (parent->type){
         case Action::NONE:
             break;
         case Action::SEQ_ON:
             Seqs_combo.set_active(0);
+            parent->arg1 = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
             break;
         case Action::SEQ_OFF:
             Seqs_combo.set_active(0);
+            parent->arg1 = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
             break;
         case Action::SEQ_TOGGLE:
             Seqs_combo.set_active(0);
+            parent->arg1 = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
             break;
         case Action::SEQ_VOLUME_SET:
             Seqs_combo.set_active(0);
@@ -202,12 +213,8 @@ void ActionGUI::OnTypeChanged(){
         case Action::TEMPO_SET:
             tempo_button.set_value(120.0);
             break;
-
-
-
     }
-    label_preview.set_text(parent->GetLabel());
-    eventswindow->UpdateRow(parent->row_in_event_window);
+
 }
 
 void ActionGUI::OnNoteChanged(){

@@ -29,7 +29,9 @@ public:
     virtual ~ActionGUI();
     void OnShow();
     void UpdateValues();
-    void TypeChanged();
+    void ChangeVisibleLines();
+    void InitType();
+
     void OnOKClicked();
     void OnTypeChanged();
     void OnSeqChanged();
@@ -65,6 +67,8 @@ public:
     Action *parent;
 
 private:
+
+
 
 };
 
