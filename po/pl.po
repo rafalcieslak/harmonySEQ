@@ -7,17 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-09-21 20:40+0200\n"
-"PO-Revision-Date: 2010-09-21 19:01+0000\n"
+"POT-Creation-Date: 2010-09-23 21:31+0200\n"
+"PO-Revision-Date: 2010-09-23 16:29+0000\n"
 "Last-Translator: rafal cieslak <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-22 05:59+0000\n"
+"X-Launchpad-Export-Date: 2010-09-24 05:40+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: main.cpp:284
+#: main.cpp:299
 #, c-format
 msgid ""
 "       --pass-midi   passes the midi events through the program by default\n"
@@ -25,24 +25,42 @@ msgstr ""
 "       --pass-midi   włącz domyślnie przesyłanie wszystkich zdarzeń MIDI "
 "przez program.\n"
 
-#: Action.cpp:103
+#: Action.cpp:115
 #, c-format
-msgid "(empty event)"
-msgstr "(puste zdarzenie)"
+msgid "%d (which was removed)"
+msgstr "%d (który został usunięty)"
 
-#: MainWindow.cpp:212
+#: Action.cpp:117
+#, c-format
+msgid "%s"
+msgstr "%s"
+
+#: Action.cpp:106
+#, c-format
+msgid "(empty action)"
+msgstr ""
+
+#: MainWindow.cpp:214
 msgid ", name is: "
 msgstr ", nazwa to: "
 
-#: MainWindow.cpp:141
+#: ActionGUI.cpp:26
+msgid "Action"
+msgstr "Akcja"
+
+#: MainWindow.cpp:143
 msgid "Add"
 msgstr "Dodaj"
 
-#: EventsWindow.cpp:35
+#: EventsWindow.cpp:42
+msgid "Add Action"
+msgstr ""
+
+#: EventsWindow.cpp:36
 msgid "Add Event"
 msgstr "Dodaj zdarzenie"
 
-#: EventGUI.cpp:270
+#: TreeModels.cpp:96
 msgid "All"
 msgstr "Wszystkie"
 
@@ -58,7 +76,7 @@ msgstr "Stosuj główną nutę"
 msgid "Chan"
 msgstr "Kan"
 
-#: EventGUI.cpp:72
+#: EventGUI.cpp:65
 msgid "Channel:"
 msgstr "Kanał:"
 
@@ -70,17 +88,17 @@ msgstr "Wybierz plik do otwarcia..."
 msgid "Choose a file to save..."
 msgstr "Wybierz plik do zapisu..."
 
-#: MainWindow.cpp:150
+#: MainWindow.cpp:152
 msgid "Clone"
 msgstr "Klonuj"
 
-#: EventGUI.cpp:251
+#: TreeModels.cpp:50
 msgid "Controller"
 msgstr "Kontroler"
 
-#: EventGUI.cpp:73
+#: EventGUI.cpp:66
 msgid "Controller:"
-msgstr "Controller:"
+msgstr "Kontroller:"
 
 #: messages.cpp:24
 #, c-format
@@ -92,55 +110,75 @@ msgstr "Włączono tryb Debug.\n"
 msgid "ERROR - error while opening file %s to write.\n"
 msgstr "BŁĄD - błąd podczas otwierania pliku %s do zapisu.\n"
 
-#: Files.cpp:111
+#: Files.cpp:136
 #, c-format
-msgid "ERROR - error while trying to read %s\n"
-msgstr "BŁĄD - błąd podczas czytania pliku %s\n"
+msgid "ERROR - error while trying to read file '%s'\n"
+msgstr "BŁĄD - błąd podczas próby otwarcia pliku '%s'\n"
 
-#: EventGUI.cpp:242
+#: Files.cpp:141
+#, c-format
+msgid "ERROR - error while trying to read file '%s': "
+msgstr "BŁĄD - błąd podczas próby otwarcia pliku '%s': "
+
+#: TreeModels.cpp:41 TreeModels.cpp:58
 msgid "Empty"
 msgstr "Puste"
 
-#: EventsWindow.cpp:121
+#: EventsWindow.cpp:135
 msgid "Error - cannot colorize triggered action: row is empty.\n"
-msgstr ""
-"Błąd - nie udało się pokolorować wywołanej akcji: wiersz jest pusty.\n"
+msgstr "Błąd - nie można pokolorować wywołanej akcji: wiersz jest pusty.\n"
 
-#: EventsWindow.cpp:103
+#: EventsWindow.cpp:117
 msgid "Error - cannot colorize triggered event: row is empty.\n"
 msgstr ""
 "Błąd - nie można pokolorować wyzwalanego zdarzenia: wiersz jest pusty.\n"
 
-#: Event.cpp:111
+#: Event.cpp:116
 msgid "Error - empty event would be triggered.\n"
 msgstr "Błąd - puste zdarzenie miałoby zostać wywołane.\n"
 
-#: EventGUI.cpp:164
+#: EventGUI.cpp:158
 msgid "Error: channel has changed, while event is not MIDI-type."
 msgstr ""
 "Błąd: kanał został zmieniony, podczas gdy zdarzenie nie jest typu MIDI."
 
-#: EventGUI.cpp:180
+#: EventGUI.cpp:176
 msgid "Error: controller has changed, while event is not ctrl-type."
 msgstr ""
-"Błąd: kontroller został zmieniony, podczas gdy zdarzenie nie jest typu ctrl."
+"Błąd: kontroler został zmieniony, podczas gdy zdarzenie nie jest typu ctrl."
 
-#: EventGUI.cpp:172
+#: EventGUI.cpp:167
 msgid "Error: key has changed, while event is not key-type."
 msgstr ""
 "Błąd: klawisz został zmieniony, podczas gdy zdarzenie nie jest typu "
 "klawiatury."
 
-#: EventGUI.cpp:189
+#: ActionGUI.cpp:217
+msgid "Error: note has changed, while action is not note-type."
+msgstr ""
+
+#: EventGUI.cpp:186
 msgid "Error: note has changed, while event is not note-type."
 msgstr ""
 "Błąd: nuta została zmieniona, podczas gdy zdarzenie nie jest typu nuty."
 
-#: EventGUI.cpp:34 EventsWindow.cpp:46
+#: ActionGUI.cpp:239
+msgid "Error: sequencer has changed, while action is not key-type."
+msgstr ""
+
+#: ActionGUI.cpp:228
+msgid "Error: tempo has changed, while action is not tempo-type."
+msgstr ""
+
+#: ActionGUI.cpp:251
+msgid "Error: volume has changed, while action is not volume-type."
+msgstr ""
+
+#: EventGUI.cpp:26 EventsWindow.cpp:52
 msgid "Event"
 msgstr "Zdarzenie"
 
-#: MainWindow.cpp:153
+#: MainWindow.cpp:155
 msgid "Events"
 msgstr "Zdarzenia"
 
@@ -156,15 +194,15 @@ msgstr "Nie udało się otworzyć portu wyjściowego.\n"
 msgid "Failed to open ALSA sequencer.\n"
 msgstr "Nie udało się otworzyć sekwencera ALSA.\n"
 
-#: EventsWindow.cpp:44 MainWindow.cpp:67
+#: EventsWindow.cpp:48 MainWindow.cpp:67
 msgid "ID"
 msgstr "ID"
 
-#: EventGUI.cpp:74
+#: EventGUI.cpp:67
 msgid "Key:"
 msgstr "Klawisz:"
 
-#: EventGUI.cpp:245
+#: TreeModels.cpp:44
 msgid "Keyboard"
 msgstr "Klawiatura"
 
@@ -192,15 +230,15 @@ msgstr "Nuta główna:"
 msgid "Name"
 msgstr "Nazwa"
 
-#: EventGUI.cpp:248
+#: TreeModels.cpp:47
 msgid "Note"
 msgstr "Nuta"
 
-#: EventGUI.cpp:75
+#: ActionGUI.cpp:68 EventGUI.cpp:68
 msgid "Note:"
 msgstr "Nuta:"
 
-#: EventGUI.cpp:86
+#: ActionGUI.cpp:70 EventGUI.cpp:79
 msgid "OK"
 msgstr "OK"
 
@@ -208,15 +246,15 @@ msgstr "OK"
 msgid "On"
 msgstr "Wł."
 
-#: MainWindow.cpp:145
+#: MainWindow.cpp:147
 msgid "Open"
 msgstr "Otwórz"
 
-#: MainWindow.cpp:157
+#: MainWindow.cpp:159
 msgid "Pass MIDI events"
-msgstr "Przekazuj MIDI"
+msgstr "Przekazuj zdarzenia MIDI"
 
-#: EventsWindow.cpp:37 MainWindow.cpp:147
+#: EventsWindow.cpp:38 MainWindow.cpp:149
 msgid "Remove"
 msgstr "Usuń"
 
@@ -228,50 +266,78 @@ msgstr "Roz"
 msgid "Resolution:"
 msgstr "Rozdzielczość:"
 
-#: MainWindow.cpp:143
+#: MainWindow.cpp:145
 msgid "Save"
 msgstr "Zapisz"
 
-#: Action.cpp:92
+#: TreeModels.cpp:64
+msgid "Sequencer/OFF"
+msgstr "Sekwencer/Wył."
+
+#: TreeModels.cpp:61
+msgid "Sequencer/ON"
+msgstr "Sekwencer/Wł."
+
+#: TreeModels.cpp:70
+msgid "Sequencer/Set volume"
+msgstr "Sekwencer/Ustaw głośność"
+
+#: TreeModels.cpp:67
+msgid "Sequencer/Toggle"
+msgstr "Sekwencer/Przełącz"
+
+#: ActionGUI.cpp:66
+msgid "Sequencer:"
+msgstr "Sekwencer:"
+
+#: TreeModels.cpp:73
+msgid "Set main note"
+msgstr "Ustaw nutę główną"
+
+#: Action.cpp:95
 #, c-format
 msgid "Set main note to %d"
 msgstr "Ustaw nutę główną na %d"
 
-#: Action.cpp:96
+#: TreeModels.cpp:76
+msgid "Set tempo"
+msgstr "Ustaw tempo"
+
+#: Action.cpp:99
 #, c-format
 msgid "Set tempo to %d"
 msgstr "Ustaw tempo na %d"
 
-#: Action.cpp:100
+#: Action.cpp:103
 #, c-format
-msgid "Set volume of sequencer %d to %d"
-msgstr "Ustaw głośność sekwencera %d na %d"
-
-#: Action.cpp:85
-#, c-format
-msgid "Switch sequencer %d OFF"
-msgstr "Wyłącz sekwencer %d"
+msgid "Set volume of sequencer '%s' to %d"
+msgstr "Ustaw głośność sekwencera '%s' na %d"
 
 #: Action.cpp:88
 #, c-format
-msgid "Switch sequencer %d ON"
-msgstr "Włącz sekewncer %d"
+msgid "Switch sequencer '%s' OFF"
+msgstr "Wyłącz sekwencer '%s'"
 
-#: MainWindow.cpp:43
+#: Action.cpp:91
+#, c-format
+msgid "Switch sequencer '%s' ON"
+msgstr "Włącz sekwencer '%s'"
+
+#: ActionGUI.cpp:67 MainWindow.cpp:43
 msgid "Tempo:"
 msgstr "Tempo:"
 
-#: Event.cpp:58
+#: Event.cpp:63
 #, c-format
 msgid "This is an empty event, that will never be triggered."
 msgstr "To jest puste zdarzenie, które nigdy nie zostanie wywołane."
 
-#: Action.cpp:82
+#: Action.cpp:85
 #, c-format
-msgid "Toggle sequencer %d"
-msgstr "Przełącz sekwencer %d"
+msgid "Toggle sequencer '%s'"
+msgstr "Przełącz sekwencer '%s'"
 
-#: EventGUI.cpp:71
+#: ActionGUI.cpp:65 EventGUI.cpp:64
 msgid "Type:"
 msgstr "Typ:"
 
@@ -279,40 +345,40 @@ msgstr "Typ:"
 msgid "Vol"
 msgstr "Gł"
 
-#: SequencerGUI.cpp:58
+#: ActionGUI.cpp:69 SequencerGUI.cpp:58
 msgid "Volume:"
 msgstr "Głośność:"
 
-#: Event.cpp:62
+#: Event.cpp:67
 #, c-format
 msgid "When controller %d on any channel is moved..."
 msgstr "Gdy kontroller %d jest poruszany..."
 
-#: Event.cpp:63
+#: Event.cpp:68
 #, c-format
 msgid "When controller %d on channel %d is moved..."
 msgstr "Gdy kontoller %d na kanale %d jest poruszany..."
 
-#: Event.cpp:54
+#: Event.cpp:59
 #, c-format
 msgid "When key %s is pressed..."
 msgstr "Gdy klawisz %s jest wciskany..."
 
-#: Event.cpp:50
+#: Event.cpp:55
 #, c-format
 msgid "When note %d on any channel gets on..."
 msgstr "Gdy nuta %d na dowolnym kanale zostaje włączona..."
 
-#: Event.cpp:51
+#: Event.cpp:56
 #, c-format
 msgid "When note %d on channel %d gets on..."
 msgstr "Gdy nuta %d na kanale %d zostaje włączona..."
 
-#: MainWindow.cpp:211
+#: MainWindow.cpp:213
 msgid "activated row "
 msgstr "aktywowano wiersz "
 
-#: main.cpp:276
+#: main.cpp:291
 #, c-format
 msgid ""
 "harmonySEQ, version %s\n"
@@ -343,12 +409,12 @@ msgstr "seq %d"
 msgid "sequencer"
 msgstr "sekwencer"
 
-#: main.cpp:228
+#: main.cpp:233
 #, c-format
 msgid "unknown option '%c'\n"
 msgstr "nieznana opcja '%c'\n"
 
-#: main.cpp:231
+#: main.cpp:236
 #, c-format
 msgid "unrecognized option '%s'\n"
 msgstr "nierozpoznana opcja '%s'\n"
@@ -386,5 +452,29 @@ msgstr "nierozpoznana opcja '%s'\n"
 #~ msgstr "Kanał"
 
 #, c-format
+#~ msgid "ERROR - error while trying to read %s\n"
+#~ msgstr "BŁĄD - błąd podczas czytania pliku %s\n"
+
+#, c-format
 #~ msgid "When note %d on channel %d is moved..."
 #~ msgstr "Gdy kontroler %d na kanale %d jest poruszany..."
+
+#, c-format
+#~ msgid "Set volume of sequencer %d to %d"
+#~ msgstr "Ustaw głośność sekwencera %d na %d"
+
+#, c-format
+#~ msgid "(empty event)"
+#~ msgstr "(puste zdarzenie)"
+
+#, c-format
+#~ msgid "Switch sequencer %d ON"
+#~ msgstr "Włącz sekewncer %d"
+
+#, c-format
+#~ msgid "Switch sequencer %d OFF"
+#~ msgstr "Wyłącz sekwencer %d"
+
+#, c-format
+#~ msgid "Toggle sequencer %d"
+#~ msgstr "Przełącz sekwencer %d"
