@@ -85,7 +85,7 @@ EventGUI::EventGUI(Event *prt){
     show_all_children(1);
 
     DO_NOT_INIT_TYPE = false;
-    //ChangeVisibleLines(); // to hide some of widgets according to the type
+    ChangeVisibleLines(); // to hide some of widgets according to the type
     hide();
 }
 

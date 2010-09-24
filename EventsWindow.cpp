@@ -244,10 +244,10 @@ void EventsWindow::OnRowCollapsed(const Gtk::TreeModel::iterator& iter, const Gt
 
 void EventsWindow::OnAddActionClicked(){
     int id;
-    Gtk::TreeModel::iterator iter = m_TreeView.get_selection()->get_selected();
-    if(!iter) return; //should not happen, button wolud not be sensitive
+    Gtk::TreeModel::iterator iter_selected = m_TreeView.get_selection()->get_selected();
+    if(!iter_selected) return; //should not happen, button wolud not be sensitive
 
-    Gtk::TreeModel::Row row = *iter;
+    Gtk::TreeModel::Row row = *iter_selected;
     switch (row[m_columns.col_type]){
         case EVENT:
             id = row[m_columns.col_ID];
@@ -271,4 +271,9 @@ void EventsWindow::OnAddActionClicked(){
     Gtk::TreeRowReference rowref_child(m_refTreeModel, m_refTreeModel->get_path(iter_new));
     events[id]->actions[act]->row_in_event_window = rowref_child;
 
+    events[id]->actions[act]->ShowWindow();
+
+    row = *iter_selected;
+    if (row[m_columns.col_type] == EVENT)
+        m_TreeView.expand_row(m_refTreeModel->get_path(iter_selected),false); //auto expanding if possible to show the action;
 }
