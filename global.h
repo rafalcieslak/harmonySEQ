@@ -102,5 +102,7 @@ extern std::map<int, string> keymap_itos;
 extern vector<Event *> events;
 #endif
 
+bool Ask(Glib::ustring message, Glib::ustring secondary_message = "", bool lock_threads = false);
+
 #endif	/* GLOBAL_H */
 

@@ -169,6 +169,7 @@ MainWindow::MainWindow()
 
 
     show_all_children(1);
+    //Ask("aaa","bbb");
 
 }
 
@@ -421,3 +422,25 @@ void MainWindow::OnSelectionChanged(){
 
 }
 
+bool MainWindow::Ask(Glib::ustring message, Glib::ustring secondary_message){
+
+
+      Gtk::MessageDialog dialog("This is a QUESTION MessageDialog",
+          false /* use_markup */, Gtk::MESSAGE_QUESTION,
+          Gtk::BUTTONS_OK_CANCEL);
+  dialog.set_secondary_text(
+          "And this is the secondary text that explains things.");
+
+    int result = dialog.run();
+
+    switch (result){
+        case Gtk::RESPONSE_YES:
+            *dbg << "anserwed YES";
+            return 1;
+        case Gtk::RESPONSE_NO:
+            *dbg << "anserwed NO";
+            return 0;
+    }
+
+    return 0;
+}

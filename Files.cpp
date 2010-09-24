@@ -32,6 +32,15 @@ void SaveToFile(){
     dialog.add_button(Gtk::Stock::CANCEL,Gtk::RESPONSE_CANCEL);
     dialog.add_button(Gtk::Stock::SAVE,Gtk::RESPONSE_OK);
 
+    Gtk::FileFilter hseq;
+    hseq.set_name("HarmonySEQ files (*.hseq)");
+    hseq.add_pattern("*.hseq");
+    dialog.add_filter(hseq);
+    Gtk::FileFilter all;
+    all.set_name("All files");
+    all.add_pattern("*");
+    dialog.add_filter(all);
+
     Glib::KeyFile kf;
 
     int result = dialog.run();
@@ -97,31 +106,28 @@ void LoadFileDialog(){
     dialog.add_button(Gtk::Stock::CANCEL,Gtk::RESPONSE_CANCEL);
     dialog.add_button(Gtk::Stock::SAVE,Gtk::RESPONSE_OK);
 
+    Gtk::FileFilter hseq;
+    hseq.set_name("HarmonySEQ files (*.hseq)");
+    hseq.add_pattern("*.hseq");
+    dialog.add_filter(hseq);
+    Gtk::FileFilter all;
+    all.set_name("All files");
+    all.add_pattern("*");
+    dialog.add_filter(all);
 
     int result = dialog.run();
     Glib::ustring filename = dialog.get_filename();
-
-
+    dialog.hide();
     switch (result){
         case Gtk::RESPONSE_OK:
             LoadFile(filename);
-
             break;
         case Gtk::RESPONSE_CANCEL:
-
             break;
-
         default:
             *dbg << "unknown response returned!\n";
         break;
-
-
-
     }
-
-
-
-
 }
 
 
@@ -130,7 +136,7 @@ bool LoadFile(Glib::ustring file){
     *dbg << "trying to open |" << file <<"|--\n";
     int number;
     Glib::KeyFile kf;
-    char temp[100];
+    char temp[1000];
     try{
         if (!kf.load_from_file(file)) {
             sprintf(temp, _("ERROR - error while trying to read file '%s'\n"), file.c_str());
@@ -144,6 +150,26 @@ bool LoadFile(Glib::ustring file){
         *err << ENDL;
         return 1;
 
+    }
+
+    int VA = kf.get_integer("harmonySEQ","versionA");
+    int VB = kf.get_integer("harmonySEQ","versionB");
+    int VC = kf.get_integer("harmonySEQ","versionC");
+    if (VA > VERSION_A || (VA == VERSION_A && VB > VERSION_B) || (VA == VERSION_A && VB == VERSION_B && VC > VERSION_C)){
+        sprintf(temp,_("This file was created by harmonySEQ in a newer version (%d.%d.%d). This means it may contain data that is suppored by the newer wersion, but not by the version you are using (%d.%d.%d). It is recommended not to open such file, since it is very likely it may produce strange errors, or may event crash the program unexpectedly. However, in some cases one may want to open such file anyway, for example if it is sure it will open without trouble. Select YES to do so."),VA,VB,VC,VERSION_A,VERSION_B,VERSION_C);
+        if (Ask(_("Do you want to open this file?"),temp,false)){
+            //anserwed YES;
+        }else{
+            return 1;
+        }
+
+    } else if (VA < VERSION_A || (VA == VERSION_A && VB < VERSION_B) || (VA == VERSION_A && VB == VERSION_B && VC < VERSION_C)){
+        sprintf(temp,_("This file was created by harmonySEQ in an older version (%d.%d.%d). This means it may miss some data that is required to be in file by the version you are using (%d.%d.%d). It is recommended not to open such file, since it is very likely it may produce strange errors, or may event crash the program unexpectedly. However, in some cases one may want to open such file anyway, for example if it is sure it will open without trouble. Select YES to do so."),VA,VB,VC,VERSION_A,VERSION_B,VERSION_C);
+        if (Ask(_("Do you want to open this file?"),temp,false)){
+            //anserwed YES;
+        }else{
+            return 1;
+        }
     }
 
     tempo = kf.get_double(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_TEMPO);
