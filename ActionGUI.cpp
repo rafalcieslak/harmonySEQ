@@ -236,7 +236,7 @@ void ActionGUI::OnSeqChanged(){
     if(!Seqs_combo.get_active()) return; //empty selection
     if(parent->type == Action::SEQ_OFF || parent->type == Action::SEQ_ON || parent->type == Action::SEQ_TOGGLE || parent->type == Action::SEQ_VOLUME_SET){
             parent->arg1 = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
-    }else *err << _("Error: sequencer has changed, while action is not key-type.") << ENDL;
+    }else *err << _("Error: sequencer has changed, while action is not sequencer-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
     eventswindow->UpdateRow(parent->row_in_event_window);
