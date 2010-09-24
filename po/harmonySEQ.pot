@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-23 21:31+0200\n"
+"POT-Creation-Date: 2010-09-24 22:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: main.cpp:299
+#: main.cpp:302
 #, c-format
 msgid ""
 "       --pass-midi   passes the midi events through the program by default\n"
@@ -38,7 +38,7 @@ msgstr ""
 msgid "(empty action)"
 msgstr ""
 
-#: MainWindow.cpp:214
+#: MainWindow.cpp:215
 msgid ", name is: "
 msgstr ""
 
@@ -78,11 +78,11 @@ msgstr ""
 msgid "Channel:"
 msgstr ""
 
-#: Files.cpp:95
+#: Files.cpp:115
 msgid "Choose a file to open..."
 msgstr ""
 
-#: Files.cpp:30
+#: Files.cpp:31
 msgid "Choose a file to save..."
 msgstr ""
 
@@ -103,17 +103,21 @@ msgstr ""
 msgid "Debug mode started.\n"
 msgstr ""
 
-#: Files.cpp:48
+#: Files.cpp:176 Files.cpp:184
+msgid "Do you want to open this file?"
+msgstr ""
+
+#: Files.cpp:58
 #, c-format
 msgid "ERROR - error while opening file %s to write.\n"
 msgstr ""
 
-#: Files.cpp:136
+#: Files.cpp:158
 #, c-format
 msgid "ERROR - error while trying to read file '%s'\n"
 msgstr ""
 
-#: Files.cpp:141
+#: Files.cpp:163
 #, c-format
 msgid "ERROR - error while trying to read file '%s': "
 msgstr ""
@@ -130,19 +134,19 @@ msgstr ""
 msgid "Error - cannot colorize triggered event: row is empty.\n"
 msgstr ""
 
-#: Event.cpp:116
+#: Event.cpp:117
 msgid "Error - empty event would be triggered.\n"
 msgstr ""
 
-#: EventGUI.cpp:158
+#: EventGUI.cpp:166
 msgid "Error: channel has changed, while event is not MIDI-type."
 msgstr ""
 
-#: EventGUI.cpp:176
+#: EventGUI.cpp:185
 msgid "Error: controller has changed, while event is not ctrl-type."
 msgstr ""
 
-#: EventGUI.cpp:167
+#: EventGUI.cpp:175
 msgid "Error: key has changed, while event is not key-type."
 msgstr ""
 
@@ -150,7 +154,7 @@ msgstr ""
 msgid "Error: note has changed, while action is not note-type."
 msgstr ""
 
-#: EventGUI.cpp:186
+#: EventGUI.cpp:195
 msgid "Error: note has changed, while event is not note-type."
 msgstr ""
 
@@ -319,6 +323,29 @@ msgstr ""
 msgid "Tempo:"
 msgstr ""
 
+#: Files.cpp:175
+#, c-format
+msgid ""
+"This file was created by harmonySEQ in a newer version (%d.%d.%d). This "
+"means it may contain data that is suppored by the newer wersion, but not by "
+"the version you are using (%d.%d.%d). It is recommended not to open such "
+"file, since it is very likely it may produce strange errors, or may event "
+"crash the program unexpectedly. However, in some cases one may want to open "
+"such file anyway, for example if it is sure it will open without trouble. "
+"Select YES to do so."
+msgstr ""
+
+#: Files.cpp:183
+#, c-format
+msgid ""
+"This file was created by harmonySEQ in an older version (%d.%d.%d). This "
+"means it may miss some data that is required to be in file by the version "
+"you are using (%d.%d.%d). It is recommended not to open such file, since it "
+"is very likely it may produce strange errors, or may event crash the program "
+"unexpectedly. However, in some cases one may want to open such file anyway, "
+"for example if it is sure it will open without trouble. Select YES to do so."
+msgstr ""
+
 #: Event.cpp:63
 #, c-format
 msgid "This is an empty event, that will never be triggered."
@@ -366,11 +393,11 @@ msgstr ""
 msgid "When note %d on channel %d gets on..."
 msgstr ""
 
-#: MainWindow.cpp:213
+#: MainWindow.cpp:214
 msgid "activated row "
 msgstr ""
 
-#: main.cpp:291
+#: main.cpp:294
 #, c-format
 msgid ""
 "harmonySEQ, version %s\n"
@@ -392,12 +419,12 @@ msgstr ""
 msgid "sequencer"
 msgstr ""
 
-#: main.cpp:233
+#: main.cpp:236
 #, c-format
 msgid "unknown option '%c'\n"
 msgstr ""
 
-#: main.cpp:236
+#: main.cpp:239
 #, c-format
 msgid "unrecognized option '%s'\n"
 msgstr ""
