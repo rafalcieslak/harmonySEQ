@@ -22,6 +22,7 @@
 #include "Sequencer.h"
 #include "MainWindow.h"
 #include "messages.h"
+#include "Event.h"
 
 namespace Files {
     
@@ -67,6 +68,7 @@ void SaveToFile(){
             kf.set_double(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_TEMPO,tempo);
             kf.set_integer(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_MAINNOTE,mainnote);
             kf.set_integer(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_SEQ_NUM,sequencers.size());
+            kf.set_integer(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_EVENTS_NUM,events.size());
 
             for (unsigned int x = 0; x < sequencers.size(); x++){
                 if(sequencers[x] == NULL) continue;
@@ -81,6 +83,15 @@ void SaveToFile(){
                 kf.set_integer_list(temp,FILE_KEY_SEQ_SEQUENCE,sequencers[x]->sequence);
                 kf.set_integer_list(temp,FILE_KEY_SEQ_NOTES,sequencers[x]->notes);
 
+            }
+
+            for (unsigned int x = 0; x < events.size(); x++){
+                if(events[x] == NULL) continue;
+                sprintf(temp,FILE_GROUP_TEMPLATE_EVENT,x);
+                kf.set_integer(temp,FILE_KEY_EVENT_TYPE,events[x]->type);
+                kf.set_integer(temp,FILE_KEY_EVENT_ARG1,events[x]->arg1);
+                kf.set_integer(temp,FILE_KEY_EVENT_ARG2,events[x]->arg2);
+                kf.set_integer(temp,FILE_KEY_EVENT_ACTIONS_NUM,events[x]->actions.size());
             }
 
 
@@ -128,6 +139,11 @@ void LoadFileDialog(){
             *dbg << "unknown response returned!\n";
         break;
     }
+
+    mainwindow->InitTreeData();
+    mainwindow->main_note.set_value(mainnote);
+    mainwindow->tempo_button.set_value(tempo);
+    eventswindow->InitTreeData();
 }
 
 
@@ -176,6 +192,7 @@ bool LoadFile(Glib::ustring file){
     mainnote = kf.get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_MAINNOTE);
     number = kf.get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_SEQ_NUM);
 
+
     clear_sequencers(); //woa hua hua hua!
 
     for (int x = 0; x < number; x++) {
@@ -188,7 +205,6 @@ bool LoadFile(Glib::ustring file){
 
         sequencers.push_back(new Sequencer());
 
-        *dbg << "now loading data...\n";
         sequencers[x]->SetName(kf.get_string(temp, FILE_KEY_SEQ_NAME));
         sequencers[x]->SetOn(kf.get_boolean(temp, FILE_KEY_SEQ_ON));
         sequencers[x]->SetChannel(kf.get_integer(temp, FILE_KEY_SEQ_CHANNEL));
@@ -217,6 +233,35 @@ bool LoadFile(Glib::ustring file){
         }
         sequencers[x]->UpdateGui();
     }
+
+    int are_there_events_in_file = kf.has_key(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_EVENTS_NUM);
+    if(!are_there_events_in_file) return 0; //THIS SHOULD BE REMOVED IN SOME NEWER VERSION, SINCE THERE ARE NOT MANY FILES OF VERSION 0.9 OR LOWER
+
+    number = kf.get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_EVENTS_NUM);
+
+    ClearEvents();
+
+    for (int x = 0; x < number; x++){
+        sprintf(temp, FILE_GROUP_TEMPLATE_EVENT, x);
+        if (!kf.has_group(temp)) {
+
+            events.push_back(NULL);
+            continue;
+        }
+        events.push_back(new Event());
+        *dbg << temp << ENDL;
+        events[x]->type = kf.get_integer(temp,FILE_KEY_EVENT_TYPE);
+        *dbg << events[x]->type<<ENDL;
+        events[x]->arg1 = kf.get_integer(temp,FILE_KEY_EVENT_ARG1);
+        events[x]->arg2 = kf.get_integer(temp,FILE_KEY_EVENT_ARG2);
+        int events_num = kf.get_integer(temp,FILE_KEY_EVENT_TYPE);
+
+        
+        events[x]->UpdateGUI();// DO NOT DO IT.
+    }
+
     return 0;
+
+
 }
 }//namespace files

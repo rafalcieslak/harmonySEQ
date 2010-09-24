@@ -59,6 +59,8 @@ Gtk::TreeModel::RowReference clone_sequencer(int orig){
 }
 
 void clear_sequencers(){
+    for(unsigned int x = 0; x < sequencers.size(); x++) delete sequencers[x];
+
     sequencers.clear();
 
 }

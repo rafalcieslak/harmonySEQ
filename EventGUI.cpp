@@ -83,7 +83,9 @@ EventGUI::EventGUI(Event *prt){
 
     label_preview.set_text(parent->GetLabel());
     show_all_children(1);
-    TypeChanged(); // to hide some of widgets according to the type
+
+    DO_NOT_INIT_TYPE = false;
+    //ChangeVisibleLines(); // to hide some of widgets according to the type
     hide();
 }
 
@@ -91,7 +93,7 @@ EventGUI::EventGUI(Event *prt){
 EventGUI::~EventGUI(){
 }
 
-void EventGUI::TypeChanged(){
+void EventGUI::ChangeVisibleLines(){
     Gtk::TreeModel::Row row = *(Types_combo.get_active());
     int type = row[m_columns_event_types.type];
     *dbg << "type is - " << type << ENDL;
@@ -120,11 +122,7 @@ void EventGUI::TypeChanged(){
     resize(2,2);
 }
 
-void EventGUI::OnTypeChanged(){
-    Gtk::TreeModel::Row row = *(Types_combo.get_active());
-    int type = row[m_columns_event_types.type];
-    parent->type = type;
-    TypeChanged();
+void EventGUI::InitType(){
     switch (parent->type){
         case Event::NONE:
 
@@ -144,8 +142,18 @@ void EventGUI::OnTypeChanged(){
             break;
 
     }
+
+}
+
+void EventGUI::OnTypeChanged(){
+    if(!Types_combo.get_active()) return;
+    Gtk::TreeModel::Row row = *(Types_combo.get_active());
+    int type = row[m_columns_event_types.type];
+    parent->type = type;
+    ChangeVisibleLines();
+    if (!DO_NOT_INIT_TYPE) InitType();
     label_preview.set_text(parent->GetLabel());
-    eventswindow->UpdateRow(parent->row_in_event_window);
+    if(parent->row_in_event_window) eventswindow->UpdateRow(parent->row_in_event_window);
 }
 
 
@@ -158,7 +166,7 @@ void EventGUI::OnChannelChanged(){
     }else *err << _("Error: channel has changed, while event is not MIDI-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
-    eventswindow->UpdateRow(parent->row_in_event_window);
+    if(parent->row_in_event_window) eventswindow->UpdateRow(parent->row_in_event_window);
 }
 
 void EventGUI::OnKeyChanged(){
@@ -167,16 +175,17 @@ void EventGUI::OnKeyChanged(){
     }else *err << _("Error: key has changed, while event is not key-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
-    eventswindow->UpdateRow(parent->row_in_event_window);
+    if(parent->row_in_event_window) eventswindow->UpdateRow(parent->row_in_event_window);
 }
 
 void EventGUI::OnCtrlChanged(){
+
     if(parent->type == Event::CONTROLLER){
         parent->arg1 = ctrl_spinbutton.get_value();
     }else *err << _("Error: controller has changed, while event is not ctrl-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
-    eventswindow->UpdateRow(parent->row_in_event_window);
+    if(parent->row_in_event_window) eventswindow->UpdateRow(parent->row_in_event_window);
 
 }
 
@@ -186,7 +195,7 @@ void EventGUI::OnNoteChanged(){
     }else *err << _("Error: note has changed, while event is not note-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
-    eventswindow->UpdateRow(parent->row_in_event_window);
+    if(parent->row_in_event_window) eventswindow->UpdateRow(parent->row_in_event_window);
 
 }
 void EventGUI::OnOKClicked(){
@@ -194,14 +203,20 @@ void EventGUI::OnOKClicked(){
 }
 
 void EventGUI::UpdateValues(){
+    //*dbg << "STARTING ========== \n";
     set_transient_for(*eventswindow);
     Gtk::TreeModel::iterator it = m_refTreeModel_EventTypes->get_iter("0");
     Gtk::TreeModel::Row row;
+    DO_NOT_INIT_TYPE = true; //causes the Types_combo.signal_changed reciver know he shouldnt clear event args with zeros;
+
     for (;it;it++){
         row = *it;
-        if (row[m_columns_event_types.type] == parent->type)
+        if (row[m_columns_event_types.type] == parent->type){
             Types_combo.set_active(it);
+            break;
+        }
     }
+    DO_NOT_INIT_TYPE = false;
     switch (parent->type){
         case Event::NONE:
 
@@ -211,8 +226,10 @@ void EventGUI::UpdateValues(){
 
             for (; it; it++) {
                 row = *it;
-                if(row[m_columns_key_codes.keycode]==parent->arg1)
+                if(row[m_columns_key_codes.keycode]==parent->arg1){
                     Keys_combo.set_active(it);
+                    break;
+                }
             }
 
             break;
@@ -228,6 +245,7 @@ void EventGUI::UpdateValues(){
     }
 
     label_preview.set_text(parent->GetLabel());
+    //*dbg << "DONE ========== \n";
 
 }
 

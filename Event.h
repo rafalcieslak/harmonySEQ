@@ -48,6 +48,7 @@ public:
 
     std::string GetLabel();
     void ShowWindow();
+    void UpdateGUI();
 
     vector<Action*> actions;
 
@@ -60,5 +61,6 @@ private:
 
 void FindAndProcessEvents(Event::EventTypes ev,int arg1 = 0, int arg2 = 0);
 bool FindAndProcessEventsKeyPress(GdkEventKey* event);
+void ClearEvents();
 #endif	/* EVENT_H */
 

@@ -93,6 +93,7 @@ void Event::ShowWindow(){
     gui_window->show();
 }
 
+void Event::UpdateGUI(){gui_window->UpdateValues();}
 
 void FindAndProcessEvents(Event::EventTypes ev,int arg1, int arg2){
     for (unsigned int x = 0; x < events.size();x++){
@@ -136,4 +137,12 @@ bool FindAndProcessEventsKeyPress(GdkEventKey* event){
     FindAndProcessEvents(Event::KEYBOARD,event->keyval);
 
     return 1;
+}
+
+void ClearEvents(){
+
+    for(unsigned int x = 0; x < events.size(); x++) delete events[x];
+
+    events.clear();
+
 }

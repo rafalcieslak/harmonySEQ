@@ -30,7 +30,8 @@ public:
     EventGUI(Event *prt);
     virtual ~EventGUI();
 
-    void TypeChanged();
+    void ChangeVisibleLines();
+    void InitType();
     void UpdateValues();
 
     void OnOKClicked();
@@ -66,9 +67,9 @@ public:
 
 
 
-
 private:
 
+    bool DO_NOT_INIT_TYPE;
 };
 
 #endif	/* EVENTGUI_H */

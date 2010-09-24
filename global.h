@@ -66,6 +66,7 @@ using namespace std;
 #define FILE_KEY_SYSTEM_TEMPO "tempo"
 #define FILE_KEY_SYSTEM_MAINNOTE "mainnote"
 #define FILE_KEY_SYSTEM_SEQ_NUM "sequencers_number"
+#define FILE_KEY_SYSTEM_EVENTS_NUM "events_number"
 
 #define FILE_GROUP_TEMPLATE_SEQ "Seq %d"
 #define FILE_KEY_SEQ_RESOLUTION "resolution"
@@ -77,6 +78,13 @@ using namespace std;
 #define FILE_KEY_SEQ_NAME "name"
 #define FILE_KEY_SEQ_SEQUENCE "sequence"
 #define FILE_KEY_SEQ_NOTES "notes"
+
+#define FILE_GROUP_TEMPLATE_EVENT "Event %d"
+#define FILE_KEY_EVENT_TYPE "type"
+#define FILE_KEY_EVENT_ARG1 "arg1"
+#define FILE_KEY_EVENT_ARG2 "arg2"
+#define FILE_KEY_EVENT_ACTIONS_NUM "actions"
+
 
 #ifndef I_DO_NOT_WANT_EXTERNS_FROM_GLOBAL_H
 class Sequencer;

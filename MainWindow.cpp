@@ -320,9 +320,6 @@ void MainWindow::OnLoadClicked(){
     Files::LoadFileDialog();
 
     
-    InitTreeData();
-    main_note.set_value(mainnote);
-    tempo_button.set_value(tempo);
     //erasing smallers the treeview, but not the window.
     resize(2,2); //resizing to a tiny size, but the window won't get that small, it will be big enough to show all widgets.
 }
