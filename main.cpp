@@ -161,14 +161,12 @@ void InitDefaultData(){
         sequencers[0] = new Sequencer(example_sequence,example_notes,"seq 0");
         sequencers[1] = new Sequencer(example_sequence2,example_notes2,"seq 1");
     
-        events[0] = new Event(Event::KEYBOARD,keymap_stoi.find("F12")->second,0);
-        events[1] = new Event(Event::NOTE,60,0);
-        events.push_back(new Event(Event::KEYBOARD,keymap_stoi.find("p")->second,0));
-        events.push_back(new Event(Event::NOTE,72,1));
-        events.push_back(new Event(Event::CONTROLLER,2,0));
-        events[2]->actions.push_back(new Action(Action::SEQ_TOGGLE,0));
-        events[2]->actions.push_back(new Action(Action::MAINOTE_SET,62));
-        events[0]->actions.push_back(new Action(Action::MAINOTE_SET,60));
+        events[0] = new Event(Event::KEYBOARD,keymap_stoi.find("1")->second,0);
+        events[1] = new Event(Event::KEYBOARD,keymap_stoi.find("2")->second,0);
+        events.push_back(new Event(Event::KEYBOARD,keymap_stoi.find("3")->second,0));
+        events[0]->actions.push_back(new Action(Action::MAINOTE_SET,48));
+        events[1]->actions.push_back(new Action(Action::MAINOTE_SET,60));
+        events[2]->actions.push_back(new Action(Action::MAINOTE_SET,72));
 }
 
 void InitGetText(){
