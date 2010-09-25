@@ -10,6 +10,7 @@ versionC=0
 tempo=121
 mainnote=60
 sequencers_number=20
+events_number=13
 
 [Seq 6]
 name=bells-A
@@ -142,3 +143,66 @@ resolution=8
 length=1
 sequence=0;1;1;1;0;1;1;1;
 notes=49;128;0;0;0;0;
+
+[Event 5]
+type=1
+arg1=113
+arg2=0
+actions=2
+Action_0_type=2
+Action_0_arg1=6
+Action_0_arg2=0
+Action_1_type=1
+Action_1_arg1=7
+Action_1_arg2=0
+
+[Event 6]
+type=1
+arg1=119
+arg2=0
+actions=2
+Action_0_type=2
+Action_0_arg1=7
+Action_0_arg2=0
+Action_1_type=1
+Action_1_arg1=6
+Action_1_arg2=0
+
+[Event 7]
+type=1
+arg1=101
+arg2=0
+actions=2
+Action_0_type=1
+Action_0_arg1=6
+Action_0_arg2=0
+Action_1_type=1
+Action_1_arg1=7
+Action_1_arg2=0
+
+[Event 10]
+type=1
+arg1=116
+arg2=0
+actions=1
+Action_0_type=5
+Action_0_arg1=65
+Action_0_arg2=0
+
+[Event 11]
+type=1
+arg1=121
+arg2=0
+actions=2
+Action_0_type=5
+Action_0_arg1=63
+Action_0_arg2=0
+
+[Event 12]
+type=1
+arg1=117
+arg2=0
+actions=1
+Action_0_type=5
+Action_0_arg1=60
+Action_0_arg2=0
