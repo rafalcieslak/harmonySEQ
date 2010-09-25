@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-24 22:39+0200\n"
+"POT-Creation-Date: 2010-09-25 20:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -78,7 +78,7 @@ msgstr ""
 msgid "Channel:"
 msgstr ""
 
-#: Files.cpp:115
+#: Files.cpp:128
 msgid "Choose a file to open..."
 msgstr ""
 
@@ -103,23 +103,33 @@ msgstr ""
 msgid "Debug mode started.\n"
 msgstr ""
 
-#: Files.cpp:176 Files.cpp:184
+#: Files.cpp:191 Files.cpp:199
 msgid "Do you want to open this file?"
 msgstr ""
 
-#: Files.cpp:58
+#: Files.cpp:293
+#, c-format
+msgid "ERROR - Glib::KeyFile error while processing file '%s': "
+msgstr ""
+
+#: Files.cpp:62
 #, c-format
 msgid "ERROR - error while opening file %s to write.\n"
 msgstr ""
 
-#: Files.cpp:158
+#: Files.cpp:172
 #, c-format
 msgid "ERROR - error while trying to read file '%s'\n"
 msgstr ""
 
-#: Files.cpp:163
+#: Files.cpp:177
 #, c-format
 msgid "ERROR - error while trying to read file '%s': "
+msgstr ""
+
+#: Files.cpp:301
+#, c-format
+msgid "ERROR - unknown error while processing file '%s': "
 msgstr ""
 
 #: TreeModels.cpp:41 TreeModels.cpp:58
@@ -150,7 +160,7 @@ msgstr ""
 msgid "Error: key has changed, while event is not key-type."
 msgstr ""
 
-#: ActionGUI.cpp:217
+#: ActionGUI.cpp:224
 msgid "Error: note has changed, while action is not note-type."
 msgstr ""
 
@@ -158,15 +168,15 @@ msgstr ""
 msgid "Error: note has changed, while event is not note-type."
 msgstr ""
 
-#: ActionGUI.cpp:239
-msgid "Error: sequencer has changed, while action is not key-type."
+#: ActionGUI.cpp:246
+msgid "Error: sequencer has changed, while action is not sequencer-type."
 msgstr ""
 
-#: ActionGUI.cpp:228
+#: ActionGUI.cpp:235
 msgid "Error: tempo has changed, while action is not tempo-type."
 msgstr ""
 
-#: ActionGUI.cpp:251
+#: ActionGUI.cpp:258
 msgid "Error: volume has changed, while action is not volume-type."
 msgstr ""
 
@@ -301,7 +311,7 @@ msgstr ""
 
 #: Action.cpp:99
 #, c-format
-msgid "Set tempo to %d"
+msgid "Set tempo to %d BPM"
 msgstr ""
 
 #: Action.cpp:103
@@ -323,7 +333,7 @@ msgstr ""
 msgid "Tempo:"
 msgstr ""
 
-#: Files.cpp:175
+#: Files.cpp:190
 #, c-format
 msgid ""
 "This file was created by harmonySEQ in a newer version (%d.%d.%d). This "
@@ -335,7 +345,7 @@ msgid ""
 "Select YES to do so."
 msgstr ""
 
-#: Files.cpp:183
+#: Files.cpp:198
 #, c-format
 msgid ""
 "This file was created by harmonySEQ in an older version (%d.%d.%d). This "
