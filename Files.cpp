@@ -97,8 +97,13 @@ void SaveToFile(){
                 kf.set_integer(temp,FILE_KEY_EVENT_ARG2,events[x]->arg2);
                 kf.set_integer(temp,FILE_KEY_EVENT_ACTIONS_NUM,events[x]->actions.size());
                 for (unsigned int a = 0; a < events[x]->actions.size(); a++){
-
-
+                    if (events[x]->actions[a] == NULL) continue;
+                    sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_TYPE,a);
+                    kf.set_integer(temp,temp2,events[x]->actions[a]->type);
+                    sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_ARG1,a);
+                    kf.set_integer(temp,temp2,events[x]->actions[a]->arg1);
+                    sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_ARG2,a);
+                    kf.set_integer(temp,temp2,events[x]->actions[a]->arg2);
                 }
             }
 
@@ -161,6 +166,7 @@ bool LoadFile(Glib::ustring file){
     int number;
     Glib::KeyFile kf;
     char temp[1000];
+    char temp2[100];
     try{
         if (!kf.load_from_file(file)) {
             sprintf(temp, _("ERROR - error while trying to read file '%s'\n"), file.c_str());
@@ -264,9 +270,24 @@ bool LoadFile(Glib::ustring file){
             events[x]->arg1 = kf.get_integer(temp,FILE_KEY_EVENT_ARG1);
             events[x]->arg2 = kf.get_integer(temp,FILE_KEY_EVENT_ARG2);
             int actions_num = kf.get_integer(temp,FILE_KEY_EVENT_ACTIONS_NUM);
-            
+            for (int a = 0; a < actions_num; a++){
+                sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_TYPE,a);
+                if (!kf.has_key(temp,temp2)){
+                    //there is no such action in file (was removed, was a NULL pointer while saving file)
+                    events[x]->actions.push_back(NULL);
+                    continue;
+                }
+                events[x]->actions.push_back(new Action(Action::NONE));
 
-            events[x]->UpdateGUI();// DO NOT DO IT.
+                events[x]->actions[a]->type = kf.get_integer(temp,temp2);
+                sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_ARG1,a);
+                events[x]->actions[a]->arg1 = kf.get_integer(temp,temp2);
+                sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_ARG2,a);
+                events[x]->actions[a]->arg2 = kf.get_integer(temp,temp2);
+
+            }
+
+            events[x]->UpdateGUI();
         }
     }catch(Glib::KeyFileError error){
         sprintf(temp, _("ERROR - Glib::KeyFile error while processing file '%s': "), file.c_str());
