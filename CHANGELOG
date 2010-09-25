@@ -1,6 +1,8 @@
 harmonyseq 0.10
 	- Events and actions implemented (as for now featuring only few events/actions types).
+	- Midi events can be now passed-through (allows playing live on external controller)
 	- Variable volume.
+	- Updated example files.
 	- Opening files from command line.
 	- Improved file opening/saving.
 	- Many minor GUI fixes and improvements.
