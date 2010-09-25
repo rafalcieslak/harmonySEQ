@@ -47,8 +47,12 @@ void SaveToFile(){
     int result = dialog.run();
     Glib::ustring filename = dialog.get_filename();
     char temp[300];
+    char temp2[300];
     ofstream output_file;
 
+    *dbg << "FILENAMEEND  =  " << filename.substr(filename.length()-5,5) << ENDL;
+    if (dialog.get_filter() == &hseq) if(filename.size() < 5 || 0 != (filename.substr(filename.length()-5,5).compare(".hseq"))) { *dbg << "LOL";filename += ".hseq";}
+    // 
     switch (result){
         case Gtk::RESPONSE_OK:
 
@@ -92,6 +96,10 @@ void SaveToFile(){
                 kf.set_integer(temp,FILE_KEY_EVENT_ARG1,events[x]->arg1);
                 kf.set_integer(temp,FILE_KEY_EVENT_ARG2,events[x]->arg2);
                 kf.set_integer(temp,FILE_KEY_EVENT_ACTIONS_NUM,events[x]->actions.size());
+                for (unsigned int a = 0; a < events[x]->actions.size(); a++){
+
+
+                }
             }
 
 
@@ -168,98 +176,115 @@ bool LoadFile(Glib::ustring file){
 
     }
 
-    int VA = kf.get_integer("harmonySEQ","versionA");
-    int VB = kf.get_integer("harmonySEQ","versionB");
-    int VC = kf.get_integer("harmonySEQ","versionC");
-    if (VA > VERSION_A || (VA == VERSION_A && VB > VERSION_B) || (VA == VERSION_A && VB == VERSION_B && VC > VERSION_C)){
-        sprintf(temp,_("This file was created by harmonySEQ in a newer version (%d.%d.%d). This means it may contain data that is suppored by the newer wersion, but not by the version you are using (%d.%d.%d). It is recommended not to open such file, since it is very likely it may produce strange errors, or may event crash the program unexpectedly. However, in some cases one may want to open such file anyway, for example if it is sure it will open without trouble. Select YES to do so."),VA,VB,VC,VERSION_A,VERSION_B,VERSION_C);
-        if (Ask(_("Do you want to open this file?"),temp,false)){
-            //anserwed YES;
-        }else{
-            return 1;
+    try{
+        int VA = kf.get_integer("harmonySEQ","versionA");
+        int VB = kf.get_integer("harmonySEQ","versionB");
+        int VC = kf.get_integer("harmonySEQ","versionC");
+        if (VA > VERSION_A || (VA == VERSION_A && VB > VERSION_B) || (VA == VERSION_A && VB == VERSION_B && VC > VERSION_C)){
+            sprintf(temp,_("This file was created by harmonySEQ in a newer version (%d.%d.%d). This means it may contain data that is suppored by the newer wersion, but not by the version you are using (%d.%d.%d). It is recommended not to open such file, since it is very likely it may produce strange errors, or may event crash the program unexpectedly. However, in some cases one may want to open such file anyway, for example if it is sure it will open without trouble. Select YES to do so."),VA,VB,VC,VERSION_A,VERSION_B,VERSION_C);
+            if (Ask(_("Do you want to open this file?"),temp,false)){
+                //anserwed YES;
+            }else{
+                return 1;
+            }
+
+        } else if (VA < VERSION_A || (VA == VERSION_A && VB < VERSION_B) || (VA == VERSION_A && VB == VERSION_B && VC < VERSION_C)){
+            sprintf(temp,_("This file was created by harmonySEQ in an older version (%d.%d.%d). This means it may miss some data that is required to be in file by the version you are using (%d.%d.%d). It is recommended not to open such file, since it is very likely it may produce strange errors, or may event crash the program unexpectedly. However, in some cases one may want to open such file anyway, for example if it is sure it will open without trouble. Select YES to do so."),VA,VB,VC,VERSION_A,VERSION_B,VERSION_C);
+            if (Ask(_("Do you want to open this file?"),temp,false)){
+                //anserwed YES;
+            }else{
+                return 1;
+            }
         }
 
-    } else if (VA < VERSION_A || (VA == VERSION_A && VB < VERSION_B) || (VA == VERSION_A && VB == VERSION_B && VC < VERSION_C)){
-        sprintf(temp,_("This file was created by harmonySEQ in an older version (%d.%d.%d). This means it may miss some data that is required to be in file by the version you are using (%d.%d.%d). It is recommended not to open such file, since it is very likely it may produce strange errors, or may event crash the program unexpectedly. However, in some cases one may want to open such file anyway, for example if it is sure it will open without trouble. Select YES to do so."),VA,VB,VC,VERSION_A,VERSION_B,VERSION_C);
-        if (Ask(_("Do you want to open this file?"),temp,false)){
-            //anserwed YES;
-        }else{
-            return 1;
+        tempo = kf.get_double(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_TEMPO);
+        mainnote = kf.get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_MAINNOTE);
+        number = kf.get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_SEQ_NUM);
+
+
+        clear_sequencers(); //woa hua hua hua!
+
+        for (int x = 0; x < number; x++) {
+            sprintf(temp, FILE_GROUP_TEMPLATE_SEQ, x);
+            if (!kf.has_group(temp)) {
+
+                sequencers.push_back(NULL);
+                continue;
+            }
+
+            sequencers.push_back(new Sequencer());
+
+            sequencers[x]->SetName(kf.get_string(temp, FILE_KEY_SEQ_NAME));
+            sequencers[x]->SetOn(kf.get_boolean(temp, FILE_KEY_SEQ_ON));
+            sequencers[x]->SetChannel(kf.get_integer(temp, FILE_KEY_SEQ_CHANNEL));
+            sequencers[x]->SetApplyMainNote(kf.get_boolean(temp, FILE_KEY_SEQ_APPLY_MAIN_NOTE));
+            if(kf.has_key(temp,FILE_KEY_SEQ_VOLUME))
+                sequencers[x]->SetVolume(kf.get_integer(temp, FILE_KEY_SEQ_VOLUME));
+            else //old file. does not have volume values in it.
+                sequencers[x]->SetVolume(DEFAULT_VOLUME);
+            sequencers[x]->resolution = kf.get_integer(temp, FILE_KEY_SEQ_RESOLUTION);
+            sequencers[x]->length = kf.get_double(temp, FILE_KEY_SEQ_LENGTH);
+
+            sequencers[x]->sequence.clear();
+            std::vector<int> sequence = kf.get_integer_list(temp, FILE_KEY_SEQ_SEQUENCE);
+            for (unsigned int n = 0; n < sequence.size(); n++) {
+                sequencers[x]->sequence.push_back(sequence[n]);
+
+            }
+
+            sequencers[x]->notes.clear();
+            *dbg << "now loading notes...\n";
+            std::vector<int> notes = kf.get_integer_list(temp, FILE_KEY_SEQ_NOTES);
+            for (unsigned int n = 0; n < notes.size(); n++) {
+                *dbg << notes[n] << ENDL;
+                sequencers[x]->notes.push_back(notes[n]);
+
+            }
+            sequencers[x]->UpdateGui();
         }
-    }
 
-    tempo = kf.get_double(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_TEMPO);
-    mainnote = kf.get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_MAINNOTE);
-    number = kf.get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_SEQ_NUM);
+        int are_there_events_in_file = kf.has_key(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_EVENTS_NUM);
+        if(!are_there_events_in_file) return 0; //THIS SHOULD BE REMOVED IN SOME NEWER VERSION, SINCE THERE ARE NOT MANY FILES OF VERSION 0.9 OR LOWER
 
+        number = kf.get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_EVENTS_NUM);
 
-    clear_sequencers(); //woa hua hua hua!
+        ClearEvents();
 
-    for (int x = 0; x < number; x++) {
-        sprintf(temp, FILE_GROUP_TEMPLATE_SEQ, x);
-        if (!kf.has_group(temp)) {
+        for (int x = 0; x < number; x++){
+            sprintf(temp, FILE_GROUP_TEMPLATE_EVENT, x);
+            if (!kf.has_group(temp)) {
 
-            sequencers.push_back(NULL);
-            continue;
+                events.push_back(NULL);
+                continue;
+            }
+            events.push_back(new Event());
+            *dbg << temp << ENDL;
+            events[x]->type = kf.get_integer(temp,FILE_KEY_EVENT_TYPE);
+            *dbg << events[x]->type<<ENDL;
+            events[x]->arg1 = kf.get_integer(temp,FILE_KEY_EVENT_ARG1);
+            events[x]->arg2 = kf.get_integer(temp,FILE_KEY_EVENT_ARG2);
+            int actions_num = kf.get_integer(temp,FILE_KEY_EVENT_ACTIONS_NUM);
+            
+
+            events[x]->UpdateGUI();// DO NOT DO IT.
         }
-
-        sequencers.push_back(new Sequencer());
-
-        sequencers[x]->SetName(kf.get_string(temp, FILE_KEY_SEQ_NAME));
-        sequencers[x]->SetOn(kf.get_boolean(temp, FILE_KEY_SEQ_ON));
-        sequencers[x]->SetChannel(kf.get_integer(temp, FILE_KEY_SEQ_CHANNEL));
-        sequencers[x]->SetApplyMainNote(kf.get_boolean(temp, FILE_KEY_SEQ_APPLY_MAIN_NOTE));
-        if(kf.has_key(temp,FILE_KEY_SEQ_VOLUME))
-            sequencers[x]->SetVolume(kf.get_integer(temp, FILE_KEY_SEQ_VOLUME));
-        else //old file. does not have volume values in it.
-            sequencers[x]->SetVolume(DEFAULT_VOLUME);
-        sequencers[x]->resolution = kf.get_integer(temp, FILE_KEY_SEQ_RESOLUTION);
-        sequencers[x]->length = kf.get_double(temp, FILE_KEY_SEQ_LENGTH);
-
-        sequencers[x]->sequence.clear();
-        std::vector<int> sequence = kf.get_integer_list(temp, FILE_KEY_SEQ_SEQUENCE);
-        for (unsigned int n = 0; n < sequence.size(); n++) {
-            sequencers[x]->sequence.push_back(sequence[n]);
-
-        }
-
-        sequencers[x]->notes.clear();
-        *dbg << "now loading notes...\n";
-        std::vector<int> notes = kf.get_integer_list(temp, FILE_KEY_SEQ_NOTES);
-        for (unsigned int n = 0; n < notes.size(); n++) {
-            *dbg << notes[n] << ENDL;
-            sequencers[x]->notes.push_back(notes[n]);
-
-        }
-        sequencers[x]->UpdateGui();
-    }
-
-    int are_there_events_in_file = kf.has_key(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_EVENTS_NUM);
-    if(!are_there_events_in_file) return 0; //THIS SHOULD BE REMOVED IN SOME NEWER VERSION, SINCE THERE ARE NOT MANY FILES OF VERSION 0.9 OR LOWER
-
-    number = kf.get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_EVENTS_NUM);
-
-    ClearEvents();
-
-    for (int x = 0; x < number; x++){
-        sprintf(temp, FILE_GROUP_TEMPLATE_EVENT, x);
-        if (!kf.has_group(temp)) {
-
-            events.push_back(NULL);
-            continue;
-        }
-        events.push_back(new Event());
-        *dbg << temp << ENDL;
-        events[x]->type = kf.get_integer(temp,FILE_KEY_EVENT_TYPE);
-        *dbg << events[x]->type<<ENDL;
-        events[x]->arg1 = kf.get_integer(temp,FILE_KEY_EVENT_ARG1);
-        events[x]->arg2 = kf.get_integer(temp,FILE_KEY_EVENT_ARG2);
-        int events_num = kf.get_integer(temp,FILE_KEY_EVENT_TYPE);
-
+    }catch(Glib::KeyFileError error){
+        sprintf(temp, _("ERROR - Glib::KeyFile error while processing file '%s': "), file.c_str());
+        *err << temp;
+        *err << error.what();
+        *err << ENDL;
+        return 1;
         
-        events[x]->UpdateGUI();// DO NOT DO IT.
-    }
 
+    }catch(Glib::Error error){
+        sprintf(temp, _("ERROR - unknown error while processing file '%s': "), file.c_str());
+        *err << temp;
+        *err << error.what();
+        *err << ENDL;
+        return 1;
+
+
+    }
     return 0;
 
 
