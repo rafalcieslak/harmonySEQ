@@ -103,6 +103,7 @@ extern int mainnote;
 extern double tempo;
 extern int ports_number;
 extern int running;
+extern int debugging;
 extern debug* dbg;
 extern error* err;
 extern MidiDriver* midi;
