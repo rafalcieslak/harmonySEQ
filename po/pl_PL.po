@@ -29,7 +29,7 @@ msgid "unrecognized option '%s'\n"
 msgstr "nierozpoznana opcja '%s'\n"
 
 #: main.cpp:298
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "harmonySEQ, version %s\n"
 "\n"
@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "harmonySEQ, wersja %s\n"
 "\n"
-"użycie: harmonySEQ [-hdvp]\n"
+"użycie: harmonySEQ [-hdvp] [FILE]\n"
 "\n"
 "    -p --ports n     ustawia ilość portów na n\n"
 "    -d --debug       włącza tryb Debug, wyświetla mnóstwo komunikatów o "
@@ -247,12 +247,12 @@ msgstr ""
 #: Files.cpp:296
 #, c-format
 msgid "ERROR - Glib::KeyFile error while processing file '%s': "
-msgstr ""
+msgstr "BŁĄD - błąd Glib::KeyFile podczas przetwarzania pliku '%s'"
 
 #: Files.cpp:305
 #, c-format
 msgid "ERROR - unknown error while processing file '%s': "
-msgstr ""
+msgstr "BŁĄD - nieznany błąd podczas przetwarzania pliku '%s'"
 
 #: Event.cpp:57
 #, c-format
@@ -287,7 +287,7 @@ msgstr "Gdy kontoller %d na kanale %d jest poruszany..."
 #: Event.cpp:74
 #, c-format
 msgid "Unknown event."
-msgstr ""
+msgstr "Nieznane zdarzenie."
 
 #: Event.cpp:122
 msgid "Error - empty event would be triggered.\n"
@@ -361,7 +361,7 @@ msgstr ""
 
 #: Action.cpp:79
 msgid "WARNING: Unknown action triggered."
-msgstr ""
+msgstr "OSTRZERZENIE: Nieznana akcja została wyzwolona."
 
 #: Action.cpp:88
 #, c-format
@@ -386,7 +386,7 @@ msgstr "Ustaw nutę główną na %d"
 #: Action.cpp:102
 #, c-format
 msgid "Set tempo to %d BPM"
-msgstr ""
+msgstr "Ustaw tempo na %d BPM"
 
 #: Action.cpp:106
 #, c-format
@@ -399,9 +399,9 @@ msgid "(empty action)"
 msgstr "(pusta akcja)"
 
 #: Action.cpp:112
-#, fuzzy, c-format
+#,  c-format
 msgid "(unknown action)"
-msgstr "nieznana opcja '%c'\n"
+msgstr "(nieznana akcja)"
 
 #: Action.cpp:120
 #, c-format
@@ -431,7 +431,7 @@ msgstr "Błąd: tempo zostało zmienione, podczas gdy akcja nie jest typu tempo.
 
 #: ActionGUI.cpp:251
 msgid "Error: sequencer has changed, while action is not sequencer-type."
-msgstr ""
+msgstr "Błąd: sekwencer zostało zmieniony, podczas gdy akcja nie jest typu sekwencera."
 
 #: ActionGUI.cpp:263
 msgid "Error: volume has changed, while action is not volume-type."
