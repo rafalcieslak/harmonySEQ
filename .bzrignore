@@ -11,3 +11,4 @@ MainWindow.o
 MidiDriver.o
 SequencerGUI.o
 Sequencer.o
+Makefile
