@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-09-24 22:39+0200\n"
-"PO-Revision-Date: 2010-09-24 21:03+0000\n"
-"Last-Translator: rafal cieslak <Unknown>\n"
+"POT-Creation-Date: 2010-09-25 20:26+0200\n"
+"PO-Revision-Date: 2010-09-25 16:43+0000\n"
+"Last-Translator: Rafal Cieślak <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-25 05:41+0000\n"
+"X-Launchpad-Export-Date: 2010-09-26 05:45+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: main.cpp:302
@@ -80,7 +80,7 @@ msgstr "Kan"
 msgid "Channel:"
 msgstr "Kanał:"
 
-#: Files.cpp:115
+#: Files.cpp:128
 msgid "Choose a file to open..."
 msgstr "Wybierz plik do otwarcia..."
 
@@ -105,24 +105,34 @@ msgstr "Kontroller:"
 msgid "Debug mode started.\n"
 msgstr "Włączono tryb Debug.\n"
 
-#: Files.cpp:176 Files.cpp:184
+#: Files.cpp:191 Files.cpp:199
 msgid "Do you want to open this file?"
+msgstr "Czy chcesz otworzyć ten plik?"
+
+#: Files.cpp:293
+#, c-format
+msgid "ERROR - Glib::KeyFile error while processing file '%s': "
 msgstr ""
 
-#: Files.cpp:58
+#: Files.cpp:62
 #, c-format
 msgid "ERROR - error while opening file %s to write.\n"
 msgstr "BŁĄD - błąd podczas otwierania pliku %s do zapisu.\n"
 
-#: Files.cpp:158
+#: Files.cpp:172
 #, c-format
 msgid "ERROR - error while trying to read file '%s'\n"
 msgstr "BŁĄD - błąd podczas próby otwarcia pliku '%s'\n"
 
-#: Files.cpp:163
+#: Files.cpp:177
 #, c-format
 msgid "ERROR - error while trying to read file '%s': "
 msgstr "BŁĄD - błąd podczas próby otwarcia pliku '%s': "
+
+#: Files.cpp:301
+#, c-format
+msgid "ERROR - unknown error while processing file '%s': "
+msgstr ""
 
 #: TreeModels.cpp:41 TreeModels.cpp:58
 msgid "Empty"
@@ -157,7 +167,7 @@ msgstr ""
 "Błąd: klawisz został zmieniony, podczas gdy zdarzenie nie jest typu "
 "klawiatury."
 
-#: ActionGUI.cpp:217
+#: ActionGUI.cpp:224
 msgid "Error: note has changed, while action is not note-type."
 msgstr "Błąd: nuta została zmieniona, podczas gdy akcja nie jest typu nuty."
 
@@ -166,17 +176,16 @@ msgid "Error: note has changed, while event is not note-type."
 msgstr ""
 "Błąd: nuta została zmieniona, podczas gdy zdarzenie nie jest typu nuty."
 
-#: ActionGUI.cpp:239
-msgid "Error: sequencer has changed, while action is not key-type."
+#: ActionGUI.cpp:246
+msgid "Error: sequencer has changed, while action is not sequencer-type."
 msgstr ""
-"Błąd: sekwencer został zmieniony, podczas gdy akcja nie jest typu sekwencera."
 
-#: ActionGUI.cpp:228
+#: ActionGUI.cpp:235
 msgid "Error: tempo has changed, while action is not tempo-type."
 msgstr ""
 "Błąd: tempo zostało zmienione, podczas gdy akcja nie jest typu tempo."
 
-#: ActionGUI.cpp:251
+#: ActionGUI.cpp:258
 msgid "Error: volume has changed, while action is not volume-type."
 msgstr ""
 "Błąd: Głośność została zmieniona, podczas gdy akcja nie jest typu głośności."
@@ -312,8 +321,8 @@ msgstr "Ustaw tempo"
 
 #: Action.cpp:99
 #, c-format
-msgid "Set tempo to %d"
-msgstr "Ustaw tempo na %d"
+msgid "Set tempo to %d BPM"
+msgstr ""
 
 #: Action.cpp:103
 #, c-format
@@ -334,7 +343,7 @@ msgstr "Włącz sekwencer '%s'"
 msgid "Tempo:"
 msgstr "Tempo:"
 
-#: Files.cpp:175
+#: Files.cpp:190
 #, c-format
 msgid ""
 "This file was created by harmonySEQ in a newer version (%d.%d.%d). This "
@@ -345,8 +354,15 @@ msgid ""
 "such file anyway, for example if it is sure it will open without trouble. "
 "Select YES to do so."
 msgstr ""
+"Ten plik był utworzony przez harmonySEQ w nowszej wersji (%d.%d.%d). To "
+"oznacza, że może on zawierać dane, które są obsługiwane przez tę nowszą "
+"wersję, ale nie przez wersję, którą używasz (%d.%d.%d). Ze względu na "
+"wysokie ryzyko wystąpienia błędów bądź awarii programu po otwarciu tego "
+"pliku, odradza się otwieranie go. Jednak w pewnych przypadkach, na przykład "
+"gdy wiadomo, że otworzenie tego pliku mimo wszystko nie spowoduje awarii, "
+"można zaryzykować, i otworzyć ten plik. Wybierz TAK, by tak uczynić."
 
-#: Files.cpp:183
+#: Files.cpp:198
 #, c-format
 msgid ""
 "This file was created by harmonySEQ in an older version (%d.%d.%d). This "
@@ -356,6 +372,13 @@ msgid ""
 "unexpectedly. However, in some cases one may want to open such file anyway, "
 "for example if it is sure it will open without trouble. Select YES to do so."
 msgstr ""
+"Ten plik był utworzony przez harmonySEQ w starszej wersji (%d.%d.%d). To "
+"oznacza, że może w nim brakować danych, które są wymagane w pliku przez "
+"wersję, której używasz (%d.%d.%d). Ze względu na wysokie ryzyko wystąpienia "
+"błędów bądź awarii programu po otwarciu tego pliku, odradza się otwieranie "
+"go. Jednak w pewnych przypadkach, na przykład gdy wiadomo, że otworzenie "
+"tego pliku mimo wszystko nie spowoduje awarii, można zaryzykować, i otworzyć "
+"ten plik. Wybierz TAK, by tak uczynić."
 
 #: Event.cpp:63
 #, c-format
@@ -490,6 +513,10 @@ msgstr "nierozpoznana opcja '%s'\n"
 #~ msgstr "Gdy kontroler %d na kanale %d jest poruszany..."
 
 #, c-format
+#~ msgid "Set tempo to %d"
+#~ msgstr "Ustaw tempo na %d"
+
+#, c-format
 #~ msgid "Set volume of sequencer %d to %d"
 #~ msgstr "Ustaw głośność sekwencera %d na %d"
 
@@ -508,3 +535,7 @@ msgstr "nierozpoznana opcja '%s'\n"
 #, c-format
 #~ msgid "Toggle sequencer %d"
 #~ msgstr "Przełącz sekwencer %d"
+
+#~ msgid "Error: sequencer has changed, while action is not key-type."
+#~ msgstr ""
+#~ "Błąd: sekwencer został zmieniony, podczas gdy akcja nie jest typu sekwencera."
