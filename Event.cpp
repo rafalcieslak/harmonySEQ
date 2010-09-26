@@ -36,15 +36,17 @@ Event::Event(int typ, int a1, int a2){
 
 
 Event::Event(const Event& orig){
-    for (unsigned int x = 0; x < actions.size(); x++){
-        delete actions[x];
 
-    }
 }
 
 
 Event::~Event(){
     delete gui_window;
+    for (unsigned int x = 0; x < actions.size(); x++){
+        delete actions[x];
+
+    }
+
 }
 
 std::string Event::GetLabel(){
