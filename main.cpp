@@ -178,6 +178,14 @@ void InitGetText(){
 
 }
 
+void InitMidiDriver(){
+
+    //create the midi driver
+    midi = new MidiDriver;
+    midi->SetTempo(tempo);
+
+}
+
 bool TryToOpenFileFromCommandLine(){
     gdk_threads_enter(); //lodking the threads. Loading file MAY ASK!!
     bool x = Files::LoadFile(file);
@@ -194,7 +202,7 @@ int main(int argc, char** argv) {
     gdk_threads_init();
     Gtk::Main kit(argc, argv);
 
-    //random number generator init
+    //random number generator init, may got usefull somewhere in the future
     srand(time(NULL));
 
     InitGetText();
@@ -210,7 +218,7 @@ int main(int argc, char** argv) {
    
     //first, parse the arguments
     char c, temp[100];
-    opterr = 0; //this prevents getopt from printing his error message
+    opterr = 0; //this prevents getarg from printing his error message
     int option_index; //getopt stores index here
     while((c=getopt_long(argc,argv,"dhvp",long_options,&option_index))!=-1){
         switch(c){
@@ -249,14 +257,12 @@ int main(int argc, char** argv) {
     dbg = new debug(debugging); //start the debugger class
     if (help) {print_help();exit(0);} //print help if required
     if (version) {printf(VERSION);printf("\n");exit(0);} //print version
-    
-    //here the non-oprion arguments should be parsed (file to load etc.), but let's leave it for now...
+
+    //here file path from command line is obtained, if any
     bool file_from_cli = false;
     if (argc>optind){ file = argv[optind];file_from_cli=1;}
 
-    //create the midi driver
-    midi = new MidiDriver;
-    midi->SetTempo(tempo);
+    InitMidiDriver();
 
     InitKeyMap();
 
