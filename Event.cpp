@@ -68,7 +68,10 @@ std::string Event::GetLabel(){
             else sprintf(temp,_("When controller %d on channel %d is moved..."),arg1,arg2);
 
             break;
+        default:
+            sprintf(temp,_("Unknown event."));
 
+            break;
     }
     a = temp;
     return a;
@@ -115,6 +118,7 @@ void FindAndProcessEvents(Event::EventTypes ev,int arg1, int arg2){
                     break;
                 case Event::NONE:
                     *err << _("Error - empty event would be triggered.\n");
+                    
             }
 
         }

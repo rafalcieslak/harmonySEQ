@@ -291,7 +291,7 @@ void print_help(){
     *dbg << "Hey, seems you wish to debug help message?" << "Nothing to debug, just a few printf's!";
     printf(_("harmonySEQ, version %s\n"
             "\n"
-            "usage: harmonySEQ [-hdvp]\n"
+            "usage: harmonySEQ [-hdvp] [FILE]\n"
             "\n"
             "    -p --ports n     sets ports number to n\n"
             "    -d --debug       enters debug mode, prints lots of debug messeges\n"

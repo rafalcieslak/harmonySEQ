@@ -133,7 +133,8 @@ void ActionGUI::UpdateValues(){
         case Action::TEMPO_SET:
             tempo_button.set_value(parent->arg1);
             break;
-
+        default:
+            break;
 
 
     }
@@ -151,6 +152,7 @@ void ActionGUI::ChangeVisibleLines(){
     line_volume.hide();
     switch (type){
         case Action::NONE:
+
             break;
         case Action::SEQ_ON:
         case Action::SEQ_OFF:
@@ -168,7 +170,8 @@ void ActionGUI::ChangeVisibleLines(){
             line_tempo.show();
             break;
 
-
+        default:
+            break;
 
     }
     resize(2,2);
@@ -212,6 +215,8 @@ void ActionGUI::InitType(){
             break;
         case Action::TEMPO_SET:
             tempo_button.set_value(120.0);
+            break;
+        default:
             break;
     }
 

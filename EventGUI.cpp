@@ -117,7 +117,8 @@ void EventGUI::ChangeVisibleLines(){
         case Event::KEYBOARD:
             line_key.show();
             break;
-
+        default:
+            break;
     }
     resize(2,2);
 }
@@ -139,6 +140,8 @@ void EventGUI::InitType(){
             ctrl_spinbutton.set_value(0.0);
             parent->arg1=0;
             Channels_combo.set_active(0);
+            break;
+        default:
             break;
 
     }
@@ -240,6 +243,8 @@ void EventGUI::UpdateValues(){
         case Event::CONTROLLER:
             ctrl_spinbutton.set_value(parent->arg1);
             Channels_combo.set_active(parent->arg2);
+            break;
+        default:
             break;
 
     }

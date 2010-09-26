@@ -68,12 +68,15 @@ void Action::Trigger(int data){
 
         case SEQ_VOLUME_SET:
             if (!sequencers[arg1]) break;
-            *dbg << "SETTING VOLUME " << arg1 << " " << arg2 << ENDL;
             sequencers[arg1]->SetVolume(arg2);
 
         case NONE:
             *dbg << "empty event triggered\n";
             break;
+
+        default:
+
+            *err << _("WARNING: Unknown action triggered.");
     }
 }
 
@@ -105,6 +108,8 @@ Glib::ustring Action::GetLabel(){
         case NONE:
             sprintf(temp,_("(empty action)"));
             break;
+        default:
+            sprintf(temp,_("(unknown action)"));
     }
     return temp;
 }
