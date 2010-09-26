@@ -21,7 +21,7 @@
 #ifndef GLOBAL_H
 #define	GLOBAL_H
 #include <gtkmm.h>
-
+#include <config.h>
 #include "EventsWindow.h"
 
 #include <libintl.h>
@@ -32,6 +32,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <string>
+#include "gettext.h"
 #include "messages.h"
 using namespace std;
 #define VERSION "0.10"

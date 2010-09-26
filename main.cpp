@@ -173,8 +173,8 @@ void InitGetText(){
 
     //gettext inits
     setlocale(LC_ALL, ""); //sets the locale to user's locale
-    bindtextdomain("harmonySEQ","locale");
-    textdomain("harmonySEQ");
+    bindtextdomain(PACKAGE,LOCALEDIR);
+    textdomain(PACKAGE);
 
 }
 
