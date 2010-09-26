@@ -63,6 +63,7 @@ public:
     void OnNoteChanged();
     void OnCtrlChanged();;
     void OnChannelChanged();
+    void OnKeyPress();
 
 
 

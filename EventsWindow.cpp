@@ -62,6 +62,7 @@ EventsWindow::EventsWindow(){
     refTreeSelection->signal_changed().connect(mem_fun(*this, &EventsWindow::OnSelectionChanged));
     m_TreeView.signal_row_collapsed().connect(mem_fun(*this, &EventsWindow::OnRowCollapsed));
     m_TreeView.signal_key_press_event().connect(&FindAndProcessEventsKeyPress);
+    signal_key_press_event().connect(&FindAndProcessEventsKeyPress);
     m_TreeView.set_enable_search(0);
     show_all_children(1);
     hide();//hidden at beggining;

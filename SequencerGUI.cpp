@@ -112,6 +112,8 @@ SequencerWindow::SequencerWindow(Sequencer* prt){
     length_box.signal_changed().connect(mem_fun(*this,&SequencerWindow::OnLengthChanged));
     
     add(main_vbox);
+
+    signal_key_press_event().connect(&FindAndProcessEventsKeyPress);
     
     show_all_children(1);
     //show();
