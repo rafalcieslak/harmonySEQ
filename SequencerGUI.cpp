@@ -23,7 +23,7 @@
 #include "Sequencer.h"
 #include "MainWindow.h"
 #include "global.h"
-
+#include "Event.h"
 SequencerWindow::SequencerWindow(Sequencer* prt){
     *dbg << "constructing new SequencerWindow\n";
 
