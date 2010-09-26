@@ -28,7 +28,7 @@ harmonySEQ_LDFLAGS =  -Wall -g -O3
 
 ACLOCAL_AMFLAGS = -I m4
 
-EXTRA_DIST = config.rpath
+EXTRA_DIST = config.rpath CHANGELOG LICENSE
 
 datadir = @datadir@
 localedir = $(datadir)/locale

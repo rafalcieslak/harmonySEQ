@@ -282,7 +282,7 @@ harmonySEQ_CPPFLAGS = $(GTKMM_CFLAGS) -Wall -g -O3
 harmonySEQ_LDADD = $(GTKMM_LIBS) -lgthread-2.0 -lasound
 harmonySEQ_LDFLAGS = -Wall -g -O3
 ACLOCAL_AMFLAGS = -I m4
-EXTRA_DIST = config.rpath
+EXTRA_DIST = config.rpath CHANGELOG LICENSE
 LDADD = $(LIBINTL)
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
