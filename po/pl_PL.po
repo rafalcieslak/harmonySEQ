@@ -1,0 +1,531 @@
+# Polish translation for harmonyseq
+# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+# This file is distributed under the same license as the harmonyseq package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: harmonyseq\n"
+"Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
+"POT-Creation-Date: 2010-09-26 19:18+0200\n"
+"PO-Revision-Date: 2010-09-25 16:43+0000\n"
+"Last-Translator: Rafal Cieślak <Unknown>\n"
+"Language-Team: Polish <pl@li.org>\n"
+"Language: pl_PL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2010-09-26 05:45+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+#: main.cpp:234
+#, c-format
+msgid "unknown option '%c'\n"
+msgstr "nieznana opcja '%c'\n"
+
+#: main.cpp:237
+#, c-format
+msgid "unrecognized option '%s'\n"
+msgstr "nierozpoznana opcja '%s'\n"
+
+#: main.cpp:292
+#, c-format
+msgid ""
+"harmonySEQ, version %s\n"
+"\n"
+"usage: harmonySEQ [-hdvp]\n"
+"\n"
+"    -p --ports n     sets ports number to n\n"
+"    -d --debug       enters debug mode, prints lots of debug messeges\n"
+"    -h --help        prints this help messase and exits\n"
+"    -v --version     prints the program version\n"
+msgstr ""
+"harmonySEQ, wersja %s\n"
+"\n"
+"użycie: harmonySEQ [-hdvp]\n"
+"\n"
+"    -p --ports n     ustawia ilość portów na n\n"
+"    -d --debug       włącza tryb Debug, wyświetla mnóstwo komunikatów o "
+"pracy programu\n"
+"    -h --help        wyświetla tę wiadomość pomocy\n"
+"    -v --version     wyświetla wersję programu\n"
+
+#: main.cpp:300
+#, c-format
+msgid ""
+"       --pass-midi   passes the midi events through the program by default\n"
+msgstr ""
+"       --pass-midi   włącz domyślnie przesyłanie wszystkich zdarzeń MIDI "
+"przez program.\n"
+
+#: MainWindow.cpp:43 ActionGUI.cpp:67
+msgid "Tempo:"
+msgstr "Tempo:"
+
+#: MainWindow.cpp:44
+msgid "Main Note:"
+msgstr "Nuta główna:"
+
+#: MainWindow.cpp:67 EventsWindow.cpp:48
+msgid "ID"
+msgstr "ID"
+
+#: MainWindow.cpp:69
+msgid "Name"
+msgstr "Nazwa"
+
+#: MainWindow.cpp:73 SequencerGUI.cpp:70
+msgid "On"
+msgstr "Wł."
+
+#: MainWindow.cpp:77
+msgid "MN"
+msgstr "GN"
+
+#: MainWindow.cpp:81
+msgid "Chan"
+msgstr "Kan"
+
+#: MainWindow.cpp:82
+msgid "Res"
+msgstr "Roz"
+
+#: MainWindow.cpp:83
+msgid "Len"
+msgstr "Dł"
+
+#: MainWindow.cpp:84
+msgid "Vol"
+msgstr "Gł"
+
+#: MainWindow.cpp:143
+msgid "Add"
+msgstr "Dodaj"
+
+#: MainWindow.cpp:145
+msgid "Save"
+msgstr "Zapisz"
+
+#: MainWindow.cpp:147
+msgid "Open"
+msgstr "Otwórz"
+
+#: MainWindow.cpp:149 EventsWindow.cpp:38
+msgid "Remove"
+msgstr "Usuń"
+
+#: MainWindow.cpp:152
+msgid "Clone"
+msgstr "Klonuj"
+
+#: MainWindow.cpp:155
+msgid "Events"
+msgstr "Zdarzenia"
+
+#: MainWindow.cpp:159
+msgid "Pass MIDI events"
+msgstr "Przekazuj zdarzenia MIDI"
+
+#: MainWindow.cpp:214
+msgid "activated row "
+msgstr "aktywowano wiersz "
+
+#: MainWindow.cpp:215
+msgid ", name is: "
+msgstr ", nazwa to: "
+
+#: MidiDriver.cpp:48
+msgid "Failed to open ALSA sequencer.\n"
+msgstr "Nie udało się otworzyć sekwencera ALSA.\n"
+
+#: MidiDriver.cpp:60
+msgid "Failed to create output port.\n"
+msgstr "Nie udało się otworzyć portu wyjściowego.\n"
+
+#: MidiDriver.cpp:69
+msgid "Failed to create input port.\n"
+msgstr "Nie udało się otworzyć portu wejściowego.\n"
+
+#: MidiDriver.cpp:75
+msgid "Alsa midi driver init successfull.\n"
+msgstr "Inicjacja sterownika MIDI powiodła się.\n"
+
+#: Sequencer.cpp:40
+#, c-format
+msgid "seq %d"
+msgstr "seq %d"
+
+#: SequencerGUI.cpp:57
+msgid "MIDI channel:"
+msgstr "Kanał MIDI"
+
+#: SequencerGUI.cpp:58 ActionGUI.cpp:69
+msgid "Volume:"
+msgstr "Głośność:"
+
+#: SequencerGUI.cpp:71
+msgid "Apply main note"
+msgstr "Stosuj główną nutę"
+
+#: SequencerGUI.cpp:80
+msgid "Resolution:"
+msgstr "Rozdzielczość:"
+
+#: SequencerGUI.cpp:97
+msgid "Length:"
+msgstr "Długość:"
+
+#: messages.cpp:24
+#, c-format
+msgid "Debug mode started.\n"
+msgstr "Włączono tryb Debug.\n"
+
+#: Files.cpp:31
+msgid "Choose a file to save..."
+msgstr "Wybierz plik do zapisu..."
+
+#: Files.cpp:62
+#, c-format
+msgid "ERROR - error while opening file %s to write.\n"
+msgstr "BŁĄD - błąd podczas otwierania pliku %s do zapisu.\n"
+
+#: Files.cpp:129
+msgid "Choose a file to open..."
+msgstr "Wybierz plik do otwarcia..."
+
+#: Files.cpp:173
+#, c-format
+msgid "ERROR - error while trying to read file '%s'\n"
+msgstr "BŁĄD - błąd podczas próby otwarcia pliku '%s'\n"
+
+#: Files.cpp:179
+#, c-format
+msgid "ERROR - error while trying to read file '%s': "
+msgstr "BŁĄD - błąd podczas próby otwarcia pliku '%s': "
+
+#: Files.cpp:193
+#, c-format
+msgid ""
+"This file was created by harmonySEQ in a newer version (%d.%d.%d). This "
+"means it may contain data that is suppored by the newer wersion, but not by "
+"the version you are using (%d.%d.%d). It is recommended not to open such "
+"file, since it is very likely it may produce strange errors, or may event "
+"crash the program unexpectedly. However, in some cases one may want to open "
+"such file anyway, for example if it is sure it will open without trouble. "
+"Select YES to do so."
+msgstr ""
+"Ten plik był utworzony przez harmonySEQ w nowszej wersji (%d.%d.%d). To "
+"oznacza, że może on zawierać dane, które są obsługiwane przez tę nowszą "
+"wersję, ale nie przez wersję, którą używasz (%d.%d.%d). Ze względu na "
+"wysokie ryzyko wystąpienia błędów bądź awarii programu po otwarciu tego "
+"pliku, odradza się otwieranie go. Jednak w pewnych przypadkach, na przykład "
+"gdy wiadomo, że otworzenie tego pliku mimo wszystko nie spowoduje awarii, "
+"można zaryzykować, i otworzyć ten plik. Wybierz TAK, by tak uczynić."
+
+#: Files.cpp:194 Files.cpp:202
+msgid "Do you want to open this file?"
+msgstr "Czy chcesz otworzyć ten plik?"
+
+#: Files.cpp:201
+#, c-format
+msgid ""
+"This file was created by harmonySEQ in an older version (%d.%d.%d). This "
+"means it may miss some data that is required to be in file by the version "
+"you are using (%d.%d.%d). It is recommended not to open such file, since it "
+"is very likely it may produce strange errors, or may event crash the program "
+"unexpectedly. However, in some cases one may want to open such file anyway, "
+"for example if it is sure it will open without trouble. Select YES to do so."
+msgstr ""
+"Ten plik był utworzony przez harmonySEQ w starszej wersji (%d.%d.%d). To "
+"oznacza, że może w nim brakować danych, które są wymagane w pliku przez "
+"wersję, której używasz (%d.%d.%d). Ze względu na wysokie ryzyko wystąpienia "
+"błędów bądź awarii programu po otwarciu tego pliku, odradza się otwieranie "
+"go. Jednak w pewnych przypadkach, na przykład gdy wiadomo, że otworzenie "
+"tego pliku mimo wszystko nie spowoduje awarii, można zaryzykować, i otworzyć "
+"ten plik. Wybierz TAK, by tak uczynić."
+
+#: Files.cpp:296
+#, c-format
+msgid "ERROR - Glib::KeyFile error while processing file '%s': "
+msgstr ""
+
+#: Files.cpp:305
+#, c-format
+msgid "ERROR - unknown error while processing file '%s': "
+msgstr ""
+
+#: Event.cpp:55
+#, c-format
+msgid "When note %d on any channel gets on..."
+msgstr "Gdy nuta %d na dowolnym kanale zostaje włączona..."
+
+#: Event.cpp:56
+#, c-format
+msgid "When note %d on channel %d gets on..."
+msgstr "Gdy nuta %d na kanale %d zostaje włączona..."
+
+#: Event.cpp:59
+#, c-format
+msgid "When key %s is pressed..."
+msgstr "Gdy klawisz %s jest wciśnięty..."
+
+#: Event.cpp:63
+#, c-format
+msgid "This is an empty event, that will never be triggered."
+msgstr "To jest puste zdarzenie, które nigdy nie zostanie wywołane."
+
+#: Event.cpp:67
+#, c-format
+msgid "When controller %d on any channel is moved..."
+msgstr "Gdy kontroller %d jest poruszany..."
+
+#: Event.cpp:68
+#, c-format
+msgid "When controller %d on channel %d is moved..."
+msgstr "Gdy kontoller %d na kanale %d jest poruszany..."
+
+#: Event.cpp:117
+msgid "Error - empty event would be triggered.\n"
+msgstr "Błąd - puste zdarzenie miałoby zostać wywołane.\n"
+
+#: EventsWindow.cpp:36
+msgid "Add Event"
+msgstr "Dodaj zdarzenie"
+
+#: EventsWindow.cpp:42
+msgid "Add Action"
+msgstr "Dodaj akcje"
+
+#: EventsWindow.cpp:52 EventGUI.cpp:26
+msgid "Event"
+msgstr "Zdarzenie"
+
+#: EventsWindow.cpp:118
+msgid "Error - cannot colorize triggered event: row is empty.\n"
+msgstr ""
+"Błąd - nie można pokolorować wyzwalanego zdarzenia: wiersz jest pusty.\n"
+
+#: EventsWindow.cpp:136
+msgid "Error - cannot colorize triggered action: row is empty.\n"
+msgstr "Błąd - nie można pokolorować wywołanej akcji: wiersz jest pusty.\n"
+
+#: EventGUI.cpp:64 ActionGUI.cpp:65
+msgid "Type:"
+msgstr "Typ:"
+
+#: EventGUI.cpp:65
+msgid "Channel:"
+msgstr "Kanał:"
+
+#: EventGUI.cpp:66
+msgid "Controller:"
+msgstr "Kontroller:"
+
+#: EventGUI.cpp:67
+msgid "Key:"
+msgstr "Klawisz:"
+
+#: EventGUI.cpp:68 ActionGUI.cpp:68
+msgid "Note:"
+msgstr "Nuta:"
+
+#: EventGUI.cpp:79 ActionGUI.cpp:70
+msgid "OK"
+msgstr "OK"
+
+#: EventGUI.cpp:166
+msgid "Error: channel has changed, while event is not MIDI-type."
+msgstr ""
+"Błąd: kanał został zmieniony, podczas gdy zdarzenie nie jest typu MIDI."
+
+#: EventGUI.cpp:175
+msgid "Error: key has changed, while event is not key-type."
+msgstr ""
+"Błąd: klawisz został zmieniony, podczas gdy zdarzenie nie jest typu "
+"klawiatury."
+
+#: EventGUI.cpp:185
+msgid "Error: controller has changed, while event is not ctrl-type."
+msgstr ""
+"Błąd: kontroler został zmieniony, podczas gdy zdarzenie nie jest typu ctrl."
+
+#: EventGUI.cpp:195
+msgid "Error: note has changed, while event is not note-type."
+msgstr ""
+"Błąd: nuta została zmieniona, podczas gdy zdarzenie nie jest typu nuty."
+
+#: Action.cpp:85
+#, c-format
+msgid "Toggle sequencer '%s'"
+msgstr "Przełącz sekwencer '%s'"
+
+#: Action.cpp:88
+#, c-format
+msgid "Switch sequencer '%s' OFF"
+msgstr "Wyłącz sekwencer '%s'"
+
+#: Action.cpp:91
+#, c-format
+msgid "Switch sequencer '%s' ON"
+msgstr "Włącz sekwencer '%s'"
+
+#: Action.cpp:95
+#, c-format
+msgid "Set main note to %d"
+msgstr "Ustaw nutę główną na %d"
+
+#: Action.cpp:99
+#, c-format
+msgid "Set tempo to %d BPM"
+msgstr ""
+
+#: Action.cpp:103
+#, c-format
+msgid "Set volume of sequencer '%s' to %d"
+msgstr "Ustaw głośność sekwencera '%s' na %d"
+
+#: Action.cpp:106
+#, c-format
+msgid "(empty action)"
+msgstr "(pusta akcja)"
+
+#: Action.cpp:115
+#, c-format
+msgid "%d (which was removed)"
+msgstr "%d (który został usunięty)"
+
+#: Action.cpp:117
+#, c-format
+msgid "%s"
+msgstr "%s"
+
+#: ActionGUI.cpp:26
+msgid "Action"
+msgstr "Akcja"
+
+#: ActionGUI.cpp:66
+msgid "Sequencer:"
+msgstr "Sekwencer:"
+
+#: ActionGUI.cpp:224
+msgid "Error: note has changed, while action is not note-type."
+msgstr "Błąd: nuta została zmieniona, podczas gdy akcja nie jest typu nuty."
+
+#: ActionGUI.cpp:235
+msgid "Error: tempo has changed, while action is not tempo-type."
+msgstr "Błąd: tempo zostało zmienione, podczas gdy akcja nie jest typu tempo."
+
+#: ActionGUI.cpp:246
+msgid "Error: sequencer has changed, while action is not sequencer-type."
+msgstr ""
+
+#: ActionGUI.cpp:258
+msgid "Error: volume has changed, while action is not volume-type."
+msgstr ""
+"Błąd: Głośność została zmieniona, podczas gdy akcja nie jest typu głośności."
+
+#: TreeModels.cpp:41 TreeModels.cpp:58
+msgid "Empty"
+msgstr "Puste"
+
+#: TreeModels.cpp:44
+msgid "Keyboard"
+msgstr "Klawiatura"
+
+#: TreeModels.cpp:47
+msgid "Note"
+msgstr "Nuta"
+
+#: TreeModels.cpp:50
+msgid "Controller"
+msgstr "Kontroler"
+
+#: TreeModels.cpp:61
+msgid "Sequencer/ON"
+msgstr "Sekwencer/Wł."
+
+#: TreeModels.cpp:64
+msgid "Sequencer/OFF"
+msgstr "Sekwencer/Wył."
+
+#: TreeModels.cpp:67
+msgid "Sequencer/Toggle"
+msgstr "Sekwencer/Przełącz"
+
+#: TreeModels.cpp:70
+msgid "Sequencer/Set volume"
+msgstr "Sekwencer/Ustaw głośność"
+
+#: TreeModels.cpp:73
+msgid "Set main note"
+msgstr "Ustaw nutę główną"
+
+#: TreeModels.cpp:76
+msgid "Set tempo"
+msgstr "Ustaw tempo"
+
+#: TreeModels.cpp:96
+msgid "All"
+msgstr "Wszystkie"
+
+#~ msgid "sequencer"
+#~ msgstr "sekwencer"
+
+#~ msgid "harmonySEQ, version %s\n"
+#~ msgstr "harmonySEQ, wersja %s\n"
+
+#~ msgid "setting ports number to "
+#~ msgstr "ustaw ilość portów na "
+
+#~ msgid "Sequencer"
+#~ msgstr "Sekwencer"
+
+#~ msgid ""
+#~ "    -p --ports n     sets ports number to n\n"
+#~ "    -d --debug       enters debug mode, prints lots of debug messeges\n"
+#~ "    -h --help        prints this help messase and exits\n"
+#~ "    -v --version     prints the program version\n"
+#~ msgstr ""
+#~ "    -p --ports n     ustawia ilość portów na n\n"
+#~ "    -d --debug       włącza tryb Debug, wyświetla mnóstwo komunikatów na "
+#~ "temat pracy programu\n"
+#~ "    -h --help        wyświetla tę wiadomość pomocy\n"
+#~ "    -v --version     wyświetla wersję programu\n"
+
+#~ msgid "Muted"
+#~ msgstr "Wyciszony"
+
+#~ msgid "Mute"
+#~ msgstr "Wycisz"
+
+#~ msgid "Channel"
+#~ msgstr "Kanał"
+
+#~ msgid "ERROR - error while trying to read %s\n"
+#~ msgstr "BŁĄD - błąd podczas czytania pliku %s\n"
+
+#~ msgid "When note %d on channel %d is moved..."
+#~ msgstr "Gdy kontroler %d na kanale %d jest poruszany..."
+
+#~ msgid "Set tempo to %d"
+#~ msgstr "Ustaw tempo na %d"
+
+#~ msgid "Set volume of sequencer %d to %d"
+#~ msgstr "Ustaw głośność sekwencera %d na %d"
+
+#~ msgid "(empty event)"
+#~ msgstr "(puste zdarzenie)"
+
+#~ msgid "Switch sequencer %d ON"
+#~ msgstr "Włącz sekewncer %d"
+
+#~ msgid "Switch sequencer %d OFF"
+#~ msgstr "Wyłącz sekwencer %d"
+
+#~ msgid "Toggle sequencer %d"
+#~ msgstr "Przełącz sekwencer %d"
+
+#~ msgid "Error: sequencer has changed, while action is not key-type."
+#~ msgstr ""
+#~ "Błąd: sekwencer został zmieniony, podczas gdy akcja nie jest typu "
+#~ "sekwencera."
