@@ -557,7 +557,7 @@ PACKAGE_STRING='harmonySEQ 0.11'
 PACKAGE_BUGREPORT='https://bugs.launchpad.net/harmonyseq'
 PACKAGE_URL=''
 
-ac_unique_file="SequencerGUI.h"
+ac_unique_file="src/SequencerGUI.h"
 gt_needs=
 # Factoring default headers for most tests.
 ac_includes_default="\
@@ -8049,7 +8049,7 @@ fi
 done
 
 
-ac_config_files="$ac_config_files Makefile po/Makefile.in examples/Makefile"
+ac_config_files="$ac_config_files Makefile po/Makefile.in examples/Makefile src/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -8789,6 +8789,7 @@ do
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "po/Makefile.in") CONFIG_FILES="$CONFIG_FILES po/Makefile.in" ;;
     "examples/Makefile") CONFIG_FILES="$CONFIG_FILES examples/Makefile" ;;
+    "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5 ;;
   esac
