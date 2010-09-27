@@ -24,7 +24,13 @@
 #include "Event.h"
 
 namespace Files {
-    
+
+bool fexists(const char *filename)
+{
+  ifstream ifile(filename);
+  return ifile;
+}
+
 void SaveToFile(){
     *dbg << "saiving to file!\n";
     Gtk::FileChooserDialog dialog(_("Choose a file to save..."),Gtk::FILE_CHOOSER_ACTION_SAVE);
@@ -55,6 +61,9 @@ void SaveToFile(){
     switch (result){
         case Gtk::RESPONSE_OK:
 
+            if (fexists(filename.c_str()))
+                if (!Ask(_("This file already exist."),_("Do you want to overwrite this file?")))
+                    return; //user choosed not to overwrite it.
 
             output_file.open(filename.c_str(),ios_base::trunc);
             if(!output_file.good()){
