@@ -20,7 +20,7 @@
 #ifndef ACTION_H
 #define	ACTION_H
 
-#include "global.h"
+//#include "global.h"
 #include "ActionGUI.h"
 
 class Action {

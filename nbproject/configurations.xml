@@ -5,43 +5,51 @@
                    displayName="Header Files"
                    projectFiles="true"
                    kind="SOURCE_LOGICAL_FOLDER">
+      <itemPath>src/Action.h</itemPath>
+      <itemPath>src/ActionGUI.h</itemPath>
+      <itemPath>src/Event.h</itemPath>
+      <itemPath>src/EventGUI.h</itemPath>
+      <itemPath>src/EventsWindow.h</itemPath>
+      <itemPath>src/Files.h</itemPath>
+      <itemPath>src/MainWindow.h</itemPath>
+      <itemPath>src/MidiDriver.h</itemPath>
+      <itemPath>src/Sequencer.h</itemPath>
+      <itemPath>src/SequencerGUI.h</itemPath>
+      <itemPath>src/TreeModels.h</itemPath>
+      <itemPath>src/config.h</itemPath>
+      <itemPath>src/gettext.h</itemPath>
+      <itemPath>src/global.h</itemPath>
+      <itemPath>src/messages.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true"
                    kind="SOURCE_LOGICAL_FOLDER">
+      <itemPath>examples/complexity.hseq</itemPath>
+      <itemPath>examples/example_0.10.hseq</itemPath>
+      <itemPath>examples/michas_sonata.hseq</itemPath>
+      <itemPath>examples/the_very_first_file.hseq</itemPath>
+      <itemPath>examples/the_very_first_file_v2.hseq</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true"
                    kind="SOURCE_LOGICAL_FOLDER">
-      <itemPath>Action.cpp</itemPath>
-      <itemPath>Action.h</itemPath>
-      <itemPath>ActionGUI.cpp</itemPath>
-      <itemPath>ActionGUI.h</itemPath>
-      <itemPath>Event.cpp</itemPath>
-      <itemPath>Event.h</itemPath>
-      <itemPath>EventGUI.cpp</itemPath>
-      <itemPath>EventGUI.h</itemPath>
-      <itemPath>EventsWindow.cpp</itemPath>
-      <itemPath>EventsWindow.h</itemPath>
-      <itemPath>Files.cpp</itemPath>
-      <itemPath>Files.h</itemPath>
-      <itemPath>MainWindow.cpp</itemPath>
-      <itemPath>MainWindow.h</itemPath>
-      <itemPath>MidiDriver.cpp</itemPath>
-      <itemPath>MidiDriver.h</itemPath>
-      <itemPath>Sequencer.cpp</itemPath>
-      <itemPath>Sequencer.h</itemPath>
-      <itemPath>SequencerGUI.cpp</itemPath>
-      <itemPath>SequencerGUI.h</itemPath>
-      <itemPath>TreeModels.cpp</itemPath>
-      <itemPath>TreeModels.h</itemPath>
-      <itemPath>global.cpp</itemPath>
-      <itemPath>global.h</itemPath>
-      <itemPath>main.cpp</itemPath>
-      <itemPath>messages.cpp</itemPath>
-      <itemPath>messages.h</itemPath>
+      <itemPath>src/Action.cpp</itemPath>
+      <itemPath>src/ActionGUI.cpp</itemPath>
+      <itemPath>src/Event.cpp</itemPath>
+      <itemPath>src/EventGUI.cpp</itemPath>
+      <itemPath>src/EventsWindow.cpp</itemPath>
+      <itemPath>src/Files.cpp</itemPath>
+      <itemPath>src/MainWindow.cpp</itemPath>
+      <itemPath>src/Makefile.am</itemPath>
+      <itemPath>src/MidiDriver.cpp</itemPath>
+      <itemPath>src/Sequencer.cpp</itemPath>
+      <itemPath>src/SequencerGUI.cpp</itemPath>
+      <itemPath>src/TreeModels.cpp</itemPath>
+      <itemPath>src/global.cpp</itemPath>
+      <itemPath>src/main.cpp</itemPath>
+      <itemPath>src/messages.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -53,9 +61,13 @@
                    projectFiles="false"
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>CHANGELOG</itemPath>
+      <itemPath>Makefile.am</itemPath>
+      <itemPath>src/Makefile.am</itemPath>
     </logicalFolder>
-    <itemPath>Makefile</itemPath>
   </logicalFolder>
+  <sourceRootList>
+    <Elem>src</Elem>
+  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="Debug" type="1">

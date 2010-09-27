@@ -33,20 +33,20 @@ OBJECTDIR=build/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/Action.o \
-	${OBJECTDIR}/SequencerGUI.o \
-	${OBJECTDIR}/MainWindow.o \
-	${OBJECTDIR}/ActionGUI.o \
-	${OBJECTDIR}/main.o \
-	${OBJECTDIR}/MidiDriver.o \
-	${OBJECTDIR}/EventsWindow.o \
-	${OBJECTDIR}/Files.o \
-	${OBJECTDIR}/Sequencer.o \
-	${OBJECTDIR}/Event.o \
-	${OBJECTDIR}/EventGUI.o \
-	${OBJECTDIR}/messages.o \
-	${OBJECTDIR}/TreeModels.o \
-	${OBJECTDIR}/global.o
+	${OBJECTDIR}/src/main.o \
+	${OBJECTDIR}/src/EventGUI.o \
+	${OBJECTDIR}/src/ActionGUI.o \
+	${OBJECTDIR}/src/Sequencer.o \
+	${OBJECTDIR}/src/messages.o \
+	${OBJECTDIR}/src/Action.o \
+	${OBJECTDIR}/src/MainWindow.o \
+	${OBJECTDIR}/src/TreeModels.o \
+	${OBJECTDIR}/src/EventsWindow.o \
+	${OBJECTDIR}/src/MidiDriver.o \
+	${OBJECTDIR}/src/Files.o \
+	${OBJECTDIR}/src/Event.o \
+	${OBJECTDIR}/src/SequencerGUI.o \
+	${OBJECTDIR}/src/global.o
 
 
 # C Compiler Flags
@@ -72,75 +72,75 @@ LDLIBSOPTIONS=
 harmonySEQ: ${OBJECTFILES}
 	${LINK.cc} -lasound -o harmonySEQ ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
-${OBJECTDIR}/Action.o: Action.cpp 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/src/main.o: src/main.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/Action.o Action.cpp
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/main.o src/main.cpp
 
-${OBJECTDIR}/SequencerGUI.o: SequencerGUI.cpp 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/src/EventGUI.o: src/EventGUI.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/SequencerGUI.o SequencerGUI.cpp
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/EventGUI.o src/EventGUI.cpp
 
-${OBJECTDIR}/MainWindow.o: MainWindow.cpp 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/src/ActionGUI.o: src/ActionGUI.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/MainWindow.o MainWindow.cpp
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/ActionGUI.o src/ActionGUI.cpp
 
-${OBJECTDIR}/ActionGUI.o: ActionGUI.cpp 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/src/Sequencer.o: src/Sequencer.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/ActionGUI.o ActionGUI.cpp
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Sequencer.o src/Sequencer.cpp
 
-${OBJECTDIR}/main.o: main.cpp 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/src/messages.o: src/messages.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/messages.o src/messages.cpp
 
-${OBJECTDIR}/MidiDriver.o: MidiDriver.cpp 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/src/Action.o: src/Action.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/MidiDriver.o MidiDriver.cpp
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Action.o src/Action.cpp
 
-${OBJECTDIR}/EventsWindow.o: EventsWindow.cpp 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/src/MainWindow.o: src/MainWindow.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/EventsWindow.o EventsWindow.cpp
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/MainWindow.o src/MainWindow.cpp
 
-${OBJECTDIR}/Files.o: Files.cpp 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/src/TreeModels.o: src/TreeModels.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/Files.o Files.cpp
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/TreeModels.o src/TreeModels.cpp
 
-${OBJECTDIR}/Sequencer.o: Sequencer.cpp 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/src/EventsWindow.o: src/EventsWindow.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/Sequencer.o Sequencer.cpp
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/EventsWindow.o src/EventsWindow.cpp
 
-${OBJECTDIR}/Event.o: Event.cpp 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/src/MidiDriver.o: src/MidiDriver.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/Event.o Event.cpp
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/MidiDriver.o src/MidiDriver.cpp
 
-${OBJECTDIR}/EventGUI.o: EventGUI.cpp 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/src/Files.o: src/Files.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/EventGUI.o EventGUI.cpp
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Files.o src/Files.cpp
 
-${OBJECTDIR}/messages.o: messages.cpp 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/src/Event.o: src/Event.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/messages.o messages.cpp
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Event.o src/Event.cpp
 
-${OBJECTDIR}/TreeModels.o: TreeModels.cpp 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/src/SequencerGUI.o: src/SequencerGUI.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/TreeModels.o TreeModels.cpp
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/SequencerGUI.o src/SequencerGUI.cpp
 
-${OBJECTDIR}/global.o: global.cpp 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/src/global.o: src/global.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/global.o global.cpp
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/global.o src/global.cpp
 
 # Subprojects
 .build-subprojects:

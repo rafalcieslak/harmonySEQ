@@ -17,11 +17,10 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
+#include <fstream>
 #include "Files.h"
 #include "Sequencer.h"
 #include "MainWindow.h"
-#include "messages.h"
 #include "Event.h"
 
 namespace Files {

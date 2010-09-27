@@ -20,6 +20,8 @@
 
 #ifndef DEBUG_H
 #define	DEBUG_H
+#include <cstdio>
+#include <cstdlib>
 #include "global.h"
 class debug {
 public:

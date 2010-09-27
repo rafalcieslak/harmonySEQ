@@ -22,20 +22,15 @@
 #define	GLOBAL_H
 #include <gtkmm.h>
 #include <config.h>
-#include "EventsWindow.h"
-
 #include <libintl.h>
 #include <locale.h>
-#include <fstream>
 #include <vector>
-#include <alsa/asoundlib.h>
-#include <cstdlib>
-#include <cstdio>
 #include <string>
 #include "gettext.h"
 #include "messages.h"
+#include "EventsWindow.h"
 using namespace std;
-#define VERSION "0.11"
+#define VERSION_STRING "0.11" //VERSION is provided by autotools in config.h
 #define VERSION_A 0
 #define VERSION_B 11
 #define VERSION_C 0

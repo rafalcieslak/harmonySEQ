@@ -18,11 +18,12 @@
 */
 
 
+#include <alsa/asoundlib.h>
 #include "MidiDriver.h"
 #include "messages.h"
 #include "MainWindow.h"
 #include "Sequencer.h"
-#include "global.h"
+//#include "global.h"
 #include "Event.h"
 MidiDriver::MidiDriver() {
     working = false;
