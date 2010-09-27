@@ -36,8 +36,7 @@ ActionGUI::ActionGUI(Action *prt){
     main_box.pack_start(line_note);
     main_box.pack_start(line_tempo);
     main_box.pack_start(line_volume);
-    main_box.pack_start(line_note_nr);
-    main_box.pack_start(line_note_seq);
+    main_box.pack_start(line_set_one_note);
     main_box.pack_start(separator);
     main_box.pack_start(label_preview);
     main_box.pack_start(ok_button);
@@ -47,16 +46,16 @@ ActionGUI::ActionGUI(Action *prt){
     line_note.pack_start(label_note,Gtk::PACK_SHRINK);
     line_tempo.pack_start(label_tempo,Gtk::PACK_SHRINK);
     line_volume.pack_start(label_volume,Gtk::PACK_SHRINK);
-    line_note_nr.pack_start(label_note_nr,Gtk::PACK_SHRINK);
-    line_note_seq.pack_start(label_note_seq,Gtk::PACK_SHRINK);
+    line_set_one_note.pack_start(label_note_nr,Gtk::PACK_SHRINK);
+    line_set_one_note.pack_start(notenr_button,Gtk::PACK_SHRINK);
+    line_set_one_note.pack_start(label_note_seq,Gtk::PACK_SHRINK);
+    line_set_one_note.pack_start(noteseq_button,Gtk::PACK_SHRINK);
 
     line_type.pack_start(Types_combo,Gtk::PACK_SHRINK);
     line_seq.pack_start(Seqs_combo,Gtk::PACK_SHRINK);
     line_note.pack_start(note_button,Gtk::PACK_SHRINK);
     line_tempo.pack_start(tempo_button,Gtk::PACK_SHRINK);
     line_volume.pack_start(vol_button,Gtk::PACK_SHRINK);
-    line_note_nr.pack_start(notenr_button,Gtk::PACK_SHRINK);
-    line_note_seq.pack_start(noteseq_button,Gtk::PACK_SHRINK);
 
     note_button.set_range(0.0,127.0);
     note_button.set_increments(1.0,12.0);
@@ -79,8 +78,8 @@ ActionGUI::ActionGUI(Action *prt){
     label_tempo.set_text(_("Tempo:"));
     label_note.set_text(_("Note:"));
     label_volume.set_text(_("Volume:"));
-    label_note_nr.set_text(_("Note number:"));
-    label_note_seq.set_text(_("Note to set to:"));
+    label_note_nr.set_text(_("Set note "));
+    label_note_seq.set_text(_(" to: "));
     ok_button.set_label(_("OK"));
     
     ok_button.signal_clicked().connect(mem_fun(*this,&ActionGUI::OnOKClicked));
@@ -169,7 +168,7 @@ void ActionGUI::ChangeVisibleLines(){
     line_note.hide();
     line_tempo.hide();
     line_volume.hide();
-    line_note_nr.hide();
+    line_set_one_note.hide();
     switch (type){
         case Action::NONE:
 
@@ -185,8 +184,7 @@ void ActionGUI::ChangeVisibleLines(){
             break;
         case Action::SEQ_CHANGE_ONE_NOTE:
             line_seq.show();
-            line_note_nr.show();
-            line_note_seq.show();
+            line_set_one_note.show();
             break;
         case Action::MAINOTE_SET:
             line_note.show();

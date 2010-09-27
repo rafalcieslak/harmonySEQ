@@ -54,9 +54,9 @@ public:
     Gtk::Label label_tempo;
     Gtk::HBox line_volume;
     Gtk::Label label_volume;
-    Gtk::HBox line_note_nr;
+    Gtk::HBox line_set_one_note;
     Gtk::Label label_note_nr;
-    Gtk::HBox line_note_seq;
+    //Gtk::HBox line_note_seq;
     Gtk::Label label_note_seq;
 
     Gtk::ComboBox Types_combo;
