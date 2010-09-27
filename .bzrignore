@@ -12,3 +12,6 @@ MidiDriver.o
 SequencerGUI.o
 Sequencer.o
 Makefile
+stamp-h1
+autoscan.log
+config.log
