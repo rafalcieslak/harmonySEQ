@@ -69,6 +69,9 @@ void InitActionTypesTreeModel(){
     row[m_columns_action_types.type] = Action::SEQ_VOLUME_SET;
     row[m_columns_action_types.label] = _("Sequencer/Set volume");
     row = *(m_refTreeModel_ActionTypes->append());
+    row[m_columns_action_types.type] = Action::SEQ_CHANGE_ONE_NOTE;
+    row[m_columns_action_types.label] = _("Sequencer/Set one note");
+    row = *(m_refTreeModel_ActionTypes->append());
     row[m_columns_action_types.type] = Action::MAINOTE_SET;
     row[m_columns_action_types.label] = _("Set main note");
     row = *(m_refTreeModel_ActionTypes->append());

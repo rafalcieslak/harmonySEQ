@@ -69,6 +69,12 @@ void Action::Trigger(int data){
         case SEQ_VOLUME_SET:
             if (!sequencers[arg1]) break;
             sequencers[arg1]->SetVolume(arg2);
+            break;
+
+        case SEQ_CHANGE_ONE_NOTE:
+            if (!sequencers[arg1]) break;
+            sequencers[arg1]->notes[arg2] = arg3;
+            sequencers[arg1]->UpdateGui(); //nessesary
 
         case NONE:
             *dbg << "empty event triggered\n";
@@ -104,6 +110,9 @@ Glib::ustring Action::GetLabel(){
 
         case SEQ_VOLUME_SET:
             sprintf(temp,_("Set volume of sequencer '%s' to %d"),GetSeqName(arg1).c_str(),arg2);
+            break;
+        case SEQ_CHANGE_ONE_NOTE:
+            sprintf(temp,_("Set note %d of sequencer '%s' to %d"),arg2,GetSeqName(arg1).c_str(),arg3);
             break;
         case NONE:
             sprintf(temp,_("(empty action)"));

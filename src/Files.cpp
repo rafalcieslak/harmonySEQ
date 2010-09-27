@@ -104,6 +104,8 @@ void SaveToFile(){
                     kf.set_integer(temp,temp2,events[x]->actions[a]->arg1);
                     sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_ARG2,a);
                     kf.set_integer(temp,temp2,events[x]->actions[a]->arg2);
+                    sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_ARG3,a);
+                    kf.set_integer(temp,temp2,events[x]->actions[a]->arg3);
                 }
             }
 
@@ -286,6 +288,9 @@ bool LoadFile(Glib::ustring file){
                 events[x]->actions[a]->arg1 = kf.get_integer(temp,temp2);
                 sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_ARG2,a);
                 events[x]->actions[a]->arg2 = kf.get_integer(temp,temp2);
+                sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_ARG3,a);
+                if (kf.has_key(temp,temp2)) //was not used in previous versiond
+                events[x]->actions[a]->arg3 = kf.get_integer(temp,temp2);
 
             }
 

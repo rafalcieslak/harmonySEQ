@@ -36,6 +36,8 @@ ActionGUI::ActionGUI(Action *prt){
     main_box.pack_start(line_note);
     main_box.pack_start(line_tempo);
     main_box.pack_start(line_volume);
+    main_box.pack_start(line_note_nr);
+    main_box.pack_start(line_note_seq);
     main_box.pack_start(separator);
     main_box.pack_start(label_preview);
     main_box.pack_start(ok_button);
@@ -45,16 +47,26 @@ ActionGUI::ActionGUI(Action *prt){
     line_note.pack_start(label_note,Gtk::PACK_SHRINK);
     line_tempo.pack_start(label_tempo,Gtk::PACK_SHRINK);
     line_volume.pack_start(label_volume,Gtk::PACK_SHRINK);
+    line_note_nr.pack_start(label_note_nr,Gtk::PACK_SHRINK);
+    line_note_seq.pack_start(label_note_seq,Gtk::PACK_SHRINK);
 
     line_type.pack_start(Types_combo,Gtk::PACK_SHRINK);
     line_seq.pack_start(Seqs_combo,Gtk::PACK_SHRINK);
     line_note.pack_start(note_button,Gtk::PACK_SHRINK);
     line_tempo.pack_start(tempo_button,Gtk::PACK_SHRINK);
     line_volume.pack_start(vol_button,Gtk::PACK_SHRINK);
+    line_note_nr.pack_start(notenr_button,Gtk::PACK_SHRINK);
+    line_note_seq.pack_start(noteseq_button,Gtk::PACK_SHRINK);
 
     note_button.set_range(0.0,127.0);
     note_button.set_increments(1.0,12.0);
     note_button.signal_value_changed().connect(mem_fun(*this,&ActionGUI::OnNoteChanged));
+    notenr_button.set_range(1.0,6.0);
+    notenr_button.set_increments(1.0,2.0);
+    notenr_button.signal_value_changed().connect(mem_fun(*this,&ActionGUI::OnNoteNrChanged));
+    noteseq_button.set_range(-48.0,48.0);
+    noteseq_button.set_increments(1.0,12.0);
+    noteseq_button.signal_value_changed().connect(mem_fun(*this,&ActionGUI::OnNoteSeqChanged));
     tempo_button.set_range(30.0,320.0);
     tempo_button.set_increments(1.0,20.0);
     tempo_button.signal_value_changed().connect(mem_fun(*this,&ActionGUI::OnTempoChanged));
@@ -67,6 +79,8 @@ ActionGUI::ActionGUI(Action *prt){
     label_tempo.set_text(_("Tempo:"));
     label_note.set_text(_("Note:"));
     label_volume.set_text(_("Volume:"));
+    label_note_nr.set_text(_("Note number:"));
+    label_note_seq.set_text(_("Note to set to:"));
     ok_button.set_label(_("OK"));
     
     ok_button.signal_clicked().connect(mem_fun(*this,&ActionGUI::OnOKClicked));
@@ -133,6 +147,11 @@ void ActionGUI::UpdateValues(){
         case Action::TEMPO_SET:
             tempo_button.set_value(parent->arg1);
             break;
+        case Action::SEQ_CHANGE_ONE_NOTE:
+            SetSeqCombo(parent->arg1);
+            notenr_button.set_value(parent->arg2);
+            noteseq_button.set_value(parent->arg3);
+            break;
         default:
             break;
 
@@ -150,6 +169,7 @@ void ActionGUI::ChangeVisibleLines(){
     line_note.hide();
     line_tempo.hide();
     line_volume.hide();
+    line_note_nr.hide();
     switch (type){
         case Action::NONE:
 
@@ -162,6 +182,11 @@ void ActionGUI::ChangeVisibleLines(){
         case Action::SEQ_VOLUME_SET:
             line_seq.show();
             line_volume.show();
+            break;
+        case Action::SEQ_CHANGE_ONE_NOTE:
+            line_seq.show();
+            line_note_nr.show();
+            line_note_seq.show();
             break;
         case Action::MAINOTE_SET:
             line_note.show();
@@ -210,6 +235,11 @@ void ActionGUI::InitType(){
             Seqs_combo.set_active(0);
             vol_button.set_value(DEFAULT_VOLUME);
             break;
+        case Action::SEQ_CHANGE_ONE_NOTE:
+            Seqs_combo.set_active(0);
+            notenr_button.set_value(1.0);
+            noteseq_button.set_value(0.0);
+            break;
         case Action::MAINOTE_SET:
             note_button.set_value(60.0);
             break;
@@ -246,7 +276,7 @@ void ActionGUI::OnTempoChanged(){
 
 void ActionGUI::OnSeqChanged(){
     if(!Seqs_combo.get_active()) return; //empty selection
-    if(parent->type == Action::SEQ_OFF || parent->type == Action::SEQ_ON || parent->type == Action::SEQ_TOGGLE || parent->type == Action::SEQ_VOLUME_SET){
+    if(parent->type == Action::SEQ_OFF || parent->type == Action::SEQ_ON || parent->type == Action::SEQ_TOGGLE || parent->type == Action::SEQ_VOLUME_SET || parent->type == Action::SEQ_CHANGE_ONE_NOTE){
             parent->arg1 = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
     }else *err << _("Error: sequencer has changed, while action is not sequencer-type.") << ENDL;
 
@@ -265,6 +295,26 @@ void ActionGUI::OnVolumeChanged(){
     label_preview.set_text(parent->GetLabel());
     eventswindow->UpdateRow(parent->row_in_event_window);
 
+}
+
+void ActionGUI::OnNoteSeqChanged(){
+    if(parent->type == Action::SEQ_CHANGE_ONE_NOTE){
+        parent->arg3 = noteseq_button.get_value();
+    }else *err << _("Error: note to set has changed, while action is not set-seq-note-type.") << ENDL;
+
+    label_preview.set_text(parent->GetLabel());
+    eventswindow->UpdateRow(parent->row_in_event_window);
+
+}
+
+void ActionGUI::OnNoteNrChanged(){
+    if(parent->type == Action::SEQ_CHANGE_ONE_NOTE){
+        parent->arg2 = notenr_button.get_value();
+    }else *err << _("Error: note number has changed, while action is not set-seq-note-type.") << ENDL;
+
+    label_preview.set_text(parent->GetLabel());
+    eventswindow->UpdateRow(parent->row_in_event_window);
+    
 }
 
 void ActionGUI::SetTypeCombo(int type){

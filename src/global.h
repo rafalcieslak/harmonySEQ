@@ -84,6 +84,7 @@ using namespace std;
 #define FILE_GROUP_TEMPLATE_EVENT_ACTION_TYPE "Action_%d_type"
 #define FILE_GROUP_TEMPLATE_EVENT_ACTION_ARG1 "Action_%d_arg1"
 #define FILE_GROUP_TEMPLATE_EVENT_ACTION_ARG2 "Action_%d_arg2"
+#define FILE_GROUP_TEMPLATE_EVENT_ACTION_ARG3 "Action_%d_arg3"
 
 
 #ifndef I_DO_NOT_WANT_EXTERNS_FROM_GLOBAL_H

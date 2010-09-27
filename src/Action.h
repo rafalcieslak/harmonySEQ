@@ -33,7 +33,8 @@ public:
         SEQ_TOGGLE,
         SEQ_VOLUME_SET,
         MAINOTE_SET,
-        TEMPO_SET
+        TEMPO_SET,
+        SEQ_CHANGE_ONE_NOTE
 
     };
 
@@ -51,6 +52,7 @@ public:
 
     int arg1;
     int arg2;
+    int arg3;
     
     void Trigger(int data = 0);
     Glib::ustring GetLabel();

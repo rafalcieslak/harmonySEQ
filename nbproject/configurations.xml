@@ -91,7 +91,7 @@
           <warningLevel>2</warningLevel>
         </ccTool>
         <linkerTool>
-          <output>harmonySEQ</output>
+          <output>src/harmonySEQ</output>
           <commandLine>-lasound</commandLine>
         </linkerTool>
       </compileType>
