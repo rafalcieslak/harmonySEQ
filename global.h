@@ -35,9 +35,9 @@
 #include "gettext.h"
 #include "messages.h"
 using namespace std;
-#define VERSION "0.10"
+#define VERSION "0.11"
 #define VERSION_A 0
-#define VERSION_B 10
+#define VERSION_B 11
 #define VERSION_C 0
 
 #define ENDL "\n"

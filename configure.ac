@@ -5,7 +5,7 @@ AC_PREREQ([2.67])
 AC_INIT([harmonySEQ], [0.10], [https://bugs.launchpad.net/harmonyseq])
 AC_CONFIG_SRCDIR([SequencerGUI.h])
 AC_CONFIG_HEADERS([config.h])
-AM_INIT_AUTOMAKE([harmonySEQ], [0.10])
+AM_INIT_AUTOMAKE([harmonySEQ], [0.1])
 AM_GNU_GETTEXT_VERSION([0.18.1])
 AM_GNU_GETTEXT([external])
 
@@ -19,10 +19,14 @@ AC_CHECK_LIB([asound], [snd_seq_open], [] , [
 					exit -1 ])
 
 # Checks for header files.
-AC_CHECK_HEADERS([libintl.h locale.h])
+AC_CHECK_HEADERS([libintl.h locale.h], [] , [
+					echo "Gettext locale headers missing! [libintl.h locale.h]"
+					exit -1 ])
 
 
-PKG_CHECK_MODULES([GTKMM], [gtkmm-2.4])
+PKG_CHECK_MODULES([GTKMM], [gtkmm-2.4], [] , [
+					echo "Gtkmm library missing!"
+					exit -1 ])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL
