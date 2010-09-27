@@ -2,7 +2,7 @@ AUTOMAKE_OPTIONS = foreign
 
 AM_CPPFLAGS = -DLOCALEDIR=\"$(localedir)\"
 
-SUBDIRS = po
+SUBDIRS = po examples
 
 bin_PROGRAMS = harmonySEQ
 harmonySEQ_SOURCES =  	main.cpp\

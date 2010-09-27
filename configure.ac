@@ -32,5 +32,5 @@ AC_FUNC_ALLOCA
 AC_FUNC_ERROR_AT_LINE
 AC_CHECK_FUNCS([select])
 
-AC_CONFIG_FILES([Makefile po/Makefile.in])
+AC_CONFIG_FILES([Makefile po/Makefile.in examples/Makefile])
 AC_OUTPUT

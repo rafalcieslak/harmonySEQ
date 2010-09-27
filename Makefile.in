@@ -260,7 +260,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = foreign
 AM_CPPFLAGS = -DLOCALEDIR=\"$(localedir)\"
-SUBDIRS = po
+SUBDIRS = po examples
 harmonySEQ_SOURCES = main.cpp\
 						MainWindow.cpp \
 						MidiDriver.cpp \
