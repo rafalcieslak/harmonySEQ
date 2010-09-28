@@ -28,6 +28,8 @@ ActionGUI::ActionGUI(Action *prt){
     set_border_width(5);
     set_position(Gtk::WIN_POS_CENTER_ON_PARENT);
 
+    for (int x = 0; x < 6; x++) notes6_buttons[x] = new Gtk::SpinButton;
+
     add(main_box);
     main_box.set_spacing(5);
 
@@ -37,6 +39,7 @@ ActionGUI::ActionGUI(Action *prt){
     main_box.pack_start(line_tempo);
     main_box.pack_start(line_volume);
     main_box.pack_start(line_set_one_note);
+    main_box.pack_start(line_6notes);
     main_box.pack_start(separator);
     main_box.pack_start(label_preview);
     main_box.pack_start(ok_button);
@@ -50,13 +53,20 @@ ActionGUI::ActionGUI(Action *prt){
     line_set_one_note.pack_start(notenr_button,Gtk::PACK_SHRINK);
     line_set_one_note.pack_start(label_note_seq,Gtk::PACK_SHRINK);
     line_set_one_note.pack_start(noteseq_button,Gtk::PACK_SHRINK);
+    line_6notes.pack_start(label_6notes,Gtk::PACK_SHRINK);
 
     line_type.pack_start(Types_combo,Gtk::PACK_SHRINK);
     line_seq.pack_start(Seqs_combo,Gtk::PACK_SHRINK);
     line_note.pack_start(note_button,Gtk::PACK_SHRINK);
     line_tempo.pack_start(tempo_button,Gtk::PACK_SHRINK);
     line_volume.pack_start(vol_button,Gtk::PACK_SHRINK);
+    for (int x = 0; x < 6; x++) line_6notes.pack_start(*notes6_buttons[x],Gtk::PACK_SHRINK);
 
+    for (int x = 0; x < 6; x++){
+        notes6_buttons[x]->set_range(-48.0,48.0);
+        notes6_buttons[x]->set_increments(1.0,12.0);
+        notes6_buttons[x]->signal_value_changed().connect(sigc::bind<int>(mem_fun(*this,&ActionGUI::OnNote6Changed),x));
+    }
     note_button.set_range(0.0,127.0);
     note_button.set_increments(1.0,12.0);
     note_button.signal_value_changed().connect(mem_fun(*this,&ActionGUI::OnNoteChanged));
@@ -80,6 +90,7 @@ ActionGUI::ActionGUI(Action *prt){
     label_volume.set_text(_("Volume:"));
     label_note_nr.set_text(_("Set note "));
     label_note_seq.set_text(_(" to: "));
+    label_6notes.set_text(_("Notes:"));
     ok_button.set_label(_("OK"));
     
     ok_button.signal_clicked().connect(mem_fun(*this,&ActionGUI::OnOKClicked));
@@ -107,6 +118,10 @@ ActionGUI::ActionGUI(const ActionGUI& orig){
 
 
 ActionGUI::~ActionGUI(){
+    for (int x = 0; x <  6; x++){
+        delete notes6_buttons[x];
+
+    }
 }
 
 void ActionGUI::OnOKClicked(){
@@ -151,6 +166,10 @@ void ActionGUI::UpdateValues(){
             notenr_button.set_value(parent->args[2]);
             noteseq_button.set_value(parent->args[3]);
             break;
+        case Action::SEQ_CHANGE_ALL_NOTES:
+            SetSeqCombo(parent->args[1]);
+            for (int x = 0; x <  6; x++) notes6_buttons[x]->set_value(parent->args[x+2]);
+            break;
         default:
             break;
 
@@ -169,6 +188,7 @@ void ActionGUI::ChangeVisibleLines(){
     line_tempo.hide();
     line_volume.hide();
     line_set_one_note.hide();
+    line_6notes.hide();
     switch (type){
         case Action::NONE:
 
@@ -185,6 +205,10 @@ void ActionGUI::ChangeVisibleLines(){
         case Action::SEQ_CHANGE_ONE_NOTE:
             line_seq.show();
             line_set_one_note.show();
+            break;
+        case Action::SEQ_CHANGE_ALL_NOTES:
+            line_seq.show();
+            line_6notes.show();
             break;
         case Action::MAINOTE_SET:
             line_note.show();
@@ -238,6 +262,10 @@ void ActionGUI::InitType(){
             notenr_button.set_value(1.0);
             noteseq_button.set_value(0.0);
             break;
+        case Action::SEQ_CHANGE_ALL_NOTES:
+            Seqs_combo.set_active(0);
+            for (int x = 0; x <  6; x++) notes6_buttons[x]->set_value(0.0);
+            break;
         case Action::MAINOTE_SET:
             note_button.set_value(60.0);
             break;
@@ -274,7 +302,7 @@ void ActionGUI::OnTempoChanged(){
 
 void ActionGUI::OnSeqChanged(){
     if(!Seqs_combo.get_active()) return; //empty selection
-    if(parent->type == Action::SEQ_OFF || parent->type == Action::SEQ_ON || parent->type == Action::SEQ_TOGGLE || parent->type == Action::SEQ_VOLUME_SET || parent->type == Action::SEQ_CHANGE_ONE_NOTE){
+    if(parent->type == Action::SEQ_OFF || parent->type == Action::SEQ_ON || parent->type == Action::SEQ_TOGGLE || parent->type == Action::SEQ_VOLUME_SET || parent->type == Action::SEQ_CHANGE_ONE_NOTE || parent->type == Action::SEQ_CHANGE_ALL_NOTES){
             parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
     }else *err << _("Error: sequencer has changed, while action is not sequencer-type.") << ENDL;
 
@@ -315,6 +343,17 @@ void ActionGUI::OnNoteNrChanged(){
     
 }
 
+void ActionGUI::OnNote6Changed(int n){
+    if(parent->type == Action::SEQ_CHANGE_ALL_NOTES){
+        parent->args[n+2] = notes6_buttons[n]->get_value();
+    }else *err << _("Error: one of 6 notes to set has changed, while action is not of change-all-notes type.") << ENDL;
+
+    label_preview.set_text(parent->GetLabel());
+    eventswindow->UpdateRow(parent->row_in_event_window);
+}
+
+//====^^Add new action gui callbacks above ^^==
+//======================================
 void ActionGUI::SetTypeCombo(int type){
     Gtk::TreeModel::iterator iter = m_refTreeModel_ActionTypes->get_iter("0");
     for (;iter;iter++){

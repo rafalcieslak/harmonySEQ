@@ -10,14 +10,14 @@ versionC=0
 tempo=200
 mainnote=60
 sequencers_number=5
-events_number=8
+events_number=9
 
 [Seq 2]
 name=piano
 on=true
 channel=1
 apply_mn=true
-volume=100
+volume=75
 resolution=8
 length=1
 sequence=0;1;2;0;1;2;1;2;
@@ -104,3 +104,17 @@ Action_0_type=7
 Action_0_arg1=2
 Action_0_arg2=3
 Action_0_arg3=7
+
+[Event 8]
+type=1
+arg1=97
+arg2=0
+actions=2
+Action_0_type=3
+Action_0_arg1=2
+Action_0_arg2=0
+Action_0_arg3=0
+Action_1_type=3
+Action_1_arg1=3
+Action_1_arg2=0
+Action_1_arg3=0

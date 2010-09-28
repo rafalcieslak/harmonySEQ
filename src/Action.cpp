@@ -75,7 +75,19 @@ void Action::Trigger(int data){
         case SEQ_CHANGE_ONE_NOTE:
             if (!sequencers[args[1]]) break;
             sequencers[args[1]]->notes[args[2]-1] = args[3];
-            sequencers[args[1]]->UpdateGuiNotes(); //nessesary //its a temporary wokraround, since UpdateGui seems to crash. Howewer, it is not needed to
+            sequencers[args[1]]->UpdateGuiNotes(); //nessesary //its a temporary wokraround, since UpdateGui seems to crash. Howewer, it is not needed to update anything else than notes.
+            break;
+
+        case SEQ_CHANGE_ALL_NOTES:
+            if (!sequencers[args[1]]) break;
+            sequencers[args[1]]->notes[0] = args[2];
+            sequencers[args[1]]->notes[1] = args[3];
+            sequencers[args[1]]->notes[2] = args[4];
+            sequencers[args[1]]->notes[3] = args[5];
+            sequencers[args[1]]->notes[4] = args[6];
+            sequencers[args[1]]->notes[5] = args[7];
+            sequencers[args[1]]->UpdateGuiNotes(); //nessesary //its a temporary wokraround, since UpdateGui seems to crash. Howewer, it is not needed to update anything else than notes.
+             break;
 
         case NONE:
             *dbg << "empty event triggered\n";
@@ -114,6 +126,9 @@ Glib::ustring Action::GetLabel(){
             break;
         case SEQ_CHANGE_ONE_NOTE:
             sprintf(temp,_("Set note %d of sequencer '%s' to %d"),args[2],GetSeqName(args[1]).c_str(),args[3]);
+            break;
+        case SEQ_CHANGE_ALL_NOTES:
+            sprintf(temp,_("Set notes of sequencer '%s' to %d,%d,%d,%d,%d,%d "),GetSeqName(args[1]).c_str(),args[2],args[3],args[4],args[5],args[6],args[7]);
             break;
         case NONE:
             sprintf(temp,_("(empty action)"));

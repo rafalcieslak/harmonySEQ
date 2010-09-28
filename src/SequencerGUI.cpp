@@ -120,7 +120,9 @@ SequencerWindow::SequencerWindow(Sequencer* prt){
     hide(); //hide at start, but let the children be shown
 }
 SequencerWindow::~SequencerWindow(){
-
+    for (int x = 0; x < 6; x++){
+        delete note_buttons[x] ;
+    }
     
 }
 
