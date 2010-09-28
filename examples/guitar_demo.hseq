@@ -7,7 +7,7 @@ versionB=11
 versionC=0
 
 [System]
-tempo=100
+tempo=110
 mainnote=40
 sequencers_number=4
 events_number=8
@@ -21,7 +21,7 @@ volume=100
 resolution=8
 length=1
 sequence=1;2;1;2;1;2;3;2;
-notes=0;5;12;17;20;24;
+notes=3;7;10;15;19;27;
 
 [Seq 3]
 name=guitar2
@@ -32,7 +32,7 @@ volume=100
 resolution=8
 length=1
 sequence=3;4;3;4;3;4;5;4;
-notes=0;5;10;17;20;24;
+notes=3;7;10;15;19;27;
 
 [Event 0]
 type=1
