@@ -8,8 +8,8 @@ versionC=0
 
 [System]
 tempo=200
-mainnote=72
-sequencers_number=4
+mainnote=60
+sequencers_number=5
 events_number=8
 
 [Seq 2]
@@ -33,6 +33,17 @@ resolution=8
 length=8
 sequence=0;0;0;0;1;1;2;1;
 notes=40;41;42;0;0;0;
+
+[Seq 4]
+name=metronome
+on=true
+channel=10
+apply_mn=false
+volume=100
+resolution=8
+length=1
+sequence=0;1;1;1;1;1;1;1;
+notes=37;128;0;0;0;0;
 
 [Event 2]
 type=1

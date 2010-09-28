@@ -55,12 +55,14 @@ void SaveToFile(){
     char temp2[300];
     ofstream output_file;
 
-    *dbg << "FILENAMEEND  =  " << filename.substr(filename.length()-5,5) << ENDL;
-    if (dialog.get_filter() == &hseq) if(filename.size() < 5 || 0 != (filename.substr(filename.length()-5,5).compare(".hseq"))) { *dbg << "LOL";filename += ".hseq";}
-    // 
+    
     switch (result){
         case Gtk::RESPONSE_OK:
+        
+            //add .hseq extention
+             if (dialog.get_filter() == &hseq) if(filename.size() < 5 || 0 != (filename.substr(filename.length()-5,5).compare(".hseq"))) { *dbg << "LOL";filename += ".hseq";}
 
+             //check whether it already exists
             if (fexists(filename.c_str())){
                 sprintf(temp,_("File '%s'  already exist."),filename.c_str());
                 if (!Ask(temp,_("Do you want to overwrite this file?")))
