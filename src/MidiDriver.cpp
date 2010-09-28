@@ -213,7 +213,9 @@ void MidiDriver::ProcessInput(){
             case SND_SEQ_EVENT_NOTEON:
                 if (ev->data.note.velocity != 0) {
                 *dbg << "noteon! (of pitch " << ev->data.note.note << ")\n";
-                    mainnote = ev->data.note.note;
+
+                    //depracated
+                    //mainnote = ev->data.note.note;
 
                     FindAndProcessEvents(Event::NOTE,ev->data.note.note,ev->data.note.channel+1);
                     /*freezed to implement the events system
@@ -221,8 +223,9 @@ void MidiDriver::ProcessInput(){
                     mainwindow->main_note.set_value(mainnote);
                     gdk_threads_leave(); //freeing lock*/
                     
+                } else {
+                    *dbg << "noteoff! (of pitch " << ev->data.note.note << ")\n";
                 }
-                *dbg << "noteoff! (of pitch " << ev->data.note.note << ")\n";
                 break;
             case SND_SEQ_EVENT_ECHO:
                 *dbg << "ECHO!\n";
@@ -234,7 +237,7 @@ void MidiDriver::ProcessInput(){
                 
                 break;
             case SND_SEQ_EVENT_CONTROLLER:
-                if (ev->data.control.param == 17){
+                /*if (ev->data.control.param == 17){
                     *dbg << "tempo controller! " << ev->data.control.value << ENDL;
                     double tmp = 30 + ((double)ev->data.control.value/(double)127.0)*(320-30);
 
@@ -244,10 +247,9 @@ void MidiDriver::ProcessInput(){
 
                     SetTempo(tmp);
 
-                }else{
+                }else*/
                     *dbg << "controller!\n";
-                }
-                
+
                 FindAndProcessEvents(Event::CONTROLLER,ev->data.control.param,ev->data.control.channel+1);
                 break;
             case SND_SEQ_EVENT_PITCHBEND:

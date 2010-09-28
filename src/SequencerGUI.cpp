@@ -194,6 +194,7 @@ void SequencerWindow::OnResolutionChanged(){
 void SequencerWindow::InitSeqSliders(){
 
     for(unsigned int x = 0; x < sequence_scales.size();x++){
+        if(!sequence_scales[x]) continue;
         box_of_sliders.remove(*sequence_scales[x]);
     }
     sequence_scales.clear();
