@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonySEQ 0.11\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2010-09-27 20:18+0200\n"
+"POT-Creation-Date: 2010-09-28 17:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,7 +46,7 @@ msgid ""
 "       --pass-midi   passes the midi events through the program by default\n"
 msgstr ""
 
-#: src/MainWindow.cpp:43 src/ActionGUI.cpp:67
+#: src/MainWindow.cpp:43 src/ActionGUI.cpp:78
 msgid "Tempo:"
 msgstr ""
 
@@ -122,19 +122,19 @@ msgstr ""
 msgid ", name is: "
 msgstr ""
 
-#: src/MidiDriver.cpp:48
+#: src/MidiDriver.cpp:49
 msgid "Failed to open ALSA sequencer.\n"
 msgstr ""
 
-#: src/MidiDriver.cpp:60
+#: src/MidiDriver.cpp:61
 msgid "Failed to create output port.\n"
 msgstr ""
 
-#: src/MidiDriver.cpp:69
+#: src/MidiDriver.cpp:70
 msgid "Failed to create input port.\n"
 msgstr ""
 
-#: src/MidiDriver.cpp:75
+#: src/MidiDriver.cpp:76
 msgid "Alsa midi driver init successfull.\n"
 msgstr ""
 
@@ -147,7 +147,7 @@ msgstr ""
 msgid "MIDI channel:"
 msgstr ""
 
-#: src/SequencerGUI.cpp:58 src/ActionGUI.cpp:69
+#: src/SequencerGUI.cpp:58 src/ActionGUI.cpp:80
 msgid "Volume:"
 msgstr ""
 
@@ -168,30 +168,38 @@ msgstr ""
 msgid "Debug mode started.\n"
 msgstr ""
 
-#: src/Files.cpp:31
+#: src/Files.cpp:36
 msgid "Choose a file to save..."
 msgstr ""
 
-#: src/Files.cpp:62
+#: src/Files.cpp:65
+msgid "This file already exist."
+msgstr ""
+
+#: src/Files.cpp:65
+msgid "Do you want to overwrite this file?"
+msgstr ""
+
+#: src/Files.cpp:70
 #, c-format
 msgid "ERROR - error while opening file %s to write.\n"
 msgstr ""
 
-#: src/Files.cpp:129
+#: src/Files.cpp:139
 msgid "Choose a file to open..."
 msgstr ""
 
-#: src/Files.cpp:173
+#: src/Files.cpp:183
 #, c-format
 msgid "ERROR - error while trying to read file '%s'\n"
 msgstr ""
 
-#: src/Files.cpp:179
+#: src/Files.cpp:189
 #, c-format
 msgid "ERROR - error while trying to read file '%s': "
 msgstr ""
 
-#: src/Files.cpp:193
+#: src/Files.cpp:203
 #, c-format
 msgid ""
 "This file was created by harmonySEQ in a newer version (%d.%d.%d). This "
@@ -203,11 +211,11 @@ msgid ""
 "Select YES to do so."
 msgstr ""
 
-#: src/Files.cpp:194 src/Files.cpp:202
+#: src/Files.cpp:204 src/Files.cpp:212
 msgid "Do you want to open this file?"
 msgstr ""
 
-#: src/Files.cpp:201
+#: src/Files.cpp:211
 #, c-format
 msgid ""
 "This file was created by harmonySEQ in an older version (%d.%d.%d). This "
@@ -218,12 +226,12 @@ msgid ""
 "for example if it is sure it will open without trouble. Select YES to do so."
 msgstr ""
 
-#: src/Files.cpp:296
+#: src/Files.cpp:309
 #, c-format
 msgid "ERROR - Glib::KeyFile error while processing file '%s': "
 msgstr ""
 
-#: src/Files.cpp:305
+#: src/Files.cpp:318
 #, c-format
 msgid "ERROR - unknown error while processing file '%s': "
 msgstr ""
@@ -287,7 +295,7 @@ msgstr ""
 msgid "Error - cannot colorize triggered action: row is empty.\n"
 msgstr ""
 
-#: src/EventGUI.cpp:64 src/ActionGUI.cpp:65
+#: src/EventGUI.cpp:64 src/ActionGUI.cpp:76
 msgid "Type:"
 msgstr ""
 
@@ -303,11 +311,11 @@ msgstr ""
 msgid "Key:"
 msgstr ""
 
-#: src/EventGUI.cpp:68 src/ActionGUI.cpp:68
+#: src/EventGUI.cpp:68 src/ActionGUI.cpp:79
 msgid "Note:"
 msgstr ""
 
-#: src/EventGUI.cpp:79 src/ActionGUI.cpp:70
+#: src/EventGUI.cpp:79 src/ActionGUI.cpp:83
 msgid "OK"
 msgstr ""
 
@@ -327,56 +335,61 @@ msgstr ""
 msgid "Error: note has changed, while event is not note-type."
 msgstr ""
 
-#: src/Action.cpp:79
+#: src/Action.cpp:85
 msgid "WARNING: Unknown action triggered."
-msgstr ""
-
-#: src/Action.cpp:88
-#, c-format
-msgid "Toggle sequencer '%s'"
-msgstr ""
-
-#: src/Action.cpp:91
-#, c-format
-msgid "Switch sequencer '%s' OFF"
 msgstr ""
 
 #: src/Action.cpp:94
 #, c-format
+msgid "Toggle sequencer '%s'"
+msgstr ""
+
+#: src/Action.cpp:97
+#, c-format
+msgid "Switch sequencer '%s' OFF"
+msgstr ""
+
+#: src/Action.cpp:100
+#, c-format
 msgid "Switch sequencer '%s' ON"
 msgstr ""
 
-#: src/Action.cpp:98
+#: src/Action.cpp:104
 #, c-format
 msgid "Set main note to %d"
 msgstr ""
 
-#: src/Action.cpp:102
+#: src/Action.cpp:108
 #, c-format
 msgid "Set tempo to %d BPM"
 msgstr ""
 
-#: src/Action.cpp:106
+#: src/Action.cpp:112
 #, c-format
 msgid "Set volume of sequencer '%s' to %d"
 msgstr ""
 
-#: src/Action.cpp:109
+#: src/Action.cpp:115
+#, c-format
+msgid "Set note %d of sequencer '%s' to %d"
+msgstr ""
+
+#: src/Action.cpp:118
 #, c-format
 msgid "(empty action)"
 msgstr ""
 
-#: src/Action.cpp:112
+#: src/Action.cpp:121
 #, c-format
 msgid "(unknown action)"
 msgstr ""
 
-#: src/Action.cpp:120
+#: src/Action.cpp:129
 #, c-format
 msgid "%d (which was removed)"
 msgstr ""
 
-#: src/Action.cpp:122
+#: src/Action.cpp:131
 #, c-format
 msgid "%s"
 msgstr ""
@@ -385,24 +398,40 @@ msgstr ""
 msgid "Action"
 msgstr ""
 
-#: src/ActionGUI.cpp:66
+#: src/ActionGUI.cpp:77
 msgid "Sequencer:"
 msgstr ""
 
-#: src/ActionGUI.cpp:229
+#: src/ActionGUI.cpp:81
+msgid "Set note "
+msgstr ""
+
+#: src/ActionGUI.cpp:82
+msgid " to: "
+msgstr ""
+
+#: src/ActionGUI.cpp:257
 msgid "Error: note has changed, while action is not note-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:240
+#: src/ActionGUI.cpp:268
 msgid "Error: tempo has changed, while action is not tempo-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:251
+#: src/ActionGUI.cpp:279
 msgid "Error: sequencer has changed, while action is not sequencer-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:263
+#: src/ActionGUI.cpp:291
 msgid "Error: volume has changed, while action is not volume-type."
+msgstr ""
+
+#: src/ActionGUI.cpp:301
+msgid "Error: note to set has changed, while action is not set-seq-note-type."
+msgstr ""
+
+#: src/ActionGUI.cpp:311
+msgid "Error: note number has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/TreeModels.cpp:41 src/TreeModels.cpp:58
@@ -438,13 +467,17 @@ msgid "Sequencer/Set volume"
 msgstr ""
 
 #: src/TreeModels.cpp:73
-msgid "Set main note"
+msgid "Sequencer/Set one note"
 msgstr ""
 
 #: src/TreeModels.cpp:76
+msgid "Set main note"
+msgstr ""
+
+#: src/TreeModels.cpp:79
 msgid "Set tempo"
 msgstr ""
 
-#: src/TreeModels.cpp:96
+#: src/TreeModels.cpp:99
 msgid "All"
 msgstr ""
