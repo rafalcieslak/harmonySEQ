@@ -5,12 +5,13 @@
   <confs>
     <conf name="Debug" type="1">
       <gizmo_options version="3">
+        <profileOnRun>false</profileOnRun>
         <configurationname>GizmoSimple</configurationname>
       </gizmo_options>
       <runprofile version="6">
         <args>--debug</args>
         <rundir></rundir>
-        <buildfirst>true</buildfirst>
+        <buildfirst>false</buildfirst>
         <console-type>2</console-type>
         <terminal-type>1</terminal-type>
         <remove-instrumentation>0</remove-instrumentation>

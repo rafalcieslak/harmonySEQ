@@ -58,6 +58,7 @@ public:
     Glib::ustring GetName();
     void ShowWindow();
     void UpdateGui();
+    void UpdateGuiNotes();
     int GetVolume();
     void SetVolume(int v);
     int last_played_note;

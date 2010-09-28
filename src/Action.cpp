@@ -74,7 +74,7 @@ void Action::Trigger(int data){
         case SEQ_CHANGE_ONE_NOTE:
             if (!sequencers[arg1]) break;
             sequencers[arg1]->notes[arg2-1] = arg3;
-            //sequencers[arg1]->UpdateGui(); //nessesary
+            sequencers[arg1]->UpdateGuiNotes(); //nessesary //its a temporary wokraround, since UpdateGui seems to crash. Howewer, it is not needed to
 
         case NONE:
             *dbg << "empty event triggered\n";

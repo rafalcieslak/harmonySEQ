@@ -29,6 +29,7 @@ public:
     SequencerWindow(Sequencer* prt);
     virtual ~SequencerWindow();
     void UpdateValues();
+    void UpdateNotes();
     Gtk::VBox main_vbox;
     Gtk::VBox box_of_sliders;
     Gtk::HBox box_of_notes;

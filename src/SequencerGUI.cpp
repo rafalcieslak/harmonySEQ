@@ -160,6 +160,14 @@ void SequencerWindow::UpdateValues(){
     }
 }
 
+
+    void SequencerWindow::UpdateNotes(){
+     for (int x = 0; x < NOTES_CONST_SIZE; x++) {
+        note_buttons[x]->set_value(parent->GetNotes(x));
+    }
+
+    }
+
 void SequencerWindow::OnChannelChanged(){
 
     parent->channel = channel_button.get_value();

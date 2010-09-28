@@ -200,3 +200,4 @@ void Sequencer::SetVolume(int v){volume = v;gui_window->volume_button.set_value(
 
 void Sequencer::ShowWindow(){gui_window->show();}
 void Sequencer::UpdateGui(){gui_window->UpdateValues();}
+void Sequencer::UpdateGuiNotes(){gui_window->UpdateNotes();}
