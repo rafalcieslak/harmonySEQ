@@ -23,9 +23,10 @@
 
 
 Action::Action(ActionTypes t, int a1, int a2){
+    args.resize(ACTION_ARGS_NUM);
     type = t;
-    arg1 = a1;
-    arg2 = a2;
+    args[1] = a1;
+    args[2] = a2;
     gui_window = new ActionGUI(this);
 }
 
@@ -44,37 +45,37 @@ void Action::Trigger(int data){
 
     switch (type){
         case SEQ_TOGGLE:
-            if (!sequencers[arg1]) break;
-            sequencers[arg1]->SetOn(!sequencers[arg1]->GetOn());
+            if (!sequencers[args[1]]) break;
+            sequencers[args[1]]->SetOn(!sequencers[args[1]]->GetOn());
             break;
         case SEQ_OFF:
-            if (!sequencers[arg1]) break;
-            sequencers[arg1]->SetOn(0);
+            if (!sequencers[args[1]]) break;
+            sequencers[args[1]]->SetOn(0);
             break;
         case SEQ_ON:
-            if (!sequencers[arg1]) break;
-            sequencers[arg1]->SetOn(1);
+            if (!sequencers[args[1]]) break;
+            sequencers[args[1]]->SetOn(1);
             break;
 
         case MAINOTE_SET:
-            mainwindow->main_note.set_value((double)arg1);
-            mainnote = arg1;
+            mainwindow->main_note.set_value((double)args[1]);
+            mainnote = args[1];
             break;
 
         case TEMPO_SET:
-            mainwindow->tempo_button.set_value((double)arg1);
-            tempo = arg1;
+            mainwindow->tempo_button.set_value((double)args[1]);
+            tempo = args[1];
             break;
 
         case SEQ_VOLUME_SET:
-            if (!sequencers[arg1]) break;
-            sequencers[arg1]->SetVolume(arg2);
+            if (!sequencers[args[1]]) break;
+            sequencers[args[1]]->SetVolume(args[2]);
             break;
 
         case SEQ_CHANGE_ONE_NOTE:
-            if (!sequencers[arg1]) break;
-            sequencers[arg1]->notes[arg2-1] = arg3;
-            sequencers[arg1]->UpdateGuiNotes(); //nessesary //its a temporary wokraround, since UpdateGui seems to crash. Howewer, it is not needed to
+            if (!sequencers[args[1]]) break;
+            sequencers[args[1]]->notes[args[2]-1] = args[3];
+            sequencers[args[1]]->UpdateGuiNotes(); //nessesary //its a temporary wokraround, since UpdateGui seems to crash. Howewer, it is not needed to
 
         case NONE:
             *dbg << "empty event triggered\n";
@@ -91,28 +92,28 @@ Glib::ustring Action::GetLabel(){
     char temp[100];
     switch (type){
         case SEQ_TOGGLE:
-            sprintf(temp,_("Toggle sequencer '%s'"),GetSeqName(arg1).c_str());
+            sprintf(temp,_("Toggle sequencer '%s'"),GetSeqName(args[1]).c_str());
             break;
         case SEQ_OFF:
-            sprintf(temp,_("Switch sequencer '%s' OFF"),GetSeqName(arg1).c_str());
+            sprintf(temp,_("Switch sequencer '%s' OFF"),GetSeqName(args[1]).c_str());
             break;
         case SEQ_ON:
-            sprintf(temp,_("Switch sequencer '%s' ON"),GetSeqName(arg1).c_str());
+            sprintf(temp,_("Switch sequencer '%s' ON"),GetSeqName(args[1]).c_str());
             break;
 
         case MAINOTE_SET:
-            sprintf(temp,_("Set main note to %d"),arg1);
+            sprintf(temp,_("Set main note to %d"),args[1]);
             break;
 
         case TEMPO_SET:
-            sprintf(temp,_("Set tempo to %d BPM"),arg1);
+            sprintf(temp,_("Set tempo to %d BPM"),args[1]);
             break;
 
         case SEQ_VOLUME_SET:
-            sprintf(temp,_("Set volume of sequencer '%s' to %d"),GetSeqName(arg1).c_str(),arg2);
+            sprintf(temp,_("Set volume of sequencer '%s' to %d"),GetSeqName(args[1]).c_str(),args[2]);
             break;
         case SEQ_CHANGE_ONE_NOTE:
-            sprintf(temp,_("Set note %d of sequencer '%s' to %d"),arg2,GetSeqName(arg1).c_str(),arg3);
+            sprintf(temp,_("Set note %d of sequencer '%s' to %d"),args[2],GetSeqName(args[1]).c_str(),args[3]);
             break;
         case NONE:
             sprintf(temp,_("(empty action)"));

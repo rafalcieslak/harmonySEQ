@@ -22,10 +22,10 @@
 
 //#include "global.h"
 #include "ActionGUI.h"
+#define ACTION_ARGS_NUM 20
 
 class Action {
 public:
-
     enum ActionTypes {
         NONE = 0,
         SEQ_OFF,
@@ -44,20 +44,27 @@ public:
 
     
 
-
+    /**Keeps a reference to events TreeModel row (a child of an event). Useful f.e. for refreshing data in that row*/
     Gtk::TreeRowReference row_in_event_window;
 
-
+    /**Stores the type of this action*/
     int type;
 
-    int arg1;
-    int arg2;
-    int arg3;
-    
+    /**Stores arguments, like sequencer number or note pitch, depending on type. */
+    vector<int> args;
+
+    /**Trigggers this action.
+     * @parram data The data to pass*/
     void Trigger(int data = 0);
+
+    /**Returns a label representing textual description of this message*/
     Glib::ustring GetLabel();
+
+    /**Returns the name of sequencer. Should be moved from Action class to some global  space.
+     *@parram n sequencer number*/
     Glib::ustring GetSeqName(int n);
 
+    /**Shows the GUI*/
     void ShowWindow();
 
 private:

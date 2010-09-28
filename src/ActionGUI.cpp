@@ -24,7 +24,7 @@
 ActionGUI::ActionGUI(Action *prt){
     parent = prt;
     set_title(_("Action"));
-
+ 
     set_border_width(5);
     set_position(Gtk::WIN_POS_CENTER_ON_PARENT);
 
@@ -128,28 +128,28 @@ void ActionGUI::UpdateValues(){
         case Action::NONE:
             break;
         case Action::SEQ_ON:
-            SetSeqCombo(parent->arg1);
+            SetSeqCombo(parent->args[1]);
             break;
         case Action::SEQ_OFF:
-            SetSeqCombo(parent->arg1);
+            SetSeqCombo(parent->args[1]);
             break;
         case Action::SEQ_TOGGLE:
-            SetSeqCombo(parent->arg1);
+            SetSeqCombo(parent->args[1]);
             break;
         case Action::SEQ_VOLUME_SET:
-            SetSeqCombo(parent->arg1);
-            vol_button.set_value(parent->arg2);
+            SetSeqCombo(parent->args[1]);
+            vol_button.set_value(parent->args[2]);
             break;
         case Action::MAINOTE_SET:
-            note_button.set_value(parent->arg1);
+            note_button.set_value(parent->args[1]);
             break;
         case Action::TEMPO_SET:
-            tempo_button.set_value(parent->arg1);
+            tempo_button.set_value(parent->args[1]);
             break;
         case Action::SEQ_CHANGE_ONE_NOTE:
-            SetSeqCombo(parent->arg1);
-            notenr_button.set_value(parent->arg2);
-            noteseq_button.set_value(parent->arg3);
+            SetSeqCombo(parent->args[1]);
+            notenr_button.set_value(parent->args[2]);
+            noteseq_button.set_value(parent->args[3]);
             break;
         default:
             break;
@@ -219,15 +219,15 @@ void ActionGUI::InitType(){
             break;
         case Action::SEQ_ON:
             Seqs_combo.set_active(0);
-            parent->arg1 = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
+            parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
             break;
         case Action::SEQ_OFF:
             Seqs_combo.set_active(0);
-            parent->arg1 = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
+            parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
             break;
         case Action::SEQ_TOGGLE:
             Seqs_combo.set_active(0);
-            parent->arg1 = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
+            parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
             break;
         case Action::SEQ_VOLUME_SET:
             Seqs_combo.set_active(0);
@@ -253,7 +253,7 @@ void ActionGUI::InitType(){
 void ActionGUI::OnNoteChanged(){
 
     if(parent->type == Action::MAINOTE_SET){
-        parent->arg1 = note_button.get_value();
+        parent->args[1] = note_button.get_value();
     }else *err << _("Error: note has changed, while action is not note-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
@@ -264,7 +264,7 @@ void ActionGUI::OnNoteChanged(){
 void ActionGUI::OnTempoChanged(){
 
     if(parent->type == Action::TEMPO_SET){
-        parent->arg1 = tempo_button.get_value();
+        parent->args[1] = tempo_button.get_value();
     }else *err << _("Error: tempo has changed, while action is not tempo-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
@@ -275,7 +275,7 @@ void ActionGUI::OnTempoChanged(){
 void ActionGUI::OnSeqChanged(){
     if(!Seqs_combo.get_active()) return; //empty selection
     if(parent->type == Action::SEQ_OFF || parent->type == Action::SEQ_ON || parent->type == Action::SEQ_TOGGLE || parent->type == Action::SEQ_VOLUME_SET || parent->type == Action::SEQ_CHANGE_ONE_NOTE){
-            parent->arg1 = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
+            parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
     }else *err << _("Error: sequencer has changed, while action is not sequencer-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
@@ -287,7 +287,7 @@ void ActionGUI::OnSeqChanged(){
 void ActionGUI::OnVolumeChanged(){
 
     if(parent->type == Action::SEQ_VOLUME_SET){
-        parent->arg2 = vol_button.get_value();
+        parent->args[2] = vol_button.get_value();
     }else *err << _("Error: volume has changed, while action is not volume-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
@@ -297,7 +297,7 @@ void ActionGUI::OnVolumeChanged(){
 
 void ActionGUI::OnNoteSeqChanged(){
     if(parent->type == Action::SEQ_CHANGE_ONE_NOTE){
-        parent->arg3 = noteseq_button.get_value();
+        parent->args[3] = noteseq_button.get_value();
     }else *err << _("Error: note to set has changed, while action is not set-seq-note-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
@@ -307,7 +307,7 @@ void ActionGUI::OnNoteSeqChanged(){
 
 void ActionGUI::OnNoteNrChanged(){
     if(parent->type == Action::SEQ_CHANGE_ONE_NOTE){
-        parent->arg2 = notenr_button.get_value();
+        parent->args[2] = notenr_button.get_value();
     }else *err << _("Error: note number has changed, while action is not set-seq-note-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
