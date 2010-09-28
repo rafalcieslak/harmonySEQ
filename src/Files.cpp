@@ -112,12 +112,8 @@ void SaveToFile(){
                     if (events[x]->actions[a] == NULL) continue;
                     sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_TYPE,a);
                     kf.set_integer(temp,temp2,events[x]->actions[a]->type);
-                    sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_ARG1,a);
-                    kf.set_integer(temp,temp2,events[x]->actions[a]->args[1]);
-                    sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_ARG2,a);
-                    kf.set_integer(temp,temp2,events[x]->actions[a]->args[2]);
-                    sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_ARG3,a);
-                    kf.set_integer(temp,temp2,events[x]->actions[a]->args[3]);
+                    sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_ARGS,a);
+                    kf.set_integer_list(temp,temp2,events[x]->actions[a]->args);
                 }
             }
 
@@ -296,14 +292,8 @@ bool LoadFile(Glib::ustring file){
                 events[x]->actions.push_back(new Action(Action::NONE));
 
                 events[x]->actions[a]->type = kf.get_integer(temp,temp2);
-                sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_ARG1,a);
-                events[x]->actions[a]->args[1] = kf.get_integer(temp,temp2);
-                sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_ARG2,a);
-                events[x]->actions[a]->args[2] = kf.get_integer(temp,temp2);
-                sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_ARG3,a);
-                if (kf.has_key(temp,temp2)) //was not used in previous versiond
-                events[x]->actions[a]->args[3] = kf.get_integer(temp,temp2);
-
+                sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_ARGS,a);
+                events[x]->actions[a]->args = kf.get_integer_list(temp,temp2);
             }
 
             events[x]->UpdateGUI();

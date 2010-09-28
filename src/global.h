@@ -82,9 +82,7 @@ using namespace std;
 #define FILE_KEY_EVENT_ACTIONS_NUM "actions"
 
 #define FILE_GROUP_TEMPLATE_EVENT_ACTION_TYPE "Action_%d_type"
-#define FILE_GROUP_TEMPLATE_EVENT_ACTION_ARG1 "Action_%d_arg1"
-#define FILE_GROUP_TEMPLATE_EVENT_ACTION_ARG2 "Action_%d_arg2"
-#define FILE_GROUP_TEMPLATE_EVENT_ACTION_ARG3 "Action_%d_arg3"
+#define FILE_GROUP_TEMPLATE_EVENT_ACTION_ARGS "Action_%d_args"
 
 
 #ifndef I_DO_NOT_WANT_EXTERNS_FROM_GLOBAL_H
