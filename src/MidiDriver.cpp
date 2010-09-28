@@ -134,26 +134,23 @@ void MidiDriver::DeleteQueue(){
 }
 
 void MidiDriver::UpdateQueue(){
-    //*dbg << "yep, updating the queue...\n";
     snd_seq_event_t ev;
     for (unsigned int n = 0; n < sequencers.size(); n++){
-        if(sequencers[n] == NULL) continue;
-        //*dbg << "sequencer " << n << " is ";
-        //*dbg << ((sequencers[n]->GetOn())?"on":"off") << ENDL;
-        if (!sequencers[n]->GetOn()) continue;
+        if(sequencers[n] == NULL) continue; //seems this sequencer was removed
+        if (!sequencers[n]->GetOn()) continue; //if it's not turned on, take next sequencer
+
         //ok, and here we proceed all notes from one sequencer.
         //first check the length:
         if (sequencers[n]->length<=1){
             //length is smaller or equal to 1, we play the same sequence several times in a tact
-            double howmanytimes = (double)1.0/(sequencers[n]->length);
-            //*dbg << "howmanytimes = " << howmanytimes << ENDL;
+
+            double howmanytimes = (double)1.0/(sequencers[n]->length); //how many times we play this sequence in one tact
             int duration = ((double)(TICKS_PER_NOTE / sequencers[n]->resolution))*sequencers[n]->length;
             int local_tick = tick;
             for (int i = 0; i < howmanytimes; i++){
                 for (int x = 0; x < sequencers[n]->resolution; x++) {
                     snd_seq_ev_clear(&ev);
                     int note = sequencers[n]->notes[sequencers[n]->sequence[x]];
-                    *dbg << note << " ";
                     if (sequencers[n]->GetApplyMainNote()) note += mainnote;
                     snd_seq_ev_set_note(&ev, sequencers[n]->GetChannel() - 1, note, sequencers[n]->GetVolume(), duration);
                     snd_seq_ev_schedule_tick(&ev, queueid, 0, local_tick + x * duration);
@@ -164,10 +161,10 @@ void MidiDriver::UpdateQueue(){
                 local_tick += (double)TICKS_PER_NOTE*sequencers[n]->length;
             }
 
-           *dbg << ENDL;
-
         }else{
             //length is larger than 1, we play one sequence over many tacts.
+            //TODO: rewrite this, so that it saves a double representing a progress of this sequence (i.e. where to start from next time)
+
             int duration = ((double)(TICKS_PER_NOTE / sequencers[n]->resolution))*sequencers[n]->length;
             int startnote = sequencers[n]->last_played_note;
             //*dbg << "startnote = " << startnote <<ENDL;
@@ -188,8 +185,10 @@ void MidiDriver::UpdateQueue(){
             sequencers[n]->last_played_note = (startnote+x)%sequencers[n]->resolution;
         }
     }
-    tick+=TICKS_PER_QUARTERNOTE*4;
 
+    tick+=TICKS_PER_NOTE;
+
+   //send ECHO event
     snd_seq_ev_clear(&ev);
     ev.type = SND_SEQ_EVENT_ECHO;
     snd_seq_ev_schedule_tick(&ev,queueid,0,tick);
