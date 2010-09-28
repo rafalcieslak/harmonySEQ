@@ -61,10 +61,11 @@ void SaveToFile(){
     switch (result){
         case Gtk::RESPONSE_OK:
 
-            if (fexists(filename.c_str()))
-                if (!Ask(_("This file already exist."),_("Do you want to overwrite this file?")))
+            if (fexists(filename.c_str())){
+                sprintf(temp,_("File '%s'  already exist."),filename.c_str());
+                if (!Ask(temp,_("Do you want to overwrite this file?")))
                     return; //user choosed not to overwrite it.
-
+            }
             output_file.open(filename.c_str(),ios_base::trunc);
             if(!output_file.good()){
                 sprintf(temp,_("ERROR - error while opening file %s to write.\n"),filename.c_str());
