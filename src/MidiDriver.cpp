@@ -134,6 +134,7 @@ void MidiDriver::DeleteQueue(){
 }
 
 void MidiDriver::UpdateQueue(){
+    gdk_threads_enter(); //for safety. any calls to GUI will be thread - protected
     snd_seq_event_t ev;
     for (unsigned int n = 0; n < sequencers.size(); n++){
         if(sequencers[n] == NULL) continue; //seems this sequencer was removed
@@ -208,6 +209,7 @@ void MidiDriver::UpdateQueue(){
     snd_seq_event_output_direct(seq_handle,&ev);
 
 
+    gdk_threads_leave(); //see note on above
 
 }
 
