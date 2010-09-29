@@ -170,6 +170,9 @@ void ActionGUI::UpdateValues(){
             SetSeqCombo(parent->args[1]);
             for (int x = 0; x <  6; x++) notes6_buttons[x]->set_value(parent->args[x+2]);
             break;
+        case Action::SEQ_PLAY_ONCE:
+            SetSeqCombo(parent->args[1]);
+            break;
         default:
             break;
 
@@ -196,6 +199,7 @@ void ActionGUI::ChangeVisibleLines(){
         case Action::SEQ_ON:
         case Action::SEQ_OFF:
         case Action::SEQ_TOGGLE:
+        case Action::SEQ_PLAY_ONCE:
             line_seq.show();
             break;
         case Action::SEQ_VOLUME_SET:
@@ -272,6 +276,9 @@ void ActionGUI::InitType(){
         case Action::TEMPO_SET:
             tempo_button.set_value(120.0);
             break;
+        case Action::SEQ_PLAY_ONCE:
+            Seqs_combo.set_active(0);
+            break;
         default:
             break;
     }
@@ -302,7 +309,7 @@ void ActionGUI::OnTempoChanged(){
 
 void ActionGUI::OnSeqChanged(){
     if(!Seqs_combo.get_active()) return; //empty selection
-    if(parent->type == Action::SEQ_OFF || parent->type == Action::SEQ_ON || parent->type == Action::SEQ_TOGGLE || parent->type == Action::SEQ_VOLUME_SET || parent->type == Action::SEQ_CHANGE_ONE_NOTE || parent->type == Action::SEQ_CHANGE_ALL_NOTES){
+    if(parent->type == Action::SEQ_OFF || parent->type == Action::SEQ_ON || parent->type == Action::SEQ_TOGGLE || parent->type == Action::SEQ_VOLUME_SET || parent->type == Action::SEQ_CHANGE_ONE_NOTE || parent->type == Action::SEQ_CHANGE_ALL_NOTES || parent->type == Action::SEQ_PLAY_ONCE){
             parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
     }else *err << _("Error: sequencer has changed, while action is not sequencer-type.") << ENDL;
 

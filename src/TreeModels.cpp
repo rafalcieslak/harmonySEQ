@@ -66,6 +66,9 @@ void InitActionTypesTreeModel(){
     row[m_columns_action_types.type] = Action::SEQ_TOGGLE;
     row[m_columns_action_types.label] = _("Sequencer/Toggle");
     row = *(m_refTreeModel_ActionTypes->append());
+    row[m_columns_action_types.type] = Action::SEQ_PLAY_ONCE;
+    row[m_columns_action_types.label] = _("Sequencer/Play once");
+    row = *(m_refTreeModel_ActionTypes->append());
     row[m_columns_action_types.type] = Action::SEQ_VOLUME_SET;
     row[m_columns_action_types.label] = _("Sequencer/Set volume");
     row = *(m_refTreeModel_ActionTypes->append());

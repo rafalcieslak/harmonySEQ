@@ -117,7 +117,7 @@ public:
 
     /**Called from MidiDriver when this sequencer is played once and it gets played, it safely switches the sequencer off*/
     void GotPlayedOnce();
-
+    void ClearPlayedOnce();
     /**Remembers the last played note*/
     int last_played_note;
 
@@ -125,6 +125,8 @@ public:
     Gtk::TreeRowReference row_in_main_window;
     
     friend class SequencerWindow;
+
+    bool switch_off_on_next_tack_beggining;
 protected:
     int channel;
     bool apply_mainnote;

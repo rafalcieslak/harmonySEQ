@@ -88,7 +88,10 @@ void Action::Trigger(int data){
             sequencers[args[1]]->notes[5] = args[7];
             sequencers[args[1]]->UpdateGuiNotes(); //nessesary //its a temporary wokraround, since UpdateGui seems to crash. Howewer, it is not needed to update anything else than notes.
              break;
-
+        case SEQ_PLAY_ONCE:
+            if (!sequencers[args[1]]) break;
+            sequencers[args[1]]->PlayOnce();
+            break;
         case NONE:
             *dbg << "empty event triggered\n";
             break;
@@ -129,6 +132,9 @@ Glib::ustring Action::GetLabel(){
             break;
         case SEQ_CHANGE_ALL_NOTES:
             sprintf(temp,_("Set notes of sequencer '%s' to %d,%d,%d,%d,%d,%d "),GetSeqName(args[1]).c_str(),args[2],args[3],args[4],args[5],args[6],args[7]);
+            break;
+        case SEQ_PLAY_ONCE:
+            sprintf(temp,_("Play sequence in '%s' once"),GetSeqName(args[1]).c_str());
             break;
         case NONE:
             sprintf(temp,_("(empty action)"));

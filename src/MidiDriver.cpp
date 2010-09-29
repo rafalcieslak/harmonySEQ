@@ -137,6 +137,9 @@ void MidiDriver::UpdateQueue(){
     snd_seq_event_t ev;
     for (unsigned int n = 0; n < sequencers.size(); n++){
         if(sequencers[n] == NULL) continue; //seems this sequencer was removed
+
+        if(sequencers[n]->switch_off_on_next_tack_beggining) sequencers[n]->ClearPlayedOnce();
+
         if (!sequencers[n]->GetOn()) continue; //if it's not turned on, take next sequencer
 
         //ok, and here we proceed all notes from one sequencer.
@@ -161,6 +164,8 @@ void MidiDriver::UpdateQueue(){
                 local_tick += (double)TICKS_PER_NOTE*sequencers[n]->length;
             }
 
+              //if the sequencer is played only once, then mark it as played
+             if(sequencers[n]->GetPlayedOnce()) sequencers[n]->GotPlayedOnce();
         }else{
             //length is larger than 1, we play one sequence over many tacts.
             //TODO: rewrite this, so that it saves a double representing a progress of this sequence (i.e. where to start from next time)
@@ -168,11 +173,11 @@ void MidiDriver::UpdateQueue(){
             int duration = ((double)(TICKS_PER_NOTE / sequencers[n]->resolution))*sequencers[n]->length;
             int startnote = sequencers[n]->last_played_note;
             //*dbg << "startnote = " << startnote <<ENDL;
-            int x;
+            int x, currnote = startnote;
             for (x = 0; x < (double)sequencers[n]->resolution/sequencers[n]->length;x++){
                     //*dbg << "x = " << x << ENDL;
                     snd_seq_ev_clear(&ev);
-                    int note = sequencers[n]->notes[sequencers[n]->sequence[(startnote+x)%sequencers[n]->resolution]];
+                    int note = sequencers[n]->notes[sequencers[n]->sequence[(currnote)]];
                     if (sequencers[n]->GetApplyMainNote()) note += mainnote;
                     snd_seq_ev_set_note(&ev, sequencers[n]->GetChannel() - 1, note, sequencers[n]->GetVolume(), duration);
                     snd_seq_ev_schedule_tick(&ev, queueid, 0, tick + x * duration);
@@ -180,13 +185,19 @@ void MidiDriver::UpdateQueue(){
                     snd_seq_ev_set_subs(&ev);
                     snd_seq_event_output_direct(seq_handle, &ev);
 
+                      //if the sequencer is played only once, then mark it as played
+                     if( currnote >= sequencers[n]->resolution&&sequencers[n]->GetPlayedOnce() ) {
+                         sequencers[n]->GotPlayedOnce();
+                         currnote = 0;
+                     }
+
+                    currnote = currnote%sequencers[n]->resolution;
+
             }
             //remember last note
-            sequencers[n]->last_played_note = (startnote+x)%sequencers[n]->resolution;
+            sequencers[n]->last_played_note =currnote;
         }
 
-        //if the sequencer is played only once, then mark it as played
-        if(sequencers[n]->GetPlayedOnce()) sequencers[n]->GotPlayedOnce();
     }
 
     tick+=TICKS_PER_NOTE;

@@ -235,6 +235,11 @@ MainWindow::OnMutedToggleToggled(const Glib::ustring& path)
     if (!iter) return;
     Gtk::TreeModel::Row row = *iter;
     *dbg << "the clicked row's ID was " << row[m_columns_sequencers.col_ID] << ENDL;
+
+    if (sequencers[row[m_columns_sequencers.col_ID]]->GetPlayedOnce()){
+        //the sequence was to be played once, but user canceled it
+        sequencers[row[m_columns_sequencers.col_ID]]->GotPlayedOnce();
+    } else 
     sequencers[row[m_columns_sequencers.col_ID]]->SetOn(row[m_columns_sequencers.col_muted]);
 }
 
@@ -276,7 +281,7 @@ Gtk::TreeModel::RowReference MainWindow::AddSequencerRow(int x)
     if(sequencers[x]->GetPlayedOnce()){
         row[m_columns_sequencers.col_colour] = "goldenrod1";
     }else if(sequencers[x]->GetOn()){
-        row[m_columns_sequencers.col_colour] = "firebrick1 ";
+        row[m_columns_sequencers.col_colour] = "brown1";
     }else{
         row[m_columns_sequencers.col_colour] = "white";
     }
@@ -309,7 +314,7 @@ void MainWindow::InitTreeData(){
         if(sequencers[x]->GetPlayedOnce()){
             row[m_columns_sequencers.col_colour] = "goldenrod1";
         }else if(sequencers[x]->GetOn()){
-            row[m_columns_sequencers.col_colour] = "firebrick1 ";
+            row[m_columns_sequencers.col_colour] = "brown1";
         }else{
             row[m_columns_sequencers.col_colour] = "white";
         }
@@ -334,7 +339,7 @@ void MainWindow::RefreshRow(Gtk::TreeRowReference rowref){
     if(sequencers[x]->GetPlayedOnce()){
         row[m_columns_sequencers.col_colour] = "goldenrod1";
     }else if(sequencers[x]->GetOn()){
-        row[m_columns_sequencers.col_colour] = "firebrick1 ";
+        row[m_columns_sequencers.col_colour] = "brown1";
     }else{
         row[m_columns_sequencers.col_colour] = "white";
     }

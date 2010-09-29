@@ -9,8 +9,8 @@ versionC=0
 [System]
 tempo=200
 mainnote=60
-sequencers_number=5
-events_number=9
+sequencers_number=7
+events_number=8
 
 [Seq 2]
 name=piano
@@ -21,11 +21,11 @@ volume=75
 resolution=8
 length=1
 sequence=0;1;2;0;1;2;1;2;
-notes=-3;0;4;5;7;0;
+notes=-3;0;4;4;7;0;
 
 [Seq 3]
 name=control
-on=true
+on=false
 channel=16
 apply_mn=false
 volume=100
@@ -36,7 +36,7 @@ notes=40;41;42;0;0;0;
 
 [Seq 4]
 name=metronome
-on=true
+on=false
 channel=10
 apply_mn=false
 volume=100
@@ -45,76 +45,72 @@ length=1
 sequence=0;1;1;1;1;1;1;1;
 notes=37;128;0;0;0;0;
 
+[Seq 5]
+name=quick
+on=false
+channel=2
+apply_mn=true
+volume=100
+resolution=8
+length=1
+sequence=0;1;2;5;3;5;2;0;
+notes=9;12;16;17;19;128;
+
+[Seq 6]
+name=quick2
+on=false
+channel=2
+apply_mn=true
+volume=100
+resolution=8
+length=1
+sequence=0;1;2;5;3;5;3;4;
+notes=9;12;16;17;19;128;
+
 [Event 2]
 type=1
 arg1=49
 arg2=0
-actions=2
+actions=3
 Action_0_type=5
-Action_0_arg1=48
-Action_0_arg2=0
-Action_0_arg3=811560559
+Action_0_args=0;60;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;
 
 [Event 3]
-type=1
-arg1=50
-arg2=0
-actions=2
-Action_0_type=5
-Action_0_arg1=60
-Action_0_arg2=0
-Action_0_arg3=811560559
-
-[Event 4]
-type=1
-arg1=51
-arg2=0
-actions=1
-Action_0_type=5
-Action_0_arg1=72
-Action_0_arg2=0
-Action_0_arg3=811560559
-
-[Event 5]
 type=2
 arg1=40
-arg2=16
+arg2=15
 actions=1
 Action_0_type=7
-Action_0_arg1=2
-Action_0_arg2=3
-Action_0_arg3=4
+Action_0_args=0;2;3;4;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;
 
-[Event 6]
+[Event 4]
 type=2
 arg1=41
 arg2=16
 actions=1
 Action_0_type=7
-Action_0_arg1=2
-Action_0_arg2=3
-Action_0_arg3=5
+Action_0_args=0;2;3;5;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;
 
-[Event 7]
+[Event 5]
 type=2
 arg1=42
 arg2=16
 actions=1
 Action_0_type=7
-Action_0_arg1=2
-Action_0_arg2=3
-Action_0_arg3=7
+Action_0_args=0;2;3;7;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;
 
-[Event 8]
+[Event 6]
 type=1
-arg1=97
+arg1=113
 arg2=0
-actions=2
-Action_0_type=3
-Action_0_arg1=2
-Action_0_arg2=0
-Action_0_arg3=0
-Action_1_type=3
-Action_1_arg1=3
-Action_1_arg2=0
-Action_1_arg3=0
+actions=1
+Action_0_type=9
+Action_0_args=0;5;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;
+
+[Event 7]
+type=1
+arg1=119
+arg2=0
+actions=1
+Action_0_type=9
+Action_0_args=0;6;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;

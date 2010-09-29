@@ -35,7 +35,8 @@ public:
         MAINOTE_SET,
         TEMPO_SET,
         SEQ_CHANGE_ONE_NOTE,
-        SEQ_CHANGE_ALL_NOTES
+        SEQ_CHANGE_ALL_NOTES,
+        SEQ_PLAY_ONCE
 
     };
 
