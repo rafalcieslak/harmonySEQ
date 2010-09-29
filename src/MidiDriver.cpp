@@ -184,6 +184,9 @@ void MidiDriver::UpdateQueue(){
             //remember last note
             sequencers[n]->last_played_note = (startnote+x)%sequencers[n]->resolution;
         }
+
+        //if the sequencer is played only once, then mark it as played
+        if(sequencers[n]->GetPlayedOnce()) sequencers[n]->GotPlayedOnce();
     }
 
     tick+=TICKS_PER_NOTE;

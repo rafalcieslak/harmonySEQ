@@ -31,39 +31,99 @@ void clear_sequencers();
 
 class Sequencer {
 public:
+
+    /**Sequencer constructor*/
     Sequencer();
     Sequencer(Glib::ustring _name0);
     Sequencer(const Sequencer* orig);
     Sequencer(int seq[],int notes[]);
     Sequencer(int seq[],int notes[], Glib::ustring _name);
     virtual ~Sequencer();
+
+    /**List of sequence notes*/
+    vector<int> sequence;
+
+    /**List of notes*/
+    vector<int> notes;
     
+    /**Fills in everything with default values*/
     void Init();
 
-
-    void SetResolution(int res);
+    /**Stores the length of  sequence*/
     double length;
+
+    /**Stores the resolution of sequence*/
     int resolution;
-    vector<int> sequence;
-    int GetSequence(int n);
-    vector<int> notes;
+
+    /**Used to change resolution of this sequencer*/
+    void SetResolution(int res);
+
+    /**Returns a one note of this sequencer
+     *  @parram n note number*/
     int GetNotes(int n);
+
+    /**Returns a one note from sequence
+     * @parram n sequence note tumber*/
+    int GetSequence(int n);
+
+
+
+    /**Sets the sequencer on/off*/
     void SetOn(bool m);
+
+    /**Returns true if sequencer is on, or false otherwise*/
     bool GetOn();
-    void SetApplyMainNote(bool a);
-    bool GetApplyMainNote();
-    void SetChannel(int ch);
-    int GetChannel();
+
+    /**Renames the sequencer*/
     void SetName(Glib::ustring n);
+
+    /**Returns current sequencer name*/
     Glib::ustring GetName();
-    void ShowWindow();
-    void UpdateGui();
-    void UpdateGuiNotes();
-    int GetVolume();
+
+    /**Sets flag ApplyMainNote*/
+    void SetApplyMainNote(bool a);
+
+    /**Returns flag ApplyMainNote*/
+    bool GetApplyMainNote();
+
+    /**Changes channel*/
+    void SetChannel(int ch);
+
+    /**Returns channel*/
+    int GetChannel();
+    
+    /**Sets velocity*/
     void SetVolume(int v);
+    /**Returns velocity*/
+    int GetVolume();
+
+
+
+    /**Shows corresponding SequencerWindow*/
+    void ShowWindow();
+
+    /**Updates values in corresponding SequencerWindow*/
+    void UpdateGui();
+
+    /**Updates note values in corresponding SequencerWindow*/
+    void UpdateGuiNotes();
+
+
+    /**Switches this sequencer on for one tact*/
+    void PlayOnce();
+
+    /**Returns whether this sequencer is played only one tact*/
+    bool GetPlayedOnce();
+
+    /**Called from MidiDriver when this sequencer is played once and it gets played, it safely switches the sequencer off*/
+    void GotPlayedOnce();
+
+    /**Remembers the last played note*/
     int last_played_note;
 
+    /**Keeps a reference to a row in Sequencers TreeModel*/
     Gtk::TreeRowReference row_in_main_window;
+    
     friend class SequencerWindow;
 protected:
     int channel;
@@ -72,6 +132,7 @@ protected:
     int volume;
     Glib::ustring name;
     SequencerWindow *gui_window;
+    bool played_once;
     
 private:
 

@@ -25,22 +25,52 @@
 
 class MidiDriver {
 public:
+    /**Alsa MIDI sequencer's handle*/
     snd_seq_t* seq_handle;
-    int output_port,output_port2, input_port;
+
+    /**MIDI ports handles*/
+    int output_port,input_port;
+
+    /**MIDI queue handle*/
     int queueid;
+
+    /**True if the driver is working*/
     bool working;
+
+    /**Current tempo on the queue*/
     double tempo;
     int tick;
     MidiDriver();
+    
+    /**Outputs immediately a noteon*/
     void SendNoteEvent(int pitch, int volume);
+
+    /**Outputs event immediately.
+     * @parram ev an event to pass*/
     void PassEvent(snd_seq_event_t *ev);
+
+    /**Opens the sequencer MIDI ports*/
     void Open();
+
+    /**Inits Queue*/
     void InitQueue();
+
+    /**Sets tempo*/
     void SetTempo(double bpm);
+
+    /**Removes all events from queue, except noteoffs*/
     void ClearQueue();
+
+    /**Closes and removes queue*/
     void DeleteQueue();
+
+    /**This routine gets called every time the echo event is received. It puts next pack of notes on the queue.*/
     void UpdateQueue();
+
+    /**Called every time there are midi events on input, since this procedure processes them; no need to call it from anywhere else*/
     void ProcessInput();
+
+    /***/
     MidiDriver(const MidiDriver& orig);
     virtual ~MidiDriver();
 private:

@@ -125,6 +125,7 @@ Sequencer::Sequencer(const Sequencer *orig) {
     volume = orig->volume;
     gui_window = new SequencerWindow(this);
     last_played_note = orig->last_played_note;
+    played_once = 0;
 }
 
 Sequencer::~Sequencer() {
@@ -138,6 +139,7 @@ void Sequencer::Init(){
     length = 1;
     volume = DEFAULT_VOLUME;
     last_played_note = 0;
+    played_once = 0;
     resolution = SEQUENCE_DEFAULT_SIZE;
     *dbg << notes[0]<<ENDL;
     *dbg << GetNotes(0);
@@ -201,3 +203,6 @@ void Sequencer::SetVolume(int v){volume = v;gui_window->volume_button.set_value(
 void Sequencer::ShowWindow(){gui_window->show();}
 void Sequencer::UpdateGui(){gui_window->UpdateValues();}
 void Sequencer::UpdateGuiNotes(){gui_window->UpdateNotes();}
+void Sequencer::PlayOnce(){on = true; played_once = true;}
+bool Sequencer::GetPlayedOnce(){return played_once;}
+void Sequencer::GotPlayedOnce(){on = false; played_once = false;}
