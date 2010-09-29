@@ -70,7 +70,6 @@ public:
     void OnSelectionChanged();
     void OnPassToggleClicked();
     bool OnKeyPress(GdkEventKey* event);
-    bool Ask(Glib::ustring message, Glib::ustring secondary_message);
     Gtk::VBox vbox1;
     Gtk::HBox hbox_up, hbox_down;
     Gtk::SpinButton main_note;

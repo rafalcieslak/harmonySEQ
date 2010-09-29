@@ -70,14 +70,19 @@ MainWindow::MainWindow()
         Gtk::CellRenderer* cell = m_TreeView.get_column_cell_renderer(col_count - 1);
         Gtk::CellRendererText& txt = dynamic_cast<Gtk::CellRendererText&> (*cell);
         txt.signal_edited().connect(mem_fun(*this, &MainWindow::OnNameEdited));
+
         col_count = m_TreeView.append_column_editable(_("On"), m_columns_sequencers.col_muted);
+        Gtk::TreeViewColumn * column = m_TreeView.get_column(col_count-1);
         cell = m_TreeView.get_column_cell_renderer(col_count - 1);
+        column->add_attribute(cell->property_cell_background(),m_columns_sequencers.col_colour);
         Gtk::CellRendererToggle& tgl = dynamic_cast<Gtk::CellRendererToggle&> (*cell);
         tgl.signal_toggled().connect(mem_fun(*this, &MainWindow::OnMutedToggleToggled));
+
         col_count = m_TreeView.append_column_editable(_("MN"), m_columns_sequencers.col_apply_mainnote);
         cell = m_TreeView.get_column_cell_renderer(col_count - 1);
         Gtk::CellRendererToggle& tgl2 = dynamic_cast<Gtk::CellRendererToggle&> (*cell);
         tgl2.signal_toggled().connect(mem_fun(*this, &MainWindow::OnApplyMainNoteToggleToggled));
+        
         col_count = m_TreeView.append_column(_("Chan"), m_columns_sequencers.col_channel);
         col_count = m_TreeView.append_column(_("Res"), m_columns_sequencers.col_res);
         col_count = m_TreeView.append_column_numeric(_("Len"), m_columns_sequencers.col_len,"%g");
@@ -255,21 +260,28 @@ MainWindow::OnNameEdited(const Glib::ustring& path, const Glib::ustring& newtext
     eventswindow->RefreshAll();
 }
 
-Gtk::TreeModel::RowReference MainWindow::AddSequencerRow(int n)
+Gtk::TreeModel::RowReference MainWindow::AddSequencerRow(int x)
 {
-    *dbg << "wooho! sequener " << n << " was just added, and we have to add it now to a new row in the list!" << ENDL;
+    *dbg << "wooho! sequener " << x << " was just added, and we have to add it now to a new row in the list!" << ENDL;
     Gtk::TreeModel::iterator iter = m_refTreeModel_sequencers->append();
     Gtk::TreeModel::Row row = *(iter);
-    row[m_columns_sequencers.col_ID] = n;
-    row[m_columns_sequencers.col_name] = sequencers[n]->GetName();
-    row[m_columns_sequencers.col_muted] = sequencers[n]->GetOn();
-    row[m_columns_sequencers.col_apply_mainnote] = sequencers[n]->GetApplyMainNote();
-    row[m_columns_sequencers.col_channel] = sequencers[n]->GetChannel();
-    row[m_columns_sequencers.col_res] = sequencers[n]->resolution;
-    row[m_columns_sequencers.col_len] = sequencers[n]->length;
-    row[m_columns_sequencers.col_vol] = sequencers[n]->GetVolume();
+    row[m_columns_sequencers.col_ID] = x;
+    row[m_columns_sequencers.col_name] = sequencers[x]->GetName();
+    row[m_columns_sequencers.col_muted] = sequencers[x]->GetOn();
+    row[m_columns_sequencers.col_apply_mainnote] = sequencers[x]->GetApplyMainNote();
+    row[m_columns_sequencers.col_channel] = sequencers[x]->GetChannel();
+    row[m_columns_sequencers.col_res] = sequencers[x]->resolution;
+    row[m_columns_sequencers.col_len] = sequencers[x]->length;
+    row[m_columns_sequencers.col_vol] = sequencers[x]->GetVolume();
+    if(sequencers[x]->GetPlayedOnce()){
+        row[m_columns_sequencers.col_colour] = "goldenrod1";
+    }else if(sequencers[x]->GetOn()){
+        row[m_columns_sequencers.col_colour] = "firebrick1 ";
+    }else{
+        row[m_columns_sequencers.col_colour] = "white";
+    }
     Gtk::TreeRowReference rowref(m_refTreeModel_sequencers,m_refTreeModel_sequencers->get_path(iter));
-    sequencers[n]->row_in_main_window = rowref;
+    sequencers[x]->row_in_main_window = rowref;
     return rowref;
 }
 
@@ -294,6 +306,13 @@ void MainWindow::InitTreeData(){
         row[m_columns_sequencers.col_vol] = sequencers[x]->GetVolume();
         Gtk::TreeRowReference rowref(m_refTreeModel_sequencers,m_refTreeModel_sequencers->get_path(iter));
         sequencers[x]->row_in_main_window = rowref;
+        if(sequencers[x]->GetPlayedOnce()){
+            row[m_columns_sequencers.col_colour] = "goldenrod1";
+        }else if(sequencers[x]->GetOn()){
+            row[m_columns_sequencers.col_colour] = "firebrick1 ";
+        }else{
+            row[m_columns_sequencers.col_colour] = "white";
+        }
         rowcount++;
 
     }
@@ -312,6 +331,13 @@ void MainWindow::RefreshRow(Gtk::TreeRowReference rowref){
     row[m_columns_sequencers.col_res] = sequencers[x]->resolution;
     row[m_columns_sequencers.col_len] = sequencers[x]->length;
     row[m_columns_sequencers.col_vol] = sequencers[x]->GetVolume();
+    if(sequencers[x]->GetPlayedOnce()){
+        row[m_columns_sequencers.col_colour] = "goldenrod1";
+    }else if(sequencers[x]->GetOn()){
+        row[m_columns_sequencers.col_colour] = "firebrick1 ";
+    }else{
+        row[m_columns_sequencers.col_colour] = "white";
+    }
 
 }
 
@@ -417,27 +443,4 @@ void MainWindow::OnSelectionChanged(){
 
     }
 
-}
-
-bool MainWindow::Ask(Glib::ustring message, Glib::ustring secondary_message){
-
-
-      Gtk::MessageDialog dialog("This is a QUESTION MessageDialog",
-          false /* use_markup */, Gtk::MESSAGE_QUESTION,
-          Gtk::BUTTONS_OK_CANCEL);
-  dialog.set_secondary_text(
-          "And this is the secondary text that explains things.");
-
-    int result = dialog.run();
-
-    switch (result){
-        case Gtk::RESPONSE_YES:
-            *dbg << "anserwed YES";
-            return 1;
-        case Gtk::RESPONSE_NO:
-            *dbg << "anserwed NO";
-            return 0;
-    }
-
-    return 0;
 }
