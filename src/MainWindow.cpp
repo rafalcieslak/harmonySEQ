@@ -274,12 +274,12 @@ Gtk::TreeModel::RowReference MainWindow::AddSequencerRow(int x)
     row[m_columns_sequencers.col_res] = sequencers[x]->resolution;
     row[m_columns_sequencers.col_len] = sequencers[x]->length;
     row[m_columns_sequencers.col_vol] = sequencers[x]->GetVolume();
-    if(sequencers[x]->GetPlayedOnce()){
-        row[m_columns_sequencers.col_colour] = "LightGoldenrod1"; // is going to be played once
-    }else if (sequencers[x]->switch_off_on_next_tack_beggining){
-        row[m_columns_sequencers.col_colour] = "goldenrod1"; //in in during being played once
-    }else if(sequencers[x]->GetOn()){
-        row[m_columns_sequencers.col_colour] = "brown1";
+    if(sequencers[x]->GetOn()){
+        row[m_columns_sequencers.col_colour] = "green1";
+    }else if (sequencers[x]->GetPlayOncePhase() == 2 || sequencers[x]->GetPlayOncePhase() == 3){
+        row[m_columns_sequencers.col_colour] = "yellow1";
+    }else if(sequencers[x]->GetPlayOncePhase()== 1){
+        row[m_columns_sequencers.col_colour] = "yellow2";
     }else{
         row[m_columns_sequencers.col_colour] = "white";
     }
@@ -309,12 +309,12 @@ void MainWindow::InitTreeData(){
         row[m_columns_sequencers.col_vol] = sequencers[x]->GetVolume();
         Gtk::TreeRowReference rowref(m_refTreeModel_sequencers,m_refTreeModel_sequencers->get_path(iter));
         sequencers[x]->row_in_main_window = rowref;
-    if(sequencers[x]->GetPlayedOnce()){
-        row[m_columns_sequencers.col_colour] = "LightGoldenrod1"; // is going to be played once
-    }else if (sequencers[x]->switch_off_on_next_tack_beggining){
-        row[m_columns_sequencers.col_colour] = "goldenrod1"; //in in during being played once
-    }else if(sequencers[x]->GetOn()){
-        row[m_columns_sequencers.col_colour] = "brown1";
+    if(sequencers[x]->GetOn()){
+        row[m_columns_sequencers.col_colour] = "green1";
+    }else if (sequencers[x]->GetPlayOncePhase() == 2 || sequencers[x]->GetPlayOncePhase() == 3){
+        row[m_columns_sequencers.col_colour] = "yellow1";
+    }else if(sequencers[x]->GetPlayOncePhase()== 1){
+        row[m_columns_sequencers.col_colour] = "yellow2";
     }else{
         row[m_columns_sequencers.col_colour] = "white";
     }
@@ -325,7 +325,6 @@ void MainWindow::InitTreeData(){
 }
 
 void MainWindow::RefreshRow(Gtk::TreeRowReference rowref){
-    *dbg << "!!!!!refreshing row" << ENDL;
     Gtk::TreeModel::Row row = *(m_refTreeModel_sequencers->get_iter(rowref.get_path()));
 
     int x = row[m_columns_sequencers.col_ID];
@@ -336,12 +335,12 @@ void MainWindow::RefreshRow(Gtk::TreeRowReference rowref){
     row[m_columns_sequencers.col_res] = sequencers[x]->resolution;
     row[m_columns_sequencers.col_len] = sequencers[x]->length;
     row[m_columns_sequencers.col_vol] = sequencers[x]->GetVolume();
-    if(sequencers[x]->GetPlayedOnce()){
-        row[m_columns_sequencers.col_colour] = "LightGoldenrod1"; // is going to be played once
-    }else if (sequencers[x]->switch_off_on_next_tack_beggining){
-        row[m_columns_sequencers.col_colour] = "goldenrod1"; //in in during being played once
-    }else if(sequencers[x]->GetOn()){
-        row[m_columns_sequencers.col_colour] = "brown1";
+    if(sequencers[x]->GetOn()){
+        row[m_columns_sequencers.col_colour] = "green1";
+    }else if (sequencers[x]->GetPlayOncePhase() == 2 || sequencers[x]->GetPlayOncePhase() == 3){
+        row[m_columns_sequencers.col_colour] = "yellow1";
+    }else if(sequencers[x]->GetPlayOncePhase()== 1){
+        row[m_columns_sequencers.col_colour] = "yellow2";
     }else{
         row[m_columns_sequencers.col_colour] = "white";
     }

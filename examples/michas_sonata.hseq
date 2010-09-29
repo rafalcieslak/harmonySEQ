@@ -25,7 +25,7 @@ notes=-3;0;4;4;7;0;
 
 [Seq 3]
 name=control
-on=false
+on=true
 channel=16
 apply_mn=false
 volume=100
@@ -78,7 +78,7 @@ Action_0_args=0;60;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;
 [Event 3]
 type=2
 arg1=40
-arg2=15
+arg2=16
 actions=1
 Action_0_type=7
 Action_0_args=0;2;3;4;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;

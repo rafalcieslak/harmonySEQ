@@ -108,16 +108,8 @@ public:
     /**Updates note values in corresponding SequencerWindow*/
     void UpdateGuiNotes();
 
-
-    /**Switches this sequencer on for one tact*/
-    void PlayOnce();
-
-    /**Returns whether this sequencer is played only one tact*/
-    bool GetPlayedOnce();
-
-    /**Called from MidiDriver when this sequencer is played once and it gets played, it safely switches the sequencer off*/
-    void GotPlayedOnce();
-    void ClearPlayedOnce();
+    int GetPlayOncePhase();
+    void SetPlayOncePhase(int p);
     /**Remembers the last played note*/
     int last_played_note;
 
@@ -126,7 +118,6 @@ public:
     
     friend class SequencerWindow;
 
-    bool switch_off_on_next_tack_beggining;
 protected:
     int channel;
     bool apply_mainnote;
@@ -134,8 +125,8 @@ protected:
     int volume;
     Glib::ustring name;
     SequencerWindow *gui_window;
-    bool played_once;
-    
+
+    int play_once_phase;
 private:
 
 };

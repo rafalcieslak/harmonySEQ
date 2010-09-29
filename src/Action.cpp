@@ -90,7 +90,7 @@ void Action::Trigger(int data){
              break;
         case SEQ_PLAY_ONCE:
             if (!sequencers[args[1]]) break;
-            sequencers[args[1]]->PlayOnce();
+            sequencers[args[1]]->SetPlayOncePhase(1);;
             break;
         case NONE:
             *dbg << "empty event triggered\n";

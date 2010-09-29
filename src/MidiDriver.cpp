@@ -138,9 +138,9 @@ void MidiDriver::UpdateQueue(){
     for (unsigned int n = 0; n < sequencers.size(); n++){
         if(sequencers[n] == NULL) continue; //seems this sequencer was removed
 
-        if(sequencers[n]->switch_off_on_next_tack_beggining) sequencers[n]->ClearPlayedOnce();
-
-        if (!sequencers[n]->GetOn()) continue; //if it's not turned on, take next sequencer
+        if(sequencers[n]->GetPlayOncePhase() == 3) sequencers[n]->SetPlayOncePhase(0);
+        if(sequencers[n]->GetPlayOncePhase() == 1) sequencers[n]->SetPlayOncePhase(2);
+        if (!(sequencers[n]->GetOn() || sequencers[n]->GetPlayOncePhase() == 2)) continue; //if it's not turned on, take next sequencer
 
         //ok, and here we proceed all notes from one sequencer.
         //first check the length:
@@ -160,16 +160,18 @@ void MidiDriver::UpdateQueue(){
                     snd_seq_ev_set_source(&ev, output_port);
                     snd_seq_ev_set_subs(&ev);
                     snd_seq_event_output_direct(seq_handle, &ev);
+
                 }
+                if(sequencers[n]->GetPlayOncePhase() == 2) {sequencers[n]->SetPlayOncePhase(3);break;} //had to be played ONCE, so we do not repeat the loop
+                
                 local_tick += (double)TICKS_PER_NOTE*sequencers[n]->length;
             }
 
-              //if the sequencer is played only once, then mark it as played
-             if(sequencers[n]->GetPlayedOnce()) sequencers[n]->GotPlayedOnce();
         }else{
             //length is larger than 1, we play one sequence over many tacts.
             //TODO: rewrite this, so that it saves a double representing a progress of this sequence (i.e. where to start from next time)
 
+             
             int duration = ((double)(TICKS_PER_NOTE / sequencers[n]->resolution))*sequencers[n]->length;
             int startnote = sequencers[n]->last_played_note;
             //*dbg << "startnote = " << startnote <<ENDL;
@@ -185,12 +187,8 @@ void MidiDriver::UpdateQueue(){
                     snd_seq_ev_set_subs(&ev);
                     snd_seq_event_output_direct(seq_handle, &ev);
 
-                      //if the sequencer is played only once, then mark it as played
-                     if( currnote >= sequencers[n]->resolution&&sequencers[n]->GetPlayedOnce() ) {
-                         sequencers[n]->GotPlayedOnce();
-                         currnote = 0;
-                     }
-
+                    currnote++;
+                     if(currnote>=sequencers[n]->resolution&&sequencers[n]->GetPlayOncePhase() == 2) sequencers[n]->SetPlayOncePhase( 3);
                     currnote = currnote%sequencers[n]->resolution;
 
             }
