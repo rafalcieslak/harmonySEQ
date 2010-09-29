@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2010-09-28 21:13+0200\n"
+"POT-Creation-Date: 2010-09-29 21:33+0200\n"
 "PO-Revision-Date: 2010-09-21 09:15+0000\n"
 "Last-Translator: rafal cieslak <Unknown>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -63,63 +63,63 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: src/MainWindow.cpp:73 src/SequencerGUI.cpp:70
+#: src/MainWindow.cpp:74 src/SequencerGUI.cpp:70
 msgid "On"
 msgstr ""
 
-#: src/MainWindow.cpp:77
+#: src/MainWindow.cpp:81
 msgid "MN"
 msgstr ""
 
-#: src/MainWindow.cpp:81
+#: src/MainWindow.cpp:86
 msgid "Chan"
 msgstr ""
 
-#: src/MainWindow.cpp:82
+#: src/MainWindow.cpp:87
 msgid "Res"
 msgstr ""
 
-#: src/MainWindow.cpp:83
+#: src/MainWindow.cpp:88
 msgid "Len"
 msgstr ""
 
-#: src/MainWindow.cpp:84
+#: src/MainWindow.cpp:89
 msgid "Vol"
 msgstr ""
 
-#: src/MainWindow.cpp:143
+#: src/MainWindow.cpp:148
 msgid "Add"
 msgstr "Ekle"
 
-#: src/MainWindow.cpp:145
+#: src/MainWindow.cpp:150
 msgid "Save"
 msgstr ""
 
-#: src/MainWindow.cpp:147
+#: src/MainWindow.cpp:152
 msgid "Open"
 msgstr ""
 
-#: src/MainWindow.cpp:149 src/EventsWindow.cpp:38
+#: src/MainWindow.cpp:154 src/EventsWindow.cpp:38
 msgid "Remove"
 msgstr ""
 
-#: src/MainWindow.cpp:152
+#: src/MainWindow.cpp:157
 msgid "Clone"
 msgstr ""
 
-#: src/MainWindow.cpp:155
+#: src/MainWindow.cpp:160
 msgid "Events"
 msgstr ""
 
-#: src/MainWindow.cpp:159
+#: src/MainWindow.cpp:164
 msgid "Pass MIDI events"
 msgstr ""
 
-#: src/MainWindow.cpp:214
+#: src/MainWindow.cpp:219
 msgid "activated row "
 msgstr ""
 
-#: src/MainWindow.cpp:215
+#: src/MainWindow.cpp:220
 msgid ", name is: "
 msgstr ""
 
@@ -337,66 +337,71 @@ msgstr ""
 msgid "Error: note has changed, while event is not note-type."
 msgstr ""
 
-#: src/Action.cpp:98
+#: src/Action.cpp:101
 msgid "WARNING: Unknown action triggered."
-msgstr ""
-
-#: src/Action.cpp:107
-#, c-format
-msgid "Toggle sequencer '%s'"
 msgstr ""
 
 #: src/Action.cpp:110
 #, c-format
-msgid "Switch sequencer '%s' OFF"
+msgid "Toggle sequencer '%s'"
 msgstr ""
 
 #: src/Action.cpp:113
 #, c-format
+msgid "Switch sequencer '%s' OFF"
+msgstr ""
+
+#: src/Action.cpp:116
+#, c-format
 msgid "Switch sequencer '%s' ON"
 msgstr ""
 
-#: src/Action.cpp:117
+#: src/Action.cpp:120
 #, c-format
 msgid "Set main note to %d"
 msgstr ""
 
-#: src/Action.cpp:121
+#: src/Action.cpp:124
 #, c-format
 msgid "Set tempo to %d BPM"
 msgstr ""
 
-#: src/Action.cpp:125
+#: src/Action.cpp:128
 #, c-format
 msgid "Set volume of sequencer '%s' to %d"
 msgstr ""
 
-#: src/Action.cpp:128
+#: src/Action.cpp:131
 #, c-format
 msgid "Set note %d of sequencer '%s' to %d"
 msgstr ""
 
-#: src/Action.cpp:131
+#: src/Action.cpp:134
 #, c-format
 msgid "Set notes of sequencer '%s' to %d,%d,%d,%d,%d,%d "
 msgstr ""
 
-#: src/Action.cpp:134
+#: src/Action.cpp:137
+#, c-format
+msgid "Play sequence in '%s' once"
+msgstr ""
+
+#: src/Action.cpp:140
 #, c-format
 msgid "(empty action)"
 msgstr ""
 
-#: src/Action.cpp:137
+#: src/Action.cpp:143
 #, c-format
 msgid "(unknown action)"
 msgstr ""
 
-#: src/Action.cpp:145
+#: src/Action.cpp:151
 #, c-format
 msgid "%d (which was removed)"
 msgstr ""
 
-#: src/Action.cpp:147
+#: src/Action.cpp:153
 #, c-format
 msgid "%s"
 msgstr ""
@@ -421,31 +426,31 @@ msgstr ""
 msgid "Notes:"
 msgstr ""
 
-#: src/ActionGUI.cpp:285
+#: src/ActionGUI.cpp:292
 msgid "Error: note has changed, while action is not note-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:296
+#: src/ActionGUI.cpp:303
 msgid "Error: tempo has changed, while action is not tempo-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:307
+#: src/ActionGUI.cpp:314
 msgid "Error: sequencer has changed, while action is not sequencer-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:319
+#: src/ActionGUI.cpp:326
 msgid "Error: volume has changed, while action is not volume-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:329
+#: src/ActionGUI.cpp:336
 msgid "Error: note to set has changed, while action is not set-seq-note-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:339
+#: src/ActionGUI.cpp:346
 msgid "Error: note number has changed, while action is not set-seq-note-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:349
+#: src/ActionGUI.cpp:356
 msgid ""
 "Error: one of 6 notes to set has changed, while action is not of change-all-"
 "notes type."
@@ -480,25 +485,29 @@ msgid "Sequencer/Toggle"
 msgstr ""
 
 #: src/TreeModels.cpp:70
-msgid "Sequencer/Set volume"
+msgid "Sequencer/Play once"
 msgstr ""
 
 #: src/TreeModels.cpp:73
-msgid "Sequencer/Set one note"
+msgid "Sequencer/Set volume"
 msgstr ""
 
 #: src/TreeModels.cpp:76
-msgid "Sequencer/Set all notes"
+msgid "Sequencer/Set one note"
 msgstr ""
 
 #: src/TreeModels.cpp:79
-msgid "Set main note"
+msgid "Sequencer/Set all notes"
 msgstr ""
 
 #: src/TreeModels.cpp:82
+msgid "Set main note"
+msgstr ""
+
+#: src/TreeModels.cpp:85
 msgid "Set tempo"
 msgstr ""
 
-#: src/TreeModels.cpp:102
+#: src/TreeModels.cpp:105
 msgid "All"
 msgstr "Tümü"
