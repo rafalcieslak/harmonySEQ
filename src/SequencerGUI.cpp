@@ -177,7 +177,7 @@ void SequencerWindow::OnChannelChanged(){
 }
 
 void SequencerWindow::OnToggleMuteToggled(){
-    parent->on = tgl_mute.get_active();
+    parent->SetOn(tgl_mute.get_active());
     if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
 }
 

@@ -191,7 +191,7 @@ void Sequencer::SetResolution(int res){
 
 int Sequencer::GetNotes(int n){return notes[n];}
 int Sequencer::GetSequence(int n){return sequence[n];}
-void Sequencer::SetOn(bool m){on = m;switch_off_on_next_tack_beggining = false; gui_window->tgl_mute.set_active(m);}
+void Sequencer::SetOn(bool m){on = m;switch_off_on_next_tack_beggining = false; played_once = false;gui_window->tgl_mute.set_active(m);}
 bool Sequencer::GetOn(){return on;}
 void Sequencer::SetApplyMainNote(bool a){apply_mainnote = a;gui_window->tgl_apply_mainnote.set_active(a);}
 bool Sequencer::GetApplyMainNote(){return apply_mainnote;}
@@ -205,7 +205,7 @@ void Sequencer::SetVolume(int v){volume = v;gui_window->volume_button.set_value(
 void Sequencer::ShowWindow(){gui_window->show();}
 void Sequencer::UpdateGui(){gui_window->UpdateValues();}
 void Sequencer::UpdateGuiNotes(){gui_window->UpdateNotes();}
-void Sequencer::PlayOnce(){on = true; played_once = true;switch_off_on_next_tack_beggining = false;if(row_in_main_window) mainwindow->RefreshRow(row_in_main_window);}
+void Sequencer::PlayOnce(){on = true; gui_window->tgl_mute.set_active(true); played_once = true;switch_off_on_next_tack_beggining = false;if(row_in_main_window) mainwindow->RefreshRow(row_in_main_window);}
 bool Sequencer::GetPlayedOnce(){return played_once;}
-void Sequencer::GotPlayedOnce(){switch_off_on_next_tack_beggining = true;played_once = false;}
-void Sequencer::ClearPlayedOnce(){on = false ;switch_off_on_next_tack_beggining = false;if(row_in_main_window) mainwindow->RefreshRow(row_in_main_window);}
+void Sequencer::GotPlayedOnce(){switch_off_on_next_tack_beggining = true;played_once = false;if(row_in_main_window) mainwindow->RefreshRow(row_in_main_window);}
+void Sequencer::ClearPlayedOnce(){on = false; gui_window->tgl_mute.set_active(false); ;switch_off_on_next_tack_beggining = false;if(row_in_main_window) mainwindow->RefreshRow(row_in_main_window);}
