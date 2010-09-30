@@ -173,6 +173,8 @@ void ActionGUI::UpdateValues(){
         case Action::SEQ_PLAY_ONCE:
             SetSeqCombo(parent->args[1]);
             break;
+        case Action::TOGGLE_PASS_MIDI:
+            break;
         default:
             break;
 
@@ -220,7 +222,8 @@ void ActionGUI::ChangeVisibleLines(){
         case Action::TEMPO_SET:
             line_tempo.show();
             break;
-
+        case Action::TOGGLE_PASS_MIDI:
+            break;
         default:
             break;
 
@@ -278,6 +281,8 @@ void ActionGUI::InitType(){
             break;
         case Action::SEQ_PLAY_ONCE:
             Seqs_combo.set_active(0);
+            break;
+        case Action::TOGGLE_PASS_MIDI:
             break;
         default:
             break;

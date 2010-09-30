@@ -92,6 +92,9 @@ void Action::Trigger(int data){
             if (!sequencers[args[1]]) break;
             sequencers[args[1]]->SetPlayOncePhase(1);;
             break;
+        case TOGGLE_PASS_MIDI:
+            mainwindow->pass_toggle.set_active(!passing_midi); //signal handle sets passingmidi variable automatically
+            break;
         case NONE:
             *dbg << "empty event triggered\n";
             break;
@@ -135,6 +138,9 @@ Glib::ustring Action::GetLabel(){
             break;
         case SEQ_PLAY_ONCE:
             sprintf(temp,_("Play sequence in '%s' once"),GetSeqName(args[1]).c_str());
+            break;
+        case TOGGLE_PASS_MIDI:
+            sprintf(temp,_("Toggle passing MIDI events"));
             break;
         case NONE:
             sprintf(temp,_("(empty action)"));

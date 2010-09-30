@@ -83,6 +83,9 @@ void InitActionTypesTreeModel(){
     row = *(m_refTreeModel_ActionTypes->append());
     row[m_columns_action_types.type] = Action::TEMPO_SET;
     row[m_columns_action_types.label] = _("Set tempo");
+    row = *(m_refTreeModel_ActionTypes->append());
+    row[m_columns_action_types.type] = Action::TOGGLE_PASS_MIDI;
+    row[m_columns_action_types.label] = _("Toggle passing MIDI events");
 
 }
 

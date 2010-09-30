@@ -36,8 +36,8 @@ public:
         TEMPO_SET,
         SEQ_CHANGE_ONE_NOTE,
         SEQ_CHANGE_ALL_NOTES,
-        SEQ_PLAY_ONCE
-
+        SEQ_PLAY_ONCE,
+        TOGGLE_PASS_MIDI
     };
 
     Action(ActionTypes t, int a1 = 0, int a2 = 0);
