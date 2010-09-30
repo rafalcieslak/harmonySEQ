@@ -237,6 +237,8 @@ MainWindow::OnMutedToggleToggled(const Glib::ustring& path)
     *dbg << "the clicked row's ID was " << row[m_columns_sequencers.col_ID] << ENDL;
 
    sequencers[row[m_columns_sequencers.col_ID]]->SetOn(row[m_columns_sequencers.col_muted]);
+    sequencers[row[m_columns_sequencers.col_ID]]->UpdateGui();
+   if(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window) RefreshRow(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window);
 }
 
 void MainWindow::OnApplyMainNoteToggleToggled(const Glib::ustring& path){
