@@ -1,6 +1,9 @@
 harmonyseq 0.11
 	- Added actions that allow manipulating notes in a sequencer
+	- Added action that plays a sequence once
+	- Coloring rows in main window depending on sequencer state
 	- Added guitar demo and self control demo
+	- Minor GUI updates
 
 harmonyseq 0.10
 	- Events and actions implemented (as for now featuring only few events/actions types).
