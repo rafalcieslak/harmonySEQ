@@ -83,8 +83,11 @@ std::string Event::GetLabel(){
 void Event::Trigger(){
     *dbg << "triggered event --'";
     *dbg << GetLabel() << "'--\n";
-    eventswindow->ColorizeEvent(row_in_event_window);
 
+#ifdef EVENTS_FLASH
+    eventswindow->ColorizeEvent(row_in_event_window);
+#endif
+    
     for (unsigned int i = 0; i < actions.size(); i++){
         if (!actions[i]) continue; //it was removed
         actions[i]->Trigger();

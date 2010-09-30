@@ -41,8 +41,12 @@ using namespace std;
 #define _(STRING) gettext(STRING)
 #define DEFAULT_TEMPO 240.0
 
+
 #define FLASH_INTERVAL 50
     //in ms
+
+//enables colorful indicator when event gets triggered
+#define EVENTS_FLASH
 #define EVENTS_FLASH_TIMEOUT 200
     //in ms
 

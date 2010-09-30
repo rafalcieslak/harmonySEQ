@@ -41,8 +41,12 @@ Action::~Action(){
 
 void Action::Trigger(int data){
     *dbg << "-- Action triggered '" << GetLabel() << "'.\n";
-    eventswindow->ColorizeAction(row_in_event_window);
 
+
+#ifdef EVENTS_FLASH
+    eventswindow->ColorizeAction(row_in_event_window);
+#endif
+    
     switch (type){
         case SEQ_TOGGLE:
             if (!sequencers[args[1]]) break;
