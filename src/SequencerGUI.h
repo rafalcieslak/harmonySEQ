@@ -29,13 +29,13 @@ public:
     SequencerWindow(Sequencer* prt);
     virtual ~SequencerWindow();
     void UpdateValues();
-    void UpdateNotes();
+    void UpdateChord();
     Gtk::VBox main_vbox;
     Gtk::VBox box_of_sliders;
-    Gtk::HBox box_of_notes;
+    Gtk::HBox box_of_chord;
     Gtk::HBox upper_box;
     vector<Gtk::HScale *> sequence_scales;
-    Gtk::SpinButton* note_buttons[6];
+    Gtk::SpinButton* chord_buttons[6];
     Gtk::SpinButton channel_button;
     Gtk::SpinButton volume_button;
     Gtk::Label channellabel;

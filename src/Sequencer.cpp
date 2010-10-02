@@ -67,14 +67,14 @@ void clear_sequencers(){
 //======begin sequencer class===============
 
 Sequencer::Sequencer()
-    : sequence(SEQUENCE_DEFAULT_SIZE,0), notes(NOTES_CONST_SIZE,0)
+    : sequence(SEQUENCE_DEFAULT_SIZE,0), chord(NOTES_CONST_SIZE,0)
 {
     name = SEQUENCER_DEFAULT_NAME;
     Init();
 }
 
 Sequencer::Sequencer(Glib::ustring _name)
-    : sequence(SEQUENCE_DEFAULT_SIZE,0), notes(NOTES_CONST_SIZE,0)
+    : sequence(SEQUENCE_DEFAULT_SIZE,0), chord(NOTES_CONST_SIZE,0)
 {
     name = _name;
     Init();
@@ -82,14 +82,14 @@ Sequencer::Sequencer(Glib::ustring _name)
 
 
 Sequencer::Sequencer(int seq[],int note[])
-    :  sequence(SEQUENCE_DEFAULT_SIZE,0), notes(NOTES_CONST_SIZE,0)
+    :  sequence(SEQUENCE_DEFAULT_SIZE,0), chord(NOTES_CONST_SIZE,0)
 {
     for (int x = 0; x < SEQUENCE_DEFAULT_SIZE; x++){
         sequence[x] = seq[x];
         
     }
     for (int x = 0; x < NOTES_CONST_SIZE; x++){
-        notes[x] = note[x];
+        chord[x] = note[x];
         
     }
     name = SEQUENCER_DEFAULT_NAME;
@@ -97,14 +97,14 @@ Sequencer::Sequencer(int seq[],int note[])
 }
 
 Sequencer::Sequencer(int seq[],int note[], Glib::ustring _name)
-    :  sequence(SEQUENCE_DEFAULT_SIZE,0), notes(NOTES_CONST_SIZE,0)
+    :  sequence(SEQUENCE_DEFAULT_SIZE,0), chord(NOTES_CONST_SIZE,0)
 {
     for (int x = 0; x < SEQUENCE_DEFAULT_SIZE; x++){
         sequence[x] = seq[x];
 
     }
     for (int x = 0; x < NOTES_CONST_SIZE; x++){
-        notes[x] = note[x];
+        chord[x] = note[x];
 
     }
 
@@ -116,7 +116,7 @@ Sequencer::Sequencer(int seq[],int note[], Glib::ustring _name)
 Sequencer::Sequencer(const Sequencer *orig) {
     name = orig->name;
     on = orig->on;
-    notes = orig->notes;
+    chord = orig->chord;
     resolution = orig->resolution;
     sequence = orig->sequence;
     channel = orig->channel;
@@ -141,8 +141,8 @@ void Sequencer::Init(){
     last_played_note = 0;
     play_once_phase = 0;
     resolution = SEQUENCE_DEFAULT_SIZE;
-    *dbg << notes[0]<<ENDL;
-    *dbg << GetNotes(0);
+    *dbg << chord[0]<<ENDL;
+    *dbg << GetNoteOfChord(0);
     gui_window = new SequencerWindow(this);
     //gui_window->UpdateValues();
     //gui_window->parent = this;
@@ -187,11 +187,12 @@ void Sequencer::SetResolution(int res){
 
 
 
-int Sequencer::GetNotes(int n){return notes[n];}
+int Sequencer::GetNoteOfChord(int n){return chord[n];}
 int Sequencer::GetSequence(int n){return sequence[n];}
 void Sequencer::SetOn(bool m){on = m;play_once_phase=0;gui_window->tgl_mute.set_active(m);}
 bool Sequencer::GetOn(){return on;}
-void Sequencer::SetApplyMainNote(bool a){apply_mainnote = a;gui_window->tgl_apply_mainnote.set_active(a);}
+void Sequencer::SetApplyMainNote(bool a){apply_mainnote = a;/*gui_window->tgl_apply_mainnote.set_active(a);*/
+    if(row_in_main_window) mainwindow->RefreshRow(row_in_main_window);}
 bool Sequencer::GetApplyMainNote(){return apply_mainnote;}
 void Sequencer::SetChannel(int ch){channel = ch;gui_window->channel_button.set_value((double)ch);}
 int Sequencer::GetChannel(){return channel;}
@@ -201,7 +202,6 @@ int Sequencer::GetVolume(){return volume;}
 void Sequencer::SetVolume(int v){volume = v;gui_window->volume_button.set_value((double)v);}
 
 void Sequencer::SetPlayOncePhase(int p){
-    //*dbg << "SETTING PHASE of " << GetName() << " to " << p << "!!!!!";
     play_once_phase = p;
     if(row_in_main_window) mainwindow->RefreshRow(row_in_main_window);
 }
@@ -212,4 +212,4 @@ int Sequencer::GetPlayOncePhase(){
 
 void Sequencer::ShowWindow(){gui_window->show();}
 void Sequencer::UpdateGui(){gui_window->UpdateValues();}
-void Sequencer::UpdateGuiNotes(){gui_window->UpdateNotes();}
+void Sequencer::UpdateGuiChord(){gui_window->UpdateChord();}

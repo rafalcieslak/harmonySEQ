@@ -330,13 +330,14 @@ void MainWindow::RefreshRow(Gtk::TreeRowReference rowref){
     Gtk::TreeModel::Row row = *(m_refTreeModel_sequencers->get_iter(rowref.get_path()));
 
     int x = row[m_columns_sequencers.col_ID];
-    row[m_columns_sequencers.col_muted] = sequencers[x]->GetOn();
-    row[m_columns_sequencers.col_name] = sequencers[x]->GetName();
-    row[m_columns_sequencers.col_apply_mainnote] = sequencers[x]->GetApplyMainNote();
-    row[m_columns_sequencers.col_channel] = sequencers[x]->GetChannel();
-    row[m_columns_sequencers.col_res] = sequencers[x]->resolution;
-    row[m_columns_sequencers.col_len] = sequencers[x]->length;
-    row[m_columns_sequencers.col_vol] = sequencers[x]->GetVolume();
+    Sequencer* seq = sequencers[x];
+    row[m_columns_sequencers.col_muted] = seq->GetOn();
+    row[m_columns_sequencers.col_name] = seq->GetName();
+    row[m_columns_sequencers.col_apply_mainnote] = seq->GetApplyMainNote();
+    row[m_columns_sequencers.col_channel] = seq->GetChannel();
+    row[m_columns_sequencers.col_res] = seq->resolution;
+    row[m_columns_sequencers.col_len] = seq->length;
+    row[m_columns_sequencers.col_vol] = seq->GetVolume();
     if(sequencers[x]->GetOn()){
         row[m_columns_sequencers.col_colour] = "green1";
     }else if (sequencers[x]->GetPlayOncePhase() == 2 || sequencers[x]->GetPlayOncePhase() == 3){
@@ -346,8 +347,9 @@ void MainWindow::RefreshRow(Gtk::TreeRowReference rowref){
     }else{
         row[m_columns_sequencers.col_colour] = "white";
     }
-    m_TreeView.queue_draw();
-    queue_draw();
+
+  //  m_TreeView.queue_draw();
+    
 }
 
 void MainWindow::OnLoadClicked(){

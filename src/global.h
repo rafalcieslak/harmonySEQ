@@ -30,7 +30,7 @@
 #include "messages.h"
 #include "EventsWindow.h"
 using namespace std;
-#define VERSION_STRING "0.11" //VERSION is provided by autotools in config.h
+#define VERSION_STRING "0.11"//ImporTanT!!! ON NEXT VERSION INCREMENT CHANGE FILE_KEY_SEQ_CHORD to CHORD and REMOVE this MessaGE!  //VERSION is provided by autotools in config.h
 #define VERSION_A 0
 #define VERSION_B 11
 #define VERSION_C 0
@@ -77,7 +77,7 @@ using namespace std;
 #define FILE_KEY_SEQ_VOLUME "volume"
 #define FILE_KEY_SEQ_NAME "name"
 #define FILE_KEY_SEQ_SEQUENCE "sequence"
-#define FILE_KEY_SEQ_NOTES "notes"
+#define FILE_KEY_SEQ_CHORD "notes"
 
 #define FILE_GROUP_TEMPLATE_EVENT "Event %d"
 #define FILE_KEY_EVENT_TYPE "type"

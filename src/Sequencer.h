@@ -36,15 +36,15 @@ public:
     Sequencer();
     Sequencer(Glib::ustring _name0);
     Sequencer(const Sequencer* orig);
-    Sequencer(int seq[],int notes[]);
-    Sequencer(int seq[],int notes[], Glib::ustring _name);
+    Sequencer(int seq[],int chord[]);
+    Sequencer(int seq[],int chord[], Glib::ustring _name);
     virtual ~Sequencer();
 
     /**List of sequence notes*/
     vector<int> sequence;
 
-    /**List of notes*/
-    vector<int> notes;
+    /**The main chord*/
+    vector<int> chord;
     
     /**Fills in everything with default values*/
     void Init();
@@ -58,9 +58,9 @@ public:
     /**Used to change resolution of this sequencer*/
     void SetResolution(int res);
 
-    /**Returns a one note of this sequencer
+    /**Returns a one note of chord of this sequencer
      *  @parram n note number*/
-    int GetNotes(int n);
+    int GetNoteOfChord(int n);
 
     /**Returns a one note from sequence
      * @parram n sequence note tumber*/
@@ -106,7 +106,7 @@ public:
     void UpdateGui();
 
     /**Updates note values in corresponding SequencerWindow*/
-    void UpdateGuiNotes();
+    void UpdateGuiChord();
 
     int GetPlayOncePhase();
     void SetPlayOncePhase(int p);

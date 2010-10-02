@@ -99,6 +99,7 @@ void Event::Trigger(){
 void Event::ShowWindow(){
 
     gui_window->show();
+    gui_window->raise();
 }
 
 void Event::UpdateGUI(){gui_window->UpdateValues();}

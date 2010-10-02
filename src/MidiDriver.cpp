@@ -136,36 +136,38 @@ void MidiDriver::DeleteQueue(){
 void MidiDriver::UpdateQueue(){
     gdk_threads_enter(); //for safety. any calls to GUI will be thread - protected
     snd_seq_event_t ev;
+    Sequencer* seq;
     for (unsigned int n = 0; n < sequencers.size(); n++){
         if(sequencers[n] == NULL) continue; //seems this sequencer was removed
 
-        if(sequencers[n]->GetPlayOncePhase() == 3) sequencers[n]->SetPlayOncePhase(0);
-        if(sequencers[n]->GetPlayOncePhase() == 1) sequencers[n]->SetPlayOncePhase(2);
-        if (!(sequencers[n]->GetOn() || sequencers[n]->GetPlayOncePhase() == 2)) continue; //if it's not turned on, take next sequencer
+        seq = sequencers[n];
+        if(seq->GetPlayOncePhase() == 3) seq->SetPlayOncePhase(0);
+        if(seq->GetPlayOncePhase() == 1) seq->SetPlayOncePhase(2);
+        if (!(seq->GetOn() || seq->GetPlayOncePhase() == 2)) continue; //if it's not turned on, take next sequencer
 
         //ok, and here we proceed all notes from one sequencer.
         //first check the length:
-        if (sequencers[n]->length<=1){
+        if (seq->length<=1){
             //length is smaller or equal to 1, we play the same sequence several times in a tact
 
-            double howmanytimes = (double)1.0/(sequencers[n]->length); //how many times we play this sequence in one tact
-            int duration = ((double)(TICKS_PER_NOTE / sequencers[n]->resolution))*sequencers[n]->length;
+            double howmanytimes = (double)1.0/(seq->length); //how many times we play this sequence in one tact
+            int duration = ((double)(TICKS_PER_NOTE / seq->resolution))*seq->length;
             int local_tick = tick;
             for (int i = 0; i < howmanytimes; i++){
                 for (int x = 0; x < sequencers[n]->resolution; x++) {
                     snd_seq_ev_clear(&ev);
-                    int note = sequencers[n]->notes[sequencers[n]->sequence[x]];
-                    if (sequencers[n]->GetApplyMainNote()) note += mainnote;
-                    snd_seq_ev_set_note(&ev, sequencers[n]->GetChannel() - 1, note, sequencers[n]->GetVolume(), duration);
+                    int note = seq->chord[seq->sequence[x]];
+                    if (seq->GetApplyMainNote()) note += mainnote;
+                    snd_seq_ev_set_note(&ev, seq->GetChannel() - 1, note, seq->GetVolume(), duration);
                     snd_seq_ev_schedule_tick(&ev, queueid, 0, local_tick + x * duration);
                     snd_seq_ev_set_source(&ev, output_port);
                     snd_seq_ev_set_subs(&ev);
                     snd_seq_event_output_direct(seq_handle, &ev);
 
                 }
-                if(sequencers[n]->GetPlayOncePhase() == 2) {sequencers[n]->SetPlayOncePhase(3);break;} //had to be played ONCE, so we do not repeat the loop
+                if(seq->GetPlayOncePhase() == 2) {seq->SetPlayOncePhase(3);break;} //had to be played ONCE, so we do not repeat the loop
                 
-                local_tick += (double)TICKS_PER_NOTE*sequencers[n]->length;
+                local_tick += (double)TICKS_PER_NOTE*seq->length;
             }
 
         }else{
@@ -173,28 +175,28 @@ void MidiDriver::UpdateQueue(){
             //TODO: rewrite this, so that it saves a double representing a progress of this sequence (i.e. where to start from next time)
 
              
-            int duration = ((double)(TICKS_PER_NOTE / sequencers[n]->resolution))*sequencers[n]->length;
-            int startnote = sequencers[n]->last_played_note;
+            int duration = ((double)(TICKS_PER_NOTE / seq->resolution))*seq->length;
+            int startnote = seq->last_played_note;
             //*dbg << "startnote = " << startnote <<ENDL;
             int x, currnote = startnote;
-            for (x = 0; x < (double)sequencers[n]->resolution/sequencers[n]->length;x++){
+            for (x = 0; x < (double)seq->resolution/seq->length;x++){
                     //*dbg << "x = " << x << ENDL;
                     snd_seq_ev_clear(&ev);
-                    int note = sequencers[n]->notes[sequencers[n]->sequence[(currnote)]];
-                    if (sequencers[n]->GetApplyMainNote()) note += mainnote;
-                    snd_seq_ev_set_note(&ev, sequencers[n]->GetChannel() - 1, note, sequencers[n]->GetVolume(), duration);
+                    int note = seq->chord[seq->sequence[(currnote)]];
+                    if (seq->GetApplyMainNote()) note += mainnote;
+                    snd_seq_ev_set_note(&ev, seq->GetChannel() - 1, note, seq->GetVolume(), duration);
                     snd_seq_ev_schedule_tick(&ev, queueid, 0, tick + x * duration);
                     snd_seq_ev_set_source(&ev, output_port);
                     snd_seq_ev_set_subs(&ev);
                     snd_seq_event_output_direct(seq_handle, &ev);
 
                     currnote++;
-                     if(currnote>=sequencers[n]->resolution&&sequencers[n]->GetPlayOncePhase() == 2) sequencers[n]->SetPlayOncePhase( 3);
-                    currnote = currnote%sequencers[n]->resolution;
+                     if(currnote>=seq->resolution&&seq->GetPlayOncePhase() == 2) seq->SetPlayOncePhase( 3);
+                    currnote = currnote%seq->resolution;
 
             }
             //remember last note
-            sequencers[n]->last_played_note =currnote;
+            seq->last_played_note =currnote;
         }
 
     }

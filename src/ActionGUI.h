@@ -58,8 +58,8 @@ public:
     Gtk::HBox line_set_one_note;
     Gtk::Label label_note_nr;
     Gtk::Label label_note_seq;
-    Gtk::HBox line_6notes;
-    Gtk::Label label_6notes;
+    Gtk::HBox line_chord;
+    Gtk::Label label_chord;
 
     Gtk::ComboBox Types_combo;
     Gtk::ComboBox Seqs_combo;
@@ -67,8 +67,8 @@ public:
     Gtk::SpinButton tempo_button;
     Gtk::SpinButton vol_button;
     Gtk::SpinButton notenr_button;
-    Gtk::SpinButton noteseq_button;
-    Gtk::SpinButton* notes6_buttons[6];
+    Gtk::SpinButton chordseq_button;
+    Gtk::SpinButton* chord6_buttons[6];
 
     Gtk::Button ok_button;
 

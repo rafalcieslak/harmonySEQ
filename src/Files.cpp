@@ -97,7 +97,7 @@ void SaveToFile(){
                 kf.set_integer(temp,FILE_KEY_SEQ_RESOLUTION,sequencers[x]->resolution);
                 kf.set_double(temp,FILE_KEY_SEQ_LENGTH,sequencers[x]->length);
                 kf.set_integer_list(temp,FILE_KEY_SEQ_SEQUENCE,sequencers[x]->sequence);
-                kf.set_integer_list(temp,FILE_KEY_SEQ_NOTES,sequencers[x]->notes);
+                kf.set_integer_list(temp,FILE_KEY_SEQ_CHORD,sequencers[x]->chord);
 
             }
 
@@ -250,12 +250,12 @@ bool LoadFile(Glib::ustring file){
 
             }
 
-            sequencers[x]->notes.clear();
+            sequencers[x]->chord.clear();
             *dbg << "now loading notes...\n";
-            std::vector<int> notes = kf.get_integer_list(temp, FILE_KEY_SEQ_NOTES);
+            std::vector<int> notes = kf.get_integer_list(temp, FILE_KEY_SEQ_CHORD);
             for (unsigned int n = 0; n < notes.size(); n++) {
                 *dbg << notes[n] << ENDL;
-                sequencers[x]->notes.push_back(notes[n]);
+                sequencers[x]->chord.push_back(notes[n]);
 
             }
             sequencers[x]->UpdateGui();

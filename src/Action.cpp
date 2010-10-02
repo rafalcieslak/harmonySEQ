@@ -78,19 +78,19 @@ void Action::Trigger(int data){
 
         case SEQ_CHANGE_ONE_NOTE:
             if (!sequencers[args[1]]) break;
-            sequencers[args[1]]->notes[args[2]-1] = args[3];
-            sequencers[args[1]]->UpdateGuiNotes(); //nessesary //its a temporary wokraround, since UpdateGui seems to crash. Howewer, it is not needed to update anything else than notes.
+            sequencers[args[1]]->chord[args[2]-1] = args[3];
+            sequencers[args[1]]->UpdateGuiChord(); //nessesary //its a temporary wokraround, since UpdateGui seems to crash. Howewer, it is not needed to update anything else than notes.
             break;
 
         case SEQ_CHANGE_ALL_NOTES:
             if (!sequencers[args[1]]) break;
-            sequencers[args[1]]->notes[0] = args[2];
-            sequencers[args[1]]->notes[1] = args[3];
-            sequencers[args[1]]->notes[2] = args[4];
-            sequencers[args[1]]->notes[3] = args[5];
-            sequencers[args[1]]->notes[4] = args[6];
-            sequencers[args[1]]->notes[5] = args[7];
-            sequencers[args[1]]->UpdateGuiNotes(); //nessesary //its a temporary wokraround, since UpdateGui seems to crash. Howewer, it is not needed to update anything else than notes.
+            sequencers[args[1]]->chord[0] = args[2];
+            sequencers[args[1]]->chord[1] = args[3];
+            sequencers[args[1]]->chord[2] = args[4];
+            sequencers[args[1]]->chord[3] = args[5];
+            sequencers[args[1]]->chord[4] = args[6];
+            sequencers[args[1]]->chord[5] = args[7];
+            sequencers[args[1]]->UpdateGuiChord(); //nessesary //its a temporary wokraround, since UpdateGui seems to crash. Howewer, it is not needed to update anything else than notes.
              break;
         case SEQ_PLAY_ONCE:
             if (!sequencers[args[1]]) break;
@@ -106,6 +106,7 @@ void Action::Trigger(int data){
         default:
 
             *err << _("WARNING: Unknown action triggered.");
+            break;
     }
 }
 
@@ -166,5 +167,5 @@ Glib::ustring Action::GetSeqName(int n){
 
 void Action::ShowWindow(){
     gui_window->show();
-
+    gui_window->raise();
 }
