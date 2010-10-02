@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
-"Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"\
-"POT-Creation-Date: 2010-09-29 21:33+0200\n"
-"PO-Revision-Date: 2010-10-01 11:46+0000\n"\
+"Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
+"POT-Creation-Date: 2010-10-02 21:14+0200\n"
+"PO-Revision-Date: 2010-10-01 11:46+0000\n"
 "Last-Translator: Rafal Cieslak <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -66,35 +66,35 @@ msgstr "Tempo:"
 msgid "Main Note:"
 msgstr "Nuta główna:"
 
-#: src/MainWindow.cpp:67 src/EventsWindow.cpp:48
+#: src/MainWindow.cpp:66 src/EventsWindow.cpp:48
 msgid "ID"
 msgstr "ID"
 
-#: src/MainWindow.cpp:69
+#: src/MainWindow.cpp:68
 msgid "Name"
 msgstr "Nazwa"
 
-#: src/MainWindow.cpp:74 src/SequencerGUI.cpp:70
+#: src/MainWindow.cpp:73 src/SequencerGUI.cpp:70
 msgid "On"
 msgstr "Wł."
 
-#: src/MainWindow.cpp:81
+#: src/MainWindow.cpp:80
 msgid "MN"
 msgstr "GN"
 
-#: src/MainWindow.cpp:86
+#: src/MainWindow.cpp:85
 msgid "Chan"
 msgstr "Kan"
 
-#: src/MainWindow.cpp:87
+#: src/MainWindow.cpp:86
 msgid "Res"
 msgstr "Roz"
 
-#: src/MainWindow.cpp:88
+#: src/MainWindow.cpp:87
 msgid "Len"
 msgstr "Dł"
 
-#: src/MainWindow.cpp:89
+#: src/MainWindow.cpp:88
 msgid "Vol"
 msgstr "Gł"
 
@@ -298,7 +298,7 @@ msgstr "Gdy kontoller %d na kanale %d jest poruszany..."
 msgid "Unknown event."
 msgstr "Nieznane zdarzenie."
 
-#: src/Event.cpp:122
+#: src/Event.cpp:126
 msgid "Error - empty event would be triggered.\n"
 msgstr "Błąd - puste zdarzenie miałoby zostać wywołane.\n"
 
@@ -368,76 +368,76 @@ msgid "Error: note has changed, while event is not note-type."
 msgstr ""
 "Błąd: nuta została zmieniona, podczas gdy zdarzenie nie jest typu nuty."
 
-#: src/Action.cpp:104
+#: src/Action.cpp:108
 msgid "WARNING: Unknown action triggered."
 msgstr "OSTRZERZENIE: Nieznana akcja została wyzwolona."
 
-#: src/Action.cpp:113
+#: src/Action.cpp:118
 #, c-format
 msgid "Toggle sequencer '%s'"
 msgstr "Przełącz sekwencer '%s'"
 
-#: src/Action.cpp:116
+#: src/Action.cpp:121
 #, c-format
 msgid "Switch sequencer '%s' OFF"
 msgstr "Wyłącz sekwencer '%s'"
 
-#: src/Action.cpp:119
+#: src/Action.cpp:124
 #, c-format
 msgid "Switch sequencer '%s' ON"
 msgstr "Włącz sekwencer '%s'"
 
-#: src/Action.cpp:123
+#: src/Action.cpp:128
 #, c-format
 msgid "Set main note to %d"
 msgstr "Ustaw nutę główną na %d"
 
-#: src/Action.cpp:127
+#: src/Action.cpp:132
 #, c-format
 msgid "Set tempo to %d BPM"
 msgstr "Ustaw tempo na %d BPM"
 
-#: src/Action.cpp:131
+#: src/Action.cpp:136
 #, c-format
 msgid "Set volume of sequencer '%s' to %d"
 msgstr "Ustaw głośność sekwencera '%s' na %d"
 
-#: src/Action.cpp:134
+#: src/Action.cpp:139
 #, c-format
 msgid "Set note %d of sequencer '%s' to %d"
 msgstr "Ustaw nutę %d sekwencera '%s' na %d"
 
-#: src/Action.cpp:137
+#: src/Action.cpp:142
 #, c-format
 msgid "Set notes of sequencer '%s' to %d,%d,%d,%d,%d,%d "
 msgstr "Ustaw nuty sekwencera '%s' na %d,%d,%d,%d,%d,%d "
 
-#: src/Action.cpp:140
+#: src/Action.cpp:145
 #, c-format
 msgid "Play sequence in '%s' once"
 msgstr "Odtwórz sekwencję w '%s' jeden raz"
 
-#: src/Action.cpp:143 src/TreeModels.cpp:88
+#: src/Action.cpp:148 src/TreeModels.cpp:88
 #, fuzzy, c-format
 msgid "Toggle passing MIDI events"
 msgstr "Przekazuj zdarzenia MIDI"
 
-#: src/Action.cpp:146
+#: src/Action.cpp:151
 #, c-format
 msgid "(empty action)"
 msgstr "(pusta akcja)"
 
-#: src/Action.cpp:149
+#: src/Action.cpp:154
 #, c-format
 msgid "(unknown action)"
 msgstr "(nieznana akcja)"
 
-#: src/Action.cpp:157
+#: src/Action.cpp:162
 #, c-format
 msgid "%d (which was removed)"
 msgstr "%d (który został usunięty)"
 
-#: src/Action.cpp:159
+#: src/Action.cpp:164
 #, c-format
 msgid "%s"
 msgstr "%s"
@@ -542,8 +542,9 @@ msgid "Sequencer/Set one note"
 msgstr "Sekwencer/Ustaw jedną nutę"
 
 #: src/TreeModels.cpp:79
-msgid "Sequencer/Set all notes"
-msgstr "Sekwencer/Ustaw wszystkie nuty"
+#, fuzzy
+msgid "Sequencer/Set chord"
+msgstr "Sekwencer/Ustaw głośność"
 
 #: src/TreeModels.cpp:82
 msgid "Set main note"
@@ -556,6 +557,9 @@ msgstr "Ustaw tempo"
 #: src/TreeModels.cpp:108
 msgid "All"
 msgstr "Wszystkie"
+
+#~ msgid "Sequencer/Set all notes"
+#~ msgstr "Sekwencer/Ustaw wszystkie nuty"
 
 #~ msgid "harmonySEQ, version %s\n"
 #~ msgstr "harmonySEQ, wersja %s\n"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2010-09-30 20:28+0200\n"
+"POT-Creation-Date: 2010-10-02 21:14+0200\n"
 "PO-Revision-Date: 2010-09-21 09:15+0000\n"
 "Last-Translator: rafal cieslak <Unknown>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -55,35 +55,35 @@ msgstr ""
 msgid "Main Note:"
 msgstr ""
 
-#: src/MainWindow.cpp:67 src/EventsWindow.cpp:48
+#: src/MainWindow.cpp:66 src/EventsWindow.cpp:48
 msgid "ID"
 msgstr ""
 
-#: src/MainWindow.cpp:69
+#: src/MainWindow.cpp:68
 msgid "Name"
 msgstr ""
 
-#: src/MainWindow.cpp:74 src/SequencerGUI.cpp:70
+#: src/MainWindow.cpp:73 src/SequencerGUI.cpp:70
 msgid "On"
 msgstr ""
 
-#: src/MainWindow.cpp:81
+#: src/MainWindow.cpp:80
 msgid "MN"
 msgstr ""
 
-#: src/MainWindow.cpp:86
+#: src/MainWindow.cpp:85
 msgid "Chan"
 msgstr ""
 
-#: src/MainWindow.cpp:87
+#: src/MainWindow.cpp:86
 msgid "Res"
 msgstr ""
 
-#: src/MainWindow.cpp:88
+#: src/MainWindow.cpp:87
 msgid "Len"
 msgstr ""
 
-#: src/MainWindow.cpp:89
+#: src/MainWindow.cpp:88
 msgid "Vol"
 msgstr ""
 
@@ -273,7 +273,7 @@ msgstr ""
 msgid "Unknown event."
 msgstr ""
 
-#: src/Event.cpp:122
+#: src/Event.cpp:126
 msgid "Error - empty event would be triggered.\n"
 msgstr ""
 
@@ -337,76 +337,76 @@ msgstr ""
 msgid "Error: note has changed, while event is not note-type."
 msgstr ""
 
-#: src/Action.cpp:104
+#: src/Action.cpp:108
 msgid "WARNING: Unknown action triggered."
 msgstr ""
 
-#: src/Action.cpp:113
+#: src/Action.cpp:118
 #, c-format
 msgid "Toggle sequencer '%s'"
 msgstr ""
 
-#: src/Action.cpp:116
+#: src/Action.cpp:121
 #, c-format
 msgid "Switch sequencer '%s' OFF"
 msgstr ""
 
-#: src/Action.cpp:119
+#: src/Action.cpp:124
 #, c-format
 msgid "Switch sequencer '%s' ON"
 msgstr ""
 
-#: src/Action.cpp:123
+#: src/Action.cpp:128
 #, c-format
 msgid "Set main note to %d"
 msgstr ""
 
-#: src/Action.cpp:127
+#: src/Action.cpp:132
 #, c-format
 msgid "Set tempo to %d BPM"
 msgstr ""
 
-#: src/Action.cpp:131
+#: src/Action.cpp:136
 #, c-format
 msgid "Set volume of sequencer '%s' to %d"
 msgstr ""
 
-#: src/Action.cpp:134
+#: src/Action.cpp:139
 #, c-format
 msgid "Set note %d of sequencer '%s' to %d"
 msgstr ""
 
-#: src/Action.cpp:137
+#: src/Action.cpp:142
 #, c-format
 msgid "Set notes of sequencer '%s' to %d,%d,%d,%d,%d,%d "
 msgstr ""
 
-#: src/Action.cpp:140
+#: src/Action.cpp:145
 #, c-format
 msgid "Play sequence in '%s' once"
 msgstr ""
 
-#: src/Action.cpp:143 src/TreeModels.cpp:88
+#: src/Action.cpp:148 src/TreeModels.cpp:88
 #, c-format
 msgid "Toggle passing MIDI events"
 msgstr ""
 
-#: src/Action.cpp:146
+#: src/Action.cpp:151
 #, c-format
 msgid "(empty action)"
 msgstr ""
 
-#: src/Action.cpp:149
+#: src/Action.cpp:154
 #, c-format
 msgid "(unknown action)"
 msgstr ""
 
-#: src/Action.cpp:157
+#: src/Action.cpp:162
 #, c-format
 msgid "%d (which was removed)"
 msgstr ""
 
-#: src/Action.cpp:159
+#: src/Action.cpp:164
 #, c-format
 msgid "%s"
 msgstr ""
@@ -502,7 +502,7 @@ msgid "Sequencer/Set one note"
 msgstr ""
 
 #: src/TreeModels.cpp:79
-msgid "Sequencer/Set all notes"
+msgid "Sequencer/Set chord"
 msgstr ""
 
 #: src/TreeModels.cpp:82
