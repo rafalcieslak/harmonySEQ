@@ -69,7 +69,7 @@ SequencerWindow::SequencerWindow(Sequencer* prt){
     toggle_vbox.pack_start(tgl_apply_mainnote);
     tgl_mute.set_label(_("On"));
     tgl_apply_mainnote.set_label(_("Apply main note"));
-    tgl_mute.signal_toggled().connect(mem_fun(*this,&SequencerWindow::OnToggleMuteToggled));
+    tgl_mute.signal_clicked().connect(mem_fun(*this,&SequencerWindow::OnToggleMuteToggled));
     tgl_mute.set_active(parent->on);
     tgl_apply_mainnote.signal_toggled().connect(mem_fun(*this,&SequencerWindow::OnToggleApplyMainNoteToggled));
     tgl_apply_mainnote.set_active(parent->apply_mainnote);
@@ -177,6 +177,7 @@ void SequencerWindow::OnChannelChanged(){
 }
 
 void SequencerWindow::OnToggleMuteToggled(){
+    *dbg << "Toggle in GUI signal called\n";
     parent->on = tgl_mute.get_active();
     parent->play_once_phase = 0;
     if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);

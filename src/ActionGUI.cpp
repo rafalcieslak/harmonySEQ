@@ -166,7 +166,7 @@ void ActionGUI::UpdateValues(){
             notenr_button.set_value(parent->args[2]);
             chordseq_button.set_value(parent->args[3]);
             break;
-        case Action::SEQ_CHANGE_ALL_NOTES:
+        case Action::SEQ_CHANGE_CHORD:
             SetSeqCombo(parent->args[1]);
             for (int x = 0; x <  6; x++) chord6_buttons[x]->set_value(parent->args[x+2]);
             break;
@@ -212,7 +212,7 @@ void ActionGUI::ChangeVisibleLines(){
             line_seq.show();
             line_set_one_note.show();
             break;
-        case Action::SEQ_CHANGE_ALL_NOTES:
+        case Action::SEQ_CHANGE_CHORD:
             line_seq.show();
             line_chord.show();
             break;
@@ -269,7 +269,7 @@ void ActionGUI::InitType(){
             notenr_button.set_value(1.0);
             chordseq_button.set_value(0.0);
             break;
-        case Action::SEQ_CHANGE_ALL_NOTES:
+        case Action::SEQ_CHANGE_CHORD:
             Seqs_combo.set_active(0);
             for (int x = 0; x <  6; x++) chord6_buttons[x]->set_value(0.0);
             break;
@@ -314,7 +314,7 @@ void ActionGUI::OnTempoChanged(){
 
 void ActionGUI::OnSeqChanged(){
     if(!Seqs_combo.get_active()) return; //empty selection
-    if(parent->type == Action::SEQ_OFF || parent->type == Action::SEQ_ON || parent->type == Action::SEQ_TOGGLE || parent->type == Action::SEQ_VOLUME_SET || parent->type == Action::SEQ_CHANGE_ONE_NOTE || parent->type == Action::SEQ_CHANGE_ALL_NOTES || parent->type == Action::SEQ_PLAY_ONCE){
+    if(parent->type == Action::SEQ_OFF || parent->type == Action::SEQ_ON || parent->type == Action::SEQ_TOGGLE || parent->type == Action::SEQ_VOLUME_SET || parent->type == Action::SEQ_CHANGE_ONE_NOTE || parent->type == Action::SEQ_CHANGE_CHORD || parent->type == Action::SEQ_PLAY_ONCE){
             parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
     }else *err << _("Error: sequencer has changed, while action is not sequencer-type.") << ENDL;
 
@@ -356,7 +356,7 @@ void ActionGUI::OnNoteNrChanged(){
 }
 
 void ActionGUI::OnNote6Changed(int n){
-    if(parent->type == Action::SEQ_CHANGE_ALL_NOTES){
+    if(parent->type == Action::SEQ_CHANGE_CHORD){
         parent->args[n+2] = chord6_buttons[n]->get_value();
     }else *err << _("Error: one of 6 notes to set has changed, while action is not of change-all-notes type.") << ENDL;
 

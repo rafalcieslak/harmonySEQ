@@ -62,7 +62,6 @@ MainWindow::MainWindow()
     // <editor-fold defaultstate="collapsed" desc="tree">
     { //creating the tree model
         m_refTreeModel_sequencers = Gtk::ListStore::create(m_columns_sequencers);
-        m_TreeView.set_model(m_refTreeModel_sequencers);
 
         if(debugging) m_TreeView.append_column(_("ID"), m_columns_sequencers.col_ID);
         
@@ -77,7 +76,7 @@ MainWindow::MainWindow()
         column->add_attribute(cell->property_cell_background(),m_columns_sequencers.col_colour);
         Gtk::CellRendererToggle& tgl = dynamic_cast<Gtk::CellRendererToggle&> (*cell);
         tgl.signal_toggled().connect(mem_fun(*this, &MainWindow::OnMutedToggleToggled));
-
+        
         col_count = m_TreeView.append_column_editable(_("MN"), m_columns_sequencers.col_apply_mainnote);
         cell = m_TreeView.get_column_cell_renderer(col_count - 1);
         Gtk::CellRendererToggle& tgl2 = dynamic_cast<Gtk::CellRendererToggle&> (*cell);
@@ -133,6 +132,7 @@ MainWindow::MainWindow()
         Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = m_TreeView.get_selection();
         refTreeSelection->signal_changed().connect(mem_fun(*this,&MainWindow::OnSelectionChanged));
 
+        m_TreeView.set_model(m_refTreeModel_sequencers);
         //initial data
         //InitTreeData();
         /*is called from main()*/
@@ -231,14 +231,14 @@ void
 MainWindow::OnMutedToggleToggled(const Glib::ustring& path)
 {
 
+    *dbg << "Toggle in main window got signal\n";
     Gtk::TreeModel::iterator iter = m_refTreeModel_sequencers->get_iter(path);
     if (!iter) return;
     Gtk::TreeModel::Row row = *iter;
-    *dbg << "the clicked row's ID was " << row[m_columns_sequencers.col_ID] << ENDL;
 
    sequencers[row[m_columns_sequencers.col_ID]]->SetOn(row[m_columns_sequencers.col_muted]);
-    sequencers[row[m_columns_sequencers.col_ID]]->UpdateGui();
-   if(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window) RefreshRow(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window);
+   sequencers[row[m_columns_sequencers.col_ID]]->UpdateGui();
+   //if(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window) RefreshRow(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window);
 }
 
 void MainWindow::OnApplyMainNoteToggleToggled(const Glib::ustring& path){
@@ -246,7 +246,6 @@ void MainWindow::OnApplyMainNoteToggleToggled(const Glib::ustring& path){
     Gtk::TreeModel::iterator iter = m_refTreeModel_sequencers->get_iter(path);
     if (!iter) return;
     Gtk::TreeModel::Row row = *iter;
-    *dbg << "the clicked row's ID was " << row[m_columns_sequencers.col_ID] << ENDL;
     sequencers[row[m_columns_sequencers.col_ID]]->SetApplyMainNote(row[m_columns_sequencers.col_apply_mainnote]);
 
 }
@@ -327,8 +326,9 @@ void MainWindow::InitTreeData(){
 }
 
 void MainWindow::RefreshRow(Gtk::TreeRowReference rowref){
-    Gtk::TreeModel::Row row = *(m_refTreeModel_sequencers->get_iter(rowref.get_path()));
 
+    *dbg << "Refreshing ROW\n";
+    Gtk::TreeModel::Row row = *(m_refTreeModel_sequencers->get_iter(rowref.get_path()));
     int x = row[m_columns_sequencers.col_ID];
     Sequencer* seq = sequencers[x];
     row[m_columns_sequencers.col_muted] = seq->GetOn();
@@ -347,7 +347,6 @@ void MainWindow::RefreshRow(Gtk::TreeRowReference rowref){
     }else{
         row[m_columns_sequencers.col_colour] = "white";
     }
-
   //  m_TreeView.queue_draw();
     
 }

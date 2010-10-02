@@ -82,7 +82,7 @@ void Action::Trigger(int data){
             sequencers[args[1]]->UpdateGuiChord(); //nessesary //its a temporary wokraround, since UpdateGui seems to crash. Howewer, it is not needed to update anything else than notes.
             break;
 
-        case SEQ_CHANGE_ALL_NOTES:
+        case SEQ_CHANGE_CHORD:
             if (!sequencers[args[1]]) break;
             sequencers[args[1]]->chord[0] = args[2];
             sequencers[args[1]]->chord[1] = args[3];
@@ -138,7 +138,7 @@ Glib::ustring Action::GetLabel(){
         case SEQ_CHANGE_ONE_NOTE:
             sprintf(temp,_("Set note %d of sequencer '%s' to %d"),args[2],GetSeqName(args[1]).c_str(),args[3]);
             break;
-        case SEQ_CHANGE_ALL_NOTES:
+        case SEQ_CHANGE_CHORD:
             sprintf(temp,_("Set notes of sequencer '%s' to %d,%d,%d,%d,%d,%d "),GetSeqName(args[1]).c_str(),args[2],args[3],args[4],args[5],args[6],args[7]);
             break;
         case SEQ_PLAY_ONCE:

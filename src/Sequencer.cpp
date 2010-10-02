@@ -191,8 +191,7 @@ int Sequencer::GetNoteOfChord(int n){return chord[n];}
 int Sequencer::GetSequence(int n){return sequence[n];}
 void Sequencer::SetOn(bool m){on = m;play_once_phase=0;gui_window->tgl_mute.set_active(m);}
 bool Sequencer::GetOn(){return on;}
-void Sequencer::SetApplyMainNote(bool a){apply_mainnote = a;/*gui_window->tgl_apply_mainnote.set_active(a);*/
-    if(row_in_main_window) mainwindow->RefreshRow(row_in_main_window);}
+void Sequencer::SetApplyMainNote(bool a){apply_mainnote = a;}
 bool Sequencer::GetApplyMainNote(){return apply_mainnote;}
 void Sequencer::SetChannel(int ch){channel = ch;gui_window->channel_button.set_value((double)ch);}
 int Sequencer::GetChannel(){return channel;}
