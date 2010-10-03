@@ -21,23 +21,35 @@
 #define	CHORDWIDGET_H
 #include <gtkmm.h>
 
-class ChordWidget : Gtk::VBox {
+#include "Chord.h"
+#include "global.h"
+
+class ChordWidget : public Gtk::VBox {
 public:
-    ChordWidget();
+    ChordWidget(Chord* associated_chord);
     virtual ~ChordWidget();
 
+    Chord* chord;
+    
     Gtk::VBox MainBox;
 
     Gtk::HBox line_guitar;
     Gtk::HBox line_chord;
     Gtk::HBox line_custom;
+
+    Gtk::Label octave_label;
+
+
+    Gtk::RadioButton radio_guitar;
+    Gtk::RadioButton radio_chord;
+    Gtk::RadioButton radio_custom;
+    Gtk::SpinButton* note_buttons[6];
+
+    Gtk::TreeView treeview_guitar_note;
+    Gtk::TreeView treewiev_chord_note;
+    Gtk::SpinButton octave;
     
-
-
-    Gtk::RadioButtonGroup group;
-    Gtk::RadioButton guitar;
-    Gtk::RadioButton chord;
-    Gtk::RadioButton custom;
+    void OnNoteChanged(int n);
 private:
 
 };

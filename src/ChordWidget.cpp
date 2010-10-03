@@ -20,10 +20,46 @@
 #include "ChordWidget.h"
 
 
-ChordWidget::ChordWidget(){
+ChordWidget::ChordWidget(Chord* associated_chord){
+
+    chord = associated_chord;
+    
+    pack_start(line_guitar);
+    pack_start(line_chord);
+    pack_start(line_custom);
+
+
+    Gtk::RadioButtonGroup group = radio_chord.get_group();
+    radio_guitar.set_group(group);
+    radio_custom.set_group(group);
+
+    radio_chord.set_label(_("Chord"));
+    radio_guitar.set_label(_("Guitar mode"));
+    radio_custom.set_label(_("Custom"));
+    line_guitar.pack_start(radio_guitar,Gtk::PACK_SHRINK);
+    line_chord.pack_start(radio_chord,Gtk::PACK_SHRINK);
+    line_custom.pack_start(radio_custom,Gtk::PACK_SHRINK);
+
+    for (int x = 0; x < 6; x++){
+        note_buttons[x] = new Gtk::SpinButton;
+        note_buttons[x]->set_range(-60.0,60.0);
+        note_buttons[x]->set_increments(1.0,12.0);
+        note_buttons[x]->set_width_chars(2);
+        note_buttons[x]->signal_value_changed().connect(sigc::bind<int>(mem_fun(*this,&ChordWidget::OnNoteChanged),x));
+        line_custom.pack_end(*note_buttons[x],Gtk::PACK_SHRINK);
+    }
 }
 
 
 ChordWidget::~ChordWidget(){
+    for (int x = 0; x < 6; x++)
+        delete note_buttons[x];
 }
 
+void ChordWidget::OnNoteChanged(int n){
+
+    radio_custom.set_active(1);
+    
+    chord->SetNote(n,note_buttons[n]->get_value());
+    
+}
