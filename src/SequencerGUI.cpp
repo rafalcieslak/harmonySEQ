@@ -150,7 +150,7 @@ void SequencerWindow::UpdateValues(){
 
 
     void SequencerWindow::UpdateChord(){
-
+        chordwidget.Update();
     }
 
 void SequencerWindow::OnChannelChanged(){
