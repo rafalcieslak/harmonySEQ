@@ -33,6 +33,7 @@ OBJECTDIR=build/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/src/ChordWidget.o \
 	${OBJECTDIR}/src/main.o \
 	${OBJECTDIR}/src/EventGUI.o \
 	${OBJECTDIR}/src/Chord.o \
@@ -73,6 +74,11 @@ LDLIBSOPTIONS=
 src/harmonySEQ: ${OBJECTFILES}
 	${MKDIR} -p src
 	${LINK.cc} -lasound -o src/harmonySEQ ${OBJECTFILES} ${LDLIBSOPTIONS} 
+
+${OBJECTDIR}/src/ChordWidget.o: src/ChordWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/ChordWidget.o src/ChordWidget.cpp
 
 ${OBJECTDIR}/src/main.o: src/main.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

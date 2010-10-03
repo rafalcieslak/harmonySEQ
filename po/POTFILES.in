@@ -14,3 +14,4 @@ src/Action.cpp
 src/ActionGUI.cpp 
 src/TreeModels.cpp
 src/Chord.cpp
+src/ChordWidget.cpp

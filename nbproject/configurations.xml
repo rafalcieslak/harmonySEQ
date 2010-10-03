@@ -8,6 +8,7 @@
       <itemPath>src/Action.h</itemPath>
       <itemPath>src/ActionGUI.h</itemPath>
       <itemPath>src/Chord.h</itemPath>
+      <itemPath>src/ChordWidget.h</itemPath>
       <itemPath>src/Event.h</itemPath>
       <itemPath>src/EventGUI.h</itemPath>
       <itemPath>src/EventsWindow.h</itemPath>
@@ -39,6 +40,7 @@
       <itemPath>src/Action.cpp</itemPath>
       <itemPath>src/ActionGUI.cpp</itemPath>
       <itemPath>src/Chord.cpp</itemPath>
+      <itemPath>src/ChordWidget.cpp</itemPath>
       <itemPath>src/Event.cpp</itemPath>
       <itemPath>src/EventGUI.cpp</itemPath>
       <itemPath>src/EventsWindow.cpp</itemPath>
