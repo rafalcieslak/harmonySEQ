@@ -35,6 +35,7 @@ OBJECTDIR=build/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/src/main.o \
 	${OBJECTDIR}/src/EventGUI.o \
+	${OBJECTDIR}/src/Chord.o \
 	${OBJECTDIR}/src/ActionGUI.o \
 	${OBJECTDIR}/src/Sequencer.o \
 	${OBJECTDIR}/src/messages.o \
@@ -82,6 +83,11 @@ ${OBJECTDIR}/src/EventGUI.o: src/EventGUI.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/EventGUI.o src/EventGUI.cpp
+
+${OBJECTDIR}/src/Chord.o: src/Chord.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Chord.o src/Chord.cpp
 
 ${OBJECTDIR}/src/ActionGUI.o: src/ActionGUI.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

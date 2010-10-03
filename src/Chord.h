@@ -44,21 +44,30 @@ public:
         TYPE_AUGMENTED,
         TYPE_DIMINICHED
     };
-
+    
 
     int GetNote(int n);
+    void SetNote(int note, int pitch);
+
     int GetMode();
     void SetMode(int n);
-    void SetNote(int note, int pitch);
-    void SetRoot(int pitch);
+
     int GetRoot();
-    void SetType(int n);
+    void SetRoot(int pitch);
+
     int GetType();
+    void SetType(int n);
+
+    int GetGuitarMode();
     void SetGuitarMode(int n);
+
     void SetInversion(int n);
     int GetInversion();
+    
     void SetOctave(int n);
     int GetOctave();
+
+    Chord& operator=(const Chord& other);
 private:
 
     void RecalcNotes();
