@@ -236,9 +236,9 @@ MainWindow::OnMutedToggleToggled(const Glib::ustring& path)
     if (!iter) return;
     Gtk::TreeModel::Row row = *iter;
 
-   sequencers[row[m_columns_sequencers.col_ID]]->SetOn(row[m_columns_sequencers.col_muted]);
+   sequencers[row[m_columns_sequencers.col_ID]]->SetOn(!row[m_columns_sequencers.col_muted]);
    sequencers[row[m_columns_sequencers.col_ID]]->UpdateGui();
-   //if(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window) RefreshRow(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window);
+   if(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window) RefreshRow(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window);
 }
 
 void MainWindow::OnApplyMainNoteToggleToggled(const Glib::ustring& path){
@@ -246,7 +246,8 @@ void MainWindow::OnApplyMainNoteToggleToggled(const Glib::ustring& path){
     Gtk::TreeModel::iterator iter = m_refTreeModel_sequencers->get_iter(path);
     if (!iter) return;
     Gtk::TreeModel::Row row = *iter;
-    sequencers[row[m_columns_sequencers.col_ID]]->SetApplyMainNote(row[m_columns_sequencers.col_apply_mainnote]);
+    sequencers[row[m_columns_sequencers.col_ID]]->SetApplyMainNote(!row[m_columns_sequencers.col_apply_mainnote]);
+   if(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window) RefreshRow(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window);
 
 }
 
@@ -258,6 +259,7 @@ MainWindow::OnNameEdited(const Glib::ustring& path, const Glib::ustring& newtext
     if (!iter) return;
     Gtk::TreeModel::Row row = *iter;
     sequencers[row[m_columns_sequencers.col_ID]]->SetName(newtext);
+   if(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window) RefreshRow(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window);
 
     eventswindow->RefreshAll();
 }
@@ -331,6 +333,7 @@ void MainWindow::RefreshRow(Gtk::TreeRowReference rowref){
     Gtk::TreeModel::Row row = *(m_refTreeModel_sequencers->get_iter(rowref.get_path()));
     int x = row[m_columns_sequencers.col_ID];
     Sequencer* seq = sequencers[x];
+    *dbg << "on = " << seq->GetOn() << ENDL;
     row[m_columns_sequencers.col_muted] = seq->GetOn();
     row[m_columns_sequencers.col_name] = seq->GetName();
     row[m_columns_sequencers.col_apply_mainnote] = seq->GetApplyMainNote();
