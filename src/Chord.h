@@ -24,10 +24,49 @@
 class Chord {
 public:
     Chord();
-    Chord(const Chord& orig);
     virtual ~Chord();
+
+
+
+    enum {
+        CUSTOM,
+        TRIAD,
+        GUITAR
+    };
+
+    enum {
+        GUITAR_MAJOR,
+        GUITAR_MINOR
+    };
+    enum {
+        TYPE_MAJOR,
+        TYPE_MINOR,
+        TYPE_AUGMENTED,
+        TYPE_DIMINICHED
+    };
+
+
+    int GetNote(int n);
+    int GetMode();
+    void SetMode(int n);
+    void SetNote(int note, int pitch);
+    void SetRoot(int pitch);
+    int GetRoot();
+    void SetType(int n);
+    int GetType();
+    void SetGuitarMode(int n);
 private:
 
+    int notes[6];
+
+    
+    int mode;
+
+    int guitar_mode;
+
+    int root;
+
+    int type;
 };
 
 #endif	/* CHORD_H */

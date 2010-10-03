@@ -24,11 +24,12 @@
 Chord::Chord(){
 }
 
-
-Chord::Chord(const Chord& orig){
-}
-
-
 Chord::~Chord(){
 }
 
+void Chord::SetNote(int note, int pitch){
+    if (note > 6 || note < 1) return; 
+    mode = CUSTOM;
+    notes[note-1] = pitch;
+
+}
