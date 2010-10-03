@@ -71,6 +71,7 @@ Chord::~Chord(){
 }
 
 void Chord::RecalcNotes(){
+    *dbg<<"recalculating chord\n";
     int n1,n2,n3,base;
     switch (mode){
         case CUSTOM:
@@ -91,7 +92,7 @@ void Chord::RecalcNotes(){
             if (type == TYPE_MAJOR || type == TYPE_AUGMENTED) n2 = n1+4;
             else n2 = n1+3;
             if(type == TYPE_MINOR || type == TYPE_AUGMENTED) n3 = n2+4;
-            else n3 = n1+3;
+            else n3 = n2+3;
 
             base = 12*octave;
 

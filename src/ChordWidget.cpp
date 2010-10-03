@@ -30,21 +30,24 @@ ChordWidget::ChordWidget(Chord* associated_chord){
     frame.add(MainBox);
 
     MainBox.pack_start(line_guitar);
-    MainBox.pack_start(line_chord);
+    MainBox.pack_start(line_triad);
     MainBox.pack_start(line_custom);
     MainBox.pack_start(line_custom2);
 
 
-    Gtk::RadioButtonGroup group = radio_chord.get_group();
+    Gtk::RadioButtonGroup group = radio_triad.get_group();
     radio_guitar.set_group(group);
     radio_custom.set_group(group);
 
-    radio_chord.set_label(_("Chord"));
+    radio_triad.set_label(_("Triad"));
     radio_guitar.set_label(_("Guitar mode"));
     radio_custom.set_label(_("Custom"));
     line_guitar.pack_start(radio_guitar,Gtk::PACK_SHRINK);
-    line_chord.pack_start(radio_chord,Gtk::PACK_SHRINK);
+    line_triad.pack_start(radio_triad,Gtk::PACK_SHRINK);
     line_custom.pack_start(radio_custom,Gtk::PACK_SHRINK);
+    radio_triad.signal_toggled().connect(mem_fun(*this,&ChordWidget::OnRadioTriadToggled));
+    radio_guitar.signal_toggled().connect(mem_fun(*this,&ChordWidget::OnRadioCustomToggled));
+    radio_custom.signal_toggled().connect(mem_fun(*this,&ChordWidget::OnRadioCustomToggled));
 
     for (int x = 0; x < 6; x++){
         note_buttons[x] = new Gtk::SpinButton;
@@ -52,16 +55,17 @@ ChordWidget::ChordWidget(Chord* associated_chord){
         note_buttons[x]->set_increments(1.0,12.0);
         note_buttons[x]->set_width_chars(3);
         note_buttons[x]->signal_value_changed().connect(sigc::bind<int>(mem_fun(*this,&ChordWidget::OnNoteChanged),x));
-        line_custom2.pack_end(*note_buttons[x],Gtk::PACK_SHRINK);
+        line_custom2.pack_start(*note_buttons[x],Gtk::PACK_SHRINK);
     }
 
     combo_guitar_note.set_model(m_refTreeModel_Notes);
-    combo_chord_note.set_model(m_refTreeModel_Notes);
+    combo_triad_note.set_model(m_refTreeModel_Notes);
     combo_guitar_note.pack_start(m_columns_notes.name);
-    combo_chord_note.pack_start(m_columns_notes.name);
+    combo_triad_note.pack_start(m_columns_notes.name);
 
     line_guitar.pack_start(combo_guitar_note,Gtk::PACK_SHRINK);
-    line_chord.pack_start(combo_chord_note,Gtk::PACK_SHRINK);
+    line_triad.pack_start(combo_triad_note,Gtk::PACK_SHRINK);
+    UpdateNotes();
 }
 
 
@@ -76,7 +80,35 @@ void ChordWidget::OnNoteChanged(int n){
     
     chord->SetNote(n,note_buttons[n]->get_value());
 
-    combo_chord_note.set_active(-1);
+    combo_triad_note.set_active(-1);
     combo_guitar_note.set_active(-1);
     
+}
+
+void ChordWidget::OnRadioTriadToggled(){
+    if(radio_triad.get_active()){
+        chord->SetMode(Chord::TRIAD);
+        UpdateNotes();
+    }
+}
+
+void ChordWidget::OnRadioCustomToggled(){
+    if(radio_custom.get_active()){
+        chord->SetMode(Chord::CUSTOM);
+        UpdateNotes();
+    }
+}
+
+void ChordWidget::OnRadioGuitarToggled(){
+    if(radio_guitar.get_active()){
+        chord->SetMode(Chord::GUITAR);
+        UpdateNotes();
+    }
+}
+
+void ChordWidget::UpdateNotes(){
+    for (int x =0;x < 6; x++){
+        note_buttons[x]->set_value(chord->GetNote(x));
+    }
+
 }

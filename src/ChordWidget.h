@@ -34,7 +34,7 @@ public:
     Gtk::VBox MainBox;
 
     Gtk::HBox line_guitar;
-    Gtk::HBox line_chord;
+    Gtk::HBox line_triad;
     Gtk::HBox line_custom;
     Gtk::HBox line_custom2;
 
@@ -42,19 +42,22 @@ public:
 
 
     Gtk::RadioButton radio_guitar;
-    Gtk::RadioButton radio_chord;
+    Gtk::RadioButton radio_triad;
     Gtk::RadioButton radio_custom;
     Gtk::SpinButton* note_buttons[6];
 
     Gtk::ComboBox combo_guitar_note;
-    Gtk::ComboBox combo_chord_note;
+    Gtk::ComboBox combo_triad_note;
     Gtk::SpinButton octave;
 
     Gtk::Frame frame;
     
     void OnNoteChanged(int n);
+    void UpdateNotes();
 private:
-
+    void OnRadioCustomToggled();
+    void OnRadioGuitarToggled();
+    void OnRadioTriadToggled();
 };
 
 #endif	/* CHORDWIDGET_H */
