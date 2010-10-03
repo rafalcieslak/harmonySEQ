@@ -18,6 +18,7 @@
 */
 
 #include "ChordWidget.h"
+#include "TreeModels.h"
 
 
 ChordWidget::ChordWidget(Chord* associated_chord){
@@ -48,6 +49,14 @@ ChordWidget::ChordWidget(Chord* associated_chord){
         note_buttons[x]->signal_value_changed().connect(sigc::bind<int>(mem_fun(*this,&ChordWidget::OnNoteChanged),x));
         line_custom.pack_end(*note_buttons[x],Gtk::PACK_SHRINK);
     }
+
+    treeview_guitar_note.set_model(m_refTreeModel_Notes);
+    treewiev_chord_note.set_model(m_refTreeModel_Notes);
+    treeview_guitar_note.pack_start(m_columns_notes.name);
+    treewiev_chord_note.pack_start(m_columns_notes.name);
+
+    line_guitar.pack_start(treeview_guitar_note,Gtk::PACK_SHRINK);
+    line_chord.pack_start(treewiev_chord_note,Gtk::PACK_SHRINK);
 }
 
 

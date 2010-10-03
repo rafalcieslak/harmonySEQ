@@ -45,8 +45,8 @@ public:
     Gtk::RadioButton radio_custom;
     Gtk::SpinButton* note_buttons[6];
 
-    Gtk::TreeView treeview_guitar_note;
-    Gtk::TreeView treewiev_chord_note;
+    Gtk::ComboBox treeview_guitar_note;
+    Gtk::ComboBox treewiev_chord_note;
     Gtk::SpinButton octave;
     
     void OnNoteChanged(int n);
