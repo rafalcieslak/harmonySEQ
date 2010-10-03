@@ -71,6 +71,9 @@ public:
     /**Shows the GUI*/
     void ShowWindow();
 
+    /**Refreshes chordwidget*/
+    void UpdateChord();
+    
 private:
 
     ActionGUI *gui_window;

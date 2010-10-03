@@ -205,12 +205,6 @@ void Chord::Set(const Chord& other){
     RecalcNotes();
 }
 
-std::vector<int> Chord::GetNotesList(){
-    std::vector<int> V;
-    for (int x = 0; x < 6;x++)
-        V.push_back(notes[x]);
-    return V;
-}
 
 Glib::ustring Chord::GetName(){
     char temp[100];
@@ -245,4 +239,31 @@ Glib::ustring Chord::GetName(){
     a = temp;
     return a;
 
+}
+
+std::vector<int> Chord::SaveToVector(){
+   /**Should have following format: mode, guitar_root, guitar_note, triad_root,triad_note,octave,inversion,notes(6)(if custom)*/
+    std::vector<int> V;
+    V.push_back(mode);
+    V.push_back(guitar_root);
+    V.push_back(guitar_mode);
+    V.push_back(triad_root);
+    V.push_back(triad_mode);
+    V.push_back(octave);
+    V.push_back(inversion);
+    if (mode == CUSTOM) for (int x = 0; x < 6; x++) V.push_back(notes[x]);
+    return V;
+}
+
+void Chord::SetFromVector(std::vector<int>& V){
+    if (V.size() < 7) {*err << "ERROR: chord vector too small\n"; return;}
+    mode = V[0];
+    guitar_root = V[1];
+    guitar_mode = V[2];
+    triad_root = V[3];
+    *dbg << "setting from vector: triad root is " << V[3] << ENDL;
+    triad_mode = V[4];
+    octave = V[5];
+    inversion = V[6];
+    if(mode == CUSTOM)for (int x = 0; x < 6; x++) notes[x] = V[7+x];
 }

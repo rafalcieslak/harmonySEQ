@@ -153,7 +153,7 @@ Glib::ustring Action::GetLabel(){
 
 Glib::ustring Action::GetSeqName(int n){
     char temp[100];
-    if(n>sequencers.size()) {*err << _("Critical ERROR: Trying to get name of sequencer outside of sequencers vector."); return "";}
+    if(n>sequencers.size()) {*err << _("Critical ERROR: Trying to get name of sequencer outside of sequencers vector.\n"); return "";}
     if (!sequencers[n])
         sprintf(temp,_("%d (which was removed)"),n);
     else
@@ -164,4 +164,8 @@ Glib::ustring Action::GetSeqName(int n){
 void Action::ShowWindow(){
     gui_window->show();
     gui_window->raise();
+}
+
+void Action::UpdateChord(){
+    gui_window->chordwidget.Update();
 }

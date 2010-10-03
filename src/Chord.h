@@ -72,8 +72,10 @@ public:
     int GetOctave();
 
    void Set(const Chord& other);
+   void SetFromVector(std::vector<int> &V);
 
-    std::vector<int> GetNotesList();
+   /**Should have following format: mode, guitar_root, guitar_note, triad_root,triad_note,octave,inversion,notes(6)(if custom)*/
+   std::vector<int> SaveToVector();
 
     Glib::ustring GetName();
 private:
