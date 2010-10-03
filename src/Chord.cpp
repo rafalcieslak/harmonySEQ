@@ -209,3 +209,38 @@ std::vector<int> Chord::GetNotesList(){
         V.push_back(notes[x]);
     return V;
 }
+
+Glib::ustring Chord::GetName(){
+    char temp[100];
+    Glib::ustring a;
+    switch (mode){
+        case CUSTOM:
+            sprintf(temp,_("Custom: %d, %d, %d, %d, %d, %d"),notes[0],notes[1],notes[2],notes[3],notes[4],notes[5]);
+            break;
+        case GUITAR:
+            if (guitar_mode == GUITAR_MAJOR){
+                sprintf(temp,_("Guitar: %s major"),notemap.find(guitar_root)->second.c_str());
+            }else if (guitar_mode == GUITAR_MINOR){
+                sprintf(temp,_("Guitar: %s minor"),notemap.find(guitar_root)->second.c_str());
+            }
+            break;
+        case TRIAD:
+            if (triad_mode ==  TYPE_MAJOR){
+                sprintf(temp,_("Triad: %s major"),notemap.find(triad_root)->second.c_str());
+            } else
+            if (triad_mode == TYPE_MINOR){
+                sprintf(temp,_("Triad: %s minor"),notemap.find(triad_root)->second.c_str());
+            } else
+            if (triad_mode ==  TYPE_AUGMENTED){
+                sprintf(temp,_("Triad: %s augumented"),notemap.find(triad_root)->second.c_str());
+            } else
+            if (triad_mode ==  TYPE_DIMINICHED){
+                sprintf(temp,_("Triad: %s diminished"),notemap.find(triad_root)->second.c_str());
+            }
+            break;
+    }
+
+    a = temp;
+    return a;
+
+}

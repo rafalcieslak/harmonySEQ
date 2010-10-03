@@ -21,6 +21,7 @@
 #ifndef CHORD_H
 #define	CHORD_H
 #include <vector>
+#include <glibmm/ustring.h>
 class Chord {
 public:
     Chord();
@@ -73,6 +74,8 @@ public:
     Chord& operator=(const Chord& other);
 
     std::vector<int> GetNotesList();
+
+    Glib::ustring GetName();
 private:
 
     void RecalcNotes();
