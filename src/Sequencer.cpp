@@ -67,14 +67,14 @@ void clear_sequencers(){
 //======begin sequencer class===============
 
 Sequencer::Sequencer()
-    : sequence(SEQUENCE_DEFAULT_SIZE,0), chord(NOTES_CONST_SIZE,0)
+    : sequence(SEQUENCE_DEFAULT_SIZE,0)
 {
     name = SEQUENCER_DEFAULT_NAME;
     Init();
 }
 
 Sequencer::Sequencer(Glib::ustring _name)
-    : sequence(SEQUENCE_DEFAULT_SIZE,0), chord(NOTES_CONST_SIZE,0)
+    : sequence(SEQUENCE_DEFAULT_SIZE,0)
 {
     name = _name;
     Init();
@@ -82,14 +82,14 @@ Sequencer::Sequencer(Glib::ustring _name)
 
 
 Sequencer::Sequencer(int seq[],int note[])
-    :  sequence(SEQUENCE_DEFAULT_SIZE,0), chord(NOTES_CONST_SIZE,0)
+    :  sequence(SEQUENCE_DEFAULT_SIZE,0)
 {
     for (int x = 0; x < SEQUENCE_DEFAULT_SIZE; x++){
         sequence[x] = seq[x];
         
     }
     for (int x = 0; x < NOTES_CONST_SIZE; x++){
-        chord[x] = note[x];
+        chord.SetNote(x,note[x]);
         
     }
     name = SEQUENCER_DEFAULT_NAME;
@@ -97,14 +97,14 @@ Sequencer::Sequencer(int seq[],int note[])
 }
 
 Sequencer::Sequencer(int seq[],int note[], Glib::ustring _name)
-    :  sequence(SEQUENCE_DEFAULT_SIZE,0), chord(NOTES_CONST_SIZE,0)
+    :  sequence(SEQUENCE_DEFAULT_SIZE,0)
 {
     for (int x = 0; x < SEQUENCE_DEFAULT_SIZE; x++){
         sequence[x] = seq[x];
 
     }
     for (int x = 0; x < NOTES_CONST_SIZE; x++){
-        chord[x] = note[x];
+        chord.SetNote(x,note[x]);
 
     }
 
@@ -141,8 +141,6 @@ void Sequencer::Init(){
     last_played_note = 0;
     play_once_phase = 0;
     resolution = SEQUENCE_DEFAULT_SIZE;
-    *dbg << chord[0]<<ENDL;
-    *dbg << GetNoteOfChord(0);
     gui_window = new SequencerWindow(this);
     //gui_window->UpdateValues();
     //gui_window->parent = this;
@@ -187,7 +185,7 @@ void Sequencer::SetResolution(int res){
 
 
 
-int Sequencer::GetNoteOfChord(int n){return chord[n];}
+int Sequencer::GetNoteOfChord(int n){return chord.GetNote(n);}
 int Sequencer::GetSequence(int n){return sequence[n];}
 void Sequencer::SetOn(bool m){on = m;play_once_phase=0;gui_window->tgl_mute.set_active(m);}
 bool Sequencer::GetOn(){return on;}

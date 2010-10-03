@@ -21,6 +21,7 @@
 #ifndef SEQUENCER_H
 #define	SEQUENCER_H
 #include "global.h"
+#include "Chord.h"
 #include "SequencerGUI.h"
 using namespace std;
 
@@ -44,7 +45,7 @@ public:
     vector<int> sequence;
 
     /**The main chord*/
-    vector<int> chord;
+   Chord chord;
     
     /**Fills in everything with default values*/
     void Init();

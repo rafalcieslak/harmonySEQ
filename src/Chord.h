@@ -20,7 +20,7 @@
 
 #ifndef CHORD_H
 #define	CHORD_H
-
+#include <vector>
 class Chord {
 public:
     Chord();
@@ -68,6 +68,8 @@ public:
     int GetOctave();
 
     Chord& operator=(const Chord& other);
+
+    std::vector<int> GetNotesList();
 private:
 
     void RecalcNotes();

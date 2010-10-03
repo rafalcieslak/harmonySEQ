@@ -127,7 +127,7 @@ SequencerWindow::~SequencerWindow(){
 }
 
 void SequencerWindow::OnNotesChanged(int note){
-    parent->chord[note] = chord_buttons[note]->get_value();
+    parent->chord.SetNote(note, chord_buttons[note]->get_value());
 
 }
 

@@ -189,3 +189,10 @@ Chord& Chord::operator =(const Chord& other){
     RecalcNotes();
     return *this;
 }
+
+std::vector<int> Chord::GetNotesList(){
+    std::vector<int> V;
+    for (int x = 0; x < 6;x++)
+        V.push_back(notes[x]);
+    return V;
+}
