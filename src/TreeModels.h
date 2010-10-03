@@ -96,6 +96,15 @@ public:
     Gtk::TreeModelColumn<int> note;
     Gtk::TreeModelColumn<Glib::ustring> name;
 };
+class ModelColumns_Universal_IDandNAME: public Gtk::TreeModel::ColumnRecord {
+public:
+    ModelColumns_Universal_IDandNAME() {
+        add(id);
+        add(name);
+    }
+    Gtk::TreeModelColumn<int> id;
+    Gtk::TreeModelColumn<Glib::ustring> name;
+};
 #ifndef I_DO_NOT_WANT_EXTERNS_FROM_TREE_MODELS
 extern ModelColumns_EventTypes m_columns_event_types;
 extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_EventTypes;
@@ -109,6 +118,9 @@ extern ModelColumns_SEQUENCERS m_columns_sequencers;
 extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_sequencers;
 extern ModelColumns_Notes m_columns_notes;
 extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_Notes;
+extern ModelColumns_Universal_IDandNAME m_columns_IdAndName;
+extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_TriadModes;
+extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_ChordGuitarModes;
 #endif
 
 void InitEventTypesTreeModel();
@@ -116,6 +128,8 @@ void InitKeyTypesTreeModel();
 void InitChannelsTreeModel();
 void InitActionTypesTreeModel();
 void InitNotesTreeModel();
+void InitTriadModesTreeModel();
+void InitChordGuitarModesTreeModel();
 void InitAllTreeModels();
 
 

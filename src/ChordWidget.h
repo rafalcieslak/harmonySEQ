@@ -48,19 +48,23 @@ public:
 
     Gtk::ComboBox combo_guitar_note;
     Gtk::ComboBox combo_triad_note;
+    Gtk::ComboBox combo_guitar_mode;
+    Gtk::ComboBox combo_triad_mode;
     Gtk::SpinButton octave;
 
     Gtk::Frame frame;
     
-    void OnNoteChanged(int n);
     void UpdateNotes();
 private:
+    void OnNoteChanged(int n);
     void OnRadioCustomToggled();
     void OnRadioGuitarToggled();
     void OnRadioTriadToggled();
     void OnGuitarRootChanged();
     void OnTriadRootChanged();
-
+    void OnTriadModeChanged();
+    void OnGuitarModeChanged();
+    void OnOctaveChanged();
     bool we_are_copying_note_values_from_chord_so_do_not_handle_the_signals;
 };
 

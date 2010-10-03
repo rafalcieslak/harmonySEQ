@@ -34,6 +34,9 @@ ModelColumns_Channels m_columns_channels;
 Glib::RefPtr<Gtk::ListStore> m_refTreeModel_Channels;
 ModelColumns_Notes m_columns_notes;
 Glib::RefPtr<Gtk::ListStore> m_refTreeModel_Notes;
+ModelColumns_Universal_IDandNAME m_columns_IdAndName;
+Glib::RefPtr<Gtk::ListStore> m_refTreeModel_TriadModes;
+Glib::RefPtr<Gtk::ListStore> m_refTreeModel_ChordGuitarModes;
 
 void InitEventTypesTreeModel(){
 
@@ -162,11 +165,41 @@ void InitNotesTreeModel(){
     row[m_columns_notes.name] = "C";*/
     
 }
+void InitTriadModesTreeModel(){
+    m_refTreeModel_TriadModes = Gtk::ListStore::create(m_columns_IdAndName);
+    Gtk::TreeModel::Row row = *(m_refTreeModel_TriadModes->append());
+    row[m_columns_IdAndName.id] = 0;
+    row[m_columns_IdAndName.name] = _("Major");
+    row = *(m_refTreeModel_TriadModes->append());
+    row[m_columns_IdAndName.id] = 1;
+    row[m_columns_IdAndName.name] = _("Minor");
+    row = *(m_refTreeModel_TriadModes->append());
+    row[m_columns_IdAndName.id] = 2;
+    row[m_columns_IdAndName.name] = _("Augmented");
+    row = *(m_refTreeModel_TriadModes->append());
+    row[m_columns_IdAndName.id] = 3;
+    row[m_columns_IdAndName.name] = _("Diminished");
+
+}
+
+void InitChordGuitarModesTreeModel(){
+    m_refTreeModel_ChordGuitarModes = Gtk::ListStore::create(m_columns_IdAndName);
+    Gtk::TreeModel::Row row = *(m_refTreeModel_ChordGuitarModes->append());
+    row[m_columns_IdAndName.id] = 0;
+    row[m_columns_IdAndName.name] = _("Major");
+    row = *(m_refTreeModel_ChordGuitarModes->append());
+    row[m_columns_IdAndName.id] = 1;
+    row[m_columns_IdAndName.name] = _("Minor");
+    
+}
+
 void InitAllTreeModels(){
     InitEventTypesTreeModel();
     InitActionTypesTreeModel();
     InitKeyTypesTreeModel();
     InitChannelsTreeModel();
+    InitTriadModesTreeModel();
+    InitChordGuitarModesTreeModel();
     InitNotesTreeModel();
 }
 

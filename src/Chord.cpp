@@ -64,7 +64,7 @@ Chord::Chord(){
     inversion = 0;
     triad_root = 0;
     guitar_mode = GUITAR_MAJOR;
-    type = TYPE_MAJOR;
+    triad_mode = TYPE_MAJOR;
     octave = 0;
 
 }
@@ -91,9 +91,9 @@ void Chord::RecalcNotes(){
             break;
         case TRIAD:
             n1 = triad_root;
-            if (type == TYPE_MAJOR || type == TYPE_AUGMENTED) n2 = n1+4;
+            if (triad_mode == TYPE_MAJOR || triad_mode == TYPE_AUGMENTED) n2 = n1+4;
             else n2 = n1+3;
-            if(type == TYPE_MINOR || type == TYPE_AUGMENTED) n3 = n2+4;
+            if(triad_mode == TYPE_MINOR || triad_mode == TYPE_AUGMENTED) n3 = n2+4;
             else n3 = n2+3;
 
             base = 12*octave;
@@ -154,13 +154,13 @@ int Chord::GetMode(){
     return mode;
 }
 
-void Chord::SetType(int n){
-    type = n;
+void Chord::SetTriadMode(int n){
+    triad_mode = n;
     RecalcNotes();
 }
 
-int Chord::GetType(){
-    return type;
+int Chord::GetTriadMode(){
+    return triad_mode;
 }
 
 void Chord::SetGuitarMode(int n){
@@ -195,7 +195,7 @@ Chord& Chord::operator =(const Chord& other){
     mode = other.mode;
     octave = other.octave;
     triad_root = other.triad_root;
-    type = other.type;
+    triad_mode = other.triad_mode;
     guitar_mode = other.guitar_mode;
     inversion = other.inversion;
     RecalcNotes();

@@ -64,14 +64,33 @@ ChordWidget::ChordWidget(Chord* associated_chord){
 
     combo_guitar_note.set_model(m_refTreeModel_Notes);
     combo_triad_note.set_model(m_refTreeModel_Notes);
+    combo_guitar_mode.set_model(m_refTreeModel_ChordGuitarModes);
+    combo_triad_mode.set_model(m_refTreeModel_TriadModes);
     combo_guitar_note.pack_start(m_columns_notes.name);
     combo_triad_note.pack_start(m_columns_notes.name);
+    combo_guitar_mode.pack_start(m_columns_IdAndName.name);
+    combo_triad_mode.pack_start(m_columns_IdAndName.name);
     combo_guitar_note.signal_changed().connect(mem_fun(*this,&ChordWidget::OnGuitarRootChanged));
     combo_triad_note.signal_changed().connect(mem_fun(*this,&ChordWidget::OnTriadRootChanged));
+    combo_guitar_mode.signal_changed().connect(mem_fun(*this,&ChordWidget::OnGuitarModeChanged));
+    combo_triad_mode.signal_changed().connect(mem_fun(*this,&ChordWidget::OnTriadModeChanged));
     combo_triad_note.set_active(chord->GetTriadRoot()); //tricky
     combo_guitar_note.set_active(chord->GetGuitarRoot());
+    combo_guitar_mode.set_active(chord->GetGuitarMode());
+    combo_triad_mode.set_active(chord->GetTriadMode());
     line_guitar.pack_start(combo_guitar_note,Gtk::PACK_SHRINK);
     line_triad.pack_start(combo_triad_note,Gtk::PACK_SHRINK);
+    line_guitar.pack_start(combo_guitar_mode,Gtk::PACK_SHRINK);
+    line_triad.pack_start(combo_triad_mode,Gtk::PACK_SHRINK);
+
+    octave.set_range(-5.0,5.0);
+    octave.set_increments(1.0,12.0);
+    octave.set_width_chars(2);
+    octave.set_value(chord->GetOctave());
+    octave.signal_value_changed().connect(mem_fun(*this,&ChordWidget::OnOctaveChanged));
+    octave_label.set_text(_("Octave"));
+    line_triad.pack_start(octave_label);
+    line_triad.pack_start(octave);
 
     UpdateNotes();
 }
@@ -133,5 +152,22 @@ void ChordWidget::OnGuitarRootChanged(){
 void ChordWidget::OnTriadRootChanged(){
     Gtk::TreeModel::Row row = *(combo_triad_note.get_active());
     chord->SetTriadRoot(row[m_columns_notes.note]);
+    UpdateNotes();
+}
+
+void ChordWidget::OnTriadModeChanged(){
+    Gtk::TreeModel::Row row = *(combo_triad_mode.get_active());
+    chord->SetTriadMode(row[m_columns_notes.note]);
+    UpdateNotes();
+}
+
+void ChordWidget::OnGuitarModeChanged(){
+    Gtk::TreeModel::Row row = *(combo_guitar_mode.get_active());
+    chord->SetGuitarMode(row[m_columns_notes.note]);
+    UpdateNotes();
+}
+
+void ChordWidget::OnOctaveChanged(){
+    chord->SetOctave(octave.get_value());
     UpdateNotes();
 }
