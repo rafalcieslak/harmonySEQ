@@ -25,6 +25,19 @@ class ChordWidget : Gtk::VBox {
 public:
     ChordWidget();
     virtual ~ChordWidget();
+
+    Gtk::VBox MainBox;
+
+    Gtk::HBox line_guitar;
+    Gtk::HBox line_chord;
+    Gtk::HBox line_custom;
+    
+
+
+    Gtk::RadioButtonGroup group;
+    Gtk::RadioButton guitar;
+    Gtk::RadioButton chord;
+    Gtk::RadioButton custom;
 private:
 
 };
