@@ -55,7 +55,14 @@ public:
     void SetType(int n);
     int GetType();
     void SetGuitarMode(int n);
+    void SetInversion(int n);
+    int GetInversion();
+    void SetOctave(int n);
+    int GetOctave();
 private:
+
+    void RecalcNotes();
+
 
     int notes[6];
 
@@ -67,6 +74,10 @@ private:
     int root;
 
     int type;
+
+    int inversion;
+
+    int octave;
 };
 
 #endif	/* CHORD_H */
