@@ -24,6 +24,7 @@
 ChordWidget::ChordWidget(Chord* associated_chord){
 
     chord = associated_chord;
+    we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = false;
     pack_start(frame);
     
     frame.set_label(_("Chord"));
@@ -45,8 +46,11 @@ ChordWidget::ChordWidget(Chord* associated_chord){
     line_guitar.pack_start(radio_guitar,Gtk::PACK_SHRINK);
     line_triad.pack_start(radio_triad,Gtk::PACK_SHRINK);
     line_custom.pack_start(radio_custom,Gtk::PACK_SHRINK);
+    if(chord->GetMode() == Chord::CUSTOM){radio_custom.set_active(1);}
+    if(chord->GetMode() == Chord::GUITAR){radio_guitar.set_active(1);}
+    if(chord->GetMode() == Chord::TRIAD){radio_triad.set_active(1);}
     radio_triad.signal_toggled().connect(mem_fun(*this,&ChordWidget::OnRadioTriadToggled));
-    radio_guitar.signal_toggled().connect(mem_fun(*this,&ChordWidget::OnRadioCustomToggled));
+    radio_guitar.signal_toggled().connect(mem_fun(*this,&ChordWidget::OnRadioGuitarToggled));
     radio_custom.signal_toggled().connect(mem_fun(*this,&ChordWidget::OnRadioCustomToggled));
 
     for (int x = 0; x < 6; x++){
@@ -62,9 +66,13 @@ ChordWidget::ChordWidget(Chord* associated_chord){
     combo_triad_note.set_model(m_refTreeModel_Notes);
     combo_guitar_note.pack_start(m_columns_notes.name);
     combo_triad_note.pack_start(m_columns_notes.name);
-
+    combo_guitar_note.signal_changed().connect(mem_fun(*this,&ChordWidget::OnGuitarRootChanged));
+    combo_triad_note.signal_changed().connect(mem_fun(*this,&ChordWidget::OnTriadRootChanged));
+    combo_triad_note.set_active(chord->GetTriadRoot()); //tricky
+    combo_guitar_note.set_active(chord->GetGuitarRoot());
     line_guitar.pack_start(combo_guitar_note,Gtk::PACK_SHRINK);
     line_triad.pack_start(combo_triad_note,Gtk::PACK_SHRINK);
+
     UpdateNotes();
 }
 
@@ -75,13 +83,14 @@ ChordWidget::~ChordWidget(){
 }
 
 void ChordWidget::OnNoteChanged(int n){
+    if(we_are_copying_note_values_from_chord_so_do_not_handle_the_signals) return;
 
     radio_custom.set_active(1);
     
     chord->SetNote(n,note_buttons[n]->get_value());
 
-    combo_triad_note.set_active(-1);
-    combo_guitar_note.set_active(-1);
+    //combo_triad_note.set_active(-1);
+    //combo_guitar_note.set_active(-1);
     
 }
 
@@ -107,8 +116,22 @@ void ChordWidget::OnRadioGuitarToggled(){
 }
 
 void ChordWidget::UpdateNotes(){
+    we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = true;
     for (int x =0;x < 6; x++){
         note_buttons[x]->set_value(chord->GetNote(x));
     }
+    we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = false;
 
+}
+
+void ChordWidget::OnGuitarRootChanged(){
+    Gtk::TreeModel::Row row = *(combo_guitar_note.get_active());
+    chord->SetGuitarRoot(row[m_columns_notes.note]);
+    UpdateNotes();
+}
+
+void ChordWidget::OnTriadRootChanged(){
+    Gtk::TreeModel::Row row = *(combo_triad_note.get_active());
+    chord->SetTriadRoot(row[m_columns_notes.note]);
+    UpdateNotes();
 }

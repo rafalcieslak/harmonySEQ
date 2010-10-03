@@ -52,8 +52,11 @@ public:
     int GetMode();
     void SetMode(int n);
 
-    int GetRoot();
-    void SetRoot(int pitch);
+    int GetTriadRoot();
+    void SetTriadRoot(int pitch);
+
+    int GetGuitarRoot();
+    void SetGuitarRoot(int pitch);
 
     int GetType();
     void SetType(int n);
@@ -82,7 +85,8 @@ private:
 
     int guitar_mode;
 
-    int root;
+    int triad_root;
+    int guitar_root;
 
     int type;
 

@@ -58,6 +58,10 @@ private:
     void OnRadioCustomToggled();
     void OnRadioGuitarToggled();
     void OnRadioTriadToggled();
+    void OnGuitarRootChanged();
+    void OnTriadRootChanged();
+
+    bool we_are_copying_note_values_from_chord_so_do_not_handle_the_signals;
 };
 
 #endif	/* CHORDWIDGET_H */

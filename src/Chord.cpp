@@ -20,6 +20,8 @@
 
 #include "Chord.h"
 
+#include "messages.h"
+extern debug *dbg;
 int STANDARD_GUITAR_TUNING[6] =
                                     {0,5,10,15,19,24};
 
@@ -60,7 +62,7 @@ int GUITAR_TABS_MINOR[12][6] = {
 Chord::Chord(){
     mode = TRIAD;
     inversion = 0;
-    root = 0;
+    triad_root = 0;
     guitar_mode = GUITAR_MAJOR;
     type = TYPE_MAJOR;
     octave = 0;
@@ -79,16 +81,16 @@ void Chord::RecalcNotes(){
             //well, in this case nothing is to be recalculated.
             break;
         case GUITAR:
-            if (mode == GUITAR_MAJOR){
+            if (guitar_mode == GUITAR_MAJOR){
                 for(int x = 0; x < 6; x++)
-                    notes[x]=STANDARD_GUITAR_TUNING[x] + GUITAR_TABS_MAJOR[root][x];
-            }else if (mode == GUITAR_MINOR){
+                    notes[x]=STANDARD_GUITAR_TUNING[x] + GUITAR_TABS_MAJOR[guitar_root][x];
+            }else if (guitar_mode == GUITAR_MINOR){
                 for(int x = 0; x < 6; x++)
-                    notes[x]=STANDARD_GUITAR_TUNING[x] + GUITAR_TABS_MINOR[root][x];
+                    notes[x]=STANDARD_GUITAR_TUNING[x] + GUITAR_TABS_MINOR[guitar_root][x];
             }
             break;
         case TRIAD:
-            n1 = root;
+            n1 = triad_root;
             if (type == TYPE_MAJOR || type == TYPE_AUGMENTED) n2 = n1+4;
             else n2 = n1+3;
             if(type == TYPE_MINOR || type == TYPE_AUGMENTED) n3 = n2+4;
@@ -124,13 +126,22 @@ void Chord::SetNote(int note, int pitch){
     //RecalcNotes(); //well, in fact: not needed;
 }
 
-void Chord::SetRoot(int pitch){
-    root = pitch%12;
+void Chord::SetTriadRoot(int pitch){
+    triad_root = pitch%12;
     RecalcNotes();
 }
 
-int Chord::GetRoot(){
-    return root;
+int Chord::GetTriadRoot(){
+    return triad_root;
+}
+
+void Chord::SetGuitarRoot(int pitch){
+    guitar_root = pitch%12;
+    RecalcNotes();
+}
+
+int Chord::GetGuitarRoot(){
+    return guitar_root;
 }
 
 void Chord::SetMode(int n){
@@ -183,7 +194,7 @@ int Chord::GetOctave(){
 Chord& Chord::operator =(const Chord& other){
     mode = other.mode;
     octave = other.octave;
-    root = other.root;
+    triad_root = other.triad_root;
     type = other.type;
     guitar_mode = other.guitar_mode;
     inversion = other.inversion;
