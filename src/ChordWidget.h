@@ -24,7 +24,7 @@
 #include "Chord.h"
 #include "global.h"
 
-class ChordWidget : public Gtk::VBox {
+class ChordWidget : public Gtk::Box {
 public:
     ChordWidget(Chord* associated_chord);
     virtual ~ChordWidget();
@@ -36,6 +36,7 @@ public:
     Gtk::HBox line_guitar;
     Gtk::HBox line_chord;
     Gtk::HBox line_custom;
+    Gtk::HBox line_custom2;
 
     Gtk::Label octave_label;
 
@@ -45,9 +46,11 @@ public:
     Gtk::RadioButton radio_custom;
     Gtk::SpinButton* note_buttons[6];
 
-    Gtk::ComboBox treeview_guitar_note;
-    Gtk::ComboBox treewiev_chord_note;
+    Gtk::ComboBox combo_guitar_note;
+    Gtk::ComboBox combo_chord_note;
     Gtk::SpinButton octave;
+
+    Gtk::Frame frame;
     
     void OnNoteChanged(int n);
 private:

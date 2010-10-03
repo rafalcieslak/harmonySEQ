@@ -24,10 +24,15 @@
 ChordWidget::ChordWidget(Chord* associated_chord){
 
     chord = associated_chord;
+    pack_start(frame);
     
-    pack_start(line_guitar);
-    pack_start(line_chord);
-    pack_start(line_custom);
+    frame.set_label(_("Chord"));
+    frame.add(MainBox);
+
+    MainBox.pack_start(line_guitar);
+    MainBox.pack_start(line_chord);
+    MainBox.pack_start(line_custom);
+    MainBox.pack_start(line_custom2);
 
 
     Gtk::RadioButtonGroup group = radio_chord.get_group();
@@ -45,18 +50,18 @@ ChordWidget::ChordWidget(Chord* associated_chord){
         note_buttons[x] = new Gtk::SpinButton;
         note_buttons[x]->set_range(-60.0,60.0);
         note_buttons[x]->set_increments(1.0,12.0);
-        note_buttons[x]->set_width_chars(2);
+        note_buttons[x]->set_width_chars(3);
         note_buttons[x]->signal_value_changed().connect(sigc::bind<int>(mem_fun(*this,&ChordWidget::OnNoteChanged),x));
-        line_custom.pack_end(*note_buttons[x],Gtk::PACK_SHRINK);
+        line_custom2.pack_end(*note_buttons[x],Gtk::PACK_SHRINK);
     }
 
-    treeview_guitar_note.set_model(m_refTreeModel_Notes);
-    treewiev_chord_note.set_model(m_refTreeModel_Notes);
-    treeview_guitar_note.pack_start(m_columns_notes.name);
-    treewiev_chord_note.pack_start(m_columns_notes.name);
+    combo_guitar_note.set_model(m_refTreeModel_Notes);
+    combo_chord_note.set_model(m_refTreeModel_Notes);
+    combo_guitar_note.pack_start(m_columns_notes.name);
+    combo_chord_note.pack_start(m_columns_notes.name);
 
-    line_guitar.pack_start(treeview_guitar_note,Gtk::PACK_SHRINK);
-    line_chord.pack_start(treewiev_chord_note,Gtk::PACK_SHRINK);
+    line_guitar.pack_start(combo_guitar_note,Gtk::PACK_SHRINK);
+    line_chord.pack_start(combo_chord_note,Gtk::PACK_SHRINK);
 }
 
 
@@ -70,5 +75,8 @@ void ChordWidget::OnNoteChanged(int n){
     radio_custom.set_active(1);
     
     chord->SetNote(n,note_buttons[n]->get_value());
+
+    combo_chord_note.set_active(-1);
+    combo_guitar_note.set_active(-1);
     
 }
