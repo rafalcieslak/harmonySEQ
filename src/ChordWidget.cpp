@@ -114,6 +114,7 @@ void ChordWidget::OnNoteChanged(int n){
 }
 
 void ChordWidget::OnRadioTriadToggled(){
+    if(we_are_copying_note_values_from_chord_so_do_not_handle_the_signals) return;
     if(radio_triad.get_active()){
         chord->SetMode(Chord::TRIAD);
         UpdateNotes();
@@ -121,6 +122,7 @@ void ChordWidget::OnRadioTriadToggled(){
 }
 
 void ChordWidget::OnRadioCustomToggled(){
+    if(we_are_copying_note_values_from_chord_so_do_not_handle_the_signals) return;
     if(radio_custom.get_active()){
         chord->SetMode(Chord::CUSTOM);
         UpdateNotes();
@@ -128,6 +130,7 @@ void ChordWidget::OnRadioCustomToggled(){
 }
 
 void ChordWidget::OnRadioGuitarToggled(){
+    if(we_are_copying_note_values_from_chord_so_do_not_handle_the_signals) return;
     if(radio_guitar.get_active()){
         chord->SetMode(Chord::GUITAR);
         UpdateNotes();
@@ -144,30 +147,50 @@ void ChordWidget::UpdateNotes(){
 }
 
 void ChordWidget::OnGuitarRootChanged(){
+    if(we_are_copying_note_values_from_chord_so_do_not_handle_the_signals) return;
     Gtk::TreeModel::Row row = *(combo_guitar_note.get_active());
     chord->SetGuitarRoot(row[m_columns_notes.note]);
     UpdateNotes();
 }
 
 void ChordWidget::OnTriadRootChanged(){
+    if(we_are_copying_note_values_from_chord_so_do_not_handle_the_signals) return;
     Gtk::TreeModel::Row row = *(combo_triad_note.get_active());
     chord->SetTriadRoot(row[m_columns_notes.note]);
     UpdateNotes();
 }
 
 void ChordWidget::OnTriadModeChanged(){
+    if(we_are_copying_note_values_from_chord_so_do_not_handle_the_signals) return;
     Gtk::TreeModel::Row row = *(combo_triad_mode.get_active());
     chord->SetTriadMode(row[m_columns_notes.note]);
     UpdateNotes();
 }
 
 void ChordWidget::OnGuitarModeChanged(){
+    if(we_are_copying_note_values_from_chord_so_do_not_handle_the_signals) return;
     Gtk::TreeModel::Row row = *(combo_guitar_mode.get_active());
     chord->SetGuitarMode(row[m_columns_notes.note]);
     UpdateNotes();
 }
 
 void ChordWidget::OnOctaveChanged(){
+    if(we_are_copying_note_values_from_chord_so_do_not_handle_the_signals) return;
     chord->SetOctave(octave.get_value());
+    UpdateNotes();
+}
+
+void ChordWidget::Update(){
+    we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = true;
+    combo_triad_note.set_active(chord->GetTriadRoot()); //tricky
+    combo_guitar_note.set_active(chord->GetGuitarRoot());
+    combo_guitar_mode.set_active(chord->GetGuitarMode());
+    combo_triad_mode.set_active(chord->GetTriadMode());
+    octave.set_value(chord->GetOctave());
+    if(chord->GetMode() == Chord::CUSTOM){radio_custom.set_active(1);}
+    if(chord->GetMode() == Chord::GUITAR){radio_guitar.set_active(1);}
+    if(chord->GetMode() == Chord::TRIAD){radio_triad.set_active(1);}
+
+    we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = false;
     UpdateNotes();
 }

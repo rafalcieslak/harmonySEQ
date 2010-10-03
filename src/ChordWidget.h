@@ -53,9 +53,10 @@ public:
     Gtk::SpinButton octave;
 
     Gtk::Frame frame;
-    
-    void UpdateNotes();
+
+    void Update();
 private:
+    void UpdateNotes();
     void OnNoteChanged(int n);
     void OnRadioCustomToggled();
     void OnRadioGuitarToggled();
