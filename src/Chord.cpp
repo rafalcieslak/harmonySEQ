@@ -90,13 +90,14 @@ void Chord::RecalcNotes(){
             }
             break;
         case TRIAD:
-            n1 = triad_root;
+            base = 12*octave;
+            n1 = base+triad_root;
+            *dbg << "n1  = " << n1 << ENDL;
             if (triad_mode == TYPE_MAJOR || triad_mode == TYPE_AUGMENTED) n2 = n1+4;
             else n2 = n1+3;
             if(triad_mode == TYPE_MINOR || triad_mode == TYPE_AUGMENTED) n3 = n2+4;
             else n3 = n2+3;
 
-            base = 12*octave;
 
             //as for now, we ignore the inversion, will be implemented later.
 
