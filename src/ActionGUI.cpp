@@ -110,6 +110,7 @@ ActionGUI::~ActionGUI(){
 }
 
 void ActionGUI::OnOKClicked(){
+    eventswindow->UpdateRow(parent->row_in_event_window);
     hide();
 
 }
@@ -247,15 +248,18 @@ void ActionGUI::InitType(){
             break;
         case Action::SEQ_VOLUME_SET:
             Seqs_combo.set_active(0);
+            parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
             vol_button.set_value(DEFAULT_VOLUME);
             break;
         case Action::SEQ_CHANGE_ONE_NOTE:
             Seqs_combo.set_active(0);
+            parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
             notenr_button.set_value(1.0);
             chordseq_button.set_value(0.0);
             break;
         case Action::SEQ_CHANGE_CHORD:
             Seqs_combo.set_active(0);
+            parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
             chordwidget.Update();
             break;
         case Action::MAINOTE_SET:

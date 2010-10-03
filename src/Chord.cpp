@@ -63,6 +63,7 @@ Chord::Chord(){
     mode = TRIAD;
     inversion = 0;
     triad_root = 0;
+    guitar_root = 0;
     guitar_mode = GUITAR_MAJOR;
     triad_mode = TYPE_MAJOR;
     octave = 0;
@@ -191,16 +192,17 @@ int Chord::GetOctave(){
     return octave;
 }
 
-
-Chord& Chord::operator =(const Chord& other){
+void Chord::Set(const Chord& other){
+    *dbg << "appending a new one." << ENDL;
     mode = other.mode;
+    if (mode == CUSTOM) for (int x = 0 ; x < 6; x++) notes[x] = other.notes[x];
     octave = other.octave;
     triad_root = other.triad_root;
     triad_mode = other.triad_mode;
     guitar_mode = other.guitar_mode;
+    guitar_root = other.guitar_root;
     inversion = other.inversion;
     RecalcNotes();
-    return *this;
 }
 
 std::vector<int> Chord::GetNotesList(){

@@ -84,7 +84,7 @@ void Action::Trigger(int data){
 
         case SEQ_CHANGE_CHORD:
             if (!sequencers[args[1]]) break;
-            sequencers[args[1]]->chord = chord;
+            sequencers[args[1]]->chord.Set(chord);
             sequencers[args[1]]->UpdateGuiChord(); //nessesary //its a temporary wokraround, since UpdateGui seems to crash. Howewer, it is not needed to update anything else than notes.
              break;
         case SEQ_PLAY_ONCE:
@@ -153,6 +153,7 @@ Glib::ustring Action::GetLabel(){
 
 Glib::ustring Action::GetSeqName(int n){
     char temp[100];
+    if(n>sequencers.size()) {*err << _("Critical ERROR: Trying to get name of sequencer outside of sequencers vector."); return "";}
     if (!sequencers[n])
         sprintf(temp,_("%d (which was removed)"),n);
     else

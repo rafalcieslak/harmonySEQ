@@ -71,7 +71,7 @@ public:
     void SetOctave(int n);
     int GetOctave();
 
-    Chord& operator=(const Chord& other);
+   void Set(const Chord& other);
 
     std::vector<int> GetNotesList();
 
