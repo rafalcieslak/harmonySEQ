@@ -21,14 +21,14 @@
 #include "TreeModels.h"
 
 
-ActionGUI::ActionGUI(Action *prt){
+ActionGUI::ActionGUI(Action *prt):
+                    chordwidget(&prt->chord)
+{
     parent = prt;
     set_title(_("Action"));
  
     set_border_width(5);
     set_position(Gtk::WIN_POS_CENTER_ON_PARENT);
-
-    for (int x = 0; x < 6; x++) chord6_buttons[x] = new Gtk::SpinButton;
 
     add(main_box);
     main_box.set_spacing(5);
@@ -53,20 +53,14 @@ ActionGUI::ActionGUI(Action *prt){
     line_set_one_note.pack_start(notenr_button,Gtk::PACK_SHRINK);
     line_set_one_note.pack_start(label_note_seq,Gtk::PACK_SHRINK);
     line_set_one_note.pack_start(chordseq_button,Gtk::PACK_SHRINK);
-    line_chord.pack_start(label_chord,Gtk::PACK_SHRINK);
 
     line_type.pack_start(Types_combo,Gtk::PACK_SHRINK);
     line_seq.pack_start(Seqs_combo,Gtk::PACK_SHRINK);
     line_note.pack_start(note_button,Gtk::PACK_SHRINK);
     line_tempo.pack_start(tempo_button,Gtk::PACK_SHRINK);
     line_volume.pack_start(vol_button,Gtk::PACK_SHRINK);
-    for (int x = 0; x < 6; x++) line_chord.pack_start(*chord6_buttons[x],Gtk::PACK_SHRINK);
+    line_chord.pack_start(chordwidget);
 
-    for (int x = 0; x < 6; x++){
-        chord6_buttons[x]->set_range(-48.0,48.0);
-        chord6_buttons[x]->set_increments(1.0,12.0);
-        chord6_buttons[x]->signal_value_changed().connect(sigc::bind<int>(mem_fun(*this,&ActionGUI::OnNote6Changed),x));
-    }
     note_button.set_range(0.0,127.0);
     note_button.set_increments(1.0,12.0);
     note_button.signal_value_changed().connect(mem_fun(*this,&ActionGUI::OnNoteChanged));
@@ -90,7 +84,6 @@ ActionGUI::ActionGUI(Action *prt){
     label_volume.set_text(_("Volume:"));
     label_note_nr.set_text(_("Set note "));
     label_note_seq.set_text(_(" to: "));
-    label_chord.set_text(_("Notes:"));
     ok_button.set_label(_("OK"));
     
     ok_button.signal_clicked().connect(mem_fun(*this,&ActionGUI::OnOKClicked));
@@ -113,15 +106,7 @@ ActionGUI::ActionGUI(Action *prt){
 }
 
 
-ActionGUI::ActionGUI(const ActionGUI& orig){
-}
-
-
 ActionGUI::~ActionGUI(){
-    for (int x = 0; x <  6; x++){
-        delete chord6_buttons[x];
-
-    }
 }
 
 void ActionGUI::OnOKClicked(){
@@ -168,7 +153,7 @@ void ActionGUI::UpdateValues(){
             break;
         case Action::SEQ_CHANGE_CHORD:
             SetSeqCombo(parent->args[1]);
-            for (int x = 0; x <  6; x++) chord6_buttons[x]->set_value(parent->args[x+2]);
+            chordwidget.Update();
             break;
         case Action::SEQ_PLAY_ONCE:
             SetSeqCombo(parent->args[1]);
@@ -271,7 +256,7 @@ void ActionGUI::InitType(){
             break;
         case Action::SEQ_CHANGE_CHORD:
             Seqs_combo.set_active(0);
-            for (int x = 0; x <  6; x++) chord6_buttons[x]->set_value(0.0);
+            chordwidget.Update();
             break;
         case Action::MAINOTE_SET:
             note_button.set_value(60.0);
@@ -353,15 +338,6 @@ void ActionGUI::OnNoteNrChanged(){
     label_preview.set_text(parent->GetLabel());
     eventswindow->UpdateRow(parent->row_in_event_window);
     
-}
-
-void ActionGUI::OnNote6Changed(int n){
-    if(parent->type == Action::SEQ_CHANGE_CHORD){
-        parent->args[n+2] = chord6_buttons[n]->get_value();
-    }else *err << _("Error: one of 6 notes to set has changed, while action is not of change-all-notes type.") << ENDL;
-
-    label_preview.set_text(parent->GetLabel());
-    eventswindow->UpdateRow(parent->row_in_event_window);
 }
 
 //====^^Add new action gui callbacks above ^^==

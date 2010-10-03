@@ -55,6 +55,8 @@ public:
     /**Stores arguments, like sequencer number or note pitch, depending on type. */
     vector<int> args;
 
+    /**Some actions take chord as an argument. Here it is stored.*/
+    Chord chord;
     /**Trigggers this action.
      * @parram data The data to pass*/
     void Trigger(int data = 0);

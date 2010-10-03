@@ -20,12 +20,12 @@
 #ifndef ACTIONGUI_H
 #define	ACTIONGUI_H
 #include "global.h"
+#include "ChordWidget.h"
 class Action;
 
 class ActionGUI : public Gtk::Window{
 public:
     ActionGUI(Action *prt);
-    ActionGUI(const ActionGUI& orig);
     virtual ~ActionGUI();
     void OnShow();
     void UpdateValues();
@@ -42,7 +42,7 @@ public:
     void SetSeqCombo(int seq);
     void OnNoteNrChanged();
     void OnNoteSeqChanged();
-    void OnNote6Changed(int n);
+    
     Gtk::VBox main_box;
 
     Gtk::HBox line_type;
@@ -59,7 +59,6 @@ public:
     Gtk::Label label_note_nr;
     Gtk::Label label_note_seq;
     Gtk::HBox line_chord;
-    Gtk::Label label_chord;
 
     Gtk::ComboBox Types_combo;
     Gtk::ComboBox Seqs_combo;
@@ -68,12 +67,13 @@ public:
     Gtk::SpinButton vol_button;
     Gtk::SpinButton notenr_button;
     Gtk::SpinButton chordseq_button;
-    Gtk::SpinButton* chord6_buttons[6];
 
     Gtk::Button ok_button;
 
     Gtk::Label label_preview;
     Gtk::HSeparator separator;
+
+    ChordWidget chordwidget;
     
     Action *parent;
 

@@ -84,12 +84,7 @@ void Action::Trigger(int data){
 
         case SEQ_CHANGE_CHORD:
             if (!sequencers[args[1]]) break;
-            sequencers[args[1]]->chord.SetNote(0,args[2]) ;
-            sequencers[args[1]]->chord.SetNote(1,args[3]) ;
-            sequencers[args[1]]->chord.SetNote(2,args[4]) ;
-            sequencers[args[1]]->chord.SetNote(3,args[5]) ;
-            sequencers[args[1]]->chord.SetNote(4,args[6]) ;
-            sequencers[args[1]]->chord.SetNote(5,args[7]) ;
+            sequencers[args[1]]->chord = chord;
             sequencers[args[1]]->UpdateGuiChord(); //nessesary //its a temporary wokraround, since UpdateGui seems to crash. Howewer, it is not needed to update anything else than notes.
              break;
         case SEQ_PLAY_ONCE:
@@ -139,7 +134,7 @@ Glib::ustring Action::GetLabel(){
             sprintf(temp,_("Set note %d of sequencer '%s' to %d"),args[2],GetSeqName(args[1]).c_str(),args[3]);
             break;
         case SEQ_CHANGE_CHORD:
-            sprintf(temp,_("Set notes of sequencer '%s' to %d,%d,%d,%d,%d,%d "),GetSeqName(args[1]).c_str(),args[2],args[3],args[4],args[5],args[6],args[7]);
+            sprintf(temp,_("Set notes of sequencer '%s' to %d,%d,%d,%d,%d,%d "),GetSeqName(args[1]).c_str(),chord.GetNote(0),chord.GetNote(1),chord.GetNote(2),chord.GetNote(3),chord.GetNote(4),chord.GetNote(5));
             break;
         case SEQ_PLAY_ONCE:
             sprintf(temp,_("Play sequence in '%s' once"),GetSeqName(args[1]).c_str());
