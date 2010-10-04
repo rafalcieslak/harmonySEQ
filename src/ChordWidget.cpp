@@ -55,7 +55,7 @@ ChordWidget::ChordWidget(Chord* associated_chord){
 
     for (int x = 0; x < 6; x++){
         note_buttons[x] = new Gtk::SpinButton;
-        note_buttons[x]->set_range(-60.0,60.0);
+        note_buttons[x]->set_range(-128.0,128.0);
         note_buttons[x]->set_increments(1.0,12.0);
         note_buttons[x]->set_width_chars(3);
         note_buttons[x]->signal_value_changed().connect(sigc::bind<int>(mem_fun(*this,&ChordWidget::OnNoteChanged),x));
