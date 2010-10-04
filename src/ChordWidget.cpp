@@ -104,10 +104,10 @@ ChordWidget::~ChordWidget(){
 void ChordWidget::OnNoteChanged(int n){
     if(we_are_copying_note_values_from_chord_so_do_not_handle_the_signals) return;
 
-    radio_custom.set_active(1);
     
     chord->SetNote(n,note_buttons[n]->get_value());
 
+    radio_custom.set_active(1);
     //combo_triad_note.set_active(-1);
     //combo_guitar_note.set_active(-1);
     
