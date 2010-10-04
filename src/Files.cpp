@@ -253,13 +253,6 @@ bool LoadFile(Glib::ustring file){
                 std::vector<int> vec =  kf.get_integer_list(temp,FILE_KEY_SEQ_CHORD);
                 sequencers[x]->chord.SetFromVector(vec);
             }
-            *dbg << "now loading notes...\n";
-            std::vector<int> notes = kf.get_integer_list(temp, FILE_KEY_SEQ_CHORD);
-            for (unsigned int n = 0; n < notes.size(); n++) {
-                *dbg << notes[n] << ENDL;
-                sequencers[x]->chord.SetNote(n,notes[n]);
-
-            }
             sequencers[x]->UpdateGui();
         }
 

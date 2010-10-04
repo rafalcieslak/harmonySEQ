@@ -145,7 +145,7 @@ void SequencerWindow::UpdateValues(){
     }
 
     InitSeqSliders();
-
+    UpdateChord();
 }
 
 
