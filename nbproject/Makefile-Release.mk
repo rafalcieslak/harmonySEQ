@@ -33,8 +33,10 @@ OBJECTDIR=build/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/src/ChordWidget.o \
 	${OBJECTDIR}/src/main.o \
 	${OBJECTDIR}/src/EventGUI.o \
+	${OBJECTDIR}/src/Chord.o \
 	${OBJECTDIR}/src/ActionGUI.o \
 	${OBJECTDIR}/src/Sequencer.o \
 	${OBJECTDIR}/src/messages.o \
@@ -73,6 +75,11 @@ build/Release/GNU-Linux-x86/tests/TestFiles/f1: ${OBJECTFILES}
 	${MKDIR} -p build/Release/GNU-Linux-x86/tests/TestFiles
 	${LINK.cc} -lasound -o ${TESTDIR}/TestFiles/f1 -s ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
+${OBJECTDIR}/src/ChordWidget.o: src/ChordWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/ChordWidget.o src/ChordWidget.cpp
+
 ${OBJECTDIR}/src/main.o: src/main.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
@@ -82,6 +89,11 @@ ${OBJECTDIR}/src/EventGUI.o: src/EventGUI.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/EventGUI.o src/EventGUI.cpp
+
+${OBJECTDIR}/src/Chord.o: src/Chord.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Chord.o src/Chord.cpp
 
 ${OBJECTDIR}/src/ActionGUI.o: src/ActionGUI.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

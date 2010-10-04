@@ -9,7 +9,7 @@ versionC=0
 [System]
 tempo=200
 mainnote=60
-sequencers_number=7
+sequencers_number=8
 events_number=8
 
 [Seq 2]
@@ -21,7 +21,7 @@ volume=75
 resolution=8
 length=1
 sequence=0;1;2;0;1;2;1;2;
-notes=-3;0;4;4;7;0;
+chord=0;0;0;0;0;0;0;-3;0;4;0;0;0;
 
 [Seq 3]
 name=control
@@ -32,7 +32,7 @@ volume=100
 resolution=8
 length=8
 sequence=0;0;0;0;1;1;2;1;
-notes=40;41;42;0;0;0;
+chord=0;0;0;0;0;0;0;40;41;42;0;0;0;
 
 [Seq 4]
 name=metronome
@@ -43,7 +43,7 @@ volume=100
 resolution=8
 length=1
 sequence=0;1;1;1;1;1;1;1;
-notes=37;128;0;0;0;0;
+chord=0;0;0;0;0;0;0;37;128;0;0;0;0;
 
 [Seq 5]
 name=quick
@@ -54,7 +54,7 @@ volume=100
 resolution=8
 length=1
 sequence=0;1;2;5;3;5;2;0;
-notes=9;12;16;17;19;128;
+chord=0;0;0;0;0;0;0;9;12;16;17;19;128;
 
 [Seq 6]
 name=quick2
@@ -65,7 +65,7 @@ volume=100
 resolution=8
 length=1
 sequence=0;1;2;5;3;5;3;4;
-notes=9;12;16;17;19;128;
+chord=0;0;0;0;0;0;0;9;12;16;17;19;128;
 
 [Event 2]
 type=1
@@ -74,6 +74,7 @@ arg2=0
 actions=3
 Action_0_type=5
 Action_0_args=0;60;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;
+Action_0_chord=1;0;0;0;0;0;0;
 
 [Event 3]
 type=2
@@ -82,6 +83,7 @@ arg2=16
 actions=1
 Action_0_type=7
 Action_0_args=0;2;3;4;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;
+Action_0_chord=1;0;0;0;0;0;0;
 
 [Event 4]
 type=2
@@ -90,6 +92,7 @@ arg2=16
 actions=1
 Action_0_type=7
 Action_0_args=0;2;3;5;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;
+Action_0_chord=1;0;0;0;0;0;0;
 
 [Event 5]
 type=2
@@ -98,6 +101,7 @@ arg2=16
 actions=1
 Action_0_type=7
 Action_0_args=0;2;3;7;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;
+Action_0_chord=1;0;0;0;0;0;0;
 
 [Event 6]
 type=1
@@ -106,6 +110,7 @@ arg2=0
 actions=1
 Action_0_type=9
 Action_0_args=0;5;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;
+Action_0_chord=1;0;0;0;0;0;0;
 
 [Event 7]
 type=1
@@ -114,3 +119,4 @@ arg2=0
 actions=1
 Action_0_type=9
 Action_0_args=0;6;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;
+Action_0_chord=1;0;0;0;0;0;0;

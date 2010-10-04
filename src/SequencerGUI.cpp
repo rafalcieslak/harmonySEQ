@@ -24,7 +24,10 @@
 #include "MainWindow.h"
 #include "global.h"
 #include "Event.h"
-SequencerWindow::SequencerWindow(Sequencer* prt){
+#include "ChordWidget.h"
+SequencerWindow::SequencerWindow(Sequencer* prt):
+                            chordwidget(&prt->chord)
+{
     *dbg << "constructing new SequencerWindow\n";
 
     parent = prt;
@@ -34,15 +37,7 @@ SequencerWindow::SequencerWindow(Sequencer* prt){
     set_position(Gtk::WIN_POS_CENTER);
     main_vbox.pack_start(upper_box);
     main_vbox.pack_start(box_of_chord);
-    for (int x = 0; x < 6; x++){
-        chord_buttons[x] = new Gtk::SpinButton;
-        chord_buttons[x]->set_range(-128,128);
-        chord_buttons[x]->set_increments(1,12);
-        //*dbg << parent->GetNotes(0);
-        chord_buttons[x]->set_value(parent->GetNoteOfChord(x));
-        chord_buttons[x]->signal_value_changed().connect(sigc::bind<int>(sigc::mem_fun(*this,&SequencerWindow::OnNotesChanged),x));
-        box_of_chord.pack_start(*chord_buttons[x]);
-    }
+    box_of_chord.pack_start(chordwidget);
 
     main_vbox.pack_start(box_of_sliders);
     InitSeqSliders();
@@ -120,15 +115,9 @@ SequencerWindow::SequencerWindow(Sequencer* prt){
     hide(); //hide at start, but let the children be shown
 }
 SequencerWindow::~SequencerWindow(){
-    for (int x = 0; x < 6; x++){
-        delete chord_buttons[x] ;
-    }
-    
 }
 
 void SequencerWindow::OnNotesChanged(int note){
-    parent->chord[note] = chord_buttons[note]->get_value();
-
 }
 
 void SequencerWindow::OnSequenceChanged(int seq){
@@ -156,18 +145,12 @@ void SequencerWindow::UpdateValues(){
     }
 
     InitSeqSliders();
-
-    for (int x = 0; x < NOTES_CONST_SIZE; x++) {
-        chord_buttons[x]->set_value(parent->GetNoteOfChord(x));
-    }
+    UpdateChord();
 }
 
 
     void SequencerWindow::UpdateChord(){
-     for (int x = 0; x < NOTES_CONST_SIZE; x++) {
-        chord_buttons[x]->set_value(parent->GetNoteOfChord(x));
-    }
-
+        chordwidget.Update();
     }
 
 void SequencerWindow::OnChannelChanged(){

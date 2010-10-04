@@ -77,7 +77,7 @@ using namespace std;
 #define FILE_KEY_SEQ_VOLUME "volume"
 #define FILE_KEY_SEQ_NAME "name"
 #define FILE_KEY_SEQ_SEQUENCE "sequence"
-#define FILE_KEY_SEQ_CHORD "notes"
+#define FILE_KEY_SEQ_CHORD "chord"
 
 #define FILE_GROUP_TEMPLATE_EVENT "Event %d"
 #define FILE_KEY_EVENT_TYPE "type"
@@ -87,6 +87,7 @@ using namespace std;
 
 #define FILE_GROUP_TEMPLATE_EVENT_ACTION_TYPE "Action_%d_type"
 #define FILE_GROUP_TEMPLATE_EVENT_ACTION_ARGS "Action_%d_args"
+#define FILE_GROUP_TEMPLATE_EVENT_ACTION_CHORD "Action_%d_chord"
 
 
 #ifndef I_DO_NOT_WANT_EXTERNS_FROM_GLOBAL_H
@@ -112,6 +113,7 @@ extern int passing_midi;
 extern std::map<string, int> keymap_stoi;
 extern std::map<int, string> keymap_itos;
 extern vector<Event *> events;
+extern std::map<int,Glib::ustring> notemap;
 #endif
 
 bool Ask(Glib::ustring message, Glib::ustring secondary_message = "", bool lock_threads = false);

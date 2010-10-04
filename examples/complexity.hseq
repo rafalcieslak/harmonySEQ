@@ -10,7 +10,7 @@ versionC=0
 tempo=121
 mainnote=60
 sequencers_number=20
-events_number=15
+events_number=6
 
 [Seq 6]
 name=bells-A
@@ -21,7 +21,7 @@ volume=100
 resolution=4
 length=0.5
 sequence=5;4;5;3;
-notes=0;2;4;5;7;9;
+chord=0;0;0;0;0;0;0;0;2;4;5;7;9;
 
 [Seq 7]
 name=bells-B
@@ -32,7 +32,7 @@ volume=100
 resolution=8
 length=1
 sequence=5;4;5;3;5;2;5;1;
-notes=0;2;4;5;7;9;
+chord=0;0;0;0;0;0;0;0;2;4;5;7;9;
 
 [Seq 8]
 name=pad
@@ -43,7 +43,7 @@ volume=100
 resolution=4
 length=4
 sequence=4;3;2;1;
-notes=0;2;4;5;7;9;
+chord=0;0;0;0;0;0;0;0;4;4;5;7;9;
 
 [Seq 11]
 name=woody
@@ -54,7 +54,7 @@ volume=100
 resolution=8
 length=1
 sequence=5;4;4;3;3;2;2;1;
-notes=0;2;4;5;7;9;
+chord=0;0;0;0;0;0;0;0;2;4;5;7;9;
 
 [Seq 12]
 name=prophesy
@@ -65,7 +65,7 @@ volume=100
 resolution=4
 length=0.5
 sequence=5;4;3;1;
-notes=0;2;4;5;7;9;
+chord=0;0;0;0;0;0;0;0;2;4;5;7;9;
 
 [Seq 13]
 name=drums-low
@@ -76,7 +76,7 @@ volume=100
 resolution=8
 length=1
 sequence=0;1;0;1;0;1;0;0;
-notes=36;128;0;0;0;0;
+chord=0;0;0;0;0;0;0;36;128;0;0;0;0;
 
 [Seq 14]
 name=drums-snare
@@ -87,7 +87,7 @@ volume=100
 resolution=16
 length=1
 sequence=0;1;1;1;0;0;0;1;0;0;1;0;1;0;0;0;
-notes=42;128;0;0;0;0;
+chord=0;0;0;0;0;0;0;42;128;0;0;0;0;
 
 [Seq 15]
 name=drums-tick
@@ -98,7 +98,7 @@ volume=100
 resolution=16
 length=1
 sequence=0;1;1;1;0;1;1;1;1;1;0;1;0;0;1;1;
-notes=37;128;0;0;0;0;
+chord=0;0;0;0;0;0;0;37;128;0;0;0;0;
 
 [Seq 16]
 name=drums-hh
@@ -109,7 +109,7 @@ volume=100
 resolution=16
 length=1
 sequence=0;1;1;1;1;1;0;1;0;1;1;0;1;1;1;1;
-notes=48;128;0;0;0;0;
+chord=0;0;0;0;0;0;0;48;128;0;0;0;0;
 
 [Seq 17]
 name=woody2
@@ -120,7 +120,7 @@ volume=100
 resolution=8
 length=1
 sequence=4;3;3;2;2;1;1;0;
-notes=0;2;4;5;7;9;
+chord=0;0;0;0;0;0;0;0;2;4;5;7;9;
 
 [Seq 18]
 name=prophesy2
@@ -131,7 +131,7 @@ volume=100
 resolution=4
 length=0.5
 sequence=4;3;2;0;
-notes=0;2;4;5;7;9;
+chord=0;0;0;0;0;0;0;0;2;4;5;7;9;
 
 [Seq 19]
 name=drums-hh
@@ -142,104 +142,4 @@ volume=100
 resolution=8
 length=1
 sequence=0;1;1;1;0;1;1;1;
-notes=49;128;0;0;0;0;
-
-[Event 5]
-type=1
-arg1=113
-arg2=0
-actions=2
-Action_0_type=2
-Action_0_arg1=6
-Action_0_arg2=0
-Action_0_arg3=811560559
-Action_1_type=1
-Action_1_arg1=7
-Action_1_arg2=0
-Action_1_arg3=828337775
-
-[Event 6]
-type=1
-arg1=119
-arg2=0
-actions=2
-Action_0_type=2
-Action_0_arg1=7
-Action_0_arg2=0
-Action_0_arg3=811560559
-Action_1_type=1
-Action_1_arg1=6
-Action_1_arg2=0
-Action_1_arg3=828337775
-
-[Event 7]
-type=1
-arg1=101
-arg2=0
-actions=2
-Action_0_type=1
-Action_0_arg1=6
-Action_0_arg2=0
-Action_0_arg3=811560559
-Action_1_type=1
-Action_1_arg1=7
-Action_1_arg2=0
-Action_1_arg3=828337775
-
-[Event 10]
-type=1
-arg1=116
-arg2=0
-actions=1
-Action_0_type=5
-Action_0_arg1=65
-Action_0_arg2=0
-Action_0_arg3=811560559
-
-[Event 11]
-type=1
-arg1=121
-arg2=0
-actions=2
-Action_0_type=5
-Action_0_arg1=63
-Action_0_arg2=0
-Action_0_arg3=811560559
-
-[Event 12]
-type=1
-arg1=117
-arg2=0
-actions=1
-Action_0_type=5
-Action_0_arg1=60
-Action_0_arg2=0
-Action_0_arg3=811560559
-
-[Event 13]
-type=2
-arg1=60
-arg2=1
-actions=2
-Action_0_type=7
-Action_0_arg1=6
-Action_0_arg2=6
-Action_0_arg3=11
-Action_1_type=7
-Action_1_arg1=7
-Action_1_arg2=6
-Action_1_arg3=11
-
-[Event 14]
-type=2
-arg1=62
-arg2=1
-actions=2
-Action_0_type=7
-Action_0_arg1=6
-Action_0_arg2=6
-Action_0_arg3=9
-Action_1_type=7
-Action_1_arg1=7
-Action_1_arg2=6
-Action_1_arg3=9
+chord=0;0;0;0;0;0;0;49;128;0;0;0;0;

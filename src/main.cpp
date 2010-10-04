@@ -48,6 +48,7 @@ int passing_midi;
 Glib::ustring file;
 std::map<string, int> keymap_stoi;
 std::map<int, string> keymap_itos;
+std::map<int, Glib::ustring> notemap;
 //-/
 int debugging = 0, help = 0, version = 0;
 int example_notes[6] = {-1,0,2,3,0,0}, example_notes2[6] = {2,3,5,7,0,0};
@@ -112,7 +113,21 @@ void InitKeyMap()
     }
 }
 
-
+void InitNoteMap(){
+    notemap[0] = "C";
+    notemap[1] = "C#";
+    notemap[2] = "D";
+    notemap[3] = "D#";
+    notemap[4] = "E";
+    notemap[5] = "F";
+    notemap[6] = "F#";
+    notemap[7] = "G";
+    notemap[8] = "G#";
+    notemap[9] = "A";
+    notemap[10] = "A#";
+    notemap[11] = "H";
+    
+}
 void threadb::th1(){
 //midi processing thread
     *dbg << "th1 started\n";
@@ -265,6 +280,7 @@ int main(int argc, char** argv) {
     InitMidiDriver();
 
     InitKeyMap();
+    InitNoteMap();
 
     InitAllTreeModels();
 

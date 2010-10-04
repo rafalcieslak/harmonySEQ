@@ -17,6 +17,8 @@ harmonySEQ_SOURCES =  	main.cpp\
 						Action.cpp \
 						ActionGUI.cpp \
 						TreeModels.cpp \
+						Chord.cpp \
+						ChordWidget.cpp \
 						MainWindow.h MidiDriver.h Sequencer.h SequencerGUI.h messages.h Files.h global.h Event.h EventsWindow.h EventGUI.h Action.h ActionGUI.h TreeModels.h \
 						gettext.h
 						

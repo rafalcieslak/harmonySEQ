@@ -97,8 +97,7 @@ void SaveToFile(){
                 kf.set_integer(temp,FILE_KEY_SEQ_RESOLUTION,sequencers[x]->resolution);
                 kf.set_double(temp,FILE_KEY_SEQ_LENGTH,sequencers[x]->length);
                 kf.set_integer_list(temp,FILE_KEY_SEQ_SEQUENCE,sequencers[x]->sequence);
-                kf.set_integer_list(temp,FILE_KEY_SEQ_CHORD,sequencers[x]->chord);
-
+                kf.set_integer_list(temp,FILE_KEY_SEQ_CHORD,sequencers[x]->chord.SaveToVector());
             }
 
             for (unsigned int x = 0; x < events.size(); x++){
@@ -114,6 +113,8 @@ void SaveToFile(){
                     kf.set_integer(temp,temp2,events[x]->actions[a]->type);
                     sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_ARGS,a);
                     kf.set_integer_list(temp,temp2,events[x]->actions[a]->args);
+                    sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_CHORD,a);
+                    kf.set_integer_list(temp,temp2,events[x]->actions[a]->chord.SaveToVector());
                 }
             }
 
@@ -247,16 +248,10 @@ bool LoadFile(Glib::ustring file){
             std::vector<int> sequence = kf.get_integer_list(temp, FILE_KEY_SEQ_SEQUENCE);
             for (unsigned int n = 0; n < sequence.size(); n++) {
                 sequencers[x]->sequence.push_back(sequence[n]);
-
             }
-
-            sequencers[x]->chord.clear();
-            *dbg << "now loading notes...\n";
-            std::vector<int> notes = kf.get_integer_list(temp, FILE_KEY_SEQ_CHORD);
-            for (unsigned int n = 0; n < notes.size(); n++) {
-                *dbg << notes[n] << ENDL;
-                sequencers[x]->chord.push_back(notes[n]);
-
+            if (kf.has_key(temp,FILE_KEY_SEQ_CHORD)){
+                std::vector<int> vec =  kf.get_integer_list(temp,FILE_KEY_SEQ_CHORD);
+                sequencers[x]->chord.SetFromVector(vec);
             }
             sequencers[x]->UpdateGui();
         }
@@ -294,6 +289,12 @@ bool LoadFile(Glib::ustring file){
                 events[x]->actions[a]->type = kf.get_integer(temp,temp2);
                 sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_ARGS,a);
                 events[x]->actions[a]->args = kf.get_integer_list(temp,temp2);
+                sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_CHORD,a);
+                if (kf.has_key(temp,temp2)){
+                    vector<int> vec = kf.get_integer_list(temp,temp2);
+                    events[x]->actions[a]->chord.SetFromVector(vec);
+                 }
+                events[x]->actions[a]->UpdateChord();
             }
 
             events[x]->UpdateGUI();
