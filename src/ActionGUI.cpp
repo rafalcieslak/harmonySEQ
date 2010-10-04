@@ -25,6 +25,7 @@ ActionGUI::ActionGUI(Action *prt):
                     chordwidget(&prt->chord)
 {
     parent = prt;
+    we_are_copying_data_from_parent_action_so_do_not_handle_signals = false;
     set_title(_("Action"));
  
     set_border_width(5);
@@ -122,6 +123,7 @@ void ActionGUI::OnShow(){
 }
 
 void ActionGUI::UpdateValues(){
+    we_are_copying_data_from_parent_action_so_do_not_handle_signals = true;
     SetTypeCombo(parent->type); 
     ChangeVisibleLines();
     int type = parent->type;
@@ -166,7 +168,7 @@ void ActionGUI::UpdateValues(){
 
 
     }
-
+    we_are_copying_data_from_parent_action_so_do_not_handle_signals = false;
 
 }
 
@@ -219,6 +221,7 @@ void ActionGUI::ChangeVisibleLines(){
 }
 
 void ActionGUI::OnTypeChanged(){
+    if(we_are_copying_data_from_parent_action_so_do_not_handle_signals) return;
     Gtk::TreeModel::Row row = *(Types_combo.get_active());
     int type = row[m_columns_action_types.type];
     parent->type = type;
