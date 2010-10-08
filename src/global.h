@@ -30,9 +30,9 @@
 #include "messages.h"
 #include "EventsWindow.h"
 using namespace std;
-#define VERSION_STRING "0.11"//ImporTanT!!! ON NEXT VERSION INCREMENT CHANGE FILE_KEY_SEQ_CHORD to CHORD and REMOVE this MessaGE!  //VERSION is provided by autotools in config.h
+#define VERSION_STRING "0.12"//VERSION is provided by autotools in config.h
 #define VERSION_A 0
-#define VERSION_B 11
+#define VERSION_B 12
 #define VERSION_C 0
 
 #define ENDL "\n"
