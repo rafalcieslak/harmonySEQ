@@ -18,26 +18,26 @@
 */
 
 
+#include "global.h"
 #include "SequencerGUI.h"
 #include "messages.h"
 #include "Sequencer.h"
 #include "MainWindow.h"
-#include "global.h"
 #include "Event.h"
 #include "ChordWidget.h"
-SequencerWindow::SequencerWindow(Sequencer* prt):
-                            chordwidget(&prt->chord)
+SequencerWindow::SequencerWindow(Sequencer* prt)
 {
     *dbg << "constructing new SequencerWindow\n";
 
     parent = prt;
+    chordwidget = new ChordWidget(&prt->chord);
 
     set_title(parent->name);
     set_border_width(0);
     set_position(Gtk::WIN_POS_CENTER);
     main_vbox.pack_start(upper_box);
     main_vbox.pack_start(box_of_chord);
-    box_of_chord.pack_start(chordwidget);
+    box_of_chord.pack_start(*chordwidget);
 
     main_vbox.pack_start(box_of_sliders);
     InitSeqSliders();
@@ -115,6 +115,7 @@ SequencerWindow::SequencerWindow(Sequencer* prt):
     hide(); //hide at start, but let the children be shown
 }
 SequencerWindow::~SequencerWindow(){
+    delete chordwidget;
 }
 
 void SequencerWindow::OnNotesChanged(int note){
@@ -150,7 +151,7 @@ void SequencerWindow::UpdateValues(){
 
 
     void SequencerWindow::UpdateChord(){
-        chordwidget.Update();
+        chordwidget->Update();
     }
 
 void SequencerWindow::OnChannelChanged(){

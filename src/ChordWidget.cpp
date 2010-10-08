@@ -19,6 +19,7 @@
 
 #include "ChordWidget.h"
 #include "TreeModels.h"
+#include "messages.h"
 
 
 ChordWidget::ChordWidget(Chord* associated_chord){

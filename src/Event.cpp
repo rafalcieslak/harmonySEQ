@@ -19,7 +19,7 @@
 
 #include "Event.h"
 #include "EventsWindow.h"
-#include "global.h"
+#include "messages.h"
 Event::Event(){
     type = 0;
     arg1 = 0;
@@ -136,7 +136,7 @@ void FindAndProcessEvents(Event::EventTypes ev,int arg1, int arg2){
 
 bool FindAndProcessEventsKeyPress(GdkEventKey* event){
     //*dbg << "triggered " << event->keyval << "\n";
-    std::map<int,string>::iterator iter;
+    std::map<int,Glib::ustring>::iterator iter;
     iter = keymap_itos.find(event->keyval);
     if(iter != keymap_itos.end()){
         *dbg << "Pressed key '" << iter->second << "'.\n";

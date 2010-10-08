@@ -20,7 +20,7 @@
 #ifndef ACTION_H
 #define	ACTION_H
 
-//#include "global.h"
+#include "global.h"
 #include "ActionGUI.h"
 #define ACTION_ARGS_NUM 20
 
@@ -53,7 +53,7 @@ public:
     int type;
 
     /**Stores arguments, like sequencer number or note pitch, depending on type. */
-    vector<int> args;
+    std::vector<int> args;
 
     /**Some actions take chord as an argument. Here it is stored.*/
     Chord chord;

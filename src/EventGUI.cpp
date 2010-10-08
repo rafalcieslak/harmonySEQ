@@ -18,7 +18,9 @@
 */
 #include "EventGUI.h"
 #include "Event.h"
-
+#include "EventsWindow.h"
+#include "messages.h"
+#include "TreeModels.h"
 
 EventGUI::EventGUI(Event *prt){
     parent = prt;

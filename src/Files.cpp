@@ -19,9 +19,12 @@
 
 #include <fstream>
 #include "Files.h"
+#include "messages.h"
 #include "Sequencer.h"
 #include "MainWindow.h"
 #include "Event.h"
+#include "EventsWindow.h"
+#include "Action.h"
 
 namespace Files {
 

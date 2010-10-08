@@ -20,7 +20,7 @@
 #ifndef EVENTSWINDOW_H
 #define	EVENTSWINDOW_H
 #include "global.h"
-
+#include <gtkmm.h>
 
 class EventsWindow : public Gtk::Window {
 public:

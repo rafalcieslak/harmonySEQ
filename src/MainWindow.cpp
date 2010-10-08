@@ -24,10 +24,8 @@
 #include "Sequencer.h"
 #include "Files.h"
 #include "Event.h"
-
-//externs from main.cpp
-extern int running;
-extern int debugging;
+#include "EventsWindow.h"
+#include "TreeModels.h"
 
 
 
@@ -425,7 +423,7 @@ void MainWindow::OnPassToggleClicked(){
 
 bool MainWindow::OnKeyPress(GdkEventKey* event){
     //*dbg << "triggered " << event->keyval << "\n";
-    std::map<int,string>::iterator iter;
+    std::map<int,Glib::ustring>::iterator iter;
     iter = keymap_itos.find(event->keyval);
     if(iter != keymap_itos.end()){
         *dbg << "Pressed key '" << iter->second << "'.\n";

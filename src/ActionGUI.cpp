@@ -19,6 +19,8 @@
 #include "ActionGUI.h"
 #include "Action.h"
 #include "TreeModels.h"
+#include "EventsWindow.h"
+#include "messages.h"
 
 
 ActionGUI::ActionGUI(Action *prt):

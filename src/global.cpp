@@ -19,6 +19,7 @@
 
 
 #include "global.h"
+#include "messages.h"
 #include "MainWindow.h"
 bool Ask(Glib::ustring message, Glib::ustring secondary_message, bool lock_threads){
     if (lock_threads) gdk_threads_enter();

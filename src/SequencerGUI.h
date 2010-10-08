@@ -22,10 +22,12 @@
 #define	SEQUENCERGUI_H
 #include "global.h"
 
-#include "ChordWidget.h"
-
+//#include "ChordWidget.h"
+#include <gtkmm.h>
+#include <vector>
 //#include "Sequencer.h"
 class Sequencer;
+class ChordWidget;
 
 class SequencerWindow : public Gtk::Window {
 public:
@@ -37,7 +39,7 @@ public:
     Gtk::VBox box_of_sliders;
     Gtk::HBox box_of_chord;
     Gtk::HBox upper_box;
-    vector<Gtk::HScale *> sequence_scales;
+    std::vector<Gtk::HScale *> sequence_scales;
     //Gtk::SpinButton* chord_buttons[6];
     Gtk::SpinButton channel_button;
     Gtk::SpinButton volume_button;
@@ -54,7 +56,7 @@ public:
     Gtk::Label reslabel, lenlabel;
     void InitSeqSliders();
 
-    ChordWidget chordwidget;
+    ChordWidget* chordwidget;
     Sequencer *parent;
 
 

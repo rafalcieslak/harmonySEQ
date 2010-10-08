@@ -20,6 +20,8 @@
 #include "Action.h"
 #include "Sequencer.h"
 #include "MainWindow.h"
+#include "messages.h"
+#include "EventsWindow.h"
 
 
 Action::Action(ActionTypes t, int a1, int a2){

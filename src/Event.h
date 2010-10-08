@@ -50,7 +50,7 @@ public:
     void ShowWindow();
     void UpdateGUI();
 
-    vector<Action*> actions;
+    std::vector<Action*> actions;
 
     Gtk::TreeRowReference row_in_event_window;
 

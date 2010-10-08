@@ -20,7 +20,7 @@
 #ifndef EVENTGUI_H
 #define	EVENTGUI_H
 #include "global.h"
-#include "TreeModels.h"
+#include <gtkmm.h>
 
 class Event;
 

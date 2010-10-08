@@ -32,6 +32,7 @@
 #include "EventGUI.h"
 #include "Action.h"
 #include "Files.h"
+#include "TreeModels.h"
 //global objects
 vector<Sequencer *> sequencers(2);
 vector<Event *> events(2);
@@ -46,8 +47,8 @@ MainWindow* mainwindow;
 EventsWindow* eventswindow;
 int passing_midi;
 Glib::ustring file;
-std::map<string, int> keymap_stoi;
-std::map<int, string> keymap_itos;
+std::map<Glib::ustring, int> keymap_stoi;
+std::map<int, Glib::ustring> keymap_itos;
 std::map<int, Glib::ustring> notemap;
 //-/
 int debugging = 0, help = 0, version = 0;

@@ -19,7 +19,7 @@
 
 #include "EventsWindow.h"
 #include "Event.h"
-
+#include "messages.h"
 
 EventsWindow::EventsWindow(){
     char temp[30];

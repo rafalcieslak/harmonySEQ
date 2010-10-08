@@ -20,16 +20,14 @@
 
 #ifndef GLOBAL_H
 #define	GLOBAL_H
-#include <gtkmm.h>
 #include <config.h>
 #include <libintl.h>
 #include <locale.h>
 #include <vector>
-#include <string>
+#include <map>
+#include <glibmm/ustring.h>
 #include "gettext.h"
-#include "messages.h"
-#include "EventsWindow.h"
-using namespace std;
+
 #define VERSION_STRING "0.12"//VERSION is provided by autotools in config.h
 #define VERSION_A 0
 #define VERSION_B 12
@@ -98,7 +96,7 @@ class MidiDriver;
 class MainWindow;
 class Event;
 class EventsWindow;
-extern vector<Sequencer *> sequencers;
+extern std::vector<Sequencer *> sequencers;
 extern int mainnote;
 extern double tempo;
 extern int ports_number;
@@ -110,9 +108,9 @@ extern MidiDriver* midi;
 extern MainWindow* mainwindow;
 extern EventsWindow* eventswindow;
 extern int passing_midi;
-extern std::map<string, int> keymap_stoi;
-extern std::map<int, string> keymap_itos;
-extern vector<Event *> events;
+extern std::map<Glib::ustring, int> keymap_stoi;
+extern std::map<int, Glib::ustring> keymap_itos;
+extern std::vector<Event *> events;
 extern std::map<int,Glib::ustring> notemap;
 #endif
 

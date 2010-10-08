@@ -21,6 +21,7 @@
 #include "TreeModels.h"
 #undef I_DO_NOT_WANT_EXTERNS_FROM_TREE_MODELS
 #include "Event.h"
+#include "messages.h"
 
 ModelColumns_SEQUENCERS m_columns_sequencers;
 Glib::RefPtr<Gtk::ListStore> m_refTreeModel_sequencers;
@@ -97,7 +98,7 @@ void InitActionTypesTreeModel(){
 void InitKeyTypesTreeModel(){
     m_refTreeModel_KeyCodes = Gtk::ListStore::create(m_columns_key_codes);
     Gtk::TreeModel::Row row;
-    std::map<int,string>::iterator iter = keymap_itos.begin();
+    std::map<int,Glib::ustring>::iterator iter = keymap_itos.begin();
     for (;iter != keymap_itos.end();iter++){
         row = *(m_refTreeModel_KeyCodes->append());
         row[m_columns_key_codes.keycode] = iter->first;

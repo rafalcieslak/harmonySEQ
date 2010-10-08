@@ -20,6 +20,7 @@
 #ifndef ACTIONGUI_H
 #define	ACTIONGUI_H
 #include "global.h"
+#include <gtkmm.h>
 #include "ChordWidget.h"
 class Action;
 
