@@ -25,6 +25,7 @@
 #include "Event.h"
 #include "EventsWindow.h"
 #include "Action.h"
+#include "MidiDriver.h"
 
 namespace Files {
 
@@ -302,6 +303,9 @@ bool LoadFile(Glib::ustring file){
 
             events[x]->UpdateGUI();
         }
+        //gdk_threads_enter();
+        midi->Sync();
+        //gdk_threads_leave();
     }catch(Glib::KeyFileError error){
         sprintf(temp, _("ERROR - Glib::KeyFile error while processing file '%s': "), file.c_str());
         *err << temp;

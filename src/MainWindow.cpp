@@ -54,7 +54,12 @@ MainWindow::MainWindow()
     tempo_button.set_increments(1, 10);
     tempo_button.set_value(tempo);
     tempo_button.signal_value_changed().connect(sigc::mem_fun(*this, &MainWindow::TempoChanged));
+    hbox_up.pack_start(play_pause_button);
 
+    Gtk::Stock::lookup(Gtk::Stock::MEDIA_PAUSE,Gtk::ICON_SIZE_BUTTON,image_pause);
+    Gtk::Stock::lookup(Gtk::Stock::MEDIA_PLAY,Gtk::ICON_SIZE_BUTTON,image_play);
+    UpdatePlayPauseButton();
+    play_pause_button.signal_clicked().connect(mem_fun(*this,&MainWindow::OnPauseButtonClicked));
 
     vbox1.pack_start(m_TreeView, Gtk::PACK_SHRINK);
     // <editor-fold defaultstate="collapsed" desc="tree">
@@ -172,7 +177,7 @@ MainWindow::MainWindow()
 
 
     show_all_children(1);
-    //Ask("aaa","bbb");
+    play_pause_button.get_image()->show();
 
 }
 
@@ -454,4 +459,31 @@ void MainWindow::OnSelectionChanged(){
 
     }
 
+}
+
+void MainWindow::UpdatePlayPauseButton(){
+    switch (midi->paused){
+        case true:
+            play_pause_button.set_label(_("Play"));
+            play_pause_button.set_image(image_play);
+            break;
+        case false:
+            play_pause_button.set_label(_("Pause"));
+            play_pause_button.set_image(image_pause);
+            break;
+    }
+
+}
+
+void MainWindow::OnPauseButtonClicked(){
+    
+     switch (midi->paused){
+        case true:
+            midi->ContinueQueue();
+            break;
+        case false:
+            midi->PauseQueueImmediately();
+            break;
+    }
+    play_pause_button.get_image()->show();
 }

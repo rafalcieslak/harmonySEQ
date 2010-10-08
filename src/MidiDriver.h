@@ -40,6 +40,11 @@ public:
     /**Current tempo on the queue*/
     double tempo;
     int tick;
+
+    /**States whether queue is paused or not*/
+    bool paused;
+    bool to_be_paused;
+    /**Constructor, called only from main()*/
     MidiDriver();
     
     /**Outputs immediately a noteon*/
@@ -58,6 +63,18 @@ public:
     /**Sets tempo*/
     void SetTempo(double bpm);
 
+    /**Stops playback*/
+    void PauseQueueImmediately();
+
+    /**Stops playback on next tact*/
+    void PauseOnNextTact();
+
+    /**Unpauses the queue*/
+    void ContinueQueue();
+
+    /**Updates queue NOW*/
+    void Sync();
+    
     /**Removes all events from queue, except noteoffs*/
     void ClearQueue();
 
@@ -65,12 +82,11 @@ public:
     void DeleteQueue();
 
     /**This routine gets called every time the echo event is received. It puts next pack of notes on the queue.*/
-    void UpdateQueue();
+    void UpdateQueue(bool do_not_lock_threads = 0);
 
     /**Called every time there are midi events on input, since this procedure processes them; no need to call it from anywhere else*/
     void ProcessInput();
 
-    /***/
     MidiDriver(const MidiDriver& orig);
     virtual ~MidiDriver();
 private:

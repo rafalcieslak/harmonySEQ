@@ -67,6 +67,9 @@ public:
     void OnApplyMainNoteToggleToggled(const Glib::ustring& path);
     void OnNameEdited(const Glib::ustring& path,const Glib::ustring& newtext);
 
+    void UpdatePlayPauseButton();
+    void OnPauseButtonClicked();
+
     void OnSelectionChanged();
     void OnPassToggleClicked();
     bool OnKeyPress(GdkEventKey* event);
@@ -83,6 +86,9 @@ public:
     Gtk::Button button_events;
     Gtk::CheckButton pass_toggle;
 
+    Gtk::Button play_pause_button;
+    Gtk::Image image_pause;
+    Gtk::Image image_play;
 private:
 
 

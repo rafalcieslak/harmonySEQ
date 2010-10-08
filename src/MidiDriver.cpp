@@ -27,6 +27,8 @@
 #include "Event.h"
 MidiDriver::MidiDriver() {
     working = false;
+    paused = false;
+    to_be_paused = false;
     Open();
     InitQueue();
     SetTempo(tempo);
@@ -115,6 +117,40 @@ void MidiDriver::SetTempo(double bpm){
     snd_seq_queue_tempo_free(queue_tempo);
 }
 
+void MidiDriver::PauseQueueImmediately(){
+    snd_seq_event_t ev;
+   snd_seq_ev_clear(&ev);
+    ev.type = SND_SEQ_EVENT_RESET; //may result in a all-note-off
+    PassEvent(&ev);
+    
+    snd_seq_stop_queue(seq_handle,queueid,NULL);
+    snd_seq_drain_output(seq_handle);
+
+    paused = true;
+    *dbg << "Queue paused!\n";
+    mainwindow->UpdatePlayPauseButton();
+}
+
+void MidiDriver::PauseOnNextTact(){
+    *err << "Pausing on next track is not yet implemented.";
+}
+
+void MidiDriver::Sync(){
+    ClearQueue();
+    UpdateQueue(1);
+}
+
+void MidiDriver::ContinueQueue(){
+    snd_seq_continue_queue(seq_handle,queueid,NULL);
+    snd_seq_drain_output(seq_handle);
+
+
+    paused = false;
+    *dbg << "Queue unpaused!\n";
+
+    mainwindow->UpdatePlayPauseButton();
+}
+
 void MidiDriver::ClearQueue(){
 
     *dbg << "clearing queue...\n";
@@ -133,10 +169,11 @@ void MidiDriver::DeleteQueue(){
     snd_seq_free_queue(seq_handle,queueid);
 }
 
-void MidiDriver::UpdateQueue(){
-    gdk_threads_enter(); //for safety. any calls to GUI will be thread - protected
+void MidiDriver::UpdateQueue(bool do_not_lock_threads){
+    if(!do_not_lock_threads) gdk_threads_enter(); //for safety. any calls to GUI will be thread - protected
     snd_seq_event_t ev;
     Sequencer* seq;
+
     for (unsigned int n = 0; n < sequencers.size(); n++){
         if(sequencers[n] == NULL) continue; //seems this sequencer was removed
 
@@ -211,7 +248,7 @@ void MidiDriver::UpdateQueue(){
     snd_seq_event_output_direct(seq_handle,&ev);
 
 
-    gdk_threads_leave(); //see note on above
+    if(!do_not_lock_threads)  gdk_threads_leave(); //see note on above
 
 }
 
@@ -229,14 +266,7 @@ void MidiDriver::ProcessInput(){
                 if (ev->data.note.velocity != 0) {
                 *dbg << "noteon! (of pitch " << ev->data.note.note << ")\n";
 
-                    //depracated
-                    //mainnote = ev->data.note.note;
-
                     FindAndProcessEvents(Event::NOTE,ev->data.note.note,ev->data.note.channel+1);
-                    /*freezed to implement the events system
-                    gdk_threads_enter(); //to interact with gui thread we MUST lock it's thread
-                    mainwindow->main_note.set_value(mainnote);
-                    gdk_threads_leave(); //freeing lock*/
                     
                 } else {
                     *dbg << "noteoff! (of pitch " << ev->data.note.note << ")\n";
@@ -252,18 +282,7 @@ void MidiDriver::ProcessInput(){
                 
                 break;
             case SND_SEQ_EVENT_CONTROLLER:
-                /*if (ev->data.control.param == 17){
-                    *dbg << "tempo controller! " << ev->data.control.value << ENDL;
-                    double tmp = 30 + ((double)ev->data.control.value/(double)127.0)*(320-30);
-
-                    gdk_threads_enter(); //to interact with gui thread we MUST lock it's thread
-                    mainwindow->tempo_button.set_value(tmp);
-                    gdk_threads_leave(); //freeing lock
-
-                    SetTempo(tmp);
-
-                }else*/
-                    *dbg << "controller!\n";
+                 *dbg << "controller!\n";
 
                 FindAndProcessEvents(Event::CONTROLLER,ev->data.control.param,ev->data.control.channel+1);
                 break;
@@ -291,7 +310,6 @@ void MidiDriver::ProcessInput(){
         }
         snd_seq_free_event(ev);
 
-
-
     }while (snd_seq_event_input_pending(seq_handle,0)>0);
+
 }
