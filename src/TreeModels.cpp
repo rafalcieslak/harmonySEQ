@@ -63,14 +63,8 @@ void InitActionTypesTreeModel(){
     row[m_columns_action_types.type] = Action::NONE;
     row[m_columns_action_types.label] = _("Empty");
     row = *(m_refTreeModel_ActionTypes->append());
-    row[m_columns_action_types.type] = Action::SEQ_ON;
-    row[m_columns_action_types.label] = _("Sequencer/ON");
-    row = *(m_refTreeModel_ActionTypes->append());
-    row[m_columns_action_types.type] = Action::SEQ_OFF;
-    row[m_columns_action_types.label] = _("Sequencer/OFF");
-    row = *(m_refTreeModel_ActionTypes->append());
-    row[m_columns_action_types.type] = Action::SEQ_TOGGLE;
-    row[m_columns_action_types.label] = _("Sequencer/Toggle");
+    row[m_columns_action_types.type] = Action::SEQ_ON_OFF_TOGGLE;
+    row[m_columns_action_types.label] = _("Sequencer/Switch On-Off");
     row = *(m_refTreeModel_ActionTypes->append());
     row[m_columns_action_types.type] = Action::SEQ_PLAY_ONCE;
     row[m_columns_action_types.label] = _("Sequencer/Play once");

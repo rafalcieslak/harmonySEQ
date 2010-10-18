@@ -28,9 +28,11 @@ class Action {
 public:
     enum ActionTypes {
         NONE = 0,
-        SEQ_OFF,
-        SEQ_ON,
-        SEQ_TOGGLE,
+
+        /**1) seq 2) mode: 0 - off, 1 - on, 2 - toggle */
+        SEQ_ON_OFF_TOGGLE,
+        DEPRACATED_1,
+        DEPRACATED_2,
         SEQ_VOLUME_SET,
         MAINOTE_SET,
         TEMPO_SET,

@@ -50,17 +50,19 @@ void Action::Trigger(int data){
 #endif
     
     switch (type){
-        case SEQ_TOGGLE:
+        case SEQ_ON_OFF_TOGGLE:
             if (!sequencers[args[1]]) break;
-            sequencers[args[1]]->SetOn(!sequencers[args[1]]->GetOn());
-            break;
-        case SEQ_OFF:
-            if (!sequencers[args[1]]) break;
-            sequencers[args[1]]->SetOn(0);
-            break;
-        case SEQ_ON:
-            if (!sequencers[args[1]]) break;
-            sequencers[args[1]]->SetOn(1);
+            switch (args[2]){
+                case 0:
+                    sequencers[args[1]]->SetOn(0);
+                    break;
+                case 1:
+                    sequencers[args[1]]->SetOn(1);
+                    break;
+                case 2:
+                    sequencers[args[1]]->SetOn(!sequencers[args[1]]->GetOn());
+                    break;
+            }
             break;
 
         case MAINOTE_SET:
@@ -111,16 +113,19 @@ Glib::ustring Action::GetLabel(){
 
     char temp[100];
     switch (type){
-        case SEQ_TOGGLE:
-            sprintf(temp,_("Toggle sequencer '%s'"),GetSeqName(args[1]).c_str());
+        case SEQ_ON_OFF_TOGGLE:
+            switch (args[2]){
+                case 0:
+                    sprintf(temp,_("Switch sequencer '%s' OFF"),GetSeqName(args[1]).c_str());
+                    break;
+                case 1:
+                    sprintf(temp,_("Switch sequencer '%s' ON"),GetSeqName(args[1]).c_str());
+                    break;
+                case 2:
+                    sprintf(temp,_("Toggle sequencer '%s'"),GetSeqName(args[1]).c_str());
+                    break;
+            }
             break;
-        case SEQ_OFF:
-            sprintf(temp,_("Switch sequencer '%s' OFF"),GetSeqName(args[1]).c_str());
-            break;
-        case SEQ_ON:
-            sprintf(temp,_("Switch sequencer '%s' ON"),GetSeqName(args[1]).c_str());
-            break;
-
         case MAINOTE_SET:
             sprintf(temp,_("Set main note to %d"),args[1]);
             break;

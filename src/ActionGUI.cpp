@@ -38,12 +38,13 @@ ActionGUI::ActionGUI(Action *prt):
 
     main_box.pack_start(line_type);
     main_box.pack_start(line_seq);
+    main_box.pack_start(line_on_off_toggle);
     main_box.pack_start(line_note);
     main_box.pack_start(line_tempo);
     main_box.pack_start(line_volume);
     main_box.pack_start(line_set_one_note);
     main_box.pack_start(line_chord);
-    main_box.pack_start(separator);
+    main_box.pack_start(separator);//==========
     main_box.pack_start(label_preview);
     main_box.pack_start(ok_button);
 
@@ -56,6 +57,16 @@ ActionGUI::ActionGUI(Action *prt):
     line_set_one_note.pack_start(notenr_button,Gtk::PACK_SHRINK);
     line_set_one_note.pack_start(label_note_seq,Gtk::PACK_SHRINK);
     line_set_one_note.pack_start(chordseq_button,Gtk::PACK_SHRINK);
+
+    line_on_off_toggle.pack_start(on_off_toggle_TOGGLE,Gtk::PACK_SHRINK);
+    line_on_off_toggle.pack_start(on_off_toggle_ON,Gtk::PACK_SHRINK);
+    line_on_off_toggle.pack_start(on_off_toggle_OFF,Gtk::PACK_SHRINK);
+    Gtk::RadioButtonGroup group = on_off_toggle_OFF.get_group();
+    on_off_toggle_ON.set_group(group);
+    on_off_toggle_TOGGLE.set_group(group);
+    on_off_toggle_OFF.signal_clicked().connect(mem_fun(*this,&ActionGUI::OnOnOffToggleChanged));
+    on_off_toggle_ON.signal_clicked().connect(mem_fun(*this,&ActionGUI::OnOnOffToggleChanged));
+    on_off_toggle_TOGGLE.signal_clicked().connect(mem_fun(*this,&ActionGUI::OnOnOffToggleChanged));
 
     line_type.pack_start(Types_combo,Gtk::PACK_SHRINK);
     line_seq.pack_start(Seqs_combo,Gtk::PACK_SHRINK);
@@ -87,6 +98,9 @@ ActionGUI::ActionGUI(Action *prt):
     label_volume.set_text(_("Volume:"));
     label_note_nr.set_text(_("Set note "));
     label_note_seq.set_text(_(" to: "));
+    on_off_toggle_OFF.set_label(_("Off"));
+    on_off_toggle_ON.set_label(_("On"));
+    on_off_toggle_TOGGLE.set_label(_("Toggle"));
     ok_button.set_label(_("OK"));
     
     ok_button.signal_clicked().connect(mem_fun(*this,&ActionGUI::OnOKClicked));
@@ -132,14 +146,19 @@ void ActionGUI::UpdateValues(){
     switch (type){
         case Action::NONE:
             break;
-        case Action::SEQ_ON:
+        case Action::SEQ_ON_OFF_TOGGLE:
             SetSeqCombo(parent->args[1]);
-            break;
-        case Action::SEQ_OFF:
-            SetSeqCombo(parent->args[1]);
-            break;
-        case Action::SEQ_TOGGLE:
-            SetSeqCombo(parent->args[1]);
+            switch (parent->args[2]){
+                case 0:
+                    on_off_toggle_OFF.set_active(1);
+                    break;
+                case 1:
+                    on_off_toggle_ON.set_active(1);
+                    break;
+                case 2:
+                    on_off_toggle_TOGGLE.set_active(1);
+                    break;
+            }
             break;
         case Action::SEQ_VOLUME_SET:
             SetSeqCombo(parent->args[1]);
@@ -184,13 +203,15 @@ void ActionGUI::ChangeVisibleLines(){
     line_volume.hide();
     line_set_one_note.hide();
     line_chord.hide();
+    line_on_off_toggle.hide();
     switch (type){
         case Action::NONE:
 
             break;
-        case Action::SEQ_ON:
-        case Action::SEQ_OFF:
-        case Action::SEQ_TOGGLE:
+        case Action::SEQ_ON_OFF_TOGGLE:
+            line_seq.show();
+            line_on_off_toggle.show();
+            break;
         case Action::SEQ_PLAY_ONCE:
             line_seq.show();
             break;
@@ -239,17 +260,11 @@ void ActionGUI::InitType(){
     switch (parent->type){
         case Action::NONE:
             break;
-        case Action::SEQ_ON:
+        case Action::SEQ_ON_OFF_TOGGLE:
             Seqs_combo.set_active(0);
             parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
-            break;
-        case Action::SEQ_OFF:
-            Seqs_combo.set_active(0);
-            parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
-            break;
-        case Action::SEQ_TOGGLE:
-            Seqs_combo.set_active(0);
-            parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
+            on_off_toggle_TOGGLE.set_active(1); //it does not triggler signal_clicked, so we have to set the mode mannually!
+            parent->args[2]=0;
             break;
         case Action::SEQ_VOLUME_SET:
             Seqs_combo.set_active(0);
@@ -308,7 +323,7 @@ void ActionGUI::OnTempoChanged(){
 
 void ActionGUI::OnSeqChanged(){
     if(!Seqs_combo.get_active()) return; //empty selection
-    if(parent->type == Action::SEQ_OFF || parent->type == Action::SEQ_ON || parent->type == Action::SEQ_TOGGLE || parent->type == Action::SEQ_VOLUME_SET || parent->type == Action::SEQ_CHANGE_ONE_NOTE || parent->type == Action::SEQ_CHANGE_CHORD || parent->type == Action::SEQ_PLAY_ONCE){
+    if(parent->type == Action::SEQ_ON_OFF_TOGGLE || parent->type == Action::SEQ_VOLUME_SET || parent->type == Action::SEQ_CHANGE_ONE_NOTE || parent->type == Action::SEQ_CHANGE_CHORD || parent->type == Action::SEQ_PLAY_ONCE){
             parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
     }else *err << _("Error: sequencer has changed, while action is not sequencer-type.") << ENDL;
 
@@ -348,6 +363,19 @@ void ActionGUI::OnNoteNrChanged(){
     eventswindow->UpdateRow(parent->row_in_event_window);
     
 }
+
+void ActionGUI::OnOnOffToggleChanged(){
+    if(parent->type == Action::SEQ_ON_OFF_TOGGLE){
+        if(on_off_toggle_OFF.get_active()) parent->args[2] = 0;
+        else if(on_off_toggle_ON.get_active()) parent->args[2] = 1;
+        else if(on_off_toggle_TOGGLE.get_active()) parent->args[2] = 2;
+    }else *err << _("Error: on-off-toggle has changed, while action is not on-off-toggle-type.") << ENDL;
+
+    label_preview.set_text(parent->GetLabel());
+    eventswindow->UpdateRow(parent->row_in_event_window);
+    
+}
+
 
 //====^^Add new action gui callbacks above ^^==
 //======================================
