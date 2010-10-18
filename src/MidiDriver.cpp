@@ -118,13 +118,15 @@ void MidiDriver::SetTempo(double bpm){
 }
 
 void MidiDriver::PauseQueueImmediately(){
-    snd_seq_event_t ev;
-   snd_seq_ev_clear(&ev);
-    ev.type = SND_SEQ_EVENT_RESET; //may result in a all-note-off
-    PassEvent(&ev);
+    //snd_seq_event_t ev;
+   //snd_seq_ev_clear(&ev);
+    //ev.type = SND_SEQ_EVENT_RESET; //may result in a all-note-off
+    //PassEvent(&ev);
     
     snd_seq_stop_queue(seq_handle,queueid,NULL);
     snd_seq_drain_output(seq_handle);
+
+    AllNotesOff();
 
     paused = true;
     *dbg << "Queue paused!\n";
@@ -136,6 +138,7 @@ void MidiDriver::PauseOnNextTact(){
 }
 
 void MidiDriver::Sync(){
+    AllNotesOff();
     ClearQueue();
     UpdateQueue(1);
 }
@@ -167,6 +170,23 @@ void MidiDriver::DeleteQueue(){
     *dbg << "stopping queue";
     snd_seq_stop_queue(seq_handle,queueid,NULL);
     snd_seq_free_queue(seq_handle,queueid);
+}
+
+
+void MidiDriver::AllNotesOff(){
+    snd_seq_event_t ev;
+    
+    for (int ch = 0; ch < 16; ch++)
+    for (int x = 0; x < 128; x++){
+        snd_seq_ev_clear(&ev);
+        snd_seq_ev_set_source(&ev,output_port);
+        snd_seq_ev_set_subs(&ev);
+        snd_seq_ev_set_direct(&ev);
+        snd_seq_ev_set_noteoff(&ev,ch,x,0);
+        snd_seq_event_output(seq_handle,&ev);
+        snd_seq_drain_output(seq_handle);
+    }
+
 }
 
 void MidiDriver::UpdateQueue(bool do_not_lock_threads){

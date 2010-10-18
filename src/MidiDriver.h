@@ -72,6 +72,9 @@ public:
     /**Unpauses the queue*/
     void ContinueQueue();
 
+    /**Ends all note events*/
+    void AllNotesOff();
+
     /**Updates queue NOW*/
     void Sync();
     
