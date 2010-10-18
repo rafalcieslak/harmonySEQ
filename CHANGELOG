@@ -1,5 +1,6 @@
 harmonyseq 0.12
-	-
+	- Added Play/Pause button
+	- Reorganized Seq/on/off/toggle actions (merged into one action type), may cause problems when loading older version files.
 
 harmonyseq 0.11
 	- Advanced chord selection
