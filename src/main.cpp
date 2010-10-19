@@ -304,7 +304,7 @@ int main(int argc, char** argv) {
     //wait for signal to exit the program
     while (running == 1)
         usleep(10000);
-    sleep(1);
+    //sleep(1);
 
     end_program();
     return 0;
@@ -331,6 +331,7 @@ void end_program(){
     *dbg << "ending the program...\n";
     if (midi != NULL) { //maybe we are ending the program before midi driver was constructed
         midi->ClearQueue();
+        sleep(1);
         midi->DeleteQueue();
     }
     delete mainwindow;

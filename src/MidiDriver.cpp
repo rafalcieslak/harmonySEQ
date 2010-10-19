@@ -138,15 +138,26 @@ void MidiDriver::PauseOnNextTact(){
 }
 
 void MidiDriver::Sync(){
+    tick = GetTick();
+    ClearQueue(1); //remove also noteoffs!
     AllNotesOff();
-    ClearQueue();
     UpdateQueue(1);
 }
+
+snd_seq_tick_time_t MidiDriver::GetTick() {
+  snd_seq_queue_status_t *status;
+  snd_seq_tick_time_t current_tick;
+  snd_seq_queue_status_malloc(&status);
+  snd_seq_get_queue_status(seq_handle, queueid, status);
+  current_tick = snd_seq_queue_status_get_tick_time(status);
+  snd_seq_queue_status_free(status);
+  return(current_tick);
+}
+
 
 void MidiDriver::ContinueQueue(){
     snd_seq_continue_queue(seq_handle,queueid,NULL);
     snd_seq_drain_output(seq_handle);
-
 
     paused = false;
     *dbg << "Queue unpaused!\n";
@@ -154,13 +165,14 @@ void MidiDriver::ContinueQueue(){
     mainwindow->UpdatePlayPauseButton();
 }
 
-void MidiDriver::ClearQueue(){
+void MidiDriver::ClearQueue(bool remove_noteoffs){
 
     *dbg << "clearing queue...\n";
     snd_seq_remove_events_t *re;
     snd_seq_remove_events_malloc(&re);
     snd_seq_remove_events_set_queue(re,queueid);
-    snd_seq_remove_events_set_condition(re,SND_SEQ_REMOVE_OUTPUT|SND_SEQ_REMOVE_IGNORE_OFF);
+    if(remove_noteoffs) snd_seq_remove_events_set_condition(re,SND_SEQ_REMOVE_OUTPUT);
+        else snd_seq_remove_events_set_condition(re,SND_SEQ_REMOVE_OUTPUT|SND_SEQ_REMOVE_IGNORE_OFF);
     snd_seq_remove_events(seq_handle,re);
     snd_seq_remove_events_free(re);
 }

@@ -78,8 +78,10 @@ public:
     /**Updates queue NOW*/
     void Sync();
     
+    /**Returns queue's current tick*/
+    snd_seq_tick_time_t GetTick();
     /**Removes all events from queue, except noteoffs*/
-    void ClearQueue();
+    void ClearQueue(bool remove_noteoffs = 0);
 
     /**Closes and removes queue*/
     void DeleteQueue();

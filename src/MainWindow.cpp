@@ -479,6 +479,7 @@ void MainWindow::OnPauseButtonClicked(){
     
      switch (midi->paused){
         case true:
+            midi->Sync();
             midi->ContinueQueue();
             break;
         case false:
