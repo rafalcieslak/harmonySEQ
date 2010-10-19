@@ -44,6 +44,7 @@ ActionGUI::ActionGUI(Action *prt):
     main_box.pack_start(line_volume);
     main_box.pack_start(line_set_one_note);
     main_box.pack_start(line_chord);
+    main_box.pack_start(line_play);
     main_box.pack_start(separator);//==========
     main_box.pack_start(label_preview);
     main_box.pack_start(ok_button);
@@ -67,6 +68,16 @@ ActionGUI::ActionGUI(Action *prt):
     on_off_toggle_OFF.signal_clicked().connect(mem_fun(*this,&ActionGUI::OnOnOffToggleChanged));
     on_off_toggle_ON.signal_clicked().connect(mem_fun(*this,&ActionGUI::OnOnOffToggleChanged));
     on_off_toggle_TOGGLE.signal_clicked().connect(mem_fun(*this,&ActionGUI::OnOnOffToggleChanged));
+
+    line_play.pack_start(play_TOGGLE,Gtk::PACK_SHRINK);
+    line_play.pack_start(play_ON,Gtk::PACK_SHRINK);
+    line_play.pack_start(play_OFF,Gtk::PACK_SHRINK);
+    group = play_OFF.get_group();
+    play_ON.set_group(group);
+    play_TOGGLE.set_group(group);
+    play_OFF.signal_clicked().connect(mem_fun(*this,&ActionGUI::OnPlayOnOffToggleClicked));
+    play_ON.signal_clicked().connect(mem_fun(*this,&ActionGUI::OnPlayOnOffToggleClicked));
+    play_TOGGLE.signal_clicked().connect(mem_fun(*this,&ActionGUI::OnPlayOnOffToggleClicked));
 
     line_type.pack_start(Types_combo,Gtk::PACK_SHRINK);
     line_seq.pack_start(Seqs_combo,Gtk::PACK_SHRINK);
@@ -101,6 +112,9 @@ ActionGUI::ActionGUI(Action *prt):
     on_off_toggle_OFF.set_label(_("Off"));
     on_off_toggle_ON.set_label(_("On"));
     on_off_toggle_TOGGLE.set_label(_("Toggle"));
+    play_OFF.set_label(_("Pause"));
+    play_ON.set_label(_("Play"));
+    play_TOGGLE.set_label(_("Toggle"));
     ok_button.set_label(_("OK"));
     
     ok_button.signal_clicked().connect(mem_fun(*this,&ActionGUI::OnOKClicked));
@@ -145,6 +159,7 @@ void ActionGUI::UpdateValues(){
     int type = parent->type;
     switch (type){
         case Action::NONE:
+        case Action::SYNC:
             break;
         case Action::SEQ_ON_OFF_TOGGLE:
             SetSeqCombo(parent->args[1]);
@@ -182,6 +197,18 @@ void ActionGUI::UpdateValues(){
         case Action::SEQ_PLAY_ONCE:
             SetSeqCombo(parent->args[1]);
             break;
+        case Action::PLAY_PAUSE:
+            switch(parent->args[1]){
+                case 0:
+                    play_OFF.set_active(1);
+                    break;
+                case 1:
+                    play_ON.set_active(1);
+                    break;
+                case 2:
+                    play_TOGGLE.set_active(1);
+                    break;
+            }
         case Action::TOGGLE_PASS_MIDI:
             break;
         default:
@@ -204,9 +231,11 @@ void ActionGUI::ChangeVisibleLines(){
     line_set_one_note.hide();
     line_chord.hide();
     line_on_off_toggle.hide();
+    line_play.hide();
     switch (type){
         case Action::NONE:
-
+            break;
+        case Action::SYNC:
             break;
         case Action::SEQ_ON_OFF_TOGGLE:
             line_seq.show();
@@ -232,6 +261,9 @@ void ActionGUI::ChangeVisibleLines(){
             break;
         case Action::TEMPO_SET:
             line_tempo.show();
+            break;
+        case Action::PLAY_PAUSE:
+            line_play.show();
             break;
         case Action::TOGGLE_PASS_MIDI:
             break;
@@ -259,6 +291,7 @@ void ActionGUI::InitType(){
 
     switch (parent->type){
         case Action::NONE:
+        case Action::SYNC:
             break;
         case Action::SEQ_ON_OFF_TOGGLE:
             Seqs_combo.set_active(0);
@@ -290,6 +323,10 @@ void ActionGUI::InitType(){
             break;
         case Action::SEQ_PLAY_ONCE:
             Seqs_combo.set_active(0);
+            break;
+        case Action::PLAY_PAUSE:
+            play_TOGGLE.set_active(1); //it does not triggler signal_clicked, so we have to set the mode mannually!
+            parent->args[1]=2;
             break;
         case Action::TOGGLE_PASS_MIDI:
             break;
@@ -376,6 +413,17 @@ void ActionGUI::OnOnOffToggleChanged(){
     
 }
 
+void ActionGUI::OnPlayOnOffToggleClicked(){
+    if(parent->type == Action::PLAY_PAUSE){
+        if(play_OFF.get_active()) parent->args[1] = 0;
+        else if(play_ON.get_active()) parent->args[1] = 1;
+        else if(play_TOGGLE.get_active()) parent->args[1] = 2;
+    }else *err << _("Error: play-pause-toggle has changed, while action is not play-pause-type.") << ENDL;
+
+    label_preview.set_text(parent->GetLabel());
+    eventswindow->UpdateRow(parent->row_in_event_window);
+
+}
 
 //====^^Add new action gui callbacks above ^^==
 //======================================

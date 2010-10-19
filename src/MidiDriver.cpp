@@ -103,7 +103,7 @@ void MidiDriver::PassEvent(snd_seq_event_t* ev){
 
 void MidiDriver::InitQueue(){
     queueid = snd_seq_alloc_named_queue(seq_handle,"harmonySEQ queue");
-    snd_seq_set_client_pool_output(seq_handle,2048);
+    snd_seq_set_client_pool_output(seq_handle,8192);
     tick = 0;
 }
 
@@ -134,14 +134,17 @@ void MidiDriver::PauseQueueImmediately(){
 }
 
 void MidiDriver::PauseOnNextTact(){
-    *err << "Pausing on next track is not yet implemented.";
+    *err << "Pausing on next track is not yet implemented.\n";
 }
 
 void MidiDriver::Sync(){
-    tick = GetTick();
+    *dbg << "Syncing.\n";
     ClearQueue(1); //remove also noteoffs!
-    AllNotesOff();
+    AllNotesOff(); //
+    tick = GetTick();
+    tick++;
     UpdateQueue(1);
+    mainwindow->FlashTempoStart();//to indicate a starting tact
 }
 
 snd_seq_tick_time_t MidiDriver::GetTick() {
@@ -156,7 +159,21 @@ snd_seq_tick_time_t MidiDriver::GetTick() {
 
 
 void MidiDriver::ContinueQueue(){
-    snd_seq_continue_queue(seq_handle,queueid,NULL);
+
+    *dbg << "Syncing.\n";
+    ClearQueue(1); //remove also noteoffs!
+    //AllNotesOff(); // here: NOT!
+    tick = GetTick();
+    UpdateQueue(1);
+    mainwindow->FlashTempoStart();//to indicate a starting tact
+    
+    snd_seq_drain_output(seq_handle);
+    int i = snd_seq_continue_queue(seq_handle,queueid,NULL) ;
+   *dbg <<  i<< ENDL;
+   if (i==-11) {//eagain
+       i = snd_seq_continue_queue(seq_handle,queueid,NULL) ;
+        *dbg <<  i<< ENDL;
+   }
     snd_seq_drain_output(seq_handle);
 
     paused = false;
@@ -196,8 +213,8 @@ void MidiDriver::AllNotesOff(){
         snd_seq_ev_set_direct(&ev);
         snd_seq_ev_set_noteoff(&ev,ch,x,0);
         snd_seq_event_output(seq_handle,&ev);
-        snd_seq_drain_output(seq_handle);
     }
+    snd_seq_drain_output(seq_handle);
 
 }
 
@@ -298,7 +315,9 @@ void MidiDriver::ProcessInput(){
                 if (ev->data.note.velocity != 0) {
                 *dbg << "noteon! (of pitch " << ev->data.note.note << ")\n";
 
+                     gdk_threads_enter(); //just in case.
                     FindAndProcessEvents(Event::NOTE,ev->data.note.note,ev->data.note.channel+1);
+                    gdk_threads_leave(); //freeing lock
                     
                 } else {
                     *dbg << "noteoff! (of pitch " << ev->data.note.note << ")\n";
@@ -316,7 +335,9 @@ void MidiDriver::ProcessInput(){
             case SND_SEQ_EVENT_CONTROLLER:
                  *dbg << "controller!\n";
 
+                gdk_threads_enter(); //just in case.
                 FindAndProcessEvents(Event::CONTROLLER,ev->data.control.param,ev->data.control.channel+1);
+                gdk_threads_leave(); //freeing lock
                 break;
             case SND_SEQ_EVENT_PITCHBEND:
                 //pass it through

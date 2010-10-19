@@ -332,6 +332,7 @@ void end_program(){
     if (midi != NULL) { //maybe we are ending the program before midi driver was constructed
         midi->ClearQueue();
         sleep(1);
+        midi->AllNotesOff();
         midi->DeleteQueue();
     }
     delete mainwindow;

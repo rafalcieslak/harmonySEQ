@@ -39,7 +39,10 @@ public:
         SEQ_CHANGE_ONE_NOTE,
         SEQ_CHANGE_CHORD,
         SEQ_PLAY_ONCE,
-        TOGGLE_PASS_MIDI
+        TOGGLE_PASS_MIDI,
+        /**1)mode: 0- off, 1 - on, 2 - toggle*/
+        PLAY_PAUSE,
+        SYNC
     };
 
     Action(ActionTypes t, int a1 = 0, int a2 = 0);

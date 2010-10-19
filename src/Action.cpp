@@ -22,6 +22,7 @@
 #include "MainWindow.h"
 #include "messages.h"
 #include "EventsWindow.h"
+#include "MidiDriver.h"
 
 
 Action::Action(ActionTypes t, int a1, int a2){
@@ -101,7 +102,25 @@ void Action::Trigger(int data){
         case NONE:
             *dbg << "empty event triggered\n";
             break;
-
+        case PLAY_PAUSE:
+            switch(args[1]){
+                case 0:
+                    midi->PauseQueueImmediately();
+                    break;
+                case 1:
+                    if(!midi->paused) break; //if it is already playing, do not call Sync().
+                    midi->ContinueQueue();
+                    break;
+                case 2:
+                    if (midi->paused) { midi->ContinueQueue();}
+                    else midi->PauseQueueImmediately();
+                    break;
+            }
+            break;
+        case SYNC:
+            if (midi->paused) break; //do not sync while in pause!
+            midi->Sync();
+            break;
         default:
 
             *err << _("WARNING: Unknown action triggered.");
@@ -148,6 +167,22 @@ Glib::ustring Action::GetLabel(){
             break;
         case TOGGLE_PASS_MIDI:
             sprintf(temp,_("Toggle passing MIDI events"));
+            break;
+        case PLAY_PAUSE:
+            switch (args[1]){
+                case 0:
+                    sprintf(temp,_("Pause"));
+                    break;
+                case 1:
+                    sprintf(temp,_("Play"));
+                    break;
+                case 2:
+                    sprintf(temp,_("Toggle pause/play"));
+                    break;
+            }
+            break;
+        case SYNC:
+            sprintf(temp,_("Synchronize"));
             break;
         case NONE:
             sprintf(temp,_("(empty action)"));

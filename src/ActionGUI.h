@@ -44,6 +44,7 @@ public:
     void OnNoteNrChanged();
     void OnNoteSeqChanged();
     void OnOnOffToggleChanged();
+    void OnPlayOnOffToggleClicked();
     
     Gtk::VBox main_box;
 
@@ -61,10 +62,16 @@ public:
     Gtk::Label label_note_nr;
     Gtk::Label label_note_seq;
     Gtk::HBox line_chord;
+
     Gtk::HBox line_on_off_toggle;
     Gtk::RadioButton on_off_toggle_ON;
     Gtk::RadioButton on_off_toggle_OFF;
     Gtk::RadioButton on_off_toggle_TOGGLE;
+
+    Gtk::HBox line_play;
+    Gtk::RadioButton play_OFF;
+    Gtk::RadioButton play_ON;
+    Gtk::RadioButton play_TOGGLE;
 
     Gtk::ComboBox Types_combo;
     Gtk::ComboBox Seqs_combo;

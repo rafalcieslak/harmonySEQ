@@ -466,10 +466,12 @@ void MainWindow::UpdatePlayPauseButton(){
         case true:
             play_pause_button.set_label(_("Play"));
             play_pause_button.set_image(image_play);
+            play_pause_button.get_image()->show();
             break;
         case false:
             play_pause_button.set_label(_("Pause"));
             play_pause_button.set_image(image_pause);
+            play_pause_button.get_image()->show();
             break;
     }
 
@@ -479,12 +481,10 @@ void MainWindow::OnPauseButtonClicked(){
     
      switch (midi->paused){
         case true:
-            midi->Sync();
             midi->ContinueQueue();
             break;
         case false:
             midi->PauseQueueImmediately();
             break;
     }
-    play_pause_button.get_image()->show();
 }
