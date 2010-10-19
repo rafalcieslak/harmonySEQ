@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2010-10-18 22:09+0200\n"
+"POT-Creation-Date: 2010-10-19 19:07+0200\n"
 "PO-Revision-Date: 2010-10-11 07:12+0000\n"
 "Last-Translator: Rafal Cieslak <Unknown>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -47,7 +47,7 @@ msgid ""
 "       --pass-midi   passes the midi events through the program by default\n"
 msgstr ""
 
-#: src/MainWindow.cpp:41 src/ActionGUI.cpp:96
+#: src/MainWindow.cpp:41 src/ActionGUI.cpp:107
 msgid "Tempo:"
 msgstr ""
 
@@ -63,7 +63,7 @@ msgstr ""
 msgid "Name"
 msgstr "İsim"
 
-#: src/MainWindow.cpp:76 src/SequencerGUI.cpp:65 src/ActionGUI.cpp:102
+#: src/MainWindow.cpp:76 src/SequencerGUI.cpp:65 src/ActionGUI.cpp:113
 msgid "On"
 msgstr ""
 
@@ -123,11 +123,13 @@ msgstr ""
 msgid ", name is: "
 msgstr ""
 
-#: src/MainWindow.cpp:467
+#: src/MainWindow.cpp:467 src/Action.cpp:177 src/ActionGUI.cpp:116
+#, c-format
 msgid "Play"
 msgstr ""
 
-#: src/MainWindow.cpp:471
+#: src/MainWindow.cpp:472 src/Action.cpp:174 src/ActionGUI.cpp:115
+#, c-format
 msgid "Pause"
 msgstr ""
 
@@ -156,7 +158,7 @@ msgstr ""
 msgid "MIDI channel:"
 msgstr ""
 
-#: src/SequencerGUI.cpp:53 src/ActionGUI.cpp:98
+#: src/SequencerGUI.cpp:53 src/ActionGUI.cpp:109
 msgid "Volume:"
 msgstr ""
 
@@ -305,7 +307,7 @@ msgstr ""
 msgid "Error - cannot colorize triggered action: row is empty.\n"
 msgstr ""
 
-#: src/EventGUI.cpp:66 src/ActionGUI.cpp:94
+#: src/EventGUI.cpp:66 src/ActionGUI.cpp:105
 msgid "Type:"
 msgstr "Tür:"
 
@@ -321,11 +323,11 @@ msgstr ""
 msgid "Key:"
 msgstr ""
 
-#: src/EventGUI.cpp:70 src/ActionGUI.cpp:97
+#: src/EventGUI.cpp:70 src/ActionGUI.cpp:108
 msgid "Note:"
 msgstr "Not:"
 
-#: src/EventGUI.cpp:81 src/ActionGUI.cpp:104
+#: src/EventGUI.cpp:81 src/ActionGUI.cpp:118
 msgid "OK"
 msgstr "TAMAM"
 
@@ -345,82 +347,92 @@ msgstr ""
 msgid "Error: note has changed, while event is not note-type."
 msgstr ""
 
-#: src/Action.cpp:107
+#: src/Action.cpp:126
 msgid "WARNING: Unknown action triggered."
-msgstr ""
-
-#: src/Action.cpp:119
-#, c-format
-msgid "Switch sequencer '%s' OFF"
-msgstr ""
-
-#: src/Action.cpp:122
-#, c-format
-msgid "Switch sequencer '%s' ON"
-msgstr ""
-
-#: src/Action.cpp:125
-#, c-format
-msgid "Toggle sequencer '%s'"
-msgstr ""
-
-#: src/Action.cpp:130
-#, c-format
-msgid "Set main note to %d"
-msgstr ""
-
-#: src/Action.cpp:134
-#, c-format
-msgid "Set tempo to %d BPM"
 msgstr ""
 
 #: src/Action.cpp:138
 #, c-format
-msgid "Set volume of sequencer '%s' to %d"
+msgid "Switch sequencer '%s' OFF"
 msgstr ""
 
 #: src/Action.cpp:141
 #, c-format
-msgid "Set note %d of sequencer '%s' to %d"
+msgid "Switch sequencer '%s' ON"
 msgstr ""
 
 #: src/Action.cpp:144
 #, c-format
-msgid "Set chord of sequencer '%s' to %s"
+msgid "Toggle sequencer '%s'"
 msgstr ""
 
-#: src/Action.cpp:147
+#: src/Action.cpp:149
 #, c-format
-msgid "Play sequence in '%s' once"
-msgstr ""
-
-#: src/Action.cpp:150 src/TreeModels.cpp:88
-#, c-format
-msgid "Toggle passing MIDI events"
+msgid "Set main note to %d"
 msgstr ""
 
 #: src/Action.cpp:153
 #, c-format
+msgid "Set tempo to %d BPM"
+msgstr ""
+
+#: src/Action.cpp:157
+#, c-format
+msgid "Set volume of sequencer '%s' to %d"
+msgstr ""
+
+#: src/Action.cpp:160
+#, c-format
+msgid "Set note %d of sequencer '%s' to %d"
+msgstr ""
+
+#: src/Action.cpp:163
+#, c-format
+msgid "Set chord of sequencer '%s' to %s"
+msgstr ""
+
+#: src/Action.cpp:166
+#, c-format
+msgid "Play sequence in '%s' once"
+msgstr ""
+
+#: src/Action.cpp:169 src/TreeModels.cpp:94
+#, c-format
+msgid "Toggle passing MIDI events"
+msgstr ""
+
+#: src/Action.cpp:180
+#, c-format
+msgid "Toggle pause/play"
+msgstr ""
+
+#: src/Action.cpp:185 src/TreeModels.cpp:91
+#, c-format
+msgid "Synchronize"
+msgstr ""
+
+#: src/Action.cpp:188
+#, c-format
 msgid "(empty action)"
 msgstr ""
 
-#: src/Action.cpp:156
+#: src/Action.cpp:191
 #, c-format
 msgid "(unknown action)"
 msgstr ""
 
-#: src/Action.cpp:163
+#: src/Action.cpp:198
 msgid ""
 "Critical ERROR: Trying to get name of sequencer outside of sequencers "
 "vector.\n"
 msgstr ""
 
-#: src/Action.cpp:165
+#: src/Action.cpp:200
 #, c-format
 msgid "%d (which was removed)"
 msgstr ""
 
-#: src/Action.cpp:167
+#: src/Action.cpp:202
 #, c-format
 msgid "%s"
 msgstr "%s"
@@ -429,53 +441,58 @@ msgstr "%s"
 msgid "Action"
 msgstr "Eylem"
 
-#: src/ActionGUI.cpp:95
+#: src/ActionGUI.cpp:106
 msgid "Sequencer:"
 msgstr ""
 
-#: src/ActionGUI.cpp:99
+#: src/ActionGUI.cpp:110
 msgid "Set note "
 msgstr ""
 
-#: src/ActionGUI.cpp:100
+#: src/ActionGUI.cpp:111
 msgid " to: "
 msgstr ""
 
-#: src/ActionGUI.cpp:101
+#: src/ActionGUI.cpp:112
 msgid "Off"
 msgstr ""
 
-#: src/ActionGUI.cpp:103
+#: src/ActionGUI.cpp:114 src/ActionGUI.cpp:117
 msgid "Toggle"
 msgstr ""
 
-#: src/ActionGUI.cpp:306
+#: src/ActionGUI.cpp:343
 msgid "Error: note has changed, while action is not note-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:317
+#: src/ActionGUI.cpp:354
 msgid "Error: tempo has changed, while action is not tempo-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:328
+#: src/ActionGUI.cpp:365
 msgid "Error: sequencer has changed, while action is not sequencer-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:340
+#: src/ActionGUI.cpp:377
 msgid "Error: volume has changed, while action is not volume-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:350
+#: src/ActionGUI.cpp:387
 msgid "Error: note to set has changed, while action is not set-seq-note-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:360
+#: src/ActionGUI.cpp:397
 msgid "Error: note number has changed, while action is not set-seq-note-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:372
+#: src/ActionGUI.cpp:409
 msgid ""
 "Error: on-off-toggle has changed, while action is not on-off-toggle-type."
+msgstr ""
+
+#: src/ActionGUI.cpp:421
+msgid ""
+"Error: play-pause-toggle has changed, while action is not play-pause-type."
 msgstr ""
 
 #: src/TreeModels.cpp:47 src/TreeModels.cpp:64
@@ -522,23 +539,27 @@ msgstr ""
 msgid "Set tempo"
 msgstr ""
 
-#: src/TreeModels.cpp:108
+#: src/TreeModels.cpp:88
+msgid "Play/pause"
+msgstr ""
+
+#: src/TreeModels.cpp:114
 msgid "All"
 msgstr "Tümü"
 
-#: src/TreeModels.cpp:167 src/TreeModels.cpp:184
+#: src/TreeModels.cpp:173 src/TreeModels.cpp:190
 msgid "Major"
 msgstr ""
 
-#: src/TreeModels.cpp:170 src/TreeModels.cpp:187
+#: src/TreeModels.cpp:176 src/TreeModels.cpp:193
 msgid "Minor"
 msgstr ""
 
-#: src/TreeModels.cpp:173
+#: src/TreeModels.cpp:179
 msgid "Augmented"
 msgstr ""
 
-#: src/TreeModels.cpp:176
+#: src/TreeModels.cpp:182
 msgid "Diminished"
 msgstr ""
 
