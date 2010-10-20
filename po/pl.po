@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
 "POT-Creation-Date: 2010-10-19 19:07+0200\n"
-"PO-Revision-Date: 2010-10-05 07:21+0000\n"
+"PO-Revision-Date: 2010-10-19 19:35+0000\n"
 "Last-Translator: Rafal Cieslak <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
-"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-08 04:58+0000\n"
+"X-Launchpad-Export-Date: 2010-10-20 05:11+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+"Language: pl\n"
 
 #: src/main.cpp:258
 #, c-format
@@ -137,12 +137,12 @@ msgstr ", nazwa to: "
 #: src/MainWindow.cpp:467 src/Action.cpp:177 src/ActionGUI.cpp:116
 #, c-format
 msgid "Play"
-msgstr ""
+msgstr "Start"
 
 #: src/MainWindow.cpp:472 src/Action.cpp:174 src/ActionGUI.cpp:115
 #, c-format
 msgid "Pause"
-msgstr ""
+msgstr "Pauza"
 
 #: src/MidiDriver.cpp:51
 msgid "Failed to open ALSA sequencer.\n"
@@ -435,12 +435,12 @@ msgstr "Przełącz przekazywanie zdarzeń MIDI"
 #: src/Action.cpp:180
 #, c-format
 msgid "Toggle pause/play"
-msgstr ""
+msgstr "Przełącz odtwarzanie"
 
 #: src/Action.cpp:185 src/TreeModels.cpp:91
 #, c-format
 msgid "Synchronize"
-msgstr ""
+msgstr "Synchronizuj"
 
 #: src/Action.cpp:188
 #, c-format
@@ -487,11 +487,11 @@ msgstr " na: "
 
 #: src/ActionGUI.cpp:112
 msgid "Off"
-msgstr ""
+msgstr "Wył."
 
 #: src/ActionGUI.cpp:114 src/ActionGUI.cpp:117
 msgid "Toggle"
-msgstr ""
+msgstr "Przełącz"
 
 #: src/ActionGUI.cpp:343
 msgid "Error: note has changed, while action is not note-type."
@@ -499,7 +499,8 @@ msgstr "Błąd: nuta została zmieniona, podczas gdy akcja nie jest typu nuty."
 
 #: src/ActionGUI.cpp:354
 msgid "Error: tempo has changed, while action is not tempo-type."
-msgstr "Błąd: tempo zostało zmienione, podczas gdy akcja nie jest typu tempo."
+msgstr ""
+"Błąd: tempo zostało zmienione, podczas gdy akcja nie jest typu tempo."
 
 #: src/ActionGUI.cpp:365
 msgid "Error: sequencer has changed, while action is not sequencer-type."
@@ -513,29 +514,31 @@ msgstr ""
 "Błąd: Głośność została zmieniona, podczas gdy akcja nie jest typu głośności."
 
 #: src/ActionGUI.cpp:387
-msgid "Error: note to set has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note to set has changed, while action is not set-seq-note-type."
 msgstr ""
 "Błąd: nuta do ustawienia została zmieniona, podczas gdy akcja nie jest typu "
 "zmień-nutę-sekwencera."
 
 #: src/ActionGUI.cpp:397
-msgid "Error: note number has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note number has changed, while action is not set-seq-note-type."
 msgstr ""
 "Błąd: numer nuty do ustawienia został zmieniony, podczas gdy akcja nie jest "
 "typu zmień-nutę-sekwencera."
 
 #: src/ActionGUI.cpp:409
-#, fuzzy
 msgid ""
 "Error: on-off-toggle has changed, while action is not on-off-toggle-type."
-msgstr "Błąd: nuta została zmieniona, podczas gdy akcja nie jest typu nuty."
+msgstr ""
+"Błąd: on-off-toggle zmieniony, podczas gdy akcja nie jest typu on-off-toggle."
 
 #: src/ActionGUI.cpp:421
-#, fuzzy
 msgid ""
 "Error: play-pause-toggle has changed, while action is not play-pause-type."
 msgstr ""
-"Błąd: Głośność została zmieniona, podczas gdy akcja nie jest typu głośności."
+"Błąd: graj-pauza-przełącz zmienione, podczas gdy akcja nie jest typu graj-"
+"pauza-przełącz."
 
 #: src/TreeModels.cpp:47 src/TreeModels.cpp:64
 msgid "Empty"
@@ -554,9 +557,8 @@ msgid "Controller"
 msgstr "Kontroler"
 
 #: src/TreeModels.cpp:67
-#, fuzzy
 msgid "Sequencer/Switch On-Off"
-msgstr "Sekwencer/Ustaw akord"
+msgstr "Sekwencer/Włącz-wyłącz"
 
 #: src/TreeModels.cpp:70
 msgid "Sequencer/Play once"
@@ -584,7 +586,7 @@ msgstr "Ustaw tempo"
 
 #: src/TreeModels.cpp:88
 msgid "Play/pause"
-msgstr ""
+msgstr "Odtwarzanie/pauza"
 
 #: src/TreeModels.cpp:114
 msgid "All"
@@ -661,15 +663,7 @@ msgstr "Własny"
 msgid "Octave"
 msgstr "Oktawa"
 
-#~ msgid "Sequencer/ON"
-#~ msgstr "Sekwencer/Wł."
-
-#~ msgid "Sequencer/OFF"
-#~ msgstr "Sekwencer/Wył."
-
-#~ msgid "Sequencer/Toggle"
-#~ msgstr "Sekwencer/Przełącz"
-
+#, c-format
 #~ msgid "harmonySEQ, version %s\n"
 #~ msgstr "harmonySEQ, wersja %s\n"
 
@@ -679,6 +673,7 @@ msgstr "Oktawa"
 #~ msgid "Sequencer"
 #~ msgstr "Sekwencer"
 
+#, c-format
 #~ msgid ""
 #~ "    -p --ports n     sets ports number to n\n"
 #~ "    -d --debug       enters debug mode, prints lots of debug messeges\n"
@@ -703,34 +698,50 @@ msgstr "Oktawa"
 #~ msgid "Channel"
 #~ msgstr "Kanał"
 
+#, c-format
 #~ msgid "ERROR - error while trying to read %s\n"
 #~ msgstr "BŁĄD - błąd podczas czytania pliku %s\n"
 
+#, c-format
 #~ msgid "When note %d on channel %d is moved..."
 #~ msgstr "Gdy kontroler %d na kanale %d jest poruszany..."
 
+#, c-format
 #~ msgid "Set tempo to %d"
 #~ msgstr "Ustaw tempo na %d"
 
+#, c-format
 #~ msgid "Set volume of sequencer %d to %d"
 #~ msgstr "Ustaw głośność sekwencera %d na %d"
 
+#, c-format
 #~ msgid "(empty event)"
 #~ msgstr "(puste zdarzenie)"
 
+#, c-format
 #~ msgid "Switch sequencer %d ON"
 #~ msgstr "Włącz sekewncer %d"
 
+#, c-format
 #~ msgid "Switch sequencer %d OFF"
 #~ msgstr "Wyłącz sekwencer %d"
 
+#, c-format
 #~ msgid "Toggle sequencer %d"
 #~ msgstr "Przełącz sekwencer %d"
 
+#~ msgid "Sequencer/OFF"
+#~ msgstr "Sekwencer/Wył."
+
+#~ msgid "Sequencer/ON"
+#~ msgstr "Sekwencer/Wł."
+
+#~ msgid "Sequencer/Toggle"
+#~ msgstr "Sekwencer/Przełącz"
+
 #~ msgid "Error: sequencer has changed, while action is not key-type."
 #~ msgstr ""
-#~ "Błąd: sekwencer został zmieniony, podczas gdy akcja nie jest typu "
-#~ "sekwencera."
+#~ "Błąd: sekwencer został zmieniony, podczas gdy akcja nie jest typu sekwencera."
 
 #~ msgid "Notes:"
 #~ msgstr "Nuty:"
@@ -739,11 +750,12 @@ msgstr "Oktawa"
 #~ msgstr "Sekwencer/Ustaw wszystkie nuty"
 
 #~ msgid ""
-#~ "Error: one of 6 notes to set has changed, while action is not of change-"
-#~ "all-notes type."
+#~ "Error: one of 6 notes to set has changed, while action is not of change-all-"
+#~ "notes type."
 #~ msgstr ""
-#~ "Błąd: jedna z 6 nut do ustawienia została zmieniona, podczas gdy akcja "
-#~ "nie jest typy zmien-wszystkie-nuty."
+#~ "Błąd: jedna z 6 nut do ustawienia została zmieniona, podczas gdy akcja nie "
+#~ "jest typy zmien-wszystkie-nuty."
 
+#, c-format
 #~ msgid "Set notes of sequencer '%s' to %d,%d,%d,%d,%d,%d "
 #~ msgstr "Ustaw nuty sekwencera '%s' na %d,%d,%d,%d,%d,%d "
