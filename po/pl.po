@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2010-10-19 19:07+0200\n"
+"POT-Creation-Date: 2010-10-25 22:20+0200\n"
 "PO-Revision-Date: 2010-10-20 07:09+0000\n"
 "Last-Translator: Rafal Cieslak <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2010-10-21 05:21+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
-"Language: pl\n"
 
 #: src/main.cpp:258
 #, c-format
@@ -28,7 +28,11 @@ msgstr "nieznana opcja '%c'\n"
 msgid "unrecognized option '%s'\n"
 msgstr "nierozpoznana opcja '%s'\n"
 
-#: src/main.cpp:315
+#: src/main.cpp:292
+msgid "Untitled"
+msgstr ""
+
+#: src/main.cpp:318
 #, c-format
 msgid ""
 "harmonySEQ, version %s\n"
@@ -50,7 +54,7 @@ msgstr ""
 "    -h --help        wyświetla tę wiadomość pomocy\n"
 "    -v --version     wyświetla wersję programu\n"
 
-#: src/main.cpp:323
+#: src/main.cpp:326
 #, c-format
 msgid ""
 "       --pass-midi   passes the midi events through the program by default\n"
@@ -58,88 +62,101 @@ msgstr ""
 "       --pass-midi   włącz domyślnie przesyłanie wszystkich zdarzeń MIDI "
 "przez program.\n"
 
-#: src/MainWindow.cpp:41 src/ActionGUI.cpp:107
+#: src/MainWindow.cpp:39 src/ActionGUI.cpp:109
 msgid "Tempo:"
 msgstr "Tempo:"
 
-#: src/MainWindow.cpp:42
+#: src/MainWindow.cpp:40
 msgid "Main Note:"
 msgstr "Nuta główna:"
 
-#: src/MainWindow.cpp:69 src/EventsWindow.cpp:48
+#: src/MainWindow.cpp:67 src/EventsWindow.cpp:49
 msgid "ID"
 msgstr "ID"
 
-#: src/MainWindow.cpp:71
+#: src/MainWindow.cpp:69
 msgid "Name"
 msgstr "Nazwa"
 
-#: src/MainWindow.cpp:76 src/SequencerGUI.cpp:65 src/ActionGUI.cpp:113
+#: src/MainWindow.cpp:74 src/SequencerGUI.cpp:66 src/ActionGUI.cpp:115
 msgid "On"
 msgstr "Wł."
 
-#: src/MainWindow.cpp:83
+#: src/MainWindow.cpp:81
 msgid "MN"
 msgstr "GN"
 
-#: src/MainWindow.cpp:88
+#: src/MainWindow.cpp:86
 msgid "Chan"
 msgstr "Kan"
 
-#: src/MainWindow.cpp:89
+#: src/MainWindow.cpp:87
 msgid "Res"
 msgstr "Roz"
 
-#: src/MainWindow.cpp:90
+#: src/MainWindow.cpp:88
 msgid "Len"
 msgstr "Dł"
 
-#: src/MainWindow.cpp:91
+#: src/MainWindow.cpp:89
 msgid "Vol"
 msgstr "Gł"
 
-#: src/MainWindow.cpp:151
+#: src/MainWindow.cpp:149
 msgid "Add"
 msgstr "Dodaj"
 
-#: src/MainWindow.cpp:153
+#: src/MainWindow.cpp:151
 msgid "Save"
 msgstr "Zapisz"
 
-#: src/MainWindow.cpp:155
+#: src/MainWindow.cpp:153
 msgid "Open"
 msgstr "Otwórz"
 
-#: src/MainWindow.cpp:157 src/EventsWindow.cpp:38
+#: src/MainWindow.cpp:155 src/EventsWindow.cpp:39
 msgid "Remove"
 msgstr "Usuń"
 
-#: src/MainWindow.cpp:160
+#: src/MainWindow.cpp:158
 msgid "Clone"
 msgstr "Klonuj"
 
-#: src/MainWindow.cpp:163
+#: src/MainWindow.cpp:161
 msgid "Events"
 msgstr "Zdarzenia"
 
-#: src/MainWindow.cpp:167
+#: src/MainWindow.cpp:165
 msgid "Pass MIDI events"
 msgstr "Przekazuj zdarzenia MIDI"
 
-#: src/MainWindow.cpp:222
+#: src/MainWindow.cpp:208 src/MainWindow.cpp:378
+msgid "The file had unsaved changes."
+msgstr ""
+
+#: src/MainWindow.cpp:208
+msgid "Are sure you want to quit?"
+msgstr ""
+
+#: src/MainWindow.cpp:233
 msgid "activated row "
 msgstr "aktywowano wiersz "
 
-#: src/MainWindow.cpp:223
+#: src/MainWindow.cpp:234
 msgid ", name is: "
 msgstr ", nazwa to: "
 
-#: src/MainWindow.cpp:467 src/Action.cpp:177 src/ActionGUI.cpp:116
+#: src/MainWindow.cpp:378
+#, fuzzy
+msgid "Are sure you want to loose them and open another file?"
+msgstr "Czy chcesz otworzyć ten plik?"
+
+#: src/MainWindow.cpp:494 src/Action.cpp:182 src/ActionGUI.cpp:118
 #, c-format
 msgid "Play"
 msgstr "Start"
 
-#: src/MainWindow.cpp:472 src/Action.cpp:174 src/ActionGUI.cpp:115
+#: src/MainWindow.cpp:499 src/Action.cpp:179 src/ActionGUI.cpp:117
 #, c-format
 msgid "Pause"
 msgstr "Pauza"
@@ -165,23 +182,23 @@ msgstr "Inicjacja sterownika MIDI powiodła się.\n"
 msgid "seq %d"
 msgstr "seq %d"
 
-#: src/SequencerGUI.cpp:52
+#: src/SequencerGUI.cpp:53
 msgid "MIDI channel:"
 msgstr "Kanał MIDI"
 
-#: src/SequencerGUI.cpp:53 src/ActionGUI.cpp:109
+#: src/SequencerGUI.cpp:54 src/ActionGUI.cpp:111
 msgid "Volume:"
 msgstr "Głośność:"
 
-#: src/SequencerGUI.cpp:66
+#: src/SequencerGUI.cpp:67
 msgid "Apply main note"
 msgstr "Stosuj główną nutę"
 
-#: src/SequencerGUI.cpp:75
+#: src/SequencerGUI.cpp:76
 msgid "Resolution:"
 msgstr "Rozdzielczość:"
 
-#: src/SequencerGUI.cpp:92
+#: src/SequencerGUI.cpp:93
 msgid "Length:"
 msgstr "Długość:"
 
@@ -190,39 +207,39 @@ msgstr "Długość:"
 msgid "Debug mode started.\n"
 msgstr "Włączono tryb Debug.\n"
 
-#: src/Files.cpp:40
+#: src/Files.cpp:54
 msgid "Choose a file to save..."
 msgstr "Wybierz plik do zapisu..."
 
-#: src/Files.cpp:71
+#: src/Files.cpp:85
 #, c-format
 msgid "File '%s'  already exist."
 msgstr "Plik '%s' już istnieje."
 
-#: src/Files.cpp:72
+#: src/Files.cpp:86
 msgid "Do you want to overwrite this file?"
 msgstr "Zastąpić ten plik?"
 
-#: src/Files.cpp:77
+#: src/Files.cpp:91
 #, c-format
 msgid "ERROR - error while opening file %s to write.\n"
 msgstr "BŁĄD - błąd podczas otwierania pliku %s do zapisu.\n"
 
-#: src/Files.cpp:143
+#: src/Files.cpp:162
 msgid "Choose a file to open..."
 msgstr "Wybierz plik do otwarcia..."
 
-#: src/Files.cpp:187
+#: src/Files.cpp:206
 #, c-format
 msgid "ERROR - error while trying to read file '%s'\n"
 msgstr "BŁĄD - błąd podczas próby otwarcia pliku '%s'\n"
 
-#: src/Files.cpp:193
+#: src/Files.cpp:212
 #, c-format
 msgid "ERROR - error while trying to read file '%s': "
 msgstr "BŁĄD - błąd podczas próby otwarcia pliku '%s': "
 
-#: src/Files.cpp:207
+#: src/Files.cpp:226
 #, c-format
 msgid ""
 "This file was created by harmonySEQ in a newer version (%d.%d.%d). This "
@@ -241,11 +258,11 @@ msgstr ""
 "gdy wiadomo, że otworzenie tego pliku mimo wszystko nie spowoduje awarii, "
 "można zaryzykować, i otworzyć ten plik. Wybierz TAK, by tak uczynić."
 
-#: src/Files.cpp:208 src/Files.cpp:216
+#: src/Files.cpp:227 src/Files.cpp:235
 msgid "Do you want to open this file?"
 msgstr "Czy chcesz otworzyć ten plik?"
 
-#: src/Files.cpp:215
+#: src/Files.cpp:234
 #, c-format
 msgid ""
 "This file was created by harmonySEQ in an older version (%d.%d.%d). This "
@@ -263,12 +280,12 @@ msgstr ""
 "tego pliku mimo wszystko nie spowoduje awarii, można zaryzykować, i otworzyć "
 "ten plik. Wybierz TAK, by tak uczynić."
 
-#: src/Files.cpp:310
+#: src/Files.cpp:335
 #, c-format
 msgid "ERROR - Glib::KeyFile error while processing file '%s': "
 msgstr "BŁĄD - błąd Glib::KeyFile podczas przetwarzania pliku '%s' "
 
-#: src/Files.cpp:319
+#: src/Files.cpp:344
 #, c-format
 msgid "ERROR - unknown error while processing file '%s': "
 msgstr "BŁĄD - nieznany błąd podczas przetwarzania pliku '%s' "
@@ -312,28 +329,28 @@ msgstr "Nieznane zdarzenie."
 msgid "Error - empty event would be triggered.\n"
 msgstr "Błąd - puste zdarzenie miałoby zostać wywołane.\n"
 
-#: src/EventsWindow.cpp:36
+#: src/EventsWindow.cpp:37
 msgid "Add Event"
 msgstr "Dodaj zdarzenie"
 
-#: src/EventsWindow.cpp:42
+#: src/EventsWindow.cpp:43
 msgid "Add Action"
 msgstr "Dodaj akcje"
 
-#: src/EventsWindow.cpp:52 src/EventGUI.cpp:28
+#: src/EventsWindow.cpp:53 src/EventGUI.cpp:28
 msgid "Event"
 msgstr "Zdarzenie"
 
-#: src/EventsWindow.cpp:118
+#: src/EventsWindow.cpp:119
 msgid "Error - cannot colorize triggered event: row is empty.\n"
 msgstr ""
 "Błąd - nie można pokolorować wyzwalanego zdarzenia: wiersz jest pusty.\n"
 
-#: src/EventsWindow.cpp:136
+#: src/EventsWindow.cpp:137
 msgid "Error - cannot colorize triggered action: row is empty.\n"
 msgstr "Błąd - nie można pokolorować wywołanej akcji: wiersz jest pusty.\n"
 
-#: src/EventGUI.cpp:66 src/ActionGUI.cpp:105
+#: src/EventGUI.cpp:66 src/ActionGUI.cpp:107
 msgid "Type:"
 msgstr "Typ:"
 
@@ -349,122 +366,122 @@ msgstr "Kontroller:"
 msgid "Key:"
 msgstr "Klawisz:"
 
-#: src/EventGUI.cpp:70 src/ActionGUI.cpp:108
+#: src/EventGUI.cpp:70 src/ActionGUI.cpp:110
 msgid "Note:"
 msgstr "Nuta:"
 
-#: src/EventGUI.cpp:81 src/ActionGUI.cpp:118
+#: src/EventGUI.cpp:81 src/ActionGUI.cpp:120
 msgid "OK"
 msgstr "OK"
 
-#: src/EventGUI.cpp:171
+#: src/EventGUI.cpp:172
 msgid "Error: channel has changed, while event is not MIDI-type."
 msgstr ""
 "Błąd: kanał został zmieniony, podczas gdy zdarzenie nie jest typu MIDI."
 
-#: src/EventGUI.cpp:180
+#: src/EventGUI.cpp:182
 msgid "Error: key has changed, while event is not key-type."
 msgstr ""
 "Błąd: klawisz został zmieniony, podczas gdy zdarzenie nie jest typu "
 "klawiatury."
 
-#: src/EventGUI.cpp:190
+#: src/EventGUI.cpp:193
 msgid "Error: controller has changed, while event is not ctrl-type."
 msgstr ""
 "Błąd: kontroler został zmieniony, podczas gdy zdarzenie nie jest typu ctrl."
 
-#: src/EventGUI.cpp:200
+#: src/EventGUI.cpp:204
 msgid "Error: note has changed, while event is not note-type."
 msgstr ""
 "Błąd: nuta została zmieniona, podczas gdy zdarzenie nie jest typu nuty."
 
-#: src/Action.cpp:126
+#: src/Action.cpp:131
 msgid "WARNING: Unknown action triggered."
 msgstr "OSTRZERZENIE: Nieznana akcja została wyzwolona."
 
-#: src/Action.cpp:138
+#: src/Action.cpp:143
 #, c-format
 msgid "Switch sequencer '%s' OFF"
 msgstr "Wyłącz sekwencer '%s'"
 
-#: src/Action.cpp:141
+#: src/Action.cpp:146
 #, c-format
 msgid "Switch sequencer '%s' ON"
 msgstr "Włącz sekwencer '%s'"
 
-#: src/Action.cpp:144
+#: src/Action.cpp:149
 #, c-format
 msgid "Toggle sequencer '%s'"
 msgstr "Przełącz sekwencer '%s'"
 
-#: src/Action.cpp:149
+#: src/Action.cpp:154
 #, c-format
 msgid "Set main note to %d"
 msgstr "Ustaw nutę główną na %d"
 
-#: src/Action.cpp:153
+#: src/Action.cpp:158
 #, c-format
 msgid "Set tempo to %d BPM"
 msgstr "Ustaw tempo na %d BPM"
 
-#: src/Action.cpp:157
+#: src/Action.cpp:162
 #, c-format
 msgid "Set volume of sequencer '%s' to %d"
 msgstr "Ustaw głośność sekwencera '%s' na %d"
 
-#: src/Action.cpp:160
+#: src/Action.cpp:165
 #, c-format
 msgid "Set note %d of sequencer '%s' to %d"
 msgstr "Ustaw nutę %d sekwencera '%s' na %d"
 
-#: src/Action.cpp:163
+#: src/Action.cpp:168
 #, c-format
 msgid "Set chord of sequencer '%s' to %s"
 msgstr "Ustaw akord sekwercera '%s' na %s"
 
-#: src/Action.cpp:166
+#: src/Action.cpp:171
 #, c-format
 msgid "Play sequence in '%s' once"
 msgstr "Odtwórz sekwencję w '%s' jeden raz"
 
-#: src/Action.cpp:169 src/TreeModels.cpp:94
+#: src/Action.cpp:174 src/TreeModels.cpp:94
 #, c-format
 msgid "Toggle passing MIDI events"
 msgstr "Przełącz przekazywanie zdarzeń MIDI"
 
-#: src/Action.cpp:180
+#: src/Action.cpp:185
 #, c-format
 msgid "Toggle pause/play"
 msgstr "Przełącz odtwarzanie"
 
-#: src/Action.cpp:185 src/TreeModels.cpp:91
+#: src/Action.cpp:190 src/TreeModels.cpp:91
 #, c-format
 msgid "Synchronize"
 msgstr "Synchronizuj"
 
-#: src/Action.cpp:188
+#: src/Action.cpp:193
 #, c-format
 msgid "(empty action)"
 msgstr "(pusta akcja)"
 
-#: src/Action.cpp:191
+#: src/Action.cpp:196
 #, c-format
 msgid "(unknown action)"
 msgstr "(nieznana akcja)"
 
-#: src/Action.cpp:198
+#: src/Action.cpp:203
 msgid ""
 "Critical ERROR: Trying to get name of sequencer outside of sequencers "
 "vector.\n"
 msgstr ""
 "BŁĄD krytyczny: Próba zdobycia nazwy sekwencera poza wektorem sekwencerów.\n"
 
-#: src/Action.cpp:200
+#: src/Action.cpp:205
 #, c-format
 msgid "%d (which was removed)"
 msgstr "%d (który został usunięty)"
 
-#: src/Action.cpp:202
+#: src/Action.cpp:207
 #, c-format
 msgid "%s"
 msgstr "%s"
@@ -473,67 +490,64 @@ msgstr "%s"
 msgid "Action"
 msgstr "Akcja"
 
-#: src/ActionGUI.cpp:106
+#: src/ActionGUI.cpp:108
 msgid "Sequencer:"
 msgstr "Sekwencer:"
 
-#: src/ActionGUI.cpp:110
+#: src/ActionGUI.cpp:112
 msgid "Set note "
 msgstr "Ustaw nutę "
 
-#: src/ActionGUI.cpp:111
+#: src/ActionGUI.cpp:113
 msgid " to: "
 msgstr " na: "
 
-#: src/ActionGUI.cpp:112
+#: src/ActionGUI.cpp:114
 msgid "Off"
 msgstr "Wył."
 
-#: src/ActionGUI.cpp:114 src/ActionGUI.cpp:117
+#: src/ActionGUI.cpp:116 src/ActionGUI.cpp:119
 msgid "Toggle"
 msgstr "Przełącz"
 
-#: src/ActionGUI.cpp:343
+#: src/ActionGUI.cpp:346
 msgid "Error: note has changed, while action is not note-type."
 msgstr "Błąd: nuta została zmieniona, podczas gdy akcja nie jest typu nuty."
 
-#: src/ActionGUI.cpp:354
+#: src/ActionGUI.cpp:358
 msgid "Error: tempo has changed, while action is not tempo-type."
-msgstr ""
-"Błąd: tempo zostało zmienione, podczas gdy akcja nie jest typu tempo."
+msgstr "Błąd: tempo zostało zmienione, podczas gdy akcja nie jest typu tempo."
 
-#: src/ActionGUI.cpp:365
+#: src/ActionGUI.cpp:370
 msgid "Error: sequencer has changed, while action is not sequencer-type."
 msgstr ""
 "Błąd: sekwencer zostało zmieniony, podczas gdy akcja nie jest typu "
 "sekwencera."
 
-#: src/ActionGUI.cpp:377
+#: src/ActionGUI.cpp:383
 msgid "Error: volume has changed, while action is not volume-type."
 msgstr ""
 "Błąd: Głośność została zmieniona, podczas gdy akcja nie jest typu głośności."
 
-#: src/ActionGUI.cpp:387
-msgid ""
-"Error: note to set has changed, while action is not set-seq-note-type."
+#: src/ActionGUI.cpp:394
+msgid "Error: note to set has changed, while action is not set-seq-note-type."
 msgstr ""
 "Błąd: nuta do ustawienia została zmieniona, podczas gdy akcja nie jest typu "
 "zmień-nutę-sekwencera."
 
-#: src/ActionGUI.cpp:397
-msgid ""
-"Error: note number has changed, while action is not set-seq-note-type."
+#: src/ActionGUI.cpp:405
+msgid "Error: note number has changed, while action is not set-seq-note-type."
 msgstr ""
 "Błąd: numer nuty do ustawienia został zmieniony, podczas gdy akcja nie jest "
 "typu zmień-nutę-sekwencera."
 
-#: src/ActionGUI.cpp:409
+#: src/ActionGUI.cpp:418
 msgid ""
 "Error: on-off-toggle has changed, while action is not on-off-toggle-type."
 msgstr ""
 "Błąd: on-off-toggle zmieniony, podczas gdy akcja nie jest typu on-off-toggle."
 
-#: src/ActionGUI.cpp:421
+#: src/ActionGUI.cpp:431
 msgid ""
 "Error: play-pause-toggle has changed, while action is not play-pause-type."
 msgstr ""
@@ -663,7 +677,6 @@ msgstr "Własny"
 msgid "Octave"
 msgstr "Oktawa"
 
-#, c-format
 #~ msgid "harmonySEQ, version %s\n"
 #~ msgstr "harmonySEQ, wersja %s\n"
 
@@ -673,7 +686,6 @@ msgstr "Oktawa"
 #~ msgid "Sequencer"
 #~ msgstr "Sekwencer"
 
-#, c-format
 #~ msgid ""
 #~ "    -p --ports n     sets ports number to n\n"
 #~ "    -d --debug       enters debug mode, prints lots of debug messeges\n"
@@ -698,35 +710,27 @@ msgstr "Oktawa"
 #~ msgid "Channel"
 #~ msgstr "Kanał"
 
-#, c-format
 #~ msgid "ERROR - error while trying to read %s\n"
 #~ msgstr "BŁĄD - błąd podczas czytania pliku %s\n"
 
-#, c-format
 #~ msgid "When note %d on channel %d is moved..."
 #~ msgstr "Gdy kontroler %d na kanale %d jest poruszany..."
 
-#, c-format
 #~ msgid "Set tempo to %d"
 #~ msgstr "Ustaw tempo na %d"
 
-#, c-format
 #~ msgid "Set volume of sequencer %d to %d"
 #~ msgstr "Ustaw głośność sekwencera %d na %d"
 
-#, c-format
 #~ msgid "(empty event)"
 #~ msgstr "(puste zdarzenie)"
 
-#, c-format
 #~ msgid "Switch sequencer %d ON"
 #~ msgstr "Włącz sekewncer %d"
 
-#, c-format
 #~ msgid "Switch sequencer %d OFF"
 #~ msgstr "Wyłącz sekwencer %d"
 
-#, c-format
 #~ msgid "Toggle sequencer %d"
 #~ msgstr "Przełącz sekwencer %d"
 
@@ -741,7 +745,8 @@ msgstr "Oktawa"
 
 #~ msgid "Error: sequencer has changed, while action is not key-type."
 #~ msgstr ""
-#~ "Błąd: sekwencer został zmieniony, podczas gdy akcja nie jest typu sekwencera."
+#~ "Błąd: sekwencer został zmieniony, podczas gdy akcja nie jest typu "
+#~ "sekwencera."
 
 #~ msgid "Notes:"
 #~ msgstr "Nuty:"
@@ -750,12 +755,11 @@ msgstr "Oktawa"
 #~ msgstr "Sekwencer/Ustaw wszystkie nuty"
 
 #~ msgid ""
-#~ "Error: one of 6 notes to set has changed, while action is not of change-all-"
-#~ "notes type."
+#~ "Error: one of 6 notes to set has changed, while action is not of change-"
+#~ "all-notes type."
 #~ msgstr ""
-#~ "Błąd: jedna z 6 nut do ustawienia została zmieniona, podczas gdy akcja nie "
-#~ "jest typy zmien-wszystkie-nuty."
+#~ "Błąd: jedna z 6 nut do ustawienia została zmieniona, podczas gdy akcja "
+#~ "nie jest typy zmien-wszystkie-nuty."
 
-#, c-format
 #~ msgid "Set notes of sequencer '%s' to %d,%d,%d,%d,%d,%d "
 #~ msgstr "Ustaw nuty sekwencera '%s' na %d,%d,%d,%d,%d,%d "
