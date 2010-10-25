@@ -1,0 +1,620 @@
+# German translation for harmonyseq
+# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+# This file is distributed under the same license as the harmonyseq package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: harmonyseq\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2010-10-19 19:07+0200\n"
+"PO-Revision-Date: 2010-10-24 12:12+0000\n"
+"Last-Translator: Marqin <Unknown>\n"
+"Language-Team: German <de@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2010-10-25 04:56+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+#: src/main.cpp:258
+#, c-format
+msgid "unknown option '%c'\n"
+msgstr "unbekannte Option '%c'\n"
+
+#: src/main.cpp:261
+#, c-format
+msgid "unrecognized option '%s'\n"
+msgstr "unerkannt Option '%s'\n"
+
+#: src/main.cpp:315
+#, c-format
+msgid ""
+"harmonySEQ, version %s\n"
+"\n"
+"usage: harmonySEQ [-hdvp] [FILE]\n"
+"\n"
+"    -p --ports n     sets ports number to n\n"
+"    -d --debug       enters debug mode, prints lots of debug messeges\n"
+"    -h --help        prints this help messase and exits\n"
+"    -v --version     prints the program version\n"
+msgstr ""
+
+#: src/main.cpp:323
+#, c-format
+msgid ""
+"       --pass-midi   passes the midi events through the program by default\n"
+msgstr ""
+
+#: src/MainWindow.cpp:41 src/ActionGUI.cpp:107
+msgid "Tempo:"
+msgstr ""
+
+#: src/MainWindow.cpp:42
+msgid "Main Note:"
+msgstr ""
+
+#: src/MainWindow.cpp:69 src/EventsWindow.cpp:48
+msgid "ID"
+msgstr "KENNUNG"
+
+#: src/MainWindow.cpp:71
+msgid "Name"
+msgstr ""
+
+#: src/MainWindow.cpp:76 src/SequencerGUI.cpp:65 src/ActionGUI.cpp:113
+msgid "On"
+msgstr ""
+
+#: src/MainWindow.cpp:83
+msgid "MN"
+msgstr ""
+
+#: src/MainWindow.cpp:88
+msgid "Chan"
+msgstr ""
+
+#: src/MainWindow.cpp:89
+msgid "Res"
+msgstr ""
+
+#: src/MainWindow.cpp:90
+msgid "Len"
+msgstr ""
+
+#: src/MainWindow.cpp:91
+msgid "Vol"
+msgstr ""
+
+#: src/MainWindow.cpp:151
+msgid "Add"
+msgstr ""
+
+#: src/MainWindow.cpp:153
+msgid "Save"
+msgstr ""
+
+#: src/MainWindow.cpp:155
+msgid "Open"
+msgstr ""
+
+#: src/MainWindow.cpp:157 src/EventsWindow.cpp:38
+msgid "Remove"
+msgstr ""
+
+#: src/MainWindow.cpp:160
+msgid "Clone"
+msgstr ""
+
+#: src/MainWindow.cpp:163
+msgid "Events"
+msgstr ""
+
+#: src/MainWindow.cpp:167
+msgid "Pass MIDI events"
+msgstr ""
+
+#: src/MainWindow.cpp:222
+msgid "activated row "
+msgstr ""
+
+#: src/MainWindow.cpp:223
+msgid ", name is: "
+msgstr ""
+
+#: src/MainWindow.cpp:467 src/Action.cpp:177 src/ActionGUI.cpp:116
+#, c-format
+msgid "Play"
+msgstr ""
+
+#: src/MainWindow.cpp:472 src/Action.cpp:174 src/ActionGUI.cpp:115
+#, c-format
+msgid "Pause"
+msgstr ""
+
+#: src/MidiDriver.cpp:51
+msgid "Failed to open ALSA sequencer.\n"
+msgstr ""
+
+#: src/MidiDriver.cpp:63
+msgid "Failed to create output port.\n"
+msgstr ""
+
+#: src/MidiDriver.cpp:72
+msgid "Failed to create input port.\n"
+msgstr ""
+
+#: src/MidiDriver.cpp:78
+msgid "Alsa midi driver init successfull.\n"
+msgstr ""
+
+#: src/Sequencer.cpp:40
+#, c-format
+msgid "seq %d"
+msgstr ""
+
+#: src/SequencerGUI.cpp:52
+msgid "MIDI channel:"
+msgstr ""
+
+#: src/SequencerGUI.cpp:53 src/ActionGUI.cpp:109
+msgid "Volume:"
+msgstr ""
+
+#: src/SequencerGUI.cpp:66
+msgid "Apply main note"
+msgstr ""
+
+#: src/SequencerGUI.cpp:75
+msgid "Resolution:"
+msgstr ""
+
+#: src/SequencerGUI.cpp:92
+msgid "Length:"
+msgstr ""
+
+#: src/messages.cpp:24
+#, c-format
+msgid "Debug mode started.\n"
+msgstr ""
+
+#: src/Files.cpp:40
+msgid "Choose a file to save..."
+msgstr ""
+
+#: src/Files.cpp:71
+#, c-format
+msgid "File '%s'  already exist."
+msgstr ""
+
+#: src/Files.cpp:72
+msgid "Do you want to overwrite this file?"
+msgstr ""
+
+#: src/Files.cpp:77
+#, c-format
+msgid "ERROR - error while opening file %s to write.\n"
+msgstr ""
+
+#: src/Files.cpp:143
+msgid "Choose a file to open..."
+msgstr ""
+
+#: src/Files.cpp:187
+#, c-format
+msgid "ERROR - error while trying to read file '%s'\n"
+msgstr ""
+
+#: src/Files.cpp:193
+#, c-format
+msgid "ERROR - error while trying to read file '%s': "
+msgstr ""
+
+#: src/Files.cpp:207
+#, c-format
+msgid ""
+"This file was created by harmonySEQ in a newer version (%d.%d.%d). This "
+"means it may contain data that is suppored by the newer wersion, but not by "
+"the version you are using (%d.%d.%d). It is recommended not to open such "
+"file, since it is very likely it may produce strange errors, or may event "
+"crash the program unexpectedly. However, in some cases one may want to open "
+"such file anyway, for example if it is sure it will open without trouble. "
+"Select YES to do so."
+msgstr ""
+
+#: src/Files.cpp:208 src/Files.cpp:216
+msgid "Do you want to open this file?"
+msgstr ""
+
+#: src/Files.cpp:215
+#, c-format
+msgid ""
+"This file was created by harmonySEQ in an older version (%d.%d.%d). This "
+"means it may miss some data that is required to be in file by the version "
+"you are using (%d.%d.%d). It is recommended not to open such file, since it "
+"is very likely it may produce strange errors, or may event crash the program "
+"unexpectedly. However, in some cases one may want to open such file anyway, "
+"for example if it is sure it will open without trouble. Select YES to do so."
+msgstr ""
+
+#: src/Files.cpp:310
+#, c-format
+msgid "ERROR - Glib::KeyFile error while processing file '%s': "
+msgstr ""
+
+#: src/Files.cpp:319
+#, c-format
+msgid "ERROR - unknown error while processing file '%s': "
+msgstr ""
+
+#: src/Event.cpp:57
+#, c-format
+msgid "When note %d on any channel gets on..."
+msgstr ""
+
+#: src/Event.cpp:58
+#, c-format
+msgid "When note %d on channel %d gets on..."
+msgstr ""
+
+#: src/Event.cpp:61
+#, c-format
+msgid "When key %s is pressed..."
+msgstr ""
+
+#: src/Event.cpp:65
+#, c-format
+msgid "This is an empty event, that will never be triggered."
+msgstr ""
+
+#: src/Event.cpp:69
+#, c-format
+msgid "When controller %d on any channel is moved..."
+msgstr ""
+
+#: src/Event.cpp:70
+#, c-format
+msgid "When controller %d on channel %d is moved..."
+msgstr ""
+
+#: src/Event.cpp:74
+#, c-format
+msgid "Unknown event."
+msgstr ""
+
+#: src/Event.cpp:126
+msgid "Error - empty event would be triggered.\n"
+msgstr ""
+
+#: src/EventsWindow.cpp:36
+msgid "Add Event"
+msgstr ""
+
+#: src/EventsWindow.cpp:42
+msgid "Add Action"
+msgstr ""
+
+#: src/EventsWindow.cpp:52 src/EventGUI.cpp:28
+msgid "Event"
+msgstr ""
+
+#: src/EventsWindow.cpp:118
+msgid "Error - cannot colorize triggered event: row is empty.\n"
+msgstr ""
+
+#: src/EventsWindow.cpp:136
+msgid "Error - cannot colorize triggered action: row is empty.\n"
+msgstr ""
+
+#: src/EventGUI.cpp:66 src/ActionGUI.cpp:105
+msgid "Type:"
+msgstr ""
+
+#: src/EventGUI.cpp:67
+msgid "Channel:"
+msgstr ""
+
+#: src/EventGUI.cpp:68
+msgid "Controller:"
+msgstr ""
+
+#: src/EventGUI.cpp:69
+msgid "Key:"
+msgstr ""
+
+#: src/EventGUI.cpp:70 src/ActionGUI.cpp:108
+msgid "Note:"
+msgstr ""
+
+#: src/EventGUI.cpp:81 src/ActionGUI.cpp:118
+msgid "OK"
+msgstr ""
+
+#: src/EventGUI.cpp:171
+msgid "Error: channel has changed, while event is not MIDI-type."
+msgstr ""
+
+#: src/EventGUI.cpp:180
+msgid "Error: key has changed, while event is not key-type."
+msgstr ""
+
+#: src/EventGUI.cpp:190
+msgid "Error: controller has changed, while event is not ctrl-type."
+msgstr ""
+
+#: src/EventGUI.cpp:200
+msgid "Error: note has changed, while event is not note-type."
+msgstr ""
+
+#: src/Action.cpp:126
+msgid "WARNING: Unknown action triggered."
+msgstr ""
+
+#: src/Action.cpp:138
+#, c-format
+msgid "Switch sequencer '%s' OFF"
+msgstr ""
+
+#: src/Action.cpp:141
+#, c-format
+msgid "Switch sequencer '%s' ON"
+msgstr ""
+
+#: src/Action.cpp:144
+#, c-format
+msgid "Toggle sequencer '%s'"
+msgstr ""
+
+#: src/Action.cpp:149
+#, c-format
+msgid "Set main note to %d"
+msgstr ""
+
+#: src/Action.cpp:153
+#, c-format
+msgid "Set tempo to %d BPM"
+msgstr ""
+
+#: src/Action.cpp:157
+#, c-format
+msgid "Set volume of sequencer '%s' to %d"
+msgstr ""
+
+#: src/Action.cpp:160
+#, c-format
+msgid "Set note %d of sequencer '%s' to %d"
+msgstr ""
+
+#: src/Action.cpp:163
+#, c-format
+msgid "Set chord of sequencer '%s' to %s"
+msgstr ""
+
+#: src/Action.cpp:166
+#, c-format
+msgid "Play sequence in '%s' once"
+msgstr ""
+
+#: src/Action.cpp:169 src/TreeModels.cpp:94
+#, c-format
+msgid "Toggle passing MIDI events"
+msgstr ""
+
+#: src/Action.cpp:180
+#, c-format
+msgid "Toggle pause/play"
+msgstr ""
+
+#: src/Action.cpp:185 src/TreeModels.cpp:91
+#, c-format
+msgid "Synchronize"
+msgstr ""
+
+#: src/Action.cpp:188
+#, c-format
+msgid "(empty action)"
+msgstr ""
+
+#: src/Action.cpp:191
+#, c-format
+msgid "(unknown action)"
+msgstr ""
+
+#: src/Action.cpp:198
+msgid ""
+"Critical ERROR: Trying to get name of sequencer outside of sequencers "
+"vector.\n"
+msgstr ""
+
+#: src/Action.cpp:200
+#, c-format
+msgid "%d (which was removed)"
+msgstr ""
+
+#: src/Action.cpp:202
+#, c-format
+msgid "%s"
+msgstr ""
+
+#: src/ActionGUI.cpp:31
+msgid "Action"
+msgstr ""
+
+#: src/ActionGUI.cpp:106
+msgid "Sequencer:"
+msgstr ""
+
+#: src/ActionGUI.cpp:110
+msgid "Set note "
+msgstr ""
+
+#: src/ActionGUI.cpp:111
+msgid " to: "
+msgstr ""
+
+#: src/ActionGUI.cpp:112
+msgid "Off"
+msgstr ""
+
+#: src/ActionGUI.cpp:114 src/ActionGUI.cpp:117
+msgid "Toggle"
+msgstr ""
+
+#: src/ActionGUI.cpp:343
+msgid "Error: note has changed, while action is not note-type."
+msgstr ""
+
+#: src/ActionGUI.cpp:354
+msgid "Error: tempo has changed, while action is not tempo-type."
+msgstr ""
+
+#: src/ActionGUI.cpp:365
+msgid "Error: sequencer has changed, while action is not sequencer-type."
+msgstr ""
+
+#: src/ActionGUI.cpp:377
+msgid "Error: volume has changed, while action is not volume-type."
+msgstr ""
+
+#: src/ActionGUI.cpp:387
+msgid ""
+"Error: note to set has changed, while action is not set-seq-note-type."
+msgstr ""
+
+#: src/ActionGUI.cpp:397
+msgid ""
+"Error: note number has changed, while action is not set-seq-note-type."
+msgstr ""
+
+#: src/ActionGUI.cpp:409
+msgid ""
+"Error: on-off-toggle has changed, while action is not on-off-toggle-type."
+msgstr ""
+
+#: src/ActionGUI.cpp:421
+msgid ""
+"Error: play-pause-toggle has changed, while action is not play-pause-type."
+msgstr ""
+
+#: src/TreeModels.cpp:47 src/TreeModels.cpp:64
+msgid "Empty"
+msgstr ""
+
+#: src/TreeModels.cpp:50
+msgid "Keyboard"
+msgstr ""
+
+#: src/TreeModels.cpp:53
+msgid "Note"
+msgstr ""
+
+#: src/TreeModels.cpp:56
+msgid "Controller"
+msgstr ""
+
+#: src/TreeModels.cpp:67
+msgid "Sequencer/Switch On-Off"
+msgstr ""
+
+#: src/TreeModels.cpp:70
+msgid "Sequencer/Play once"
+msgstr ""
+
+#: src/TreeModels.cpp:73
+msgid "Sequencer/Set volume"
+msgstr ""
+
+#: src/TreeModels.cpp:76
+msgid "Sequencer/Set one note"
+msgstr ""
+
+#: src/TreeModels.cpp:79
+msgid "Sequencer/Set chord"
+msgstr ""
+
+#: src/TreeModels.cpp:82
+msgid "Set main note"
+msgstr ""
+
+#: src/TreeModels.cpp:85
+msgid "Set tempo"
+msgstr ""
+
+#: src/TreeModels.cpp:88
+msgid "Play/pause"
+msgstr ""
+
+#: src/TreeModels.cpp:114
+msgid "All"
+msgstr ""
+
+#: src/TreeModels.cpp:173 src/TreeModels.cpp:190
+msgid "Major"
+msgstr ""
+
+#: src/TreeModels.cpp:176 src/TreeModels.cpp:193
+msgid "Minor"
+msgstr ""
+
+#: src/TreeModels.cpp:179
+msgid "Augmented"
+msgstr ""
+
+#: src/TreeModels.cpp:182
+msgid "Diminished"
+msgstr ""
+
+#: src/Chord.cpp:214
+#, c-format
+msgid "Custom: %d, %d, %d, %d, %d, %d"
+msgstr ""
+
+#: src/Chord.cpp:218
+#, c-format
+msgid "Guitar: %s major"
+msgstr ""
+
+#: src/Chord.cpp:220
+#, c-format
+msgid "Guitar: %s minor"
+msgstr ""
+
+#: src/Chord.cpp:225
+#, c-format
+msgid "Triad: %s major"
+msgstr ""
+
+#: src/Chord.cpp:228
+#, c-format
+msgid "Triad: %s minor"
+msgstr ""
+
+#: src/Chord.cpp:231
+#, c-format
+msgid "Triad: %s augumented"
+msgstr ""
+
+#: src/Chord.cpp:234
+#, c-format
+msgid "Triad: %s diminished"
+msgstr ""
+
+#: src/ChordWidget.cpp:31
+msgid "Chord"
+msgstr ""
+
+#: src/ChordWidget.cpp:44
+msgid "Triad"
+msgstr ""
+
+#: src/ChordWidget.cpp:45
+msgid "Guitar mode"
+msgstr ""
+
+#: src/ChordWidget.cpp:46
+msgid "Custom"
+msgstr ""
+
+#: src/ChordWidget.cpp:92
+msgid "Octave"
+msgstr ""
