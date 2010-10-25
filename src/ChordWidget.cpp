@@ -147,7 +147,6 @@ void ChordWidget::UpdateNotes(){
         note_buttons[x]->set_value(chord->GetNote(x));
     }
     we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = false;
-    on_changed.emit();
 
 }
 

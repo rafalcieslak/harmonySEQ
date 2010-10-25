@@ -24,9 +24,13 @@
 #include "global.h"
 
 namespace Files{
-void SaveToFile();
-void LoadFileDialog();
-bool LoadFile(Glib::ustring file);
+    extern bool file_modified;
+    extern Glib::ustring file_name;
+    
+    bool SetFileModified(bool modified);
+    void SaveToFile();
+    void LoadFileDialog();
+    bool LoadFile(Glib::ustring file);
 }
 
 

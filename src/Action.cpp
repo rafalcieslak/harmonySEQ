@@ -23,7 +23,7 @@
 #include "messages.h"
 #include "EventsWindow.h"
 #include "MidiDriver.h"
-
+#include "Files.h"
 
 Action::Action(ActionTypes t, int a1, int a2){
     args.resize(ACTION_ARGS_NUM);
@@ -69,32 +69,37 @@ void Action::Trigger(int data){
         case MAINOTE_SET:
             mainwindow->main_note.set_value((double)args[1]);
             mainnote = args[1];
+            Files::SetFileModified(1);
             break;
 
         case TEMPO_SET:
             mainwindow->tempo_button.set_value((double)args[1]);
             tempo = args[1];
+            Files::SetFileModified(1);
             break;
 
         case SEQ_VOLUME_SET:
             if (!sequencers[args[1]]) break;
             sequencers[args[1]]->SetVolume(args[2]);
+            Files::SetFileModified(1);
             break;
 
         case SEQ_CHANGE_ONE_NOTE:
             if (!sequencers[args[1]]) break;
             sequencers[args[1]]->chord.SetNote(args[2]-1, args[3]);
             sequencers[args[1]]->UpdateGuiChord(); //nessesary //its a temporary wokraround, since UpdateGui seems to crash. Howewer, it is not needed to update anything else than notes.
+            Files::SetFileModified(1);
             break;
 
         case SEQ_CHANGE_CHORD:
             if (!sequencers[args[1]]) break;
             sequencers[args[1]]->chord.Set(chord);
             sequencers[args[1]]->UpdateGuiChord(); //nessesary //its a temporary wokraround, since UpdateGui seems to crash. Howewer, it is not needed to update anything else than notes.
+            Files::SetFileModified(1);
              break;
         case SEQ_PLAY_ONCE:
             if (!sequencers[args[1]]) break;
-            sequencers[args[1]]->SetPlayOncePhase(1);;
+            sequencers[args[1]]->SetPlayOncePhase(1);
             break;
         case TOGGLE_PASS_MIDI:
             mainwindow->pass_toggle.set_active(!passing_midi); //signal handle sets passingmidi variable automatically

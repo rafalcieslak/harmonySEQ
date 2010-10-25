@@ -32,12 +32,10 @@
 
 MainWindow::MainWindow()
 {
-    char temp[30];
-    sprintf(temp, "harmonySEQ %s", VERSION);
-    set_title(temp);
     set_border_width(5);
     //set_default_size(300,500);
-
+    UpdateTitle();
+            
     tempolabel.set_text(_("Tempo:"));
     mainnotelabel.set_text(_("Main Note:"));
     add(vbox1);
@@ -186,17 +184,30 @@ MainWindow::~MainWindow()
 
 }
 
+void MainWindow::UpdateTitle(){
+    char temp[300];
+    if (Files::file_modified)
+       sprintf(temp, "harmonySEQ %s - %s [*]", VERSION,Files::file_name.c_str()) ;
+    else
+        sprintf(temp, "harmonySEQ %s - %s", VERSION,Files::file_name.c_str());
+    set_title(temp);
+}
 
 void
 MainWindow::MainNoteChanged()
 {
     mainnote = main_note.get_value();
+    Files::SetFileModified(1);
 }
 
 bool
 MainWindow::on_delete_event(GdkEventAny* event)
 {
     *dbg << "user clicked X\n";
+    if(Files::file_modified)
+        if(!Ask(_("The file had unsaved changes."),_("Are sure you want to quit?")))
+          return 1;
+    
     running = 0;
     return 0;
 }
@@ -206,7 +217,7 @@ MainWindow::TempoChanged()
 {
     tempo = tempo_button.get_value();
     midi->SetTempo(tempo);
-
+    Files::SetFileModified(1);
 }
 
 void
@@ -242,6 +253,8 @@ MainWindow::OnMutedToggleToggled(const Glib::ustring& path)
    sequencers[row[m_columns_sequencers.col_ID]]->SetOn(!row[m_columns_sequencers.col_muted]);
    sequencers[row[m_columns_sequencers.col_ID]]->UpdateGui();
    if(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window) RefreshRow(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window);
+
+   //Files::SetFileModified(1); do not detect mutes
 }
 
 void MainWindow::OnApplyMainNoteToggleToggled(const Glib::ustring& path){
@@ -252,6 +265,7 @@ void MainWindow::OnApplyMainNoteToggleToggled(const Glib::ustring& path){
     sequencers[row[m_columns_sequencers.col_ID]]->SetApplyMainNote(!row[m_columns_sequencers.col_apply_mainnote]);
    if(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window) RefreshRow(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window);
 
+    Files::SetFileModified(1);
 }
 
 void
@@ -265,6 +279,7 @@ MainWindow::OnNameEdited(const Glib::ustring& path, const Glib::ustring& newtext
    if(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window) RefreshRow(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window);
 
     eventswindow->RefreshAll();
+    Files::SetFileModified(1);
 }
 
 Gtk::TreeModel::RowReference MainWindow::AddSequencerRow(int x)
@@ -359,9 +374,17 @@ void MainWindow::RefreshRow(Gtk::TreeRowReference rowref){
 
 void MainWindow::OnLoadClicked(){
 
+    if(Files::file_modified)
+        if(!Ask(_("The file had unsaved changes."),_("Are sure you want to loose them and open another file?")))
+        {
+            return;
+        }
+        
+
+
     Files::LoadFileDialog();
 
-    
+    Files::SetFileModified(0);
     //erasing smallers the treeview, but not the window.
     resize(2,2); //resizing to a tiny size, but the window won't get that small, it will be big enough to show all widgets.
 }
@@ -386,6 +409,7 @@ void MainWindow::OnRemoveClicked(){
 
     eventswindow->InitTreeData();
 
+    Files::SetFileModified(1);
 }
 
 void MainWindow::OnButtonAddClicked(){
@@ -395,6 +419,7 @@ void MainWindow::OnButtonAddClicked(){
     Gtk::TreeModel::iterator iter = rowref.get_model()->get_iter(rowref.get_path());
     m_TreeView.get_selection()->select(iter);
 
+    Files::SetFileModified(1);
 }
 
 void MainWindow::OnCloneClicked(){
@@ -407,7 +432,9 @@ void MainWindow::OnCloneClicked(){
     iter = rowref.get_model()->get_iter(rowref.get_path());
     m_TreeView.get_selection()->select(iter);
 
-    FlashTempoStart();
+   // FlashTempoStart(); wtf it is doing here?????
+
+    Files::SetFileModified(1);
 }
 
 void MainWindow::FlashTempoStart(){

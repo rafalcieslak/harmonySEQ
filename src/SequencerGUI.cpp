@@ -25,6 +25,7 @@
 #include "MainWindow.h"
 #include "Event.h"
 #include "ChordWidget.h"
+#include "Files.h"
 SequencerWindow::SequencerWindow(Sequencer* prt)
 {
     *dbg << "constructing new SequencerWindow\n";
@@ -118,13 +119,10 @@ SequencerWindow::~SequencerWindow(){
     delete chordwidget;
 }
 
-void SequencerWindow::OnNotesChanged(int note){
-}
-
 void SequencerWindow::OnSequenceChanged(int seq){
     *dbg << "seq changed";
     parent->sequence[seq] = sequence_scales[seq]->get_value();
-
+    Files::SetFileModified(1);
 }
 
 void SequencerWindow::UpdateValues(){
@@ -158,6 +156,7 @@ void SequencerWindow::OnChannelChanged(){
 
     parent->channel = channel_button.get_value();
     if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
+    Files::SetFileModified(1);
 }
 
 void SequencerWindow::OnToggleMuteToggled(){
@@ -165,17 +164,20 @@ void SequencerWindow::OnToggleMuteToggled(){
     parent->on = tgl_mute.get_active();
     parent->play_once_phase = 0;
     if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
+
+    //Files::SetFileModified(1); come on, do not write mutes.
 }
 
 void SequencerWindow::OnToggleApplyMainNoteToggled(){
     parent->apply_mainnote = tgl_apply_mainnote.get_active();
     if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
-
+    Files::SetFileModified(1);
 }
 
 void SequencerWindow::OnVolumeChanged(){
     parent->volume = volume_button.get_value();
     if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
+    Files::SetFileModified(1);
 }
 
 void SequencerWindow::OnResolutionChanged(){
@@ -185,6 +187,7 @@ void SequencerWindow::OnResolutionChanged(){
     InitSeqSliders();
     
     if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
+    Files::SetFileModified(1);
 }
 
 void SequencerWindow::InitSeqSliders(){
@@ -217,5 +220,12 @@ void SequencerWindow::OnLengthChanged(){
     parent->length = row[m_Columns_len.len];
     *dbg << "will refresh row\n";
     if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
+
+    Files::SetFileModified(1);
+
+}
+
+void SequencerWindow::OnChordWidgetChanged(){
+    Files::SetFileModified(1);
 
 }

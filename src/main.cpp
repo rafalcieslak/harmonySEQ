@@ -289,6 +289,9 @@ int main(int argc, char** argv) {
 
     InitDefaultData();
 
+    Files::file_name = _("Untitled"); //Here we init the filename, that shouldn't be empty anymore.
+    Files::SetFileModified(0);
+
     if (file_from_cli) TryToOpenFileFromCommandLine();
     //else InitDefaultData();
 

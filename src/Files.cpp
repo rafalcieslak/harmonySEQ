@@ -29,10 +29,24 @@
 
 namespace Files {
 
+     bool file_modified;
+    Glib::ustring file_name;
+    
 bool fexists(const char *filename)
 {
   ifstream ifile(filename);
   return ifile;
+}
+
+bool SetFileModified(bool modified){
+    if (modified != file_modified){
+        file_modified = modified;
+        mainwindow->UpdateTitle();
+    }
+    else
+        file_modified = modified;
+
+    return file_modified;
 }
 
 void SaveToFile(){
@@ -59,7 +73,7 @@ void SaveToFile(){
     char temp2[300];
     ofstream output_file;
 
-    
+    int found;
     switch (result){
         case Gtk::RESPONSE_OK:
         
@@ -127,6 +141,11 @@ void SaveToFile(){
             output_file << kf.to_data().c_str();
 
             output_file.close();
+
+             found =  filename.find_last_of("/\\");
+             file_name = filename.substr(found+1);
+            mainwindow->UpdateTitle();
+            SetFileModified(0); //file is clean now
             break;
         case Gtk::RESPONSE_CANCEL:
 
@@ -306,6 +325,12 @@ bool LoadFile(Glib::ustring file){
         //gdk_threads_enter();
         midi->Sync();
         //gdk_threads_leave();
+
+        SetFileModified(0);
+        int found =  file.find_last_of("/\\");
+        file_name = file.substr(found+1);
+        mainwindow->UpdateTitle();
+        
     }catch(Glib::KeyFileError error){
         sprintf(temp, _("ERROR - Glib::KeyFile error while processing file '%s': "), file.c_str());
         *err << temp;

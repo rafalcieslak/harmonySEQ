@@ -20,6 +20,7 @@
 #include "EventsWindow.h"
 #include "Event.h"
 #include "messages.h"
+#include "Files.h"
 
 EventsWindow::EventsWindow(){
     char temp[30];
@@ -193,6 +194,7 @@ void EventsWindow::OnAddEventClicked(){
     events[events.size()-1]->row_in_event_window = rowref;
     events[events.size()-1]->ShowWindow();
 
+    Files::SetFileModified(1);
 }
 
 void EventsWindow::OnRemoveClicked(){
@@ -222,6 +224,7 @@ void EventsWindow::OnRemoveClicked(){
     }
     resize(2,2);
 
+    Files::SetFileModified(1);
 }
 
 void EventsWindow::OnSelectionChanged(){
@@ -277,4 +280,6 @@ void EventsWindow::OnAddActionClicked(){
     row = *iter_selected;
     if (row[m_columns.col_type] == EVENT)
         m_TreeView.expand_row(m_refTreeModel->get_path(iter_selected),false); //auto expanding if possible to show the action;
+    
+    Files::SetFileModified(1);
 }

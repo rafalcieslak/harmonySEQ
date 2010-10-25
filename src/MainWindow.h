@@ -30,6 +30,7 @@ public:
     MainWindow();
     virtual ~MainWindow();
 
+    void UpdateTitle();
     //when user presses exit
     bool on_delete_event(GdkEventAny* event);
     

@@ -21,7 +21,7 @@
 #include "EventsWindow.h"
 #include "messages.h"
 #include "TreeModels.h"
-
+#include "Files.h"
 EventGUI::EventGUI(Event *prt){
     parent = prt;
 
@@ -159,6 +159,7 @@ void EventGUI::OnTypeChanged(){
     if (!DO_NOT_INIT_TYPE) InitType();
     label_preview.set_text(parent->GetLabel());
     if(parent->row_in_event_window) eventswindow->UpdateRow(parent->row_in_event_window);
+    Files::SetFileModified(1);
 }
 
 
@@ -172,6 +173,7 @@ void EventGUI::OnChannelChanged(){
 
     label_preview.set_text(parent->GetLabel());
     if(parent->row_in_event_window) eventswindow->UpdateRow(parent->row_in_event_window);
+    Files::SetFileModified(1);
 }
 
 void EventGUI::OnKeyChanged(){
@@ -181,6 +183,7 @@ void EventGUI::OnKeyChanged(){
 
     label_preview.set_text(parent->GetLabel());
     if(parent->row_in_event_window) eventswindow->UpdateRow(parent->row_in_event_window);
+    Files::SetFileModified(1);
 }
 
 void EventGUI::OnCtrlChanged(){
@@ -191,6 +194,7 @@ void EventGUI::OnCtrlChanged(){
 
     label_preview.set_text(parent->GetLabel());
     if(parent->row_in_event_window) eventswindow->UpdateRow(parent->row_in_event_window);
+    Files::SetFileModified(1);
 
 }
 
@@ -201,6 +205,7 @@ void EventGUI::OnNoteChanged(){
 
     label_preview.set_text(parent->GetLabel());
     if(parent->row_in_event_window) eventswindow->UpdateRow(parent->row_in_event_window);
+    Files::SetFileModified(1);
 
 }
 void EventGUI::OnOKClicked(){

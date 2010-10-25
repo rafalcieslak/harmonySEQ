@@ -21,7 +21,7 @@
 #include "TreeModels.h"
 #include "EventsWindow.h"
 #include "messages.h"
-
+#include "Files.h"
 
 ActionGUI::ActionGUI(Action *prt):
                     chordwidget(&prt->chord)
@@ -287,6 +287,7 @@ void ActionGUI::OnTypeChanged(){
 
     label_preview.set_text(parent->GetLabel());
     if(parent->row_in_event_window) eventswindow->UpdateRow(parent->row_in_event_window);
+    Files::SetFileModified(1);
 }
 
 void ActionGUI::InitType(){
@@ -299,7 +300,7 @@ void ActionGUI::InitType(){
             Seqs_combo.set_active(0);
             parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
             on_off_toggle_TOGGLE.set_active(1); //it does not triggler signal_clicked, so we have to set the mode mannually!
-            parent->args[2]=0;
+            parent->args[2]=2;
             break;
         case Action::SEQ_VOLUME_SET:
             Seqs_combo.set_active(0);
@@ -347,6 +348,7 @@ void ActionGUI::OnNoteChanged(){
     label_preview.set_text(parent->GetLabel());
     eventswindow->UpdateRow(parent->row_in_event_window);
 
+    Files::SetFileModified(1);
 }
 
 void ActionGUI::OnTempoChanged(){
@@ -358,6 +360,7 @@ void ActionGUI::OnTempoChanged(){
     label_preview.set_text(parent->GetLabel());
     eventswindow->UpdateRow(parent->row_in_event_window);
 
+    Files::SetFileModified(1);
 }
 
 void ActionGUI::OnSeqChanged(){
@@ -369,6 +372,7 @@ void ActionGUI::OnSeqChanged(){
     label_preview.set_text(parent->GetLabel());
     eventswindow->UpdateRow(parent->row_in_event_window);
 
+    Files::SetFileModified(1);
     
 }
 
@@ -381,6 +385,7 @@ void ActionGUI::OnVolumeChanged(){
     label_preview.set_text(parent->GetLabel());
     eventswindow->UpdateRow(parent->row_in_event_window);
 
+    Files::SetFileModified(1);
 }
 
 void ActionGUI::OnNoteSeqChanged(){
@@ -391,6 +396,7 @@ void ActionGUI::OnNoteSeqChanged(){
     label_preview.set_text(parent->GetLabel());
     eventswindow->UpdateRow(parent->row_in_event_window);
 
+    Files::SetFileModified(1);
 }
 
 void ActionGUI::OnNoteNrChanged(){
@@ -400,7 +406,8 @@ void ActionGUI::OnNoteNrChanged(){
 
     label_preview.set_text(parent->GetLabel());
     eventswindow->UpdateRow(parent->row_in_event_window);
-    
+
+    Files::SetFileModified(1);
 }
 
 void ActionGUI::OnOnOffToggleChanged(){
@@ -412,7 +419,8 @@ void ActionGUI::OnOnOffToggleChanged(){
 
     label_preview.set_text(parent->GetLabel());
     eventswindow->UpdateRow(parent->row_in_event_window);
-    
+
+    Files::SetFileModified(1);
 }
 
 void ActionGUI::OnPlayOnOffToggleClicked(){
@@ -425,6 +433,7 @@ void ActionGUI::OnPlayOnOffToggleClicked(){
     label_preview.set_text(parent->GetLabel());
     eventswindow->UpdateRow(parent->row_in_event_window);
 
+    Files::SetFileModified(1);
 }
 
 void ActionGUI::OnChordWidgetChanged(){
@@ -433,6 +442,7 @@ void ActionGUI::OnChordWidgetChanged(){
     label_preview.set_text(parent->GetLabel());
     eventswindow->UpdateRow(parent->row_in_event_window);
 
+    Files::SetFileModified(1);
 
 }
 

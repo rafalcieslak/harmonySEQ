@@ -61,7 +61,7 @@ public:
 
 
 private:
-    void OnNotesChanged(int note);
+    void OnChordWidgetChanged();
     void OnSequenceChanged(int seq);
     void OnChannelChanged();
     void OnVolumeChanged();
