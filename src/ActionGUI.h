@@ -45,6 +45,7 @@ public:
     void OnNoteSeqChanged();
     void OnOnOffToggleChanged();
     void OnPlayOnOffToggleClicked();
+    void OnChordWidgetChanged();
     
     Gtk::VBox main_box;
 

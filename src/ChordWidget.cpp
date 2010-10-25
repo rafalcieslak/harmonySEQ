@@ -109,8 +109,8 @@ void ChordWidget::OnNoteChanged(int n){
     chord->SetNote(n,note_buttons[n]->get_value());
 
     radio_custom.set_active(1);
-    //combo_triad_note.set_active(-1);
-    //combo_guitar_note.set_active(-1);
+
+    on_changed.emit();
     
 }
 
@@ -119,6 +119,7 @@ void ChordWidget::OnRadioTriadToggled(){
     if(radio_triad.get_active()){
         chord->SetMode(Chord::TRIAD);
         UpdateNotes();
+        on_changed.emit();
     }
 }
 
@@ -127,6 +128,7 @@ void ChordWidget::OnRadioCustomToggled(){
     if(radio_custom.get_active()){
         chord->SetMode(Chord::CUSTOM);
         UpdateNotes();
+        on_changed.emit();
     }
 }
 
@@ -135,6 +137,7 @@ void ChordWidget::OnRadioGuitarToggled(){
     if(radio_guitar.get_active()){
         chord->SetMode(Chord::GUITAR);
         UpdateNotes();
+        on_changed.emit();
     }
 }
 
@@ -144,6 +147,7 @@ void ChordWidget::UpdateNotes(){
         note_buttons[x]->set_value(chord->GetNote(x));
     }
     we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = false;
+    on_changed.emit();
 
 }
 
@@ -152,6 +156,7 @@ void ChordWidget::OnGuitarRootChanged(){
     Gtk::TreeModel::Row row = *(combo_guitar_note.get_active());
     chord->SetGuitarRoot(row[m_columns_notes.note]);
     UpdateNotes();
+    on_changed.emit();
 }
 
 void ChordWidget::OnTriadRootChanged(){
@@ -159,6 +164,7 @@ void ChordWidget::OnTriadRootChanged(){
     Gtk::TreeModel::Row row = *(combo_triad_note.get_active());
     chord->SetTriadRoot(row[m_columns_notes.note]);
     UpdateNotes();
+    on_changed.emit();
 }
 
 void ChordWidget::OnTriadModeChanged(){
@@ -166,6 +172,7 @@ void ChordWidget::OnTriadModeChanged(){
     Gtk::TreeModel::Row row = *(combo_triad_mode.get_active());
     chord->SetTriadMode(row[m_columns_notes.note]);
     UpdateNotes();
+    on_changed.emit();
 }
 
 void ChordWidget::OnGuitarModeChanged(){
@@ -173,12 +180,14 @@ void ChordWidget::OnGuitarModeChanged(){
     Gtk::TreeModel::Row row = *(combo_guitar_mode.get_active());
     chord->SetGuitarMode(row[m_columns_notes.note]);
     UpdateNotes();
+    on_changed.emit();
 }
 
 void ChordWidget::OnOctaveChanged(){
     if(we_are_copying_note_values_from_chord_so_do_not_handle_the_signals) return;
     chord->SetOctave(octave.get_value());
     UpdateNotes();
+    on_changed.emit();
 }
 
 void ChordWidget::Update(){

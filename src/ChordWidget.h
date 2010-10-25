@@ -55,6 +55,8 @@ public:
     Gtk::Frame frame;
 
     void Update();
+
+    sigc::signal<void> on_changed;
 private:
     void UpdateNotes();
     void OnNoteChanged(int n);

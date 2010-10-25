@@ -102,6 +102,8 @@ ActionGUI::ActionGUI(Action *prt):
     vol_button.set_increments(1.0,16.0);
     vol_button.signal_value_changed().connect(mem_fun(*this,&ActionGUI::OnVolumeChanged));
 
+    chordwidget.on_changed.connect(mem_fun(*this,&ActionGUI::OnChordWidgetChanged));
+
     label_type.set_text(_("Type:"));
     label_seq.set_text(_("Sequencer:"));
     label_tempo.set_text(_("Tempo:"));
@@ -422,6 +424,15 @@ void ActionGUI::OnPlayOnOffToggleClicked(){
 
     label_preview.set_text(parent->GetLabel());
     eventswindow->UpdateRow(parent->row_in_event_window);
+
+}
+
+void ActionGUI::OnChordWidgetChanged(){
+        //chord widget updates chord settings automatically, we just need to update labels
+
+    label_preview.set_text(parent->GetLabel());
+    eventswindow->UpdateRow(parent->row_in_event_window);
+
 
 }
 
