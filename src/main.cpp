@@ -63,7 +63,6 @@ static struct option long_options[]={
     {"help",no_argument,&help,1},
     {"version",no_argument,&version,1},
     {"pass-midi",no_argument,&passing_midi,1},
-    {"ports",required_argument,0,'p'},
     {0,0,0,0}
 
 };
@@ -317,13 +316,12 @@ void print_help(){
     *dbg << "Hey, seems you wish to debug help message?" << "Nothing to debug, just a few printf's!";
     printf(_("harmonySEQ, version %s\n"
             "\n"
-            "usage: harmonySEQ [-hdvp] [FILE]\n"
+            "usage: harmonySEQ [-hdv] [FILE]\n"
             "\n"
-            "    -p --ports n     sets ports number to n\n"
-            "    -d --debug       enters debug mode, prints lots of debug messeges\n"
-            "    -h --help        prints this help messase and exits\n"
-            "    -v --version     prints the program version\n"), VERSION);
-    printf(_("       --pass-midi   passes the midi events through the program by default\n"));
+            "   -d    --debug       enters debug mode, prints lots of debug messeges\n"
+            "         --pass-midi   passes the midi events through the program by default\n"
+            "   -h    --help        prints this help messase and exits\n"
+            "   -v    --version     prints the program version\n"), VERSION);
     printf("\n");
 
 
