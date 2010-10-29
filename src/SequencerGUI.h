@@ -48,8 +48,11 @@ public:
     /**Sequencer associated with this GUI, used to set sequencer's data according to values in GUI widgets*/
     Sequencer *parent;
 
-
+    friend class Sequencer;
+    
 private:
+    void UpdateActiveSeqRange();
+
     void OnChordWidgetChanged();
     void OnSequenceChanged(int seq);
     void OnChannelChanged();
@@ -58,7 +61,8 @@ private:
     void OnToggleApplyMainNoteToggled();
     void OnResolutionChanged();
     void OnLengthChanged();
-
+    void OnActiveSequenceChanged();
+    void OnSetAsActiveSequenceClicked();
     Gtk::VBox main_vbox;
     Gtk::VBox box_of_sliders;
     Gtk::HBox box_of_chord;
@@ -66,11 +70,15 @@ private:
     std::vector<Gtk::HScale *> sequence_scales;
     Gtk::SpinButton channel_button;
     Gtk::SpinButton volume_button;
+    Gtk::SpinButton active_sequence;
+    Gtk::Button set_as_active_sequence;
     Gtk::Label channellabel;
     Gtk::Label volumelabel;
+    Gtk::Label activesequencelabel;
     Gtk::HBox low_hbox;
     Gtk::HBox line_one;
     Gtk::HBox line_two;
+    Gtk::HBox line_zero;
     Gtk::VBox spinners_vbox;
     Gtk::VBox toggle_vbox;
     Gtk::CheckButton tgl_apply_mainnote, tgl_mute;

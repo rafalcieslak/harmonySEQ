@@ -77,6 +77,9 @@
 #define FILE_KEY_SEQ_VOLUME "volume"
 #define FILE_KEY_SEQ_NAME "name"
 #define FILE_KEY_SEQ_SEQUENCE "sequence"
+#define FILE_KEY_SEQ_SEQUENCES_NUMBER "sequences_num"
+#define FILE_KEY_SEQ_ACTIVE_SEQUENCE "active_sequence"
+#define FILE_KEY_SEQ_SEQUENCE_TEMPLATE "sequence_%d"
 #define FILE_KEY_SEQ_CHORD "chord"
 
 #define FILE_GROUP_TEMPLATE_EVENT "Event %d"

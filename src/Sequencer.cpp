@@ -67,25 +67,29 @@ void clear_sequencers(){
 //======begin sequencer class===============
 
 Sequencer::Sequencer()
-    : sequence(SEQUENCE_DEFAULT_SIZE,0)
+    : sequences(0)
 {
     name = SEQUENCER_DEFAULT_NAME;
+    AddSequence();
     Init();
 }
 
 Sequencer::Sequencer(Glib::ustring _name)
-    : sequence(SEQUENCE_DEFAULT_SIZE,0)
+    : sequences(0)
 {
     name = _name;
+    AddSequence();
     Init();
 }
 
 
 Sequencer::Sequencer(int seq[],int note[])
-    :  sequence(SEQUENCE_DEFAULT_SIZE,0)
+    :  sequences(0)
 {
+    AddSequence();
+    
     for (int x = 0; x < SEQUENCE_DEFAULT_SIZE; x++){
-        sequence[x] = seq[x];
+        sequences[0][x] = seq[x];
         
     }
     for (int x = 0; x < NOTES_CONST_SIZE; x++){
@@ -97,10 +101,12 @@ Sequencer::Sequencer(int seq[],int note[])
 }
 
 Sequencer::Sequencer(int seq[],int note[], Glib::ustring _name)
-    :  sequence(SEQUENCE_DEFAULT_SIZE,0)
+    :  sequences(0)
 {
+    AddSequence();
+    
     for (int x = 0; x < SEQUENCE_DEFAULT_SIZE; x++){
-        sequence[x] = seq[x];
+        sequences[0][x] = seq[x];
 
     }
     for (int x = 0; x < NOTES_CONST_SIZE; x++){
@@ -118,7 +124,8 @@ Sequencer::Sequencer(const Sequencer *orig) {
     on = orig->on;
     chord = orig->chord;
     resolution = orig->resolution;
-    sequence = orig->sequence;
+    sequences = orig->sequences;
+    active_sequence = orig->active_sequence;
     channel = orig->channel;
     apply_mainnote = orig->apply_mainnote;
     length = orig->length;
@@ -135,6 +142,7 @@ void Sequencer::Init(){
 
     on = false;
     apply_mainnote = true;
+    active_sequence = 0;
     channel = 1;
     length = 1;
     volume = DEFAULT_VOLUME;
@@ -152,30 +160,33 @@ void Sequencer::SetResolution(int res){
     
     if (res < resolution){
         //the new resolution is smaller
-        vector<int> new_sequence(res,0);
         int ratio = resolution/res;
         *dbg << "ensmalling resolution ratio = " << ratio << ENDL;
-        assert(ratio>=1);
-        int x = 0, i = 0;
-        for (; x < resolution;x+=ratio){
-            new_sequence[i++] = sequence[x];
-        }
 
-        sequence = new_sequence;
+        for(int s=0; s<sequences.size();s++){
+            vector<int> new_sequence(res,0);
+            assert(ratio>=1);
+            int x = 0, i = 0;
+            for (; x < resolution;x+=ratio){
+                new_sequence[i++] = sequences[s][x];
+            }
+            sequences[s] = new_sequence;
+        }
         resolution = res;
-        
     } else {
         //the new resolution is larger
-        vector<int> new_sequence(res,0);
         int ratio = res/resolution;
         *dbg << "enlarging resolution ratio = " << ratio << ENDL;
-        int x = 0;
-        for (int p =0; p < resolution;p++){
-            for (int i = 0; i < ratio;i++){
-                new_sequence[x++]=sequence[p];
+        for(int s=0; s<sequences.size();s++){
+         vector<int> new_sequence(res,0);
+            int x = 0;
+            for (int p =0; p < resolution;p++){
+                for (int i = 0; i < ratio;i++){
+                    new_sequence[x++]=sequences[s][p];
+                }
             }
+            sequences[s]=new_sequence;
         }
-        sequence=new_sequence;
         resolution = res;
     }
 
@@ -186,7 +197,6 @@ void Sequencer::SetResolution(int res){
 
 
 int Sequencer::GetNoteOfChord(int n){return chord.GetNote(n);}
-int Sequencer::GetSequence(int n){return sequence[n];}
 void Sequencer::SetOn(bool m){on = m;play_once_phase=0;gui_window->tgl_mute.set_active(m);}
 bool Sequencer::GetOn(){return on;}
 void Sequencer::SetApplyMainNote(bool a){apply_mainnote = a;}
@@ -213,3 +223,35 @@ void Sequencer::ShowWindow(){
 
 void Sequencer::UpdateGui(){gui_window->UpdateValues();}
 void Sequencer::UpdateGuiChord(){gui_window->UpdateChord();}
+
+
+int Sequencer::AddSequence(){
+    vector<int> seq (SEQUENCE_DEFAULT_SIZE,0);
+    sequences.push_back(seq);
+
+    *dbg<< "Added sequence " << sequences.size() << ".\n";
+    return sequences.size()-1;
+}
+
+bool Sequencer::RemoveSequence(int x){
+    sequences.erase(sequences.begin()+x);
+    if (active_sequence > x) active_sequence--;
+    else if (active_sequence == x) active_sequence = 0;
+
+    *dbg<< "Removed sequence " << x << ".\n";
+    return 0;
+}
+
+
+int Sequencer::GetSequenceNote(int sequence, int n){
+    return sequences[sequence][n];
+}
+
+int Sequencer::GetActiveSequenceNote(int n){
+    return sequences[active_sequence][n];
+}
+
+void Sequencer::SetSequenceNote(int sequence, int n, int value){
+    sequences[sequence][n] = value;
+
+}

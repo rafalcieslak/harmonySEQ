@@ -36,12 +36,16 @@ SequencerWindow::SequencerWindow(Sequencer* prt)
     set_title(parent->name);
     set_border_width(0);
     set_position(Gtk::WIN_POS_CENTER);
+    
     main_vbox.pack_start(upper_box);
     main_vbox.pack_start(box_of_chord);
     box_of_chord.pack_start(*chordwidget);
-
     main_vbox.pack_start(box_of_sliders);
+    main_vbox.pack_start(line_zero, Gtk::PACK_SHRINK);
+    main_vbox.pack_start(low_hbox);
+
     InitSeqSliders();
+
     low_hbox.pack_start(spinners_vbox,Gtk::PACK_SHRINK);
     low_hbox.pack_start(toggle_vbox,Gtk::PACK_SHRINK);
     spinners_vbox.pack_start(line_one, Gtk::PACK_SHRINK);
@@ -50,8 +54,14 @@ SequencerWindow::SequencerWindow(Sequencer* prt)
     line_one.pack_end(channellabel,Gtk::PACK_SHRINK);
     line_two.pack_end(volume_button,Gtk::PACK_SHRINK);
     line_two.pack_end(volumelabel,Gtk::PACK_SHRINK);
+    line_zero.pack_end(active_sequence,Gtk::PACK_SHRINK);
+    line_zero.pack_end(activesequencelabel,Gtk::PACK_SHRINK);
+    line_zero.pack_end(set_as_active_sequence,Gtk::PACK_SHRINK);
+    set_as_active_sequence.signal_clicked().connect(mem_fun(*this,&SequencerWindow::OnSetAsActiveSequenceClicked));
     channellabel.set_text(_("MIDI channel:"));
     volumelabel.set_text(_("Volume:"));
+    activesequencelabel.set_text(_("Active sequence:"));
+    set_as_active_sequence.set_label(_("Set as active sequence"));
     volume_button.set_range(0,127);
     channel_button.set_range(1,16);
     volume_button.set_increments(1,16);
@@ -61,6 +71,8 @@ SequencerWindow::SequencerWindow(Sequencer* prt)
     channel_button.set_value(parent->GetChannel());
     volume_button.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWindow::OnVolumeChanged));
     channel_button.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWindow::OnChannelChanged));
+    UpdateActiveSeqRange();//                <----
+    active_sequence.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWindow::OnActiveSequenceChanged));
     toggle_vbox.pack_start(tgl_mute);
     toggle_vbox.pack_start(tgl_apply_mainnote);
     tgl_mute.set_label(_("On"));
@@ -69,7 +81,6 @@ SequencerWindow::SequencerWindow(Sequencer* prt)
     tgl_mute.set_active(parent->on);
     tgl_apply_mainnote.signal_toggled().connect(mem_fun(*this,&SequencerWindow::OnToggleApplyMainNoteToggled));
     tgl_apply_mainnote.set_active(parent->apply_mainnote);
-    main_vbox.pack_start(low_hbox);
 
     //lengths selector
     upper_box.pack_start(reslabel,Gtk::PACK_SHRINK);
@@ -121,7 +132,7 @@ SequencerWindow::~SequencerWindow(){
 
 void SequencerWindow::OnSequenceChanged(int seq){
     *dbg << "seq changed";
-    parent->sequence[seq] = sequence_scales[seq]->get_value();
+    parent->SetSequenceNote(active_sequence.get_value(),seq,sequence_scales[seq]->get_value());
     Files::SetFileModified(1);
 }
 
@@ -203,7 +214,7 @@ void SequencerWindow::InitSeqSliders(){
     sequence_scales.resize(parent->resolution,NULL);
     for (int x= 0; x < parent->resolution; x++){
         sequence_scales[x] = Gtk::manage<Gtk::HScale>(new Gtk::HScale(0,6,1));
-        sequence_scales[x]->set_value(parent->GetSequence(x));
+        sequence_scales[x]->set_value(parent->GetSequenceNote(active_sequence.get_value(),x));
         sequence_scales[x]->set_increments(1.0,1.0);
         //sequence_scales[x]->set_draw_value(0);  //<- hehe, here is a bug in gtkmm ^^
         sequence_scales[x]->set_value_pos(Gtk::POS_RIGHT); //<- temporary workaround
@@ -227,5 +238,21 @@ void SequencerWindow::OnLengthChanged(){
 
 void SequencerWindow::OnChordWidgetChanged(){
     Files::SetFileModified(1);
+}
 
+void SequencerWindow::UpdateActiveSeqRange(){
+    int v = active_sequence.get_value();
+    active_sequence.set_range(0.0,(double)parent->sequences.size()-1);
+    active_sequence.set_increments(1.0,1.0);
+    active_sequence.set_value(v); //if it's too high, it will change to largest possible
+}
+
+void SequencerWindow::OnActiveSequenceChanged(){
+    //changing notepad tab labels and active tab
+    //changing active seq in parent, but only if in range!!!!
+    
+}
+
+void SequencerWindow::OnSetAsActiveSequenceClicked(){
+    //recognize which is now shown and set it to be active
 }

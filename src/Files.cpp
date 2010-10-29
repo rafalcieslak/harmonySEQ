@@ -104,6 +104,7 @@ void SaveToFile(){
             kf.set_integer(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_SEQ_NUM,sequencers.size());
             kf.set_integer(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_EVENTS_NUM,events.size());
 
+            //first, save the sequencers
             for (unsigned int x = 0; x < sequencers.size(); x++){
                 if(sequencers[x] == NULL) continue;
                 sprintf(temp,FILE_GROUP_TEMPLATE_SEQ,x);
@@ -114,10 +115,16 @@ void SaveToFile(){
                 kf.set_integer(temp,FILE_KEY_SEQ_VOLUME,sequencers[x]->GetVolume());
                 kf.set_integer(temp,FILE_KEY_SEQ_RESOLUTION,sequencers[x]->resolution);
                 kf.set_double(temp,FILE_KEY_SEQ_LENGTH,sequencers[x]->length);
-                kf.set_integer_list(temp,FILE_KEY_SEQ_SEQUENCE,sequencers[x]->sequence);
+                kf.set_integer(temp,FILE_KEY_SEQ_SEQUENCES_NUMBER,sequencers[x]->sequences.size());
+                //save the sequences
+                for (int s=0; s<sequencers[x]->sequences.size();s++){
+                    sprintf(temp2,FILE_KEY_SEQ_SEQUENCE_TEMPLATE,s);
+                    kf.set_integer_list(temp,temp2,sequencers[x]->sequences[s]);
+                }
                 kf.set_integer_list(temp,FILE_KEY_SEQ_CHORD,sequencers[x]->chord.SaveToVector());
             }
 
+            //then save the events
             for (unsigned int x = 0; x < events.size(); x++){
                 if(events[x] == NULL) continue;
                 sprintf(temp,FILE_GROUP_TEMPLATE_EVENT,x);
@@ -125,6 +132,8 @@ void SaveToFile(){
                 kf.set_integer(temp,FILE_KEY_EVENT_ARG1,events[x]->arg1);
                 kf.set_integer(temp,FILE_KEY_EVENT_ARG2,events[x]->arg2);
                 kf.set_integer(temp,FILE_KEY_EVENT_ACTIONS_NUM,events[x]->actions.size());
+
+                //save all actions of this event
                 for (unsigned int a = 0; a < events[x]->actions.size(); a++){
                     if (events[x]->actions[a] == NULL) continue;
                     sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_TYPE,a);
@@ -137,7 +146,7 @@ void SaveToFile(){
             }
 
 
-            //*dbg << kf.to_data();
+            //output to file
             output_file << kf.to_data().c_str();
 
             output_file.close();
@@ -179,6 +188,7 @@ void LoadFileDialog(){
     switch (result){
         case Gtk::RESPONSE_OK:
             LoadFile(filename);
+            SetFileModified(0);
             break;
         case Gtk::RESPONSE_CANCEL:
             break;
@@ -267,11 +277,34 @@ bool LoadFile(Glib::ustring file){
             sequencers[x]->resolution = kf.get_integer(temp, FILE_KEY_SEQ_RESOLUTION);
             sequencers[x]->length = kf.get_double(temp, FILE_KEY_SEQ_LENGTH);
 
-            sequencers[x]->sequence.clear();
-            std::vector<int> sequence = kf.get_integer_list(temp, FILE_KEY_SEQ_SEQUENCE);
-            for (unsigned int n = 0; n < sequence.size(); n++) {
-                sequencers[x]->sequence.push_back(sequence[n]);
+            sequencers[x]->sequences.clear();
+
+            //here we load the sequences
+            if(kf.has_key(temp,FILE_KEY_SEQ_SEQUENCE)){ //old file, seems it uses only one sequence
+                    int seq = sequencers[x]->AddSequence();
+                    sequencers[x]->sequences[seq].clear();
+                    std::vector<int> sequence = kf.get_integer_list(temp, FILE_KEY_SEQ_SEQUENCE);
+                    for (unsigned int n = 0; n < sequence.size(); n++) {
+                        sequencers[x]->sequences[0].push_back(sequence[n]); //pushing notes to the first, and the olny sequence
+                    }
+            }else{//new file, uses many sequences
+                int n = kf.get_integer(temp,FILE_KEY_SEQ_SEQUENCES_NUMBER);
+                for(int s =0; s < n; s++){
+                    int seq = sequencers[x]->AddSequence();
+                    sequencers[x]->sequences[seq].clear();
+                    sprintf(temp2,FILE_KEY_SEQ_SEQUENCE_TEMPLATE,s);
+                    std::vector<int> sequence = kf.get_integer_list(temp, temp2);
+                    for (unsigned int n = 0; n < sequence.size(); n++) {
+                        sequencers[x]->sequences[s].push_back(sequence[n]); //pushing all notes to sequence
+                    }
+                }
+                if(sequencers.size() == 0) //wtf, there were no sequences in the file? strange. We have to create one in order to prevent crashes.
+                    sequencers[x]->AddSequence();
+
             }
+            //Note: the above (saving myltiple sequences) is, well, new. May be still not working. To be tested and checked.
+
+            //here we load the chord
             if (kf.has_key(temp,FILE_KEY_SEQ_CHORD)){
                 std::vector<int> vec =  kf.get_integer_list(temp,FILE_KEY_SEQ_CHORD);
                 sequencers[x]->chord.SetFromVector(vec);

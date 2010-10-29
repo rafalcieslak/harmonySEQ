@@ -44,8 +44,12 @@ public:
     virtual ~Sequencer();
 
     /**List of sequence notes*/
-    vector<int> sequence;
+    vector<vector<int> > sequences;
+    /**The active sequence number*/
+    int active_sequence;
 
+    int AddSequence();
+    bool RemoveSequence(int x);
     /**The main chord*/
    Chord chord;
     
@@ -65,11 +69,16 @@ public:
      *  @parram n note number*/
     int GetNoteOfChord(int n);
 
-    /**Returns a one note from sequence
+    /**Returns a one note from a given sequence
      * @parram n sequence note tumber*/
-    int GetSequence(int n);
+    int GetSequenceNote(int sequence, int n);
 
+    /**Returns a one note from the active sequence
+     * @parram n sequence note tumber*/
+    int GetActiveSequenceNote( int n);
 
+    /**Sets a note in a given sequence*/
+    void SetSequenceNote(int sequence, int n, int value);
 
     /**Sets the sequencer on/off*/
     void SetOn(bool m);

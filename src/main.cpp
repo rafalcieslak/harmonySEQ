@@ -289,7 +289,6 @@ int main(int argc, char** argv) {
     InitDefaultData();
 
     Files::file_name = _("Untitled"); //Here we init the filename, that shouldn't be empty anymore.
-    Files::SetFileModified(0);
 
     if (file_from_cli) TryToOpenFileFromCommandLine();
     //else InitDefaultData();
@@ -297,12 +296,14 @@ int main(int argc, char** argv) {
     mainwindow->tempo_button.set_value(tempo);
     mainwindow->main_note.set_value(mainnote);
 
-    mainwindow->InitTreeData();
+    mainwindow->InitTreeData(); //TODO: initing data sholudn't mark file as modified
     eventswindow->InitTreeData();
 
+    Files::SetFileModified(0);
+    
     threadb Th;
     /*Glib::Thread * const th1 =*/ Glib::Thread::create(sigc::mem_fun(Th, &threadb::th1), true);
-    /*Glib::Thread * const th2 =*/  Glib::Thread::create(sigc::mem_fun(Th, &threadb::th2), true);
+    /*Glib::Thread * const th2 =*/ Glib::Thread::create(sigc::mem_fun(Th, &threadb::th2), true);
     //wait for signal to exit the program
     while (running == 1)
         usleep(10000);
