@@ -29,12 +29,7 @@ class Event {
 public:
     Event();
     Event(int typ, int a1, int a2);
-    Event(const Event& orig);
     virtual ~Event();
-
-    int type;
-
-    void Trigger();
 
     enum EventTypes{
         NONE = 0,        //no arguments
@@ -43,24 +38,40 @@ public:
         CONTROLLER = 3   //ctrl num, channel [0 - all]
     };
 
+    int type;
     int arg1;
     int arg2;
 
+
+    /**Triggers this events actions*/
+    void Trigger();
+
+    /**Generates a label describing this event*/
     std::string GetLabel();
+
+    /**Shows this event GUI window*/
     void ShowWindow();
+
+    /**Updates the GUI*/
     void UpdateGUI();
 
+    /**Actions list*/
     std::vector<Action*> actions;
 
+    /**Reference to treerow in events window*/
     Gtk::TreeRowReference row_in_event_window;
 
-    EventGUI *gui_window;
 private:
 
+    EventGUI *gui_window;
 };
-
+/**Magic function that triggers all events that are of appropriate type and args (as specified in function arguments)*/
 void FindAndProcessEvents(Event::EventTypes ev,int arg1 = 0, int arg2 = 0);
+
+/**Triggers all key-press events, using GdkKeyEvent as argument, very useful when capturing keypresses from widgets*/
 bool FindAndProcessEventsKeyPress(GdkEventKey* event);
+
+/**Removes all events, clears whole list*/
 void ClearEvents();
 #endif	/* EVENT_H */
 

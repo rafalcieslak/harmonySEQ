@@ -278,7 +278,7 @@ MainWindow::OnNameEdited(const Glib::ustring& path, const Glib::ustring& newtext
     sequencers[row[m_columns_sequencers.col_ID]]->SetName(newtext);
    if(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window) RefreshRow(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window);
 
-    eventswindow->RefreshAll();
+    eventswindow->UpdateAll();
     Files::SetFileModified(1);
 }
 

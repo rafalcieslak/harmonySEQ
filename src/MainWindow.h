@@ -30,54 +30,60 @@ public:
     MainWindow();
     virtual ~MainWindow();
 
+    /**Sets the window title, filling it with filename*/
     void UpdateTitle();
-    //when user presses exit
+    /**Called when user presses X in the titlebar, meaning he wants to exit the application*/
     bool on_delete_event(GdkEventAny* event);
+
+    /**Clears the treemodel and inits a new, according to sequencers vector*/
+    void InitTreeData();
+    /**Refreshes a single row, called when some of it's settings had changed*/
+    void RefreshRow(Gtk::TreeRowReference it);
+
+    /**Adds a single row, when a new sequencer is spawned (and return a RowReference, so that the sequencer will know where is it's row)*/
+    Gtk::TreeModel::RowReference AddSequencerRow(int n);
     
-    //buttons functions
+    /**Called when user changed main note*/
+    void MainNoteChanged();
+    /**Called when user changed tempo*/
+    void TempoChanged();
+    
+    /**Called every tempo, starts the animation*/
+    void FlashTempoStart();
+    /**Ends the animation after timeout*/
+    bool FlashTempoEnd();
+
+    /**Sets title and icon for the play-pause button*/
+    void UpdatePlayPauseButton();
+
+    Gtk::SpinButton main_note;
+    Gtk::SpinButton tempo_button;
+    Gtk::CheckButton pass_toggle;
+private:
+
+    /**Reacts on double click on a row*/
+    void OnTreeviewRowActivated(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column);
+     /**Reacts on sequencer settings changes from main window*/
+    void OnMutedToggleToggled(const Glib::ustring& path);
+    void OnApplyMainNoteToggleToggled(const Glib::ustring& path);
+    void OnNameEdited(const Glib::ustring& path,const Glib::ustring& newtext);
+
+    
     void OnButtonAddClicked();
     void OnSaveClicked();
     void OnLoadClicked();
     void OnRemoveClicked();
     void OnCloneClicked();
     void OnEventsClicked();
-
-    //called when user changes values from gui
-    void MainNoteChanged();
-    void TempoChanged();
-    
-    //called every tempo, starts the animation
-    void FlashTempoStart();
-    //ends the animation after timeout
-    bool FlashTempoEnd();
-
-    //clears the treemodel and inits a new, according to sequencers vector
-    void InitTreeData();
-
-    //adds a single row, when a new sequencer is spawned
-    Gtk::TreeModel::RowReference AddSequencerRow(int n);
-
-    //refreshes a single row, when some of it's settings had changed
-    void RefreshRow(Gtk::TreeRowReference it);
-
-    //reacts on double click on a row
-    void OnTreeviewRowActivated(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column);
-
-    //reacts on settings changes from main window
-    void OnMutedToggleToggled(const Glib::ustring& path);
-    void OnApplyMainNoteToggleToggled(const Glib::ustring& path);
-    void OnNameEdited(const Glib::ustring& path,const Glib::ustring& newtext);
-
-    void UpdatePlayPauseButton();
     void OnPauseButtonClicked();
-
     void OnSelectionChanged();
     void OnPassToggleClicked();
     bool OnKeyPress(GdkEventKey* event);
+    
+    Gtk::TreeView m_TreeView;
+
     Gtk::VBox vbox1;
     Gtk::HBox hbox_up, hbox_down;
-    Gtk::SpinButton main_note;
-    Gtk::SpinButton tempo_button;
     Gtk::Label tempolabel, mainnotelabel;
     Gtk::Button button_add;
     Gtk::Button button_save;
@@ -85,16 +91,10 @@ public:
     Gtk::Button button_remove;
     Gtk::Button button_clone;
     Gtk::Button button_events;
-    Gtk::CheckButton pass_toggle;
 
     Gtk::Button play_pause_button;
     Gtk::Image image_pause;
     Gtk::Image image_play;
-private:
-
-
-    Gtk::TreeView m_TreeView;
-
 };
 
 

@@ -317,7 +317,7 @@ bool LoadFile(Glib::ustring file){
                     vector<int> vec = kf.get_integer_list(temp,temp2);
                     events[x]->actions[a]->chord.SetFromVector(vec);
                  }
-                events[x]->actions[a]->UpdateChord();
+                events[x]->actions[a]->GUIUpdateChordwidget();
             }
 
             events[x]->UpdateGUI();

@@ -28,9 +28,25 @@ class ActionGUI : public Gtk::Window{
 public:
     ActionGUI(Action *prt);
     virtual ~ActionGUI();
-    void OnShow();
+    
+    /**Called mostly from outside this class, it refreshes the GUI according to parent Action*/
     void UpdateValues();
+
+    void UpdateChordwidget();
+
+    /**An action this GUI is associated with, it is used for two-way communication between Action and ActionGUI*/
+    Action *parent;
+
+private:
+    /**Flag disabling reaction on signals, used to set data in widgets without reacting (react only if it was the user that changes the data)*/
+    bool we_are_copying_data_from_parent_action_so_do_not_handle_signals;
+
+    void OnShow();
+
+    /**Hides and shows lines appropieate to the parent action type.*/
     void ChangeVisibleLines();
+
+    /**Sets all default data for given type, used to avoid having actions with strange arguments*/
     void InitType();
 
     void OnOKClicked();
@@ -46,7 +62,8 @@ public:
     void OnOnOffToggleChanged();
     void OnPlayOnOffToggleClicked();
     void OnChordWidgetChanged();
-    
+
+
     Gtk::VBox main_box;
 
     Gtk::HBox line_type;
@@ -88,13 +105,6 @@ public:
     Gtk::HSeparator separator;
 
     ChordWidget chordwidget;
-    
-    Action *parent;
-
-
-private:
-    bool we_are_copying_data_from_parent_action_so_do_not_handle_signals;
-
 
 };
 

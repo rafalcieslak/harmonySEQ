@@ -33,30 +33,19 @@ class SequencerWindow : public Gtk::Window {
 public:
     SequencerWindow(Sequencer* prt);
     virtual ~SequencerWindow();
+    /**Updates all values, according to data in the parent sequencer*/
     void UpdateValues();
-    void UpdateChord();
-    Gtk::VBox main_vbox;
-    Gtk::VBox box_of_sliders;
-    Gtk::HBox box_of_chord;
-    Gtk::HBox upper_box;
-    std::vector<Gtk::HScale *> sequence_scales;
-    //Gtk::SpinButton* chord_buttons[6];
-    Gtk::SpinButton channel_button;
-    Gtk::SpinButton volume_button;
-    Gtk::Label channellabel;
-    Gtk::Label volumelabel;
-    Gtk::HBox low_hbox;
-    Gtk::HBox line_one;
-    Gtk::HBox line_two;
-    Gtk::VBox spinners_vbox;
-    Gtk::VBox toggle_vbox;
-    Gtk::CheckButton tgl_apply_mainnote, tgl_mute;
-    Gtk::ComboBox resolution_box;
-    Gtk::ComboBox length_box;
-    Gtk::Label reslabel, lenlabel;
-    void InitSeqSliders();
 
+    /**Just like UpdateValues, but updates only the Chordwidget*/
+    void UpdateChord();
+
+    /**Inits melody sliders*/
+    void InitSeqSliders();
+    
+    /**The chordwidget of this GUI*/
     ChordWidget* chordwidget;
+
+    /**Sequencer associated with this GUI, used to set sequencer's data according to values in GUI widgets*/
     Sequencer *parent;
 
 
@@ -70,6 +59,26 @@ private:
     void OnResolutionChanged();
     void OnLengthChanged();
 
+    Gtk::VBox main_vbox;
+    Gtk::VBox box_of_sliders;
+    Gtk::HBox box_of_chord;
+    Gtk::HBox upper_box;
+    std::vector<Gtk::HScale *> sequence_scales;
+    Gtk::SpinButton channel_button;
+    Gtk::SpinButton volume_button;
+    Gtk::Label channellabel;
+    Gtk::Label volumelabel;
+    Gtk::HBox low_hbox;
+    Gtk::HBox line_one;
+    Gtk::HBox line_two;
+    Gtk::VBox spinners_vbox;
+    Gtk::VBox toggle_vbox;
+    Gtk::CheckButton tgl_apply_mainnote, tgl_mute;
+    Gtk::ComboBox resolution_box;
+    Gtk::ComboBox length_box;
+    Gtk::Label reslabel, lenlabel;
+
+    /**ModelColums used for comboboxes*/
     class ModelColumns : public Gtk::TreeModel::ColumnRecord {
     public:
         ModelColumns() {

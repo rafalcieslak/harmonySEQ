@@ -25,9 +25,11 @@
 #include "SequencerGUI.h"
 using namespace std;
 
-
+/**Spawns a new sequencer*/
 Gtk::TreeModel::RowReference spawn_sequencer();
+/**Spawns a new sequencer, identical to the one specified as arg*/
 Gtk::TreeModel::RowReference clone_sequencer(int orig);
+/**Clears the list of sequencers, removing every sequencer*/
 void clear_sequencers();
 
 class Sequencer {

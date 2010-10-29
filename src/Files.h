@@ -26,10 +26,14 @@
 namespace Files{
     extern bool file_modified;
     extern Glib::ustring file_name;
-    
+
+    /**Sets file_modified flag, and refreshes the mainwindow title*/
     bool SetFileModified(bool modified);
+    /**Shows a file save dialog*/
     void SaveToFile();
+    /**Shows a file load dialog*/
     void LoadFileDialog();
+    /**Loads a file, but without showing the dialog (so the filename must be passed as an argument)*/
     bool LoadFile(Glib::ustring file);
 }
 

@@ -28,17 +28,20 @@ public:
     virtual ~Chord();
 
 
-
+    /**Chord modes*/
     enum {
         CUSTOM,
         TRIAD,
         GUITAR
     };
 
+    /**Guitar chord modes*/
     enum {
         GUITAR_MAJOR,
         GUITAR_MINOR
     };
+
+    /**Triad chord modes*/
     enum {
         TYPE_MAJOR,
         TYPE_MINOR,
@@ -46,6 +49,7 @@ public:
         TYPE_DIMINICHED
     };
     
+    //The following have obvious names, they does not require to be commented
 
     int GetNote(int n);
     void SetNote(int note, int pitch);
@@ -71,18 +75,24 @@ public:
     void SetOctave(int n);
     int GetOctave();
 
+   /**Copies all data from another chord (fe. from an action)*/
    void Set(const Chord& other);
+
+
+   /**Load chord settings from vector. Should have following format: mode, guitar_root, guitar_note, triad_root,triad_note,octave,inversion,notes(6)(if custom).*/
    void SetFromVector(std::vector<int> &V);
 
-   /**Should have following format: mode, guitar_root, guitar_note, triad_root,triad_note,octave,inversion,notes(6)(if custom)*/
+   /**Saves all chord settings to a vector. Should have following format: mode, guitar_root, guitar_note, triad_root,triad_note,octave,inversion,notes(6)(if custom).*/
    std::vector<int> SaveToVector();
 
+   /**Generates a name for the chord, like "Guitar, E-moll"*/
     Glib::ustring GetName();
 private:
 
+    /**Recalculates notes (given the modes, roots etc) and stores them to notes array.*/
     void RecalcNotes();
 
-
+    /**Notes are stored here so that they do not need to be recalculated every time.*/
     int notes[6];
 
     

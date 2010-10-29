@@ -62,6 +62,7 @@ public:
 
     /**Some actions take chord as an argument. Here it is stored.*/
     Chord chord;
+
     /**Trigggers this action.
      * @parram data The data to pass*/
     void Trigger(int data = 0);
@@ -74,10 +75,10 @@ public:
     Glib::ustring GetSeqName(int n);
 
     /**Shows the GUI*/
-    void ShowWindow();
+    void GUIShowWindow();
 
     /**Refreshes chordwidget*/
-    void UpdateChord();
+    void GUIUpdateChordwidget();
     
 private:
 

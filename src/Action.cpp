@@ -208,11 +208,11 @@ Glib::ustring Action::GetSeqName(int n){
     return temp;
 }
 
-void Action::ShowWindow(){
+void Action::GUIShowWindow(){
     gui_window->show();
     gui_window->raise();
 }
 
-void Action::UpdateChord(){
-    gui_window->chordwidget.Update();
+void Action::GUIUpdateChordwidget(){
+    gui_window->UpdateChordwidget();
 }

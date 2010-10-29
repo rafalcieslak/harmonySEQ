@@ -25,6 +25,9 @@
 
 class MidiDriver {
 public:
+    MidiDriver(const MidiDriver& orig);
+    virtual ~MidiDriver();
+
     /**Alsa MIDI sequencer's handle*/
     snd_seq_t* seq_handle;
 
@@ -91,9 +94,6 @@ public:
 
     /**Called every time there are midi events on input, since this procedure processes them; no need to call it from anywhere else*/
     void ProcessInput();
-
-    MidiDriver(const MidiDriver& orig);
-    virtual ~MidiDriver();
 private:
 
 };

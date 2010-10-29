@@ -20,7 +20,9 @@
 
 #ifndef GLOBAL_H
 #define	GLOBAL_H
+#ifdef HAVE_CONFIG_H
 #include <config.h>
+#endif
 #include <libintl.h>
 #include <locale.h>
 #include <vector>
@@ -113,8 +115,9 @@ extern std::map<int, Glib::ustring> keymap_itos;
 extern std::vector<Event *> events;
 extern std::map<int,Glib::ustring> notemap;
 #endif
-
+/**Ask user a YES-NO question.*/
 bool Ask(Glib::ustring message, Glib::ustring secondary_message = "", bool lock_threads = false);
+/**Shows user a message.*/
 void Info(Glib::ustring message, Glib::ustring secondary_message = "", bool lock_threads = false);
 
 #endif	/* GLOBAL_H */

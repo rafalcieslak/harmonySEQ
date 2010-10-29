@@ -30,12 +30,28 @@ public:
     EventGUI(Event *prt);
     virtual ~EventGUI();
 
-    void ChangeVisibleLines();
-    void InitType();
+    /**Sets all widgets data to the data from parent event.*/
     void UpdateValues();
 
-    void OnOKClicked();
+    /**Event this GUI is associated with, used for two-way communication between Event and EventGUI.*/
     Event *parent;
+
+private:
+    /**Flag disabling signal that is called when type is changed, is true during type manual set.*/
+    bool DO_NOT_INIT_TYPE;
+
+    /**Hides and shows lines appropieate to the parent event type.*/
+    void ChangeVisibleLines();
+    /**Sets all default data for given type, used to avoid having events with strange arguments.*/
+    void InitType();
+
+    void OnTypeChanged();
+    void OnKeyChanged();
+    void OnNoteChanged();
+    void OnCtrlChanged();;
+    void OnChannelChanged();
+    void OnKeyPress();
+    void OnOKClicked();
 
     Gtk::VBox main_box;
     Gtk::HBox line_type;
@@ -58,19 +74,6 @@ public:
     Gtk::SpinButton ctrl_spinbutton;
     Gtk::ComboBox Channels_combo;
 
-    void OnTypeChanged();
-    void OnKeyChanged();
-    void OnNoteChanged();
-    void OnCtrlChanged();;
-    void OnChannelChanged();
-    void OnKeyPress();
-
-
-
-
-private:
-
-    bool DO_NOT_INIT_TYPE;
 };
 
 #endif	/* EVENTGUI_H */

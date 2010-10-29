@@ -154,6 +154,10 @@ void ActionGUI::OnShow(){
 
 }
 
+void ActionGUI::UpdateChordwidget(){
+    chordwidget.Update();
+}
+
 void ActionGUI::UpdateValues(){
     we_are_copying_data_from_parent_action_so_do_not_handle_signals = true;
     SetTypeCombo(parent->type); 

@@ -125,6 +125,7 @@ extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_TriadModes;
 extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_ChordGuitarModes;
 #endif
 
+/**Init - tree models*/
 void InitEventTypesTreeModel();
 void InitKeyTypesTreeModel();
 void InitChannelsTreeModel();

@@ -207,6 +207,9 @@ int Sequencer::GetPlayOncePhase(){
     return play_once_phase;
 }
 
-void Sequencer::ShowWindow(){gui_window->show();}
+void Sequencer::ShowWindow(){
+    gui_window->show();
+    gui_window->raise();}
+
 void Sequencer::UpdateGui(){gui_window->UpdateValues();}
 void Sequencer::UpdateGuiChord(){gui_window->UpdateChord();}

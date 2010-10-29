@@ -108,7 +108,7 @@ void EventsWindow::InitTreeData(){
     resize(2,2);
 }
 
-void EventsWindow::RefreshAll(){
+void EventsWindow::UpdateAll(){
     InitTreeData();
 }
 
@@ -160,7 +160,7 @@ void EventsWindow::OnRowChosen(const Gtk::TreeModel::Path& path, Gtk::TreeViewCo
                 events[row[m_columns.col_ID]]->ShowWindow();
                 break;
             case ACTION:
-                events[row[m_columns.col_prt]]->actions[row[m_columns.col_ID]]->ShowWindow();
+                events[row[m_columns.col_prt]]->actions[row[m_columns.col_ID]]->GUIShowWindow();
                 break;
         }
     }
@@ -242,7 +242,7 @@ void EventsWindow::OnSelectionChanged(){
 }
 
 void EventsWindow::OnRowCollapsed(const Gtk::TreeModel::iterator& iter, const Gtk::TreeModel::Path& path){
-
+    //just to make sure the window is not bigger than the treeview, if some rows got hidden
     resize(2,2);
 }
 
@@ -275,7 +275,7 @@ void EventsWindow::OnAddActionClicked(){
     Gtk::TreeRowReference rowref_child(m_refTreeModel, m_refTreeModel->get_path(iter_new));
     events[id]->actions[act]->row_in_event_window = rowref_child;
 
-    events[id]->actions[act]->ShowWindow();
+    events[id]->actions[act]->GUIShowWindow();
 
     row = *iter_selected;
     if (row[m_columns.col_type] == EVENT)
