@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2010-10-29 19:42+0200\n"
+"POT-Creation-Date: 2010-10-29 21:45+0200\n"
 "PO-Revision-Date: 2010-10-28 08:28+0000\n"
 "Last-Translator: Rafal Cieslak <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -32,7 +32,7 @@ msgstr "nierozpoznana opcja '%s'\n"
 msgid "Untitled"
 msgstr "Bez tutułu"
 
-#: src/main.cpp:317
+#: src/main.cpp:318
 #, fuzzy, c-format
 msgid ""
 "harmonySEQ, version %s\n"
@@ -71,7 +71,7 @@ msgstr "ID"
 msgid "Name"
 msgstr "Nazwa"
 
-#: src/MainWindow.cpp:74 src/SequencerGUI.cpp:66 src/ActionGUI.cpp:115
+#: src/MainWindow.cpp:74 src/SequencerGUI.cpp:78 src/ActionGUI.cpp:115
 msgid "On"
 msgstr "Wł."
 
@@ -174,23 +174,32 @@ msgstr "Inicjacja sterownika MIDI powiodła się.\n"
 msgid "seq %d"
 msgstr "seq %d"
 
-#: src/SequencerGUI.cpp:53
+#: src/SequencerGUI.cpp:61
 msgid "MIDI channel:"
 msgstr "Kanał MIDI"
 
-#: src/SequencerGUI.cpp:54 src/ActionGUI.cpp:111
+#: src/SequencerGUI.cpp:62 src/ActionGUI.cpp:111
 msgid "Volume:"
 msgstr "Głośność:"
 
-#: src/SequencerGUI.cpp:67
+#: src/SequencerGUI.cpp:63
+#, fuzzy
+msgid "Active sequence:"
+msgstr "sekwencer"
+
+#: src/SequencerGUI.cpp:64
+msgid "Set as active sequence"
+msgstr ""
+
+#: src/SequencerGUI.cpp:79
 msgid "Apply main note"
 msgstr "Stosuj główną nutę"
 
-#: src/SequencerGUI.cpp:76
+#: src/SequencerGUI.cpp:87
 msgid "Resolution:"
 msgstr "Rozdzielczość:"
 
-#: src/SequencerGUI.cpp:93
+#: src/SequencerGUI.cpp:104
 msgid "Length:"
 msgstr "Długość:"
 
@@ -217,21 +226,21 @@ msgstr "Zastąpić ten plik?"
 msgid "ERROR - error while opening file %s to write.\n"
 msgstr "BŁĄD - błąd podczas otwierania pliku %s do zapisu.\n"
 
-#: src/Files.cpp:162
+#: src/Files.cpp:171
 msgid "Choose a file to open..."
 msgstr "Wybierz plik do otwarcia..."
 
-#: src/Files.cpp:206
+#: src/Files.cpp:216
 #, c-format
 msgid "ERROR - error while trying to read file '%s'\n"
 msgstr "BŁĄD - błąd podczas próby otwarcia pliku '%s'\n"
 
-#: src/Files.cpp:212
+#: src/Files.cpp:222
 #, c-format
 msgid "ERROR - error while trying to read file '%s': "
 msgstr "BŁĄD - błąd podczas próby otwarcia pliku '%s': "
 
-#: src/Files.cpp:226
+#: src/Files.cpp:236
 #, c-format
 msgid ""
 "This file was created by harmonySEQ in a newer version (%d.%d.%d). This "
@@ -250,11 +259,11 @@ msgstr ""
 "gdy wiadomo, że otworzenie tego pliku mimo wszystko nie spowoduje awarii, "
 "można zaryzykować, i otworzyć ten plik. Wybierz TAK, by tak uczynić."
 
-#: src/Files.cpp:227 src/Files.cpp:235
+#: src/Files.cpp:237 src/Files.cpp:245
 msgid "Do you want to open this file?"
 msgstr "Czy chcesz otworzyć ten plik?"
 
-#: src/Files.cpp:234
+#: src/Files.cpp:244
 #, c-format
 msgid ""
 "This file was created by harmonySEQ in an older version (%d.%d.%d). This "
@@ -272,12 +281,12 @@ msgstr ""
 "tego pliku mimo wszystko nie spowoduje awarii, można zaryzykować, i otworzyć "
 "ten plik. Wybierz TAK, by tak uczynić."
 
-#: src/Files.cpp:335
+#: src/Files.cpp:368
 #, c-format
 msgid "ERROR - Glib::KeyFile error while processing file '%s': "
 msgstr "BŁĄD - błąd Glib::KeyFile podczas przetwarzania pliku '%s' "
 
-#: src/Files.cpp:344
+#: src/Files.cpp:377
 #, c-format
 msgid "ERROR - unknown error while processing file '%s': "
 msgstr "BŁĄD - nieznany błąd podczas przetwarzania pliku '%s' "
@@ -696,9 +705,6 @@ msgstr "Oktawa"
 #~ "temat pracy programu\n"
 #~ "    -h --help        wyświetla tę wiadomość pomocy\n"
 #~ "    -v --version     wyświetla wersję programu\n"
-
-#~ msgid "sequencer"
-#~ msgstr "sekwencer"
 
 #~ msgid "Muted"
 #~ msgstr "Wyciszony"

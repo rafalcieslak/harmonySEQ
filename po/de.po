@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2010-10-29 19:42+0200\n"
+"POT-Creation-Date: 2010-10-29 21:45+0200\n"
 "PO-Revision-Date: 2010-10-25 07:03+0000\n"
 "Last-Translator: Rafal Cieslak <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
@@ -32,7 +32,7 @@ msgstr "unerkannt Option '%s'\n"
 msgid "Untitled"
 msgstr ""
 
-#: src/main.cpp:317
+#: src/main.cpp:318
 #, c-format
 msgid ""
 "harmonySEQ, version %s\n"
@@ -62,7 +62,7 @@ msgstr "KENNUNG"
 msgid "Name"
 msgstr ""
 
-#: src/MainWindow.cpp:74 src/SequencerGUI.cpp:66 src/ActionGUI.cpp:115
+#: src/MainWindow.cpp:74 src/SequencerGUI.cpp:78 src/ActionGUI.cpp:115
 msgid "On"
 msgstr ""
 
@@ -165,23 +165,31 @@ msgstr ""
 msgid "seq %d"
 msgstr ""
 
-#: src/SequencerGUI.cpp:53
+#: src/SequencerGUI.cpp:61
 msgid "MIDI channel:"
 msgstr ""
 
-#: src/SequencerGUI.cpp:54 src/ActionGUI.cpp:111
+#: src/SequencerGUI.cpp:62 src/ActionGUI.cpp:111
 msgid "Volume:"
 msgstr ""
 
-#: src/SequencerGUI.cpp:67
+#: src/SequencerGUI.cpp:63
+msgid "Active sequence:"
+msgstr ""
+
+#: src/SequencerGUI.cpp:64
+msgid "Set as active sequence"
+msgstr ""
+
+#: src/SequencerGUI.cpp:79
 msgid "Apply main note"
 msgstr ""
 
-#: src/SequencerGUI.cpp:76
+#: src/SequencerGUI.cpp:87
 msgid "Resolution:"
 msgstr ""
 
-#: src/SequencerGUI.cpp:93
+#: src/SequencerGUI.cpp:104
 msgid "Length:"
 msgstr ""
 
@@ -208,21 +216,21 @@ msgstr ""
 msgid "ERROR - error while opening file %s to write.\n"
 msgstr ""
 
-#: src/Files.cpp:162
+#: src/Files.cpp:171
 msgid "Choose a file to open..."
 msgstr ""
 
-#: src/Files.cpp:206
+#: src/Files.cpp:216
 #, c-format
 msgid "ERROR - error while trying to read file '%s'\n"
 msgstr ""
 
-#: src/Files.cpp:212
+#: src/Files.cpp:222
 #, c-format
 msgid "ERROR - error while trying to read file '%s': "
 msgstr ""
 
-#: src/Files.cpp:226
+#: src/Files.cpp:236
 #, c-format
 msgid ""
 "This file was created by harmonySEQ in a newer version (%d.%d.%d). This "
@@ -234,11 +242,11 @@ msgid ""
 "Select YES to do so."
 msgstr ""
 
-#: src/Files.cpp:227 src/Files.cpp:235
+#: src/Files.cpp:237 src/Files.cpp:245
 msgid "Do you want to open this file?"
 msgstr ""
 
-#: src/Files.cpp:234
+#: src/Files.cpp:244
 #, c-format
 msgid ""
 "This file was created by harmonySEQ in an older version (%d.%d.%d). This "
@@ -249,12 +257,12 @@ msgid ""
 "for example if it is sure it will open without trouble. Select YES to do so."
 msgstr ""
 
-#: src/Files.cpp:335
+#: src/Files.cpp:368
 #, c-format
 msgid "ERROR - Glib::KeyFile error while processing file '%s': "
 msgstr ""
 
-#: src/Files.cpp:344
+#: src/Files.cpp:377
 #, c-format
 msgid "ERROR - unknown error while processing file '%s': "
 msgstr ""
