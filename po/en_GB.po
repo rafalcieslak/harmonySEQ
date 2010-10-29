@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2010-10-25 22:20+0200\n"
+"POT-Creation-Date: 2010-10-29 19:42+0200\n"
 "PO-Revision-Date: 2010-09-17 22:22+0000\n"
 "Last-Translator: rafal cieslak <Unknown>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
@@ -18,31 +18,32 @@ msgstr ""
 "X-Launchpad-Export-Date: 2010-09-22 05:59+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: src/main.cpp:258
+#: src/main.cpp:257
 #, c-format
 msgid "unknown option '%c'\n"
 msgstr "unknown option '%c'\n"
 
-#: src/main.cpp:261
+#: src/main.cpp:260
 #, c-format
 msgid "unrecognized option '%s'\n"
 msgstr "unrecognized option '%s'\n"
 
-#: src/main.cpp:292
+#: src/main.cpp:291
 msgid "Untitled"
 msgstr ""
 
-#: src/main.cpp:318
+#: src/main.cpp:317
 #, fuzzy, c-format
 msgid ""
 "harmonySEQ, version %s\n"
 "\n"
-"usage: harmonySEQ [-hdvp] [FILE]\n"
+"usage: harmonySEQ [-hdv] [FILE]\n"
 "\n"
-"    -p --ports n     sets ports number to n\n"
-"    -d --debug       enters debug mode, prints lots of debug messeges\n"
-"    -h --help        prints this help messase and exits\n"
-"    -v --version     prints the program version\n"
+"   -d    --debug       enters debug mode, prints lots of debug messeges\n"
+"         --pass-midi   passes the midi events through the program by "
+"default\n"
+"   -h    --help        prints this help messase and exits\n"
+"   -v    --version     prints the program version\n"
 msgstr ""
 "harmonySEQ, version %s\n"
 "\n"
@@ -52,13 +53,6 @@ msgstr ""
 "    -d --debug       enters debug mode, prints lots of debug messeges\n"
 "    -h --help        prints this help messase and exits\n"
 "    -v --version     prints the program version\n"
-
-#: src/main.cpp:326
-#, c-format
-msgid ""
-"       --pass-midi   passes the midi events through the program by default\n"
-msgstr ""
-"       --pass-midi   passes the midi events through the program by default\n"
 
 #: src/MainWindow.cpp:39 src/ActionGUI.cpp:109
 msgid "Tempo:"
@@ -273,42 +267,42 @@ msgstr "ERROR - error while opening file %s to write.\n"
 msgid "ERROR - unknown error while processing file '%s': "
 msgstr "ERROR - error while opening file %s to write.\n"
 
-#: src/Event.cpp:57
+#: src/Event.cpp:50
 #, c-format
 msgid "When note %d on any channel gets on..."
 msgstr "When note %d on any channel gets on..."
 
-#: src/Event.cpp:58
+#: src/Event.cpp:51
 #, c-format
 msgid "When note %d on channel %d gets on..."
 msgstr "When note %d on channel %d gets on..."
 
-#: src/Event.cpp:61
+#: src/Event.cpp:54
 #, c-format
 msgid "When key %s is pressed..."
 msgstr "When key %s is pressed..."
 
-#: src/Event.cpp:65
+#: src/Event.cpp:58
 #, c-format
 msgid "This is an empty event, that will never be triggered."
 msgstr "This is an empty event, that will never be triggered."
 
-#: src/Event.cpp:69
+#: src/Event.cpp:62
 #, c-format
 msgid "When controller %d on any channel is moved..."
 msgstr "When controller %d on any channel is moved..."
 
-#: src/Event.cpp:70
+#: src/Event.cpp:63
 #, c-format
 msgid "When controller %d on channel %d is moved..."
 msgstr ""
 
-#: src/Event.cpp:74
+#: src/Event.cpp:67
 #, c-format
 msgid "Unknown event."
 msgstr ""
 
-#: src/Event.cpp:126
+#: src/Event.cpp:119
 msgid "Error - empty event would be triggered.\n"
 msgstr "Error - empty event would be triggered.\n"
 
@@ -488,36 +482,36 @@ msgstr ""
 msgid "Toggle"
 msgstr ""
 
-#: src/ActionGUI.cpp:346
+#: src/ActionGUI.cpp:350
 msgid "Error: note has changed, while action is not note-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:358
+#: src/ActionGUI.cpp:362
 msgid "Error: tempo has changed, while action is not tempo-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:370
+#: src/ActionGUI.cpp:374
 msgid "Error: sequencer has changed, while action is not sequencer-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:383
+#: src/ActionGUI.cpp:387
 msgid "Error: volume has changed, while action is not volume-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:394
+#: src/ActionGUI.cpp:398
 msgid "Error: note to set has changed, while action is not set-seq-note-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:405
+#: src/ActionGUI.cpp:409
 msgid "Error: note number has changed, while action is not set-seq-note-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:418
+#: src/ActionGUI.cpp:422
 msgid ""
 "Error: on-off-toggle has changed, while action is not on-off-toggle-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:431
+#: src/ActionGUI.cpp:435
 msgid ""
 "Error: play-pause-toggle has changed, while action is not play-pause-type."
 msgstr ""
@@ -649,6 +643,13 @@ msgstr ""
 #: src/ChordWidget.cpp:92
 msgid "Octave"
 msgstr ""
+
+#~ msgid ""
+#~ "       --pass-midi   passes the midi events through the program by "
+#~ "default\n"
+#~ msgstr ""
+#~ "       --pass-midi   passes the midi events through the program by "
+#~ "default\n"
 
 #, fuzzy
 #~ msgid "Sequencer/ON"
