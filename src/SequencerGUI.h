@@ -75,6 +75,7 @@ private:
     void OnNotebookPageChanged(GtkNotebookPage* page, guint page_num);
     void OnAddMelodyClicked();
     void OnRemoveMelodyClicked();
+    void SetRemoveButtonSensitivity();
     Gtk::VBox main_vbox;
     Gtk::Notebook notebook;
     Gtk::VBox box_of_sliders;

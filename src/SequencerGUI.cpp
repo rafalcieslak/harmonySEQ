@@ -261,7 +261,7 @@ void SequencerWindow::InitNotebook(){
     for (unsigned int x = 0; x < parent->melodies.size();x++){
         melody_boxes[x] = /*Gtk::manage<Gtk::VBox>*/(new Gtk::VBox); //careful. may cause some strange memory leaks, should be investigated whether the Gtk::manage formule is really unneeded.
         melody_boxes[x]->show();
-        sprintf(temp,_("Mel %d"),x);
+        sprintf(temp,_("%d"),x);
         notebook.append_page(*melody_boxes[x],temp);
         
     }
@@ -274,6 +274,7 @@ void SequencerWindow::InitNotebook(){
     ReattachSliders(); //to bring the sliders back
     UpdateActiveMelodyRange();
     OnActiveMelodyChanged(); //this will mark active tab with a star (Mel x*)
+    SetRemoveButtonSensitivity(); //according to the number of pages
 }
 
 void SequencerWindow::InitMelodySliders(){
@@ -364,12 +365,12 @@ void SequencerWindow::OnActiveMelodyChanged(){
 
     assert(activemelody < parent->melodies.size());
 
-    sprintf(temp,_("Mel %d"),old);
+    sprintf(temp,_(" %d"),old);
     notebook.set_tab_label_text(*melody_boxes[old],temp);
 
     parent->active_melody = activemelody; //applying to parent
 
-    sprintf(temp,_("Mel %d*"),activemelody);
+    sprintf(temp,_("%d*"),activemelody);
     notebook.set_tab_label_text(*melody_boxes[activemelody],temp);
 }
 
@@ -397,14 +398,36 @@ void SequencerWindow::OnAddMelodyClicked(){
     int x = melody_boxes.size() - 1;
     melody_boxes[x] = new Gtk::VBox;
     melody_boxes[x]->show();
-    sprintf(temp, _("Mel %d"), x);
+    sprintf(temp, _("%d"), x);
     notebook.append_page(*melody_boxes[x], temp);
     notebook.set_current_page(notebook.pages().size()-1); //will show the last page
     InitMelodySliders();
-
+    UpdateActiveMelodyRange();
+    SetRemoveButtonSensitivity();
 }
 
 void SequencerWindow::OnRemoveMelodyClicked(){
+    int n = notebook.get_current_page();
+    *dbg << "removing melody " << n <<"\n";
+    DetachSliders();
+    notebook.remove(*melody_boxes[n]);
+    delete melody_boxes[n];
+    melody_boxes.erase(melody_boxes.begin()+n);
+    parent->melodies.erase(parent->melodies.begin()+n);
+    if (parent->active_melody == n ) { parent->active_melody = 0;active_melody.set_value(0.0);}
+    if (parent->active_melody > n ) {parent->active_melody = parent->active_melody-1;active_melody.set_value(parent->active_melody); }
+    previous_box_where_sliders_were_packed = -1;
+    InitNotebook();
+    notebook.set_current_page(n);
+    UpdateActiveMelodyRange();
+    SetRemoveButtonSensitivity();
+}
 
-    
+void SequencerWindow::SetRemoveButtonSensitivity(){
+    if(notebook.get_n_pages() == 1){
+        remove_melody.set_sensitive(0);
+    }else{
+        remove_melody.set_sensitive(1);
+    }
+
 }
