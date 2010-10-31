@@ -73,6 +73,8 @@ private:
     void OnActiveMelodyChanged();
     void OnSetAsActiveMelodyClicked();
     void OnNotebookPageChanged(GtkNotebookPage* page, guint page_num);
+    void OnAddMelodyClicked();
+    void OnRemoveMelodyClicked();
     Gtk::VBox main_vbox;
     Gtk::Notebook notebook;
     Gtk::VBox box_of_sliders;
@@ -87,6 +89,10 @@ private:
     Gtk::Label channellabel;
     Gtk::Label volumelabel;
     Gtk::Label activemelodylabel;
+    Gtk::Label melodylabel;
+    Gtk::HBox melody_ops_hbox;
+    Gtk::Button add_melody_button;
+    Gtk::Button remove_melody;
     Gtk::HBox low_hbox;
     Gtk::HBox line_one;
     Gtk::HBox line_two;

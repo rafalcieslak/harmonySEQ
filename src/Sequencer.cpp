@@ -53,7 +53,6 @@ Gtk::TreeModel::RowReference clone_sequencer(int orig){
     Sequencer *new_seq = new Sequencer(sequencers[orig]);
     new_seq->SetOn(0);
     sequencers.push_back(new_seq);
-
     return mainwindow->AddSequencerRow(n);
 
 }

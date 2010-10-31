@@ -45,11 +45,15 @@ SequencerWindow::SequencerWindow(Sequencer* prt)
     main_vbox.pack_start(box_of_chord);
     box_of_chord.pack_start(*chordwidget);
     main_vbox.pack_start(notebook);
+    main_vbox.pack_start(melody_ops_hbox);
     main_vbox.pack_start(line_zero, Gtk::PACK_SHRINK);
     main_vbox.pack_start(low_hbox);
 
     notebook.set_tab_pos(Gtk::POS_BOTTOM);
+    UpdateActiveMelodyRange();
+    active_melody.set_value(parent->active_melody); //maybe the parent already have an active melody chosen
     InitNotebook();
+    notebook.set_scrollable(1);
     notebook.signal_switch_page().connect(sigc::mem_fun(*this, &SequencerWindow::OnNotebookPageChanged));
 
     low_hbox.pack_start(spinners_vbox,Gtk::PACK_SHRINK);
@@ -64,10 +68,21 @@ SequencerWindow::SequencerWindow(Sequencer* prt)
     line_zero.pack_end(activemelodylabel,Gtk::PACK_SHRINK);
     line_zero.pack_end(set_as_active_melody,Gtk::PACK_SHRINK);
     set_as_active_melody.signal_clicked().connect(mem_fun(*this,&SequencerWindow::OnSetAsActiveMelodyClicked));
+
+    melody_ops_hbox.pack_end(remove_melody,Gtk::PACK_SHRINK);
+    melody_ops_hbox.pack_end(add_melody_button,Gtk::PACK_SHRINK);
+    melody_ops_hbox.pack_end(melodylabel,Gtk::PACK_SHRINK);
+    add_melody_button.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWindow::OnAddMelodyClicked));
+    remove_melody.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWindow::OnRemoveMelodyClicked));
+
     channellabel.set_text(_("MIDI channel:"));
     volumelabel.set_text(_("Volume:"));
     activemelodylabel.set_text(_("Active melody:"));
     set_as_active_melody.set_label(_("Set as active melody"));
+    melodylabel.set_text(_("Melody:"));
+    add_melody_button.set_label(_("Add"));
+    remove_melody.set_label(_("Remove"));
+
     volume_button.set_range(0,127);
     channel_button.set_range(1,16);
     volume_button.set_increments(1,16);
@@ -77,8 +92,6 @@ SequencerWindow::SequencerWindow(Sequencer* prt)
     channel_button.set_value(parent->GetChannel());
     volume_button.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWindow::OnVolumeChanged));
     channel_button.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWindow::OnChannelChanged));
-    UpdateActiveMelodyRange();
-    OnActiveMelodyChanged();
     active_melody.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWindow::OnActiveMelodyChanged));
     toggle_vbox.pack_start(tgl_mute);
     toggle_vbox.pack_start(tgl_apply_mainnote);
@@ -140,7 +153,7 @@ SequencerWindow::~SequencerWindow(){
 
 void SequencerWindow::OnMelodyNoteChanged(int seq){
     *dbg << "seq changed";
-    parent->SetMelodyNote(active_melody.get_value(),seq,melody_scales[seq]->get_value());
+    parent->SetMelodyNote(notebook.get_current_page(),seq,melody_scales[seq]->get_value());
     Files::SetFileModified(1);
 }
 
@@ -209,8 +222,8 @@ void SequencerWindow::OnResolutionChanged(){
     Gtk::TreeModel::Row row = *(resolution_box.get_active());
 
     parent->SetResolution(row[m_Columns_resol.resol]);
-    if(!do_not_react_on_page_changes)
-        InitMelodySliders();;
+    //if(!do_not_react_on_page_changes)
+        InitMelodySliders();
     
     if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
     Files::SetFileModified(1);
@@ -267,8 +280,6 @@ void SequencerWindow::InitMelodySliders(){
     *dbg << "sliders were on  " << previous_box_where_sliders_were_packed << " page. \n";
     int active_page = notebook.get_current_page();
     *dbg << "setting sliders to be on page " << active_page << ". \n";
-    if(active_page == previous_box_where_sliders_were_packed) //so the current page didn't change, so:
-        return;
 
     if (previous_box_where_sliders_were_packed != -1)   //because -1 that means there are not packed anywhere yet
     for(unsigned int x = 0; x < melody_scales.size();x++){
@@ -375,4 +386,25 @@ void SequencerWindow::OnNotebookPageChanged(GtkNotebookPage* page, guint page_nu
     *dbg << "page changed!\n";
     InitMelodySliders();
 
+}
+
+void SequencerWindow::OnAddMelodyClicked(){
+    char temp[100];
+
+    parent->melodies.push_back( vector<int>(parent->resolution,0));
+
+    melody_boxes.push_back(NULL);
+    int x = melody_boxes.size() - 1;
+    melody_boxes[x] = new Gtk::VBox;
+    melody_boxes[x]->show();
+    sprintf(temp, _("Mel %d"), x);
+    notebook.append_page(*melody_boxes[x], temp);
+    notebook.set_current_page(notebook.pages().size()-1); //will show the last page
+    InitMelodySliders();
+
+}
+
+void SequencerWindow::OnRemoveMelodyClicked(){
+
+    
 }
