@@ -43,10 +43,10 @@ public:
     Sequencer(int seq[],int chord[], Glib::ustring _name);
     virtual ~Sequencer();
 
-    /**List of sequence notes*/
-    vector<vector<int> > sequences;
+    /**List of melody notes*/
+    vector<vector<int> > melodies;
     /**The active sequence number*/
-    int active_sequence;
+    int active_melody;
 
     int AddSequence();
     bool RemoveSequence(int x);
@@ -71,14 +71,14 @@ public:
 
     /**Returns a one note from a given sequence
      * @parram n sequence note tumber*/
-    int GetSequenceNote(int sequence, int n);
+    int GetMelodyNote(int melody, int n);
 
     /**Returns a one note from the active sequence
      * @parram n sequence note tumber*/
-    int GetActiveSequenceNote( int n);
+    int GetActiveMelodyNote( int n);
 
     /**Sets a note in a given sequence*/
-    void SetSequenceNote(int sequence, int n, int value);
+    void SetMelodyNote(int sequence, int n, int value);
 
     /**Sets the sequencer on/off*/
     void SetOn(bool m);

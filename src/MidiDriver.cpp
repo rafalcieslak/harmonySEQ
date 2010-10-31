@@ -242,7 +242,7 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
             for (int i = 0; i < howmanytimes; i++){
                 for (int x = 0; x < sequencers[n]->resolution; x++) {
                     snd_seq_ev_clear(&ev);
-                    int note = seq->GetNoteOfChord(seq->GetActiveSequenceNote(x));
+                    int note = seq->GetNoteOfChord(seq->GetActiveMelodyNote(x));
                     if (seq->GetApplyMainNote()) note += mainnote;
                     snd_seq_ev_set_note(&ev, seq->GetChannel() - 1, note, seq->GetVolume(), duration);
                     snd_seq_ev_schedule_tick(&ev, queueid, 0, local_tick + x * duration);
@@ -268,7 +268,7 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
             for (x = 0; x < (double)seq->resolution/seq->length;x++){
                     //*dbg << "x = " << x << ENDL;
                     snd_seq_ev_clear(&ev);
-                    int note = seq->GetNoteOfChord(seq->GetActiveSequenceNote(currnote));
+                    int note = seq->GetNoteOfChord(seq->GetActiveMelodyNote(currnote));
                     if (seq->GetApplyMainNote()) note += mainnote;
                     snd_seq_ev_set_note(&ev, seq->GetChannel() - 1, note, seq->GetVolume(), duration);
                     snd_seq_ev_schedule_tick(&ev, queueid, 0, tick + x * duration);

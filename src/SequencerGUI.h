@@ -39,8 +39,15 @@ public:
     /**Just like UpdateValues, but updates only the Chordwidget*/
     void UpdateChord();
 
-    /**Inits melody sliders*/
-    void InitSeqSliders();
+    /**Inits the notebook*/
+    void InitNotebook();
+    
+    /**Inits the sliders, packs then on active notebook page, sets them apropierate values*/
+    void InitMelodySliders();
+
+    /**When pages are added or removed etc, the boxes where sliders are stored are removed, and after then they are brougth back again. To make it save to remove these boxes, we must first unpack sliders from them, and then add them back to the appropierate box.*/
+    void DetachSliders();
+    void ReattachSliders();
     
     /**The chordwidget of this GUI*/
     ChordWidget* chordwidget;
@@ -51,30 +58,35 @@ public:
     friend class Sequencer;
     
 private:
-    void UpdateActiveSeqRange();
+    int previous_box_where_sliders_were_packed;
+    int do_not_react_on_page_changes;
+    void UpdateActiveMelodyRange();
 
     void OnChordWidgetChanged();
-    void OnSequenceChanged(int seq);
+    void OnMelodyNoteChanged(int seq);
     void OnChannelChanged();
     void OnVolumeChanged();
     void OnToggleMuteToggled();
     void OnToggleApplyMainNoteToggled();
     void OnResolutionChanged();
     void OnLengthChanged();
-    void OnActiveSequenceChanged();
-    void OnSetAsActiveSequenceClicked();
+    void OnActiveMelodyChanged();
+    void OnSetAsActiveMelodyClicked();
+    void OnNotebookPageChanged(GtkNotebookPage* page, guint page_num);
     Gtk::VBox main_vbox;
+    Gtk::Notebook notebook;
     Gtk::VBox box_of_sliders;
     Gtk::HBox box_of_chord;
     Gtk::HBox upper_box;
-    std::vector<Gtk::HScale *> sequence_scales;
+    std::vector<Gtk::HScale *> melody_scales;
+    std::vector<Gtk::VBox  *> melody_boxes;
     Gtk::SpinButton channel_button;
     Gtk::SpinButton volume_button;
-    Gtk::SpinButton active_sequence;
-    Gtk::Button set_as_active_sequence;
+    Gtk::SpinButton active_melody;
+    Gtk::Button set_as_active_melody;
     Gtk::Label channellabel;
     Gtk::Label volumelabel;
-    Gtk::Label activesequencelabel;
+    Gtk::Label activemelodylabel;
     Gtk::HBox low_hbox;
     Gtk::HBox line_one;
     Gtk::HBox line_two;

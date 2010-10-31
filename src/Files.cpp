@@ -115,11 +115,11 @@ void SaveToFile(){
                 kf.set_integer(temp,FILE_KEY_SEQ_VOLUME,sequencers[x]->GetVolume());
                 kf.set_integer(temp,FILE_KEY_SEQ_RESOLUTION,sequencers[x]->resolution);
                 kf.set_double(temp,FILE_KEY_SEQ_LENGTH,sequencers[x]->length);
-                kf.set_integer(temp,FILE_KEY_SEQ_SEQUENCES_NUMBER,sequencers[x]->sequences.size());
+                kf.set_integer(temp,FILE_KEY_SEQ_SEQUENCES_NUMBER,sequencers[x]->melodies.size());
                 //save the sequences
-                for (int s=0; s<sequencers[x]->sequences.size();s++){
+                for (int s=0; s<sequencers[x]->melodies.size();s++){
                     sprintf(temp2,FILE_KEY_SEQ_SEQUENCE_TEMPLATE,s);
-                    kf.set_integer_list(temp,temp2,sequencers[x]->sequences[s]);
+                    kf.set_integer_list(temp,temp2,sequencers[x]->melodies[s]);
                 }
                 kf.set_integer_list(temp,FILE_KEY_SEQ_CHORD,sequencers[x]->chord.SaveToVector());
             }
@@ -277,25 +277,25 @@ bool LoadFile(Glib::ustring file){
             sequencers[x]->resolution = kf.get_integer(temp, FILE_KEY_SEQ_RESOLUTION);
             sequencers[x]->length = kf.get_double(temp, FILE_KEY_SEQ_LENGTH);
 
-            sequencers[x]->sequences.clear();
+            sequencers[x]->melodies.clear();
 
             //here we load the sequences
             if(kf.has_key(temp,FILE_KEY_SEQ_SEQUENCE)){ //old file, seems it uses only one sequence
                     int seq = sequencers[x]->AddSequence();
-                    sequencers[x]->sequences[seq].clear();
+                    sequencers[x]->melodies[seq].clear();
                     std::vector<int> sequence = kf.get_integer_list(temp, FILE_KEY_SEQ_SEQUENCE);
                     for (unsigned int n = 0; n < sequence.size(); n++) {
-                        sequencers[x]->sequences[0].push_back(sequence[n]); //pushing notes to the first, and the olny sequence
+                        sequencers[x]->melodies[0].push_back(sequence[n]); //pushing notes to the first, and the olny sequence
                     }
             }else{//new file, uses many sequences
                 int n = kf.get_integer(temp,FILE_KEY_SEQ_SEQUENCES_NUMBER);
                 for(int s =0; s < n; s++){
                     int seq = sequencers[x]->AddSequence();
-                    sequencers[x]->sequences[seq].clear();
+                    sequencers[x]->melodies[seq].clear();
                     sprintf(temp2,FILE_KEY_SEQ_SEQUENCE_TEMPLATE,s);
                     std::vector<int> sequence = kf.get_integer_list(temp, temp2);
                     for (unsigned int n = 0; n < sequence.size(); n++) {
-                        sequencers[x]->sequences[s].push_back(sequence[n]); //pushing all notes to sequence
+                        sequencers[x]->melodies[s].push_back(sequence[n]); //pushing all notes to sequence
                     }
                 }
                 if(sequencers.size() == 0) //wtf, there were no sequences in the file? strange. We have to create one in order to prevent crashes.
