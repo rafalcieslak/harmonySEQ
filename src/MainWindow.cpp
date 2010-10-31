@@ -84,6 +84,7 @@ MainWindow::MainWindow()
         tgl2.signal_toggled().connect(mem_fun(*this, &MainWindow::OnApplyMainNoteToggleToggled));
         
         col_count = m_TreeView.append_column(_("Chan"), m_columns_sequencers.col_channel);
+        col_count = m_TreeView.append_column(_("Mel"), m_columns_sequencers.col_mel);
         col_count = m_TreeView.append_column(_("Res"), m_columns_sequencers.col_res);
         col_count = m_TreeView.append_column_numeric(_("Len"), m_columns_sequencers.col_len,"%g");
         col_count = m_TreeView.append_column(_("Vol"), m_columns_sequencers.col_vol);
@@ -292,6 +293,7 @@ Gtk::TreeModel::RowReference MainWindow::AddSequencerRow(int x)
     row[m_columns_sequencers.col_muted] = sequencers[x]->GetOn();
     row[m_columns_sequencers.col_apply_mainnote] = sequencers[x]->GetApplyMainNote();
     row[m_columns_sequencers.col_channel] = sequencers[x]->GetChannel();
+    row[m_columns_sequencers.col_mel] = sequencers[x]->active_melody;
     row[m_columns_sequencers.col_res] = sequencers[x]->resolution;
     row[m_columns_sequencers.col_len] = sequencers[x]->length;
     row[m_columns_sequencers.col_vol] = sequencers[x]->GetVolume();
@@ -326,6 +328,7 @@ void MainWindow::InitTreeData(){
         row[m_columns_sequencers.col_apply_mainnote] = sequencers[x]->GetApplyMainNote();
         row[m_columns_sequencers.col_channel] = sequencers[x]->GetChannel();
         row[m_columns_sequencers.col_res] = sequencers[x]->resolution;
+        row[m_columns_sequencers.col_mel] = sequencers[x]->active_melody;
         row[m_columns_sequencers.col_len] = sequencers[x]->length;
         row[m_columns_sequencers.col_vol] = sequencers[x]->GetVolume();
         Gtk::TreeRowReference rowref(m_refTreeModel_sequencers,m_refTreeModel_sequencers->get_path(iter));
@@ -357,6 +360,7 @@ void MainWindow::RefreshRow(Gtk::TreeRowReference rowref){
     row[m_columns_sequencers.col_apply_mainnote] = seq->GetApplyMainNote();
     row[m_columns_sequencers.col_channel] = seq->GetChannel();
     row[m_columns_sequencers.col_res] = seq->resolution;
+    row[m_columns_sequencers.col_mel] = seq->active_melody;
     row[m_columns_sequencers.col_len] = seq->length;
     row[m_columns_sequencers.col_vol] = seq->GetVolume();
     if(sequencers[x]->GetOn()){

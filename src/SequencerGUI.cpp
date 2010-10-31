@@ -372,13 +372,15 @@ void SequencerWindow::OnActiveMelodyChanged(){
 
     sprintf(temp,_("%d*"),activemelody);
     notebook.set_tab_label_text(*melody_boxes[activemelody],temp);
+
+    if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
+    Files::SetFileModified(1);
 }
 
 void SequencerWindow::OnSetAsActiveMelodyClicked(){
 
     int current = notebook.get_current_page();
-    active_melody.set_value((double)current); //singnal handler wont be triggered, it reacts on user changes, so call it manually
-    OnActiveMelodyChanged();
+    active_melody.set_value((double)current);
 
 }
 
@@ -404,6 +406,7 @@ void SequencerWindow::OnAddMelodyClicked(){
     InitMelodySliders();
     UpdateActiveMelodyRange();
     SetRemoveButtonSensitivity();
+    Files::SetFileModified(1);
 }
 
 void SequencerWindow::OnRemoveMelodyClicked(){
@@ -421,6 +424,7 @@ void SequencerWindow::OnRemoveMelodyClicked(){
     notebook.set_current_page(n);
     UpdateActiveMelodyRange();
     SetRemoveButtonSensitivity();
+    Files::SetFileModified(1);
 }
 
 void SequencerWindow::SetRemoveButtonSensitivity(){
