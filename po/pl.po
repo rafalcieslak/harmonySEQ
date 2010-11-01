@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2010-10-29 21:45+0200\n"
+"POT-Creation-Date: 2010-11-01 20:09+0100\n"
 "PO-Revision-Date: 2010-10-28 08:28+0000\n"
 "Last-Translator: Rafal Cieslak <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -71,7 +71,7 @@ msgstr "ID"
 msgid "Name"
 msgstr "Nazwa"
 
-#: src/MainWindow.cpp:74 src/SequencerGUI.cpp:78 src/ActionGUI.cpp:115
+#: src/MainWindow.cpp:74 src/SequencerGUI.cpp:98 src/ActionGUI.cpp:115
 msgid "On"
 msgstr "Wł."
 
@@ -84,71 +84,75 @@ msgid "Chan"
 msgstr "Kan"
 
 #: src/MainWindow.cpp:87
+msgid "Mel"
+msgstr ""
+
+#: src/MainWindow.cpp:88
 msgid "Res"
 msgstr "Roz"
 
-#: src/MainWindow.cpp:88
+#: src/MainWindow.cpp:89
 msgid "Len"
 msgstr "Dł"
 
-#: src/MainWindow.cpp:89
+#: src/MainWindow.cpp:90
 msgid "Vol"
 msgstr "Gł"
 
-#: src/MainWindow.cpp:149
+#: src/MainWindow.cpp:150 src/SequencerGUI.cpp:83
 msgid "Add"
 msgstr "Dodaj"
 
-#: src/MainWindow.cpp:151
+#: src/MainWindow.cpp:152
 msgid "Save"
 msgstr "Zapisz"
 
-#: src/MainWindow.cpp:153
+#: src/MainWindow.cpp:154
 msgid "Open"
 msgstr "Otwórz"
 
-#: src/MainWindow.cpp:155 src/EventsWindow.cpp:39
+#: src/MainWindow.cpp:156 src/SequencerGUI.cpp:84 src/EventsWindow.cpp:39
 msgid "Remove"
 msgstr "Usuń"
 
-#: src/MainWindow.cpp:158
+#: src/MainWindow.cpp:159
 msgid "Clone"
 msgstr "Klonuj"
 
-#: src/MainWindow.cpp:161
+#: src/MainWindow.cpp:162
 msgid "Events"
 msgstr "Zdarzenia"
 
-#: src/MainWindow.cpp:165
+#: src/MainWindow.cpp:166
 msgid "Pass MIDI events"
 msgstr "Przekazuj zdarzenia MIDI"
 
-#: src/MainWindow.cpp:208 src/MainWindow.cpp:378
+#: src/MainWindow.cpp:209 src/MainWindow.cpp:382
 msgid "The file had unsaved changes."
 msgstr "Plik ma niezapisane zmiany."
 
-#: src/MainWindow.cpp:208
+#: src/MainWindow.cpp:209
 msgid "Are sure you want to quit?"
 msgstr "Czy na pewno chcesz zakończyć pracę programu?"
 
-#: src/MainWindow.cpp:233
+#: src/MainWindow.cpp:234
 msgid "activated row "
 msgstr "aktywowano wiersz "
 
-#: src/MainWindow.cpp:234
+#: src/MainWindow.cpp:235
 msgid ", name is: "
 msgstr ", nazwa to: "
 
-#: src/MainWindow.cpp:378
+#: src/MainWindow.cpp:382
 msgid "Are sure you want to loose them and open another file?"
 msgstr "Czy na pewno otworzyć inny plik, tracąc je?"
 
-#: src/MainWindow.cpp:494 src/Action.cpp:182 src/ActionGUI.cpp:118
+#: src/MainWindow.cpp:498 src/Action.cpp:182 src/ActionGUI.cpp:118
 #, c-format
 msgid "Play"
 msgstr "Start"
 
-#: src/MainWindow.cpp:499 src/Action.cpp:179 src/ActionGUI.cpp:117
+#: src/MainWindow.cpp:503 src/Action.cpp:179 src/ActionGUI.cpp:117
 #, c-format
 msgid "Pause"
 msgstr "Pauza"
@@ -174,34 +178,53 @@ msgstr "Inicjacja sterownika MIDI powiodła się.\n"
 msgid "seq %d"
 msgstr "seq %d"
 
-#: src/SequencerGUI.cpp:61
+#: src/SequencerGUI.cpp:78
 msgid "MIDI channel:"
 msgstr "Kanał MIDI"
 
-#: src/SequencerGUI.cpp:62 src/ActionGUI.cpp:111
+#: src/SequencerGUI.cpp:79 src/ActionGUI.cpp:111
 msgid "Volume:"
 msgstr "Głośność:"
 
-#: src/SequencerGUI.cpp:63
+#: src/SequencerGUI.cpp:80
 #, fuzzy
-msgid "Active sequence:"
+msgid "Active melody:"
 msgstr "sekwencer"
 
-#: src/SequencerGUI.cpp:64
-msgid "Set as active sequence"
+#: src/SequencerGUI.cpp:81
+msgid "Set as active melody"
 msgstr ""
 
-#: src/SequencerGUI.cpp:79
+#: src/SequencerGUI.cpp:82
+msgid "Melody:"
+msgstr ""
+
+#: src/SequencerGUI.cpp:99
 msgid "Apply main note"
 msgstr "Stosuj główną nutę"
 
-#: src/SequencerGUI.cpp:87
+#: src/SequencerGUI.cpp:107
 msgid "Resolution:"
 msgstr "Rozdzielczość:"
 
-#: src/SequencerGUI.cpp:104
+#: src/SequencerGUI.cpp:124
 msgid "Length:"
 msgstr "Długość:"
+
+#: src/SequencerGUI.cpp:264 src/SequencerGUI.cpp:403
+#, c-format
+msgid "%d"
+msgstr ""
+
+#: src/SequencerGUI.cpp:368
+#, fuzzy, c-format
+msgid " %d"
+msgstr "seq %d"
+
+#: src/SequencerGUI.cpp:373
+#, c-format
+msgid "%d*"
+msgstr ""
 
 #: src/messages.cpp:24
 #, c-format

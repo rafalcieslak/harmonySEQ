@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2010-10-29 21:45+0200\n"
+"POT-Creation-Date: 2010-11-01 20:09+0100\n"
 "PO-Revision-Date: 2010-10-11 07:12+0000\n"
 "Last-Translator: Rafal Cieslak <Unknown>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -62,7 +62,7 @@ msgstr ""
 msgid "Name"
 msgstr "İsim"
 
-#: src/MainWindow.cpp:74 src/SequencerGUI.cpp:78 src/ActionGUI.cpp:115
+#: src/MainWindow.cpp:74 src/SequencerGUI.cpp:98 src/ActionGUI.cpp:115
 msgid "On"
 msgstr ""
 
@@ -75,71 +75,75 @@ msgid "Chan"
 msgstr ""
 
 #: src/MainWindow.cpp:87
-msgid "Res"
+msgid "Mel"
 msgstr ""
 
 #: src/MainWindow.cpp:88
-msgid "Len"
+msgid "Res"
 msgstr ""
 
 #: src/MainWindow.cpp:89
+msgid "Len"
+msgstr ""
+
+#: src/MainWindow.cpp:90
 msgid "Vol"
 msgstr ""
 
-#: src/MainWindow.cpp:149
+#: src/MainWindow.cpp:150 src/SequencerGUI.cpp:83
 msgid "Add"
 msgstr "Ekle"
 
-#: src/MainWindow.cpp:151
+#: src/MainWindow.cpp:152
 msgid "Save"
 msgstr "Kaydet"
 
-#: src/MainWindow.cpp:153
+#: src/MainWindow.cpp:154
 msgid "Open"
 msgstr ""
 
-#: src/MainWindow.cpp:155 src/EventsWindow.cpp:39
+#: src/MainWindow.cpp:156 src/SequencerGUI.cpp:84 src/EventsWindow.cpp:39
 msgid "Remove"
 msgstr "Kaldır"
 
-#: src/MainWindow.cpp:158
+#: src/MainWindow.cpp:159
 msgid "Clone"
 msgstr ""
 
-#: src/MainWindow.cpp:161
+#: src/MainWindow.cpp:162
 msgid "Events"
 msgstr ""
 
-#: src/MainWindow.cpp:165
+#: src/MainWindow.cpp:166
 msgid "Pass MIDI events"
 msgstr ""
 
-#: src/MainWindow.cpp:208 src/MainWindow.cpp:378
+#: src/MainWindow.cpp:209 src/MainWindow.cpp:382
 msgid "The file had unsaved changes."
 msgstr ""
 
-#: src/MainWindow.cpp:208
+#: src/MainWindow.cpp:209
 msgid "Are sure you want to quit?"
 msgstr ""
 
-#: src/MainWindow.cpp:233
+#: src/MainWindow.cpp:234
 msgid "activated row "
 msgstr ""
 
-#: src/MainWindow.cpp:234
+#: src/MainWindow.cpp:235
 msgid ", name is: "
 msgstr ""
 
-#: src/MainWindow.cpp:378
+#: src/MainWindow.cpp:382
 msgid "Are sure you want to loose them and open another file?"
 msgstr ""
 
-#: src/MainWindow.cpp:494 src/Action.cpp:182 src/ActionGUI.cpp:118
+#: src/MainWindow.cpp:498 src/Action.cpp:182 src/ActionGUI.cpp:118
 #, c-format
 msgid "Play"
 msgstr ""
 
-#: src/MainWindow.cpp:499 src/Action.cpp:179 src/ActionGUI.cpp:117
+#: src/MainWindow.cpp:503 src/Action.cpp:179 src/ActionGUI.cpp:117
 #, c-format
 msgid "Pause"
 msgstr ""
@@ -165,33 +169,52 @@ msgstr ""
 msgid "seq %d"
 msgstr ""
 
-#: src/SequencerGUI.cpp:61
+#: src/SequencerGUI.cpp:78
 msgid "MIDI channel:"
 msgstr ""
 
-#: src/SequencerGUI.cpp:62 src/ActionGUI.cpp:111
+#: src/SequencerGUI.cpp:79 src/ActionGUI.cpp:111
 msgid "Volume:"
 msgstr ""
 
-#: src/SequencerGUI.cpp:63
-msgid "Active sequence:"
+#: src/SequencerGUI.cpp:80
+msgid "Active melody:"
 msgstr ""
 
-#: src/SequencerGUI.cpp:64
-msgid "Set as active sequence"
+#: src/SequencerGUI.cpp:81
+msgid "Set as active melody"
 msgstr ""
 
-#: src/SequencerGUI.cpp:79
+#: src/SequencerGUI.cpp:82
+msgid "Melody:"
+msgstr ""
+
+#: src/SequencerGUI.cpp:99
 msgid "Apply main note"
 msgstr ""
 
-#: src/SequencerGUI.cpp:87
+#: src/SequencerGUI.cpp:107
 msgid "Resolution:"
 msgstr "Çözünürlük:"
 
-#: src/SequencerGUI.cpp:104
+#: src/SequencerGUI.cpp:124
 msgid "Length:"
 msgstr "Uzunluk:"
+
+#: src/SequencerGUI.cpp:264 src/SequencerGUI.cpp:403
+#, c-format
+msgid "%d"
+msgstr ""
+
+#: src/SequencerGUI.cpp:368
+#, c-format
+msgid " %d"
+msgstr ""
+
+#: src/SequencerGUI.cpp:373
+#, c-format
+msgid "%d*"
+msgstr ""
 
 #: src/messages.cpp:24
 #, c-format
