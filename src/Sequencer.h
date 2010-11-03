@@ -106,10 +106,12 @@ public:
     
     /**Sets velocity*/
     void SetVolume(int v);
+
     /**Returns velocity*/
     int GetVolume();
 
-
+    /**Changes the melody that is played by this sequencer*/
+    void ChangeActiveMelody(int new_one);
 
     /**Shows corresponding SequencerWindow*/
     void ShowWindow();

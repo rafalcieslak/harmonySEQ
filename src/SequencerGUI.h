@@ -39,15 +39,19 @@ public:
     /**Just like UpdateValues, but updates only the Chordwidget*/
     void UpdateChord();
 
+    /**Sets active melody to match the one from sequencer*/
+    void UpdateMelody();
+    
     /**Inits the notebook*/
     void InitNotebook();
     
     /**Inits the sliders, packs then on active notebook page, sets them apropierate values*/
-    void InitMelodySliders();
+    //void InitMelodySliders();
 
     /**When pages are added or removed etc, the boxes where sliders are stored are removed, and after then they are brougth back again. To make it save to remove these boxes, we must first unpack sliders from them, and then add them back to the appropierate box.*/
     void DetachSliders();
-    void ReattachSliders();
+    void AttachSliders(int where);
+    //void ReattachSliders();
     
     /**The chordwidget of this GUI*/
     ChordWidget* chordwidget;

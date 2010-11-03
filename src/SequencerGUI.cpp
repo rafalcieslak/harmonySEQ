@@ -221,9 +221,10 @@ void SequencerWindow::OnVolumeChanged(){
 void SequencerWindow::OnResolutionChanged(){
     Gtk::TreeModel::Row row = *(resolution_box.get_active());
 
+    DetachSliders();
     parent->SetResolution(row[m_Columns_resol.resol]);
     //if(!do_not_react_on_page_changes)
-        InitMelodySliders();
+    AttachSliders(previous_box_where_sliders_were_packed);
     
     if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
     Files::SetFileModified(1);
@@ -270,51 +271,20 @@ void SequencerWindow::InitNotebook(){
 
     //reset the current page
     notebook.set_current_page(0);
-    previous_box_where_sliders_were_packed = 0;
-    ReattachSliders(); //to bring the sliders back
+    AttachSliders(0); //to bring the sliders back
     UpdateActiveMelodyRange();
     OnActiveMelodyChanged(); //this will mark active tab with a star (Mel x*)
     SetRemoveButtonSensitivity(); //according to the number of pages
 }
 
-void SequencerWindow::InitMelodySliders(){
-    *dbg << "sliders were on  " << previous_box_where_sliders_were_packed << " page. \n";
-    int active_page = notebook.get_current_page();
-    *dbg << "setting sliders to be on page " << active_page << ". \n";
-
-    if (previous_box_where_sliders_were_packed != -1)   //because -1 that means there are not packed anywhere yet
-    for(unsigned int x = 0; x < melody_scales.size();x++){
-        if(!melody_scales[x]) continue;
-        melody_scales[x]->hide();
-        melody_boxes[previous_box_where_sliders_were_packed]->remove(*melody_scales[x]);
-        delete melody_scales[x];
-    }
-    
-    melody_scales.clear();
-
-    melody_scales.resize(parent->resolution,NULL);
-
-    for (int x= 0; x < parent->resolution; x++){
-        melody_scales[x] = (new Gtk::HScale(0,6,1)); //cannot use Gtk::manage, since deleting the box would delete the sliders!
-        melody_scales[x]->set_value(parent->GetMelodyNote(active_page,x));
-        melody_scales[x]->set_increments(1.0,1.0);
-        //sequence_scales[x]->set_draw_value(0);  //<- hehe, here is a bug in gtkmm ^^
-        melody_scales[x]->set_value_pos(Gtk::POS_RIGHT); //<- temporary workaround
-        melody_scales[x]->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this,&SequencerWindow::OnMelodyNoteChanged),x));
-        //*dbg << "putting slider " << x << " to page " << active_page << ".\n";
-        melody_boxes[active_page]->pack_start(*melody_scales[x],Gtk::PACK_SHRINK);
-        melody_scales[x]->show();
-    }
-    previous_box_where_sliders_were_packed=active_page; //remember where sliders are packed, becuse this information is  nessesary to unpack them
-
-}
-
 void SequencerWindow::DetachSliders(){
 
+    *dbg << "Deattaching sliders\n";
     if (previous_box_where_sliders_were_packed == -1) return;   //because -1 that means there are not packed anywhere yet
-     for(unsigned int x = 0; x < melody_scales.size();x++){
+     for(unsigned int x = 0; x < melody_scales.size() ;x++){
         if(!melody_scales[x]) continue;
         melody_scales[x]->hide();
+        *dbg << "removing " << x << " from " << previous_box_where_sliders_were_packed << ENDL;
         melody_boxes[previous_box_where_sliders_were_packed]->remove(*melody_scales[x]);
         delete melody_scales[x];
     }
@@ -323,27 +293,28 @@ void SequencerWindow::DetachSliders(){
 
 }
 
-void SequencerWindow::ReattachSliders(){
+void SequencerWindow::AttachSliders(int where){
+    *dbg << "Attaching sliders to page " << where << ".\n";
+    if(where >= melody_boxes.size()) {*err<< "Cannot attach sliders to box  "<<where<<", out of range.\n";return;}
 
-    //sliders are reattached to previous_box_where_sliders_were_packed
-    if (previous_box_where_sliders_were_packed == -1) ;   //because -1 that means there are not packed anywhere yet
+     melody_scales.resize(parent->resolution,NULL);
 
-    melody_scales.resize(parent->resolution,NULL);
-    
     for (int x= 0; x < parent->resolution; x++){
         melody_scales[x] = (new Gtk::HScale(0,6,1)); //cannot use Gtk::manage, since deleting the box would delete the sliders!
-        melody_scales[x]->set_value(parent->GetMelodyNote(previous_box_where_sliders_were_packed,x));
+        melody_scales[x]->set_value(parent->GetMelodyNote(where,x));
         melody_scales[x]->set_increments(1.0,1.0);
         //sequence_scales[x]->set_draw_value(0);  //<- hehe, here is a bug in gtkmm ^^
         melody_scales[x]->set_value_pos(Gtk::POS_RIGHT); //<- temporary workaround
         melody_scales[x]->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this,&SequencerWindow::OnMelodyNoteChanged),x));
         //*dbg << "putting slider " << x << " to page " << active_page << ".\n";
-        melody_boxes[previous_box_where_sliders_were_packed]->pack_start(*melody_scales[x],Gtk::PACK_SHRINK);
+        melody_boxes[where]->pack_start(*melody_scales[x],Gtk::PACK_SHRINK);
         melody_scales[x]->show();
     }
 
+    previous_box_where_sliders_were_packed = where;
 
 }
+
 
 void SequencerWindow::OnChordWidgetChanged(){
     Files::SetFileModified(1);
@@ -387,7 +358,8 @@ void SequencerWindow::OnSetAsActiveMelodyClicked(){
 void SequencerWindow::OnNotebookPageChanged(GtkNotebookPage* page, guint page_num){
     if(do_not_react_on_page_changes) return;
     *dbg << "page changed!\n";
-    InitMelodySliders();
+    DetachSliders();
+    AttachSliders(notebook.get_current_page());
 
 }
 
@@ -402,8 +374,7 @@ void SequencerWindow::OnAddMelodyClicked(){
     melody_boxes[x]->show();
     sprintf(temp, _("%d"), x);
     notebook.append_page(*melody_boxes[x], temp);
-    notebook.set_current_page(notebook.pages().size()-1); //will show the last page
-    InitMelodySliders();
+    notebook.set_current_page(notebook.get_n_pages()-1); //will show the last page AND THE SIGNAL HANDLER WILL ATTACH THE SLIDERS!
     UpdateActiveMelodyRange();
     SetRemoveButtonSensitivity();
     Files::SetFileModified(1);
@@ -434,4 +405,26 @@ void SequencerWindow::SetRemoveButtonSensitivity(){
         remove_melody.set_sensitive(1);
     }
 
+}
+
+void SequencerWindow::UpdateMelody(){
+
+    //changing notepad tab labels
+    //changing active seq in parent, but only if in range!!!!
+    char temp[100];
+    int activemelody = parent->active_melody;
+    int old = active_melody.get_value();
+
+    assert(activemelody < parent->melodies.size());
+
+    sprintf(temp,_(" %d"),old);
+    notebook.set_tab_label_text(*melody_boxes[old],temp);
+
+    active_melody.set_value(activemelody);
+
+    sprintf(temp,_("%d*"),activemelody);
+    notebook.set_tab_label_text(*melody_boxes[activemelody],temp);
+
+    if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
+    
 }
