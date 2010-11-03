@@ -126,6 +126,10 @@ void Action::Trigger(int data){
             if (midi->paused) break; //do not sync while in pause!
             midi->Sync();
             break;
+        case SEQ_CHANGE_MELODY:
+            if (!sequencers[args[1]]) break;
+            sequencers[args[1]]->ChangeActiveMelody(args[2]);
+            break;
         default:
 
             *err << _("WARNING: Unknown action triggered.");
@@ -188,6 +192,9 @@ Glib::ustring Action::GetLabel(){
             break;
         case SYNC:
             sprintf(temp,_("Synchronize"));
+            break;
+        case SEQ_CHANGE_MELODY:
+            sprintf(temp,_("Set active melody of sequencer '%s' to %d"),GetSeqName(args[1]).c_str(),args[2]);
             break;
         case NONE:
             sprintf(temp,_("(empty action)"));

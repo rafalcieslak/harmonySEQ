@@ -42,7 +42,8 @@ public:
         TOGGLE_PASS_MIDI,
         /**1)mode: 0- off, 1 - on, 2 - toggle*/
         PLAY_PAUSE,
-        SYNC
+        SYNC,
+        SEQ_CHANGE_MELODY
     };
 
     Action(ActionTypes t, int a1 = 0, int a2 = 0);

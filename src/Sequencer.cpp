@@ -254,3 +254,8 @@ void Sequencer::SetMelodyNote(int sequence, int n, int value){
     melodies[sequence][n] = value;
 
 }
+
+void Sequencer::ChangeActiveMelody(int new_one){
+    active_melody = new_one%(melodies.size());
+    gui_window->UpdateMelody();
+}

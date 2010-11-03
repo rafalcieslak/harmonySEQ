@@ -62,7 +62,7 @@ private:
     void OnOnOffToggleChanged();
     void OnPlayOnOffToggleClicked();
     void OnChordWidgetChanged();
-
+    void OnMelodyChanged();
 
     Gtk::VBox main_box;
 
@@ -80,6 +80,8 @@ private:
     Gtk::Label label_note_nr;
     Gtk::Label label_note_seq;
     Gtk::HBox line_chord;
+    Gtk::HBox line_melody;
+    Gtk::Label label_melody;
 
     Gtk::HBox line_on_off_toggle;
     Gtk::RadioButton on_off_toggle_ON;
@@ -98,6 +100,7 @@ private:
     Gtk::SpinButton vol_button;
     Gtk::SpinButton notenr_button;
     Gtk::SpinButton chordseq_button;
+    Gtk::SpinButton melody_button;
 
     Gtk::Button ok_button;
 

@@ -78,6 +78,9 @@ void InitActionTypesTreeModel(){
     row[m_columns_action_types.type] = Action::SEQ_CHANGE_CHORD;
     row[m_columns_action_types.label] = _("Sequencer/Set chord");
     row = *(m_refTreeModel_ActionTypes->append());
+    row[m_columns_action_types.type] = Action::SEQ_CHANGE_MELODY;
+    row[m_columns_action_types.label] = _("Sequencer/Set active melody");
+    row = *(m_refTreeModel_ActionTypes->append());
     row[m_columns_action_types.type] = Action::MAINOTE_SET;
     row[m_columns_action_types.label] = _("Set main note");
     row = *(m_refTreeModel_ActionTypes->append());
