@@ -1,6 +1,13 @@
 harmonyseq 0.12
+	- Added ability to bind multiple melodies to one sequencer
 	- Added Play/Pause button
+	- Added Sync action, that may be useful to synchronize harmonySEQ with an external application
+	- Improved interaction with user
+	- Recognizing wheter the file was modified since it was last saved
+	- Added Play/pause action
+	- Added action changing melodies in a specified sequencer
 	- Reorganized Seq/on/off/toggle actions (merged into one action type), may cause problems when loading older version files.
+	- Minor GUI improvements
 
 harmonyseq 0.11
 	- Advanced chord selection
