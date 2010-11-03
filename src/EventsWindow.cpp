@@ -154,7 +154,6 @@ void EventsWindow::OnRowChosen(const Gtk::TreeModel::Path& path, Gtk::TreeViewCo
     if (iter)
     {
         Gtk::TreeModel::Row row = *iter;
-        //*dbg << row[m_columns.col_label] << " - " << row[m_columns.col_ID] << " - p: " << row[m_columns.col_prt] << ENDL;
         switch (row[m_columns.col_type]){
             case EVENT:
                 events[row[m_columns.col_ID]]->ShowWindow();

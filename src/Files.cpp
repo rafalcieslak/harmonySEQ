@@ -78,7 +78,7 @@ void SaveToFile(){
         case Gtk::RESPONSE_OK:
         
             //add .hseq extention
-             if (dialog.get_filter() == &hseq) if(filename.size() < 5 || 0 != (filename.substr(filename.length()-5,5).compare(".hseq"))) { *dbg << "LOL";filename += ".hseq";}
+             if (dialog.get_filter() == &hseq) if(filename.size() < 5 || 0 != (filename.substr(filename.length()-5,5).compare(".hseq"))) { filename += ".hseq";}
 
              //check whether it already exists
             if (fexists(filename.c_str())){
@@ -281,7 +281,7 @@ bool LoadFile(Glib::ustring file){
 
             //here we load the sequences
             if(kf.has_key(temp,FILE_KEY_SEQ_SEQUENCE)){ //old file, seems it uses only one sequence
-                    int seq = sequencers[x]->AddSequence();
+                    int seq = sequencers[x]->AddMelody();
                     sequencers[x]->melodies[seq].clear();
                     std::vector<int> sequence = kf.get_integer_list(temp, FILE_KEY_SEQ_SEQUENCE);
                     for (unsigned int n = 0; n < sequence.size(); n++) {
@@ -290,7 +290,7 @@ bool LoadFile(Glib::ustring file){
             }else{//new file, uses many sequences
                 int n = kf.get_integer(temp,FILE_KEY_SEQ_SEQUENCES_NUMBER);
                 for(int s =0; s < n; s++){
-                    int seq = sequencers[x]->AddSequence();
+                    int seq = sequencers[x]->AddMelody();
                     sequencers[x]->melodies[seq].clear();
                     sprintf(temp2,FILE_KEY_SEQ_SEQUENCE_TEMPLATE,s);
                     std::vector<int> sequence = kf.get_integer_list(temp, temp2);
@@ -299,7 +299,7 @@ bool LoadFile(Glib::ustring file){
                     }
                 }
                 if(sequencers.size() == 0) //wtf, there were no sequences in the file? strange. We have to create one in order to prevent crashes.
-                    sequencers[x]->AddSequence();
+                    sequencers[x]->AddMelody();
 
             }
             //Note: the above (saving myltiple sequences) is, well, new. May be still not working. To be tested and checked.
@@ -327,9 +327,7 @@ bool LoadFile(Glib::ustring file){
                 continue;
             }
             events.push_back(new Event());
-            *dbg << temp << ENDL;
             events[x]->type = kf.get_integer(temp,FILE_KEY_EVENT_TYPE);
-            *dbg << events[x]->type<<ENDL;
             events[x]->arg1 = kf.get_integer(temp,FILE_KEY_EVENT_ARG1);
             events[x]->arg2 = kf.get_integer(temp,FILE_KEY_EVENT_ARG2);
             int actions_num = kf.get_integer(temp,FILE_KEY_EVENT_ACTIONS_NUM);

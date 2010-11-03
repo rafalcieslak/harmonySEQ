@@ -118,7 +118,6 @@ void InitChannelsTreeModel(){
     char temp[3];
     for (int x = 1; x < 17; x++){
         row = *(m_refTreeModel_Channels->append());
-        *dbg << "-----" << x << ENDL;
         sprintf(temp,"%d",x);
         row[m_columns_channels.ch] = x;
         row[m_columns_channels.label] = temp;

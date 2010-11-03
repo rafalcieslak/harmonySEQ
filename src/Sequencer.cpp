@@ -69,7 +69,7 @@ Sequencer::Sequencer()
     : melodies(0)
 {
     name = SEQUENCER_DEFAULT_NAME;
-    AddSequence();
+    AddMelody();
     Init();
 }
 
@@ -77,7 +77,7 @@ Sequencer::Sequencer(Glib::ustring _name)
     : melodies(0)
 {
     name = _name;
-    AddSequence();
+    AddMelody();
     Init();
 }
 
@@ -85,7 +85,7 @@ Sequencer::Sequencer(Glib::ustring _name)
 Sequencer::Sequencer(int seq[],int note[])
     :  melodies(0)
 {
-    AddSequence();
+    AddMelody();
     
     for (int x = 0; x < SEQUENCE_DEFAULT_SIZE; x++){
         melodies[0][x] = seq[x];
@@ -102,7 +102,7 @@ Sequencer::Sequencer(int seq[],int note[])
 Sequencer::Sequencer(int seq[],int note[], Glib::ustring _name)
     :  melodies(0)
 {
-    AddSequence();
+    AddMelody();
     
     for (int x = 0; x < SEQUENCE_DEFAULT_SIZE; x++){
         melodies[0][x] = seq[x];
@@ -224,20 +224,20 @@ void Sequencer::UpdateGui(){gui_window->UpdateValues();}
 void Sequencer::UpdateGuiChord(){gui_window->UpdateChord();}
 
 
-int Sequencer::AddSequence(){
+int Sequencer::AddMelody(){
     vector<int> seq (SEQUENCE_DEFAULT_SIZE,0);
     melodies.push_back(seq);
 
-    *dbg<< "Added sequence " << melodies.size() << ".\n";
+    *dbg<< "Added melody " << melodies.size() << ".\n";
     return melodies.size()-1;
 }
 
-bool Sequencer::RemoveSequence(int x){
+bool Sequencer::RemoveMelody(int x){
     melodies.erase(melodies.begin()+x);
     if (active_melody > x) active_melody--;
     else if (active_melody == x) active_melody = 0;
 
-    *dbg<< "Removed sequence " << x << ".\n";
+    *dbg<< "Removed melody " << x << ".\n";
     return 0;
 }
 

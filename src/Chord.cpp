@@ -93,7 +93,7 @@ void Chord::RecalcNotes(){
         case TRIAD:
             base = 12*octave;
             n1 = base+triad_root;
-            *dbg << "n1  = " << n1 << ENDL;
+            *dbg << "    base+triad_root  = " << n1 << ENDL;
             if (triad_mode == TYPE_MAJOR || triad_mode == TYPE_AUGMENTED) n2 = n1+4;
             else n2 = n1+3;
             if(triad_mode == TYPE_MINOR || triad_mode == TYPE_AUGMENTED) n3 = n2+4;
@@ -193,7 +193,7 @@ int Chord::GetOctave(){
 }
 
 void Chord::Set(const Chord& other){
-    *dbg << "appending a new one." << ENDL;
+    *dbg << "copying chord." << ENDL;
     mode = other.mode;
     if (mode == CUSTOM) for (int x = 0 ; x < 6; x++) notes[x] = other.notes[x];
     octave = other.octave;
@@ -261,7 +261,7 @@ void Chord::SetFromVector(std::vector<int>& V){
     guitar_root = V[1];
     guitar_mode = V[2];
     triad_root = V[3];
-    *dbg << "setting from vector: triad root is " << V[3] << ENDL;
+    *dbg << "setting chord settings from vector: triad root is " << V[3] << ENDL;
     triad_mode = V[4];
     octave = V[5];
     inversion = V[6];

@@ -152,7 +152,6 @@ SequencerWindow::~SequencerWindow(){
 }
 
 void SequencerWindow::OnMelodyNoteChanged(int seq){
-    *dbg << "seq changed";
     parent->SetMelodyNote(notebook.get_current_page(),seq,melody_scales[seq]->get_value());
     Files::SetFileModified(1);
 }
@@ -198,7 +197,6 @@ void SequencerWindow::OnChannelChanged(){
 }
 
 void SequencerWindow::OnToggleMuteToggled(){
-    *dbg << "Toggle in GUI signal called\n";
     parent->on = tgl_mute.get_active();
     parent->play_once_phase = 0;
     if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
@@ -233,9 +231,7 @@ void SequencerWindow::OnResolutionChanged(){
 
 void SequencerWindow::OnLengthChanged(){
     Gtk::TreeModel::Row row = *(length_box.get_active());
-    *dbg << "setting length\n";
     parent->length = row[m_Columns_len.len];
-    *dbg << "will refresh row\n";
     if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
 
     Files::SetFileModified(1);

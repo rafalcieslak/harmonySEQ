@@ -98,7 +98,6 @@ EventGUI::~EventGUI(){
 void EventGUI::ChangeVisibleLines(){
     Gtk::TreeModel::Row row = *(Types_combo.get_active());
     int type = row[m_columns_event_types.type];
-    *dbg << "type is - " << type << ENDL;
     line_key.hide();
     line_note.hide();
     line_controller.hide();
@@ -213,7 +212,6 @@ void EventGUI::OnOKClicked(){
 }
 
 void EventGUI::UpdateValues(){
-    //*dbg << "STARTING ========== \n";
     set_transient_for(*eventswindow);
     Gtk::TreeModel::iterator it = m_refTreeModel_EventTypes->get_iter("0");
     Gtk::TreeModel::Row row;

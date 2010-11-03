@@ -48,8 +48,8 @@ public:
     /**The active sequence number*/
     int active_melody;
 
-    int AddSequence();
-    bool RemoveSequence(int x);
+    int AddMelody();
+    bool RemoveMelody(int x);
     /**The main chord*/
    Chord chord;
     

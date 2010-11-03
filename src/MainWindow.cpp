@@ -246,7 +246,6 @@ void
 MainWindow::OnMutedToggleToggled(const Glib::ustring& path)
 {
 
-    *dbg << "Toggle in main window got signal\n";
     Gtk::TreeModel::iterator iter = m_refTreeModel_sequencers->get_iter(path);
     if (!iter) return;
     Gtk::TreeModel::Row row = *iter;
@@ -354,7 +353,6 @@ void MainWindow::RefreshRow(Gtk::TreeRowReference rowref){
     Gtk::TreeModel::Row row = *(m_refTreeModel_sequencers->get_iter(rowref.get_path()));
     int x = row[m_columns_sequencers.col_ID];
     Sequencer* seq = sequencers[x];
-    *dbg << "on = " << seq->GetOn() << ENDL;
     row[m_columns_sequencers.col_muted] = seq->GetOn();
     row[m_columns_sequencers.col_name] = seq->GetName();
     row[m_columns_sequencers.col_apply_mainnote] = seq->GetApplyMainNote();

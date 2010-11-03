@@ -190,12 +190,10 @@ void ChordWidget::OnOctaveChanged(){
 }
 
 void ChordWidget::Update(){
-    *dbg << "updating!---\n" << ENDL;
     we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = true;
     if(chord->GetMode() == Chord::CUSTOM){radio_custom.set_active(1);}
     if(chord->GetMode() == Chord::GUITAR){radio_guitar.set_active(1);}
     if(chord->GetMode() == Chord::TRIAD){radio_triad.set_active(1);}
-    *dbg << "triad note is " <<  chord->GetTriadRoot() << ENDL;;
     combo_triad_note.set_active(chord->GetTriadRoot()); //tricky
     combo_guitar_note.set_active(chord->GetGuitarRoot());
     combo_guitar_mode.set_active(chord->GetGuitarMode());
