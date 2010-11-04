@@ -223,7 +223,8 @@ void SequencerWindow::OnResolutionChanged(){
     parent->SetResolution(row[m_Columns_resol.resol]);
     //if(!do_not_react_on_page_changes)
     AttachSliders(previous_box_where_sliders_were_packed);
-    
+    resize(2,2);
+
     if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
     Files::SetFileModified(1);
 }
