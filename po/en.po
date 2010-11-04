@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2010-11-03 21:01+0100\n"
+"POT-Creation-Date: 2010-11-04 20:05+0100\n"
 "PO-Revision-Date: 2010-09-17 22:23+0000\n"
 "Last-Translator: rafal cieslak <Unknown>\n"
 "Language-Team: English\n"
@@ -126,7 +126,7 @@ msgstr "Events"
 msgid "Pass MIDI events"
 msgstr "Pass MIDI events"
 
-#: src/MainWindow.cpp:209 src/MainWindow.cpp:382
+#: src/MainWindow.cpp:209 src/MainWindow.cpp:380
 msgid "The file had unsaved changes."
 msgstr ""
 
@@ -142,16 +142,16 @@ msgstr "activated row "
 msgid ", name is: "
 msgstr ", name is: "
 
-#: src/MainWindow.cpp:382
+#: src/MainWindow.cpp:380
 msgid "Are sure you want to loose them and open another file?"
 msgstr ""
 
-#: src/MainWindow.cpp:498 src/Action.cpp:186 src/ActionGUI.cpp:125
+#: src/MainWindow.cpp:496 src/Action.cpp:186 src/ActionGUI.cpp:125
 #, c-format
 msgid "Play"
 msgstr ""
 
-#: src/MainWindow.cpp:503 src/Action.cpp:183 src/ActionGUI.cpp:124
+#: src/MainWindow.cpp:501 src/Action.cpp:183 src/ActionGUI.cpp:124
 #, c-format
 msgid "Pause"
 msgstr ""
@@ -210,17 +210,17 @@ msgstr "Resolution:"
 msgid "Length:"
 msgstr "Length:"
 
-#: src/SequencerGUI.cpp:265 src/SequencerGUI.cpp:375
+#: src/SequencerGUI.cpp:262 src/SequencerGUI.cpp:372
 #, c-format
 msgid "%d"
 msgstr ""
 
-#: src/SequencerGUI.cpp:339 src/SequencerGUI.cpp:420
+#: src/SequencerGUI.cpp:336 src/SequencerGUI.cpp:417
 #, fuzzy, c-format
 msgid " %d"
 msgstr "seq %d"
 
-#: src/SequencerGUI.cpp:344 src/SequencerGUI.cpp:425
+#: src/SequencerGUI.cpp:341 src/SequencerGUI.cpp:422
 #, c-format
 msgid "%d*"
 msgstr ""
@@ -289,12 +289,12 @@ msgid ""
 "for example if it is sure it will open without trouble. Select YES to do so."
 msgstr ""
 
-#: src/Files.cpp:368
+#: src/Files.cpp:366
 #, fuzzy, c-format
 msgid "ERROR - Glib::KeyFile error while processing file '%s': "
 msgstr "ERROR - error while opening file %s to write.\n"
 
-#: src/Files.cpp:377
+#: src/Files.cpp:375
 #, fuzzy, c-format
 msgid "ERROR - unknown error while processing file '%s': "
 msgstr "ERROR - error while opening file %s to write.\n"
@@ -382,19 +382,19 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
-#: src/EventGUI.cpp:172
+#: src/EventGUI.cpp:171
 msgid "Error: channel has changed, while event is not MIDI-type."
 msgstr ""
 
-#: src/EventGUI.cpp:182
+#: src/EventGUI.cpp:181
 msgid "Error: key has changed, while event is not key-type."
 msgstr ""
 
-#: src/EventGUI.cpp:193
+#: src/EventGUI.cpp:192
 msgid "Error: controller has changed, while event is not ctrl-type."
 msgstr ""
 
-#: src/EventGUI.cpp:204
+#: src/EventGUI.cpp:203
 msgid "Error: note has changed, while event is not note-type."
 msgstr ""
 
@@ -623,19 +623,19 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: src/TreeModels.cpp:176 src/TreeModels.cpp:193
+#: src/TreeModels.cpp:175 src/TreeModels.cpp:192
 msgid "Major"
 msgstr ""
 
-#: src/TreeModels.cpp:179 src/TreeModels.cpp:196
+#: src/TreeModels.cpp:178 src/TreeModels.cpp:195
 msgid "Minor"
 msgstr ""
 
-#: src/TreeModels.cpp:182
+#: src/TreeModels.cpp:181
 msgid "Augmented"
 msgstr ""
 
-#: src/TreeModels.cpp:185
+#: src/TreeModels.cpp:184
 msgid "Diminished"
 msgstr ""
 
