@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
 "POT-Creation-Date: 2010-11-04 20:05+0100\n"
-"PO-Revision-Date: 2010-11-04 23:17+0000\n"
-"Last-Translator: Rafal Cieslak <Unknown>\n"
+"PO-Revision-Date: 2010-11-18 19:30+0000\n"
+"Last-Translator: Hubert Jarosz <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-11-06 05:11+0000\n"
+"X-Launchpad-Export-Date: 2010-11-19 05:10+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "Language: pl\n"
 
@@ -485,7 +485,7 @@ msgstr "Synchronizuj"
 #: src/Action.cpp:197
 #, c-format
 msgid "Set active melody of sequencer '%s' to %d"
-msgstr ""
+msgstr "Ustaw aktywną melodię sekwencera '%s' na %d"
 
 #: src/Action.cpp:200
 #, c-format
