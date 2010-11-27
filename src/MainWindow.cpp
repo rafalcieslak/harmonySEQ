@@ -46,10 +46,10 @@ MainWindow::MainWindow()
 
     m_refActionGroup->add(Gtk::Action::create("MenuFile",_("File")));
     m_refActionGroup->add(Gtk::Action::create("MenuHelp",_( "Help")));
-    m_refActionGroup->add(Gtk::Action::create("FileNew", Gtk::Stock::NEW)/*, sigc::mem_fun(*this, &MainWindow::on_menu_exit)*/);
-    m_refActionGroup->add(Gtk::Action::create("FileOpen", Gtk::Stock::OPEN)/*, sigc::mem_fun(*this, &MainWindow::on_menu_exit)*/);
-    m_refActionGroup->add(Gtk::Action::create("FileSave", Gtk::Stock::SAVE)/*, sigc::mem_fun(*this, &MainWindow::on_menu_exit)*/);
-    m_refActionGroup->add(Gtk::Action::create("FileSaveAs", Gtk::Stock::SAVE_AS)/*, sigc::mem_fun(*this, &MainWindow::on_menu_exit)*/);
+    m_refActionGroup->add(Gtk::Action::create("FileNew", Gtk::Stock::NEW), sigc::mem_fun(*this, &MainWindow::OnMenuNewClicked));
+    m_refActionGroup->add(Gtk::Action::create("FileOpen", Gtk::Stock::OPEN), sigc::mem_fun(*this, &MainWindow::OnMenuOpenClicked));
+    m_refActionGroup->add(Gtk::Action::create("FileSave", Gtk::Stock::SAVE), sigc::mem_fun(*this, &MainWindow::OnMenuSaveClicked));
+    m_refActionGroup->add(Gtk::Action::create("FileSaveAs", Gtk::Stock::SAVE_AS), sigc::mem_fun(*this, &MainWindow::OnMenuSaveAsClicked));
     m_refActionGroup->add(Gtk::Action::create("FileQuit", Gtk::Stock::QUIT), sigc::mem_fun(*this, &MainWindow::OnMenuQuitClicked));
     m_refActionGroup->add(Gtk::Action::create("About", Gtk::Stock::ABOUT), sigc::mem_fun(*this, &MainWindow::OnAboutMenuClicked));
 
@@ -244,10 +244,14 @@ MainWindow::~MainWindow()
 
 void MainWindow::UpdateTitle(){
     char temp[300];
-    if (Files::file_modified)
-       sprintf(temp, "harmonySEQ %s - %s [*]", VERSION,Files::file_name.c_str()) ;
-    else
-        sprintf(temp, "harmonySEQ %s - %s", VERSION,Files::file_name.c_str());
+    if (Files::file_name == ""){
+           sprintf(temp, "harmonySEQ %s - %s", VERSION,_("Untitled")) ;
+    }else{
+        if (Files::file_modified)
+           sprintf(temp, "harmonySEQ %s - %s [*]", VERSION,Files::file_name.c_str()) ;
+        else
+            sprintf(temp, "harmonySEQ %s - %s", VERSION,Files::file_name.c_str());
+    }
     set_title(temp);
 }
 
@@ -263,7 +267,7 @@ MainWindow::on_delete_event(GdkEventAny* event)
 {
     *dbg << "user clicked X\n";
     if(Files::file_modified)
-        if(!Ask(_("The file had unsaved changes."),_("Are sure you want to quit?")))
+        if(!Ask(_("The file has unsaved changes."),_("Are sure you want to quit?")))
           return 1;
     
     running = 0;
@@ -432,25 +436,18 @@ void MainWindow::RefreshRow(Gtk::TreeRowReference rowref){
 }
 
 void MainWindow::OnLoadClicked(){
-
     if(Files::file_modified)
-        if(!Ask(_("The file had unsaved changes."),_("Are sure you want to loose them and open another file?")))
+        if(!Ask(_("The file has unsaved changes."),_("Are sure you want to loose them and open another file?")))
         {
             return;
         }
-        
-
-
     Files::LoadFileDialog();
-
     Files::SetFileModified(0);
     //erasing smallers the treeview, but not the window.
     resize(2,2); //resizing to a tiny size, but the window won't get that small, it will be big enough to show all widgets.
 }
 
 void MainWindow::OnSaveClicked(){
-    Files::SaveToFile();
-
 }
 
 void MainWindow::OnRemoveClicked(){
@@ -580,7 +577,7 @@ void MainWindow::OnAboutMenuClicked(){
     aboutbox.set_transient_for(*this);
     aboutbox.set_program_name("harmonySEQ");
     aboutbox.set_version(VERSION);
-    aboutbox.set_copyright("Rafał Cieślak");
+    aboutbox.set_copyright("Copyright © 2010 Rafał Cieślak");
     aboutbox.set_comments(_("A MIDI sequencing application helpful for music composers and live artists."));
     //TRANSLATORS:The GNU GPL v.3
      aboutbox.set_license(_("HarmonySEQ is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n"
@@ -594,7 +591,7 @@ void MainWindow::OnAboutMenuClicked(){
     authors.push_back("       Rafał Cieślak <rafalcieslak256@gmail.com>");
     aboutbox.set_authors(authors);
     //TRANSLATORS: The list of translators to be placed in about-box
-    aboutbox.set_translator_credits(_(""));
+    aboutbox.set_translator_credits(_(" translator-credits"));
     
     aboutbox.run();
 
@@ -602,9 +599,100 @@ void MainWindow::OnAboutMenuClicked(){
 
 void MainWindow::OnMenuQuitClicked(){
         if(Files::file_modified)
-            if(!Ask(_("The file had unsaved changes."),_("Are sure you want to quit?")))
+            if(!Ask(_("The file has unsaved changes."),_("Are sure you want to quit?")))
                 return;
 
         hide();
         running = 0;
+}
+
+void MainWindow::OnMenuNewClicked(){
+    Files::file_name = "";
+
+    //clear everything.
+    ClearEvents();
+    ClearSequencers();
+    eventswindow->UpdateAll();
+    InitTreeData();
+
+    tempo = 120.0;
+    tempo_button.set_value(120.0);
+    mainnote = 60;
+    main_note.set_value(60.0);
+
+    resize(2,2);
+    UpdateTitle();
+    
+    Files::SetFileModified(0);
+}
+
+void MainWindow::OnMenuOpenClicked(){
+    if(Files::file_modified)
+        if(!Ask(_("The file has unsaved changes."),_("Are sure you want to loose them and open another file?")))
+        {
+            return;
+        }
+    Files::LoadFileDialog();
+    Files::SetFileModified(0);
+    //erasing smallers the treeview, but not the window.
+    resize(2,2); //resizing to a tiny size, but the window won't get that small, it will be big enough to show all widgets.
+}
+
+void MainWindow::OnMenuSaveClicked(){
+
+    if (Files::file_name == "") //first save, so behave just if we were saving as
+        OnMenuSaveAsClicked();
+
+    Files::SaveToFile(Files::file_name);
+
+}
+
+void MainWindow::OnMenuSaveAsClicked(){
+
+    *dbg << "saiving to file!\n";
+    Gtk::FileChooserDialog dialog(_("Choose a file to save..."),Gtk::FILE_CHOOSER_ACTION_SAVE);
+    dialog.set_transient_for(*mainwindow);
+    dialog.add_button(Gtk::Stock::CANCEL,Gtk::RESPONSE_CANCEL);
+    dialog.add_button(Gtk::Stock::SAVE,Gtk::RESPONSE_OK);
+
+    Gtk::FileFilter hseq;
+    hseq.set_name("HarmonySEQ files (*.hseq)");
+    hseq.add_pattern("*.hseq");
+    dialog.add_filter(hseq);
+    Gtk::FileFilter all;
+    all.set_name("All files");
+    all.add_pattern("*");
+    dialog.add_filter(all);
+
+
+    int result = dialog.run();
+
+    Glib::ustring filename = dialog.get_filename();
+    char temp[300];
+    
+    switch (result) {
+        case Gtk::RESPONSE_OK:
+
+            //add .hseq extention
+            if (dialog.get_filter() == &hseq) if (filename.size() < 5 || 0 != (filename.substr(filename.length() - 5, 5).compare(".hseq"))) {
+                    filename += ".hseq";
+              }
+            //check whether it already exists
+            if (Files::fexists(filename.c_str())) {
+                sprintf(temp, _("File '%s'  already exist."), filename.c_str());
+                if (!Ask(temp, _("Do you want to overwrite this file?")))
+                    return; //user choosed not to overwrite it.
+            }
+            
+            Files::SaveToFile(filename);
+
+        case Gtk::RESPONSE_CANCEL:
+
+            break;
+
+        default:
+            *dbg << "unknown response returned!\n";
+            break;
+    }
+    
 }

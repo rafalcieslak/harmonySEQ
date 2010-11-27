@@ -85,6 +85,7 @@ private:
     void OnMenuSaveClicked();
     void OnMenuSaveAsClicked();
     void OnMenuOpenClicked();
+    void OnMenuNewClicked();
     Gtk::TreeView m_TreeView;
 
   Glib::RefPtr<Gtk::UIManager> m_refUIManager;

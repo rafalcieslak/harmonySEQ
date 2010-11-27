@@ -27,10 +27,12 @@ namespace Files{
     extern bool file_modified;
     extern Glib::ustring file_name;
 
+    /**Checks if a file exists.*/
+    bool fexists(const char *filename);
     /**Sets file_modified flag, and refreshes the mainwindow title*/
     bool SetFileModified(bool modified);
-    /**Shows a file save dialog*/
-    void SaveToFile();
+    /**Saves a file. Does not show any dialog, does not check for overwriting. Just saves.*/
+    void SaveToFile(Glib::ustring filename);
     /**Shows a file load dialog*/
     void LoadFileDialog();
     /**Loads a file, but without showing the dialog (so the filename must be passed as an argument)*/
