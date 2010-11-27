@@ -201,15 +201,9 @@ MainWindow::MainWindow()
     hbox_down.pack_end(button_add, Gtk::PACK_SHRINK);
     hbox_down.pack_end(button_clone, Gtk::PACK_SHRINK);
     hbox_down.pack_end(button_remove, Gtk::PACK_SHRINK);
-    hbox_down.pack_end(button_save, Gtk::PACK_SHRINK);
-    hbox_down.pack_end(button_open, Gtk::PACK_SHRINK);
-    hbox_down.pack_end(button_events, Gtk::PACK_SHRINK);
+    hbox_down.pack_start(button_events, Gtk::PACK_SHRINK);
     button_add.set_label(_("Add"));
     button_add.signal_clicked().connect(mem_fun(*this, &MainWindow::OnButtonAddClicked));
-    button_save.set_label(_("Save"));
-    button_save.signal_clicked().connect(mem_fun(*this, &MainWindow::OnSaveClicked));
-    button_open.set_label(_("Open"));
-    button_open.signal_clicked().connect(mem_fun(*this, &MainWindow::OnLoadClicked));
     button_remove.set_label(_("Remove"));
     button_remove.signal_clicked().connect(mem_fun(*this, &MainWindow::OnRemoveClicked));
     button_remove.set_sensitive(0);
@@ -433,21 +427,6 @@ void MainWindow::RefreshRow(Gtk::TreeRowReference rowref){
     }
   //  m_TreeView.queue_draw();
     
-}
-
-void MainWindow::OnLoadClicked(){
-    if(Files::file_modified)
-        if(!Ask(_("The file has unsaved changes."),_("Are sure you want to loose them and open another file?")))
-        {
-            return;
-        }
-    Files::LoadFileDialog();
-    Files::SetFileModified(0);
-    //erasing smallers the treeview, but not the window.
-    resize(2,2); //resizing to a tiny size, but the window won't get that small, it will be big enough to show all widgets.
-}
-
-void MainWindow::OnSaveClicked(){
 }
 
 void MainWindow::OnRemoveClicked(){

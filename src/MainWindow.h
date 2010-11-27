@@ -70,8 +70,6 @@ private:
 
     
     void OnButtonAddClicked();
-    void OnSaveClicked();
-    void OnLoadClicked();
     void OnRemoveClicked();
     void OnCloneClicked();
     void OnEventsClicked();
@@ -97,8 +95,6 @@ private:
     Gtk::HBox hbox_up, hbox_down;
     Gtk::Label tempolabel, mainnotelabel;
     Gtk::Button button_add;
-    Gtk::Button button_save;
-    Gtk::Button button_open;
     Gtk::Button button_remove;
     Gtk::Button button_clone;
     Gtk::Button button_events;
