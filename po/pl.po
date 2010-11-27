@@ -3,13 +3,11 @@
 # This file is distributed under the same license as the harmonyseq package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 #
-#. TRANSLATORS: The list of translators to be placed in about-box
-#: src/MainWindow.cpp:597
 msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2010-11-27 16:30+0100\n"
+"POT-Creation-Date: 2010-11-27 20:19+0100\n"
 "PO-Revision-Date: 2010-11-19 07:06+0000\n"
 "Last-Translator: Rafal Cieslak <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -29,10 +27,6 @@ msgstr "nieznana opcja '%c'\n"
 #, c-format
 msgid "unrecognized option '%s'\n"
 msgstr "nierozpoznana opcja '%s'\n"
-
-#: src/main.cpp:291
-msgid "Untitled"
-msgstr "Bez tytułu"
 
 #: src/main.cpp:318
 #, c-format
@@ -74,7 +68,6 @@ msgid "Help"
 msgstr ""
 
 #: src/MainWindow.cpp:81 src/MainWindow.cpp:87
-#, fuzzy
 msgid "ERROR - error while building menus: "
 msgstr ""
 
@@ -114,71 +107,64 @@ msgstr "Dł"
 msgid "Vol"
 msgstr "Gł"
 
-#: src/MainWindow.cpp:207 src/SequencerGUI.cpp:83
+#: src/MainWindow.cpp:205 src/SequencerGUI.cpp:83
 msgid "Add"
 msgstr "Dodaj"
 
-#: src/MainWindow.cpp:209
-msgid "Save"
-msgstr "Zapisz"
-
-#: src/MainWindow.cpp:211
-msgid "Open"
-msgstr "Otwórz"
-
-#: src/MainWindow.cpp:213 src/SequencerGUI.cpp:84 src/EventsWindow.cpp:39
+#: src/MainWindow.cpp:207 src/SequencerGUI.cpp:84 src/EventsWindow.cpp:39
 msgid "Remove"
 msgstr "Usuń"
 
-#: src/MainWindow.cpp:216
+#: src/MainWindow.cpp:210
 msgid "Clone"
 msgstr "Klonuj"
 
-#: src/MainWindow.cpp:219
+#: src/MainWindow.cpp:213
 msgid "Events"
 msgstr "Zdarzenia"
 
-#: src/MainWindow.cpp:223
+#: src/MainWindow.cpp:217
 msgid "Pass MIDI events"
 msgstr "Przekazuj zdarzenia MIDI"
 
-#: src/MainWindow.cpp:266 src/MainWindow.cpp:437
-msgid "The file had unsaved changes."
+#: src/MainWindow.cpp:242
+msgid "Untitled"
+msgstr "Bez tytułu"
+
+#: src/MainWindow.cpp:264 src/MainWindow.cpp:581 src/MainWindow.cpp:610
+#, fuzzy
+msgid "The file has unsaved changes."
 msgstr "Plik ma niezapisane zmiany."
 
-#: src/MainWindow.cpp:266
+#: src/MainWindow.cpp:264 src/MainWindow.cpp:581
 msgid "Are sure you want to quit?"
 msgstr "Czy na pewno chcesz zakończyć pracę programu?"
 
-#: src/MainWindow.cpp:291
+#: src/MainWindow.cpp:289
 msgid "activated row "
 msgstr "aktywowano wiersz "
 
-#: src/MainWindow.cpp:292
+#: src/MainWindow.cpp:290
 msgid ", name is: "
 msgstr ", nazwa to: "
 
-#: src/MainWindow.cpp:437
-msgid "Are sure you want to loose them and open another file?"
-msgstr "Czy na pewno otworzyć inny plik, tracąc je?"
-
-#: src/MainWindow.cpp:553 src/Action.cpp:186 src/ActionGUI.cpp:125
+#: src/MainWindow.cpp:529 src/Action.cpp:186 src/ActionGUI.cpp:125
 #, c-format
 msgid "Play"
 msgstr "Start"
 
-#: src/MainWindow.cpp:558 src/Action.cpp:183 src/ActionGUI.cpp:124
+#: src/MainWindow.cpp:534 src/Action.cpp:183 src/ActionGUI.cpp:124
 #, c-format
 msgid "Pause"
 msgstr "Pauza"
 
-#: src/MainWindow.cpp:584
+#: src/MainWindow.cpp:560
 msgid ""
 "A MIDI sequencing application helpful for music composers and live artists."
 msgstr ""
 
 #. TRANSLATORS:The GNU GPL v.3
-#: src/MainWindow.cpp:586
+#: src/MainWindow.cpp:562
 msgid ""
 "HarmonySEQ is free software: you can redistribute it and/or modify\n"
 "it under the terms of the GNU General Public License as published by\n"
@@ -194,15 +180,37 @@ msgid ""
 "along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>."
 msgstr ""
 
-#: src/MainWindow.cpp:590
+#: src/MainWindow.cpp:566
 #, fuzzy
 msgid "harmonySEQ website"
 msgstr "harmonySEQ, wersja %s\n"
 
 #. TRANSLATORS:First caption in authors list
-#: src/MainWindow.cpp:593
+#: src/MainWindow.cpp:569
 msgid "Main author"
 msgstr ""
+
+#. TRANSLATORS: The list of translators to be placed in about-box
+#: src/MainWindow.cpp:573
+msgid " translator-credits"
+msgstr ""
+
+#: src/MainWindow.cpp:610
+msgid "Are sure you want to loose them and open another file?"
+msgstr "Czy na pewno otworzyć inny plik, tracąc je?"
+
+#: src/MainWindow.cpp:632
+msgid "Choose a file to save..."
+msgstr "Wybierz plik do zapisu..."
+
+#: src/MainWindow.cpp:661
+#, c-format
+msgid "File '%s'  already exist."
+msgstr "Plik '%s' już istnieje."
+
+#: src/MainWindow.cpp:662
+msgid "Do you want to overwrite this file?"
+msgstr "Zastąpić ten plik?"
 
 #: src/MidiDriver.cpp:51
 msgid "Failed to open ALSA sequencer.\n"
@@ -277,39 +285,26 @@ msgstr "%d*"
 msgid "Debug mode started.\n"
 msgstr "Włączono tryb Debug.\n"
 
-#: src/Files.cpp:54
-msgid "Choose a file to save..."
-msgstr "Wybierz plik do zapisu..."
-
-#: src/Files.cpp:85
-#, c-format
-msgid "File '%s'  already exist."
-msgstr "Plik '%s' już istnieje."
-
-#: src/Files.cpp:86
-msgid "Do you want to overwrite this file?"
-msgstr "Zastąpić ten plik?"
-
-#: src/Files.cpp:91
+#: src/Files.cpp:63
 #, c-format
 msgid "ERROR - error while opening file %s to write.\n"
 msgstr "BŁĄD - błąd podczas otwierania pliku %s do zapisu.\n"
 
-#: src/Files.cpp:171
+#: src/Files.cpp:134
 msgid "Choose a file to open..."
 msgstr "Wybierz plik do otwarcia..."
 
-#: src/Files.cpp:216
+#: src/Files.cpp:179
 #, c-format
 msgid "ERROR - error while trying to read file '%s'\n"
 msgstr "BŁĄD - błąd podczas próby otwarcia pliku '%s'\n"
 
-#: src/Files.cpp:222
+#: src/Files.cpp:185
 #, c-format
 msgid "ERROR - error while trying to read file '%s': "
 msgstr "BŁĄD - błąd podczas próby otwarcia pliku '%s': "
 
-#: src/Files.cpp:236
+#: src/Files.cpp:199
 #, c-format
 msgid ""
 "This file was created by harmonySEQ in a newer version (%d.%d.%d). This "
@@ -328,11 +323,11 @@ msgstr ""
 "gdy wiadomo, że otworzenie tego pliku mimo wszystko nie spowoduje awarii, "
 "można zaryzykować, i otworzyć ten plik. Wybierz TAK, by tak uczynić."
 
-#: src/Files.cpp:237 src/Files.cpp:245
+#: src/Files.cpp:200 src/Files.cpp:208
 msgid "Do you want to open this file?"
 msgstr "Czy chcesz otworzyć ten plik?"
 
-#: src/Files.cpp:244
+#: src/Files.cpp:207
 #, c-format
 msgid ""
 "This file was created by harmonySEQ in an older version (%d.%d.%d). This "
@@ -350,12 +345,12 @@ msgstr ""
 "tego pliku mimo wszystko nie spowoduje awarii, można zaryzykować, i otworzyć "
 "ten plik. Wybierz TAK, by tak uczynić."
 
-#: src/Files.cpp:366
+#: src/Files.cpp:329
 #, c-format
 msgid "ERROR - Glib::KeyFile error while processing file '%s': "
 msgstr "BŁĄD - błąd Glib::KeyFile podczas przetwarzania pliku '%s' "
 
-#: src/Files.cpp:375
+#: src/Files.cpp:338
 #, c-format
 msgid "ERROR - unknown error while processing file '%s': "
 msgstr "BŁĄD - nieznany błąd podczas przetwarzania pliku '%s' "
@@ -765,6 +760,12 @@ msgstr "Własny"
 #: src/ChordWidget.cpp:92
 msgid "Octave"
 msgstr "Oktawa"
+
+#~ msgid "Save"
+#~ msgstr "Zapisz"
+
+#~ msgid "Open"
+#~ msgstr "Otwórz"
 
 #~ msgid "setting ports number to "
 #~ msgstr "ustaw ilość portów na "
