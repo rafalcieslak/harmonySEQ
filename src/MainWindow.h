@@ -79,7 +79,8 @@ private:
     void OnSelectionChanged();
     void OnPassToggleClicked();
     bool OnKeyPress(GdkEventKey* event);
-    
+
+    void OnAboutMenuClicked();
     Gtk::TreeView m_TreeView;
 
   Glib::RefPtr<Gtk::UIManager> m_refUIManager;

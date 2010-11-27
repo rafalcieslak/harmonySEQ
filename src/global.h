@@ -32,7 +32,7 @@
 
 #define VERSION_STRING "0.13"//VERSION is provided by autotools in config.h
 #define VERSION_A 0
-#define VERSION_B 12
+#define VERSION_B 13
 #define VERSION_C 0
 
 #define ENDL "\n"
