@@ -3,20 +3,22 @@
 # This file is distributed under the same license as the harmonyseq package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 #
+#. TRANSLATORS: The list of translators to be placed in about-box
+#: src/MainWindow.cpp:597
 msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2010-11-04 20:05+0100\n"
+"POT-Creation-Date: 2010-11-27 16:30+0100\n"
 "PO-Revision-Date: 2010-11-19 06:58+0000\n"
 "Last-Translator: Rafal Cieslak <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2010-11-20 05:25+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
-"Language: de\n"
 
 #: src/main.cpp:257
 #, c-format
@@ -46,106 +48,149 @@ msgid ""
 "   -v    --version     prints the program version\n"
 msgstr ""
 
-#: src/MainWindow.cpp:39 src/ActionGUI.cpp:115
+#: src/MainWindow.cpp:40 src/ActionGUI.cpp:115
 msgid "Tempo:"
 msgstr ""
 
-#: src/MainWindow.cpp:40
+#: src/MainWindow.cpp:41
 msgid "Main Note:"
 msgstr ""
 
-#: src/MainWindow.cpp:67 src/EventsWindow.cpp:49
+#: src/MainWindow.cpp:47
+msgid "File"
+msgstr ""
+
+#: src/MainWindow.cpp:48
+msgid "Help"
+msgstr ""
+
+#: src/MainWindow.cpp:81 src/MainWindow.cpp:87
+msgid "ERROR - error while building menus: "
+msgstr ""
+
+#: src/MainWindow.cpp:123 src/EventsWindow.cpp:49
 msgid "ID"
 msgstr "ID"
 
-#: src/MainWindow.cpp:69
+#: src/MainWindow.cpp:125
 msgid "Name"
 msgstr "Name"
 
-#: src/MainWindow.cpp:74 src/SequencerGUI.cpp:98 src/ActionGUI.cpp:122
+#: src/MainWindow.cpp:130 src/SequencerGUI.cpp:98 src/ActionGUI.cpp:122
 msgid "On"
 msgstr ""
 
-#: src/MainWindow.cpp:81
+#: src/MainWindow.cpp:137
 msgid "MN"
 msgstr ""
 
-#: src/MainWindow.cpp:86
+#: src/MainWindow.cpp:142
 msgid "Chan"
 msgstr ""
 
-#: src/MainWindow.cpp:87
+#: src/MainWindow.cpp:143
 msgid "Mel"
 msgstr ""
 
-#: src/MainWindow.cpp:88
+#: src/MainWindow.cpp:144
 msgid "Res"
 msgstr ""
 
-#: src/MainWindow.cpp:89
+#: src/MainWindow.cpp:145
 msgid "Len"
 msgstr ""
 
-#: src/MainWindow.cpp:90
+#: src/MainWindow.cpp:146
 msgid "Vol"
 msgstr ""
 
-#: src/MainWindow.cpp:150 src/SequencerGUI.cpp:83
+#: src/MainWindow.cpp:207 src/SequencerGUI.cpp:83
 msgid "Add"
 msgstr ""
 
-#: src/MainWindow.cpp:152
+#: src/MainWindow.cpp:209
 msgid "Save"
 msgstr ""
 
-#: src/MainWindow.cpp:154
+#: src/MainWindow.cpp:211
 msgid "Open"
 msgstr ""
 
-#: src/MainWindow.cpp:156 src/SequencerGUI.cpp:84 src/EventsWindow.cpp:39
+#: src/MainWindow.cpp:213 src/SequencerGUI.cpp:84 src/EventsWindow.cpp:39
 msgid "Remove"
 msgstr ""
 
-#: src/MainWindow.cpp:159
+#: src/MainWindow.cpp:216
 msgid "Clone"
 msgstr ""
 
-#: src/MainWindow.cpp:162
+#: src/MainWindow.cpp:219
 msgid "Events"
 msgstr ""
 
-#: src/MainWindow.cpp:166
+#: src/MainWindow.cpp:223
 msgid "Pass MIDI events"
 msgstr ""
 
-#: src/MainWindow.cpp:209 src/MainWindow.cpp:380
+#: src/MainWindow.cpp:266 src/MainWindow.cpp:437
 msgid "The file had unsaved changes."
 msgstr ""
 
-#: src/MainWindow.cpp:209
+#: src/MainWindow.cpp:266
 msgid "Are sure you want to quit?"
 msgstr "Sind Sie sicher, dass Sie beenden möchten?"
 
-#: src/MainWindow.cpp:234
+#: src/MainWindow.cpp:291
 msgid "activated row "
 msgstr ""
 
-#: src/MainWindow.cpp:235
+#: src/MainWindow.cpp:292
 msgid ", name is: "
 msgstr ""
 
-#: src/MainWindow.cpp:380
+#: src/MainWindow.cpp:437
 msgid "Are sure you want to loose them and open another file?"
 msgstr ""
 
-#: src/MainWindow.cpp:496 src/Action.cpp:186 src/ActionGUI.cpp:125
+#: src/MainWindow.cpp:553 src/Action.cpp:186 src/ActionGUI.cpp:125
 #, c-format
 msgid "Play"
 msgstr ""
 
-#: src/MainWindow.cpp:501 src/Action.cpp:183 src/ActionGUI.cpp:124
+#: src/MainWindow.cpp:558 src/Action.cpp:183 src/ActionGUI.cpp:124
 #, c-format
 msgid "Pause"
+msgstr ""
+
+#: src/MainWindow.cpp:584
+msgid ""
+"A MIDI sequencing application helpful for music composers and live artists."
+msgstr ""
+
+#. TRANSLATORS:The GNU GPL v.3
+#: src/MainWindow.cpp:586
+msgid ""
+"HarmonySEQ is free software: you can redistribute it and/or modify\n"
+"it under the terms of the GNU General Public License as published by\n"
+"the Free Software Foundation, either version 3 of the License, or\n"
+"(at your option) any later version.\n"
+"\n"
+"HarmonySEQ is distributed in the hope that it will be useful,\n"
+"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+"GNU General Public License for more details.\n"
+"\n"
+"You should have received a copy of the GNU General Public License\n"
+"along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>."
+msgstr ""
+
+#: src/MainWindow.cpp:590
+msgid "harmonySEQ website"
+msgstr ""
+
+#. TRANSLATORS:First caption in authors list
+#: src/MainWindow.cpp:593
+msgid "Main author"
 msgstr ""
 
 #: src/MidiDriver.cpp:51
@@ -529,13 +574,11 @@ msgid "Error: volume has changed, while action is not volume-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:419
-msgid ""
-"Error: note to set has changed, while action is not set-seq-note-type."
+msgid "Error: note to set has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:430
-msgid ""
-"Error: note number has changed, while action is not set-seq-note-type."
+msgid "Error: note number has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:443

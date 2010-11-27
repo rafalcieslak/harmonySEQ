@@ -582,31 +582,18 @@ void MainWindow::OnAboutMenuClicked(){
     aboutbox.set_version(VERSION);
     aboutbox.set_copyright("Rafał Cieślak");
     aboutbox.set_comments(_("A MIDI sequencing application helpful for music composers and live artists."));
-    ///The GNU GPL v.3
-     aboutbox.set_license("HarmonySEQ is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n"
+    //TRANSLATORS:The GNU GPL v.3
+     aboutbox.set_license(_("HarmonySEQ is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n"
                                                            "(at your option) any later version.\n\nHarmonySEQ is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A P"
-                                                            "ARTICULAR PURPOSE.  See the\nGNU General Public License for more details.\n\nYou should have received a copy of the GNU General Public License\nalong with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>." );
-    /*
-    aboutbox.set_license(_("HarmonySEQ is free software: you can redistribute it and/or modify/n"
-    "it under the terms of the GNU General Public License as published by/n"
-    "the Free Software Foundation, either version 3 of the License, or/n"
-    "(at your option) any later version./n"
-    "/n"
-    "HarmonySEQ is distributed in the hope that it will be useful,/n"
-    "but WITHOUT ANY WARRANTY; without even the implied warranty of/n"
-    "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the/n"
-    "GNU General Public License for more details./n"
-    "/n"
-    "You should have received a copy of the GNU General Public License/n"
-    "along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>."));*/
+                                                            "ARTICULAR PURPOSE.  See the\nGNU General Public License for more details.\n\nYou should have received a copy of the GNU General Public License\nalong with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>." ));
     aboutbox.set_website("http://harmonyseq.wordpress.com");
     aboutbox.set_website_label(_("harmonySEQ website"));
     std::vector<Glib::ustring> authors;
-    ///First caption in authors list
+    //TRANSLATORS:First caption in authors list
     authors.push_back(_("Main author"));
     authors.push_back("       Rafał Cieślak <rafalcieslak256@gmail.com>");
     aboutbox.set_authors(authors);
-    ///The list of translators to be placed in about-box
+    //TRANSLATORS: The list of translators to be placed in about-box
     aboutbox.set_translator_credits(_(""));
     
     aboutbox.run();
