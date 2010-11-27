@@ -7,5 +7,5 @@ ACLOCAL_AMFLAGS = -I m4
 
 EXTRA_DIST = config.rpath CHANGELOG LICENSE harmonyseq.desktop
 
-appsdir = $(datadir)/gnome/apps/Applications
+appsdir = $(datadir)/applications
 apps_DATA = harmonyseq.desktop
