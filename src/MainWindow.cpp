@@ -50,7 +50,7 @@ MainWindow::MainWindow()
     m_refActionGroup->add(Gtk::Action::create("FileOpen", Gtk::Stock::OPEN)/*, sigc::mem_fun(*this, &MainWindow::on_menu_exit)*/);
     m_refActionGroup->add(Gtk::Action::create("FileSave", Gtk::Stock::SAVE)/*, sigc::mem_fun(*this, &MainWindow::on_menu_exit)*/);
     m_refActionGroup->add(Gtk::Action::create("FileSaveAs", Gtk::Stock::SAVE_AS)/*, sigc::mem_fun(*this, &MainWindow::on_menu_exit)*/);
-    m_refActionGroup->add(Gtk::Action::create("FileQuit", Gtk::Stock::QUIT)/*, sigc::mem_fun(*this, &MainWindow::on_menu_exit)*/);
+    m_refActionGroup->add(Gtk::Action::create("FileQuit", Gtk::Stock::QUIT), sigc::mem_fun(*this, &MainWindow::OnMenuQuitClicked));
     m_refActionGroup->add(Gtk::Action::create("About", Gtk::Stock::ABOUT), sigc::mem_fun(*this, &MainWindow::OnAboutMenuClicked));
 
     m_refUIManager = Gtk::UIManager::create();
@@ -598,4 +598,13 @@ void MainWindow::OnAboutMenuClicked(){
     
     aboutbox.run();
 
+}
+
+void MainWindow::OnMenuQuitClicked(){
+        if(Files::file_modified)
+            if(!Ask(_("The file had unsaved changes."),_("Are sure you want to quit?")))
+                return;
+
+        hide();
+        running = 0;
 }

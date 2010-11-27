@@ -81,6 +81,10 @@ private:
     bool OnKeyPress(GdkEventKey* event);
 
     void OnAboutMenuClicked();
+    void OnMenuQuitClicked();
+    void OnMenuSaveClicked();
+    void OnMenuSaveAsClicked();
+    void OnMenuOpenClicked();
     Gtk::TreeView m_TreeView;
 
   Glib::RefPtr<Gtk::UIManager> m_refUIManager;
