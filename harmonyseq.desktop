@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=harmonySEQ
+Name[pl]=harmonySEQ
+Comment=MIDI sequencer
+Comment[pl]=Sekwencer MIDI
+Exec=harmonyseq %f
+Terminal=false
+Type=Application
+Categories=GTK;GNOME;AudioVideo;Audio;Midi;Sequencer;
