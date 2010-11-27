@@ -1,5 +1,9 @@
 harmonyseq 0.13
-
+	- Added menubar to improve GUI
+	- Added AboutBox
+	- Basic shortcuts support
+	- Added basic integration with desktop - menu entry
+	
 harmonyseq 0.12
 	- Added ability to bind multiple melodies to one sequencer
 	- Added Play/Pause button
