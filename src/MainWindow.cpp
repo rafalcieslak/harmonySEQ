@@ -32,13 +32,68 @@
 
 MainWindow::MainWindow()
 {
-    set_border_width(5);
+    set_border_width(0);
     //set_default_size(300,500);
     UpdateTitle();
             
     tempolabel.set_text(_("Tempo:"));
     mainnotelabel.set_text(_("Main Note:"));
-    add(vbox1);
+    add(main_vbox);
+
+    // <editor-fold defaultstate="collapsed" desc="menus creation and initialisation">
+    m_refActionGroup = Gtk::ActionGroup::create();
+
+    m_refActionGroup->add(Gtk::Action::create("MenuFile",_("File")));
+    m_refActionGroup->add(Gtk::Action::create("MenuHelp",_( "Help")));
+    m_refActionGroup->add(Gtk::Action::create("FileNew", Gtk::Stock::NEW)/*, sigc::mem_fun(*this, &MainWindow::on_menu_exit)*/);
+    m_refActionGroup->add(Gtk::Action::create("FileOpen", Gtk::Stock::OPEN)/*, sigc::mem_fun(*this, &MainWindow::on_menu_exit)*/);
+    m_refActionGroup->add(Gtk::Action::create("FileSave", Gtk::Stock::SAVE)/*, sigc::mem_fun(*this, &MainWindow::on_menu_exit)*/);
+    m_refActionGroup->add(Gtk::Action::create("FileSaveAs", Gtk::Stock::SAVE_AS)/*, sigc::mem_fun(*this, &MainWindow::on_menu_exit)*/);
+    m_refActionGroup->add(Gtk::Action::create("FileQuit", Gtk::Stock::QUIT)/*, sigc::mem_fun(*this, &MainWindow::on_menu_exit)*/);
+    m_refActionGroup->add(Gtk::Action::create("About", Gtk::Stock::ABOUT)/*, sigc::mem_fun(*this, &MainWindow::on_menu_exit)*/);
+
+    m_refUIManager = Gtk::UIManager::create();
+    m_refUIManager->insert_action_group(m_refActionGroup);
+    add_accel_group(m_refUIManager->get_accel_group());
+
+    Glib::ustring ui_info =
+            "<ui>"
+            "  <menubar name='MenuBar'>"
+            "    <menu action='MenuFile'>"
+            "      <menuitem action='FileNew'/>"
+            "      <separator/>"
+            "      <menuitem action='FileOpen'/>"
+            "      <menuitem action='FileSave'/>"
+            "      <menuitem action='FileSaveAs'/>"
+            "      <separator/>"
+            "      <menuitem action='FileQuit'/>"
+            "    </menu>"
+            "    <menu action='MenuHelp'>"
+            "      <menuitem action='About'/>"
+            "    </menu>"
+            "  </menubar>"
+            "</ui>";
+#ifdef GLIBMM_EXCEPTIONS_ENABLED
+    try {
+        m_refUIManager->add_ui_from_string(ui_info);
+    } catch (const Glib::Error& ex) {
+        *err << _("ERROR - error while building menus: ") << ex.what();
+    }
+#else
+    std::auto_ptr<Glib::Error> ex;
+    m_refUIManager->add_ui_from_string(ui_info, ex);
+    if (ex.get()) {
+        *err << _("ERROR - error while building menus: ") << ex->what();
+    }
+#endif //GLIBMM_EXCEPTIONS_ENABLED
+
+
+    Gtk::Widget* pMenubar = m_refUIManager->get_widget("/MenuBar"); // </editor-fold>
+
+    main_vbox.pack_start(*pMenubar,Gtk::PACK_SHRINK);
+    main_vbox.pack_start(vbox1,Gtk::PACK_SHRINK);
+    vbox1.set_border_width(5);
+
     vbox1.pack_start(hbox_up, Gtk::PACK_SHRINK);
     hbox_up.pack_start(mainnotelabel);
     hbox_up.pack_start(main_note, Gtk::PACK_SHRINK);
@@ -140,6 +195,7 @@ MainWindow::MainWindow()
         /*is called from main()*/
 
     }// </editor-fold>
+
     vbox1.pack_start(hbox_down, Gtk::PACK_SHRINK);
     hbox_down.pack_end(button_add, Gtk::PACK_SHRINK);
     hbox_down.pack_end(button_clone, Gtk::PACK_SHRINK);

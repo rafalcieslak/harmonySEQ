@@ -82,6 +82,11 @@ private:
     
     Gtk::TreeView m_TreeView;
 
+  Glib::RefPtr<Gtk::UIManager> m_refUIManager;
+  Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
+
+
+    Gtk::VBox main_vbox;
     Gtk::VBox vbox1;
     Gtk::HBox hbox_up, hbox_down;
     Gtk::Label tempolabel, mainnotelabel;
