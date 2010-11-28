@@ -1,4 +1,5 @@
-harmonyseq 0.13
+harmonyseq 0.13 "polyphony"
+	- Using checkboxes instead of sliders in seqencer GUI makes it now possible to produce polyponic voices using one sequencer
 	- Added menubar to improve GUI
 	- Added AboutBox
 	- Basic shortcuts support
