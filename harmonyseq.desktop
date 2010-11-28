@@ -7,3 +7,4 @@ Exec=harmonySEQ %f
 Terminal=false
 Type=Application
 Categories=GTK;GNOME;AudioVideo;Midi;Sequencer;
+MimeType=text/x-harmonyseq
