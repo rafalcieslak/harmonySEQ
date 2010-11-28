@@ -29,6 +29,20 @@
 class Sequencer;
 class ChordWidget;
 
+class MelodyLine : public Gtk::HBox{
+public:
+    MelodyLine();
+    ~MelodyLine();
+
+    void SetButton(int c, bool value);
+    bool GetButton(int c);
+    sigc::signal<void,int,bool> OnButtonClicked;
+private:
+    void OnButtonsToggled(int c);
+    std::vector<Gtk::CheckButton *> buttons;
+
+};
+
 class SequencerWindow : public Gtk::Window {
 public:
     SequencerWindow(Sequencer* prt);
@@ -49,8 +63,8 @@ public:
     //void InitMelodySliders();
 
     /**When pages are added or removed etc, the boxes where sliders are stored are removed, and after then they are brougth back again. To make it save to remove these boxes, we must first unpack sliders from them, and then add them back to the appropierate box.*/
-    void DetachSliders();
-    void AttachSliders(int where);
+    void DetachLines();
+    void AttachLines(int where);
     //void ReattachSliders();
     
     /**The chordwidget of this GUI*/
@@ -62,12 +76,12 @@ public:
     friend class Sequencer;
     
 private:
-    int previous_box_where_sliders_were_packed;
+    int previous_box_where_melody_lines_were_packed;
     int do_not_react_on_page_changes;
     void UpdateActiveMelodyRange();
 
     void OnChordWidgetChanged();
-    void OnMelodyNoteChanged(int seq);
+    void OnMelodyNoteChanged(int c, bool value, int seq);
     void OnChannelChanged();
     void OnVolumeChanged();
     void OnToggleMuteToggled();
@@ -85,8 +99,8 @@ private:
     Gtk::VBox box_of_sliders;
     Gtk::HBox box_of_chord;
     Gtk::HBox upper_box;
-    std::vector<Gtk::HScale *> melody_scales;
-    std::vector<Gtk::VBox  *> melody_boxes;
+    std::vector<MelodyLine  *> melody_lines;
+    std::vector<Gtk::VBox *> melody_boxes;
     Gtk::SpinButton channel_button;
     Gtk::SpinButton volume_button;
     Gtk::SpinButton active_melody;
@@ -134,6 +148,8 @@ private:
     Glib::RefPtr<Gtk::ListStore> m_refTreeModel_len;
 
 };
+
+
 
 #endif	/* SEQUENCERGUI_H */
 

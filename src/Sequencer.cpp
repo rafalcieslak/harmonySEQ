@@ -81,43 +81,6 @@ Sequencer::Sequencer(Glib::ustring _name)
     Init();
 }
 
-
-Sequencer::Sequencer(int seq[],int note[])
-    :  melodies(0)
-{
-    AddMelody();
-    
-    for (int x = 0; x < SEQUENCE_DEFAULT_SIZE; x++){
-        melodies[0][x] = seq[x];
-        
-    }
-    for (int x = 0; x < NOTES_CONST_SIZE; x++){
-        chord.SetNote(x,note[x]);
-        
-    }
-    name = SEQUENCER_DEFAULT_NAME;
-    Init();
-}
-
-Sequencer::Sequencer(int seq[],int note[], Glib::ustring _name)
-    :  melodies(0)
-{
-    AddMelody();
-    
-    for (int x = 0; x < SEQUENCE_DEFAULT_SIZE; x++){
-        melodies[0][x] = seq[x];
-
-    }
-    for (int x = 0; x < NOTES_CONST_SIZE; x++){
-        chord.SetNote(x,note[x]);
-
-    }
-
-    
-    name = _name;
-    Init();
-}
-
 Sequencer::Sequencer(const Sequencer *orig) {
     name = orig->name;
     on = orig->on;
@@ -163,11 +126,14 @@ void Sequencer::SetResolution(int res){
         *dbg << "ensmalling resolution ratio = " << ratio << ENDL;
 
         for(int s=0; s<melodies.size();s++){
-            vector<int> new_sequence(res,0);
+            vector<vector<bool> > new_sequence(res,vector<bool>(6,0));
             assert(ratio>=1);
             int x = 0, i = 0;
             for (; x < resolution;x+=ratio){
-                new_sequence[i++] = melodies[s][x];
+                for(int c = 0; c < 6;c++){
+                    new_sequence[i][c] = melodies[s][x][c]; //to be checked
+                }
+                i++;
             }
             melodies[s] = new_sequence;
         }
@@ -177,11 +143,14 @@ void Sequencer::SetResolution(int res){
         int ratio = res/resolution;
         *dbg << "enlarging resolution ratio = " << ratio << ENDL;
         for(int s=0; s<melodies.size();s++){
-         vector<int> new_sequence(res,0);
+         vector<vector<bool> > new_sequence(res,vector<bool>(6,0));
             int x = 0;
             for (int p =0; p < resolution;p++){
                 for (int i = 0; i < ratio;i++){
-                    new_sequence[x++]=melodies[s][p];
+                    for(int c = 0; c < 6; c++){
+                        new_sequence[x][c]=melodies[s][p][c];
+                    }
+                    x++;
                 }
             }
             melodies[s]=new_sequence;
@@ -225,7 +194,7 @@ void Sequencer::UpdateGuiChord(){gui_window->UpdateChord();}
 
 
 int Sequencer::AddMelody(){
-    vector<int> seq (SEQUENCE_DEFAULT_SIZE,0);
+    vector<vector<bool> > seq (SEQUENCE_DEFAULT_SIZE,vector<bool>(6,false));
     melodies.push_back(seq);
 
     *dbg<< "Added melody " << melodies.size() << ".\n";
@@ -242,16 +211,16 @@ bool Sequencer::RemoveMelody(int x){
 }
 
 
-int Sequencer::GetMelodyNote(int melody, int n){
-    return melodies[melody][n];
+int Sequencer::GetMelodyNote(int melody, int n, int c){
+    return melodies[melody][n][c];
 }
 
-int Sequencer::GetActiveMelodyNote(int n){
-    return melodies[active_melody][n];
+int Sequencer::GetActiveMelodyNote(int n, int c){
+    return melodies[active_melody][n][c];
 }
 
-void Sequencer::SetMelodyNote(int sequence, int n, int value){
-    melodies[sequence][n] = value;
+void Sequencer::SetMelodyNote(int melody, int n, int c, bool value){
+    melodies[melody][n][c] = value;
 
 }
 

@@ -172,10 +172,10 @@ void InitGui(){
 }
 
 void InitDefaultData(){
-    
+        /*
         sequencers[0] = new Sequencer(example_sequence,example_notes,"seq 0");
         sequencers[1] = new Sequencer(example_sequence2,example_notes2,"seq 1");
-    
+        */ //TODO: load a file instead
         events[0] = new Event(Event::KEYBOARD,keymap_stoi.find("1")->second,0);
         events[1] = new Event(Event::KEYBOARD,keymap_stoi.find("2")->second,0);
         events.push_back(new Event(Event::KEYBOARD,keymap_stoi.find("3")->second,0));

@@ -91,7 +91,8 @@ void SaveToFile(Glib::ustring filename){
         //save the sequences
         for (int s=0; s<sequencers[x]->melodies.size();s++){
             sprintf(temp2,FILE_KEY_SEQ_SEQUENCE_TEMPLATE,s);
-            kf.set_integer_list(temp,temp2,sequencers[x]->melodies[s]);
+            //FIXME
+            //kf.set_integer_list(temp,temp2,sequencers[x]->melodies[s]);
         }
         kf.set_integer_list(temp,FILE_KEY_SEQ_CHORD,sequencers[x]->chord.SaveToVector());
     }
@@ -248,7 +249,8 @@ bool LoadFile(Glib::ustring file){
                     sequencers[x]->melodies[seq].clear();
                     std::vector<int> sequence = kf.get_integer_list(temp, FILE_KEY_SEQ_SEQUENCE);
                     for (unsigned int n = 0; n < sequence.size(); n++) {
-                        sequencers[x]->melodies[0].push_back(sequence[n]); //pushing notes to the first, and the olny sequence
+                        //FIXME
+                        //sequencers[x]->melodies[0].push_back(sequence[n]); //pushing notes to the first, and the olny sequence
                     }
             }else{//new file, uses many sequences
                 int n = kf.get_integer(temp,FILE_KEY_SEQ_SEQUENCES_NUMBER);
@@ -258,7 +260,8 @@ bool LoadFile(Glib::ustring file){
                     sprintf(temp2,FILE_KEY_SEQ_SEQUENCE_TEMPLATE,s);
                     std::vector<int> sequence = kf.get_integer_list(temp, temp2);
                     for (unsigned int n = 0; n < sequence.size(); n++) {
-                        sequencers[x]->melodies[s].push_back(sequence[n]); //pushing all notes to sequence
+                        //FIXME
+                        //sequencers[x]->melodies[s].push_back(sequence[n]); //pushing all notes to sequence
                     }
                 }
                 if(sequencers.size() == 0) //wtf, there were no sequences in the file? strange. We have to create one in order to prevent crashes.
