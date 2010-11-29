@@ -69,6 +69,7 @@ Sequencer::Sequencer()
     : melodies(0)
 {
     name = SEQUENCER_DEFAULT_NAME;
+    resolution = SEQUENCE_DEFAULT_SIZE; //AddMelody() must know the resolution
     AddMelody();
     Init();
 }
@@ -77,6 +78,7 @@ Sequencer::Sequencer(Glib::ustring _name)
     : melodies(0)
 {
     name = _name;
+    resolution = SEQUENCE_DEFAULT_SIZE; //AddMelody() must know the resolution
     AddMelody();
     Init();
 }
@@ -194,9 +196,12 @@ void Sequencer::UpdateGuiChord(){gui_window->UpdateChord();}
 
 
 int Sequencer::AddMelody(){
-    vector<vector<bool> > seq (SEQUENCE_DEFAULT_SIZE,vector<bool>(6,false));
+    vector<bool> line(6,false);
+    vector<vector<bool> > seq;
+    for(int x = 0; x < resolution;x++){
+        seq.push_back(line);
+    }
     melodies.push_back(seq);
-
     *dbg<< "Added melody " << melodies.size() << ".\n";
     return melodies.size()-1;
 }
@@ -215,7 +220,7 @@ int Sequencer::GetMelodyNote(int melody, int n, int c){
     return melodies[melody][n][c];
 }
 
-int Sequencer::GetActiveMelodyNote(int n, int c){
+bool Sequencer::GetActiveMelodyNote(int n, int c){
     return melodies[active_melody][n][c];
 }
 

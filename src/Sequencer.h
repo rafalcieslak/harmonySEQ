@@ -74,7 +74,7 @@ public:
 
     /**Returns a one note from the active sequence
      * @parram n sequence note tumber*/
-    int GetActiveMelodyNote( int n, int c);
+    bool GetActiveMelodyNote( int n, int c);
 
     /**Sets a note in a given sequence*/
     void SetMelodyNote(int sequence, int n, int c, bool value);

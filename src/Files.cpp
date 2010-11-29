@@ -91,8 +91,15 @@ void SaveToFile(Glib::ustring filename){
         //save the sequences
         for (int s=0; s<sequencers[x]->melodies.size();s++){
             sprintf(temp2,FILE_KEY_SEQ_SEQUENCE_TEMPLATE,s);
-            //FIXME
-            //kf.set_integer_list(temp,temp2,sequencers[x]->melodies[s]);
+
+            vector<int> S(sequencers[x]->resolution*6);
+            for (int r = 0; r < sequencers[x]->resolution; r++){
+                for (int c = 0; c < 6; c++){
+                    S[r*6+c]=sequencers[x]->GetMelodyNote(s,r,c);
+                }
+
+            }
+            kf.set_integer_list(temp,temp2,S);
         }
         kf.set_integer_list(temp,FILE_KEY_SEQ_CHORD,sequencers[x]->chord.SaveToVector());
     }
@@ -173,8 +180,8 @@ bool LoadFile(Glib::ustring file){
     *dbg << "trying to open |" << file <<"|--\n";
     int number;
     Glib::KeyFile kf;
-    char temp[1000];
-    char temp2[100];
+    char temp[3000];
+    char temp2[1000];
     try{
         if (!kf.load_from_file(file)) {
             sprintf(temp, _("ERROR - error while trying to read file '%s'\n"), file.c_str());
@@ -196,6 +203,7 @@ bool LoadFile(Glib::ustring file){
         int VA = kf.get_integer("harmonySEQ","versionA");
         int VB = kf.get_integer("harmonySEQ","versionB");
         int VC = kf.get_integer("harmonySEQ","versionC");
+        int slider_compatible_mode = 0;
         if (VA > VERSION_A || (VA == VERSION_A && VB > VERSION_B) || (VA == VERSION_A && VB == VERSION_B && VC > VERSION_C)){
             sprintf(temp,_("This file was created by harmonySEQ in a newer version (%d.%d.%d). This means it may contain data that is suppored by the newer wersion, but not by the version you are using (%d.%d.%d). It is recommended not to open such file, since it is very likely it may produce strange errors, or may event crash the program unexpectedly. However, in some cases one may want to open such file anyway, for example if it is sure it will open without trouble. Select YES to do so."),VA,VB,VC,VERSION_A,VERSION_B,VERSION_C);
             if (Ask(_("Do you want to open this file?"),temp,false)){
@@ -208,6 +216,7 @@ bool LoadFile(Glib::ustring file){
             sprintf(temp,_("This file was created by harmonySEQ in an older version (%d.%d.%d). This means it may miss some data that is required to be in file by the version you are using (%d.%d.%d). It is recommended not to open such file, since it is very likely it may produce strange errors, or may event crash the program unexpectedly. However, in some cases one may want to open such file anyway, for example if it is sure it will open without trouble. Select YES to do so."),VA,VB,VC,VERSION_A,VERSION_B,VERSION_C);
             if (Ask(_("Do you want to open this file?"),temp,false)){
                 //anserwed YES;
+                if (VA == 0 && VB <= 12) slider_compatible_mode = 1; //we'll read the slider-data and translate it to matrix-data
             }else{
                 return 1;
             }
@@ -221,7 +230,9 @@ bool LoadFile(Glib::ustring file){
         ClearSequencers(); //woa hua hua hua!
 
         for (int x = 0; x < number; x++) {
+            
             sprintf(temp, FILE_GROUP_TEMPLATE_SEQ, x);
+
             if (!kf.has_group(temp)) {
 
                 sequencers.push_back(NULL);
@@ -244,40 +255,62 @@ bool LoadFile(Glib::ustring file){
             sequencers[x]->melodies.clear();
 
             //here we load the sequences
-            if(kf.has_key(temp,FILE_KEY_SEQ_SEQUENCE)){ //old file, seems it uses only one sequence
+            if(kf.has_key(temp,FILE_KEY_SEQ_SEQUENCE)){ //old file, seems it uses only one sequence, this case may be abandoned in future, since noone uses soooo old files
                     int seq = sequencers[x]->AddMelody();
-                    sequencers[x]->melodies[seq].clear();
                     std::vector<int> sequence = kf.get_integer_list(temp, FILE_KEY_SEQ_SEQUENCE);
-                    for (unsigned int n = 0; n < sequence.size(); n++) {
-                        //FIXME
-                        //sequencers[x]->melodies[0].push_back(sequence[n]); //pushing notes to the first, and the olny sequence
+                        for(int r = 0; r < sequencers[x]->resolution; r++){
+                            for(int c = 0; c < 6; c++){
+                                if (c == sequence[r])
+                                    sequencers[x]->SetMelodyNote(0,r,c,1);
+                                else
+                                    sequencers[x]->SetMelodyNote(0,r,c,0);
+
+                            }
                     }
             }else{//new file, uses many sequences
                 int n = kf.get_integer(temp,FILE_KEY_SEQ_SEQUENCES_NUMBER);
                 for(int s =0; s < n; s++){
                     int seq = sequencers[x]->AddMelody();
-                    sequencers[x]->melodies[seq].clear();
                     sprintf(temp2,FILE_KEY_SEQ_SEQUENCE_TEMPLATE,s);
                     std::vector<int> sequence = kf.get_integer_list(temp, temp2);
-                    for (unsigned int n = 0; n < sequence.size(); n++) {
-                        //FIXME
-                        //sequencers[x]->melodies[s].push_back(sequence[n]); //pushing all notes to sequence
+                    
+                    if (slider_compatible_mode){
+                        //used to load old files <=0.12.0
+                        for(int r = 0; r < sequencers[x]->resolution; r++){
+                            for(int c = 0; c < 6; c++){
+                                if (c == sequence[r])
+                                    sequencers[x]->SetMelodyNote(s,r,c,1);
+                                else
+                                    sequencers[x]->SetMelodyNote(s,r,c,0);
+
+                            }
+                        }
+                    }else{
+                        for (unsigned int n = 0; n < sequence.size(); n++) {
+                        //used to load new files >=0.13.0
+                        for(int r = 0; r < sequencers[x]->resolution; r++){
+                            for(int c = 0; c < 6; c++){
+                                    sequencers[x]->SetMelodyNote(s,r,c,sequence[r*6+c]);
+
+                            }
+                        }
+                         }
                     }
+                     
                 }
                 if(sequencers.size() == 0) //wtf, there were no sequences in the file? strange. We have to create one in order to prevent crashes.
                     sequencers[x]->AddMelody();
 
             }
-            //Note: the above (saving myltiple sequences) is, well, new. May be still not working. To be tested and checked.
-
+            
             //here we load the chord
             if (kf.has_key(temp,FILE_KEY_SEQ_CHORD)){
-                std::vector<int> vec =  kf.get_integer_list(temp,FILE_KEY_SEQ_CHORD);
+                std::vector<int> vec =   kf.get_integer_list(temp,FILE_KEY_SEQ_CHORD);
                 sequencers[x]->chord.SetFromVector(vec);
             }
+        
             sequencers[x]->UpdateGui();
         }
-
         int are_there_events_in_file = kf.has_key(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_EVENTS_NUM);
         if(!are_there_events_in_file) return 0; //THIS SHOULD BE REMOVED IN SOME NEWER VERSION, SINCE THERE ARE NOT MANY FILES OF VERSION 0.9 OR LOWER
 
