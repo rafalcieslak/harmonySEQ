@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = foreign
 
-SUBDIRS = po examples src
+SUBDIRS = po examples pixmaps src
 
 ACLOCAL_AMFLAGS = -I m4
 
