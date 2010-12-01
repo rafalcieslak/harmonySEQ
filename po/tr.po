@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
 "POT-Creation-Date: 2010-11-27 20:19+0100\n"
-"PO-Revision-Date: 2010-11-22 06:54+0000\n"
+"PO-Revision-Date: 2010-11-30 18:51+0000\n"
 "Last-Translator: Rafal Cieslak <Unknown>\n"
 "Language-Team: Turkish <tr@li.org>\n"
-"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-11-23 05:25+0000\n"
+"X-Launchpad-Export-Date: 2010-12-01 05:19+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+"Language: tr\n"
 
 #: src/main.cpp:257
 #, c-format
@@ -59,9 +59,8 @@ msgid "Help"
 msgstr ""
 
 #: src/MainWindow.cpp:81 src/MainWindow.cpp:87
-#, fuzzy
 msgid "ERROR - error while building menus: "
-msgstr "HATA - '%s' dosyasının okunmasında hata: "
+msgstr ""
 
 #: src/MainWindow.cpp:123 src/EventsWindow.cpp:49
 msgid "ID"
@@ -124,9 +123,8 @@ msgid "Untitled"
 msgstr ""
 
 #: src/MainWindow.cpp:264 src/MainWindow.cpp:581 src/MainWindow.cpp:610
-#, fuzzy
 msgid "The file has unsaved changes."
-msgstr "Dosyada yapılan değişiklikler kaydedilmemiş."
+msgstr ""
 
 #: src/MainWindow.cpp:264 src/MainWindow.cpp:581
 msgid "Are sure you want to quit?"
@@ -185,6 +183,8 @@ msgstr ""
 #: src/MainWindow.cpp:573
 msgid " translator-credits"
 msgstr ""
+" Emre AYTAÇ\r\n"
+"zeugma"
 
 #: src/MainWindow.cpp:610
 msgid "Are sure you want to loose them and open another file?"
@@ -572,11 +572,13 @@ msgid "Error: volume has changed, while action is not volume-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:419
-msgid "Error: note to set has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note to set has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:430
-msgid "Error: note number has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note number has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:443
