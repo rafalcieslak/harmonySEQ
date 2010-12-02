@@ -19,3 +19,9 @@ iconsscalablemdir = $(datadir)/icons/gnome/scalable/mimetypes/
 iconsscalablem_DATA = scalable/mimetypes/text-x-harmonyseq.svg
 
 EXTRA_DIST = 32x32/apps/harmonyseq.png 48x48/apps/harmonyseq.png 192x192/apps/harmonyseq.png scalable/apps/harmonyseq.svg 32x32/mimetypes/text-x-harmonyseq.png 48x48/mimetypes/text-x-harmonyseq.png 192x192/mimetypes/text-x-harmonyseq.png scalable/mimetypes/text-x-harmonyseq.svg
+
+
+install-data-hook:
+	ln -s $(datadir)/icons/gnome/32x32/mimetypes/text-x-harmonyseq.png $(datadir)/icons/gnome/32x32/mimetypes/gnome-mime-text-x-harmonyseq.png
+uninstall-hook:
+	rm $(datadir)/icons/gnome/32x32/mimetypes/gnome-mime-text-x-harmonyseq.png

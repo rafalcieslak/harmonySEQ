@@ -507,7 +507,8 @@ install-data-am: install-icons192DATA install-icons192mDATA \
 	install-icons32DATA install-icons32mDATA install-icons48DATA \
 	install-icons48mDATA install-iconsscalableDATA \
 	install-iconsscalablemDATA
-
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
 install-dvi: install-dvi-am
 
 install-dvi-am:
@@ -554,26 +555,33 @@ uninstall-am: uninstall-icons192DATA uninstall-icons192mDATA \
 	uninstall-icons32DATA uninstall-icons32mDATA \
 	uninstall-icons48DATA uninstall-icons48mDATA \
 	uninstall-iconsscalableDATA uninstall-iconsscalablemDATA
-
-.MAKE: install-am install-strip
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
+.MAKE: install-am install-data-am install-strip uninstall-am
 
 .PHONY: all all-am check check-am clean clean-generic distclean \
 	distclean-generic distdir dvi dvi-am html html-am info info-am \
-	install install-am install-data install-data-am install-dvi \
-	install-dvi-am install-exec install-exec-am install-html \
-	install-html-am install-icons192DATA install-icons192mDATA \
-	install-icons32DATA install-icons32mDATA install-icons48DATA \
-	install-icons48mDATA install-iconsscalableDATA \
-	install-iconsscalablemDATA install-info install-info-am \
-	install-man install-pdf install-pdf-am install-ps \
-	install-ps-am install-strip installcheck installcheck-am \
-	installdirs maintainer-clean maintainer-clean-generic \
-	mostlyclean mostlyclean-generic pdf pdf-am ps ps-am uninstall \
-	uninstall-am uninstall-icons192DATA uninstall-icons192mDATA \
+	install install-am install-data install-data-am \
+	install-data-hook install-dvi install-dvi-am install-exec \
+	install-exec-am install-html install-html-am \
+	install-icons192DATA install-icons192mDATA install-icons32DATA \
+	install-icons32mDATA install-icons48DATA install-icons48mDATA \
+	install-iconsscalableDATA install-iconsscalablemDATA \
+	install-info install-info-am install-man install-pdf \
+	install-pdf-am install-ps install-ps-am install-strip \
+	installcheck installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-generic pdf \
+	pdf-am ps ps-am uninstall uninstall-am uninstall-hook \
+	uninstall-icons192DATA uninstall-icons192mDATA \
 	uninstall-icons32DATA uninstall-icons32mDATA \
 	uninstall-icons48DATA uninstall-icons48mDATA \
 	uninstall-iconsscalableDATA uninstall-iconsscalablemDATA
 
+
+install-data-hook:
+	ln -s $(datadir)/icons/gnome/32x32/mimetypes/text-x-harmonyseq.png $(datadir)/icons/gnome/32x32/mimetypes/gnome-mime-text-x-harmonyseq.png
+uninstall-hook:
+	rm $(datadir)/icons/gnome/32x32/mimetypes/gnome-mime-text-x-harmonyseq.png
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
