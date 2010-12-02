@@ -13,3 +13,8 @@ appsmenu_DATA = harmonyseq.desktop
 mimedir = $(datadir)/mime/packages
 mime_DATA = harmonyseq-mime.xml
 
+install-data-hook:
+	update-mime-database /usr/share/mime
+
+uninstall-hook:
+	update-mime-database /usr/share/mime

@@ -31,6 +31,13 @@ PKG_CHECK_MODULES([GTKMM], [gtkmm-2.4], [] , [
 					echo "Gtkmm library missing!"
 					exit -1 ])
 
+
+AC_PATH_PROG(UPDATE_MIME_DB, update-mime-database, no)
+if test "x$UPDATE_MIME_DB" = "xno"; then
+	AC_MSG_ERROR([You need to install update-mime-database])
+fi
+
+
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL
 
