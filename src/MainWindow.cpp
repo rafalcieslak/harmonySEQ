@@ -28,7 +28,7 @@
 #include "TreeModels.h"
 #include "config.h"
 
-
+Glib::RefPtr< Gdk::Pixbuf > harmonySEQ_logo_48;
 
 
 MainWindow::MainWindow()
@@ -228,6 +228,36 @@ MainWindow::MainWindow()
 
     show_all_children(1);
     play_pause_button.get_image()->show();
+
+    // <editor-fold defaultstate="collapsed" desc="loading logos">
+    //loading logo
+    bool found = 1;
+    Glib::ustring filename = "/usr";
+    filename += "/share/icons/hicolor/48x48/apps/harmonyseq.png";
+    if (!Files::fexists(filename.c_str())) {
+        *dbg << _("Failed to load harmonySEQ logo icon from: ") << filename << ENDL;
+        filename = "pixmaps/48x48/apps/harmonyseq.png";
+        if (!Files::fexists(filename.c_str())) {
+            *dbg << _("Failed to load harmonySEQ logo icon from: ") << filename << ENDL;
+            filename = "../pixmaps/48x48/apps/harmonyseq.png";
+            if (!Files::fexists(filename.c_str())) {
+                *dbg << _("Failed to load harmonySEQ logo icon from: ") << filename << ENDL;
+                filename = "/usr/local/share/icons/hicolor/48x48/apps/harmonyseq.png";
+                if (!Files::fexists(filename.c_str())) {
+                    *dbg << _("Failed to load harmonySEQ logo icon from: ") << filename << ENDL << _("Icon not found.\n");
+                    found = 0;
+                }
+            }
+        }
+    }
+
+    if (found) {
+        harmonySEQ_logo_48 = Gdk::Pixbuf::create_from_file(filename); //will be also used a.o. in about-box
+        set_icon(harmonySEQ_logo_48);
+    } else {
+        *err << ("Failed to find harmonySEQ icon file.\n");
+    }// </editor-fold>
+
 
 }
 
@@ -556,6 +586,7 @@ void MainWindow::OnAboutMenuClicked(){
     aboutbox.set_transient_for(*this);
     aboutbox.set_program_name("harmonySEQ");
     aboutbox.set_version(VERSION);
+    aboutbox.set_logo(harmonySEQ_logo_48);
     aboutbox.set_copyright("Copyright © 2010 Rafał Cieślak");
     aboutbox.set_comments(_("A MIDI sequencing application helpful for music composers and live artists."));
     //TRANSLATORS:The GNU GPL v.3

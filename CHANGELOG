@@ -2,8 +2,9 @@ harmonyseq 0.13 "polyphony"
 	- Using checkboxes instead of sliders in seqencer GUI makes it now possible to produce polyponic voices using one sequencer
 	- Added menubar to improve GUI
 	- Added AboutBox
+	- Included harmonySEQ icon and used it used widely
 	- Basic shortcuts support
-	- Added basic integration with desktop - menu entry
+	- Added integration with desktop - menu entry, icon, MIME type support
 	
 harmonyseq 0.12
 	- Added ability to bind multiple melodies to one sequencer
