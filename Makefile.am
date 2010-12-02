@@ -15,6 +15,8 @@ mime_DATA = harmonyseq-mime.xml
 
 install-data-hook:
 	update-mime-database /usr/share/mime
+	gtk-update-icon-cache -f /usr/share/icons/gnome
 
 uninstall-hook:
 	update-mime-database /usr/share/mime
+	gtk-update-icon-cache -f /usr/share/icons/gnome
