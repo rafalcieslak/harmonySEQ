@@ -22,6 +22,6 @@ EXTRA_DIST = 32x32/apps/harmonyseq.png 48x48/apps/harmonyseq.png 192x192/apps/ha
 
 
 install-data-hook:
-	ln -s $(datadir)/icons/gnome/32x32/mimetypes/text-x-harmonyseq.png $(datadir)/icons/gnome/32x32/mimetypes/gnome-mime-text-x-harmonyseq.png
+	ln -sf $(datadir)/icons/gnome/32x32/mimetypes/text-x-harmonyseq.png $(datadir)/icons/gnome/32x32/mimetypes/gnome-mime-text-x-harmonyseq.png
 uninstall-hook:
 	rm $(datadir)/icons/gnome/32x32/mimetypes/gnome-mime-text-x-harmonyseq.png
