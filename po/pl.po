@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
 "POT-Creation-Date: 2010-11-27 20:19+0100\n"
-"PO-Revision-Date: 2010-11-28 08:24+0000\n"
-"Last-Translator: Rafal Cieslak <Unknown>\n"
+"PO-Revision-Date: 2010-12-10 15:32+0000\n"
+"Last-Translator: Adam Czabara <kolofaza@o2.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-10 05:31+0000\n"
+"X-Launchpad-Export-Date: 2010-12-11 05:44+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "Language: pl\n"
 
@@ -133,7 +133,7 @@ msgstr "Bez tytułu"
 
 #: src/MainWindow.cpp:264 src/MainWindow.cpp:581 src/MainWindow.cpp:610
 msgid "The file has unsaved changes."
-msgstr ""
+msgstr "Plik zawiera niezapisane zmiany."
 
 #: src/MainWindow.cpp:264 src/MainWindow.cpp:581
 msgid "Are sure you want to quit?"
@@ -204,7 +204,7 @@ msgstr "Główny autor"
 #. TRANSLATORS: The list of translators to be placed in about-box
 #: src/MainWindow.cpp:573
 msgid " translator-credits"
-msgstr ""
+msgstr " Tłumaczyli"
 
 #: src/MainWindow.cpp:610
 msgid "Are sure you want to loose them and open another file?"
