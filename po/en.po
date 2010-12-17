@@ -9,14 +9,14 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
 "POT-Creation-Date: 2010-11-27 20:19+0100\n"
 "PO-Revision-Date: 2010-09-17 22:23+0000\n"
-"Last-Translator: rafal cieslak <Unknown>\n"
+"Last-Translator: Rafal Cieslak <Unknown>\n"
 "Language-Team: English\n"
-"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ASCII\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-09-22 05:59+0000\n"
+"X-Launchpad-Export-Date: 2010-12-10 05:31+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+"Language: en\n"
 
 #: src/main.cpp:257
 #, c-format
@@ -29,7 +29,7 @@ msgid "unrecognized option '%s'\n"
 msgstr "unrecognized option '%s'\n"
 
 #: src/main.cpp:318
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "harmonySEQ, version %s\n"
 "\n"
@@ -41,14 +41,6 @@ msgid ""
 "   -h    --help        prints this help messase and exits\n"
 "   -v    --version     prints the program version\n"
 msgstr ""
-"harmonySEQ, version %s\n"
-"\n"
-"usage: harmonySEQ [-hdvp]\n"
-"\n"
-"    -p --ports n     sets ports number to n\n"
-"    -d --debug       enters debug mode, prints lots of debug messeges\n"
-"    -h --help        prints this help messase and exits\n"
-"    -v --version     prints the program version\n"
 
 #: src/MainWindow.cpp:40 src/ActionGUI.cpp:115
 msgid "Tempo:"
@@ -67,9 +59,8 @@ msgid "Help"
 msgstr ""
 
 #: src/MainWindow.cpp:81 src/MainWindow.cpp:87
-#, fuzzy
 msgid "ERROR - error while building menus: "
-msgstr "ERROR - error while trying to read %s\n"
+msgstr ""
 
 #: src/MainWindow.cpp:123 src/EventsWindow.cpp:49
 msgid "ID"
@@ -240,9 +231,8 @@ msgid "Volume:"
 msgstr ""
 
 #: src/SequencerGUI.cpp:80
-#, fuzzy
 msgid "Active melody:"
-msgstr "sequencer"
+msgstr ""
 
 #: src/SequencerGUI.cpp:81
 msgid "Set as active melody"
@@ -270,9 +260,9 @@ msgid "%d"
 msgstr ""
 
 #: src/SequencerGUI.cpp:336 src/SequencerGUI.cpp:417
-#, fuzzy, c-format
+#, c-format
 msgid " %d"
-msgstr "seq %d"
+msgstr ""
 
 #: src/SequencerGUI.cpp:341 src/SequencerGUI.cpp:422
 #, c-format
@@ -294,14 +284,14 @@ msgid "Choose a file to open..."
 msgstr "Choose a file to open..."
 
 #: src/Files.cpp:179
-#, fuzzy, c-format
+#, c-format
 msgid "ERROR - error while trying to read file '%s'\n"
-msgstr "ERROR - error while trying to read %s\n"
+msgstr ""
 
 #: src/Files.cpp:185
-#, fuzzy, c-format
+#, c-format
 msgid "ERROR - error while trying to read file '%s': "
-msgstr "ERROR - error while trying to read %s\n"
+msgstr ""
 
 #: src/Files.cpp:199
 #, c-format
@@ -331,14 +321,14 @@ msgid ""
 msgstr ""
 
 #: src/Files.cpp:329
-#, fuzzy, c-format
+#, c-format
 msgid "ERROR - Glib::KeyFile error while processing file '%s': "
-msgstr "ERROR - error while opening file %s to write.\n"
+msgstr ""
 
 #: src/Files.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid "ERROR - unknown error while processing file '%s': "
-msgstr "ERROR - error while opening file %s to write.\n"
+msgstr ""
 
 #: src/Event.cpp:50
 #, c-format
@@ -454,9 +444,9 @@ msgid "Switch sequencer '%s' ON"
 msgstr ""
 
 #: src/Action.cpp:153
-#, fuzzy, c-format
+#, c-format
 msgid "Toggle sequencer '%s'"
-msgstr "sequencer"
+msgstr ""
 
 #: src/Action.cpp:158
 #, c-format
@@ -474,24 +464,24 @@ msgid "Set volume of sequencer '%s' to %d"
 msgstr ""
 
 #: src/Action.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid "Set note %d of sequencer '%s' to %d"
-msgstr "sequencer"
+msgstr ""
 
 #: src/Action.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "Set chord of sequencer '%s' to %s"
-msgstr "sequencer"
+msgstr ""
 
 #: src/Action.cpp:175
-#, fuzzy, c-format
+#, c-format
 msgid "Play sequence in '%s' once"
-msgstr "sequencer"
+msgstr ""
 
 #: src/Action.cpp:178 src/TreeModels.cpp:97
-#, fuzzy, c-format
+#, c-format
 msgid "Toggle passing MIDI events"
-msgstr "Pass MIDI events"
+msgstr ""
 
 #: src/Action.cpp:189
 #, c-format
@@ -504,9 +494,9 @@ msgid "Synchronize"
 msgstr ""
 
 #: src/Action.cpp:197
-#, fuzzy, c-format
+#, c-format
 msgid "Set active melody of sequencer '%s' to %d"
-msgstr "sequencer"
+msgstr ""
 
 #: src/Action.cpp:200
 #, c-format
@@ -514,9 +504,9 @@ msgid "(empty action)"
 msgstr ""
 
 #: src/Action.cpp:203
-#, fuzzy, c-format
+#, c-format
 msgid "(unknown action)"
-msgstr "unknown option '%c'\n"
+msgstr ""
 
 #: src/Action.cpp:210
 msgid ""
@@ -539,14 +529,12 @@ msgid "Action"
 msgstr ""
 
 #: src/ActionGUI.cpp:114
-#, fuzzy
 msgid "Sequencer:"
-msgstr "sequencer"
+msgstr ""
 
 #: src/ActionGUI.cpp:118
-#, fuzzy
 msgid "Set note "
-msgstr "Apply main note"
+msgstr ""
 
 #: src/ActionGUI.cpp:119
 msgid " to: "
@@ -581,11 +569,13 @@ msgid "Error: volume has changed, while action is not volume-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:419
-msgid "Error: note to set has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note to set has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:430
-msgid "Error: note number has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note number has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:443
@@ -619,38 +609,32 @@ msgid "Controller"
 msgstr ""
 
 #: src/TreeModels.cpp:67
-#, fuzzy
 msgid "Sequencer/Switch On-Off"
-msgstr "sequencer"
+msgstr ""
 
 #: src/TreeModels.cpp:70
-#, fuzzy
 msgid "Sequencer/Play once"
-msgstr "sequencer"
+msgstr ""
 
 #: src/TreeModels.cpp:73
 msgid "Sequencer/Set volume"
 msgstr ""
 
 #: src/TreeModels.cpp:76
-#, fuzzy
 msgid "Sequencer/Set one note"
-msgstr "sequencer"
+msgstr ""
 
 #: src/TreeModels.cpp:79
-#, fuzzy
 msgid "Sequencer/Set chord"
-msgstr "sequencer"
+msgstr ""
 
 #: src/TreeModels.cpp:82
-#, fuzzy
 msgid "Sequencer/Set active melody"
-msgstr "sequencer"
+msgstr ""
 
 #: src/TreeModels.cpp:85
-#, fuzzy
 msgid "Set main note"
-msgstr "Apply main note"
+msgstr ""
 
 #: src/TreeModels.cpp:88
 msgid "Set tempo"
@@ -735,42 +719,18 @@ msgstr ""
 msgid "Octave"
 msgstr ""
 
-#~ msgid "Save"
-#~ msgstr "Save"
+#, c-format
+#~ msgid ""
+#~ "       --pass-midi   passes the midi events through the program by default\n"
+#~ msgstr ""
+#~ "       --pass-midi   passes the midi events through the program by default\n"
 
 #~ msgid "Open"
 #~ msgstr "Open"
 
-#~ msgid ""
-#~ "       --pass-midi   passes the midi events through the program by "
-#~ "default\n"
-#~ msgstr ""
-#~ "       --pass-midi   passes the midi events through the program by "
-#~ "default\n"
+#~ msgid "Save"
+#~ msgstr "Save"
 
-#, fuzzy
-#~ msgid "Sequencer/ON"
-#~ msgstr "sequencer"
-
-#, fuzzy
-#~ msgid "Sequencer/OFF"
-#~ msgstr "sequencer"
-
-#, fuzzy
-#~ msgid "Sequencer/Toggle"
-#~ msgstr "sequencer"
-
-#, fuzzy
-#~ msgid "Set notes of sequencer '%s' to %d,%d,%d,%d,%d,%d "
-#~ msgstr "sequencer"
-
-#, fuzzy
-#~ msgid "Notes:"
-#~ msgstr "Main Note:"
-
-#, fuzzy
-#~ msgid "Sequencer/Set all notes"
-#~ msgstr "sequencer"
-
+#, c-format
 #~ msgid "When note %d on channel %d is moved..."
 #~ msgstr "When note %d on channel %d is moved..."

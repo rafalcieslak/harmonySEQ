@@ -11,12 +11,12 @@ msgstr ""
 "PO-Revision-Date: 2010-11-19 07:09+0000\n"
 "Last-Translator: Rafal Cieslak <Unknown>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
-"Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-11-20 05:25+0000\n"
+"X-Launchpad-Export-Date: 2010-12-10 05:31+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+"Language: en_GB\n"
 
 #: src/main.cpp:257
 #, c-format
@@ -59,9 +59,8 @@ msgid "Help"
 msgstr ""
 
 #: src/MainWindow.cpp:81 src/MainWindow.cpp:87
-#, fuzzy
 msgid "ERROR - error while building menus: "
-msgstr "ERROR - error while opening file %s to write.\n"
+msgstr ""
 
 #: src/MainWindow.cpp:123 src/EventsWindow.cpp:49
 msgid "ID"
@@ -124,9 +123,8 @@ msgid "Untitled"
 msgstr ""
 
 #: src/MainWindow.cpp:264 src/MainWindow.cpp:581 src/MainWindow.cpp:610
-#, fuzzy
 msgid "The file has unsaved changes."
-msgstr "The file has unsaved changes."
+msgstr ""
 
 #: src/MainWindow.cpp:264 src/MainWindow.cpp:581
 msgid "Are sure you want to quit?"
@@ -571,11 +569,13 @@ msgid "Error: volume has changed, while action is not volume-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:419
-msgid "Error: note to set has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note to set has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:430
-msgid "Error: note number has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note number has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:443
@@ -719,18 +719,18 @@ msgstr ""
 msgid "Octave"
 msgstr ""
 
-#~ msgid "Save"
-#~ msgstr "Save"
+#, c-format
+#~ msgid ""
+#~ "       --pass-midi   passes the midi events through the program by default\n"
+#~ msgstr ""
+#~ "       --pass-midi   passes the midi events through the program by default\n"
 
 #~ msgid "Open"
 #~ msgstr "Open"
 
-#~ msgid ""
-#~ "       --pass-midi   passes the midi events through the program by "
-#~ "default\n"
-#~ msgstr ""
-#~ "       --pass-midi   passes the midi events through the program by "
-#~ "default\n"
-
+#, c-format
 #~ msgid "When note %d on channel %d is moved..."
 #~ msgstr "When note %d on channel %d is moved..."
+
+#~ msgid "Save"
+#~ msgstr "Save"
