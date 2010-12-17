@@ -134,6 +134,7 @@ void SaveToFile(Glib::ustring filename){
 
      found =  filename.find_last_of("/\\");
      file_name = filename.substr(found+1);
+     file_dir = filename.substr(0,found+1);
     mainwindow->UpdateTitle();
     SetFileModified(0); //file is clean now
 
@@ -361,7 +362,6 @@ bool LoadFile(Glib::ustring file){
         int found =  file.find_last_of("/\\");  //Will work on linux and windos both
         file_name = file.substr(found+1);
         file_dir = file.substr(0,found+1);
-        *dbg << file_dir << ENDL;
         mainwindow->UpdateTitle();
         
     }catch(Glib::KeyFileError error){

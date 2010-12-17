@@ -618,6 +618,7 @@ void MainWindow::OnMenuQuitClicked(){
 
 void MainWindow::OnMenuNewClicked(){
     Files::file_name = "";
+    
 
     //clear everything.
     ClearEvents();
@@ -653,7 +654,7 @@ void MainWindow::OnMenuSaveClicked(){
     if (Files::file_name == "") //first save, so behave just if we were saving as
         OnMenuSaveAsClicked();
 
-    Files::SaveToFile(Files::file_name);
+    Files::SaveToFile(Files::file_dir+Files::file_name);
 
 }
 
@@ -674,7 +675,9 @@ void MainWindow::OnMenuSaveAsClicked(){
     all.add_pattern("*");
     dialog.add_filter(all);
 
-
+    if (Files::file_name != "")
+        dialog.set_filename(Files::file_dir+Files::file_name);
+    
     int result = dialog.run();
 
     Glib::ustring filename = dialog.get_filename();
