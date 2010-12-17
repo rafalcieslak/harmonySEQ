@@ -601,7 +601,7 @@ void MainWindow::OnAboutMenuClicked(){
     authors.push_back("       Rafał Cieślak <rafalcieslak256@gmail.com>");
     aboutbox.set_authors(authors);
     //TRANSLATORS: The list of translators to be placed in about-box
-    aboutbox.set_translator_credits(_(" translator-credits"));
+    aboutbox.set_translator_credits(_("translator-credits"));
     
     aboutbox.run();
 
