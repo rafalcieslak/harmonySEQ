@@ -66,20 +66,20 @@ void ClearSequencers(){
 //======begin sequencer class===============
 
 Sequencer::Sequencer()
-    : melodies(0)
+    : patterns(0)
 {
     name = SEQUENCER_DEFAULT_NAME;
-    resolution = SEQUENCE_DEFAULT_SIZE; //AddMelody() must know the resolution
-    AddMelody();
+    resolution = SEQUENCE_DEFAULT_SIZE; //AddPattern() must know the resolution
+    AddPattern();
     Init();
 }
 
 Sequencer::Sequencer(Glib::ustring _name)
-    : melodies(0)
+    : patterns(0)
 {
     name = _name;
-    resolution = SEQUENCE_DEFAULT_SIZE; //AddMelody() must know the resolution
-    AddMelody();
+    resolution = SEQUENCE_DEFAULT_SIZE; //AddPattern() must know the resolution
+    AddPattern();
     Init();
 }
 
@@ -88,8 +88,8 @@ Sequencer::Sequencer(const Sequencer *orig) {
     on = orig->on;
     chord = orig->chord;
     resolution = orig->resolution;
-    melodies = orig->melodies;
-    active_melody = orig->active_melody;
+    patterns = orig->patterns;
+    active_pattern = orig->active_pattern;
     channel = orig->channel;
     apply_mainnote = orig->apply_mainnote;
     length = orig->length;
@@ -106,7 +106,7 @@ void Sequencer::Init(){
 
     on = false;
     apply_mainnote = true;
-    active_melody = 0;
+    active_pattern = 0;
     channel = 1;
     length = 1;
     volume = DEFAULT_VOLUME;
@@ -127,35 +127,35 @@ void Sequencer::SetResolution(int res){
         int ratio = resolution/res;
         *dbg << "ensmalling resolution ratio = " << ratio << ENDL;
 
-        for(int s=0; s<melodies.size();s++){
+        for(int s=0; s<patterns.size();s++){
             vector<vector<bool> > new_sequence(res,vector<bool>(6,0));
             assert(ratio>=1);
             int x = 0, i = 0;
             for (; x < resolution;x+=ratio){
                 for(int c = 0; c < 6;c++){
-                    new_sequence[i][c] = melodies[s][x][c]; //to be checked
+                    new_sequence[i][c] = patterns[s][x][c]; //to be checked
                 }
                 i++;
             }
-            melodies[s] = new_sequence;
+            patterns[s] = new_sequence;
         }
         resolution = res;
     } else {
         //the new resolution is larger
         int ratio = res/resolution;
         *dbg << "enlarging resolution ratio = " << ratio << ENDL;
-        for(int s=0; s<melodies.size();s++){
+        for(int s=0; s<patterns.size();s++){
          vector<vector<bool> > new_sequence(res,vector<bool>(6,0));
             int x = 0;
             for (int p =0; p < resolution;p++){
                 for (int i = 0; i < ratio;i++){
                     for(int c = 0; c < 6; c++){
-                        new_sequence[x][c]=melodies[s][p][c];
+                        new_sequence[x][c]=patterns[s][p][c];
                     }
                     x++;
                 }
             }
-            melodies[s]=new_sequence;
+            patterns[s]=new_sequence;
         }
         resolution = res;
     }
@@ -195,41 +195,41 @@ void Sequencer::UpdateGui(){gui_window->UpdateValues();}
 void Sequencer::UpdateGuiChord(){gui_window->UpdateChord();}
 
 
-int Sequencer::AddMelody(){
+int Sequencer::AddPattern(){
     vector<bool> line(6,false);
     vector<vector<bool> > seq;
     for(int x = 0; x < resolution;x++){
         seq.push_back(line);
     }
-    melodies.push_back(seq);
-    *dbg<< "Added melody " << melodies.size() << ".\n";
-    return melodies.size()-1;
+    patterns.push_back(seq);
+    *dbg<< "Added pattern " << patterns.size() << ".\n";
+    return patterns.size()-1;
 }
 
-bool Sequencer::RemoveMelody(int x){
-    melodies.erase(melodies.begin()+x);
-    if (active_melody > x) active_melody--;
-    else if (active_melody == x) active_melody = 0;
+bool Sequencer::RemovePattern(int x){
+    patterns.erase(patterns.begin()+x);
+    if (active_pattern > x) active_pattern--;
+    else if (active_pattern == x) active_pattern = 0;
 
-    *dbg<< "Removed melody " << x << ".\n";
+    *dbg<< "Removed pattern " << x << ".\n";
     return 0;
 }
 
 
-int Sequencer::GetMelodyNote(int melody, int n, int c){
-    return melodies[melody][n][c];
+int Sequencer::GetPatternNote(int pattern, int n, int c){
+    return patterns[pattern][n][c];
 }
 
-bool Sequencer::GetActiveMelodyNote(int n, int c){
-    return melodies[active_melody][n][c];
+bool Sequencer::GetActivePatternNote(int n, int c){
+    return patterns[active_pattern][n][c];
 }
 
-void Sequencer::SetMelodyNote(int melody, int n, int c, bool value){
-    melodies[melody][n][c] = value;
+void Sequencer::SetPatternNote(int pattern, int n, int c, bool value){
+    patterns[pattern][n][c] = value;
 
 }
 
-void Sequencer::ChangeActiveMelody(int new_one){
-    active_melody = new_one%(melodies.size());
-    gui_window->UpdateMelody();
+void Sequencer::ChangeActivePattern(int new_one){
+    active_pattern = new_one%(patterns.size());
+    gui_window->UpdatePattern();
 }

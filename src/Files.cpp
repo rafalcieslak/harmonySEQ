@@ -87,15 +87,15 @@ void SaveToFile(Glib::ustring filename){
         kf.set_integer(temp,FILE_KEY_SEQ_VOLUME,sequencers[x]->GetVolume());
         kf.set_integer(temp,FILE_KEY_SEQ_RESOLUTION,sequencers[x]->resolution);
         kf.set_double(temp,FILE_KEY_SEQ_LENGTH,sequencers[x]->length);
-        kf.set_integer(temp,FILE_KEY_SEQ_SEQUENCES_NUMBER,sequencers[x]->melodies.size());
+        kf.set_integer(temp,FILE_KEY_SEQ_SEQUENCES_NUMBER,sequencers[x]->patterns.size());
         //save the sequences
-        for (int s=0; s<sequencers[x]->melodies.size();s++){
+        for (int s=0; s<sequencers[x]->patterns.size();s++){
             sprintf(temp2,FILE_KEY_SEQ_SEQUENCE_TEMPLATE,s);
 
             vector<int> S(sequencers[x]->resolution*6);
             for (int r = 0; r < sequencers[x]->resolution; r++){
                 for (int c = 0; c < 6; c++){
-                    S[r*6+c]=sequencers[x]->GetMelodyNote(s,r,c);
+                    S[r*6+c]=sequencers[x]->GetPatternNote(s,r,c);
                 }
 
             }
@@ -252,25 +252,25 @@ bool LoadFile(Glib::ustring file){
             sequencers[x]->resolution = kf.get_integer(temp, FILE_KEY_SEQ_RESOLUTION);
             sequencers[x]->length = kf.get_double(temp, FILE_KEY_SEQ_LENGTH);
 
-            sequencers[x]->melodies.clear();
+            sequencers[x]->patterns.clear();
 
             //here we load the sequences
             if(kf.has_key(temp,FILE_KEY_SEQ_SEQUENCE)){ //old file, seems it uses only one sequence, this case may be abandoned in future, since noone uses soooo old files
-                    int seq = sequencers[x]->AddMelody();
+                    int seq = sequencers[x]->AddPattern();
                     std::vector<int> sequence = kf.get_integer_list(temp, FILE_KEY_SEQ_SEQUENCE);
                         for(int r = 0; r < sequencers[x]->resolution; r++){
                             for(int c = 0; c < 6; c++){
                                 if (c == sequence[r])
-                                    sequencers[x]->SetMelodyNote(0,r,c,1);
+                                    sequencers[x]->SetPatternNote(0,r,c,1);
                                 else
-                                    sequencers[x]->SetMelodyNote(0,r,c,0);
+                                    sequencers[x]->SetPatternNote(0,r,c,0);
 
                             }
                     }
             }else{//new file, uses many sequences
                 int n = kf.get_integer(temp,FILE_KEY_SEQ_SEQUENCES_NUMBER);
                 for(int s =0; s < n; s++){
-                    int seq = sequencers[x]->AddMelody();
+                    int seq = sequencers[x]->AddPattern();
                     sprintf(temp2,FILE_KEY_SEQ_SEQUENCE_TEMPLATE,s);
                     std::vector<int> sequence = kf.get_integer_list(temp, temp2);
                     
@@ -279,9 +279,9 @@ bool LoadFile(Glib::ustring file){
                         for(int r = 0; r < sequencers[x]->resolution; r++){
                             for(int c = 0; c < 6; c++){
                                 if (c == sequence[r])
-                                    sequencers[x]->SetMelodyNote(s,r,c,1);
+                                    sequencers[x]->SetPatternNote(s,r,c,1);
                                 else
-                                    sequencers[x]->SetMelodyNote(s,r,c,0);
+                                    sequencers[x]->SetPatternNote(s,r,c,0);
 
                             }
                         }
@@ -290,7 +290,7 @@ bool LoadFile(Glib::ustring file){
                         //used to load new files >=0.13.0
                         for(int r = 0; r < sequencers[x]->resolution; r++){
                             for(int c = 0; c < 6; c++){
-                                    sequencers[x]->SetMelodyNote(s,r,c,sequence[r*6+c]);
+                                    sequencers[x]->SetPatternNote(s,r,c,sequence[r*6+c]);
 
                             }
                         }
@@ -299,7 +299,7 @@ bool LoadFile(Glib::ustring file){
                      
                 }
                 if(sequencers.size() == 0) //wtf, there were no sequences in the file? strange. We have to create one in order to prevent crashes.
-                    sequencers[x]->AddMelody();
+                    sequencers[x]->AddPattern();
 
             }
             

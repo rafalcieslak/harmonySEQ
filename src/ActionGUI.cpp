@@ -42,7 +42,7 @@ ActionGUI::ActionGUI(Action *prt):
     main_box.pack_start(line_note);
     main_box.pack_start(line_tempo);
     main_box.pack_start(line_volume);
-    main_box.pack_start(line_melody);
+    main_box.pack_start(line_pattern);
     main_box.pack_start(line_set_one_note);
     main_box.pack_start(line_chord);
     main_box.pack_start(line_play);
@@ -55,7 +55,7 @@ ActionGUI::ActionGUI(Action *prt):
     line_note.pack_start(label_note,Gtk::PACK_SHRINK);
     line_tempo.pack_start(label_tempo,Gtk::PACK_SHRINK);
     line_volume.pack_start(label_volume,Gtk::PACK_SHRINK);
-    line_melody.pack_start(label_melody,Gtk::PACK_SHRINK);
+    line_pattern.pack_start(label_pattern,Gtk::PACK_SHRINK);
     line_set_one_note.pack_start(label_note_nr,Gtk::PACK_SHRINK);
     line_set_one_note.pack_start(notenr_button,Gtk::PACK_SHRINK);
     line_set_one_note.pack_start(label_note_seq,Gtk::PACK_SHRINK);
@@ -84,7 +84,7 @@ ActionGUI::ActionGUI(Action *prt):
     line_type.pack_start(Types_combo,Gtk::PACK_SHRINK);
     line_seq.pack_start(Seqs_combo,Gtk::PACK_SHRINK);
     line_note.pack_start(note_button,Gtk::PACK_SHRINK);
-    line_melody.pack_start(melody_button,Gtk::PACK_SHRINK);
+    line_pattern.pack_start(pattern_button,Gtk::PACK_SHRINK);
     line_tempo.pack_start(tempo_button,Gtk::PACK_SHRINK);
     line_volume.pack_start(vol_button,Gtk::PACK_SHRINK);
     line_chord.pack_start(chordwidget);
@@ -98,9 +98,9 @@ ActionGUI::ActionGUI(Action *prt):
     chordseq_button.set_range(-48.0,48.0);
     chordseq_button.set_increments(1.0,12.0);
     chordseq_button.signal_value_changed().connect(mem_fun(*this,&ActionGUI::OnNoteSeqChanged));
-    melody_button.set_range(0.0,100.0);
-    melody_button.set_increments(1.0,10.0);
-    melody_button.signal_value_changed().connect(mem_fun(*this,&ActionGUI::OnMelodyChanged));
+    pattern_button.set_range(0.0,100.0);
+    pattern_button.set_increments(1.0,10.0);
+    pattern_button.signal_value_changed().connect(mem_fun(*this,&ActionGUI::OnPatternChanged));
     tempo_button.set_range(30.0,320.0);
     tempo_button.set_increments(1.0,20.0);
     tempo_button.signal_value_changed().connect(mem_fun(*this,&ActionGUI::OnTempoChanged));
@@ -117,7 +117,7 @@ ActionGUI::ActionGUI(Action *prt):
     label_volume.set_text(_("Volume:"));
     label_note_nr.set_text(_("Set note "));
     label_note_seq.set_text(_(" to: "));
-    label_melody.set_text(_("Melody number: "));
+    label_pattern.set_text(_("Pattern number: "));
     on_off_toggle_OFF.set_label(_("Off"));
     on_off_toggle_ON.set_label(_("On"));
     on_off_toggle_TOGGLE.set_label(_("Toggle"));
@@ -192,9 +192,9 @@ void ActionGUI::UpdateValues(){
             SetSeqCombo(parent->args[1]);
             vol_button.set_value(parent->args[2]);
             break;
-        case Action::SEQ_CHANGE_MELODY:
+        case Action::SEQ_CHANGE_PATTERN:
             SetSeqCombo(parent->args[1]);
-            melody_button.set_value(parent->args[2]);
+            pattern_button.set_value(parent->args[2]);
             break;
         case Action::MAINOTE_SET:
             note_button.set_value(parent->args[1]);
@@ -249,7 +249,7 @@ void ActionGUI::ChangeVisibleLines(){
     line_chord.hide();
     line_on_off_toggle.hide();
     line_play.hide();
-    line_melody.hide();
+    line_pattern.hide();
     switch (type){
         case Action::NONE:
             break;
@@ -266,9 +266,9 @@ void ActionGUI::ChangeVisibleLines(){
             line_seq.show();
             line_volume.show();
             break;
-        case Action::SEQ_CHANGE_MELODY:
+        case Action::SEQ_CHANGE_PATTERN:
             line_seq.show();
-            line_melody.show();
+            line_pattern.show();
             break;
         case Action::SEQ_CHANGE_ONE_NOTE:
             line_seq.show();
@@ -338,10 +338,10 @@ void ActionGUI::InitType(){
             parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
             chordwidget.Update();
             break;
-        case Action::SEQ_CHANGE_MELODY:
+        case Action::SEQ_CHANGE_PATTERN:
             Seqs_combo.set_active(0);
             parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
-            melody_button.set_value(0.0);
+            pattern_button.set_value(0.0);
             break;
         case Action::MAINOTE_SET:
             note_button.set_value(60.0);
@@ -390,7 +390,7 @@ void ActionGUI::OnTempoChanged(){
 
 void ActionGUI::OnSeqChanged(){
     if(!Seqs_combo.get_active()) return; //empty selection
-    if(parent->type == Action::SEQ_ON_OFF_TOGGLE || parent->type == Action::SEQ_VOLUME_SET || parent->type == Action::SEQ_CHANGE_ONE_NOTE || parent->type == Action::SEQ_CHANGE_CHORD || parent->type == Action::SEQ_PLAY_ONCE||parent->type == Action::SEQ_CHANGE_MELODY){
+    if(parent->type == Action::SEQ_ON_OFF_TOGGLE || parent->type == Action::SEQ_VOLUME_SET || parent->type == Action::SEQ_CHANGE_ONE_NOTE || parent->type == Action::SEQ_CHANGE_CHORD || parent->type == Action::SEQ_PLAY_ONCE||parent->type == Action::SEQ_CHANGE_PATTERN){
             parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
     }else *err << _("Error: sequencer has changed, while action is not sequencer-type.") << ENDL;
 
@@ -471,11 +471,11 @@ void ActionGUI::OnChordWidgetChanged(){
 
 }
 
-void ActionGUI::OnMelodyChanged(){
+void ActionGUI::OnPatternChanged(){
 
-    if(parent->type == Action::SEQ_CHANGE_MELODY){
-        parent->args[2] = melody_button.get_value();
-    }else *err << _("Error: melody has changed, while action is not melody-type.") << ENDL;
+    if(parent->type == Action::SEQ_CHANGE_PATTERN){
+        parent->args[2] = pattern_button.get_value();
+    }else *err << _("Error: pattern has changed, while action is not pattern-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
     eventswindow->UpdateRow(parent->row_in_event_window);

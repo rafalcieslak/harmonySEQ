@@ -43,7 +43,7 @@ public:
         /**1)mode: 0- off, 1 - on, 2 - toggle*/
         PLAY_PAUSE,
         SYNC,
-        SEQ_CHANGE_MELODY
+        SEQ_CHANGE_PATTERN
     };
 
     Action(ActionTypes t, int a1 = 0, int a2 = 0);

@@ -41,14 +41,14 @@ public:
     Sequencer(const Sequencer* orig);
     virtual ~Sequencer();
 
-    /**List of melody notes: */
-    vector<vector<vector<bool> > > melodies;
+    /**List of  notes in patterns: */
+    vector<vector<vector<bool> > > patterns;
     
     /**The active sequence number*/
-    int active_melody;
+    int active_pattern;
 
-    int AddMelody();
-    bool RemoveMelody(int x);
+    int AddPattern();
+    bool RemovePattern(int x);
     /**The main chord*/
    Chord chord;
     
@@ -70,14 +70,14 @@ public:
 
     /**Returns a one note from a given sequence
      * @parram n sequence note tumber*/
-    int GetMelodyNote(int melody, int n, int c);
+    int GetPatternNote(int pattern, int n, int c);
 
     /**Returns a one note from the active sequence
      * @parram n sequence note tumber*/
-    bool GetActiveMelodyNote( int n, int c);
+    bool GetActivePatternNote( int n, int c);
 
     /**Sets a note in a given sequence*/
-    void SetMelodyNote(int sequence, int n, int c, bool value);
+    void SetPatternNote(int sequence, int n, int c, bool value);
 
     /**Sets the sequencer on/off*/
     void SetOn(bool m);
@@ -109,8 +109,8 @@ public:
     /**Returns velocity*/
     int GetVolume();
 
-    /**Changes the melody that is played by this sequencer*/
-    void ChangeActiveMelody(int new_one);
+    /**Changes the pattern that is played by this sequencer*/
+    void ChangeActivePattern(int new_one);
 
     /**Shows corresponding SequencerWindow*/
     void ShowWindow();

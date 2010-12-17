@@ -34,7 +34,7 @@ SequencerWindow::SequencerWindow(Sequencer* prt)
 
     parent = prt;
     chordwidget = new ChordWidget(&prt->chord);
-    previous_box_where_melody_lines_were_packed = -1;
+    previous_box_where_pattern_lines_were_packed = -1;
     do_not_react_on_page_changes = 0;
 
     set_title(parent->name);
@@ -45,13 +45,13 @@ SequencerWindow::SequencerWindow(Sequencer* prt)
     main_vbox.pack_start(box_of_chord);
     box_of_chord.pack_start(*chordwidget);
     main_vbox.pack_start(notebook);
-    main_vbox.pack_start(melody_ops_hbox);
+    main_vbox.pack_start(pattern_ops_hbox);
     main_vbox.pack_start(line_zero, Gtk::PACK_SHRINK);
     main_vbox.pack_start(low_hbox);
 
     notebook.set_tab_pos(Gtk::POS_BOTTOM);
-    UpdateActiveMelodyRange();
-    active_melody.set_value(parent->active_melody); //maybe the parent already have an active melody chosen
+    UpdateActivePatternRange();
+    active_pattern.set_value(parent->active_pattern); //maybe the parent already have an active pattern chosen
     InitNotebook();
     notebook.set_scrollable(1);
     notebook.signal_switch_page().connect(sigc::mem_fun(*this, &SequencerWindow::OnNotebookPageChanged));
@@ -64,24 +64,24 @@ SequencerWindow::SequencerWindow(Sequencer* prt)
     line_one.pack_end(channellabel,Gtk::PACK_SHRINK);
     line_two.pack_end(volume_button,Gtk::PACK_SHRINK);
     line_two.pack_end(volumelabel,Gtk::PACK_SHRINK);
-    line_zero.pack_end(active_melody,Gtk::PACK_SHRINK);
-    line_zero.pack_end(activemelodylabel,Gtk::PACK_SHRINK);
-    line_zero.pack_end(set_as_active_melody,Gtk::PACK_SHRINK);
-    set_as_active_melody.signal_clicked().connect(mem_fun(*this,&SequencerWindow::OnSetAsActiveMelodyClicked));
+    line_zero.pack_end(active_pattern,Gtk::PACK_SHRINK);
+    line_zero.pack_end(activepanellabel,Gtk::PACK_SHRINK);
+    line_zero.pack_end(set_as_active_pattern,Gtk::PACK_SHRINK);
+    set_as_active_pattern.signal_clicked().connect(mem_fun(*this,&SequencerWindow::OnSetAsActivePatternClicked));
 
-    melody_ops_hbox.pack_end(remove_melody,Gtk::PACK_SHRINK);
-    melody_ops_hbox.pack_end(add_melody_button,Gtk::PACK_SHRINK);
-    melody_ops_hbox.pack_end(melodylabel,Gtk::PACK_SHRINK);
-    add_melody_button.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWindow::OnAddMelodyClicked));
-    remove_melody.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWindow::OnRemoveMelodyClicked));
+    pattern_ops_hbox.pack_end(remove_pattern,Gtk::PACK_SHRINK);
+    pattern_ops_hbox.pack_end(add_pattern_button,Gtk::PACK_SHRINK);
+    pattern_ops_hbox.pack_end(patternlabel,Gtk::PACK_SHRINK);
+    add_pattern_button.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWindow::OnAddPatternClicked));
+    remove_pattern.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWindow::OnRemovePatternClicked));
 
     channellabel.set_text(_("MIDI channel:"));
     volumelabel.set_text(_("Volume:"));
-    activemelodylabel.set_text(_("Active melody:"));
-    set_as_active_melody.set_label(_("Set as active melody"));
-    melodylabel.set_text(_("Melody:"));
-    add_melody_button.set_label(_("Add"));
-    remove_melody.set_label(_("Remove"));
+    activepanellabel.set_text(_("Active pattern:"));
+    set_as_active_pattern.set_label(_("Set as active pattern"));
+    patternlabel.set_text(_("Pattern:"));
+    add_pattern_button.set_label(_("Add"));
+    remove_pattern.set_label(_("Remove"));
 
     volume_button.set_range(0,127);
     channel_button.set_range(1,16);
@@ -92,7 +92,7 @@ SequencerWindow::SequencerWindow(Sequencer* prt)
     channel_button.set_value(parent->GetChannel());
     volume_button.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWindow::OnVolumeChanged));
     channel_button.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWindow::OnChannelChanged));
-    active_melody.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWindow::OnActiveMelodyChanged));
+    active_pattern.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWindow::OnActivePatternChanged));
     toggle_vbox.pack_start(tgl_mute);
     toggle_vbox.pack_start(tgl_apply_mainnote);
     tgl_mute.set_label(_("On"));
@@ -147,12 +147,12 @@ SequencerWindow::SequencerWindow(Sequencer* prt)
 }
 SequencerWindow::~SequencerWindow(){
     delete chordwidget;
-    for (int x = 0; x < melody_lines.size();x++) delete melody_lines[x];
+    for (int x = 0; x < pattern_lines.size();x++) delete pattern_lines[x];
 }
 
-void SequencerWindow::OnMelodyNoteChanged(int c, bool value, int seq){
+void SequencerWindow::OnPatternNoteChanged(int c, bool value, int seq){
     
-    parent->SetMelodyNote(notebook.get_current_page(),seq,c,value);
+    parent->SetPatternNote(notebook.get_current_page(),seq,c,value);
     Files::SetFileModified(1);
 }
 
@@ -177,8 +177,8 @@ void SequencerWindow::UpdateValues(){
 
     do_not_react_on_page_changes = 0;
 
-    active_melody.set_value(parent->active_melody); //this doesn't trigger the signal handler
-    OnActiveMelodyChanged();
+    active_pattern.set_value(parent->active_pattern); //this doesn't trigger the signal handler
+    OnActivePatternChanged();
 
     InitNotebook();
     UpdateChord();
@@ -222,7 +222,7 @@ void SequencerWindow::OnResolutionChanged(){
     DetachLines();
     parent->SetResolution(row[m_Columns_resol.resol]);
 
-    AttachLines(previous_box_where_melody_lines_were_packed);
+    AttachLines(previous_box_where_pattern_lines_were_packed);
     resize(2,2);
 
     if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
@@ -247,20 +247,20 @@ void SequencerWindow::InitNotebook(){
 
     DetachLines(); //to make it save to add/remove pages
 
-    for (unsigned int x = 0; x < melody_boxes.size();x++){
-        if(!melody_boxes[x]) continue;
-        notebook.remove_page(*melody_boxes[x]);
-        if(melody_boxes[x]) //maybe .remove_page removes also the object....
-            delete melody_boxes[x];
+    for (unsigned int x = 0; x < pattern_boxes.size();x++){
+        if(!pattern_boxes[x]) continue;
+        notebook.remove_page(*pattern_boxes[x]);
+        if(pattern_boxes[x]) //maybe .remove_page removes also the object....
+            delete pattern_boxes[x];
     }
-    melody_boxes.clear();
+    pattern_boxes.clear();
     
-    melody_boxes.resize(parent->melodies.size(),NULL);
-    for (unsigned int x = 0; x < parent->melodies.size();x++){
-        melody_boxes[x] = /*Gtk::manage<Gtk::VBox>*/(new Gtk::VBox); //careful. may cause some strange memory leaks, should be investigated whether the Gtk::manage formule is really unneeded.
-        melody_boxes[x]->show();
+    pattern_boxes.resize(parent->patterns.size(),NULL);
+    for (unsigned int x = 0; x < parent->patterns.size();x++){
+        pattern_boxes[x] = /*Gtk::manage<Gtk::VBox>*/(new Gtk::VBox); //careful. may cause some strange memory leaks, should be investigated whether the Gtk::manage formule is really unneeded.
+        pattern_boxes[x]->show();
         sprintf(temp,_("%d"),x);
-        notebook.append_page(*melody_boxes[x],temp);
+        notebook.append_page(*pattern_boxes[x],temp);
         
     }
     resize(2,2);
@@ -269,45 +269,45 @@ void SequencerWindow::InitNotebook(){
     //reset the current page
     notebook.set_current_page(0);
     AttachLines(0); //to bring the sliders back
-    UpdateActiveMelodyRange();
-    OnActiveMelodyChanged(); //this will mark active tab with a star (Mel x*)
+    UpdateActivePatternRange();
+    OnActivePatternChanged(); //this will mark active tab with a star (Pat x*)
     SetRemoveButtonSensitivity(); //according to the number of pages
 }
 
 void SequencerWindow::DetachLines(){
 
-    *dbg << "Deattaching melody-lines\n";
-    if (previous_box_where_melody_lines_were_packed == -1) return;   //because -1 that means there are not packed anywhere yet
-     for(unsigned int x = 0; x < melody_lines.size() ;x++){
-        if(!melody_lines[x]) continue;
-        melody_lines[x]->hide();
-        *dbg << "removing " << x << " from " << previous_box_where_melody_lines_were_packed << ENDL;
-        melody_boxes[previous_box_where_melody_lines_were_packed]->remove(*melody_lines[x]);
-        delete melody_lines[x];
+    *dbg << "Deattaching pattern-lines\n";
+    if (previous_box_where_pattern_lines_were_packed == -1) return;   //because -1 that means there are not packed anywhere yet
+     for(unsigned int x = 0; x < pattern_lines.size() ;x++){
+        if(!pattern_lines[x]) continue;
+        pattern_lines[x]->hide();
+        *dbg << "removing " << x << " from " << previous_box_where_pattern_lines_were_packed << ENDL;
+        pattern_boxes[previous_box_where_pattern_lines_were_packed]->remove(*pattern_lines[x]);
+        delete pattern_lines[x];
     }
     
-    melody_lines.clear();
+    pattern_lines.clear();
 
 }
 
 void SequencerWindow::AttachLines(int where){
-    *dbg << "Attaching melody-lines to page " << where << ".\n";
-    if(where >= melody_boxes.size()) {*err<< "Cannot attach melody-lines to box  "<<where<<", out of range.\n";return;}
+    *dbg << "Attaching pattern-lines to page " << where << ".\n";
+    if(where >= pattern_boxes.size()) {*err<< "Cannot attach pattern-lines to box  "<<where<<", out of range.\n";return;}
 
-     //assert(melody_lines.size() == 0);
-     melody_lines.resize(parent->resolution,NULL);
+     //assert(pattern_lines.size() == 0);
+     pattern_lines.resize(parent->resolution,NULL);
 
     for (int x= 0; x < parent->resolution; x++){
-        melody_lines[x] = (new MelodyLine); //cannot use Gtk::manage, since deleting the box would delete the lines!
+        pattern_lines[x] = (new PatternLine); //cannot use Gtk::manage, since deleting the box would delete the lines!
         for(int c = 0; c < 6; c++)
-            melody_lines[x]->SetButton(c,parent->GetMelodyNote(where,x,c));
+            pattern_lines[x]->SetButton(c,parent->GetPatternNote(where,x,c));
                     
-        melody_lines[x]->OnButtonClicked.connect(sigc::bind(sigc::mem_fun(*this,&SequencerWindow::OnMelodyNoteChanged),x));
-        melody_boxes[where]->pack_start(*melody_lines[x],Gtk::PACK_SHRINK);
-        melody_lines[x]->show();
+        pattern_lines[x]->OnButtonClicked.connect(sigc::bind(sigc::mem_fun(*this,&SequencerWindow::OnPatternNoteChanged),x));
+        pattern_boxes[where]->pack_start(*pattern_lines[x],Gtk::PACK_SHRINK);
+        pattern_lines[x]->show();
     }
 
-    previous_box_where_melody_lines_were_packed = where;
+    previous_box_where_pattern_lines_were_packed = where;
 
 }
 
@@ -316,38 +316,38 @@ void SequencerWindow::OnChordWidgetChanged(){
     Files::SetFileModified(1);
 }
 
-void SequencerWindow::UpdateActiveMelodyRange(){
-    int v = active_melody.get_value();
-    active_melody.set_range(0.0,(double)parent->melodies.size()-1);
-    active_melody.set_increments(1.0,1.0);
-    active_melody.set_value(v); //if it's too high, it will change to largest possible
+void SequencerWindow::UpdateActivePatternRange(){
+    int v = active_pattern.get_value();
+    active_pattern.set_range(0.0,(double)parent->patterns.size()-1);
+    active_pattern.set_increments(1.0,1.0);
+    active_pattern.set_value(v); //if it's too high, it will change to largest possible
 }
 
-void SequencerWindow::OnActiveMelodyChanged(){
+void SequencerWindow::OnActivePatternChanged(){
     //changing notepad tab labels
     //changing active seq in parent, but only if in range!!!!
     char temp[100];
-    int activemelody = active_melody.get_value();
-    int old = parent->active_melody;
+    int activepattern = active_pattern.get_value();
+    int old = parent->active_pattern;
 
-    assert(activemelody < parent->melodies.size());
+    assert(activepattern < parent->patterns.size());
 
     sprintf(temp,_(" %d"),old);
-    notebook.set_tab_label_text(*melody_boxes[old],temp);
+    notebook.set_tab_label_text(*pattern_boxes[old],temp);
 
-    parent->active_melody = activemelody; //applying to parent
+    parent->active_pattern = activepattern; //applying to parent
 
-    sprintf(temp,_("%d*"),activemelody);
-    notebook.set_tab_label_text(*melody_boxes[activemelody],temp);
+    sprintf(temp,_("%d*"),activepattern);
+    notebook.set_tab_label_text(*pattern_boxes[activepattern],temp);
 
     if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
     Files::SetFileModified(1);
 }
 
-void SequencerWindow::OnSetAsActiveMelodyClicked(){
+void SequencerWindow::OnSetAsActivePatternClicked(){
 
     int current = notebook.get_current_page();
-    active_melody.set_value((double)current);
+    active_pattern.set_value((double)current);
 
 }
 
@@ -359,85 +359,85 @@ void SequencerWindow::OnNotebookPageChanged(GtkNotebookPage* page, guint page_nu
 
 }
 
-void SequencerWindow::OnAddMelodyClicked(){
+void SequencerWindow::OnAddPatternClicked(){
     char temp[100];
 
-    parent->AddMelody();
+    parent->AddPattern();
     
-    melody_boxes.push_back(NULL);
-    int x = melody_boxes.size() - 1;
-    melody_boxes[x] = new Gtk::VBox;
-    melody_boxes[x]->show();
+    pattern_boxes.push_back(NULL);
+    int x = pattern_boxes.size() - 1;
+    pattern_boxes[x] = new Gtk::VBox;
+    pattern_boxes[x]->show();
     sprintf(temp, _("%d"), x);
-    notebook.append_page(*melody_boxes[x], temp);
+    notebook.append_page(*pattern_boxes[x], temp);
     notebook.set_current_page(notebook.get_n_pages()-1); //will show the last page AND THE SIGNAL HANDLER WILL ATTACH THE SLIDERS!
-    UpdateActiveMelodyRange();
+    UpdateActivePatternRange();
     SetRemoveButtonSensitivity();
     Files::SetFileModified(1);
 }
 
-void SequencerWindow::OnRemoveMelodyClicked(){
+void SequencerWindow::OnRemovePatternClicked(){
     int n = notebook.get_current_page();
-    *dbg << "removing melody " << n <<"\n";
+    *dbg << "removing pattern " << n <<"\n";
     DetachLines();
-    notebook.remove(*melody_boxes[n]);
-    delete melody_boxes[n];
-    melody_boxes.erase(melody_boxes.begin()+n);
-    parent->melodies.erase(parent->melodies.begin()+n);
-    if (parent->active_melody == n ) { parent->active_melody = 0;active_melody.set_value(0.0);}
-    if (parent->active_melody > n ) {parent->active_melody = parent->active_melody-1;active_melody.set_value(parent->active_melody); }
-    previous_box_where_melody_lines_were_packed = -1;
+    notebook.remove(*pattern_boxes[n]);
+    delete pattern_boxes[n];
+    pattern_boxes.erase(pattern_boxes.begin()+n);
+    parent->patterns.erase(parent->patterns.begin()+n);
+    if (parent->active_pattern == n ) { parent->active_pattern = 0;active_pattern.set_value(0.0);}
+    if (parent->active_pattern > n ) {parent->active_pattern = parent->active_pattern-1;active_pattern.set_value(parent->active_pattern); }
+    previous_box_where_pattern_lines_were_packed = -1;
     InitNotebook();
     notebook.set_current_page(n);
-    UpdateActiveMelodyRange();
+    UpdateActivePatternRange();
     SetRemoveButtonSensitivity();
     Files::SetFileModified(1);
 }
 
 void SequencerWindow::SetRemoveButtonSensitivity(){
     if(notebook.get_n_pages() == 1){
-        remove_melody.set_sensitive(0);
+        remove_pattern.set_sensitive(0);
     }else{
-        remove_melody.set_sensitive(1);
+        remove_pattern.set_sensitive(1);
     }
 
 }
 
-void SequencerWindow::UpdateMelody(){
+void SequencerWindow::UpdatePattern(){
 
     //changing notepad tab labels
     //changing active seq in parent, but only if in range!!!!
     char temp[100];
-    int activemelody = parent->active_melody;
-    int old = active_melody.get_value();
+    int activepattern = parent->active_pattern;
+    int old = active_pattern.get_value();
 
-    assert(activemelody < parent->melodies.size());
+    assert(activepattern < parent->patterns.size());
 
     sprintf(temp,_(" %d"),old);
-    notebook.set_tab_label_text(*melody_boxes[old],temp);
+    notebook.set_tab_label_text(*pattern_boxes[old],temp);
 
-    active_melody.set_value(activemelody);
+    active_pattern.set_value(activepattern);
 
-    sprintf(temp,_("%d*"),activemelody);
-    notebook.set_tab_label_text(*melody_boxes[activemelody],temp);
+    sprintf(temp,_("%d*"),activepattern);
+    notebook.set_tab_label_text(*pattern_boxes[activepattern],temp);
 
     if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
     
 }
-//====================MELODYLINE=========================
-MelodyLine::MelodyLine(){
+//====================PATTERNLINE=========================
+PatternLine::PatternLine(){
     set_border_width(0);
     for (int x = 0; x < 6; x++){
         buttons.push_back(new Gtk::CheckButton);
         pack_start(*buttons[x],Gtk::PACK_EXPAND_PADDING); //check the pack flag
-        buttons[x]->signal_toggled().connect(sigc::bind<int>(sigc::mem_fun(*this,&MelodyLine::OnButtonsToggled),x));
+        buttons[x]->signal_toggled().connect(sigc::bind<int>(sigc::mem_fun(*this,&PatternLine::OnButtonsToggled),x));
         buttons[x]->set_border_width(0);
         buttons[x]->show();
     }
 
 }
 
-MelodyLine::~MelodyLine(){
+PatternLine::~PatternLine(){
     for (int x = 0; x < 6; x++){
         remove(*buttons[x]);
         delete buttons[x];
@@ -445,15 +445,15 @@ MelodyLine::~MelodyLine(){
     
 }
 
-void MelodyLine::SetButton(int c, bool value){
+void PatternLine::SetButton(int c, bool value){
     buttons[c]->set_active(value);
 }
 
-bool MelodyLine::GetButton(int c){
+bool PatternLine::GetButton(int c){
     return buttons[c]->get_active();
 }
 
-void MelodyLine::OnButtonsToggled(int c){
+void PatternLine::OnButtonsToggled(int c){
 
     OnButtonClicked.emit(c,buttons[c]->get_active());
 }

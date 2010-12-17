@@ -32,7 +32,7 @@ public:
         add(col_muted);
         add(col_apply_mainnote);
         add(col_channel);
-        add(col_mel);
+        add(col_pattern);
         add(col_res);
         add(col_len);
         add(col_vol);
@@ -43,7 +43,7 @@ public:
     Gtk::TreeModelColumn<bool> col_muted;
     Gtk::TreeModelColumn<bool> col_apply_mainnote;
     Gtk::TreeModelColumn<int> col_channel;
-    Gtk::TreeModelColumn<int> col_mel;
+    Gtk::TreeModelColumn<int> col_pattern;
     Gtk::TreeModelColumn<int> col_res;
     Gtk::TreeModelColumn<double> col_len;
     Gtk::TreeModelColumn<int> col_vol;

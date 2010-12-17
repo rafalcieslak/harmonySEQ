@@ -29,10 +29,10 @@
 class Sequencer;
 class ChordWidget;
 
-class MelodyLine : public Gtk::HBox{
+class PatternLine : public Gtk::HBox{
 public:
-    MelodyLine();
-    ~MelodyLine();
+    PatternLine();
+    ~PatternLine();
 
     void SetButton(int c, bool value);
     bool GetButton(int c);
@@ -53,14 +53,14 @@ public:
     /**Just like UpdateValues, but updates only the Chordwidget*/
     void UpdateChord();
 
-    /**Sets active melody to match the one from sequencer*/
-    void UpdateMelody();
+    /**Sets active pattern to match the one from sequencer*/
+    void UpdatePattern();
     
     /**Inits the notebook*/
     void InitNotebook();
     
     /**Inits the sliders, packs then on active notebook page, sets them apropierate values*/
-    //void InitMelodySliders();
+    //void InitPatternSliders();
 
     /**When pages are added or removed etc, the boxes where sliders are stored are removed, and after then they are brougth back again. To make it save to remove these boxes, we must first unpack sliders from them, and then add them back to the appropierate box.*/
     void DetachLines();
@@ -76,42 +76,42 @@ public:
     friend class Sequencer;
     
 private:
-    int previous_box_where_melody_lines_were_packed;
+    int previous_box_where_pattern_lines_were_packed;
     int do_not_react_on_page_changes;
-    void UpdateActiveMelodyRange();
+    void UpdateActivePatternRange();
 
     void OnChordWidgetChanged();
-    void OnMelodyNoteChanged(int c, bool value, int seq);
+    void OnPatternNoteChanged(int c, bool value, int seq);
     void OnChannelChanged();
     void OnVolumeChanged();
     void OnToggleMuteToggled();
     void OnToggleApplyMainNoteToggled();
     void OnResolutionChanged();
     void OnLengthChanged();
-    void OnActiveMelodyChanged();
-    void OnSetAsActiveMelodyClicked();
+    void OnActivePatternChanged();
+    void OnSetAsActivePatternClicked();
     void OnNotebookPageChanged(GtkNotebookPage* page, guint page_num);
-    void OnAddMelodyClicked();
-    void OnRemoveMelodyClicked();
+    void OnAddPatternClicked();
+    void OnRemovePatternClicked();
     void SetRemoveButtonSensitivity();
     Gtk::VBox main_vbox;
     Gtk::Notebook notebook;
     Gtk::VBox box_of_sliders;
     Gtk::HBox box_of_chord;
     Gtk::HBox upper_box;
-    std::vector<MelodyLine  *> melody_lines;
-    std::vector<Gtk::VBox *> melody_boxes;
+    std::vector<PatternLine  *> pattern_lines;
+    std::vector<Gtk::VBox *> pattern_boxes;
     Gtk::SpinButton channel_button;
     Gtk::SpinButton volume_button;
-    Gtk::SpinButton active_melody;
-    Gtk::Button set_as_active_melody;
+    Gtk::SpinButton active_pattern;
+    Gtk::Button set_as_active_pattern;
     Gtk::Label channellabel;
     Gtk::Label volumelabel;
-    Gtk::Label activemelodylabel;
-    Gtk::Label melodylabel;
-    Gtk::HBox melody_ops_hbox;
-    Gtk::Button add_melody_button;
-    Gtk::Button remove_melody;
+    Gtk::Label activepanellabel;
+    Gtk::Label patternlabel;
+    Gtk::HBox pattern_ops_hbox;
+    Gtk::Button add_pattern_button;
+    Gtk::Button remove_pattern;
     Gtk::HBox low_hbox;
     Gtk::HBox line_one;
     Gtk::HBox line_two;
