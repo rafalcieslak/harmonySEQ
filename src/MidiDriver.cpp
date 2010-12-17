@@ -17,29 +17,57 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
+#ifdef __linux__
 #include <alsa/asoundlib.h>
+#endif
 #include "MidiDriver.h"
 #include "messages.h"
 #include "MainWindow.h"
 #include "Sequencer.h"
-//#include "global.h"
 #include "Event.h"
+
+extern int running;
 MidiDriver::MidiDriver() {
     working = false;
     paused = false;
-    to_be_paused = false;
     Open();
     InitQueue();
     SetTempo(tempo);
 }
 
-MidiDriver::MidiDriver(const MidiDriver& orig) {
-    
-}
-
 MidiDriver::~MidiDriver() {
 
+}
+
+bool MidiDriver::GetPaused(){
+    return paused;
+}
+
+#ifdef __linux__                                            /*Linux-specific implementation below.*/
+
+void MidiDriver::StartQueue(){
+
+    *dbg << "The queue is starting!\n";
+    snd_seq_start_queue(seq_handle,queueid,NULL);
+    snd_seq_drain_output(seq_handle);
+
+}
+
+
+void MidiDriver::LoopWhileWaitingForInput(){
+    int npfd;
+    struct pollfd* pfd;
+    
+    npfd = snd_seq_poll_descriptors_count(seq_handle,POLLIN);
+    pfd = (struct pollfd*)alloca(npfd*sizeof(struct pollfd*));
+    snd_seq_poll_descriptors(seq_handle,pfd,npfd,POLLIN);
+
+    while(running == 1){
+    if (poll(pfd,npfd,1000)>0)
+        //*dbg << "w00t! an event got!\n";
+        ProcessInput();
+    };    
+    
 }
 
 void MidiDriver::Open(){
@@ -203,6 +231,8 @@ void MidiDriver::DeleteQueue(){
 
 
 void MidiDriver::AllNotesOff(){
+
+    //Wel most sequencers use an AllNotesOff control event and then automatically end all notes. That would be more elegant way to achieve that.
     snd_seq_event_t ev;
     
     for (int ch = 0; ch < 16; ch++)
@@ -370,3 +400,28 @@ void MidiDriver::ProcessInput(){
     }while (snd_seq_event_input_pending(seq_handle,0)>0);
 
 }
+#else
+#ifdef __WIN32 /*both 32 and 64-bit enviroments*/
+
+
+
+
+    / * The midi driver for Windows shall go
+        *
+        *    H
+        *    E
+        *    R
+        *    E
+        *
+        */
+
+
+
+
+
+#else
+
+#error Neither Linux nor Windows, sorry.
+
+#endif
+#endif

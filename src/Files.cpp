@@ -31,6 +31,7 @@ namespace Files {
 
      bool file_modified;
     Glib::ustring file_name;
+    Glib::ustring file_dir;
     
 bool fexists(const char *filename)
 {
@@ -357,8 +358,10 @@ bool LoadFile(Glib::ustring file){
         //gdk_threads_leave();
 
         SetFileModified(0);
-        int found =  file.find_last_of("/\\");
+        int found =  file.find_last_of("/\\");  //Will work on linux and windos both
         file_name = file.substr(found+1);
+        file_dir = file.substr(0,found+1);
+        *dbg << file_dir << ENDL;
         mainwindow->UpdateTitle();
         
     }catch(Glib::KeyFileError error){

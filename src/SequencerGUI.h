@@ -22,10 +22,8 @@
 #define	SEQUENCERGUI_H
 #include "global.h"
 
-//#include "ChordWidget.h"
 #include <gtkmm.h>
 #include <vector>
-//#include "Sequencer.h"
 class Sequencer;
 class ChordWidget;
 

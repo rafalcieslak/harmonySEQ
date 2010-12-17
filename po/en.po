@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2010-11-27 20:19+0100\n"
+"POT-Creation-Date: 2010-12-17 20:21+0100\n"
 "PO-Revision-Date: 2010-09-17 22:23+0000\n"
 "Last-Translator: Rafal Cieslak <Unknown>\n"
 "Language-Team: English\n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ASCII\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2010-12-10 05:31+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
-"Language: en\n"
 
 #: src/main.cpp:257
 #, c-format
@@ -83,7 +83,7 @@ msgid "Chan"
 msgstr "Chan"
 
 #: src/MainWindow.cpp:143
-msgid "Mel"
+msgid "Pat"
 msgstr ""
 
 #: src/MainWindow.cpp:144
@@ -118,43 +118,52 @@ msgstr "Events"
 msgid "Pass MIDI events"
 msgstr "Pass MIDI events"
 
-#: src/MainWindow.cpp:242
+#: src/MainWindow.cpp:238 src/MainWindow.cpp:241 src/MainWindow.cpp:244
+#: src/MainWindow.cpp:247
+msgid "Failed to load harmonySEQ logo icon from: "
+msgstr ""
+
+#: src/MainWindow.cpp:247
+msgid "Icon not found.\n"
+msgstr ""
+
+#: src/MainWindow.cpp:272
 msgid "Untitled"
 msgstr ""
 
-#: src/MainWindow.cpp:264 src/MainWindow.cpp:581 src/MainWindow.cpp:610
+#: src/MainWindow.cpp:294 src/MainWindow.cpp:612 src/MainWindow.cpp:641
 msgid "The file has unsaved changes."
 msgstr ""
 
-#: src/MainWindow.cpp:264 src/MainWindow.cpp:581
+#: src/MainWindow.cpp:294 src/MainWindow.cpp:612
 msgid "Are sure you want to quit?"
 msgstr ""
 
-#: src/MainWindow.cpp:289
+#: src/MainWindow.cpp:319
 msgid "activated row "
 msgstr "activated row "
 
-#: src/MainWindow.cpp:290
+#: src/MainWindow.cpp:320
 msgid ", name is: "
 msgstr ", name is: "
 
-#: src/MainWindow.cpp:529 src/Action.cpp:186 src/ActionGUI.cpp:125
+#: src/MainWindow.cpp:559 src/Action.cpp:186 src/ActionGUI.cpp:125
 #, c-format
 msgid "Play"
 msgstr ""
 
-#: src/MainWindow.cpp:534 src/Action.cpp:183 src/ActionGUI.cpp:124
+#: src/MainWindow.cpp:564 src/Action.cpp:183 src/ActionGUI.cpp:124
 #, c-format
 msgid "Pause"
 msgstr ""
 
-#: src/MainWindow.cpp:560
+#: src/MainWindow.cpp:591
 msgid ""
 "A MIDI sequencing application helpful for music composers and live artists."
 msgstr ""
 
 #. TRANSLATORS:The GNU GPL v.3
-#: src/MainWindow.cpp:562
+#: src/MainWindow.cpp:593
 msgid ""
 "HarmonySEQ is free software: you can redistribute it and/or modify\n"
 "it under the terms of the GNU General Public License as published by\n"
@@ -170,34 +179,34 @@ msgid ""
 "along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>."
 msgstr ""
 
-#: src/MainWindow.cpp:566
+#: src/MainWindow.cpp:597
 msgid "harmonySEQ website"
 msgstr ""
 
 #. TRANSLATORS:First caption in authors list
-#: src/MainWindow.cpp:569
+#: src/MainWindow.cpp:600
 msgid "Main author"
 msgstr ""
 
 #. TRANSLATORS: The list of translators to be placed in about-box
-#: src/MainWindow.cpp:573
+#: src/MainWindow.cpp:604
 msgid " translator-credits"
 msgstr ""
 
-#: src/MainWindow.cpp:610
+#: src/MainWindow.cpp:641
 msgid "Are sure you want to loose them and open another file?"
 msgstr ""
 
-#: src/MainWindow.cpp:632
+#: src/MainWindow.cpp:663
 msgid "Choose a file to save..."
 msgstr "Choose a file to save..."
 
-#: src/MainWindow.cpp:661
+#: src/MainWindow.cpp:692
 #, c-format
 msgid "File '%s'  already exist."
 msgstr ""
 
-#: src/MainWindow.cpp:662
+#: src/MainWindow.cpp:693
 msgid "Do you want to overwrite this file?"
 msgstr ""
 
@@ -231,15 +240,15 @@ msgid "Volume:"
 msgstr ""
 
 #: src/SequencerGUI.cpp:80
-msgid "Active melody:"
+msgid "Active pattern:"
 msgstr ""
 
 #: src/SequencerGUI.cpp:81
-msgid "Set as active melody"
+msgid "Set as active pattern"
 msgstr ""
 
 #: src/SequencerGUI.cpp:82
-msgid "Melody:"
+msgid "Pattern:"
 msgstr ""
 
 #: src/SequencerGUI.cpp:99
@@ -254,17 +263,17 @@ msgstr "Resolution:"
 msgid "Length:"
 msgstr "Length:"
 
-#: src/SequencerGUI.cpp:262 src/SequencerGUI.cpp:372
+#: src/SequencerGUI.cpp:262 src/SequencerGUI.cpp:371
 #, c-format
 msgid "%d"
 msgstr ""
 
-#: src/SequencerGUI.cpp:336 src/SequencerGUI.cpp:417
+#: src/SequencerGUI.cpp:335 src/SequencerGUI.cpp:416
 #, c-format
 msgid " %d"
 msgstr ""
 
-#: src/SequencerGUI.cpp:341 src/SequencerGUI.cpp:422
+#: src/SequencerGUI.cpp:340 src/SequencerGUI.cpp:421
 #, c-format
 msgid "%d*"
 msgstr ""
@@ -279,21 +288,21 @@ msgstr "Debug mode started.\n"
 msgid "ERROR - error while opening file %s to write.\n"
 msgstr "ERROR - error while opening file %s to write.\n"
 
-#: src/Files.cpp:134
+#: src/Files.cpp:142
 msgid "Choose a file to open..."
 msgstr "Choose a file to open..."
 
-#: src/Files.cpp:179
+#: src/Files.cpp:187
 #, c-format
 msgid "ERROR - error while trying to read file '%s'\n"
 msgstr ""
 
-#: src/Files.cpp:185
+#: src/Files.cpp:193
 #, c-format
 msgid "ERROR - error while trying to read file '%s': "
 msgstr ""
 
-#: src/Files.cpp:199
+#: src/Files.cpp:208
 #, c-format
 msgid ""
 "This file was created by harmonySEQ in a newer version (%d.%d.%d). This "
@@ -305,11 +314,11 @@ msgid ""
 "Select YES to do so."
 msgstr ""
 
-#: src/Files.cpp:200 src/Files.cpp:208
+#: src/Files.cpp:209 src/Files.cpp:217
 msgid "Do you want to open this file?"
 msgstr ""
 
-#: src/Files.cpp:207
+#: src/Files.cpp:216
 #, c-format
 msgid ""
 "This file was created by harmonySEQ in an older version (%d.%d.%d). This "
@@ -320,12 +329,12 @@ msgid ""
 "for example if it is sure it will open without trouble. Select YES to do so."
 msgstr ""
 
-#: src/Files.cpp:329
+#: src/Files.cpp:365
 #, c-format
 msgid "ERROR - Glib::KeyFile error while processing file '%s': "
 msgstr ""
 
-#: src/Files.cpp:338
+#: src/Files.cpp:374
 #, c-format
 msgid "ERROR - unknown error while processing file '%s': "
 msgstr ""
@@ -495,7 +504,7 @@ msgstr ""
 
 #: src/Action.cpp:197
 #, c-format
-msgid "Set active melody of sequencer '%s' to %d"
+msgid "Set active pattern of sequencer '%s' to %d"
 msgstr ""
 
 #: src/Action.cpp:200
@@ -541,7 +550,7 @@ msgid " to: "
 msgstr ""
 
 #: src/ActionGUI.cpp:120
-msgid "Melody number: "
+msgid "Pattern number: "
 msgstr ""
 
 #: src/ActionGUI.cpp:121
@@ -569,13 +578,11 @@ msgid "Error: volume has changed, while action is not volume-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:419
-msgid ""
-"Error: note to set has changed, while action is not set-seq-note-type."
+msgid "Error: note to set has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:430
-msgid ""
-"Error: note number has changed, while action is not set-seq-note-type."
+msgid "Error: note number has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:443
@@ -589,7 +596,7 @@ msgid ""
 msgstr ""
 
 #: src/ActionGUI.cpp:478
-msgid "Error: melody has changed, while action is not melody-type."
+msgid "Error: pattern has changed, while action is not pattern-type."
 msgstr ""
 
 #: src/TreeModels.cpp:47 src/TreeModels.cpp:64
@@ -629,7 +636,7 @@ msgid "Sequencer/Set chord"
 msgstr ""
 
 #: src/TreeModels.cpp:82
-msgid "Sequencer/Set active melody"
+msgid "Sequencer/Set active pattern"
 msgstr ""
 
 #: src/TreeModels.cpp:85
@@ -719,11 +726,12 @@ msgstr ""
 msgid "Octave"
 msgstr ""
 
-#, c-format
 #~ msgid ""
-#~ "       --pass-midi   passes the midi events through the program by default\n"
+#~ "       --pass-midi   passes the midi events through the program by "
+#~ "default\n"
 #~ msgstr ""
-#~ "       --pass-midi   passes the midi events through the program by default\n"
+#~ "       --pass-midi   passes the midi events through the program by "
+#~ "default\n"
 
 #~ msgid "Open"
 #~ msgstr "Open"
@@ -731,6 +739,5 @@ msgstr ""
 #~ msgid "Save"
 #~ msgstr "Save"
 
-#, c-format
 #~ msgid "When note %d on channel %d is moved..."
 #~ msgstr "When note %d on channel %d is moved..."

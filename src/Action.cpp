@@ -113,17 +113,17 @@ void Action::Trigger(int data){
                     midi->PauseQueueImmediately();
                     break;
                 case 1:
-                    if(!midi->paused) break; //if it is already playing, do not call Sync().
+                    if(!midi->GetPaused()) break; //if it is already playing, do not call Sync().
                     midi->ContinueQueue();
                     break;
                 case 2:
-                    if (midi->paused) { midi->ContinueQueue();}
+                    if (midi->GetPaused()) { midi->ContinueQueue();}
                     else midi->PauseQueueImmediately();
                     break;
             }
             break;
         case SYNC:
-            if (midi->paused) break; //do not sync while in pause!
+            if (midi->GetPaused()) break; //do not sync while in pause!
             midi->Sync();
             break;
         case SEQ_CHANGE_PATTERN:

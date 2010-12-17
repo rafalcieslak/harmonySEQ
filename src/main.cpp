@@ -131,25 +131,10 @@ void InitNoteMap(){
 void threadb::th1(){
 //midi processing thread
     *dbg << "th1 started\n";
-    int npfd;
-    struct pollfd* pfd;
 
-
-    *dbg << "The queue is starting!\n";
-    snd_seq_start_queue(midi->seq_handle,midi->queueid,NULL);
-    snd_seq_drain_output(midi->seq_handle);
-
-    midi->UpdateQueue(); //initial
-    npfd = snd_seq_poll_descriptors_count(midi->seq_handle,POLLIN);
-    pfd = (struct pollfd*)alloca(npfd*sizeof(struct pollfd*));
-    snd_seq_poll_descriptors(midi->seq_handle,pfd,npfd,POLLIN);
-
-    while(running == 1){
-    if (poll(pfd,npfd,1000)>0)
-        //*dbg << "w00t! event!\n";
-        midi->ProcessInput();
-    };
-    //when stoped running
+    midi->StartQueue();
+    midi->UpdateQueue(); //initial call
+    midi->LoopWhileWaitingForInput();
 }
 
 void threadb::th2(){
@@ -334,7 +319,7 @@ void end_program(){
     if (midi != NULL) { //maybe we are ending the program before midi driver was constructed
         midi->ClearQueue();
         sleep(1);
-        midi->AllNotesOff();
+        midi->AllNotesOff(); //giving it some time, for the noteoffs that are left on
         midi->DeleteQueue();
     }
     delete mainwindow;

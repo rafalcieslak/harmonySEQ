@@ -554,7 +554,7 @@ void MainWindow::OnSelectionChanged(){
 }
 
 void MainWindow::UpdatePlayPauseButton(){
-    switch (midi->paused){
+    switch (midi->GetPaused()){
         case true:
             play_pause_button.set_label(_("Play"));
             play_pause_button.set_image(image_play);
@@ -571,7 +571,7 @@ void MainWindow::UpdatePlayPauseButton(){
 
 void MainWindow::OnPauseButtonClicked(){
     
-     switch (midi->paused){
+     switch (midi->GetPaused()){
         case true:
             midi->ContinueQueue();
             break;

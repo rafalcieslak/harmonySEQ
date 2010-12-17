@@ -26,6 +26,7 @@
 namespace Files{
     extern bool file_modified;
     extern Glib::ustring file_name;
+    extern Glib::ustring file_dir;
 
     /**Checks if a file exists.*/
     bool fexists(const char *filename);
