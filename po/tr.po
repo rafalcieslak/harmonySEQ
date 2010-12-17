@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2010-12-17 20:21+0100\n"
+"POT-Creation-Date: 2010-12-17 21:34+0100\n"
 "PO-Revision-Date: 2010-12-01 08:26+0000\n"
 "Last-Translator: Rafal Cieslak <Unknown>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -18,17 +18,17 @@ msgstr ""
 "X-Launchpad-Export-Date: 2010-12-10 05:31+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: src/main.cpp:257
+#: src/main.cpp:242
 #, c-format
 msgid "unknown option '%c'\n"
 msgstr "bilinmeyen seçenek '%c'\n"
 
-#: src/main.cpp:260
+#: src/main.cpp:245
 #, c-format
 msgid "unrecognized option '%s'\n"
 msgstr "tanınmayan seçenek '%s'\n"
 
-#: src/main.cpp:318
+#: src/main.cpp:303
 #, c-format
 msgid ""
 "harmonySEQ, version %s\n"
@@ -131,7 +131,7 @@ msgstr ""
 msgid "Untitled"
 msgstr ""
 
-#: src/MainWindow.cpp:294 src/MainWindow.cpp:612 src/MainWindow.cpp:641
+#: src/MainWindow.cpp:294 src/MainWindow.cpp:612 src/MainWindow.cpp:642
 msgid "The file has unsaved changes."
 msgstr ""
 
@@ -190,42 +190,43 @@ msgstr ""
 
 #. TRANSLATORS: The list of translators to be placed in about-box
 #: src/MainWindow.cpp:604
-msgid " translator-credits"
+#, fuzzy
+msgid "translator-credits"
 msgstr ""
 " Emre AYTAÇ\r\n"
 "zeugma"
 
-#: src/MainWindow.cpp:641
+#: src/MainWindow.cpp:642
 msgid "Are sure you want to loose them and open another file?"
 msgstr ""
 "Değişikleri kaydetmeden yeni bir dosya açmak istediğinize emin misiniz?"
 
-#: src/MainWindow.cpp:663
+#: src/MainWindow.cpp:664
 msgid "Choose a file to save..."
 msgstr "Kaydedilecek dosyayı seçin..."
 
-#: src/MainWindow.cpp:692
+#: src/MainWindow.cpp:695
 #, c-format
 msgid "File '%s'  already exist."
 msgstr "'%s' dosyası zaten mevcut."
 
-#: src/MainWindow.cpp:693
+#: src/MainWindow.cpp:696
 msgid "Do you want to overwrite this file?"
 msgstr "Bu dosyanın üzerine yazmak ister misiniz?"
 
-#: src/MidiDriver.cpp:51
+#: src/MidiDriver.cpp:79
 msgid "Failed to open ALSA sequencer.\n"
 msgstr ""
 
-#: src/MidiDriver.cpp:63
+#: src/MidiDriver.cpp:91
 msgid "Failed to create output port.\n"
 msgstr ""
 
-#: src/MidiDriver.cpp:72
+#: src/MidiDriver.cpp:100
 msgid "Failed to create input port.\n"
 msgstr ""
 
-#: src/MidiDriver.cpp:78
+#: src/MidiDriver.cpp:106
 msgid "Alsa midi driver init successfull.\n"
 msgstr ""
 
@@ -286,26 +287,26 @@ msgstr ""
 msgid "Debug mode started.\n"
 msgstr "Hata ayıklama kipi başlatıldı.\n"
 
-#: src/Files.cpp:63
+#: src/Files.cpp:64
 #, c-format
 msgid "ERROR - error while opening file %s to write.\n"
 msgstr "HATA - %s dosyasına yazmak için açılması sırasında hata.\n"
 
-#: src/Files.cpp:142
+#: src/Files.cpp:144
 msgid "Choose a file to open..."
 msgstr "Açılacak dosyayı seçin..."
 
-#: src/Files.cpp:187
+#: src/Files.cpp:189
 #, c-format
 msgid "ERROR - error while trying to read file '%s'\n"
 msgstr "HATA - '%s' dosyasının okunmasında hata\n"
 
-#: src/Files.cpp:193
+#: src/Files.cpp:195
 #, c-format
 msgid "ERROR - error while trying to read file '%s': "
 msgstr "HATA - '%s' dosyasının okunmasında hata: "
 
-#: src/Files.cpp:208
+#: src/Files.cpp:210
 #, c-format
 msgid ""
 "This file was created by harmonySEQ in a newer version (%d.%d.%d). This "
@@ -317,11 +318,11 @@ msgid ""
 "Select YES to do so."
 msgstr ""
 
-#: src/Files.cpp:209 src/Files.cpp:217
+#: src/Files.cpp:211 src/Files.cpp:219
 msgid "Do you want to open this file?"
 msgstr "Bu dosyayı açmak istiyor musunuz?"
 
-#: src/Files.cpp:216
+#: src/Files.cpp:218
 #, c-format
 msgid ""
 "This file was created by harmonySEQ in an older version (%d.%d.%d). This "
@@ -332,12 +333,12 @@ msgid ""
 "for example if it is sure it will open without trouble. Select YES to do so."
 msgstr ""
 
-#: src/Files.cpp:365
+#: src/Files.cpp:368
 #, c-format
 msgid "ERROR - Glib::KeyFile error while processing file '%s': "
 msgstr ""
 
-#: src/Files.cpp:374
+#: src/Files.cpp:377
 #, c-format
 msgid "ERROR - unknown error while processing file '%s': "
 msgstr "HATA - '%s' dosyasının işlenmesi sırasında bilinmeyen hata: "
