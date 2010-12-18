@@ -131,11 +131,11 @@ msgstr "Przekazuj zdarzenia MIDI"
 #: src/MainWindow.cpp:238 src/MainWindow.cpp:241 src/MainWindow.cpp:244
 #: src/MainWindow.cpp:247
 msgid "Failed to load harmonySEQ logo icon from: "
-msgstr ""
+msgstr "Nie udało się otworzyć ikony z logo harmonySEQ z: "
 
 #: src/MainWindow.cpp:247
 msgid "Icon not found.\n"
-msgstr ""
+msgstr "Nie znaleziono ikony. \n"
 
 #: src/MainWindow.cpp:272
 msgid "Untitled"
@@ -268,15 +268,15 @@ msgstr "Głośność:"
 
 #: src/SequencerGUI.cpp:80
 msgid "Active pattern:"
-msgstr ""
+msgstr "Aktywny wzór:"
 
 #: src/SequencerGUI.cpp:81
 msgid "Set as active pattern"
-msgstr ""
+msgstr "Ustaw jako aktywny wzór"
 
 #: src/SequencerGUI.cpp:82
 msgid "Pattern:"
-msgstr ""
+msgstr "Wzór:"
 
 #: src/SequencerGUI.cpp:99
 msgid "Apply main note"
@@ -552,7 +552,7 @@ msgstr "Synchronizuj"
 #: src/Action.cpp:197
 #, c-format
 msgid "Set active pattern of sequencer '%s' to %d"
-msgstr ""
+msgstr "Ustaw aktywny wzór sekwencera '%s' na %d"
 
 #: src/Action.cpp:200
 #, c-format
@@ -599,7 +599,7 @@ msgstr " na: "
 
 #: src/ActionGUI.cpp:120
 msgid "Pattern number: "
-msgstr ""
+msgstr "Numer wzoru: "
 
 #: src/ActionGUI.cpp:121
 msgid "Off"
@@ -655,7 +655,7 @@ msgstr ""
 
 #: src/ActionGUI.cpp:478
 msgid "Error: pattern has changed, while action is not pattern-type."
-msgstr ""
+msgstr "Błąd: wzór został zmieniony, podczas gdy akcja nie jest typu zmiany wzoru."
 
 #: src/TreeModels.cpp:47 src/TreeModels.cpp:64
 msgid "Empty"
@@ -695,7 +695,7 @@ msgstr "Sekwencer/Ustaw akord"
 
 #: src/TreeModels.cpp:82
 msgid "Sequencer/Set active pattern"
-msgstr ""
+msgstr "Sekwencer/Ustaw aktywny wzór"
 
 #: src/TreeModels.cpp:85
 msgid "Set main note"
