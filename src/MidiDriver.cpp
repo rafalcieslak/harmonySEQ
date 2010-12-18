@@ -258,7 +258,7 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
 
         seq = sequencers[n];
         if(seq->GetPlayOncePhase() == 3) seq->SetPlayOncePhase(0);
-        if(seq->GetPlayOncePhase() == 1) seq->SetPlayOncePhase(2);
+        if(seq->GetPlayOncePhase() == 1) {seq->SetPlayOncePhase(2); seq->last_played_note = 0;} //to make sure, that when a long sequence is played once, it's played from it's beggining
         if (!(seq->GetOn() || seq->GetPlayOncePhase() == 2)) continue; //if it's not turned on, take next sequencer
 
         //ok, and here we proceed all notes from one sequencer.
@@ -309,11 +309,11 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                     snd_seq_ev_set_source(&ev, output_port);
                     snd_seq_ev_set_subs(&ev);
                     snd_seq_event_output_direct(seq_handle, &ev);
-
-                    currnote++;
-                     if(currnote>=seq->resolution&&seq->GetPlayOncePhase() == 2) seq->SetPlayOncePhase( 3);
-                    currnote = currnote%seq->resolution;
                 }
+                currnote++;
+                if (currnote >= seq->resolution && seq->GetPlayOncePhase() == 2) seq->SetPlayOncePhase(3);
+                currnote = currnote % seq->resolution;
+
             }
             //remember last note
             seq->last_played_note =currnote;
