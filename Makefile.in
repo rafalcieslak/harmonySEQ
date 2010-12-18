@@ -256,7 +256,7 @@ top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = foreign
 SUBDIRS = po examples pixmaps src
 ACLOCAL_AMFLAGS = -I m4
-EXTRA_DIST = config.rpath CHANGELOG LICENSE harmonyseq.desktop
+EXTRA_DIST = config.rpath CHANGELOG LICENSE harmonyseq.desktop harmonyseq-mime.xml
 appsmenudir = $(datadir)/applications
 appsmenu_DATA = harmonyseq.desktop
 mimedir = $(datadir)/mime/packages
@@ -776,12 +776,12 @@ uninstall-am: uninstall-appsmenuDATA uninstall-mimeDATA
 
 
 install-data-hook:
-	update-mime-database /usr/share/mime
-	gtk-update-icon-cache -f /usr/share/icons/gnome
+	update-mime-database $(datadir)/mime
+	gtk-update-icon-cache -f -t $(datadir)/icons/gnome
 
 uninstall-hook:
-	update-mime-database /usr/share/mime
-	gtk-update-icon-cache -f /usr/share/icons/gnome
+	update-mime-database $(datadir)/mime
+	gtk-update-icon-cache -f -t $(datadir)/icons/gnome
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

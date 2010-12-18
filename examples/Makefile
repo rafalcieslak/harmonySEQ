@@ -35,7 +35,7 @@ POST_UNINSTALL = :
 build_triplet = x86_64-unknown-linux-gnu
 host_triplet = x86_64-unknown-linux-gnu
 subdir = examples
-DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
+DIST_COMMON = README $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/gettext.m4 \
 	$(top_srcdir)/m4/iconv.m4 $(top_srcdir)/m4/intlmacosx.m4 \
@@ -199,8 +199,8 @@ top_build_prefix = ../
 top_builddir = ..
 top_srcdir = ..
 exampledir = $(docdir)/examples
-example_DATA = complexity.hseq example_0.10.hseq  michas_sonata.hseq  the_very_first_file_v2.hseq the_very_first_file.hseq guitar_demo.hseq selfcontrol_demo.hseq chordexample.hseq read_m.hseq
-EXTRA_DIST = complexity.hseq example_0.10.hseq  michas_sonata.hseq  the_very_first_file_v2.hseq the_very_first_file.hseq guitar_demo.hseq selfcontrol_demo.hseq chordexample.hseq read_m.hseq
+example_DATA = big_0.12.hseq selfcontrol_demo_0.11.hseq chasm_0.13.hseq chordexample_0.11.hseq complexity_0.11.hseq  mesosphere_0.12.hseq tron2_0.13.hseq example_0.10.hseq michas_sonata_0.11.hseq guitar_demo_0.11.hseq README
+EXTRA_DIST = big_0.12.hseq selfcontrol_demo_0.11.hseq chasm_0.13.hseq chordexample_0.11.hseq complexity_0.11.hseq  mesosphere_0.12.hseq tron2_0.13.hseq example_0.10.hseq michas_sonata_0.11.hseq guitar_demo_0.11.hseq README
 all: all-am
 
 .SUFFIXES:

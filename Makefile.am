@@ -5,7 +5,7 @@ SUBDIRS = po examples pixmaps src
 ACLOCAL_AMFLAGS = -I m4
 
 
-EXTRA_DIST = config.rpath CHANGELOG LICENSE harmonyseq.desktop
+EXTRA_DIST = config.rpath CHANGELOG LICENSE harmonyseq.desktop harmonyseq-mime.xml
 
 appsmenudir = $(datadir)/applications
 appsmenu_DATA = harmonyseq.desktop
@@ -14,9 +14,9 @@ mimedir = $(datadir)/mime/packages
 mime_DATA = harmonyseq-mime.xml
 
 install-data-hook:
-	update-mime-database /usr/share/mime
-	gtk-update-icon-cache -f /usr/share/icons/gnome
+	update-mime-database $(datadir)/mime
+	gtk-update-icon-cache -f -t $(datadir)/icons/gnome
 
 uninstall-hook:
-	update-mime-database /usr/share/mime
-	gtk-update-icon-cache -f /usr/share/icons/gnome
+	update-mime-database $(datadir)/mime
+	gtk-update-icon-cache -f -t $(datadir)/icons/gnome
