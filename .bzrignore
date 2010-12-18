@@ -16,3 +16,4 @@ stamp-h1
 autoscan.log
 config.log
 .deps
+examples/Makefile
