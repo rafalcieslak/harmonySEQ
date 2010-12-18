@@ -11,12 +11,12 @@ msgstr ""
 "PO-Revision-Date: 2010-09-17 22:23+0000\n"
 "Last-Translator: Rafal Cieslak <Unknown>\n"
 "Language-Team: English\n"
-"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ASCII\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-10 05:31+0000\n"
+"X-Launchpad-Export-Date: 2010-12-18 05:39+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+"Language: en\n"
 
 #: src/main.cpp:242
 #, c-format
@@ -192,6 +192,8 @@ msgstr ""
 #: src/MainWindow.cpp:604
 msgid "translator-credits"
 msgstr ""
+"Launchpad Contributions:\n"
+"  Rafal Cieslak https://launchpad.net/~rafalcieslak256"
 
 #: src/MainWindow.cpp:642
 msgid "Are sure you want to loose them and open another file?"
@@ -578,11 +580,13 @@ msgid "Error: volume has changed, while action is not volume-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:419
-msgid "Error: note to set has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note to set has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:430
-msgid "Error: note number has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note number has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:443
@@ -726,12 +730,11 @@ msgstr ""
 msgid "Octave"
 msgstr ""
 
+#, c-format
 #~ msgid ""
-#~ "       --pass-midi   passes the midi events through the program by "
-#~ "default\n"
+#~ "       --pass-midi   passes the midi events through the program by default\n"
 #~ msgstr ""
-#~ "       --pass-midi   passes the midi events through the program by "
-#~ "default\n"
+#~ "       --pass-midi   passes the midi events through the program by default\n"
 
 #~ msgid "Open"
 #~ msgstr "Open"
@@ -739,5 +742,6 @@ msgstr ""
 #~ msgid "Save"
 #~ msgstr "Save"
 
+#, c-format
 #~ msgid "When note %d on channel %d is moved..."
 #~ msgstr "When note %d on channel %d is moved..."
