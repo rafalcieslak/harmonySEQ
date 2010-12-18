@@ -1,0 +1,21 @@
+README
+info concerning examples
+
+every file's name suffix describes the version of harmonySEQ that saved this file. The older the file is, the less probable is, that it will open corectly. As for now (0.13) all these examples open well.
+The older files do not make use of newest features, so in some cases they have may look strange.
+
+Recorded material is available at http://harmonySEQ.wordpress.com/showcase/
+
+	chasm_0.13.hseq				- used to record cielak's Chasm
+	tron2_0.13.hseq				- used to record the harmonySEQ video demonstration
+	
+	mesosphere_0.12.hseq		- used to record cielak's Mesosphere
+	big_0.12.hseq				- a really big file with thousands of sequencer, used for benchmarking
+	
+	complexity_0.11.hseq		- used to record cielak's Complexity
+	chordsexample_0.11.hseq		- demonstrates how chords were achieved before polyphony was implemented
+	selfcontrol_demo_0.11.hseq	- demonstrates how harmonySEQ can control ITSELF, producing interesting results; to make it work, connect harmonySEQ'a MIDI output to it's MIDI input
+	michas_sonata_0.11.hseq		- see above
+	guitar_demo_0.11.hseq		- nothing special
+	
+	example_0.10.hseq			- nothing special

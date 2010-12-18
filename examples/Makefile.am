@@ -1,4 +1,4 @@
 exampledir = $(docdir)/examples
-example_DATA = complexity.hseq example_0.10.hseq  michas_sonata.hseq  the_very_first_file_v2.hseq the_very_first_file.hseq guitar_demo.hseq selfcontrol_demo.hseq chordexample.hseq read_m.hseq
+example_DATA = big_0.12.hseq selfcontrol_demo_0.11.hseq chasm_0.13.hseq chordexample_0.11.hseq complexity_0.11.hseq  mesosphere_0.12.hseq tron2_0.13.hseq example_0.10.hseq michas_sonata_0.11.hseq guitar_demo_0.11.hseq README
 
-EXTRA_DIST = complexity.hseq example_0.10.hseq  michas_sonata.hseq  the_very_first_file_v2.hseq the_very_first_file.hseq guitar_demo.hseq selfcontrol_demo.hseq chordexample.hseq read_m.hseq
+EXTRA_DIST = big_0.12.hseq selfcontrol_demo_0.11.hseq chasm_0.13.hseq chordexample_0.11.hseq complexity_0.11.hseq  mesosphere_0.12.hseq tron2_0.13.hseq example_0.10.hseq michas_sonata_0.11.hseq guitar_demo_0.11.hseq README
