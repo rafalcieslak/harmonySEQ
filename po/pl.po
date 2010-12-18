@@ -655,7 +655,8 @@ msgstr ""
 
 #: src/ActionGUI.cpp:478
 msgid "Error: pattern has changed, while action is not pattern-type."
-msgstr "Błąd: wzór został zmieniony, podczas gdy akcja nie jest typu zmiany wzoru."
+msgstr ""
+"Błąd: wzór został zmieniony, podczas gdy akcja nie jest typu zmiany wzoru."
 
 #: src/TreeModels.cpp:47 src/TreeModels.cpp:64
 msgid "Empty"

@@ -27,13 +27,17 @@
 class Sequencer;
 class ChordWidget;
 
+/**A widget displaying a horisontal line with 6 CheckBoxes.*/
 class PatternLine : public Gtk::HBox{
 public:
     PatternLine();
     ~PatternLine();
 
+    /**Sets a button to a given value.*/
     void SetButton(int c, bool value);
+    /**Returns the state of a button.*/
     bool GetButton(int c);
+    /**Signal emited when one fo the buttons is clicked.*/
     sigc::signal<void,int,bool> OnButtonClicked;
 private:
     void OnButtonsToggled(int c);
@@ -56,14 +60,10 @@ public:
     
     /**Inits the notebook*/
     void InitNotebook();
-    
-    /**Inits the sliders, packs then on active notebook page, sets them apropierate values*/
-    //void InitPatternSliders();
 
     /**When pages are added or removed etc, the boxes where sliders are stored are removed, and after then they are brougth back again. To make it save to remove these boxes, we must first unpack sliders from them, and then add them back to the appropierate box.*/
     void DetachLines();
     void AttachLines(int where);
-    //void ReattachSliders();
     
     /**The chordwidget of this GUI*/
     ChordWidget* chordwidget;

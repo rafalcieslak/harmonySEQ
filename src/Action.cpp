@@ -47,9 +47,11 @@ void Action::Trigger(int data){
 
 
 #ifdef EVENTS_FLASH
+    //Animating the row representing the triggered action.
     eventswindow->ColorizeAction(row_in_event_window);
 #endif
-    
+
+    //Reactions depend on action type.
     switch (type){
         case SEQ_ON_OFF_TOGGLE:
             if (!sequencers[args[1]]) break;
@@ -109,14 +111,14 @@ void Action::Trigger(int data){
             break;
         case PLAY_PAUSE:
             switch(args[1]){
-                case 0:
+                case 0: //just pause
                     midi->PauseQueueImmediately();
                     break;
-                case 1:
+                case 1: //just play
                     if(!midi->GetPaused()) break; //if it is already playing, do not call Sync().
                     midi->ContinueQueue();
                     break;
-                case 2:
+                case 2: //toggle
                     if (midi->GetPaused()) { midi->ContinueQueue();}
                     else midi->PauseQueueImmediately();
                     break;
@@ -138,7 +140,6 @@ void Action::Trigger(int data){
 }
 
 Glib::ustring Action::GetLabel(){
-
     char temp[100];
     switch (type){
         case SEQ_ON_OFF_TOGGLE:

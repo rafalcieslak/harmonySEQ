@@ -36,12 +36,15 @@
 #define VERSION_C 0
 
 #define ENDL "\n"
+//Internal resolution of ALSA sequencer.
 #define TICKS_PER_QUARTERNOTE 128
 #define TICKS_PER_NOTE (4*TICKS_PER_QUARTERNOTE)
+//Makro for easier internalisation.
 #define _(STRING) gettext(STRING)
+
 #define DEFAULT_TEMPO 240.0
 
-
+//How long is the tempo indicatior RED.
 #define FLASH_INTERVAL 50
     //in ms
 

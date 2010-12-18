@@ -22,8 +22,11 @@
 
 #include "global.h"
 #include "ActionGUI.h"
+
+/**Number of arguments each action has*/
 #define ACTION_ARGS_NUM 20
 
+/**Item representing one acition.*/
 class Action {
 public:
     enum ActionTypes {
@@ -46,6 +49,9 @@ public:
         SEQ_CHANGE_PATTERN
     };
 
+    /**Constructor.
+     *@parram t Action's type
+     *@parram a Initial arguments (only two, it's used rarely)*/
     Action(ActionTypes t, int a1 = 0, int a2 = 0);
     Action(const Action& orig);
     virtual ~Action();
@@ -83,6 +89,7 @@ public:
     
 private:
 
+    /**The related GUI window.*/
     ActionGUI *gui_window;
 };
 

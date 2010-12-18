@@ -26,8 +26,13 @@
 ActionGUI::ActionGUI(Action *prt):
                     chordwidget(&prt->chord)
 {
+    //Set the pointer to point to the parent
     parent = prt;
+
+    //by defalut default
     we_are_copying_data_from_parent_action_so_do_not_handle_signals = false;
+
+    //window's title
     set_title(_("Action"));
  
     set_border_width(5);
@@ -138,9 +143,16 @@ ActionGUI::ActionGUI(Action *prt):
 
     signal_show().connect(mem_fun(*this,&ActionGUI::OnShow));
 
+    //Setting the label's text, to parent action's name.
     label_preview.set_text(parent->GetLabel());
+
+    //Show all children widgets
     show_all_children(1);
-    ChangeVisibleLines(); // to hide some of widgets according to the type
+
+     //Hide some of widgets according to the type
+    ChangeVisibleLines();
+
+    //And hide the window at first.
     hide();
 
 }
@@ -150,6 +162,7 @@ ActionGUI::~ActionGUI(){
 }
 
 void ActionGUI::OnOKClicked(){
+    //Updating corresponding row, and hiding the window.
     eventswindow->UpdateRow(parent->row_in_event_window);
     hide();
 
@@ -158,7 +171,6 @@ void ActionGUI::OnOKClicked(){
 void ActionGUI::OnShow(){
     set_transient_for(*eventswindow);
     UpdateValues();
-
 }
 
 void ActionGUI::UpdateChordwidget(){
@@ -166,6 +178,7 @@ void ActionGUI::UpdateChordwidget(){
 }
 
 void ActionGUI::UpdateValues(){
+    //For following: see we_are_copying_data_from_parent_action_so_do_not_handle_signals delaration.
     we_are_copying_data_from_parent_action_so_do_not_handle_signals = true;
     SetTypeCombo(parent->type); 
     ChangeVisibleLines();
@@ -241,6 +254,8 @@ void ActionGUI::ChangeVisibleLines(){
     //if(!Types_combo.get_active()) return; //nothing is selected
     //Gtk::TreeModel::Row row = *(Types_combo.get_active());
     int type = parent->type;
+
+    //Hide all, and show required ones.
     line_seq.hide();
     line_note.hide();
     line_tempo.hide();

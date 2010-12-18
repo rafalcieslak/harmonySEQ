@@ -39,25 +39,24 @@ vector<Event *> events(2);
 int mainnote = 60;
 double tempo = DEFAULT_TEMPO;
 int ports_number;
-int running = 1;
-debug* dbg;
-error* err;
+int running = 1; //states, whether the application is running. When it's changed to 0, all infinite loops in background break, and the whole program closes.
+debug* dbg; //the stream-like objects responsible of putting messages into stdio
+error* err;     //see above
 MidiDriver* midi;
 MainWindow* mainwindow;
 EventsWindow* eventswindow;
-int passing_midi;
+int passing_midi; //states whether all midi events are passed through, or not.
 Glib::ustring file;
-std::map<Glib::ustring, int> keymap_stoi;
-std::map<int, Glib::ustring> keymap_itos;
-std::map<int, Glib::ustring> notemap;
-//-/
-int debugging = 0, help = 0, version = 0;
-int example_notes[6] = {-1,0,2,3,0,0}, example_notes2[6] = {2,3,5,7,0,0};
-int example_sequence[8] = {0,1,3,2,1,2,3,1}, example_sequence2[8] = {0,1,3,2,1,2,3,1};
-void print_help();
+std::map<Glib::ustring, int> keymap_stoi; //map used for keyname -> id conversion
+std::map<int, Glib::ustring> keymap_itos; //map used for id -> keyname conversion
+std::map<int, Glib::ustring> notemap;         //map used for note_number -> note_name conversion
+
+int debugging = 0, help = 0, version = 0; //flags set by getopt, depending on command-line parameters
+
+void print_help(); //forward declaration of few functions
 void end_program();
 
-//for getopt
+//for getopt - defines which flag is related to which variable
 static struct option long_options[]={
     {"debug",no_argument,&debugging,1},
     {"help",no_argument,&help,1},
@@ -69,6 +68,7 @@ static struct option long_options[]={
 
 // <editor-fold defaultstate="collapsed" desc="thread classes">
 
+/** Thread-related magic.*/
 class threadb : public sigc::trackable {
 public:
     threadb();
@@ -85,6 +85,8 @@ threadb::threadb() {
 
 threadb::~threadb() {
 }// </editor-fold>
+
+/**Prepares both keymaps*/
 void InitKeyMap()
 {
     char temp[30];
@@ -113,6 +115,7 @@ void InitKeyMap()
     }
 }
 
+/**Prepares notes map*/
 void InitNoteMap(){
     notemap[0] = "C";
     notemap[1] = "C#";
@@ -128,24 +131,32 @@ void InitNoteMap(){
     notemap[11] = "H";
     
 }
-void threadb::th1(){
-//midi processing thread
-    *dbg << "th1 started\n";
 
+/**The function that is run, when thread 1 starts.
+  **Thread 1 is responsible for midi i/o */
+void threadb::th1(){
+    *dbg << "th1 started\n";
+    //preparing the queue...
     midi->StartQueue();
-    midi->UpdateQueue(); //initial call
+    //initial call, puts the first ECHO event, to make sure the loop will loop.
+    midi->UpdateQueue();
+    //go into infinite loop (while running = 1)
     midi->LoopWhileWaitingForInput();
 }
 
+/**The function that is run, when thread 2 starts.
+  **Thread 2 passec control to GTK, which makes it responsble for the GUI. */
 void threadb::th2(){
-//gtk thread
     *dbg << "th2 started\n";
+
+
     gdk_threads_enter();
-    //pass control to gtk
+    //Pass control to gtk.
     Gtk::Main::run(*mainwindow);
     gdk_threads_leave();
 }
 
+/**Prepates the GUI. Constructs both the MainWindow and the EventsWindow*/
 void InitGui(){
     gdk_threads_enter();
     {
@@ -156,6 +167,7 @@ void InitGui(){
     
 }
 
+/**Puts some initial data to events list.*/
 void InitDefaultData(){
         /*
         sequencers[0] = new Sequencer(example_sequence,example_notes,"seq 0");
@@ -169,23 +181,22 @@ void InitDefaultData(){
         events[2]->actions.push_back(new Action(Action::MAINOTE_SET,72));
 }
 
+/**Inits gettext, must be called before any internationalized message is required*/
 void InitGetText(){
-
-    //gettext inits
-    setlocale(LC_ALL, ""); //sets the locale to user's locale
+     //sets the locale to user's locale
+    setlocale(LC_ALL, "");
     bindtextdomain(PACKAGE,LOCALEDIR);
     textdomain(PACKAGE);
-
 }
 
+/**Prepares the Midi Driver*/
 void InitMidiDriver(){
-
     //create the midi driver
     midi = new MidiDriver;
     midi->SetTempo(tempo);
-
 }
 
+/**As in the name: When we got a filename from command-line, we try to open it.*/
 bool TryToOpenFileFromCommandLine(){
     gdk_threads_enter(); //lodking the threads. Loading file MAY ASK!!
     bool x = Files::LoadFile(file);
@@ -197,12 +208,13 @@ bool TryToOpenFileFromCommandLine(){
 }
 
 int main(int argc, char** argv) {
-    //gtk inits
+
+    //Initializing GTK.
     Glib::thread_init();
     gdk_threads_init();
     Gtk::Main kit(argc, argv);
 
-    //random number generator init, may got usefull somewhere in the future
+    //random number generator init, may got useful somewhere in the future
     srand(time(NULL));
 
     InitGetText();
@@ -213,13 +225,14 @@ int main(int argc, char** argv) {
     ports_number = 1;   //by default
     passing_midi = 0;   //by default
     tempo = DEFAULT_TEMPO;
-    err = new error();  //error stream is never quiet!
+    err = new error();  //error stream is never quiet! so we open it, not caring about what we got in arguments
 
    
-    //first, parse the arguments
+    //Now, parse the arguments.
     char c, temp[100];
     opterr = 0; //this prevents getarg from printing his error message
     int option_index; //getopt stores index here
+    //Calling getopt to parse agrs, until there are none left.
     while((c=getopt_long(argc,argv,"dhvp",long_options,&option_index))!=-1){
         switch(c){
             case 0:
@@ -254,45 +267,60 @@ int main(int argc, char** argv) {
 
     }
 
-    dbg = new debug(debugging); //start the debugger class
-    if (help) {print_help();exit(0);} //print help if required
-    if (version) {printf(VERSION);printf("\n");exit(0);} //print version
+    //start the debugger class, enabling it only if debugging = 1.
+    dbg = new debug(debugging);
+    //print help, if required
+    if (help) {print_help();exit(0);}
+    //print version, if required
+    if (version) {printf(VERSION);printf("\n");exit(0);} 
 
     //here file path from command line is obtained, if any
     bool file_from_cli = false;
     if (argc>optind){ file = argv[optind];file_from_cli=1;}
 
+    //Initing the driver...
     InitMidiDriver();
 
+    //...the maps...
     InitKeyMap();
     InitNoteMap();
 
+    //...tree models...
     InitAllTreeModels();
 
-    InitGui();  //Ow... better have all the main windows constructed, before any sequencer on event is.
+    //...GUI...
+    InitGui();  //(Ow... better have all the main windows constructed, before any sequencer or event is. Might cause problems elsewhere).
 
+    //...and some default events.
     InitDefaultData();
 
-    Files::file_name = ""; //Here we init the filename, if it's empty, it means the file was not yet saved
+    //Here we init the filename, if it's empty, it means the file was not yet saved
+    Files::file_name = "";
 
+    //Trying to open file...
     if (file_from_cli) TryToOpenFileFromCommandLine();
     //else InitDefaultData();
 
+    //Putting some values into GUI
     mainwindow->tempo_button.set_value(tempo);
     mainwindow->main_note.set_value(mainnote);
 
-    mainwindow->InitTreeData(); //TODO: initing data sholudn't mark file as modified
+    //Initing trees in both windows.
+    mainwindow->InitTreeData();
     eventswindow->InitTreeData();
 
+    //At the beggining, file is not modified.
     Files::SetFileModified(0);
-    
+
+    //Starting an instance of the threads class...
     threadb Th;
-    /*Glib::Thread * const th1 =*/ Glib::Thread::create(sigc::mem_fun(Th, &threadb::th1), true);
-    /*Glib::Thread * const th2 =*/ Glib::Thread::create(sigc::mem_fun(Th, &threadb::th2), true);
-    //wait for signal to exit the program
+    //And creating both threads.
+    Glib::Thread::create(sigc::mem_fun(Th, &threadb::th1), true);
+    Glib::Thread::create(sigc::mem_fun(Th, &threadb::th2), true);
+
+    //Wait for signal to exit the program
     while (running == 1)
         usleep(10000);
-    //sleep(1);
 
     end_program();
     return 0;
@@ -300,6 +328,7 @@ int main(int argc, char** argv) {
 
 void print_help(){
     *dbg << "Hey, seems you wish to debug help message?" << "Nothing to debug, just a few printf's!";
+
     printf(_("harmonySEQ, version %s\n"
             "\n"
             "usage: harmonySEQ [-hdv] [FILE]\n"
@@ -309,8 +338,6 @@ void print_help(){
             "   -h    --help        prints this help messase and exits\n"
             "   -v    --version     prints the program version\n"), VERSION);
     printf("\n");
-
-
 }
 
 void end_program(){
@@ -318,8 +345,8 @@ void end_program(){
     *dbg << "ending the program...\n";
     if (midi != NULL) { //maybe we are ending the program before midi driver was constructed
         midi->ClearQueue();
-        sleep(1);
-        midi->AllNotesOff(); //giving it some time, for the noteoffs that are left on
+        sleep(1); //giving it some time, for the noteoffs that are left on
+        midi->AllNotesOff();
         midi->DeleteQueue();
     }
     delete mainwindow;
