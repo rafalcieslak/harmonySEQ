@@ -777,10 +777,12 @@ uninstall-am: uninstall-appsmenuDATA uninstall-mimeDATA
 
 install-data-hook:
 	update-mime-database $(datadir)/mime
+	update-desktop-database
 	gtk-update-icon-cache -f -t $(datadir)/icons/gnome
 
 uninstall-hook:
 	update-mime-database $(datadir)/mime
+	update-desktop-database
 	gtk-update-icon-cache -f -t $(datadir)/icons/gnome
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
