@@ -42,8 +42,8 @@ public:
     /**Stops playback*/
     void PauseQueueImmediately(); 
 
-    /**Stops playback on next tact. NOT YET IMPLEMENTED*/
-    void PauseOnNextTact();
+    /**Stops playback on next bar. NOT YET IMPLEMENTED*/
+    void PauseOnNextBar();
 
     /*Tell whether the queue is paused*/
     bool GetPaused();
@@ -52,7 +52,7 @@ public:
     void ContinueQueue();
 
 
-    /**This routine gets called every time the echo event is received. It puts next set of notes (lasting one tact) into the queue. */
+    /**This routine gets called every time the echo event is received. It puts next set of notes (lasting one bar) into the queue. */
     void UpdateQueue(bool do_not_lock_threads = 0);
 
     /**Stops all notes and updates queue IMMIDIATELLY*/

@@ -161,8 +161,8 @@ void MidiDriver::PauseQueueImmediately(){
     mainwindow->UpdatePlayPauseButton();
 }
 
-void MidiDriver::PauseOnNextTact(){
-    *err << "Pausing on next track is not yet implemented.\n";
+void MidiDriver::PauseOnNextBar(){
+    *err << "Pausing on next bar is not yet implemented.\n";
 }
 
 void MidiDriver::Sync(){
@@ -172,7 +172,7 @@ void MidiDriver::Sync(){
     tick = GetTick();
     tick++;
     UpdateQueue(1);
-    mainwindow->FlashTempoStart();//to indicate a starting tact
+    mainwindow->FlashTempoStart();//to indicate a starting bar
 }
 
 snd_seq_tick_time_t MidiDriver::GetTick() {
@@ -193,7 +193,7 @@ void MidiDriver::ContinueQueue(){
     //AllNotesOff(); // here: NOT!
     tick = GetTick();
     UpdateQueue(1);
-    mainwindow->FlashTempoStart();//to indicate a starting tact
+    mainwindow->FlashTempoStart();//to indicate a starting bar
     
     snd_seq_drain_output(seq_handle);
     int i = snd_seq_continue_queue(seq_handle,queueid,NULL) ;
@@ -264,9 +264,9 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
         //ok, and here we proceed all notes from one sequencer.
         //first check the length:
         if (seq->length<=1){
-            //length is smaller or equal to 1, we play the same sequence several times in a tact
+            //length is smaller or equal to 1, we play the same sequence several times in a bar
 
-            double howmanytimes = (double)1.0/(seq->length); //how many times we play this sequence in one tact
+            double howmanytimes = (double)1.0/(seq->length); //how many times we play this sequence in one bar
             int duration = ((double)(TICKS_PER_NOTE / seq->resolution))*seq->length;
             int local_tick = tick;
             for (int i = 0; i < howmanytimes; i++){
@@ -290,7 +290,7 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
             }
 
         }else{
-            //length is larger than 1, we play one sequence over many tacts.
+            //length is larger than 1, we play one sequence over many bars.
             //TODO: rewrite this, so that it saves a double representing a progress of this sequence (i.e. where to start from next time)
 
              
