@@ -41,7 +41,14 @@ public:
     Sequencer(const Sequencer* orig);
     virtual ~Sequencer();
 
-    /**List of  notes in patterns: */
+    /**List of  notes in patterns:
+        * In fact, it's a 3-dimentional array.
+        * 1st dimention: pattern number.
+        * 2nd dimention: note number (in time - vertical)
+        * 3rd dimention: note number (pitch - horisontal)
+        *
+        * So: patterns[4][1][5] representa a boolan state of the first note (5th pith of chord) in fourth pattern.
+        * Hard to explain, easy to use.*/
     vector<vector<vector<bool> > > patterns;
     
     /**The active sequence number*/

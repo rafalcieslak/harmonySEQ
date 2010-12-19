@@ -170,11 +170,14 @@ void SaveToFile(Glib::ustring filename){
 }
 
 void LoadFileDialog(){
+    //Creating a new File Choosing Dialog
     Gtk::FileChooserDialog dialog(_("Choose a file to open..."),Gtk::FILE_CHOOSER_ACTION_OPEN);
     dialog.set_transient_for(*mainwindow);
+    //And adding to it some buttons.
     dialog.add_button(Gtk::Stock::CANCEL,Gtk::RESPONSE_CANCEL);
     dialog.add_button(Gtk::Stock::SAVE,Gtk::RESPONSE_OK);
 
+    //Creating filters...
     Gtk::FileFilter hseq;
     hseq.set_name("HarmonySEQ files (*.hseq)");
     hseq.add_pattern("*.hseq");
@@ -184,21 +187,32 @@ void LoadFileDialog(){
     all.add_pattern("*");
     dialog.add_filter(all);
 
+    //Running the dialog - passing the control to it, and waiting for the user to choose a file.
     int result = dialog.run();
+
+    //Obtaining the file the user has chosen..
     Glib::ustring filename = dialog.get_filename();
+
+    //Hiding the dialog...
     dialog.hide();
+
+    //And depending on which button did the user choose
     switch (result){
         case Gtk::RESPONSE_OK:
+            //User clicked OK. Calling other procedure, that will load the file.
             LoadFile(filename);
             SetFileModified(0);
             break;
         case Gtk::RESPONSE_CANCEL:
+            //User clicked CANCEL. Do nothing.
             break;
         default:
+            //User uses cheat codes.
             *dbg << "unknown response returned!\n";
         break;
     }
 
+    //Some things that must be done to update the GUI fully.
     mainwindow->InitTreeData();
     mainwindow->main_note.set_value(mainnote);
     mainwindow->tempo_button.set_value(tempo);
@@ -208,34 +222,47 @@ void LoadFileDialog(){
 
 bool LoadFile(Glib::ustring file){
 
+
     *dbg << "trying to open |" << file <<"|--\n";
     int number;
     Glib::KeyFile kf;
     char temp[3000];
     char temp2[1000];
+
+
+    //We'll try to open a file. No i/o streams needed here, KeyFile provides us with a useful method load_from_file, which does all the magic.
     try{
         if (!kf.load_from_file(file)) {
+            //Returned 1, so something strange is with the file.
             sprintf(temp, _("ERROR - error while trying to read file '%s'\n"), file.c_str());
             *err << temp;
             Info(temp);
             return 1;
         }
     }catch(Glib::Error error){
+        //Exception cought. So can even tell what's wrong (usually some file-related problem, not a problem which it's contains).
         sprintf(temp, _("ERROR - error while trying to read file '%s': "), file.c_str());
         *err << temp;
         *err << error.what();
         *err << ENDL;
         Info(temp,error.what());
         return 1;
-
     }
 
+
+    //A large TRY-CATCH for almost whole LoadFile procedure.
     try{
+        //At the very beggining we should check the version of the file.
         int VA = kf.get_integer("harmonySEQ","versionA");
         int VB = kf.get_integer("harmonySEQ","versionB");
         int VC = kf.get_integer("harmonySEQ","versionC");
+        //Slider-compatible mode is switched on, when the file we open does not support polyphony  (version 0.12 or earlier).
+        //In this case we must translate monophonic data, to polyphonic.
         int slider_compatible_mode = 0;
+
+        //Compaing versions...
         if (VA > VERSION_A || (VA == VERSION_A && VB > VERSION_B) || (VA == VERSION_A && VB == VERSION_B && VC > VERSION_C)){
+            //File is too new
             sprintf(temp,_("This file was created by harmonySEQ in a newer version (%d.%d.%d). This means it may contain data that is suppored by the newer wersion, but not by the version you are using (%d.%d.%d). It is recommended not to open such file, since it is very likely it may produce strange errors, or may event crash the program unexpectedly. However, in some cases one may want to open such file anyway, for example if it is sure it will open without trouble. Select YES to do so."),VA,VB,VC,VERSION_A,VERSION_B,VERSION_C);
             if (Ask(_("Do you want to open this file?"),temp,false)){
                 //anserwed YES;
@@ -244,49 +271,59 @@ bool LoadFile(Glib::ustring file){
             }
 
         } else if (VA < VERSION_A || (VA == VERSION_A && VB < VERSION_B) || (VA == VERSION_A && VB == VERSION_B && VC < VERSION_C)){
+            //File is too old
             sprintf(temp,_("This file was created by harmonySEQ in an older version (%d.%d.%d). This means it may miss some data that is required to be in file by the version you are using (%d.%d.%d). It is recommended not to open such file, since it is very likely it may produce strange errors, or may event crash the program unexpectedly. However, in some cases one may want to open such file anyway, for example if it is sure it will open without trouble. Select YES to do so."),VA,VB,VC,VERSION_A,VERSION_B,VERSION_C);
             if (Ask(_("Do you want to open this file?"),temp,false)){
                 //anserwed YES;
-                if (VA == 0 && VB <= 12) slider_compatible_mode = 1; //we'll read the slider-data and translate it to matrix-data
+                if (VA == 0 && VB <= 12) slider_compatible_mode = 1; //That's the case, when monophonic data will be converted to polyphonic.
             }else{
                 return 1;
             }
         }
 
+        //Read some basic data...
         tempo = kf.get_double(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_TEMPO);
         mainnote = kf.get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_MAINNOTE);
         number = kf.get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_SEQ_NUM);
 
-
+        //Get rid of any seqeuncers.
         ClearSequencers(); //woa hua hua hua!
 
+        //Now we'll process all sequencers that are in the file.
         for (int x = 0; x < number; x++) {
-            
+            //First prepare the key.
             sprintf(temp, FILE_GROUP_TEMPLATE_SEQ, x);
 
+            //If there is no such key in the file, that means this sequencer was skipped while saving.
             if (!kf.has_group(temp)) {
-
+                //We'll suplement it with an empty pointer, so it'll look like like a removed sequencer, and skip to look for the next one.
                 sequencers.push_back(NULL);
                 continue;
             }
 
+            //If we got here, this means this sequencer was NOT removed. So: let's create it.
             sequencers.push_back(new Sequencer());
 
+            //Put some data into it...
             sequencers[x]->SetName(kf.get_string(temp, FILE_KEY_SEQ_NAME));
             sequencers[x]->SetOn(kf.get_boolean(temp, FILE_KEY_SEQ_ON));
             sequencers[x]->SetChannel(kf.get_integer(temp, FILE_KEY_SEQ_CHANNEL));
             sequencers[x]->SetApplyMainNote(kf.get_boolean(temp, FILE_KEY_SEQ_APPLY_MAIN_NOTE));
-            if(kf.has_key(temp,FILE_KEY_SEQ_VOLUME))
-                sequencers[x]->SetVolume(kf.get_integer(temp, FILE_KEY_SEQ_VOLUME));
-            else //old file. does not have volume values in it.
-                sequencers[x]->SetVolume(DEFAULT_VOLUME);
             sequencers[x]->resolution = kf.get_integer(temp, FILE_KEY_SEQ_RESOLUTION);
             sequencers[x]->length = kf.get_double(temp, FILE_KEY_SEQ_LENGTH);
 
+            //Check whether volume is saved in file.
+            if(kf.has_key(temp,FILE_KEY_SEQ_VOLUME))
+                sequencers[x]->SetVolume(kf.get_integer(temp, FILE_KEY_SEQ_VOLUME));
+            //Because if it's not...
+            else
+                //...we need to set it to a default value.
+                sequencers[x]->SetVolume(DEFAULT_VOLUME);
             sequencers[x]->patterns.clear();
 
-            //here we load the sequences
-            if(kf.has_key(temp,FILE_KEY_SEQ_SEQUENCE)){ //old file, seems it uses only one sequence, this case may be abandoned in future, since noone uses soooo old files
+            //Now, load the patterns.
+            if(kf.has_key(temp,FILE_KEY_SEQ_SEQUENCE)){
+                    //VEEEERY old file, seems it uses only one pattern, this case may be abandoned in future, since noone uses soooo old files (not sure, but probably it's 0.10 or earlier)
                     int seq = sequencers[x]->AddPattern();
                     std::vector<int> sequence = kf.get_integer_list(temp, FILE_KEY_SEQ_SEQUENCE);
                         for(int r = 0; r < sequencers[x]->resolution; r++){
@@ -298,119 +335,164 @@ bool LoadFile(Glib::ustring file){
 
                             }
                     }
-            }else{//new file, uses many sequences
+            }else{
+                //Normal case: there are many patterns.
+                //Number of pattrens -> n
                 int n = kf.get_integer(temp,FILE_KEY_SEQ_PATTERNS_NUMBER);
+                //For each pattern we load...
                 for(int s =0; s < n; s++){
+                    //First add an empty pattern.
                     int seq = sequencers[x]->AddPattern();
+                    //Prepare the value name...
                     sprintf(temp2,FILE_KEY_SEQ_PATTERN_TEMPLATE,s);
-                    std::vector<int> sequence = kf.get_integer_list(temp, temp2);
-                    
+                    //And get the pattern from file
+                    std::vector<int> pattern = kf.get_integer_list(temp, temp2);
+
+                    //Check for the old-file case...
                     if (slider_compatible_mode){
                         //used to load old files <=0.12.0
                         for(int r = 0; r < sequencers[x]->resolution; r++){
                             for(int c = 0; c < 6; c++){
-                                if (c == sequence[r])
+                                //(If this is the note, that is chosen in file...)
+                                if (c == pattern [r])
+                                    //mark it as ON
                                     sequencers[x]->SetPatternNote(s,r,c,1);
                                 else
+                                    //mark it as OFF
                                     sequencers[x]->SetPatternNote(s,r,c,0);
-
                             }
                         }
                     }else{
-                        for (unsigned int n = 0; n < sequence.size(); n++) {
                         //used to load new files >=0.13.0
+                        //Simple algorithm, just copying data from the pattern from file to the pattern in the sequencer
+                        for (unsigned int n = 0; n < pattern .size(); n++) {
                         for(int r = 0; r < sequencers[x]->resolution; r++){
                             for(int c = 0; c < 6; c++){
-                                    sequencers[x]->SetPatternNote(s,r,c,sequence[r*6+c]);
-
+                                    sequencers[x]->SetPatternNote(s,r,c,pattern [r*6+c]);
                             }
                         }
                          }
                     }
                      
-                }
-                if(sequencers.size() == 0) //wtf, there were no sequences in the file? strange. We have to create one in order to prevent crashes.
+                }//next pattern
+                
+                //Just to make sure, check if the sequencer we've just loaded from file has any patterns...
+                if(sequencers[x]->patterns.size() == 0)
+                    //wtf, there were no sequences in the file? strange. We have to create one in order to prevent crashes. What would be a sequencer with no patterns? At least that's something we beeter aviod.
                     sequencers[x]->AddPattern();
-
             }
             
-            //here we load the chord
+            //Here we load the chord (if any)
             if (kf.has_key(temp,FILE_KEY_SEQ_CHORD)){
                 std::vector<int> vec =   kf.get_integer_list(temp,FILE_KEY_SEQ_CHORD);
                 sequencers[x]->chord.SetFromVector(vec);
             }
-        
-            sequencers[x]->UpdateGui();
-        }
-        int are_there_events_in_file = kf.has_key(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_EVENTS_NUM);
-        if(!are_there_events_in_file) return 0; //THIS SHOULD BE REMOVED IN SOME NEWER VERSION, SINCE THERE ARE NOT MANY FILES OF VERSION 0.9 OR LOWER
 
+            //And update this sequencer's GUI.
+            sequencers[x]->UpdateGui();
+            
+            //Now proceed to the...
+        }  //...next sequencer.
+
+        //Done loading sequencers.
+
+        //Now, proceed to events.
+
+        //No such key? something really wrong. There should be an error message, TODO.
+        if(!kf.has_key(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_EVENTS_NUM)) return 1;
+
+        //Number of events.
         number = kf.get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_EVENTS_NUM);
 
+        //Get rid of any events.
         ClearEvents();
 
+        //For each event in file...
         for (int x = 0; x < number; x++){
-            sprintf(temp, FILE_GROUP_TEMPLATE_EVENT, x);
-            if (!kf.has_group(temp)) {
 
+            sprintf(temp, FILE_GROUP_TEMPLATE_EVENT, x);
+            //If there is no key related to this number of event, this means this event was removed.
+            if (!kf.has_group(temp)) {
+                //So we'll put instead a null pointer, so it'll look as a removed one, and skip to look for the next event.
                 events.push_back(NULL);
                 continue;
             }
+            //First, create a new event...
             events.push_back(new Event());
+            //Put some data into it...
             events[x]->type = kf.get_integer(temp,FILE_KEY_EVENT_TYPE);
             events[x]->arg1 = kf.get_integer(temp,FILE_KEY_EVENT_ARG1);
             events[x]->arg2 = kf.get_integer(temp,FILE_KEY_EVENT_ARG2);
             int actions_num = kf.get_integer(temp,FILE_KEY_EVENT_ACTIONS_NUM);
+            //For each action of this event...
             for (int a = 0; a < actions_num; a++){
                 sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_TYPE,a);
                 if (!kf.has_key(temp,temp2)){
-                    //there is no such action in file (was removed, was a NULL pointer while saving file)
+                    //there is no such action in file (was removed, was a NULL pointer while saving file) - skip to next action
                     events[x]->actions.push_back(NULL);
                     continue;
                 }
+                //Create a new action
                 events[x]->actions.push_back(new Action(Action::NONE));
 
+                //Fill it with data: type...
+                sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_TYPE,a);
                 events[x]->actions[a]->type = kf.get_integer(temp,temp2);
+                //...arguments...
                 sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_ARGS,a);
                 events[x]->actions[a]->args = kf.get_integer_list(temp,temp2);
+                //...and a chord, if any.
                 sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_CHORD,a);
                 if (kf.has_key(temp,temp2)){
                     vector<int> vec = kf.get_integer_list(temp,temp2);
                     events[x]->actions[a]->chord.SetFromVector(vec);
                  }
+                //Update the chord GUI.
                 events[x]->actions[a]->GUIUpdateChordwidget();
-            }
+            }//next action.
 
+            //Update this event's GUI, using newly loaded data.
             events[x]->UpdateGUI();
-        }
-        //gdk_threads_enter();
-        midi->Sync();
-        //gdk_threads_leave();
+            
+        }//next event.
 
+        //To make sure all goes well:
+        midi->Sync();
+       
+        //At beggining, file is unmodidied.
         SetFileModified(0);
-        int found =  file.find_last_of("/\\");  //Will work on linux and windos both
+
+        //Looking for the last '/' or '\' in the file patch, and storing file name and patch in appropriate variable.
+        int found =  file.find_last_of("/\\");  //Will work on linux and windows both
         file_name = file.substr(found+1);
         file_dir = file.substr(0,found+1);
+         //If file name has changed, we have to show it in the title of the main window.
         mainwindow->UpdateTitle();
+
+
+
+     //And that's all, file is loaded.
+
+
         
+
+    //Only exception handles are left...
     }catch(Glib::KeyFileError error){
+        //KeyFile error means some trouble with data in the file. Missing key, wrong format, wrong characters, all these goes here.
         sprintf(temp, _("ERROR - Glib::KeyFile error while processing file '%s': "), file.c_str());
         *err << temp;
         *err << error.what();
         *err << ENDL;
         Info(temp,error.what());
         return 1;
-        
-
     }catch(Glib::Error error){
+        //Some other strange file-related errors are cought here.
         sprintf(temp, _("ERROR - unknown error while processing file '%s': "), file.c_str());
         *err << temp;
         *err << error.what();
         *err << ENDL;
         Info(temp,error.what());
         return 1;
-
-
     }
     return 0;
 
