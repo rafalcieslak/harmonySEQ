@@ -80,9 +80,9 @@
 #define FILE_KEY_SEQ_VOLUME "volume"
 #define FILE_KEY_SEQ_NAME "name"
 #define FILE_KEY_SEQ_SEQUENCE "sequence"
-#define FILE_KEY_SEQ_SEQUENCES_NUMBER "sequences_num"
+#define FILE_KEY_SEQ_PATTERNS_NUMBER "sequences_num"
 #define FILE_KEY_SEQ_ACTIVE_SEQUENCE "active_sequence"
-#define FILE_KEY_SEQ_SEQUENCE_TEMPLATE "sequence_%d"
+#define FILE_KEY_SEQ_PATTERN_TEMPLATE "sequence_%d" //God, it should be "pattern_%d". Too late to change, older files use "sequence".  Maybe in future a workaround will be found.
 #define FILE_KEY_SEQ_CHORD "chord"
 
 #define FILE_GROUP_TEMPLATE_EVENT "Event %d"
