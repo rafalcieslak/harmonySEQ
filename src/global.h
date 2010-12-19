@@ -30,9 +30,9 @@
 #include <glibmm/ustring.h>
 #include "gettext.h"
 
-#define VERSION_STRING "0.13"//VERSION is provided by autotools in config.h
+#define VERSION_STRING "0.14"//VERSION is provided by autotools in config.h
 #define VERSION_A 0
-#define VERSION_B 13
+#define VERSION_B 14
 #define VERSION_C 0
 
 #define ENDL "\n"

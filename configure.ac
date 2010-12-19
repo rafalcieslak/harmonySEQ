@@ -2,10 +2,10 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.67])
-AC_INIT([harmonySEQ], [0.13], [https://bugs.launchpad.net/harmonyseq])
+AC_INIT([harmonySEQ], [0.14], [https://bugs.launchpad.net/harmonyseq])
 AC_CONFIG_SRCDIR([src/SequencerGUI.h])
 AC_CONFIG_HEADERS([src/config.h])
-AM_INIT_AUTOMAKE([harmonySEQ], [0.13])
+AM_INIT_AUTOMAKE([harmonySEQ], [0.14])
 AM_GNU_GETTEXT_VERSION([0.18.1])
 AM_GNU_GETTEXT([external])
 
