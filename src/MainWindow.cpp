@@ -34,14 +34,14 @@ Glib::RefPtr< Gdk::Pixbuf > harmonySEQ_logo_48;
 MainWindow::MainWindow()
 {
     set_border_width(0);
-    //set_default_size(300,500);
+    set_default_size(500,0);
     UpdateTitle();
             
     tempolabel.set_text(_("Tempo:"));
     mainnotelabel.set_text(_("Main Note:"));
     add(main_vbox);
 
-    // <editor-fold defaultstate="collapsed" desc="menus creation and initialisation">
+    // <editor-fold defaultstate="collapsed" desc="menus and toolbar creation and initialisation">
     m_refActionGroup = Gtk::ActionGroup::create();
 
     m_refActionGroup->add(Gtk::Action::create("MenuFile",_("File")));
@@ -51,6 +51,10 @@ MainWindow::MainWindow()
     m_refActionGroup->add(Gtk::Action::create("FileSave", Gtk::Stock::SAVE), sigc::mem_fun(*this, &MainWindow::OnMenuSaveClicked));
     m_refActionGroup->add(Gtk::Action::create("FileSaveAs", Gtk::Stock::SAVE_AS), sigc::mem_fun(*this, &MainWindow::OnMenuSaveAsClicked));
     m_refActionGroup->add(Gtk::Action::create("FileQuit", Gtk::Stock::QUIT), sigc::mem_fun(*this, &MainWindow::OnMenuQuitClicked));
+    m_refActionGroup->add(Gtk::Action::create("AddSeq", Gtk::Stock::ADD, _("Add"),_("Adds a new seqencer")), sigc::mem_fun(*this, &MainWindow::OnAddSeqClicked));
+    m_refActionGroup->add(Gtk::Action::create("RemoveSeq", Gtk::Stock::REMOVE, _("Remove"),_("Removes selected sequencer")), sigc::mem_fun(*this, &MainWindow::OnRemoveClicked));
+    m_refActionGroup->add(Gtk::Action::create("DuplicateSeq", Gtk::Stock::CONVERT, _("Duplicate"), _("Duplicates selected sequencer")), sigc::mem_fun(*this, &MainWindow::OnCloneClicked));
+    m_refActionGroup->add(Gtk::Action::create("Events", Gtk::Stock::EXECUTE,_("Events window"), _("Opens the events window")), sigc::mem_fun(*this, &MainWindow::OnEventsClicked));
     m_refActionGroup->add(Gtk::Action::create("About", Gtk::Stock::ABOUT), sigc::mem_fun(*this, &MainWindow::OnAboutMenuClicked));
 
     m_refUIManager = Gtk::UIManager::create();
@@ -73,6 +77,20 @@ MainWindow::MainWindow()
             "      <menuitem action='About'/>"
             "    </menu>"
             "  </menubar>"
+            "  <toolbar name='ToolBar'>"
+            "  <placeholder name='FileTools'>"
+            "   <toolitem action='FileNew'/>"
+            "   <toolitem action='FileOpen'/>"
+            "   <toolitem action='FileSave'/>"
+            "   <toolitem action='FileSaveAs'/>"
+            "   <separator/>"
+            "   <toolitem action='AddSeq'/>"
+            "   <toolitem action='RemoveSeq'/>"
+            "   <toolitem action='DuplicateSeq'/>"
+            "   <separator/>"
+            "   <toolitem action='Events'/>"
+            "  </placeholder>"
+            "  </toolbar>"
             "</ui>";
 #ifdef GLIBMM_EXCEPTIONS_ENABLED
     try {
@@ -89,26 +107,28 @@ MainWindow::MainWindow()
 #endif //GLIBMM_EXCEPTIONS_ENABLED
 
 
-    Gtk::Widget* pMenubar = m_refUIManager->get_widget("/MenuBar"); // </editor-fold>
-
+    Gtk::Widget* pMenubar = m_refUIManager->get_widget("/MenuBar");
+    Gtk::Widget* pToolbar = m_refUIManager->get_widget("/ToolBar"); // </editor-fold>
+    
     main_vbox.pack_start(*pMenubar,Gtk::PACK_SHRINK);
+    main_vbox.pack_start(*pToolbar,Gtk::PACK_SHRINK);
     main_vbox.pack_start(vbox1,Gtk::PACK_SHRINK);
     vbox1.set_border_width(5);
 
     vbox1.pack_start(hbox_up, Gtk::PACK_SHRINK);
-    hbox_up.pack_start(mainnotelabel);
+    hbox_up.pack_start(mainnotelabel, Gtk::PACK_SHRINK);
     hbox_up.pack_start(main_note, Gtk::PACK_SHRINK);
     main_note.set_range(0, 127);
     main_note.set_increments(1, 12);
     main_note.set_value(mainnote);
     main_note.signal_value_changed().connect(sigc::mem_fun(*this, &MainWindow::MainNoteChanged));
-    hbox_up.pack_start(tempolabel);
+    hbox_up.pack_start(tempolabel, Gtk::PACK_SHRINK);
     hbox_up.pack_start(tempo_button, Gtk::PACK_SHRINK);
     tempo_button.set_range(30, 320);
     tempo_button.set_increments(1, 10);
     tempo_button.set_value(tempo);
     tempo_button.signal_value_changed().connect(sigc::mem_fun(*this, &MainWindow::TempoChanged));
-    hbox_up.pack_start(play_pause_button);
+    hbox_up.pack_start(play_pause_button, Gtk::PACK_SHRINK);
 
     Gtk::Stock::lookup(Gtk::Stock::MEDIA_PAUSE,Gtk::ICON_SIZE_BUTTON,image_pause);
     Gtk::Stock::lookup(Gtk::Stock::MEDIA_PLAY,Gtk::ICON_SIZE_BUTTON,image_play);
@@ -203,7 +223,7 @@ MainWindow::MainWindow()
     hbox_down.pack_end(button_remove, Gtk::PACK_SHRINK);
     hbox_down.pack_start(button_events, Gtk::PACK_SHRINK);
     button_add.set_label(_("Add"));
-    button_add.signal_clicked().connect(mem_fun(*this, &MainWindow::OnButtonAddClicked));
+    button_add.signal_clicked().connect(mem_fun(*this, &MainWindow::OnAddSeqClicked));
     button_remove.set_label(_("Remove"));
     button_remove.signal_clicked().connect(mem_fun(*this, &MainWindow::OnRemoveClicked));
     button_remove.set_sensitive(0);
@@ -477,7 +497,7 @@ void MainWindow::OnRemoveClicked(){
     Files::SetFileModified(1);
 }
 
-void MainWindow::OnButtonAddClicked(){
+void MainWindow::OnAddSeqClicked(){
 
     Gtk::TreeModel::RowReference rowref = spawn_sequencer();
 

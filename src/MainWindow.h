@@ -69,7 +69,7 @@ private:
     void OnNameEdited(const Glib::ustring& path,const Glib::ustring& newtext);
 
     
-    void OnButtonAddClicked();
+    void OnAddSeqClicked();
     void OnRemoveClicked();
     void OnCloneClicked();
     void OnEventsClicked();
