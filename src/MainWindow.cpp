@@ -78,18 +78,16 @@ MainWindow::MainWindow()
             "    </menu>"
             "  </menubar>"
             "  <toolbar name='ToolBar'>"
-            "  <placeholder name='FileTools'>"
             "   <toolitem action='FileNew'/>"
             "   <toolitem action='FileOpen'/>"
             "   <toolitem action='FileSave'/>"
             "   <toolitem action='FileSaveAs'/>"
             "   <separator/>"
             "   <toolitem action='AddSeq'/>"
-            "   <toolitem action='RemoveSeq'/>"
-            "   <toolitem action='DuplicateSeq'/>"
+            "   <toolitem name='RemoveTool' action='RemoveSeq'/>"
+            "   <toolitem name='DuplicateTool' action='DuplicateSeq'/>"
             "   <separator/>"
             "   <toolitem action='Events'/>"
-            "  </placeholder>"
             "  </toolbar>"
             "</ui>";
 #ifdef GLIBMM_EXCEPTIONS_ENABLED
@@ -109,7 +107,12 @@ MainWindow::MainWindow()
 
     Gtk::Widget* pMenubar = m_refUIManager->get_widget("/MenuBar");
     Gtk::Widget* pToolbar = m_refUIManager->get_widget("/ToolBar"); // </editor-fold>
-    
+
+    Gtk::Widget* pRemoveTool = m_refUIManager->get_widget("/ToolBar/RemoveTool");
+    pRemoveTool->set_sensitive(0);
+    Gtk::Widget* pDuplicateTool = m_refUIManager->get_widget("/ToolBar/DuplicateTool");
+    pDuplicateTool->set_sensitive(0);
+
     main_vbox.pack_start(*pMenubar,Gtk::PACK_SHRINK);
     main_vbox.pack_start(*pToolbar,Gtk::PACK_SHRINK);
     main_vbox.pack_start(vbox1,Gtk::PACK_SHRINK);
@@ -564,11 +567,18 @@ void MainWindow::OnSelectionChanged(){
         //something is selected
         button_remove.set_sensitive(1);
         button_clone.set_sensitive(1);
-    }else{
+        Gtk::Widget* pRemoveTool = m_refUIManager->get_widget("/ToolBar/RemoveTool");
+        pRemoveTool->set_sensitive(1);
+        Gtk::Widget* pDuplicateTool = m_refUIManager->get_widget("/ToolBar/DuplicateTool");
+        pDuplicateTool->set_sensitive(1);
+    } else {
         //selection is empty
         button_remove.set_sensitive(0);
         button_clone.set_sensitive(0);
-
+        Gtk::Widget* pRemoveTool = m_refUIManager->get_widget("/ToolBar/RemoveTool");
+        pRemoveTool->set_sensitive(0);
+        Gtk::Widget* pDuplicateTool = m_refUIManager->get_widget("/ToolBar/DuplicateTool");
+        pDuplicateTool->set_sensitive(0);
     }
 
 }
