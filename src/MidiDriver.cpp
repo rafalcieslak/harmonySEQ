@@ -158,7 +158,7 @@ void MidiDriver::PauseQueueImmediately(){
 
     paused = true;
     *dbg << "Queue paused!\n";
-    mainwindow->UpdatePlayPauseButton();
+    mainwindow->UpdatePlayPauseTool();
 }
 
 void MidiDriver::PauseOnNextBar(){
@@ -207,7 +207,7 @@ void MidiDriver::ContinueQueue(){
     paused = false;
     *dbg << "Queue unpaused!\n";
 
-    mainwindow->UpdatePlayPauseButton();
+    mainwindow->UpdatePlayPauseTool();
 }
 
 void MidiDriver::ClearQueue(bool remove_noteoffs){

@@ -54,7 +54,7 @@ public:
     bool FlashTempoEnd();
 
     /**Sets title and icon for the play-pause button*/
-    void UpdatePlayPauseButton();
+    void UpdatePlayPauseTool();
 
     Gtk::SpinButton main_note;
     Gtk::SpinButton tempo_button;
@@ -73,7 +73,7 @@ private:
     void OnRemoveClicked();
     void OnCloneClicked();
     void OnEventsClicked();
-    void OnPauseButtonClicked();
+    void OnPlayPauseClicked();
     void OnSelectionChanged();
     void OnPassToggleClicked();
     bool OnKeyPress(GdkEventKey* event);
@@ -89,6 +89,7 @@ private:
   Glib::RefPtr<Gtk::UIManager> m_refUIManager;
   Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
 
+  Gtk::ScrolledWindow ScrolledWindow;
 
     Gtk::VBox main_vbox;
     Gtk::VBox vbox1;

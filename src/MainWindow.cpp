@@ -34,9 +34,11 @@ Glib::RefPtr< Gdk::Pixbuf > harmonySEQ_logo_48;
 MainWindow::MainWindow()
 {
     set_border_width(0);
+    //set_resizable(0);
     set_default_size(500,0);
+    set_size_request(500,-1);
+    set_resizable(0);
     UpdateTitle();
-            
     tempolabel.set_text(_("Tempo:"));
     mainnotelabel.set_text(_("Main Note:"));
     add(main_vbox);
@@ -56,7 +58,7 @@ MainWindow::MainWindow()
     m_refActionGroup->add(Gtk::Action::create("DuplicateSeq", Gtk::Stock::CONVERT, _("Duplicate"), _("Duplicates selected sequencer")), sigc::mem_fun(*this, &MainWindow::OnCloneClicked));
     m_refActionGroup->add(Gtk::Action::create("Events", Gtk::Stock::EXECUTE,_("Events"), _("Opens the events window")), sigc::mem_fun(*this, &MainWindow::OnEventsClicked));
     m_refActionGroup->add(Gtk::Action::create("About", Gtk::Stock::ABOUT), sigc::mem_fun(*this, &MainWindow::OnAboutMenuClicked));
-    m_refActionGroup->add(Gtk::Action::create("PlayPause", Gtk::Stock::MEDIA_PAUSE, _("Pause")), sigc::mem_fun(*this, &MainWindow::OnPauseButtonClicked));
+    m_refActionGroup->add(Gtk::Action::create("PlayPause", Gtk::Stock::MEDIA_PAUSE, _("Play/Pause"),_("Toggle play/pause")), sigc::mem_fun(*this, &MainWindow::OnPlayPauseClicked));
 
     m_refUIManager = Gtk::UIManager::create();
     m_refUIManager->insert_action_group(m_refActionGroup);
@@ -142,9 +144,11 @@ MainWindow::MainWindow()
     tempo_button.set_value(tempo);
     tempo_button.signal_value_changed().connect(sigc::mem_fun(*this, &MainWindow::TempoChanged));
 
-    UpdatePlayPauseButton();
+    UpdatePlayPauseTool();
 
-    vbox1.pack_start(m_TreeView, Gtk::PACK_SHRINK);
+    //ScrolledWindow.add(m_TreeView);
+    //ScrolledWindow.set_size_request(-1,-1);
+    vbox1.pack_start(m_TreeView,Gtk::PACK_EXPAND_PADDING);
     // <editor-fold defaultstate="collapsed" desc="tree">
     { //creating the tree model
         m_refTreeModel_sequencers = Gtk::ListStore::create(m_columns_sequencers);
@@ -277,7 +281,7 @@ MainWindow::~MainWindow()
 {
 
 }
-
+ 
 void MainWindow::UpdateTitle(){
     char temp[300];
     if (Files::file_name == ""){
@@ -568,7 +572,7 @@ void MainWindow::OnSelectionChanged(){
 
 }
 
-void MainWindow::UpdatePlayPauseButton(){
+void MainWindow::UpdatePlayPauseTool(){
     Gtk::Widget* pPlayPauseTool = m_refUIManager->get_widget("/ToolBar/PlayPauseTool");
     Gtk::ToolButton& PlayPauseTool = dynamic_cast<Gtk::ToolButton&> (*pPlayPauseTool);
     switch (midi->GetPaused()){
@@ -584,7 +588,7 @@ void MainWindow::UpdatePlayPauseButton(){
 
 }
 
-void MainWindow::OnPauseButtonClicked(){
+void MainWindow::OnPlayPauseClicked(){
     
      switch (midi->GetPaused()){
         case true:
