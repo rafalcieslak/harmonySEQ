@@ -92,16 +92,8 @@ private:
 
     Gtk::VBox main_vbox;
     Gtk::VBox vbox1;
-    Gtk::HBox hbox_up, hbox_down;
+    Gtk::HBox hbox_up;
     Gtk::Label tempolabel, mainnotelabel;
-    Gtk::Button button_add;
-    Gtk::Button button_remove;
-    Gtk::Button button_clone;
-    Gtk::Button button_events;
-
-    Gtk::Button play_pause_button;
-    Gtk::Image image_pause;
-    Gtk::Image image_play;
 };
 
 
