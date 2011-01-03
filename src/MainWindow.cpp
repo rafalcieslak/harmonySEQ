@@ -54,7 +54,7 @@ MainWindow::MainWindow()
     m_refActionGroup->add(Gtk::Action::create("AddSeq", Gtk::Stock::ADD, _("Add"),_("Adds a new seqencer")), sigc::mem_fun(*this, &MainWindow::OnAddSeqClicked));
     m_refActionGroup->add(Gtk::Action::create("RemoveSeq", Gtk::Stock::REMOVE, _("Remove"),_("Removes selected sequencer")), sigc::mem_fun(*this, &MainWindow::OnRemoveClicked));
     m_refActionGroup->add(Gtk::Action::create("DuplicateSeq", Gtk::Stock::CONVERT, _("Duplicate"), _("Duplicates selected sequencer")), sigc::mem_fun(*this, &MainWindow::OnCloneClicked));
-    m_refActionGroup->add(Gtk::Action::create("Events", Gtk::Stock::EXECUTE,_("Events window"), _("Opens the events window")), sigc::mem_fun(*this, &MainWindow::OnEventsClicked));
+    m_refActionGroup->add(Gtk::Action::create("Events", Gtk::Stock::EXECUTE,_("Events"), _("Opens the events window")), sigc::mem_fun(*this, &MainWindow::OnEventsClicked));
     m_refActionGroup->add(Gtk::Action::create("About", Gtk::Stock::ABOUT), sigc::mem_fun(*this, &MainWindow::OnAboutMenuClicked));
     m_refActionGroup->add(Gtk::Action::create("PlayPause", Gtk::Stock::MEDIA_PAUSE, _("Pause")), sigc::mem_fun(*this, &MainWindow::OnPauseButtonClicked));
 
@@ -88,7 +88,7 @@ MainWindow::MainWindow()
             "   <toolitem name='RemoveTool' action='RemoveSeq'/>"
             "   <toolitem name='DuplicateTool' action='DuplicateSeq'/>"
             "   <separator/>"
-            "   <toolitem action='Events'/>"
+            "   <toolitem name='EventsTool' action='Events'/>"
             "   <separator expand='true'/>"
             "   <toolitem name='PlayPauseTool' action='PlayPause'/>"
             "  </toolbar>"
@@ -118,6 +118,9 @@ MainWindow::MainWindow()
     Gtk::Widget* pPlayPauseTool = m_refUIManager->get_widget("/ToolBar/PlayPauseTool");
     Gtk::ToolItem& PlayPauseTool = dynamic_cast<Gtk::ToolItem&> (*pPlayPauseTool);
     PlayPauseTool.set_is_important(1); // will display text text to the icon
+    Gtk::Widget* pEventsTool = m_refUIManager->get_widget("/ToolBar/EventsTool");
+    Gtk::ToolItem& EventsTool = dynamic_cast<Gtk::ToolItem&> (*pEventsTool);
+    EventsTool.set_is_important(1); // will display text text to the icon
     // </editor-fold>
 
     main_vbox.pack_start(*pMenubar,Gtk::PACK_SHRINK);
