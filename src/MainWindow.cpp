@@ -35,9 +35,9 @@ MainWindow::MainWindow()
 {
     set_border_width(0);
     //set_resizable(0);
-    set_default_size(500,0);
-    set_size_request(500,-1);
-    set_resizable(0);
+    set_default_size(500,300);
+    set_size_request(500,300);
+    //set_resizable(0);
     UpdateTitle();
 
     tempolabel.set_text(_("Tempo:"));
@@ -128,7 +128,7 @@ MainWindow::MainWindow()
 
     main_vbox.pack_start(*pMenubar,Gtk::PACK_SHRINK);
     main_vbox.pack_start(*pToolbar,Gtk::PACK_SHRINK);
-    main_vbox.pack_start(vbox1,Gtk::PACK_SHRINK);
+    main_vbox.pack_start(vbox1);
     vbox1.set_border_width(5);
 
     vbox1.pack_start(hbox_up, Gtk::PACK_SHRINK);
@@ -147,9 +147,9 @@ MainWindow::MainWindow()
 
     UpdatePlayPauseTool();
 
-    //ScrolledWindow.add(m_TreeView);
-    //ScrolledWindow.set_size_request(-1,-1);
-    vbox1.pack_start(m_TreeView,Gtk::PACK_EXPAND_PADDING);
+    ScrolledWindow.add(m_TreeView);
+    ScrolledWindow.set_policy(Gtk::POLICY_NEVER,Gtk::POLICY_AUTOMATIC); //always hide the horisontal scroolbar, but the vertical show only when needed
+    vbox1.pack_start(ScrolledWindow); //will expand, no shrinking
     // <editor-fold defaultstate="collapsed" desc="tree">
     { //creating the tree model
         m_refTreeModel_sequencers = Gtk::ListStore::create(m_columns_sequencers);
