@@ -32,14 +32,14 @@ public:
 
 
 
-    /**Infinite loop, stopping when"running" is set to 0. Waits for any MIDI events on input.*/
+    /**Infinite loop, exiting when"running" variable is set to 0. Waits for any MIDI events on input, and calls ProcessInput() when something is on the input.*/
     void LoopWhileWaitingForInput();
 
-    /**Runs the queue. Called on startup.*/
+    /**Runs the queue. Called on startup.  Warning: It's not unpausing, unpausing is implemented in ContinueQueue().*/
     void StartQueue();
 
 
-    /**Stops playback*/
+    /**Stops playback - pauses the queue*/
     void PauseQueueImmediately(); 
 
     /**Stops playback on next bar. NOT YET IMPLEMENTED*/
@@ -52,7 +52,7 @@ public:
     void ContinueQueue();
 
 
-    /**This routine gets called every time the echo event is received. It puts next set of notes (lasting one bar) into the queue. */
+    /**This routine gets called every time the ECHO event is received. It puts next set of notes (one bar long) into the queue, and puts next ECHO event to harmonySEQ itself, so it gets called consequently. */
     void UpdateQueue(bool do_not_lock_threads = 0);
 
     /**Stops all notes and updates queue IMMIDIATELLY*/
@@ -77,13 +77,13 @@ public:
 
 
 private:
-    /**Alsa MIDI sequencer's handle*/
+    /**ALSA MIDI sequencer's handle*/
     snd_seq_t* seq_handle;
 
-    /**MIDI ports handles*/
+    /**ALSA MIDI ports handles*/
     int output_port,input_port;
 
-    /**MIDI queue handle*/
+    /**ALSA MIDI queue handle*/
     int queueid;
 
     /**True if the driver is working*/
@@ -101,7 +101,7 @@ private:
      * @parram ev an event to pass*/
     void PassEvent(snd_seq_event_t *ev);
 
-    /**Opens the sequencer MIDI ports*/
+    /**Opens the sequencer MIDI ports, activates the driver.*/
     void Open();
 
     /**Inits Queue*/
@@ -117,7 +117,7 @@ private:
     snd_seq_tick_time_t GetTick();
 
 
-    /**Called every time there are midi events on input, since this procedure processes them; no need to call it from anywhere else*/
+    /**Called every time there are MIDI events on input, this procedure processes them; no need to call it from anywhere else*/
     void ProcessInput();
 
 };
