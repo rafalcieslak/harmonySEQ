@@ -620,6 +620,12 @@ void MainWindow::OnMenuQuitClicked(){
 }
 
 void MainWindow::OnMenuNewClicked(){
+
+    if (Files::file_modified)
+        if (!Ask(_("The file has unsaved changes."), _("Are sure you want to loose them and open another file?"))) {
+            return;
+        }
+
     Files::file_name = "";
     
 
