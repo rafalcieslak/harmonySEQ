@@ -39,6 +39,7 @@ MainWindow::MainWindow()
     set_size_request(500,-1);
     set_resizable(0);
     UpdateTitle();
+
     tempolabel.set_text(_("Tempo:"));
     mainnotelabel.set_text(_("Main Note:"));
     add(main_vbox);
@@ -172,11 +173,11 @@ MainWindow::MainWindow()
         Gtk::CellRendererToggle& tgl2 = dynamic_cast<Gtk::CellRendererToggle&> (*cell);
         tgl2.signal_toggled().connect(mem_fun(*this, &MainWindow::OnApplyMainNoteToggleToggled));
         
-        col_count = m_TreeView.append_column(_("Chan"), m_columns_sequencers.col_channel);
-        col_count = m_TreeView.append_column(_("Pat"), m_columns_sequencers.col_pattern);
-        col_count = m_TreeView.append_column(_("Res"), m_columns_sequencers.col_res);
-        col_count = m_TreeView.append_column_numeric(_("Len"), m_columns_sequencers.col_len,"%g");
-        col_count = m_TreeView.append_column(_("Vol"), m_columns_sequencers.col_vol);
+        col_count = m_TreeView.append_column(_("Channel"), m_columns_sequencers.col_channel);
+        col_count = m_TreeView.append_column(_("Pattern"), m_columns_sequencers.col_pattern);
+        col_count = m_TreeView.append_column(_("Resolution"), m_columns_sequencers.col_res);
+        col_count = m_TreeView.append_column_numeric(_("Length"), m_columns_sequencers.col_len,"%g");
+        col_count = m_TreeView.append_column(_("Velocity"), m_columns_sequencers.col_vol);
 
 
         Gtk::TreeView::Column* pColumn;
