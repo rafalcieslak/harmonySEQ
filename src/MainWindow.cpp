@@ -286,6 +286,9 @@ MainWindow::~MainWindow()
 void MainWindow::UpdateTitle(){
     char temp[300];
     if (Files::file_name == ""){
+        if (Files::file_modified)
+           sprintf(temp, "harmonySEQ %s - %s [*]", VERSION,_("Untitled")) ;
+        else
            sprintf(temp, "harmonySEQ %s - %s", VERSION,_("Untitled")) ;
     }else{
         if (Files::file_modified)
