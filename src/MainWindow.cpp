@@ -648,12 +648,11 @@ void MainWindow::OnMenuNewClicked(){
 
 void MainWindow::OnMenuOpenClicked(){
     if(Files::file_modified)
-        if(!Ask(_("The file has unsaved changes."),_("Are sure you want to loose them and open another file?")))
+        if(!Ask(_("The file has unsaved changes."),_("Are sure you want to loose them?")))
         {
             return;
         }
     Files::LoadFileDialog();
-    Files::SetFileModified(0);
     //erasing smallers the treeview, but not the window.
     resize(2,2); //resizing to a tiny size, but the window won't get that small, it will be big enough to show all widgets.
 }
