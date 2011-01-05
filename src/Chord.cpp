@@ -60,14 +60,14 @@ int GUITAR_TABS_MINOR[12][6] = {
 };
 
 Chord::Chord(){
-    mode = TRIAD;
+    mode = CHORD_MODE_TRIAD;
     inversion = 0;
     triad_root = 0;
     guitar_root = 0;
-    guitar_mode = GUITAR_MAJOR;
-    triad_mode = TYPE_MAJOR;
+    guitar_mode = CHORD_GUITAR_MODE_MAJOR;
+    triad_mode = CHORD_TRIAD_MODE_MAJOR;
     octave = 0;
-
+    main_note = 60;
 }
 
 Chord::~Chord(){
@@ -77,20 +77,20 @@ void Chord::RecalcNotes(){
     *dbg<<"recalculating chord\n";
     int n1,n2,n3,base;
     switch (mode){
-        case CUSTOM:
+        case CHORD_MODE_CUSTOM:
 
             //well, in this case nothing is to be recalculated.
             break;
         case GUITAR:
-            if (guitar_mode == GUITAR_MAJOR){
+            if (guitar_mode == CHORD_GUITAR_MODE_MAJOR){
                 for(int x = 0; x < 6; x++)
                     notes[x]=STANDARD_GUITAR_TUNING[x] + GUITAR_TABS_MAJOR[guitar_root][x];
-            }else if (guitar_mode == GUITAR_MINOR){
+            }else if (guitar_mode == CHORD_GUITAR_MODE_MINOR){
                 for(int x = 0; x < 6; x++)
                     notes[x]=STANDARD_GUITAR_TUNING[x] + GUITAR_TABS_MINOR[guitar_root][x];
             }
             break;
-        case TRIAD:
+        case CHORD_MODE_TRIAD:
             base = 12*octave;
             n1 = base+triad_root;
             *dbg << "    base+triad_root  = " << n1 << ENDL;
@@ -123,7 +123,7 @@ int Chord::GetNote(int n){
 
 void Chord::SetNote(int note, int pitch){
     if (note > 5 || note < 0) return;
-    mode = CUSTOM;
+    mode = CHORD_MODE_CUSTOM;
     notes[note] = pitch;
     //RecalcNotes(); //well, in fact: not needed;
 }
@@ -195,7 +195,7 @@ int Chord::GetOctave(){
 void Chord::Set(const Chord& other){
     *dbg << "copying chord." << ENDL;
     mode = other.mode;
-    if (mode == CUSTOM) for (int x = 0 ; x < 6; x++) notes[x] = other.notes[x];
+    if (mode == CHORD_MODE_CUSTOM) for (int x = 0 ; x < 6; x++) notes[x] = other.notes[x];
     octave = other.octave;
     triad_root = other.triad_root;
     triad_mode = other.triad_mode;
@@ -210,17 +210,17 @@ Glib::ustring Chord::GetName(){
     char temp[100];
     Glib::ustring a;
     switch (mode){
-        case CUSTOM:
+        case CHORD_MODE_CUSTOM:
             sprintf(temp,_("Custom: %d, %d, %d, %d, %d, %d"),notes[0],notes[1],notes[2],notes[3],notes[4],notes[5]);
             break;
         case GUITAR:
-            if (guitar_mode == GUITAR_MAJOR){
+            if (guitar_mode == CHORD_GUITAR_MODE_MAJOR){
                 sprintf(temp,_("Guitar: %s major"),notemap.find(guitar_root)->second.c_str());
-            }else if (guitar_mode == GUITAR_MINOR){
+            }else if (guitar_mode == CHORD_GUITAR_MODE_MINOR){
                 sprintf(temp,_("Guitar: %s minor"),notemap.find(guitar_root)->second.c_str());
             }
             break;
-        case TRIAD:
+        case CHORD_MODE_TRIAD:
             if (triad_mode ==  TYPE_MAJOR){
                 sprintf(temp,_("Triad: %s major"),notemap.find(triad_root)->second.c_str());
             } else
@@ -230,7 +230,7 @@ Glib::ustring Chord::GetName(){
             if (triad_mode ==  TYPE_AUGMENTED){
                 sprintf(temp,_("Triad: %s augumented"),notemap.find(triad_root)->second.c_str());
             } else
-            if (triad_mode ==  TYPE_DIMINICHED){
+            if (triad_mode ==  CHORD_TRIAD_MODEDIMINICHED){
                 sprintf(temp,_("Triad: %s diminished"),notemap.find(triad_root)->second.c_str());
             }
             break;
@@ -251,7 +251,7 @@ std::vector<int> Chord::SaveToVector(){
     V.push_back(triad_mode);
     V.push_back(octave);
     V.push_back(inversion);
-    if (mode == CUSTOM) for (int x = 0; x < 6; x++) V.push_back(notes[x]);
+    if (mode == CHORD_MODE_CUSTOM) for (int x = 0; x < 6; x++) V.push_back(notes[x]);
     return V;
 }
 
@@ -265,5 +265,5 @@ void Chord::SetFromVector(std::vector<int>& V){
     triad_mode = V[4];
     octave = V[5];
     inversion = V[6];
-    if(mode == CUSTOM)for (int x = 0; x < 6; x++) notes[x] = V[7+x];
+    if(mode == CHORD_MODE_CUSTOM)for (int x = 0; x < 6; x++) notes[x] = V[7+x];
 }

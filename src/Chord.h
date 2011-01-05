@@ -30,23 +30,23 @@ public:
 
     /**Chord modes*/
     enum {
-        CUSTOM,
-        TRIAD,
-        GUITAR
+        CHORD_MODE_CUSTOM,
+        CHORD_MODE_TRIAD,
+        CHORD_MODE_GUITAR
     };
 
     /**Guitar chord modes*/
     enum {
-        GUITAR_MAJOR,
-        GUITAR_MINOR
+        CHORD_GUITAR_MODE_MAJOR,
+        CHORD_GUITAR_MODE_MINOR
     };
 
     /**Triad chord modes*/
     enum {
-        TYPE_MAJOR,
-        TYPE_MINOR,
-        TYPE_AUGMENTED,
-        TYPE_DIMINICHED
+        CHORD_TRIAD_MODE_MAJOR,
+        CHORD_TRIAD_MODE_MINOR,
+        CHORD_TRIAD_MODE_AUGMENTED,
+        CHORD_TRIAD_MODE_DIMINICHED
     };
     
     //The following have obvious names, they does not require to be commented
@@ -95,7 +95,11 @@ private:
     /**Notes are stored here so that they do not need to be recalculated every time.*/
     int notes[6];
 
-    
+    int main_note;
+    //states whether pitches are given relatively to the main note.
+    bool use_main_note;
+
+
     int mode;
 
     int guitar_mode;
