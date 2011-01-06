@@ -174,7 +174,7 @@ void MidiDriver::PauseQueueImmediately(){
     paused = true;
     *dbg << "Queue paused!\n";
     //Choose an icon/label for the toggle in the main window
-    mainwindow->UpdatePlayPauseButton();
+    mainwindow->UpdatePlayPauseTool();
 }
 
 void MidiDriver::PauseOnNextBar(){
@@ -229,8 +229,9 @@ void MidiDriver::ContinueQueue(){
     //Remember the state
     paused = false;
     *dbg << "Queue unpaused!\n";
+    
     //Choose an icon/label for the toggle in the main window
-    mainwindow->UpdatePlayPauseButton();
+    mainwindow->UpdatePlayPauseTool();
 }
 
 void MidiDriver::ClearQueue(bool remove_noteoffs){

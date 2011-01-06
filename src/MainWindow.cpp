@@ -34,13 +34,16 @@ Glib::RefPtr< Gdk::Pixbuf > harmonySEQ_logo_48;
 MainWindow::MainWindow()
 {
     set_border_width(0);
-    //set_default_size(300,500);
+    //set_resizable(0);
+    set_default_size(500,300);
+    set_size_request(500,300);
+    //set_resizable(0);
     UpdateTitle();
-            
+
     tempolabel.set_text(_("Tempo:"));
     add(main_vbox);
 
-    // <editor-fold defaultstate="collapsed" desc="menus creation and initialisation">
+    // <editor-fold defaultstate="collapsed" desc="menus and toolbar creation and initialisation">
     m_refActionGroup = Gtk::ActionGroup::create();
 
     m_refActionGroup->add(Gtk::Action::create("MenuFile",_("File")));
@@ -50,7 +53,12 @@ MainWindow::MainWindow()
     m_refActionGroup->add(Gtk::Action::create("FileSave", Gtk::Stock::SAVE), sigc::mem_fun(*this, &MainWindow::OnMenuSaveClicked));
     m_refActionGroup->add(Gtk::Action::create("FileSaveAs", Gtk::Stock::SAVE_AS), sigc::mem_fun(*this, &MainWindow::OnMenuSaveAsClicked));
     m_refActionGroup->add(Gtk::Action::create("FileQuit", Gtk::Stock::QUIT), sigc::mem_fun(*this, &MainWindow::OnMenuQuitClicked));
+    m_refActionGroup->add(Gtk::Action::create("AddSeq", Gtk::Stock::ADD, _("Add"),_("Adds a new seqencer")), sigc::mem_fun(*this, &MainWindow::OnAddSeqClicked));
+    m_refActionGroup->add(Gtk::Action::create("RemoveSeq", Gtk::Stock::REMOVE, _("Remove"),_("Removes selected sequencer")), sigc::mem_fun(*this, &MainWindow::OnRemoveClicked));
+    m_refActionGroup->add(Gtk::Action::create("DuplicateSeq", Gtk::Stock::CONVERT, _("Duplicate"), _("Duplicates selected sequencer")), sigc::mem_fun(*this, &MainWindow::OnCloneClicked));
+    m_refActionGroup->add(Gtk::Action::create("Events", Gtk::Stock::EXECUTE,_("Events"), _("Opens the events window")), sigc::mem_fun(*this, &MainWindow::OnEventsClicked));
     m_refActionGroup->add(Gtk::Action::create("About", Gtk::Stock::ABOUT), sigc::mem_fun(*this, &MainWindow::OnAboutMenuClicked));
+    m_refActionGroup->add(Gtk::Action::create("PlayPause", Gtk::Stock::MEDIA_PAUSE, _("Play/Pause"),_("Toggle play/pause")), sigc::mem_fun(*this, &MainWindow::OnPlayPauseClicked));
 
     m_refUIManager = Gtk::UIManager::create();
     m_refUIManager->insert_action_group(m_refActionGroup);
@@ -72,6 +80,20 @@ MainWindow::MainWindow()
             "      <menuitem action='About'/>"
             "    </menu>"
             "  </menubar>"
+            "  <toolbar name='ToolBar'>"
+            "   <toolitem action='FileNew'/>"
+            "   <toolitem action='FileOpen'/>"
+            "   <toolitem action='FileSave'/>"
+            "   <toolitem action='FileSaveAs'/>"
+            "   <separator/>"
+            "   <toolitem action='AddSeq'/>"
+            "   <toolitem name='RemoveTool' action='RemoveSeq'/>"
+            "   <toolitem name='DuplicateTool' action='DuplicateSeq'/>"
+            "   <separator/>"
+            "   <toolitem name='EventsTool' action='Events'/>"
+            "   <separator expand='true'/>"
+            "   <toolitem name='PlayPauseTool' action='PlayPause'/>"
+            "  </toolbar>"
             "</ui>";
 #ifdef GLIBMM_EXCEPTIONS_ENABLED
     try {
@@ -88,27 +110,43 @@ MainWindow::MainWindow()
 #endif //GLIBMM_EXCEPTIONS_ENABLED
 
 
-    Gtk::Widget* pMenubar = m_refUIManager->get_widget("/MenuBar"); // </editor-fold>
+    Gtk::Widget* pMenubar = m_refUIManager->get_widget("/MenuBar");
+    Gtk::Widget* pToolbar = m_refUIManager->get_widget("/ToolBar"); 
+
+    Gtk::Toolbar& Toolbar = dynamic_cast<Gtk::Toolbar&> (*pToolbar);
+    Toolbar.set_toolbar_style(Gtk::TOOLBAR_BOTH_HORIZ);
+    Toolbar.set_border_width(0);
+
+    Gtk::Widget* pRemoveTool = m_refUIManager->get_widget("/ToolBar/RemoveTool");
+    pRemoveTool->set_sensitive(0);
+    Gtk::Widget* pDuplicateTool = m_refUIManager->get_widget("/ToolBar/DuplicateTool");
+    pDuplicateTool->set_sensitive(0);
+    Gtk::Widget* pPlayPauseTool = m_refUIManager->get_widget("/ToolBar/PlayPauseTool");
+    Gtk::ToolItem& PlayPauseTool = dynamic_cast<Gtk::ToolItem&> (*pPlayPauseTool);
+    PlayPauseTool.set_is_important(1); // will display text text to the icon
+    Gtk::Widget* pEventsTool = m_refUIManager->get_widget("/ToolBar/EventsTool");
+    Gtk::ToolItem& EventsTool = dynamic_cast<Gtk::ToolItem&> (*pEventsTool);
+    EventsTool.set_is_important(1); // will display text text to the icon
+    // </editor-fold>
 
     main_vbox.pack_start(*pMenubar,Gtk::PACK_SHRINK);
-    main_vbox.pack_start(vbox1,Gtk::PACK_SHRINK);
+    main_vbox.pack_start(Toolbar,Gtk::PACK_SHRINK);
+    main_vbox.pack_start(vbox1);
     vbox1.set_border_width(5);
 
     vbox1.pack_start(hbox_up, Gtk::PACK_SHRINK);
-    hbox_up.pack_start(tempolabel);
+    hbox_up.pack_start(tempolabel, Gtk::PACK_SHRINK);
     hbox_up.pack_start(tempo_button, Gtk::PACK_SHRINK);
     tempo_button.set_range(30, 320);
     tempo_button.set_increments(1, 10);
     tempo_button.set_value(tempo);
     tempo_button.signal_value_changed().connect(sigc::mem_fun(*this, &MainWindow::TempoChanged));
-    hbox_up.pack_start(play_pause_button);
 
-    Gtk::Stock::lookup(Gtk::Stock::MEDIA_PAUSE,Gtk::ICON_SIZE_BUTTON,image_pause);
-    Gtk::Stock::lookup(Gtk::Stock::MEDIA_PLAY,Gtk::ICON_SIZE_BUTTON,image_play);
-    UpdatePlayPauseButton();
-    play_pause_button.signal_clicked().connect(mem_fun(*this,&MainWindow::OnPauseButtonClicked));
+    UpdatePlayPauseTool();
 
-    vbox1.pack_start(m_TreeView, Gtk::PACK_SHRINK);
+    ScrolledWindow.add(m_TreeView);
+    ScrolledWindow.set_policy(Gtk::POLICY_NEVER,Gtk::POLICY_AUTOMATIC); //always hide the horisontal scroolbar, but the vertical show only when needed
+    vbox1.pack_start(ScrolledWindow); //will expand, no shrinking
     // <editor-fold defaultstate="collapsed" desc="tree">
     { //creating the tree model
         m_refTreeModel_sequencers = Gtk::ListStore::create(m_columns_sequencers);
@@ -134,11 +172,11 @@ MainWindow::MainWindow()
         tgl2.signal_toggled().connect(mem_fun(*this, &MainWindow::OnApplyMainNoteToggleToggled));
         */
         
-        col_count = m_TreeView.append_column(_("Chan"), m_columns_sequencers.col_channel);
-        col_count = m_TreeView.append_column(_("Pat"), m_columns_sequencers.col_pattern);
-        col_count = m_TreeView.append_column(_("Res"), m_columns_sequencers.col_res);
-        col_count = m_TreeView.append_column_numeric(_("Len"), m_columns_sequencers.col_len,"%g");
-        col_count = m_TreeView.append_column(_("Vol"), m_columns_sequencers.col_vol);
+        col_count = m_TreeView.append_column(_("Channel"), m_columns_sequencers.col_channel);
+        col_count = m_TreeView.append_column(_("Pattern"), m_columns_sequencers.col_pattern);
+        col_count = m_TreeView.append_column(_("Resolution"), m_columns_sequencers.col_res);
+        col_count = m_TreeView.append_column_numeric(_("Length"), m_columns_sequencers.col_len,"%g");
+        col_count = m_TreeView.append_column(_("Velocity"), m_columns_sequencers.col_vol);
 
 
         Gtk::TreeView::Column* pColumn;
@@ -179,22 +217,6 @@ MainWindow::MainWindow()
 
     }// </editor-fold>
 
-    vbox1.pack_start(hbox_down, Gtk::PACK_SHRINK);
-    hbox_down.pack_end(button_add, Gtk::PACK_SHRINK);
-    hbox_down.pack_end(button_clone, Gtk::PACK_SHRINK);
-    hbox_down.pack_end(button_remove, Gtk::PACK_SHRINK);
-    hbox_down.pack_start(button_events, Gtk::PACK_SHRINK);
-    button_add.set_label(_("Add"));
-    button_add.signal_clicked().connect(mem_fun(*this, &MainWindow::OnButtonAddClicked));
-    button_remove.set_label(_("Remove"));
-    button_remove.signal_clicked().connect(mem_fun(*this, &MainWindow::OnRemoveClicked));
-    button_remove.set_sensitive(0);
-    button_clone.set_label(_("Clone"));
-    button_clone.signal_clicked().connect(mem_fun(*this, &MainWindow::OnCloneClicked));
-    button_clone.set_sensitive(0);
-    button_events.set_label(_("Events"));
-    button_events.signal_clicked().connect(mem_fun(*this, &MainWindow::OnEventsClicked));
-
     vbox1.pack_start(pass_toggle,Gtk::PACK_SHRINK);
     pass_toggle.set_label(_("Pass MIDI events"));
     pass_toggle.set_active(passing_midi);
@@ -209,7 +231,6 @@ MainWindow::MainWindow()
 
 
     show_all_children(1);
-    play_pause_button.get_image()->show();
 
     // <editor-fold defaultstate="collapsed" desc="loading logos">
     //loading logo
@@ -247,7 +268,7 @@ MainWindow::~MainWindow()
 {
 
 }
-
+ 
 void MainWindow::UpdateTitle(){
     char temp[300];
     if (Files::file_name == ""){
@@ -441,7 +462,7 @@ void MainWindow::OnRemoveClicked(){
     Files::SetFileModified(1);
 }
 
-void MainWindow::OnButtonAddClicked(){
+void MainWindow::OnAddSeqClicked(){
 
     Gtk::TreeModel::RowReference rowref = spawn_sequencer();
 
@@ -506,34 +527,37 @@ void MainWindow::OnSelectionChanged(){
     Gtk::TreeModel::iterator iter = m_TreeView.get_selection()->get_selected();
     if(iter){
         //something is selected
-        button_remove.set_sensitive(1);
-        button_clone.set_sensitive(1);
-    }else{
+        Gtk::Widget* pRemoveTool = m_refUIManager->get_widget("/ToolBar/RemoveTool");
+        pRemoveTool->set_sensitive(1);
+        Gtk::Widget* pDuplicateTool = m_refUIManager->get_widget("/ToolBar/DuplicateTool");
+        pDuplicateTool->set_sensitive(1);
+    } else {
         //selection is empty
-        button_remove.set_sensitive(0);
-        button_clone.set_sensitive(0);
-
+        Gtk::Widget* pRemoveTool = m_refUIManager->get_widget("/ToolBar/RemoveTool");
+        pRemoveTool->set_sensitive(0);
+        Gtk::Widget* pDuplicateTool = m_refUIManager->get_widget("/ToolBar/DuplicateTool");
+        pDuplicateTool->set_sensitive(0);
     }
 
 }
 
-void MainWindow::UpdatePlayPauseButton(){
+void MainWindow::UpdatePlayPauseTool(){
+    Gtk::Widget* pPlayPauseTool = m_refUIManager->get_widget("/ToolBar/PlayPauseTool");
+    Gtk::ToolButton& PlayPauseTool = dynamic_cast<Gtk::ToolButton&> (*pPlayPauseTool);
     switch (midi->GetPaused()){
         case true:
-            play_pause_button.set_label(_("Play"));
-            play_pause_button.set_image(image_play);
-            play_pause_button.get_image()->show();
+            PlayPauseTool.set_label(_("Play"));
+            PlayPauseTool.set_stock_id(Gtk::Stock::MEDIA_PLAY);
             break;
         case false:
-            play_pause_button.set_label(_("Pause"));
-            play_pause_button.set_image(image_pause);
-            play_pause_button.get_image()->show();
+            PlayPauseTool.set_label(_("Pause"));
+            PlayPauseTool.set_stock_id(Gtk::Stock::MEDIA_PAUSE);
             break;
     }
 
 }
 
-void MainWindow::OnPauseButtonClicked(){
+void MainWindow::OnPlayPauseClicked(){
     
      switch (midi->GetPaused()){
         case true:

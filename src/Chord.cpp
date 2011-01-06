@@ -188,32 +188,39 @@ int Chord::GetBaseOctave(){
 }
 
 void Chord::SetBaseNote(int n){
-
+    base_note = n;
+    NoteAndOctaveToBase();
+    RecalcNotes();
 }
 int Chord::GetBaseNote(){
-
+    return base_note;
 }
 
 void Chord::SetBase(int n){
-
+    base = n;
+    BaseToOctaveAndNote();
+    RecalcNotes();
 }
 int Chord::GetBase(){
-
+    return base;
 }
 
 void Chord::SetBaseUse(bool use){
-
+    base_use = use;
+    //no need to recalc. base_use is checked on GetNote();
 }
 bool Chord::GetBaseUse(){
-
+    return base_use;
 }
 
 void Chord::BaseToOctaveAndNote(){
-
+    int oct = base/12;
+    base_octave = oct-5;
+    base_note = base - (base_octave+5)*12;
 }
 
 void Chord::NoteAndOctaveToBase(){
-    
+    base = (base_octave+5)*12+base_note;
 }
 
 void Chord::Set(const Chord& other){

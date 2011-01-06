@@ -240,13 +240,13 @@ bool LoadFile(Glib::ustring file){
             Info(temp);
             return 1;
         }
-    }catch(Glib::Error error){
+    }catch(Glib::Error e){
         //Exception cought. So can even tell what's wrong (usually some file-related problem, not a problem which it's contains).
         sprintf(temp, _("ERROR - error while trying to read file '%s': "), file.c_str());
         *err << temp;
-        *err << error.what();
+        *err << e.what();
         *err << ENDL;
-        Info(temp,error.what());
+        Info(temp,e.what());
         return 1;
     }
 
@@ -480,21 +480,21 @@ bool LoadFile(Glib::ustring file){
         
 
     //Only exception handles are left...
-    }catch(Glib::KeyFileError error){
+    }catch(Glib::KeyFileError e){
         //KeyFile error means some trouble with data in the file. Missing key, wrong format, wrong characters, all these goes here.
         sprintf(temp, _("ERROR - Glib::KeyFile error while processing file '%s': "), file.c_str());
         *err << temp;
-        *err << error.what();
+        *err << e.what();
         *err << ENDL;
-        Info(temp,error.what());
+        Info(temp,e.what());
         return 1;
-    }catch(Glib::Error error){
+    }catch(Glib::Error e){
         //Some other strange file-related errors are cought here.
         sprintf(temp, _("ERROR - unknown error while processing file '%s': "), file.c_str());
         *err << temp;
-        *err << error.what();
+        *err << e.what();
         *err << ENDL;
-        Info(temp,error.what());
+        Info(temp,e.what());
         return 1;
     }
     return 0;
