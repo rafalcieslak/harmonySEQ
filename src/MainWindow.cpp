@@ -131,7 +131,7 @@ MainWindow::MainWindow()
     // </editor-fold>
 
     main_vbox.pack_start(*pMenubar,Gtk::PACK_SHRINK);
-    main_vbox.pack_start(*pToolbar,Gtk::PACK_SHRINK);
+    main_vbox.pack_start(Toolbar,Gtk::PACK_SHRINK);
     main_vbox.pack_start(vbox1);
     vbox1.set_border_width(5);
 
