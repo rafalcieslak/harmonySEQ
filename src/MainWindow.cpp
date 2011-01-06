@@ -114,6 +114,10 @@ MainWindow::MainWindow()
     Gtk::Widget* pMenubar = m_refUIManager->get_widget("/MenuBar");
     Gtk::Widget* pToolbar = m_refUIManager->get_widget("/ToolBar"); 
 
+    Gtk::Toolbar& Toolbar = dynamic_cast<Gtk::Toolbar&> (*pToolbar);
+    Toolbar.set_toolbar_style(Gtk::TOOLBAR_BOTH_HORIZ);
+    Toolbar.set_border_width(0);
+
     Gtk::Widget* pRemoveTool = m_refUIManager->get_widget("/ToolBar/RemoveTool");
     pRemoveTool->set_sensitive(0);
     Gtk::Widget* pDuplicateTool = m_refUIManager->get_widget("/ToolBar/DuplicateTool");
