@@ -123,6 +123,7 @@ extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_Notes;
 extern ModelColumns_Universal_IDandNAME m_columns_IdAndName;
 extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_TriadModes;
 extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_ChordGuitarModes;
+extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_ChordTypes;
 #endif
 
 /**Init - tree models*/
@@ -133,6 +134,7 @@ void InitActionTypesTreeModel();
 void InitNotesTreeModel();
 void InitTriadModesTreeModel();
 void InitChordGuitarModesTreeModel();
+void InitChordTypesTreeModel();
 void InitAllTreeModels();
 
 

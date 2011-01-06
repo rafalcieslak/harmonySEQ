@@ -28,11 +28,11 @@ public:
     virtual ~Chord();
 
 
-    /**Chord modes*/
+    /**Chord types*/
     enum {
-        CHORD_MODE_CUSTOM,
-        CHORD_MODE_TRIAD,
-        CHORD_MODE_GUITAR
+        CHORD_TYPE_CUSTOM,
+        CHORD_TYPE_TRIAD,
+        CHORD_TYPE_GUITAR
     };
 
     /**Guitar chord modes*/

@@ -39,38 +39,43 @@ public:
     sigc::signal<void> on_changed;
 private:
     void UpdateNotes();
-    void OnNoteChanged(int n);
-    void OnRadioCustomToggled();
-    void OnRadioGuitarToggled();
-    void OnRadioTriadToggled();
-    void OnGuitarRootChanged();
-    void OnTriadRootChanged();
-    void OnTriadModeChanged();
+    void UpdateWhatToShowAndWhatIsSensitive();
+    void OnTypeChanged();
     void OnGuitarModeChanged();
-    void OnOctaveChanged();
+    void OnTriadModeChanged();
+    void OnRootChanged();
+    void OnBaseNoteChanged();
+    void OnBaseOctaveChanged();
+    void OnInversionChanged();
+    void OnBaseChanged();
+    void OnNoteChanged(int n);
 
     /**Flag disabling reaction on signals, used to set data in widgets without reacting (react only if it was the user that changes the data)*/
     bool we_are_copying_note_values_from_chord_so_do_not_handle_the_signals;
 
     Gtk::VBox MainBox;
 
-    Gtk::HBox line_guitar;
-    Gtk::HBox line_triad;
-    Gtk::HBox line_custom;
-    Gtk::HBox line_custom2;
+    Gtk::HBox line1;
+    Gtk::HBox line2;
+    Gtk::HBox line3;
 
-    Gtk::Label octave_label;
-
-    Gtk::RadioButton radio_guitar;
-    Gtk::RadioButton radio_triad;
-    Gtk::RadioButton radio_custom;
-    Gtk::SpinButton* note_buttons[6];
-
-    Gtk::ComboBox combo_guitar_note;
-    Gtk::ComboBox combo_triad_note;
+    Gtk::ComboBox combo_type;
+    Gtk::ComboBox combo_root;
     Gtk::ComboBox combo_guitar_mode;
     Gtk::ComboBox combo_triad_mode;
+    Gtk::Label inversion_label;
+    Gtk::SpinButton inversion;
+
+    Gtk::CheckButton use_base;
+
+    Gtk::Label octave_label;
     Gtk::SpinButton octave;
+    Gtk::Label note_label;
+    Gtk::ComboBox combo_note;
+    Gtk::Label eq_label;
+    Gtk::SpinButton base;
+
+    Gtk::SpinButton* note_buttons[6];
 
     Gtk::Frame frame;
 };

@@ -38,6 +38,7 @@ Glib::RefPtr<Gtk::ListStore> m_refTreeModel_Notes;
 ModelColumns_Universal_IDandNAME m_columns_IdAndName;
 Glib::RefPtr<Gtk::ListStore> m_refTreeModel_TriadModes;
 Glib::RefPtr<Gtk::ListStore> m_refTreeModel_ChordGuitarModes;
+Glib::RefPtr<Gtk::ListStore> m_refTreeModel_ChordTypes;
 
 void InitEventTypesTreeModel(){
 
@@ -193,6 +194,21 @@ void InitChordGuitarModesTreeModel(){
     
 }
 
+void InitChordTypesTreeModel(){
+    m_refTreeModel_ChordTypes = Gtk::ListStore::create(m_columns_IdAndName);
+    Gtk::TreeModel::Row row = *(m_refTreeModel_ChordTypes->append());
+    row[m_columns_IdAndName.id] = Chord::CHORD_TYPE_CUSTOM;
+    row[m_columns_IdAndName.name] = _("Custom");
+    row = *(m_refTreeModel_ChordTypes->append());
+    row[m_columns_IdAndName.id] = Chord::CHORD_TYPE_TRIAD;
+    row[m_columns_IdAndName.name] = _("Triad");
+    row = *(m_refTreeModel_ChordTypes->append());
+    row[m_columns_IdAndName.id] = Chord::CHORD_TYPE_GUITAR;
+    row[m_columns_IdAndName.name] = _("Guitar");
+
+
+}
+
 void InitAllTreeModels(){
     InitEventTypesTreeModel();
     InitActionTypesTreeModel();
@@ -200,6 +216,7 @@ void InitAllTreeModels(){
     InitChannelsTreeModel();
     InitTriadModesTreeModel();
     InitChordGuitarModesTreeModel();
+    InitChordTypesTreeModel();
     InitNotesTreeModel();
 }
 
