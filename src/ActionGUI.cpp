@@ -44,7 +44,6 @@ ActionGUI::ActionGUI(Action *prt):
     main_box.pack_start(line_type);
     main_box.pack_start(line_seq);
     main_box.pack_start(line_on_off_toggle);
-    main_box.pack_start(line_note);
     main_box.pack_start(line_tempo);
     main_box.pack_start(line_volume);
     main_box.pack_start(line_pattern);
@@ -57,7 +56,6 @@ ActionGUI::ActionGUI(Action *prt):
 
     line_type.pack_start(label_type,Gtk::PACK_SHRINK);
     line_seq.pack_start(label_seq,Gtk::PACK_SHRINK);
-    line_note.pack_start(label_note,Gtk::PACK_SHRINK);
     line_tempo.pack_start(label_tempo,Gtk::PACK_SHRINK);
     line_volume.pack_start(label_volume,Gtk::PACK_SHRINK);
     line_pattern.pack_start(label_pattern,Gtk::PACK_SHRINK);
@@ -88,15 +86,11 @@ ActionGUI::ActionGUI(Action *prt):
 
     line_type.pack_start(Types_combo,Gtk::PACK_SHRINK);
     line_seq.pack_start(Seqs_combo,Gtk::PACK_SHRINK);
-    line_note.pack_start(note_button,Gtk::PACK_SHRINK);
     line_pattern.pack_start(pattern_button,Gtk::PACK_SHRINK);
     line_tempo.pack_start(tempo_button,Gtk::PACK_SHRINK);
     line_volume.pack_start(vol_button,Gtk::PACK_SHRINK);
     line_chord.pack_start(chordwidget);
 
-    note_button.set_range(0.0,127.0);
-    note_button.set_increments(1.0,12.0);
-    note_button.signal_value_changed().connect(mem_fun(*this,&ActionGUI::OnNoteChanged));
     notenr_button.set_range(1.0,6.0);
     notenr_button.set_increments(1.0,2.0);
     notenr_button.signal_value_changed().connect(mem_fun(*this,&ActionGUI::OnNoteNrChanged));
@@ -118,7 +112,6 @@ ActionGUI::ActionGUI(Action *prt):
     label_type.set_text(_("Type:"));
     label_seq.set_text(_("Sequencer:"));
     label_tempo.set_text(_("Tempo:"));
-    label_note.set_text(_("Note:"));
     label_volume.set_text(_("Volume:"));
     label_note_nr.set_text(_("Set note "));
     label_note_seq.set_text(_(" to: "));
@@ -209,8 +202,6 @@ void ActionGUI::UpdateValues(){
             SetSeqCombo(parent->args[1]);
             pattern_button.set_value(parent->args[2]);
             break;
-        case Action::MAINOTE_SET:
-            note_button.set_value(parent->args[1]);
             break;
         case Action::TEMPO_SET:
             tempo_button.set_value(parent->args[1]);
@@ -257,7 +248,6 @@ void ActionGUI::ChangeVisibleLines(){
 
     //Hide all, and show required ones.
     line_seq.hide();
-    line_note.hide();
     line_tempo.hide();
     line_volume.hide();
     line_set_one_note.hide();
@@ -292,9 +282,6 @@ void ActionGUI::ChangeVisibleLines(){
         case Action::SEQ_CHANGE_CHORD:
             line_seq.show();
             line_chord.show();
-            break;
-        case Action::MAINOTE_SET:
-            line_note.show();
             break;
         case Action::TEMPO_SET:
             line_tempo.show();
@@ -358,9 +345,6 @@ void ActionGUI::InitType(){
             parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
             pattern_button.set_value(0.0);
             break;
-        case Action::MAINOTE_SET:
-            note_button.set_value(60.0);
-            break;
         case Action::TEMPO_SET:
             tempo_button.set_value(120.0);
             break;
@@ -379,17 +363,6 @@ void ActionGUI::InitType(){
 
 }
 
-void ActionGUI::OnNoteChanged(){
-
-    if(parent->type == Action::MAINOTE_SET){
-        parent->args[1] = note_button.get_value();
-    }else *err << _("Error: note has changed, while action is not note-type.") << ENDL;
-
-    label_preview.set_text(parent->GetLabel());
-    eventswindow->UpdateRow(parent->row_in_event_window);
-
-    Files::SetFileModified(1);
-}
 
 void ActionGUI::OnTempoChanged(){
 

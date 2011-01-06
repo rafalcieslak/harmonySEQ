@@ -318,8 +318,6 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                         if(!(seq->GetActivePatternNote(x,C))) continue;
                         //Get the pitch of that note.
                         int pitch = seq->GetNoteOfChord(C);
-                        //If this sequencer uses pitches relatively to the main note, add main note to the pitch
-                        if (seq->GetApplyMainNote()) pitch += mainnote;
                         *dbg << "outputting note " << pitch << ",\n";
                         //Create a new event (clear it)...
                         snd_seq_ev_clear(&ev);
@@ -360,8 +358,6 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                     if (!(seq->GetActivePatternNote(currnote, C))) continue;
                     //Get the pitch of that note.
                     int note = seq->GetNoteOfChord(C);
-                    //If this sequencer uses pitches relatively to the main note, add main note to the pitch
-                    if (seq->GetApplyMainNote()) note += mainnote;
                     //Create a new event (clear it)...
                     snd_seq_ev_clear(&ev);
                     //Fill it with note data

@@ -91,7 +91,6 @@ Sequencer::Sequencer(const Sequencer *orig) {
     patterns = orig->patterns;
     active_pattern = orig->active_pattern;
     channel = orig->channel;
-    apply_mainnote = orig->apply_mainnote;
     length = orig->length;
     volume = orig->volume;
     gui_window = new SequencerWindow(this);
@@ -105,7 +104,6 @@ Sequencer::~Sequencer() {
 void Sequencer::Init(){
 
     on = false;
-    apply_mainnote = true;
     active_pattern = 0;
     channel = 1;
     length = 1;
@@ -169,8 +167,6 @@ void Sequencer::SetResolution(int res){
 int Sequencer::GetNoteOfChord(int n){return chord.GetNote(n);}
 void Sequencer::SetOn(bool m){on = m;play_once_phase=0;gui_window->tgl_mute.set_active(m);}
 bool Sequencer::GetOn(){return on;}
-void Sequencer::SetApplyMainNote(bool a){apply_mainnote = a;}
-bool Sequencer::GetApplyMainNote(){return apply_mainnote;}
 void Sequencer::SetChannel(int ch){channel = ch;gui_window->channel_button.set_value((double)ch);}
 int Sequencer::GetChannel(){return channel;}
 void Sequencer::SetName(Glib::ustring nm){name = nm;gui_window->set_title(nm);}

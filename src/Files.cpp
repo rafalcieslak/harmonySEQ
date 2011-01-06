@@ -85,7 +85,8 @@ void SaveToFile(Glib::ustring filename){
     kf.set_integer("harmonySEQ","versionB",VERSION_B);
     kf.set_integer("harmonySEQ","versionC",VERSION_C);
     kf.set_double(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_TEMPO,tempo);
-    kf.set_integer(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_MAINNOTE,mainnote);
+    //This is depracated
+    //kf.set_integer(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_MAINNOTE,mainnote);
     kf.set_integer(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_SEQ_NUM,sequencers.size());
     kf.set_integer(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_EVENTS_NUM,events.size());
 
@@ -99,7 +100,8 @@ void SaveToFile(Glib::ustring filename){
         kf.set_string(temp,FILE_KEY_SEQ_NAME,sequencers[x]->GetName());
         kf.set_boolean(temp,FILE_KEY_SEQ_ON,sequencers[x]->GetOn());
         kf.set_integer(temp,FILE_KEY_SEQ_CHANNEL,sequencers[x]->GetChannel());
-        kf.set_boolean(temp,FILE_KEY_SEQ_APPLY_MAIN_NOTE,sequencers[x]->GetApplyMainNote());
+        //This is depracated
+        //kf.set_boolean(temp,FILE_KEY_SEQ_APPLY_MAIN_NOTE,sequencers[x]->GetApplyMainNote());
         kf.set_integer(temp,FILE_KEY_SEQ_VOLUME,sequencers[x]->GetVolume());
         kf.set_integer(temp,FILE_KEY_SEQ_RESOLUTION,sequencers[x]->resolution);
         kf.set_double(temp,FILE_KEY_SEQ_LENGTH,sequencers[x]->length);
@@ -214,7 +216,6 @@ void LoadFileDialog(){
 
     //Some things that must be done to update the GUI fully.
     mainwindow->InitTreeData();
-    mainwindow->main_note.set_value(mainnote);
     mainwindow->tempo_button.set_value(tempo);
     eventswindow->InitTreeData();
 }
@@ -283,7 +284,8 @@ bool LoadFile(Glib::ustring file){
 
         //Read some basic data...
         tempo = kf.get_double(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_TEMPO);
-        mainnote = kf.get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_MAINNOTE);
+        //TODO applay this main note to all chords
+        int mainnote = kf.get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_MAINNOTE);
         number = kf.get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_SEQ_NUM);
 
         //Get rid of any seqeuncers.
@@ -308,7 +310,8 @@ bool LoadFile(Glib::ustring file){
             sequencers[x]->SetName(kf.get_string(temp, FILE_KEY_SEQ_NAME));
             sequencers[x]->SetOn(kf.get_boolean(temp, FILE_KEY_SEQ_ON));
             sequencers[x]->SetChannel(kf.get_integer(temp, FILE_KEY_SEQ_CHANNEL));
-            sequencers[x]->SetApplyMainNote(kf.get_boolean(temp, FILE_KEY_SEQ_APPLY_MAIN_NOTE));
+            //TOTO apply this to sequencer's chord
+            //sequencers[x]->SetApplyMainNote(kf.get_boolean(temp, FILE_KEY_SEQ_APPLY_MAIN_NOTE));
             sequencers[x]->resolution = kf.get_integer(temp, FILE_KEY_SEQ_RESOLUTION);
             sequencers[x]->length = kf.get_double(temp, FILE_KEY_SEQ_LENGTH);
 

@@ -43,8 +43,6 @@ public:
     /**Adds a single row, when a new sequencer is spawned (and return a RowReference, so that the sequencer will know where is it's row)*/
     Gtk::TreeModel::RowReference AddSequencerRow(int n);
     
-    /**Called when user changed main note*/
-    void MainNoteChanged();
     /**Called when user changed tempo*/
     void TempoChanged();
     
@@ -56,7 +54,6 @@ public:
     /**Sets title and icon for the play-pause button*/
     void UpdatePlayPauseButton();
 
-    Gtk::SpinButton main_note;
     Gtk::SpinButton tempo_button;
     Gtk::CheckButton pass_toggle;
 private:
@@ -65,7 +62,6 @@ private:
     void OnTreeviewRowActivated(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column);
      /**Reacts on sequencer settings changes from main window*/
     void OnMutedToggleToggled(const Glib::ustring& path);
-    void OnApplyMainNoteToggleToggled(const Glib::ustring& path);
     void OnNameEdited(const Glib::ustring& path,const Glib::ustring& newtext);
 
     
@@ -93,7 +89,7 @@ private:
     Gtk::VBox main_vbox;
     Gtk::VBox vbox1;
     Gtk::HBox hbox_up, hbox_down;
-    Gtk::Label tempolabel, mainnotelabel;
+    Gtk::Label tempolabel;
     Gtk::Button button_add;
     Gtk::Button button_remove;
     Gtk::Button button_clone;

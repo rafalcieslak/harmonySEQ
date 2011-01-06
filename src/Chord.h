@@ -54,14 +54,11 @@ public:
     int GetNote(int n);
     void SetNote(int note, int pitch);
 
-    int GetMode();
-    void SetMode(int n);
+    int GetType();
+    void SetType(int n);
 
-    int GetTriadRoot();
-    void SetTriadRoot(int pitch);
-
-    int GetGuitarRoot();
-    void SetGuitarRoot(int pitch);
+    int GetRoot();
+    void SetRoot(int pitch);
 
     int GetTriadMode();
     void SetTriadMode(int n);
@@ -72,15 +69,26 @@ public:
     void SetInversion(int n);
     int GetInversion();
     
-    void SetOctave(int n);
-    int GetOctave();
+    void SetBaseOctave(int n);
+    int GetBaseOctave();
 
+    void SetBaseNote(int n);
+    int GetBaseNote();
+
+    void SetBase(int n);
+    int GetBase();
+
+    void SetBaseUse(bool use);
+    bool GetBaseUse();
+    
    /**Copies all data from another chord (fe. from an action)*/
    void Set(const Chord& other);
 
 
    /**Load chord settings from vector. Should have following format: mode, guitar_root, guitar_note, triad_root,triad_note,octave,inversion,notes(6)(if custom).*/
    void SetFromVector(std::vector<int> &V);
+   /**Load chord settings from vector. Should have following format: mode, guitar_root, guitar_note, triad_root,triad_note,octave,inversion,notes(6)(if custom).*/
+   void SetFromVector_OLD_FILE_PRE_0_14(std::vector<int> &V);
 
    /**Saves all chord settings to a vector. Should have following format: mode, guitar_root, guitar_note, triad_root,triad_note,octave,inversion,notes(6)(if custom).*/
    std::vector<int> SaveToVector();
@@ -92,25 +100,26 @@ private:
     /**Recalculates notes (given the modes, roots etc) and stores them to notes array.*/
     void RecalcNotes();
 
+    void BaseToOctaveAndNote();
+    void NoteAndOctaveToBase();
     /**Notes are stored here so that they do not need to be recalculated every time.*/
     int notes[6];
 
-    int main_note;
-    //states whether pitches are given relatively to the main note.
-    bool use_main_note;
+    int type;
 
+    int base;
+    int base_octave;
+    int base_note;
+    //states whether pitches are given relatively to the base note.
+    bool base_use;
 
-    int mode;
+    int root;
 
-    int guitar_mode;
-    int triad_mode;
-
-    int triad_root;
-    int guitar_root;
+    int mode_guitar;
+    int mode_triad;
 
     int inversion;
 
-    int octave;
 };
 
 #endif	/* CHORD_H */

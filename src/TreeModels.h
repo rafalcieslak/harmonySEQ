@@ -30,7 +30,6 @@ public:
         add(col_ID);
         add(col_name);
         add(col_muted);
-        add(col_apply_mainnote);
         add(col_channel);
         add(col_pattern);
         add(col_res);
@@ -41,7 +40,6 @@ public:
     Gtk::TreeModelColumn<int> col_ID;
     Gtk::TreeModelColumn<Glib::ustring> col_name;
     Gtk::TreeModelColumn<bool> col_muted;
-    Gtk::TreeModelColumn<bool> col_apply_mainnote;
     Gtk::TreeModelColumn<int> col_channel;
     Gtk::TreeModelColumn<int> col_pattern;
     Gtk::TreeModelColumn<int> col_res;

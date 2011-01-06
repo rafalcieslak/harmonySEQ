@@ -81,9 +81,6 @@ void InitActionTypesTreeModel(){
     row[m_columns_action_types.type] = Action::SEQ_CHANGE_PATTERN;
     row[m_columns_action_types.label] = _("Sequencer/Set active pattern");
     row = *(m_refTreeModel_ActionTypes->append());
-    row[m_columns_action_types.type] = Action::MAINOTE_SET;
-    row[m_columns_action_types.label] = _("Set main note");
-    row = *(m_refTreeModel_ActionTypes->append());
     row[m_columns_action_types.type] = Action::TEMPO_SET;
     row[m_columns_action_types.label] = _("Set tempo");
     row = *(m_refTreeModel_ActionTypes->append());
