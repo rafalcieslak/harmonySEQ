@@ -99,28 +99,46 @@ void Chord::RecalcNotes(){
             else n3 = n2+3;
 
 
-            //as for now, we ignore the inversion, will be implemented later.
 
-            notes[0] = n1;
-            notes[3] = n1+12;
-            notes[1] = n2;
-            notes[4] = n2+12;
-            notes[2] = n3;
-            notes[5] = n3+12;
-
+            if (inversion == 0) {
+                notes[0] = n1;
+                notes[1] = n2;
+                notes[2] = n3;
+                notes[3] = n1 + 12;
+                notes[4] = n2 + 12;
+                notes[5] = n3 + 12;
+            }else if (inversion == 1){
+                notes[0] = n3 - 12;
+                notes[1] = n1;
+                notes[2] = n2;
+                notes[3] = n3;
+                notes[4] = n1 + 12;
+                notes[5] = n2 + 12;
+            }else if (inversion == 2){
+                notes[0] = n2 - 12;
+                notes[1] = n3 - 12;
+                notes[2] = n1;
+                notes[3] = n2;
+                notes[4] = n3;
+                notes[5] = n1 + 12;
+            }
 
             break;
     }
 
 }
 
-int Chord::GetNote(int n){
+int Chord::GetNotePlusBasenote(int n){
     if (n > 5 || n < 0) return 0;
     if (base_use)
         return notes[n] + base;
     else
         return notes[n];
+}
 
+int Chord::GetNote(int n){
+    if (n > 5 || n < 0) return 0;
+    return notes[n];
 }
 
 void Chord::SetNote(int note, int pitch){
@@ -230,7 +248,9 @@ void Chord::Set(const Chord& other){
     *dbg << "copying chord." << ENDL;
     type = other.type;
     if (type == CHORD_TYPE_CUSTOM) for (int x = 0 ; x < 6; x++) notes[x] = other.notes[x];
-    base_octave = other.base_octave;
+    base = other.base;
+    base_use = other.base_use;
+    BaseToOctaveAndNote();
     mode_triad = other.mode_triad;
     mode_guitar = other.mode_guitar;
     root = other.root;

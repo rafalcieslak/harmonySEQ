@@ -57,11 +57,10 @@ ChordWidget::ChordWidget(Chord* associated_chord){
     combo_note.set_active(chord->GetBaseNote());
     combo_guitar_mode.set_active(chord->GetGuitarMode());
     combo_triad_mode.set_active(chord->GetTriadMode());
-
-    line1.pack_start(combo_type,Gtk::PACK_SHRINK);
-    line1.pack_start(combo_root,Gtk::PACK_SHRINK);
-    line1.pack_start(combo_guitar_mode,Gtk::PACK_SHRINK);
-    line1.pack_start(combo_triad_mode,Gtk::PACK_SHRINK);
+    combo_type.set_tooltip_markup(_("Sets <b>type</b> of this chord."));
+    combo_guitar_mode.set_tooltip_markup(_("Sets <b>mode</b> of this chord."));
+    combo_triad_mode.set_tooltip_markup(_("Sets <b>mode</b> of this chord."));
+    combo_root.set_tooltip_markup(_("Sets <b>root</b> of this chord."));
 
     octave.set_range(-5.0,5.0);
     octave.set_increments(1.0,2.0);
@@ -75,10 +74,13 @@ ChordWidget::ChordWidget(Chord* associated_chord){
     inversion.set_width_chars(1);
     inversion.set_value(chord->GetInversion());
     inversion.signal_value_changed().connect(mem_fun(*this,&ChordWidget::OnInversionChanged));
+    inversion.set_tooltip_markup(_("Sets the <b>inversion</b> of the triad."));
     inversion_label.set_text(_("Inversion:"));
 
     use_base.set_active(chord->GetBaseUse());
     use_base.set_label(_("Base:"));
+    use_base.signal_toggled().connect(mem_fun(*this,&ChordWidget::OnUseBaseToggled));
+    use_base.set_tooltip_text(_("Sets whether this chord uses the base note.\n - If on, chord notes are set relatively to the base note.\n - If off, the chord ignores the base note."));
     note_label.set_text(_("Note:"));
     eq_label.set_text("=");
 
@@ -87,6 +89,12 @@ ChordWidget::ChordWidget(Chord* associated_chord){
     //base.set_width_chars(3);
     base.set_value(chord->GetBase());
     base.signal_value_changed().connect(mem_fun(*this, &ChordWidget::OnBaseChanged));
+
+    line1.pack_start(combo_type,Gtk::PACK_SHRINK);
+    line1.pack_start(combo_root,Gtk::PACK_SHRINK);
+    line1.pack_start(combo_guitar_mode,Gtk::PACK_SHRINK);
+    line1.pack_start(combo_triad_mode,Gtk::PACK_SHRINK);
+    line1.pack_start(inversion,Gtk::PACK_SHRINK);
 
     line2.pack_start(use_base,Gtk::PACK_SHRINK);
     line2.pack_start(octave_label,Gtk::PACK_SHRINK);
@@ -251,6 +259,14 @@ void ChordWidget::OnInversionChanged(){
     chord->SetInversion(inversion.get_value());
     UpdateNotes();
     on_changed.emit();
+}
+
+void ChordWidget::OnUseBaseToggled(){
+    if(we_are_copying_note_values_from_chord_so_do_not_handle_the_signals) return;
+    chord->SetBaseUse(use_base.get_active());
+    UpdateNotes();
+    on_changed.emit();
+
 }
 
 void ChordWidget::Update(){

@@ -164,7 +164,7 @@ void Sequencer::SetResolution(int res){
 
 
 
-int Sequencer::GetNoteOfChord(int n){return chord.GetNote(n);}
+int Sequencer::GetNoteOfChord(int n){return chord.GetNotePlusBasenote(n);}
 void Sequencer::SetOn(bool m){on = m;play_once_phase=0;gui_window->tgl_mute.set_active(m);}
 bool Sequencer::GetOn(){return on;}
 void Sequencer::SetChannel(int ch){channel = ch;gui_window->channel_button.set_value((double)ch);}

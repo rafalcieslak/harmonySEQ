@@ -48,6 +48,7 @@ private:
     void OnBaseOctaveChanged();
     void OnInversionChanged();
     void OnBaseChanged();
+    void OnUseBaseToggled();
     void OnNoteChanged(int n);
 
     /**Flag disabling reaction on signals, used to set data in widgets without reacting (react only if it was the user that changes the data)*/

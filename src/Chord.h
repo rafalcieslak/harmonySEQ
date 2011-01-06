@@ -51,6 +51,8 @@ public:
     
     //The following have obvious names, they does not require to be commented
 
+    int GetNotePlusBasenote(int n);
+    /*Returns a note ignoring*/
     int GetNote(int n);
     void SetNote(int note, int pitch);
 
