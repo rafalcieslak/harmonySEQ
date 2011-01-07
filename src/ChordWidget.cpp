@@ -136,6 +136,7 @@ void ChordWidget::OnNoteChanged(int n){
 void ChordWidget::UpdateWhatToShowAndWhatIsSensitive(){
     base.set_sensitive(1);
     use_base.set_sensitive(1);
+    note_label.set_sensitive(1);
     combo_note.set_sensitive(1);
     combo_root.hide();
     combo_guitar_mode.hide();
@@ -155,6 +156,7 @@ void ChordWidget::UpdateWhatToShowAndWhatIsSensitive(){
             inversion_label.show();
             inversion.show();
             base.set_sensitive(0);
+            note_label.set_sensitive(0);
             combo_note.set_sensitive(0);
             use_base.set_sensitive(0);
             break;
@@ -162,6 +164,7 @@ void ChordWidget::UpdateWhatToShowAndWhatIsSensitive(){
             combo_root.show();
             combo_guitar_mode.show();
             base.set_sensitive(0);
+            note_label.set_sensitive(0);
             combo_note.set_sensitive(0);
             use_base.set_sensitive(0);
             break;
