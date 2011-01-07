@@ -49,11 +49,11 @@ MainWindow::MainWindow()
     m_refActionGroup->add(Gtk::Action::create("MenuFile",_("File")));
     m_refActionGroup->add(Gtk::Action::create("MenuHelp",_( "Help")));
     m_refActionGroup->add(Gtk::Action::create("MenuTools",_( "Tools")));
-    m_refActionGroup->add(Gtk::Action::create("FileNew", Gtk::Stock::NEW), sigc::mem_fun(*this, &MainWindow::OnMenuNewClicked));
-    m_refActionGroup->add(Gtk::Action::create("FileOpen", Gtk::Stock::OPEN), sigc::mem_fun(*this, &MainWindow::OnMenuOpenClicked));
-    m_refActionGroup->add(Gtk::Action::create("FileSave", Gtk::Stock::SAVE), sigc::mem_fun(*this, &MainWindow::OnMenuSaveClicked));
-    m_refActionGroup->add(Gtk::Action::create("FileSaveAs", Gtk::Stock::SAVE_AS), sigc::mem_fun(*this, &MainWindow::OnMenuSaveAsClicked));
-    m_refActionGroup->add(Gtk::Action::create("FileQuit", Gtk::Stock::QUIT), sigc::mem_fun(*this, &MainWindow::OnMenuQuitClicked));
+    m_refActionGroup->add(Gtk::Action::create("FileNew", Gtk::Stock::NEW,_("New"),_("Creates a new file.")), sigc::mem_fun(*this, &MainWindow::OnMenuNewClicked));
+    m_refActionGroup->add(Gtk::Action::create("FileOpen", Gtk::Stock::OPEN,_("Open"),_("Opens a file.")), sigc::mem_fun(*this, &MainWindow::OnMenuOpenClicked));
+    m_refActionGroup->add(Gtk::Action::create("FileSave", Gtk::Stock::SAVE,_("Save"),_("Saves the current file.")), sigc::mem_fun(*this, &MainWindow::OnMenuSaveClicked));
+    m_refActionGroup->add(Gtk::Action::create("FileSaveAs", Gtk::Stock::SAVE_AS,_("Save as..."),_("Saves the current file with a different name.")), sigc::mem_fun(*this, &MainWindow::OnMenuSaveAsClicked));
+    m_refActionGroup->add(Gtk::Action::create("FileQuit", Gtk::Stock::QUIT,_("Quit"),_("Quits harmonySEQ.")), sigc::mem_fun(*this, &MainWindow::OnMenuQuitClicked));
     m_refActionGroup->add(Gtk::Action::create("AddSeq", Gtk::Stock::ADD, _("Add"),_("Adds a new seqencer")), sigc::mem_fun(*this, &MainWindow::OnAddSeqClicked));
     m_refActionGroup->add(Gtk::Action::create("RemoveSeq", Gtk::Stock::REMOVE, _("Remove"),_("Removes selected sequencer")), sigc::mem_fun(*this, &MainWindow::OnRemoveClicked));
     m_refActionGroup->add(Gtk::Action::create("DuplicateSeq", Gtk::Stock::CONVERT, _("Duplicate"), _("Duplicates selected sequencer")), sigc::mem_fun(*this, &MainWindow::OnCloneClicked));
@@ -145,7 +145,7 @@ MainWindow::MainWindow()
     main_vbox.pack_start(*pMenubar,Gtk::PACK_SHRINK);
     main_vbox.pack_start(Toolbar,Gtk::PACK_SHRINK);
     main_vbox.pack_start(vbox1);
-    vbox1.set_border_width(5);
+    vbox1.set_border_width(1);
 
     
     TempoTool.remove();
