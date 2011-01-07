@@ -8,14 +8,13 @@ msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
 "POT-Creation-Date: 2010-12-17 21:34+0100\n"
-"PO-Revision-Date: 2010-12-19 08:06+0000\n"
-"Last-Translator: Launchpad Translations Administrators "
-"<rosetta@launchpad.net>\n"
+"PO-Revision-Date: 2011-01-06 20:11+0000\n"
+"Last-Translator: Rafal Cieslak <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-20 05:25+0000\n"
+"X-Launchpad-Export-Date: 2011-01-07 05:38+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 "Language: pl\n"
 
@@ -82,7 +81,7 @@ msgstr "Nazwa"
 
 #: src/MainWindow.cpp:130 src/SequencerGUI.cpp:98 src/ActionGUI.cpp:122
 msgid "On"
-msgstr "Wł."
+msgstr "Włączony"
 
 #: src/MainWindow.cpp:137
 msgid "MN"
@@ -188,17 +187,18 @@ msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>."
 msgstr ""
-"HarmonySEQ stanowi wolne oprogramowanie: możesz je rozpowszechniać i/lub "
-"modyfikować na warunkach GNU Powszechnej Licencji Publicznej opublikowanej "
-"przez Free Software Foundation, według wersji 3 Licencji lub (według "
-"uznania) jakiejkolwiek wersji późniejszej.\n"
+"HarmonySEQ stanowi wolne oprogramowanie: możesz je rozpowszechniać\n"
+"i/lub modyfikować na warunkach GNU Powszechnej Licencji Publicznej\n"
+"opublikowanej przez Free Software Foundation, według wersji 3 Licencji lub\n"
+"(według uznania) jakiejkolwiek wersji późniejszej.\n"
 "\n"
-"harmonySEQ jest rozpowszechniany z nadzieją, że okaże się przydatny, ale BEZ "
-"JAKIEJKOLWIEK GWARANCJI, nawet bez domyślnej gwarancji PRZYDATNOŚCI "
-"HANDLOWEJ lub PRZYDATNOŚCI DO OKREŚLONYCH ZASTOSOWAŃ. Przeczytaj GNU "
-"Powszechną Licencję Publiczną w celu zapoznania się ze szczegółami.\n"
+"harmonySEQ jest rozpowszechniany z nadzieją, że okaże się przydatny, ale\n"
+"BEZ JAKIEJKOLWIEK GWARANCJI, nawet bez domyślnej gwarancji\n"
+"PRZYDATNOŚCI HANDLOWEJ lub PRZYDATNOŚCI DO OKREŚLONYCH\n"
+"ZASTOSOWAŃ. Przeczytaj GNU Powszechną Licencję Publiczną w celu\n"
+"zapoznania się ze szczegółami.\n"
 "\n"
-"Powinieneś otrzymać kopię GNU Powszechnej Licencji Publicznej wraz z "
+"Powinieneś otrzymać kopię GNU Powszechnej Licencji Publicznej wraz z\n"
 "harmonySEQ. Jeżeli nie otrzymałeś jej, zobacz na "
 "<http://www.gnu.org/licenses/>."
 
@@ -788,6 +788,10 @@ msgstr "Własny"
 msgid "Octave"
 msgstr "Oktawa"
 
+#, c-format
+#~ msgid "harmonySEQ, version %s\n"
+#~ msgstr "harmonySEQ, wersja %s\n"
+
 #~ msgid "setting ports number to "
 #~ msgstr "ustaw ilość portów na "
 
@@ -807,14 +811,42 @@ msgstr "Oktawa"
 #~ "    -h --help        wyświetla tę wiadomość pomocy\n"
 #~ "    -v --version     wyświetla wersję programu\n"
 
+#~ msgid "sequencer"
+#~ msgstr "sekwencer"
+
 #~ msgid "Muted"
 #~ msgstr "Wyciszony"
+
+#, c-format
+#~ msgid ""
+#~ "harmonySEQ, version %s\n"
+#~ "\n"
+#~ "usage: harmonySEQ [-hdvp]\n"
+#~ "\n"
+#~ "    -p --ports n     sets ports number to n\n"
+#~ "    -d --debug       enters debug mode, prints lots of debug messeges\n"
+#~ "    -h --help        prints this help messase and exits\n"
+#~ "    -v --version     prints the program version\n"
+#~ msgstr ""
+#~ "harmonySEQ, wersja %s\n"
+#~ "\n"
+#~ "użycie: harmonySEQ [-hdvp]\n"
+#~ "\n"
+#~ "    -p --ports n     ustawia ilość portów na n\n"
+#~ "    -d --debug       włącza tryb Debug, wyświetla mnóstwo komunikatów o "
+#~ "pracy programu\n"
+#~ "    -h --help        wyświetla tę wiadomość pomocy\n"
+#~ "    -v --version     wyświetla wersję programu\n"
 
 #~ msgid "Mute"
 #~ msgstr "Wycisz"
 
 #~ msgid "Channel"
 #~ msgstr "Kanał"
+
+#, c-format
+#~ msgid "ERROR - error while trying to read %s\n"
+#~ msgstr "BŁĄD - błąd podczas czytania pliku %s\n"
 
 #~ msgid "Open"
 #~ msgstr "Otwórz"
@@ -870,6 +902,30 @@ msgstr "Oktawa"
 #~ msgstr ""
 #~ "Błąd: sekwencer został zmieniony, podczas gdy akcja nie jest typu sekwencera."
 
+#, c-format
+#~ msgid ""
+#~ "harmonySEQ, version %s\n"
+#~ "\n"
+#~ "usage: harmonySEQ [-hdvp] [FILE]\n"
+#~ "\n"
+#~ "    -p --ports n     sets ports number to n\n"
+#~ "    -d --debug       enters debug mode, prints lots of debug messeges\n"
+#~ "    -h --help        prints this help messase and exits\n"
+#~ "    -v --version     prints the program version\n"
+#~ msgstr ""
+#~ "harmonySEQ, wersja %s\n"
+#~ "\n"
+#~ "użycie: harmonySEQ [-hdvp] [FILE]\n"
+#~ "\n"
+#~ "    -p --ports n     ustawia ilość portów na n\n"
+#~ "    -d --debug       włącza tryb Debug, wyświetla mnóstwo komunikatów o "
+#~ "pracy programu\n"
+#~ "    -h --help        wyświetla tę wiadomość pomocy\n"
+#~ "    -v --version     wyświetla wersję programu\n"
+
+#~ msgid "This file already exist."
+#~ msgstr "Ten plik już istnieje."
+
 #~ msgid "Notes:"
 #~ msgstr "Nuty:"
 
@@ -887,13 +943,35 @@ msgstr "Oktawa"
 #~ msgid "Set notes of sequencer '%s' to %d,%d,%d,%d,%d,%d "
 #~ msgstr "Ustaw nuty sekwencera '%s' na %d,%d,%d,%d,%d,%d "
 
+#~ msgid "The file had unsaved changes."
+#~ msgstr "Plik ma niezapisane zmiany."
+
+#~ msgid "Active melody:"
+#~ msgstr "Aktywna melodia:"
+
 #~ msgid "Mel"
 #~ msgstr "Mel"
 
+#~ msgid "Set as active melody"
+#~ msgstr "Ustaw jako aktywną melodię"
+
 #~ msgid "Melody:"
 #~ msgstr "Melodia:"
+
+#~ msgid "Melody number: "
+#~ msgstr "Numer melodii: "
 
 #~ msgid "Error: melody has changed, while action is not melody-type."
 #~ msgstr ""
 #~ "Błąd: melodia została zmieniona, podczas gdy akcja nie jest typu zmiany "
 #~ "melodii"
+
+#~ msgid "Sequencer/Set active melody"
+#~ msgstr "Sekwencer/Ustaw aktywną melodię"
+
+#, c-format
+#~ msgid "Set active melody of sequencer '%s' to %d"
+#~ msgstr "Ustaw aktywną melodię sekwencera '%s' na %d"
+
+#~ msgid " translator-credits"
+#~ msgstr " Tłumaczyli"
