@@ -34,8 +34,8 @@
 #include "Files.h"
 #include "TreeModels.h"
 //global objects
-vector<Sequencer *> sequencers(2);
-vector<Event *> events(2);
+vector<Sequencer *> sequencers;
+vector<Event *> events;
 double tempo = DEFAULT_TEMPO;
 int ports_number;
 int running = 1; //states, whether the application is running. When it's changed to 0, all infinite loops in background break, and the whole program closes.

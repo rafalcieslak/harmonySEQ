@@ -37,7 +37,7 @@ Gtk::TreeModel::RowReference spawn_sequencer(){
 
     //init and push to vector
     char temp[20];
-    sprintf(temp,_("seq %d"),n);
+    sprintf(temp,_("seq %d"),n+1);
     Sequencer *new_seq = new Sequencer(temp);
     sequencers.push_back(new_seq);
 
