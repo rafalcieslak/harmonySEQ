@@ -55,7 +55,8 @@ public:
     void UpdatePlayPauseTool();
 
     Gtk::SpinButton tempo_button;
-    Gtk::CheckButton pass_toggle;
+
+    void UpdatePassMidiToggle();
 private:
 
     /**Reacts on double click on a row*/

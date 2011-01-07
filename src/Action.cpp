@@ -98,7 +98,8 @@ void Action::Trigger(int data){
             sequencers[args[1]]->SetPlayOncePhase(1);
             break;
         case TOGGLE_PASS_MIDI:
-            mainwindow->pass_toggle.set_active(!passing_midi); //signal handle sets passingmidi variable automatically
+            passing_midi = !passing_midi;
+            mainwindow->UpdatePassMidiToggle();
             break;
         case NONE:
             *dbg << "empty event triggered\n";

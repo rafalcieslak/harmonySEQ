@@ -48,6 +48,7 @@ MainWindow::MainWindow()
 
     m_refActionGroup->add(Gtk::Action::create("MenuFile",_("File")));
     m_refActionGroup->add(Gtk::Action::create("MenuHelp",_( "Help")));
+    m_refActionGroup->add(Gtk::Action::create("MenuTools",_( "Tools")));
     m_refActionGroup->add(Gtk::Action::create("FileNew", Gtk::Stock::NEW), sigc::mem_fun(*this, &MainWindow::OnMenuNewClicked));
     m_refActionGroup->add(Gtk::Action::create("FileOpen", Gtk::Stock::OPEN), sigc::mem_fun(*this, &MainWindow::OnMenuOpenClicked));
     m_refActionGroup->add(Gtk::Action::create("FileSave", Gtk::Stock::SAVE), sigc::mem_fun(*this, &MainWindow::OnMenuSaveClicked));
@@ -59,6 +60,7 @@ MainWindow::MainWindow()
     m_refActionGroup->add(Gtk::Action::create("Events", Gtk::Stock::EXECUTE,_("Events"), _("Opens the events window")), sigc::mem_fun(*this, &MainWindow::OnEventsClicked));
     m_refActionGroup->add(Gtk::Action::create("About", Gtk::Stock::ABOUT), sigc::mem_fun(*this, &MainWindow::OnAboutMenuClicked));
     m_refActionGroup->add(Gtk::Action::create("PlayPause", Gtk::Stock::MEDIA_PAUSE, _("Play/Pause"),_("Toggle play/pause")), sigc::mem_fun(*this, &MainWindow::OnPlayPauseClicked));
+    m_refActionGroup->add(Gtk::ToggleAction::create("PassMidiEvents", _("Pass MIDI events"),_("States whether MIDI events are passed-through harmonySEQ.")), sigc::mem_fun(*this, &MainWindow::OnPassToggleClicked));
 
     m_refActionGroup->add(Gtk::Action::create("Empty"));
 
@@ -77,6 +79,9 @@ MainWindow::MainWindow()
             "      <menuitem action='FileSaveAs'/>"
             "      <separator/>"
             "      <menuitem action='FileQuit'/>"
+            "    </menu>" 
+            "    <menu action='MenuTools'>"
+            "      <menuitem action='PassMidiEvents'/>"
             "    </menu>"
             "    <menu action='MenuHelp'>"
             "      <menuitem action='About'/>"
@@ -229,14 +234,6 @@ MainWindow::MainWindow()
         /*is called from main()*/
 
     }// </editor-fold>
-
-    vbox1.pack_start(pass_toggle,Gtk::PACK_SHRINK);
-    pass_toggle.set_label(_("Pass MIDI events"));
-    pass_toggle.set_active(passing_midi);
-    pass_toggle.signal_clicked().connect(mem_fun(*this,&MainWindow::OnPassToggleClicked));
-
-
-
 
     add_events(Gdk::KEY_PRESS_MASK);
     signal_key_press_event().connect(mem_fun(*this,&MainWindow::OnKeyPress));
@@ -511,9 +508,15 @@ bool MainWindow::FlashTempoEnd(){
 }
 
 void MainWindow::OnPassToggleClicked(){
-    passing_midi = pass_toggle.get_active();
+    Gtk::Widget* pPassToggle = m_refUIManager->get_widget("/MenuBar/MenuTools/PassMidiEvents");
+    Gtk::CheckMenuItem& PassToggle = dynamic_cast<Gtk::CheckMenuItem&> (*pPassToggle);
+    passing_midi = PassToggle.get_active();
+}
 
-
+void MainWindow::UpdatePassMidiToggle(){
+    Gtk::Widget* pPassToggle = m_refUIManager->get_widget("/MenuBar/MenuTools/PassMidiEvents");
+    Gtk::CheckMenuItem& PassToggle = dynamic_cast<Gtk::CheckMenuItem&> (*pPassToggle);
+    PassToggle.set_active(passing_midi);
 }
 
 bool MainWindow::OnKeyPress(GdkEventKey* event){
