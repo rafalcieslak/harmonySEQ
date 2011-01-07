@@ -99,6 +99,8 @@ Sequencer::Sequencer(const Sequencer *orig) {
 }
 
 Sequencer::~Sequencer() {
+    gui_window->hide();
+    delete gui_window;
 }
 
 void Sequencer::Init(){
