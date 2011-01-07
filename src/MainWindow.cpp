@@ -41,7 +41,6 @@ MainWindow::MainWindow()
     UpdateTitle();
 
     tempolabel.set_text(_("Tempo:"));
-    mainnotelabel.set_text(_("Main Note:"));
     add(main_vbox);
 
     // <editor-fold defaultstate="collapsed" desc="menus and toolbar creation and initialisation">
@@ -136,12 +135,6 @@ MainWindow::MainWindow()
     vbox1.set_border_width(5);
 
     vbox1.pack_start(hbox_up, Gtk::PACK_SHRINK);
-    hbox_up.pack_start(mainnotelabel, Gtk::PACK_SHRINK);
-    hbox_up.pack_start(main_note, Gtk::PACK_SHRINK);
-    main_note.set_range(0, 127);
-    main_note.set_increments(1, 12);
-    main_note.set_value(mainnote);
-    main_note.signal_value_changed().connect(sigc::mem_fun(*this, &MainWindow::MainNoteChanged));
     hbox_up.pack_start(tempolabel, Gtk::PACK_SHRINK);
     hbox_up.pack_start(tempo_button, Gtk::PACK_SHRINK);
     tempo_button.set_range(30, 320);
@@ -171,11 +164,13 @@ MainWindow::MainWindow()
         column->add_attribute(cell->property_cell_background(),m_columns_sequencers.col_colour);
         Gtk::CellRendererToggle& tgl = dynamic_cast<Gtk::CellRendererToggle&> (*cell);
         tgl.signal_toggled().connect(mem_fun(*this, &MainWindow::OnMutedToggleToggled));
-        
+
+        /*
         col_count = m_TreeView.append_column_editable(_("MN"), m_columns_sequencers.col_apply_mainnote);
         cell = m_TreeView.get_column_cell_renderer(col_count - 1);
         Gtk::CellRendererToggle& tgl2 = dynamic_cast<Gtk::CellRendererToggle&> (*cell);
         tgl2.signal_toggled().connect(mem_fun(*this, &MainWindow::OnApplyMainNoteToggleToggled));
+        */
         
         col_count = m_TreeView.append_column(_("Channel"), m_columns_sequencers.col_channel);
         col_count = m_TreeView.append_column(_("Pattern"), m_columns_sequencers.col_pattern);
@@ -199,19 +194,6 @@ MainWindow::MainWindow()
         pColumn = m_TreeView.get_column(tricky);
         //pColumn->set_sort_column(m_columns.col_muted);
         pColumn->set_fixed_width(10);
-        tricky++;
-        pColumn = m_TreeView.get_column(tricky);
-        //pColumn->set_sort_column(m_columns.col_apply_mainnote);
-        pColumn->set_fixed_width(10);
-        tricky++;
-        pColumn = m_TreeView.get_column(tricky);
-        //pColumn->set_sort_column(m_columns.col_channel);
-        tricky++;
-        pColumn = m_TreeView.get_column(tricky);
-        //pColumn->set_sort_column(m_columns.col_res);
-        //tricky++;
-        //pColumn = m_TreeView.get_column(tricky);
-        //pColumn->set_sort_column(m_columns.col_len);
 
         //drag and drop enabling
         //m_TreeView.enable_model_drag_source();
@@ -303,13 +285,6 @@ void MainWindow::UpdateTitle(){
     set_title(temp);
 }
 
-void
-MainWindow::MainNoteChanged()
-{
-    mainnote = main_note.get_value();
-    Files::SetFileModified(1);
-}
-
 bool
 MainWindow::on_delete_event(GdkEventAny* event)
 {
@@ -366,17 +341,6 @@ MainWindow::OnMutedToggleToggled(const Glib::ustring& path)
    //Files::SetFileModified(1); do not detect mutes
 }
 
-void MainWindow::OnApplyMainNoteToggleToggled(const Glib::ustring& path){
-
-    Gtk::TreeModel::iterator iter = m_refTreeModel_sequencers->get_iter(path);
-    if (!iter) return;
-    Gtk::TreeModel::Row row = *iter;
-    sequencers[row[m_columns_sequencers.col_ID]]->SetApplyMainNote(!row[m_columns_sequencers.col_apply_mainnote]);
-   if(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window) RefreshRow(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window);
-
-    Files::SetFileModified(1);
-}
-
 void
 MainWindow::OnNameEdited(const Glib::ustring& path, const Glib::ustring& newtext)
 {
@@ -399,7 +363,6 @@ Gtk::TreeModel::RowReference MainWindow::AddSequencerRow(int x)
     row[m_columns_sequencers.col_ID] = x;
     row[m_columns_sequencers.col_name] = sequencers[x]->GetName();
     row[m_columns_sequencers.col_muted] = sequencers[x]->GetOn();
-    row[m_columns_sequencers.col_apply_mainnote] = sequencers[x]->GetApplyMainNote();
     row[m_columns_sequencers.col_channel] = sequencers[x]->GetChannel();
     row[m_columns_sequencers.col_pattern] = sequencers[x]->active_pattern;
     row[m_columns_sequencers.col_res] = sequencers[x]->resolution;
@@ -433,7 +396,6 @@ void MainWindow::InitTreeData(){
         row[m_columns_sequencers.col_ID] = x;
         row[m_columns_sequencers.col_muted] = sequencers[x]->GetOn();
         row[m_columns_sequencers.col_name] = sequencers[x]->GetName();
-        row[m_columns_sequencers.col_apply_mainnote] = sequencers[x]->GetApplyMainNote();
         row[m_columns_sequencers.col_channel] = sequencers[x]->GetChannel();
         row[m_columns_sequencers.col_res] = sequencers[x]->resolution;
         row[m_columns_sequencers.col_pattern] = sequencers[x]->active_pattern;
@@ -464,7 +426,6 @@ void MainWindow::RefreshRow(Gtk::TreeRowReference rowref){
     Sequencer* seq = sequencers[x];
     row[m_columns_sequencers.col_muted] = seq->GetOn();
     row[m_columns_sequencers.col_name] = seq->GetName();
-    row[m_columns_sequencers.col_apply_mainnote] = seq->GetApplyMainNote();
     row[m_columns_sequencers.col_channel] = seq->GetChannel();
     row[m_columns_sequencers.col_res] = seq->resolution;
     row[m_columns_sequencers.col_pattern] = seq->active_pattern;
@@ -661,8 +622,6 @@ void MainWindow::OnMenuNewClicked(){
 
     tempo = 120.0;
     tempo_button.set_value(120.0);
-    mainnote = 60;
-    main_note.set_value(60.0);
 
     resize(2,2);
     UpdateTitle();

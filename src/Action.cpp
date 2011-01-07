@@ -68,12 +68,6 @@ void Action::Trigger(int data){
             }
             break;
 
-        case MAINOTE_SET:
-            mainwindow->main_note.set_value((double)args[1]);
-            mainnote = args[1];
-            Files::SetFileModified(1);
-            break;
-
         case TEMPO_SET:
             mainwindow->tempo_button.set_value((double)args[1]);
             tempo = args[1];
@@ -154,9 +148,6 @@ Glib::ustring Action::GetLabel(){
                     sprintf(temp,_("Toggle sequencer '%s'"),GetSeqName(args[1]).c_str());
                     break;
             }
-            break;
-        case MAINOTE_SET:
-            sprintf(temp,_("Set main note to %d"),args[1]);
             break;
 
         case TEMPO_SET:

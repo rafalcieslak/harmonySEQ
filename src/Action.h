@@ -37,7 +37,7 @@ public:
         DEPRACATED_1,
         DEPRACATED_2,
         SEQ_VOLUME_SET,
-        MAINOTE_SET,
+        DEPRACATED_3,
         TEMPO_SET,
         SEQ_CHANGE_ONE_NOTE,
         SEQ_CHANGE_CHORD,

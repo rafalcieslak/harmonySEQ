@@ -60,14 +60,14 @@ int GUITAR_TABS_MINOR[12][6] = {
 };
 
 Chord::Chord(){
-    mode = TRIAD;
+    type = CHORD_TYPE_TRIAD;
     inversion = 0;
-    triad_root = 0;
-    guitar_root = 0;
-    guitar_mode = GUITAR_MAJOR;
-    triad_mode = TYPE_MAJOR;
-    octave = 0;
-
+    root = 0;
+    mode_guitar = CHORD_GUITAR_MODE_MAJOR;
+    mode_triad = CHORD_TRIAD_MODE_MAJOR;
+    base_octave = 0;
+    base_note=0;
+    NoteAndOctaveToBase();
 }
 
 Chord::~Chord(){
@@ -75,103 +75,118 @@ Chord::~Chord(){
 
 void Chord::RecalcNotes(){
     *dbg<<"recalculating chord\n";
-    int n1,n2,n3,base;
-    switch (mode){
-        case CUSTOM:
+    int n1,n2,n3;
+    switch (type){
+        case CHORD_TYPE_CUSTOM:
 
             //well, in this case nothing is to be recalculated.
             break;
-        case GUITAR:
-            if (guitar_mode == GUITAR_MAJOR){
+        case CHORD_TYPE_GUITAR:
+            if (mode_guitar == CHORD_GUITAR_MODE_MAJOR){
                 for(int x = 0; x < 6; x++)
-                    notes[x]=STANDARD_GUITAR_TUNING[x] + GUITAR_TABS_MAJOR[guitar_root][x];
-            }else if (guitar_mode == GUITAR_MINOR){
+                    notes[x]=STANDARD_GUITAR_TUNING[x] + GUITAR_TABS_MAJOR[root][x];
+            }else if (mode_guitar == CHORD_GUITAR_MODE_MINOR){
                 for(int x = 0; x < 6; x++)
-                    notes[x]=STANDARD_GUITAR_TUNING[x] + GUITAR_TABS_MINOR[guitar_root][x];
+                    notes[x]=STANDARD_GUITAR_TUNING[x] + GUITAR_TABS_MINOR[root][x];
             }
             break;
-        case TRIAD:
-            base = 12*octave;
-            n1 = base+triad_root;
+        case CHORD_TYPE_TRIAD:
+            n1 =root;
             *dbg << "    base+triad_root  = " << n1 << ENDL;
-            if (triad_mode == TYPE_MAJOR || triad_mode == TYPE_AUGMENTED) n2 = n1+4;
+            if (mode_triad == CHORD_TRIAD_MODE_MAJOR || mode_triad == CHORD_TRIAD_MODE_AUGMENTED) n2 = n1+4;
             else n2 = n1+3;
-            if(triad_mode == TYPE_MINOR || triad_mode == TYPE_AUGMENTED) n3 = n2+4;
+            if(mode_triad == CHORD_TRIAD_MODE_MINOR || mode_triad == CHORD_TRIAD_MODE_AUGMENTED) n3 = n2+4;
             else n3 = n2+3;
 
 
-            //as for now, we ignore the inversion, will be implemented later.
 
-            notes[0] = n1;
-            notes[3] = n1+12;
-            notes[1] = n2;
-            notes[4] = n2+12;
-            notes[2] = n3;
-            notes[5] = n3+12;
-
+            if (inversion == 0) {
+                notes[0] = n1;
+                notes[1] = n2;
+                notes[2] = n3;
+                notes[3] = n1 + 12;
+                notes[4] = n2 + 12;
+                notes[5] = n3 + 12;
+            }else if (inversion == 1){
+                notes[0] = n3 - 12;
+                notes[1] = n1;
+                notes[2] = n2;
+                notes[3] = n3;
+                notes[4] = n1 + 12;
+                notes[5] = n2 + 12;
+            }else if (inversion == 2){
+                notes[0] = n2 - 12;
+                notes[1] = n3 - 12;
+                notes[2] = n1;
+                notes[3] = n2;
+                notes[4] = n3;
+                notes[5] = n1 + 12;
+            }
 
             break;
     }
 
 }
 
+int Chord::GetNotePlusBasenote(int n){
+    if (n > 5 || n < 0) return 0;
+    if (base_use)
+        return notes[n] + base;
+    else
+        return notes[n];
+}
+
 int Chord::GetNote(int n){
     if (n > 5 || n < 0) return 0;
     return notes[n];
-
 }
 
 void Chord::SetNote(int note, int pitch){
     if (note > 5 || note < 0) return;
-    mode = CUSTOM;
+    type = CHORD_TYPE_CUSTOM;
     notes[note] = pitch;
     //RecalcNotes(); //well, in fact: not needed;
 }
 
-void Chord::SetTriadRoot(int pitch){
-    triad_root = pitch%12;
+void Chord::SetRoot(int pitch){
+    root = pitch%12;
     RecalcNotes();
 }
 
-int Chord::GetTriadRoot(){
-    return triad_root;
+int Chord::GetRoot(){
+    return root;
 }
 
-void Chord::SetGuitarRoot(int pitch){
-    guitar_root = pitch%12;
-    RecalcNotes();
-}
 
-int Chord::GetGuitarRoot(){
-    return guitar_root;
-}
-
-void Chord::SetMode(int n){
-    mode = n;
+void Chord::SetType(int n){
+    type = n;
+    if(type == CHORD_TYPE_GUITAR || type == CHORD_TYPE_TRIAD) base_use =1;
+    if(type == CHORD_TYPE_GUITAR) base_note = 4;
+    if(type == CHORD_TYPE_TRIAD) base_note = 0;
     RecalcNotes();
 
 }
 
-int Chord::GetMode(){
-    return mode;
+int Chord::GetType(){
+    return type;
 }
 
 void Chord::SetTriadMode(int n){
-    triad_mode = n;
+    mode_triad = n;
     RecalcNotes();
 }
 
 int Chord::GetTriadMode(){
-    return triad_mode;
+    return mode_triad;
 }
 
 void Chord::SetGuitarMode(int n){
-    guitar_mode = n;
+    mode_guitar = n;
     RecalcNotes();
 }
 
 int Chord::GetGuitarMode(){
-    return guitar_mode;
+    return mode_guitar;
 }
 
 void Chord::SetInversion(int n){
@@ -183,24 +198,62 @@ int Chord::GetInversion(){
     return inversion;
 }
 
-void Chord::SetOctave(int n){
-    octave = n;
+void Chord::SetBaseOctave(int n){
+    base_octave = n;
+    NoteAndOctaveToBase();
     RecalcNotes();
 }
 
-int Chord::GetOctave(){
-    return octave;
+int Chord::GetBaseOctave(){
+    return base_octave;
+}
+
+void Chord::SetBaseNote(int n){
+    base_note = n;
+    NoteAndOctaveToBase();
+    RecalcNotes();
+}
+int Chord::GetBaseNote(){
+    return base_note;
+}
+
+void Chord::SetBase(int n){
+    base = n;
+    BaseToOctaveAndNote();
+    RecalcNotes();
+}
+int Chord::GetBase(){
+    return base;
+}
+
+void Chord::SetBaseUse(bool use){
+    base_use = use;
+    //no need to recalc. base_use is checked on GetNote();
+}
+bool Chord::GetBaseUse(){
+    return base_use;
+}
+
+void Chord::BaseToOctaveAndNote(){
+    int oct = base/12;
+    base_octave = oct-5;
+    base_note = base - (base_octave+5)*12;
+}
+
+void Chord::NoteAndOctaveToBase(){
+    base = (base_octave+5)*12+base_note;
 }
 
 void Chord::Set(const Chord& other){
     *dbg << "copying chord." << ENDL;
-    mode = other.mode;
-    if (mode == CUSTOM) for (int x = 0 ; x < 6; x++) notes[x] = other.notes[x];
-    octave = other.octave;
-    triad_root = other.triad_root;
-    triad_mode = other.triad_mode;
-    guitar_mode = other.guitar_mode;
-    guitar_root = other.guitar_root;
+    type = other.type;
+    if (type == CHORD_TYPE_CUSTOM) for (int x = 0 ; x < 6; x++) notes[x] = other.notes[x];
+    base = other.base;
+    base_use = other.base_use;
+    BaseToOctaveAndNote();
+    mode_triad = other.mode_triad;
+    mode_guitar = other.mode_guitar;
+    root = other.root;
     inversion = other.inversion;
     RecalcNotes();
 }
@@ -209,29 +262,29 @@ void Chord::Set(const Chord& other){
 Glib::ustring Chord::GetName(){
     char temp[100];
     Glib::ustring a;
-    switch (mode){
-        case CUSTOM:
+    switch (type){
+        case CHORD_TYPE_CUSTOM:
             sprintf(temp,_("Custom: %d, %d, %d, %d, %d, %d"),notes[0],notes[1],notes[2],notes[3],notes[4],notes[5]);
             break;
-        case GUITAR:
-            if (guitar_mode == GUITAR_MAJOR){
-                sprintf(temp,_("Guitar: %s major"),notemap.find(guitar_root)->second.c_str());
-            }else if (guitar_mode == GUITAR_MINOR){
-                sprintf(temp,_("Guitar: %s minor"),notemap.find(guitar_root)->second.c_str());
+        case CHORD_TYPE_GUITAR:
+            if (mode_guitar == CHORD_GUITAR_MODE_MAJOR){
+                sprintf(temp,_("Guitar: %s major"),notemap.find(root)->second.c_str());
+            }else if (mode_guitar == CHORD_GUITAR_MODE_MINOR){
+                sprintf(temp,_("Guitar: %s minor"),notemap.find(root)->second.c_str());
             }
             break;
-        case TRIAD:
-            if (triad_mode ==  TYPE_MAJOR){
-                sprintf(temp,_("Triad: %s major"),notemap.find(triad_root)->second.c_str());
+        case CHORD_TYPE_TRIAD:
+            if (mode_triad ==  CHORD_TRIAD_MODE_MAJOR){
+                sprintf(temp,_("Triad: %s major"),notemap.find(root)->second.c_str());
             } else
-            if (triad_mode == TYPE_MINOR){
-                sprintf(temp,_("Triad: %s minor"),notemap.find(triad_root)->second.c_str());
+            if (mode_triad == CHORD_TRIAD_MODE_MINOR){
+                sprintf(temp,_("Triad: %s minor"),notemap.find(root)->second.c_str());
             } else
-            if (triad_mode ==  TYPE_AUGMENTED){
-                sprintf(temp,_("Triad: %s augumented"),notemap.find(triad_root)->second.c_str());
+            if (mode_triad ==  CHORD_TRIAD_MODE_AUGMENTED){
+                sprintf(temp,_("Triad: %s augumented"),notemap.find(root)->second.c_str());
             } else
-            if (triad_mode ==  TYPE_DIMINICHED){
-                sprintf(temp,_("Triad: %s diminished"),notemap.find(triad_root)->second.c_str());
+            if (mode_triad ==  CHORD_TRIAD_MODE_DIMINICHED){
+                sprintf(temp,_("Triad: %s diminished"),notemap.find(root)->second.c_str());
             }
             break;
     }
@@ -242,28 +295,52 @@ Glib::ustring Chord::GetName(){
 }
 
 std::vector<int> Chord::SaveToVector(){
-   /**Should have following format: mode, guitar_root, guitar_note, triad_root,triad_note,octave,inversion,notes(6)(if custom)*/
+   /**Should have following format: type, root, guitar_mode, triad_mode,inversion,base,use_base, notes(6)(if custom)*/
     std::vector<int> V;
-    V.push_back(mode);
-    V.push_back(guitar_root);
-    V.push_back(guitar_mode);
-    V.push_back(triad_root);
-    V.push_back(triad_mode);
-    V.push_back(octave);
+    V.push_back(type);
+    V.push_back(root);
+    V.push_back(mode_guitar);
+    V.push_back(mode_triad);
     V.push_back(inversion);
-    if (mode == CUSTOM) for (int x = 0; x < 6; x++) V.push_back(notes[x]);
+    V.push_back(base);
+    V.push_back(base_use);
+    if (type == CHORD_TYPE_CUSTOM) for (int x = 0; x < 6; x++) V.push_back(notes[x]);
     return V;
 }
 
 void Chord::SetFromVector(std::vector<int>& V){
-    if (V.size() < 7) {*err << "ERROR: chord vector too small\n"; return;}
-    mode = V[0];
-    guitar_root = V[1];
-    guitar_mode = V[2];
-    triad_root = V[3];
-    *dbg << "setting chord settings from vector: triad root is " << V[3] << ENDL;
-    triad_mode = V[4];
-    octave = V[5];
-    inversion = V[6];
-    if(mode == CUSTOM)for (int x = 0; x < 6; x++) notes[x] = V[7+x];
+    if (V.size() < 7) {
+        *err << "ERROR: chord vector too small\n";
+        return;
+    }
+    type = V[0];
+    root = V[1];
+    mode_guitar = V[2];
+    mode_triad = V[3];
+    inversion = V[4];
+    base = V[5];
+    base_use = V[6];
+    BaseToOctaveAndNote();
+    if(type == CHORD_TYPE_CUSTOM)for (int x = 0; x < 6; x++) notes[x] = V[7+x];
+    RecalcNotes();
 }
+
+
+   void Chord::SetFromVector_OLD_FILE_PRE_0_14(std::vector<int> &V){
+   /**Old files have following format: mode, guitar_root, guitar_note, triad_root,triad_note,octave,inversion,notes(6)(if custom)*/
+    if (V.size() < 7) {
+        *err << "ERROR: chord vector too small\n";
+        return;
+    }
+    type = V[0];
+    if (type == CHORD_TYPE_GUITAR) root = V[1];
+    else root = V[3];
+
+    mode_guitar = V[2];
+    mode_triad = V[4];
+    base_octave = V[5];
+    NoteAndOctaveToBase();
+    inversion = V[6];
+    if(type == CHORD_TYPE_CUSTOM)for (int x = 0; x < 6; x++) notes[x] = V[7+x];
+    else RecalcNotes();
+   }

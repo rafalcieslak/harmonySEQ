@@ -30,7 +30,6 @@ public:
         add(col_ID);
         add(col_name);
         add(col_muted);
-        add(col_apply_mainnote);
         add(col_channel);
         add(col_pattern);
         add(col_res);
@@ -41,7 +40,6 @@ public:
     Gtk::TreeModelColumn<int> col_ID;
     Gtk::TreeModelColumn<Glib::ustring> col_name;
     Gtk::TreeModelColumn<bool> col_muted;
-    Gtk::TreeModelColumn<bool> col_apply_mainnote;
     Gtk::TreeModelColumn<int> col_channel;
     Gtk::TreeModelColumn<int> col_pattern;
     Gtk::TreeModelColumn<int> col_res;
@@ -125,6 +123,7 @@ extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_Notes;
 extern ModelColumns_Universal_IDandNAME m_columns_IdAndName;
 extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_TriadModes;
 extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_ChordGuitarModes;
+extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_ChordTypes;
 #endif
 
 /**Init - tree models*/
@@ -135,6 +134,7 @@ void InitActionTypesTreeModel();
 void InitNotesTreeModel();
 void InitTriadModesTreeModel();
 void InitChordGuitarModesTreeModel();
+void InitChordTypesTreeModel();
 void InitAllTreeModels();
 
 

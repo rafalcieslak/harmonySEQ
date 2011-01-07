@@ -98,12 +98,6 @@ public:
     /**Returns current sequencer name*/
     Glib::ustring GetName();
 
-    /**Sets flag ApplyMainNote*/
-    void SetApplyMainNote(bool a);
-
-    /**Returns flag ApplyMainNote*/
-    bool GetApplyMainNote();
-
     /**Changes channel*/
     void SetChannel(int ch);
 
@@ -140,7 +134,6 @@ public:
 
 protected:
     int channel;
-    bool apply_mainnote;
     bool on;
     int volume;
     Glib::ustring name;

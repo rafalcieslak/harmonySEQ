@@ -85,7 +85,8 @@ void SaveToFile(Glib::ustring filename){
     kf.set_integer("harmonySEQ","versionB",VERSION_B);
     kf.set_integer("harmonySEQ","versionC",VERSION_C);
     kf.set_double(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_TEMPO,tempo);
-    kf.set_integer(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_MAINNOTE,mainnote);
+    //This is depracated
+    //kf.set_integer(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_MAINNOTE,mainnote);
     kf.set_integer(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_SEQ_NUM,sequencers.size());
     kf.set_integer(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_EVENTS_NUM,events.size());
 
@@ -99,7 +100,8 @@ void SaveToFile(Glib::ustring filename){
         kf.set_string(temp,FILE_KEY_SEQ_NAME,sequencers[x]->GetName());
         kf.set_boolean(temp,FILE_KEY_SEQ_ON,sequencers[x]->GetOn());
         kf.set_integer(temp,FILE_KEY_SEQ_CHANNEL,sequencers[x]->GetChannel());
-        kf.set_boolean(temp,FILE_KEY_SEQ_APPLY_MAIN_NOTE,sequencers[x]->GetApplyMainNote());
+        //This is depracated
+        //kf.set_boolean(temp,FILE_KEY_SEQ_APPLY_MAIN_NOTE,sequencers[x]->GetApplyMainNote());
         kf.set_integer(temp,FILE_KEY_SEQ_VOLUME,sequencers[x]->GetVolume());
         kf.set_integer(temp,FILE_KEY_SEQ_RESOLUTION,sequencers[x]->resolution);
         kf.set_double(temp,FILE_KEY_SEQ_LENGTH,sequencers[x]->length);
@@ -214,7 +216,6 @@ void LoadFileDialog(){
 
     //Some things that must be done to update the GUI fully.
     mainwindow->InitTreeData();
-    mainwindow->main_note.set_value(mainnote);
     mainwindow->tempo_button.set_value(tempo);
     eventswindow->InitTreeData();
 }
@@ -259,7 +260,7 @@ bool LoadFile(Glib::ustring file){
         //Slider-compatible mode is switched on, when the file we open does not support polyphony  (version 0.12 or earlier).
         //In this case we must translate monophonic data, to polyphonic.
         int slider_compatible_mode = 0;
-
+        int chord_compatible_mode = 0;
         //Compaing versions...
         if (VA > VERSION_A || (VA == VERSION_A && VB > VERSION_B) || (VA == VERSION_A && VB == VERSION_B && VC > VERSION_C)){
             //File is too new
@@ -276,6 +277,7 @@ bool LoadFile(Glib::ustring file){
             if (Ask(_("Do you want to open this file?"),temp,false)){
                 //anserwed YES;
                 if (VA == 0 && VB <= 12) slider_compatible_mode = 1; //That's the case, when monophonic data will be converted to polyphonic.
+                if(VA == 0 && VB <= 13) chord_compatible_mode = 1; //Chord is stored in the old format.
             }else{
                 return 1;
             }
@@ -283,7 +285,8 @@ bool LoadFile(Glib::ustring file){
 
         //Read some basic data...
         tempo = kf.get_double(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_TEMPO);
-        mainnote = kf.get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_MAINNOTE);
+        int mainnote, use_main_note;
+        if (chord_compatible_mode) mainnote= kf.get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_MAINNOTE);
         number = kf.get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_SEQ_NUM);
 
         //Get rid of any seqeuncers.
@@ -308,7 +311,7 @@ bool LoadFile(Glib::ustring file){
             sequencers[x]->SetName(kf.get_string(temp, FILE_KEY_SEQ_NAME));
             sequencers[x]->SetOn(kf.get_boolean(temp, FILE_KEY_SEQ_ON));
             sequencers[x]->SetChannel(kf.get_integer(temp, FILE_KEY_SEQ_CHANNEL));
-            sequencers[x]->SetApplyMainNote(kf.get_boolean(temp, FILE_KEY_SEQ_APPLY_MAIN_NOTE));
+            if (chord_compatible_mode) use_main_note = kf.get_boolean(temp, FILE_KEY_SEQ_APPLY_MAIN_NOTE);
             sequencers[x]->resolution = kf.get_integer(temp, FILE_KEY_SEQ_RESOLUTION);
             sequencers[x]->length = kf.get_double(temp, FILE_KEY_SEQ_LENGTH);
 
@@ -324,7 +327,7 @@ bool LoadFile(Glib::ustring file){
             //Now, load the patterns.
             if(kf.has_key(temp,FILE_KEY_SEQ_SEQUENCE)){
                     //VEEEERY old file, seems it uses only one pattern, this case may be abandoned in future, since noone uses soooo old files (not sure, but probably it's 0.10 or earlier)
-                    int seq = sequencers[x]->AddPattern();
+                    sequencers[x]->AddPattern();
                     std::vector<int> sequence = kf.get_integer_list(temp, FILE_KEY_SEQ_SEQUENCE);
                         for(int r = 0; r < sequencers[x]->resolution; r++){
                             for(int c = 0; c < 6; c++){
@@ -342,7 +345,7 @@ bool LoadFile(Glib::ustring file){
                 //For each pattern we load...
                 for(int s =0; s < n; s++){
                     //First add an empty pattern.
-                    int seq = sequencers[x]->AddPattern();
+                    sequencers[x]->AddPattern();
                     //Prepare the value name...
                     sprintf(temp2,FILE_KEY_SEQ_PATTERN_TEMPLATE,s);
                     //And get the pattern from file
@@ -385,11 +388,18 @@ bool LoadFile(Glib::ustring file){
             //Here we load the chord (if any)
             if (kf.has_key(temp,FILE_KEY_SEQ_CHORD)){
                 std::vector<int> vec =   kf.get_integer_list(temp,FILE_KEY_SEQ_CHORD);
-                sequencers[x]->chord.SetFromVector(vec);
+                if (!chord_compatible_mode){
+                    sequencers[x]->chord.SetFromVector(vec);
+                }else{ //old file
+                    sequencers[x]->chord.SetBaseUse(use_main_note);
+                    sequencers[x]->chord.SetBase(mainnote);
+                    sequencers[x]->chord.SetFromVector_OLD_FILE_PRE_0_14(vec);
+                }
             }
 
             //And update this sequencer's GUI.
             sequencers[x]->UpdateGui();
+            sequencers[x]->UpdateGuiChord();
             
             //Now proceed to the...
         }  //...next sequencer.
@@ -445,7 +455,13 @@ bool LoadFile(Glib::ustring file){
                 sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_CHORD,a);
                 if (kf.has_key(temp,temp2)){
                     vector<int> vec = kf.get_integer_list(temp,temp2);
-                    events[x]->actions[a]->chord.SetFromVector(vec);
+                        if (!chord_compatible_mode) {
+                            events[x]->actions[a]->chord.SetFromVector(vec);
+                        } else { //old file
+                            events[x]->actions[a]->chord.SetBaseUse(1);
+                            events[x]->actions[a]->chord.SetBase(mainnote);
+                            events[x]->actions[a]->chord.SetFromVector_OLD_FILE_PRE_0_14(vec);
+                        }
                  }
                 //Update the chord GUI.
                 events[x]->actions[a]->GUIUpdateChordwidget();

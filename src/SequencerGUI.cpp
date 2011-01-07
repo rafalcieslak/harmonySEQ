@@ -94,13 +94,9 @@ SequencerWindow::SequencerWindow(Sequencer* prt)
     channel_button.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWindow::OnChannelChanged));
     active_pattern.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWindow::OnActivePatternChanged));
     toggle_vbox.pack_start(tgl_mute);
-    toggle_vbox.pack_start(tgl_apply_mainnote);
     tgl_mute.set_label(_("On"));
-    tgl_apply_mainnote.set_label(_("Apply main note"));
     tgl_mute.signal_clicked().connect(mem_fun(*this,&SequencerWindow::OnToggleMuteToggled));
     tgl_mute.set_active(parent->on);
-    tgl_apply_mainnote.signal_toggled().connect(mem_fun(*this,&SequencerWindow::OnToggleApplyMainNoteToggled));
-    tgl_apply_mainnote.set_active(parent->apply_mainnote);
 
     //lengths selector
     upper_box.pack_start(reslabel,Gtk::PACK_SHRINK);
@@ -202,12 +198,6 @@ void SequencerWindow::OnToggleMuteToggled(){
     if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
 
     //Files::SetFileModified(1); come on, do not write mutes.
-}
-
-void SequencerWindow::OnToggleApplyMainNoteToggled(){
-    parent->apply_mainnote = tgl_apply_mainnote.get_active();
-    if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
-    Files::SetFileModified(1);
 }
 
 void SequencerWindow::OnVolumeChanged(){

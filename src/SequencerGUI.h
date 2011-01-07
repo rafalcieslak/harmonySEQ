@@ -83,7 +83,6 @@ private:
     void OnChannelChanged();
     void OnVolumeChanged();
     void OnToggleMuteToggled();
-    void OnToggleApplyMainNoteToggled();
     void OnResolutionChanged();
     void OnLengthChanged();
     void OnActivePatternChanged();
@@ -116,7 +115,7 @@ private:
     Gtk::HBox line_zero;
     Gtk::VBox spinners_vbox;
     Gtk::VBox toggle_vbox;
-    Gtk::CheckButton tgl_apply_mainnote, tgl_mute;
+    Gtk::CheckButton tgl_mute;
     Gtk::ComboBox resolution_box;
     Gtk::ComboBox length_box;
     Gtk::Label reslabel, lenlabel;

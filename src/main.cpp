@@ -36,7 +36,6 @@
 //global objects
 vector<Sequencer *> sequencers(2);
 vector<Event *> events(2);
-int mainnote = 60;
 double tempo = DEFAULT_TEMPO;
 int ports_number;
 int running = 1; //states, whether the application is running. When it's changed to 0, all infinite loops in background break, and the whole program closes.
@@ -173,12 +172,6 @@ void InitDefaultData(){
         sequencers[0] = new Sequencer(example_sequence,example_notes,"seq 0");
         sequencers[1] = new Sequencer(example_sequence2,example_notes2,"seq 1");
         */ //TODO: load a file instead
-        events[0] = new Event(Event::KEYBOARD,keymap_stoi.find("1")->second,0);
-        events[1] = new Event(Event::KEYBOARD,keymap_stoi.find("2")->second,0);
-        events.push_back(new Event(Event::KEYBOARD,keymap_stoi.find("3")->second,0));
-        events[0]->actions.push_back(new Action(Action::MAINOTE_SET,48));
-        events[1]->actions.push_back(new Action(Action::MAINOTE_SET,60));
-        events[2]->actions.push_back(new Action(Action::MAINOTE_SET,72));
 }
 
 /**Inits gettext, must be called before any internationalized message is required*/
@@ -303,7 +296,6 @@ int main(int argc, char** argv) {
 
     //Putting some values into GUI
     mainwindow->tempo_button.set_value(tempo);
-    mainwindow->main_note.set_value(mainnote);
 
     //Initing trees in both windows.
     mainwindow->InitTreeData();
