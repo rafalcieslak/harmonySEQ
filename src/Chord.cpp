@@ -295,15 +295,15 @@ Glib::ustring Chord::GetName(){
 }
 
 std::vector<int> Chord::SaveToVector(){
-   /**Should have following format: mode, guitar_root, guitar_note, triad_root,triad_note,octave,inversion,notes(6)(if custom)*/
+   /**Should have following format: type, root, guitar_mode, triad_mode,inversion,base,use_base, notes(6)(if custom)*/
     std::vector<int> V;
     V.push_back(type);
     V.push_back(root);
     V.push_back(mode_guitar);
-    V.push_back(root);
     V.push_back(mode_triad);
-    V.push_back(base_octave);
     V.push_back(inversion);
+    V.push_back(base);
+    V.push_back(base_use);
     if (type == CHORD_TYPE_CUSTOM) for (int x = 0; x < 6; x++) V.push_back(notes[x]);
     return V;
 }
@@ -316,16 +316,18 @@ void Chord::SetFromVector(std::vector<int>& V){
     type = V[0];
     root = V[1];
     mode_guitar = V[2];
-    root = V[3];
-    *dbg << "setting chord settings from vector: triad root is " << V[3] << ENDL;
-    mode_triad = V[4];
-    base_octave = V[5];
-    inversion = V[6];
+    mode_triad = V[3];
+    inversion = V[4];
+    base = V[5];
+    base_use = V[6];
+    BaseToOctaveAndNote();
     if(type == CHORD_TYPE_CUSTOM)for (int x = 0; x < 6; x++) notes[x] = V[7+x];
+    RecalcNotes();
 }
 
 
    void Chord::SetFromVector_OLD_FILE_PRE_0_14(std::vector<int> &V){
+   /**Old files have following format: mode, guitar_root, guitar_note, triad_root,triad_note,octave,inversion,notes(6)(if custom)*/
     if (V.size() < 7) {
         *err << "ERROR: chord vector too small\n";
         return;
@@ -337,6 +339,7 @@ void Chord::SetFromVector(std::vector<int>& V){
     mode_guitar = V[2];
     mode_triad = V[4];
     base_octave = V[5];
+    NoteAndOctaveToBase();
     inversion = V[6];
     if(type == CHORD_TYPE_CUSTOM)for (int x = 0; x < 6; x++) notes[x] = V[7+x];
     else RecalcNotes();

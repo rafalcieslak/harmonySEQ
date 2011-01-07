@@ -97,13 +97,13 @@ public:
 
    /**Generates a name for the chord, like "Guitar, E-moll"*/
     Glib::ustring GetName();
+
+    void BaseToOctaveAndNote();
+    void NoteAndOctaveToBase();
 private:
 
     /**Recalculates notes (given the modes, roots etc) and stores them to notes array.*/
     void RecalcNotes();
-
-    void BaseToOctaveAndNote();
-    void NoteAndOctaveToBase();
     /**Notes are stored here so that they do not need to be recalculated every time.*/
     int notes[6];
 
