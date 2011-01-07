@@ -1,3 +1,9 @@
+harmonyseq 0.14 "enlighted"
+	- Moved GUI from buttons to an elegant toolbar.
+	- Reorganized chord logic and GUI.
+	- Fixed many bugs.
+	- Source code cleaned-up.
+
 harmonyseq 0.13 "polyphony"
 	- Using checkboxes instead of sliders in seqencer GUI makes it now possible to produce polyponic voices using one sequencer
 	- Added menubar to improve GUI
