@@ -90,7 +90,6 @@ private:
     Gtk::VBox main_vbox;
     Gtk::VBox vbox1;
     
-    Gtk::HBox hbox_up;
     Gtk::Label tempolabel;
     
 };

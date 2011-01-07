@@ -35,8 +35,8 @@ MainWindow::MainWindow()
 {
     set_border_width(0);
     //set_resizable(0);
-    set_default_size(500,300);
-    set_size_request(500,300);
+    set_default_size(600,300);
+    set_size_request(600,300);
     //set_resizable(0);
     UpdateTitle();
 
@@ -59,6 +59,8 @@ MainWindow::MainWindow()
     m_refActionGroup->add(Gtk::Action::create("Events", Gtk::Stock::EXECUTE,_("Events"), _("Opens the events window")), sigc::mem_fun(*this, &MainWindow::OnEventsClicked));
     m_refActionGroup->add(Gtk::Action::create("About", Gtk::Stock::ABOUT), sigc::mem_fun(*this, &MainWindow::OnAboutMenuClicked));
     m_refActionGroup->add(Gtk::Action::create("PlayPause", Gtk::Stock::MEDIA_PAUSE, _("Play/Pause"),_("Toggle play/pause")), sigc::mem_fun(*this, &MainWindow::OnPlayPauseClicked));
+
+    m_refActionGroup->add(Gtk::Action::create("Empty"));
 
     m_refUIManager = Gtk::UIManager::create();
     m_refUIManager->insert_action_group(m_refActionGroup);
@@ -92,6 +94,8 @@ MainWindow::MainWindow()
             "   <separator/>"
             "   <toolitem name='EventsTool' action='Events'/>"
             "   <separator expand='true'/>"
+            "   <toolitem name='TempoLabel' action='Empty'/>"
+            "   <toolitem name='Tempo' action='Empty'/>"
             "   <toolitem name='PlayPauseTool' action='PlayPause'/>"
             "  </toolbar>"
             "</ui>";
@@ -127,6 +131,10 @@ MainWindow::MainWindow()
     Gtk::Widget* pEventsTool = m_refUIManager->get_widget("/ToolBar/EventsTool");
     Gtk::ToolItem& EventsTool = dynamic_cast<Gtk::ToolItem&> (*pEventsTool);
     EventsTool.set_is_important(1); // will display text text to the icon
+    Gtk::Widget* pTempo = m_refUIManager->get_widget("/ToolBar/Tempo");
+    Gtk::ToolItem& TempoTool = dynamic_cast<Gtk::ToolItem&> (*pTempo);
+    Gtk::Widget* pTempoLabelTool = m_refUIManager->get_widget("/ToolBar/TempoLabel");
+    Gtk::ToolItem& TempoLabelTool = dynamic_cast<Gtk::ToolItem&> (*pTempoLabelTool);
     // </editor-fold>
 
     main_vbox.pack_start(*pMenubar,Gtk::PACK_SHRINK);
@@ -134,10 +142,15 @@ MainWindow::MainWindow()
     main_vbox.pack_start(vbox1);
     vbox1.set_border_width(5);
 
-    vbox1.pack_start(hbox_up, Gtk::PACK_SHRINK);
-    hbox_up.pack_start(tempolabel, Gtk::PACK_SHRINK);
-    hbox_up.pack_start(tempo_button, Gtk::PACK_SHRINK);
+    
+    TempoTool.remove();
+    TempoTool.add(tempo_button);
+    TempoTool.set_homogeneous(0);
+    TempoLabelTool.remove();
+    TempoLabelTool.add(tempolabel);
+    TempoLabelTool.set_homogeneous(0);
     tempo_button.set_range(30, 320);
+    tempo_button.set_tooltip_markup(_("Sets the <b>tempo</b> applied to all sequencers.\nIt also blinks when a bar starts."));
     tempo_button.set_increments(1, 10);
     tempo_button.set_value(tempo);
     tempo_button.signal_value_changed().connect(sigc::mem_fun(*this, &MainWindow::TempoChanged));
