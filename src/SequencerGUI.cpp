@@ -79,22 +79,28 @@ SequencerWindow::SequencerWindow(Sequencer* prt)
     volumelabel.set_text(_("Volume:"));
     activepanellabel.set_text(_("Active pattern:"));
     set_as_active_pattern.set_label(_("Set as active pattern"));
+    set_as_active_pattern.set_tooltip_markup(_("Sets the chosen pattern to be the <b>active</b> one, which means the one that  will be played back."));
+    active_pattern.set_tooltip_markup(_("Selects which patter is <b>active</b>.\nActive pattern is the one that is played back. It's marked on a list with an asterisk (*).\n\n<i>This way all patterns can be edited while only the selected (the active) is played back. </i>"));
     patternlabel.set_text(_("Pattern:"));
     add_pattern_button.set_label(_("Add"));
+    add_pattern_button.set_tooltip_markup(_("Adds a new pattern to this sequencer."));
     remove_pattern.set_label(_("Remove"));
+    remove_pattern.set_tooltip_markup(_("Removes this pattern."));
 
     volume_button.set_range(0,127);
     channel_button.set_range(1,16);
     volume_button.set_increments(1,16);
     channel_button.set_increments(1,1);
     volume_button.set_value(parent->GetVolume());
-    volume_button.property_value() = (double)parent->GetVolume();
+    volume_button.set_tooltip_markup(_("Sets the <b>velocity</b> of the notes played by this sequencer.\nUsually higher velocities result in louder sounds."));
     channel_button.set_value(parent->GetChannel());
+    channel_button.set_tooltip_markup(_("Selects the <b>MIDI channel</b> this sequencer will output notes to. "));
     volume_button.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWindow::OnVolumeChanged));
     channel_button.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWindow::OnChannelChanged));
     active_pattern.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWindow::OnActivePatternChanged));
     toggle_vbox.pack_start(tgl_mute);
     tgl_mute.set_label(_("On"));
+    tgl_mute.set_tooltip_markup(_("Turns this sequencer <b>on/off</b>."));
     tgl_mute.signal_clicked().connect(mem_fun(*this,&SequencerWindow::OnToggleMuteToggled));
     tgl_mute.set_active(parent->on);
 
@@ -112,6 +118,7 @@ SequencerWindow::SequencerWindow(Sequencer* prt)
         row[m_Columns_resol.resol] = resolutions[x];
         if(parent->resolution==resolutions[x]) resolution_box.set_active(x);
     }
+    resolution_box.set_tooltip_markup(_("Selects the <b>resolution</b> of this sequencer. It defines how many <i>notes per one sequence</i> the sequencer has.\nIf the length is set to one, than the resolution will determine how many notes will be played in one bar."));
     resolution_box.pack_start(m_Columns_resol.resol);
     resolution_box.signal_changed().connect(mem_fun(*this,&SequencerWindow::OnResolutionChanged));
     
@@ -131,6 +138,7 @@ SequencerWindow::SequencerWindow(Sequencer* prt)
         row[m_Columns_len.text] = temp;
         if(parent->length==lengths[x]) length_box.set_active(x);
     }
+    length_box.set_tooltip_markup(_("Selects the <b>length</b> of this sequencer. It defines <i>how many bars</i> the sequence in this sequencer will last. In case it's smaller then 1, the sequence will be repeated few times in each bar."));
     length_box.pack_start(m_Columns_len.text);
     length_box.signal_changed().connect(mem_fun(*this,&SequencerWindow::OnLengthChanged));
     

@@ -161,9 +161,10 @@ MainWindow::MainWindow()
     tempo_button.signal_value_changed().connect(sigc::mem_fun(*this, &MainWindow::TempoChanged));
 
     UpdatePlayPauseTool();
+    UpdatePassMidiToggle(); //sometimes we pass midi by default.
 
     ScrolledWindow.add(m_TreeView);
-    ScrolledWindow.set_policy(Gtk::POLICY_NEVER,Gtk::POLICY_AUTOMATIC); //always hide the horisontal scroolbar, but the vertical show only when needed
+    ScrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC,Gtk::POLICY_AUTOMATIC); //The sliders should be shown only when needed
     vbox1.pack_start(ScrolledWindow); //will expand, no shrinking
     // <editor-fold defaultstate="collapsed" desc="tree">
     { //creating the tree model
@@ -198,19 +199,17 @@ MainWindow::MainWindow()
 
 
         Gtk::TreeView::Column* pColumn;
-        int tricky = 0;
-        pColumn = m_TreeView.get_column(tricky);
+        int col_iter = 0;
+        pColumn = m_TreeView.get_column(col_iter);
         if(debugging){
             pColumn->set_sort_column(m_columns_sequencers.col_ID);
-            tricky++;
-            pColumn = m_TreeView.get_column(tricky);
+            col_iter++;
+            pColumn = m_TreeView.get_column(col_iter);
         }
 
-        //pColumn->set_sort_column(m_columns.col_name);
-        //disabled, as it causes strange problems with TreeRowReference-s
-        tricky++;
-        pColumn = m_TreeView.get_column(tricky);
-        //pColumn->set_sort_column(m_columns.col_muted);
+        
+        col_iter++;
+        pColumn = m_TreeView.get_column(col_iter);
         pColumn->set_fixed_width(10);
 
         //drag and drop enabling
@@ -491,8 +490,6 @@ void MainWindow::OnCloneClicked(){
     Gtk::TreeModel::RowReference rowref = clone_sequencer(id);
     iter = rowref.get_model()->get_iter(rowref.get_path());
     m_TreeView.get_selection()->select(iter);
-
-   // FlashTempoStart(); wtf it is doing here?????
 
     Files::SetFileModified(1);
 }
