@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
 "POT-Creation-Date: 2011-01-07 21:18+0100\n"
-"PO-Revision-Date: 2011-01-06 20:11+0000\n"
+"PO-Revision-Date: 2011-01-10 15:38+0000\n"
 "Last-Translator: Rafal Cieslak <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
-"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-01-07 05:38+0000\n"
+"X-Launchpad-Export-Date: 2011-01-11 05:46+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+"Language: pl\n"
 
 #: src/main.cpp:248
 #, c-format
@@ -96,14 +96,12 @@ msgid "Opens the events window"
 msgstr ""
 
 #: src/MainWindow.cpp:61
-#, fuzzy
 msgid "Play/Pause"
-msgstr "Odtwarzanie/pauza"
+msgstr ""
 
 #: src/MainWindow.cpp:61
-#, fuzzy
 msgid "Toggle play/pause"
-msgstr "Przełącz odtwarzanie"
+msgstr ""
 
 #: src/MainWindow.cpp:102 src/MainWindow.cpp:108
 msgid "ERROR - error while building menus: "
@@ -126,19 +124,16 @@ msgid "Channel"
 msgstr "Kanał"
 
 #: src/MainWindow.cpp:176
-#, fuzzy
 msgid "Pattern"
-msgstr "Wzór:"
+msgstr ""
 
 #: src/MainWindow.cpp:177
-#, fuzzy
 msgid "Resolution"
-msgstr "Rozdzielczość:"
+msgstr ""
 
 #: src/MainWindow.cpp:178
-#, fuzzy
 msgid "Length"
-msgstr "Długość:"
+msgstr ""
 
 #: src/MainWindow.cpp:179
 msgid "Velocity"
@@ -221,8 +216,8 @@ msgstr ""
 "zapoznania się ze szczegółami.\n"
 "\n"
 "Powinieneś otrzymać kopię GNU Powszechnej Licencji Publicznej wraz z\n"
-"harmonySEQ. Jeżeli nie otrzymałeś jej, zobacz na <http://www.gnu.org/"
-"licenses/>."
+"harmonySEQ. Jeżeli nie otrzymałeś jej, zobacz na "
+"<http://www.gnu.org/licenses/>."
 
 #: src/MainWindow.cpp:585
 msgid "harmonySEQ website"
@@ -243,9 +238,8 @@ msgstr ""
 "  Rafal Cieslak https://launchpad.net/~rafalcieslak256"
 
 #: src/MainWindow.cpp:610
-#, fuzzy
 msgid "Are sure you want to loose them?"
-msgstr "Czy na pewno chcesz zakończyć pracę programu?"
+msgstr ""
 
 #: src/MainWindow.cpp:634
 msgid "Are sure you want to loose them and open another file?"
@@ -629,7 +623,8 @@ msgstr "Przełącz"
 
 #: src/ActionGUI.cpp:371
 msgid "Error: tempo has changed, while action is not tempo-type."
-msgstr "Błąd: tempo zostało zmienione, podczas gdy akcja nie jest typu tempo."
+msgstr ""
+"Błąd: tempo zostało zmienione, podczas gdy akcja nie jest typu tempo."
 
 #: src/ActionGUI.cpp:383
 msgid "Error: sequencer has changed, while action is not sequencer-type."
@@ -643,13 +638,15 @@ msgstr ""
 "Błąd: Głośność została zmieniona, podczas gdy akcja nie jest typu głośności."
 
 #: src/ActionGUI.cpp:407
-msgid "Error: note to set has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note to set has changed, while action is not set-seq-note-type."
 msgstr ""
 "Błąd: nuta do ustawienia została zmieniona, podczas gdy akcja nie jest typu "
 "zmień-nutę-sekwencera."
 
 #: src/ActionGUI.cpp:418
-msgid "Error: note number has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note number has changed, while action is not set-seq-note-type."
 msgstr ""
 "Błąd: numer nuty do ustawienia został zmieniony, podczas gdy akcja nie jest "
 "typu zmień-nutę-sekwencera."
@@ -749,9 +746,8 @@ msgid "Triad"
 msgstr "Trójdźwięk"
 
 #: src/TreeModels.cpp:207
-#, fuzzy
 msgid "Guitar"
-msgstr "Tryb gitary"
+msgstr ""
 
 #: src/Chord.cpp:267
 #, c-format
@@ -805,9 +801,8 @@ msgid "Sets <b>root</b> of this chord."
 msgstr ""
 
 #: src/ChordWidget.cpp:70
-#, fuzzy
 msgid "Octave:"
-msgstr "Oktawa"
+msgstr ""
 
 #: src/ChordWidget.cpp:77
 msgid "Sets the <b>inversion</b> of the triad."
@@ -828,51 +823,20 @@ msgid ""
 " - If off, the chord ignores the base note."
 msgstr ""
 
-#~ msgid "Main Note:"
-#~ msgstr "Nuta główna:"
-
-#~ msgid "MN"
-#~ msgstr "GN"
-
-#~ msgid "Chan"
-#~ msgstr "Kan"
-
-#~ msgid "Pat"
-#~ msgstr "Wzór"
-
-#~ msgid "Res"
-#~ msgstr "Roz"
-
-#~ msgid "Len"
-#~ msgstr "Dł"
-
-#~ msgid "Vol"
-#~ msgstr "Gł"
-
-#~ msgid "Clone"
-#~ msgstr "Klonuj"
-
-#~ msgid "Apply main note"
-#~ msgstr "Stosuj główną nutę"
-
-#~ msgid "Set main note to %d"
-#~ msgstr "Ustaw nutę główną na %d"
-
-#~ msgid "Error: note has changed, while action is not note-type."
-#~ msgstr "Błąd: nuta została zmieniona, podczas gdy akcja nie jest typu nuty."
-
-#~ msgid "Set main note"
-#~ msgstr "Ustaw nutę główną"
-
+#, c-format
 #~ msgid "harmonySEQ, version %s\n"
 #~ msgstr "harmonySEQ, wersja %s\n"
 
 #~ msgid "setting ports number to "
 #~ msgstr "ustaw ilość portów na "
 
+#~ msgid "Main Note:"
+#~ msgstr "Nuta główna:"
+
 #~ msgid "Sequencer"
 #~ msgstr "Sekwencer"
 
+#, c-format
 #~ msgid ""
 #~ "    -p --ports n     sets ports number to n\n"
 #~ "    -d --debug       enters debug mode, prints lots of debug messeges\n"
@@ -891,6 +855,7 @@ msgstr ""
 #~ msgid "Muted"
 #~ msgstr "Wyciszony"
 
+#, c-format
 #~ msgid ""
 #~ "harmonySEQ, version %s\n"
 #~ "\n"
@@ -911,9 +876,16 @@ msgstr ""
 #~ "    -h --help        wyświetla tę wiadomość pomocy\n"
 #~ "    -v --version     wyświetla wersję programu\n"
 
+#~ msgid "Apply main note"
+#~ msgstr "Stosuj główną nutę"
+
+#~ msgid "MN"
+#~ msgstr "GN"
+
 #~ msgid "Mute"
 #~ msgstr "Wycisz"
 
+#, c-format
 #~ msgid "ERROR - error while trying to read %s\n"
 #~ msgstr "BŁĄD - błąd podczas czytania pliku %s\n"
 
@@ -923,33 +895,62 @@ msgstr ""
 #~ msgid "Save"
 #~ msgstr "Zapisz"
 
+#~ msgid "Clone"
+#~ msgstr "Klonuj"
+
+#~ msgid "Res"
+#~ msgstr "Roz"
+
+#~ msgid "Chan"
+#~ msgstr "Kan"
+
+#~ msgid "Len"
+#~ msgstr "Dł"
+
+#, c-format
 #~ msgid ""
-#~ "       --pass-midi   passes the midi events through the program by "
-#~ "default\n"
+#~ "       --pass-midi   passes the midi events through the program by default\n"
 #~ msgstr ""
 #~ "       --pass-midi   włącz domyślnie przesyłanie wszystkich zdarzeń MIDI "
 #~ "przez program.\n"
 
+#, c-format
 #~ msgid "When note %d on channel %d is moved..."
 #~ msgstr "Gdy kontroler %d na kanale %d jest poruszany..."
 
+#, c-format
 #~ msgid "Set tempo to %d"
 #~ msgstr "Ustaw tempo na %d"
 
+#, c-format
 #~ msgid "Set volume of sequencer %d to %d"
 #~ msgstr "Ustaw głośność sekwencera %d na %d"
 
+#, c-format
+#~ msgid "Set main note to %d"
+#~ msgstr "Ustaw nutę główną na %d"
+
+#, c-format
 #~ msgid "(empty event)"
 #~ msgstr "(puste zdarzenie)"
 
+#~ msgid "Vol"
+#~ msgstr "Gł"
+
+#, c-format
 #~ msgid "Switch sequencer %d ON"
 #~ msgstr "Włącz sekewncer %d"
 
+#, c-format
 #~ msgid "Switch sequencer %d OFF"
 #~ msgstr "Wyłącz sekwencer %d"
 
+#, c-format
 #~ msgid "Toggle sequencer %d"
 #~ msgstr "Przełącz sekwencer %d"
+
+#~ msgid "Set main note"
+#~ msgstr "Ustaw nutę główną"
 
 #~ msgid "Sequencer/OFF"
 #~ msgstr "Sekwencer/Wył."
@@ -962,9 +963,12 @@ msgstr ""
 
 #~ msgid "Error: sequencer has changed, while action is not key-type."
 #~ msgstr ""
-#~ "Błąd: sekwencer został zmieniony, podczas gdy akcja nie jest typu "
-#~ "sekwencera."
+#~ "Błąd: sekwencer został zmieniony, podczas gdy akcja nie jest typu sekwencera."
 
+#~ msgid "Error: note has changed, while action is not note-type."
+#~ msgstr "Błąd: nuta została zmieniona, podczas gdy akcja nie jest typu nuty."
+
+#, c-format
 #~ msgid ""
 #~ "harmonySEQ, version %s\n"
 #~ "\n"
@@ -995,14 +999,21 @@ msgstr ""
 #~ msgstr "Sekwencer/Ustaw wszystkie nuty"
 
 #~ msgid ""
-#~ "Error: one of 6 notes to set has changed, while action is not of change-"
-#~ "all-notes type."
+#~ "Error: one of 6 notes to set has changed, while action is not of change-all-"
+#~ "notes type."
 #~ msgstr ""
-#~ "Błąd: jedna z 6 nut do ustawienia została zmieniona, podczas gdy akcja "
-#~ "nie jest typy zmien-wszystkie-nuty."
+#~ "Błąd: jedna z 6 nut do ustawienia została zmieniona, podczas gdy akcja nie "
+#~ "jest typy zmien-wszystkie-nuty."
 
+#, c-format
 #~ msgid "Set notes of sequencer '%s' to %d,%d,%d,%d,%d,%d "
 #~ msgstr "Ustaw nuty sekwencera '%s' na %d,%d,%d,%d,%d,%d "
+
+#~ msgid "Guitar mode"
+#~ msgstr "Tryb gitary"
+
+#~ msgid "Octave"
+#~ msgstr "Oktawa"
 
 #~ msgid "The file had unsaved changes."
 #~ msgstr "Plik ma niezapisane zmiany."
@@ -1030,8 +1041,12 @@ msgstr ""
 #~ msgid "Sequencer/Set active melody"
 #~ msgstr "Sekwencer/Ustaw aktywną melodię"
 
+#, c-format
 #~ msgid "Set active melody of sequencer '%s' to %d"
 #~ msgstr "Ustaw aktywną melodię sekwencera '%s' na %d"
 
 #~ msgid " translator-credits"
 #~ msgstr " Tłumaczyli"
+
+#~ msgid "Pat"
+#~ msgstr "Wzór"
