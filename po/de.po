@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2011-01-11 20:56+0100\n"
+"POT-Creation-Date: 2011-01-11 22:26+0100\n"
 "PO-Revision-Date: 2010-12-18 08:17+0000\n"
 "Last-Translator: Launchpad Translations Administrators <rosetta@launchpad."
 "net>\n"
@@ -43,7 +43,7 @@ msgid ""
 "   -v    --version     prints the program version\n"
 msgstr ""
 
-#: src/MainWindow.cpp:43 src/ActionGUI.cpp:114
+#: src/MainWindow.cpp:43 src/ActionGUI.cpp:115
 msgid "Tempo:"
 msgstr ""
 
@@ -165,7 +165,7 @@ msgstr "ID"
 msgid "Name"
 msgstr "Name"
 
-#: src/MainWindow.cpp:180 src/SequencerGUI.cpp:102 src/ActionGUI.cpp:120
+#: src/MainWindow.cpp:180 src/SequencerGUI.cpp:102 src/ActionGUI.cpp:121
 msgid "On"
 msgstr ""
 
@@ -219,12 +219,12 @@ msgstr ""
 msgid ", name is: "
 msgstr ""
 
-#: src/MainWindow.cpp:561 src/Action.cpp:179 src/ActionGUI.cpp:123
+#: src/MainWindow.cpp:561 src/Action.cpp:179 src/ActionGUI.cpp:124
 #, c-format
 msgid "Play"
 msgstr ""
 
-#: src/MainWindow.cpp:565 src/Action.cpp:176 src/ActionGUI.cpp:122
+#: src/MainWindow.cpp:565 src/Action.cpp:176 src/ActionGUI.cpp:123
 #, c-format
 msgid "Pause"
 msgstr ""
@@ -314,7 +314,7 @@ msgstr ""
 msgid "MIDI channel:"
 msgstr ""
 
-#: src/SequencerGUI.cpp:79 src/ActionGUI.cpp:115
+#: src/SequencerGUI.cpp:79 src/ActionGUI.cpp:116
 msgid "Volume:"
 msgstr ""
 
@@ -526,43 +526,43 @@ msgstr ""
 msgid "Error - cannot colorize triggered action: row is empty.\n"
 msgstr ""
 
-#: src/EventGUI.cpp:66 src/ActionGUI.cpp:112
+#: src/EventGUI.cpp:67 src/ActionGUI.cpp:113
 msgid "Type:"
 msgstr ""
 
-#: src/EventGUI.cpp:67
+#: src/EventGUI.cpp:68
 msgid "Channel:"
 msgstr ""
 
-#: src/EventGUI.cpp:68
+#: src/EventGUI.cpp:69
 msgid "Controller:"
 msgstr ""
 
-#: src/EventGUI.cpp:69
+#: src/EventGUI.cpp:70
 msgid "Key:"
 msgstr ""
 
-#: src/EventGUI.cpp:70 src/ChordWidget.cpp:84
+#: src/EventGUI.cpp:71 src/ChordWidget.cpp:84
 msgid "Note:"
 msgstr ""
 
-#: src/EventGUI.cpp:81 src/ActionGUI.cpp:125
+#: src/EventGUI.cpp:82 src/ActionGUI.cpp:126
 msgid "OK"
 msgstr ""
 
-#: src/EventGUI.cpp:171
+#: src/EventGUI.cpp:172
 msgid "Error: channel has changed, while event is not MIDI-type."
 msgstr ""
 
-#: src/EventGUI.cpp:181
+#: src/EventGUI.cpp:182
 msgid "Error: key has changed, while event is not key-type."
 msgstr ""
 
-#: src/EventGUI.cpp:192
+#: src/EventGUI.cpp:193
 msgid "Error: controller has changed, while event is not ctrl-type."
 msgstr ""
 
-#: src/EventGUI.cpp:203
+#: src/EventGUI.cpp:204
 msgid "Error: note has changed, while event is not note-type."
 msgstr ""
 
@@ -640,18 +640,18 @@ msgstr ""
 msgid "(unknown action)"
 msgstr ""
 
-#: src/Action.cpp:203
+#: src/Action.cpp:204
 msgid ""
 "Critical ERROR: Trying to get name of sequencer outside of sequencers "
 "vector.\n"
 msgstr ""
 
-#: src/Action.cpp:205
+#: src/Action.cpp:208
 #, c-format
 msgid "%d (which was removed)"
 msgstr ""
 
-#: src/Action.cpp:207
+#: src/Action.cpp:210
 #, c-format
 msgid "%s"
 msgstr ""
@@ -660,61 +660,61 @@ msgstr ""
 msgid "Action"
 msgstr ""
 
-#: src/ActionGUI.cpp:113
+#: src/ActionGUI.cpp:114
 msgid "Sequencer:"
 msgstr ""
 
-#: src/ActionGUI.cpp:116
+#: src/ActionGUI.cpp:117
 msgid "Set note "
 msgstr ""
 
-#: src/ActionGUI.cpp:117
+#: src/ActionGUI.cpp:118
 msgid " to: "
 msgstr ""
 
-#: src/ActionGUI.cpp:118
+#: src/ActionGUI.cpp:119
 msgid "Pattern number: "
 msgstr ""
 
-#: src/ActionGUI.cpp:119
+#: src/ActionGUI.cpp:120
 msgid "Off"
 msgstr ""
 
-#: src/ActionGUI.cpp:121 src/ActionGUI.cpp:124
+#: src/ActionGUI.cpp:122 src/ActionGUI.cpp:125
 msgid "Toggle"
 msgstr ""
 
-#: src/ActionGUI.cpp:371
+#: src/ActionGUI.cpp:372
 msgid "Error: tempo has changed, while action is not tempo-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:383
+#: src/ActionGUI.cpp:384
 msgid "Error: sequencer has changed, while action is not sequencer-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:396
+#: src/ActionGUI.cpp:397
 msgid "Error: volume has changed, while action is not volume-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:407
+#: src/ActionGUI.cpp:408
 msgid "Error: note to set has changed, while action is not set-seq-note-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:418
+#: src/ActionGUI.cpp:419
 msgid "Error: note number has changed, while action is not set-seq-note-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:431
+#: src/ActionGUI.cpp:432
 msgid ""
 "Error: on-off-toggle has changed, while action is not on-off-toggle-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:444
+#: src/ActionGUI.cpp:445
 msgid ""
 "Error: play-pause-toggle has changed, while action is not play-pause-type."
 msgstr ""
 
-#: src/ActionGUI.cpp:466
+#: src/ActionGUI.cpp:467
 msgid "Error: pattern has changed, while action is not pattern-type."
 msgstr ""
 
@@ -870,4 +870,11 @@ msgid ""
 "Sets whether this chord uses the base note.\n"
 " - If on, chord notes are set relatively to the base note.\n"
 " - If off, the chord ignores the base note."
+msgstr ""
+
+#: src/ChordWidget.cpp:92
+msgid ""
+"The <b>base note</b> for this chord. If it uses the base, which is "
+"determined by the switch on the left-hand side, all notes of this chord are "
+"given relatively to this base note."
 msgstr ""

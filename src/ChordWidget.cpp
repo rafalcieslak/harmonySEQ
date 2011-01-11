@@ -89,6 +89,7 @@ ChordWidget::ChordWidget(Chord* associated_chord){
     //base.set_width_chars(3);
     base.set_value(chord->GetBase());
     base.signal_value_changed().connect(mem_fun(*this, &ChordWidget::OnBaseChanged));
+    base.set_tooltip_markup(_("The <b>base note</b> for this chord. If it uses the base, which is determined by the switch on the left-hand side, all notes of this chord are given relatively to this base note."));
 
     line1.pack_start(combo_type,Gtk::PACK_SHRINK);
     line1.pack_start(combo_root,Gtk::PACK_SHRINK);
