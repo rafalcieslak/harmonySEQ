@@ -37,6 +37,7 @@ ActionGUI::ActionGUI(Action *prt):
  
     set_border_width(5);
     set_position(Gtk::WIN_POS_CENTER_ON_PARENT);
+    set_resizable(0);
     
     add(main_box);
     main_box.set_spacing(5);
