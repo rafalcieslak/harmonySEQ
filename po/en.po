@@ -11,12 +11,12 @@ msgstr ""
 "PO-Revision-Date: 2010-12-18 08:23+0000\n"
 "Last-Translator: Rafal Cieslak <Unknown>\n"
 "Language-Team: English\n"
-"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ASCII\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-12-19 05:19+0000\n"
+"X-Launchpad-Export-Date: 2011-01-11 05:46+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+"Language: en\n"
 
 #: src/main.cpp:248
 #, c-format
@@ -111,23 +111,20 @@ msgid "On"
 msgstr "On"
 
 #: src/MainWindow.cpp:175
-#, fuzzy
 msgid "Channel"
-msgstr "Chan"
+msgstr ""
 
 #: src/MainWindow.cpp:176
 msgid "Pattern"
 msgstr ""
 
 #: src/MainWindow.cpp:177
-#, fuzzy
 msgid "Resolution"
-msgstr "Resolution:"
+msgstr ""
 
 #: src/MainWindow.cpp:178
-#, fuzzy
 msgid "Length"
-msgstr "Length:"
+msgstr ""
 
 #: src/MainWindow.cpp:179
 msgid "Velocity"
@@ -591,11 +588,13 @@ msgid "Error: volume has changed, while action is not volume-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:407
-msgid "Error: note to set has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note to set has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:418
-msgid "Error: note number has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note number has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:431
@@ -766,36 +765,36 @@ msgid ""
 " - If off, the chord ignores the base note."
 msgstr ""
 
-#~ msgid "Main Note:"
-#~ msgstr "Main Note:"
+#~ msgid "Apply main note"
+#~ msgstr "Apply main note"
 
 #~ msgid "MN"
 #~ msgstr "MN"
 
-#~ msgid "Res"
-#~ msgstr "Res"
+#~ msgid "Main Note:"
+#~ msgstr "Main Note:"
 
-#~ msgid "Len"
-#~ msgstr "Len"
+#, c-format
+#~ msgid ""
+#~ "       --pass-midi   passes the midi events through the program by default\n"
+#~ msgstr ""
+#~ "       --pass-midi   passes the midi events through the program by default\n"
 
 #~ msgid "Clone"
 #~ msgstr "Clone"
 
-#~ msgid "Apply main note"
-#~ msgstr "Apply main note"
-
-#~ msgid ""
-#~ "       --pass-midi   passes the midi events through the program by "
-#~ "default\n"
-#~ msgstr ""
-#~ "       --pass-midi   passes the midi events through the program by "
-#~ "default\n"
+#~ msgid "Len"
+#~ msgstr "Len"
 
 #~ msgid "Open"
 #~ msgstr "Open"
 
+#~ msgid "Res"
+#~ msgstr "Res"
+
 #~ msgid "Save"
 #~ msgstr "Save"
 
+#, c-format
 #~ msgid "When note %d on channel %d is moved..."
 #~ msgstr "When note %d on channel %d is moved..."
