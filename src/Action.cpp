@@ -54,7 +54,7 @@ void Action::Trigger(int data){
     //Reactions depend on action type.
     switch (type){
         case SEQ_ON_OFF_TOGGLE:
-            if (!sequencers[args[1]]) break;
+            if (sequencers.size()==0 || !sequencers[args[1]]) break;
             switch (args[2]){
                 case 0:
                     sequencers[args[1]]->SetOn(0);
@@ -75,26 +75,26 @@ void Action::Trigger(int data){
             break;
 
         case SEQ_VOLUME_SET:
-            if (!sequencers[args[1]]) break;
+            if (sequencers.size()==0 || !sequencers[args[1]]) break;
             sequencers[args[1]]->SetVolume(args[2]);
             Files::SetFileModified(1);
             break;
 
         case SEQ_CHANGE_ONE_NOTE:
-            if (!sequencers[args[1]]) break;
+            if (sequencers.size()==0 || !sequencers[args[1]]) break;
             sequencers[args[1]]->chord.SetNote(args[2]-1, args[3]);
             sequencers[args[1]]->UpdateGuiChord(); //nessesary //its a temporary wokraround, since UpdateGui seems to crash. Howewer, it is not needed to update anything else than notes.
             Files::SetFileModified(1);
             break;
 
         case SEQ_CHANGE_CHORD:
-            if (!sequencers[args[1]]) break;
+            if (sequencers.size()==0 || !sequencers[args[1]]) break;
             sequencers[args[1]]->chord.Set(chord);
             sequencers[args[1]]->UpdateGuiChord(); //nessesary //its a temporary wokraround, since UpdateGui seems to crash. Howewer, it is not needed to update anything else than notes.
             Files::SetFileModified(1);
              break;
         case SEQ_PLAY_ONCE:
-            if (!sequencers[args[1]]) break;
+            if (sequencers.size()==0 || !sequencers[args[1]]) break;
             sequencers[args[1]]->SetPlayOncePhase(1);
             break;
         case TOGGLE_PASS_MIDI:
@@ -124,7 +124,7 @@ void Action::Trigger(int data){
             midi->Sync();
             break;
         case SEQ_CHANGE_PATTERN:
-            if (!sequencers[args[1]]) break;
+            if (sequencers.size()==0 || !sequencers[args[1]]) break;
             sequencers[args[1]]->ChangeActivePattern(args[2]);
             break;
         default:
@@ -200,7 +200,10 @@ Glib::ustring Action::GetLabel(){
 
 Glib::ustring Action::GetSeqName(int n){
     char temp[100];
-    if(n>sequencers.size()) {*err << _("Critical ERROR: Trying to get name of sequencer outside of sequencers vector.\n"); return "";}
+    if (n >= sequencers.size()) {
+        if (sequencers.size() > 0) *err << _("Critical ERROR: Trying to get name of sequencer outside of sequencers vector.\n");
+        return "(none)";
+    }
     if (!sequencers[n])
         sprintf(temp,_("%d (which was removed)"),n);
     else
