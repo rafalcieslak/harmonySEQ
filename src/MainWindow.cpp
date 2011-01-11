@@ -461,8 +461,7 @@ void MainWindow::OnRemoveClicked(){
     *dbg << "removing row of id " << id << ENDL;
     
     m_refTreeModel_sequencers->erase(iter);
-    //erasing smallers the treeview, but not the window.
-    resize(2,2); //resizing to a tiny size, but the window won't get that small, it will be big enough to show all widgets.
+    
     delete sequencers[id];
     sequencers[id] = NULL;
 
@@ -636,7 +635,6 @@ void MainWindow::OnMenuNewClicked(){
     tempo = 120.0;
     tempo_button.set_value(120.0);
 
-    resize(2,2);
     UpdateTitle();
     
     Files::SetFileModified(0);
@@ -649,8 +647,6 @@ void MainWindow::OnMenuOpenClicked(){
             return;
         }
     Files::LoadFileDialog();
-    //erasing smallers the treeview, but not the window.
-    resize(2,2); //resizing to a tiny size, but the window won't get that small, it will be big enough to show all widgets.
 }
 
 void MainWindow::OnMenuSaveClicked(){
