@@ -198,13 +198,6 @@ MainWindow::MainWindow()
         column->add_attribute(cell->property_cell_background(),m_columns_sequencers.col_colour);
         Gtk::CellRendererToggle& tgl = dynamic_cast<Gtk::CellRendererToggle&> (*cell);
         tgl.signal_toggled().connect(mem_fun(*this, &MainWindow::OnMutedToggleToggled));
-
-        /*
-        col_count = m_TreeView.append_column_editable(_("MN"), m_columns_sequencers.col_apply_mainnote);
-        cell = m_TreeView.get_column_cell_renderer(col_count - 1);
-        Gtk::CellRendererToggle& tgl2 = dynamic_cast<Gtk::CellRendererToggle&> (*cell);
-        tgl2.signal_toggled().connect(mem_fun(*this, &MainWindow::OnApplyMainNoteToggleToggled));
-        */
         
         col_count = m_TreeView.append_column(_("Channel"), m_columns_sequencers.col_channel);
         col_count = m_TreeView.append_column(_("Pattern"), m_columns_sequencers.col_pattern);
@@ -746,11 +739,12 @@ bool MainWindow::OnTreviewButtonPress(GdkEventButton* event){
    Gtk::TreePath path;
    m_TreeView.get_path_at_pos(event->x,event->y,path);
 
-  if (path != NULL)
+  if (path != NULL) //right-clicked on a seq, not on the empty space
   if( (event->type == GDK_BUTTON_PRESS) && (event->button == 3) )
   {
     popup_menu->popup(event->button, event->time);
   }
+   
   return false;
 }
 
