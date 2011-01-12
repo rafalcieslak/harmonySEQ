@@ -22,8 +22,10 @@
 #include "global.h"
 #include "EventGUI.h"
 #include "Action.h"
+class Event;
 
-
+extern bool event_guessing_mode;
+extern Event* event_to_guess_to;
 
 class Event {
 public:

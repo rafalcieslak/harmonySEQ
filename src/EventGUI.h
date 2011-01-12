@@ -50,12 +50,15 @@ private:
     void OnNoteChanged();
     void OnCtrlChanged();;
     void OnChannelChanged();
-    void OnKeyPress();
+    bool OnKeyPress(GdkEventKey* event);
     void OnOKClicked();
+    void OnGuessClicked();
 
     Gtk::VBox main_box;
     Gtk::HBox line_type;
     Gtk::Label label_type;
+    Gtk::ToggleButton guess;
+
     Gtk::HBox line_key;
     Gtk::Label label_key;
     Gtk::HBox line_note;

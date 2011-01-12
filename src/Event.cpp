@@ -20,6 +20,10 @@
 #include "Event.h"
 #include "EventsWindow.h"
 #include "messages.h"
+
+bool event_guessing_mode;
+Event* event_to_guess_to;
+
 Event::Event(){
     type = 0;
     arg1 = 0;
@@ -98,6 +102,16 @@ void Event::ShowWindow(){
 void Event::UpdateGUI(){gui_window->UpdateValues();}
 
 void FindAndProcessEvents(Event::EventTypes ev,int arg1, int arg2){
+    if (event_guessing_mode == true){
+        if (event_to_guess_to != 0){ //in case the event was deleted, skip to processing the event
+            event_to_guess_to->type = ev;
+            event_to_guess_to->arg1 = arg1;
+            event_to_guess_to->arg2 = arg2;
+            event_guessing_mode = 0; //switch the mode off
+            event_to_guess_to->UpdateGUI();
+            return; //do not process this event
+        }
+    }
     for (unsigned int x = 0; x < events.size();x++){
         if (events[x]==NULL) continue;
         if (events[x]->type == ev){

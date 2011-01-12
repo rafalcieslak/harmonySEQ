@@ -52,6 +52,7 @@ EventGUI::EventGUI(Event *prt){
     line_channel.pack_start(label_channel,Gtk::PACK_SHRINK);
 
     line_type.pack_start(Types_combo,Gtk::PACK_SHRINK);
+    line_type.pack_end(guess,Gtk::PACK_SHRINK);
     line_key.pack_start(Keys_combo,Gtk::PACK_SHRINK);
     line_note.pack_start(note_spinbutton,Gtk::PACK_SHRINK);
     line_controller.pack_start(ctrl_spinbutton,Gtk::PACK_SHRINK);
@@ -69,6 +70,10 @@ EventGUI::EventGUI(Event *prt){
     label_controller.set_text(_("Controller:"));
     label_key.set_text(_("Key:"));
     label_note.set_text(_("Note:"));
+    guess.set_label(_("Guess"));
+    guess.set_tooltip_markup(_("Cathes next event end fill this one's type and arguments to fit the one triggered.\n<i>Example usage: press this button and then the X key on yout keyboard. The event will be automatically set to type: keyboard, key: X.</i>"));
+
+    guess.signal_clicked().connect(sigc::mem_fun(*this,&EventGUI::OnGuessClicked));
 
     Types_combo.pack_start(m_columns_event_types.label);
     Types_combo.set_active(parent->type);
@@ -83,6 +88,8 @@ EventGUI::EventGUI(Event *prt){
     ok_button.signal_clicked().connect(mem_fun(*this,&EventGUI::OnOKClicked));
 
     signal_show().connect(mem_fun(*this,&EventGUI::UpdateValues));
+    add_events(Gdk::KEY_PRESS_MASK);
+    signal_key_press_event().connect(mem_fun(*this,&EventGUI::OnKeyPress));
 
     label_preview.set_text(parent->GetLabel());
     show_all_children(1);
@@ -256,8 +263,25 @@ void EventGUI::UpdateValues(){
     }
 
     label_preview.set_text(parent->GetLabel());
-    //*dbg << "DONE ========== \n";
+
+    if(event_guessing_mode == 1 && event_to_guess_to == parent) guess.set_active(1);
+    else guess.set_active(0);
 
 }
 
-//===============================================
+bool EventGUI::OnKeyPress(GdkEventKey* event){
+    FindAndProcessEvents(Event::KEYBOARD, event->keyval);
+
+    return 1;
+}
+
+void EventGUI::OnGuessClicked(){
+    if (guess.get_active() == 1){
+        event_guessing_mode = 1;
+        event_to_guess_to = parent;
+    }else{
+        event_guessing_mode = 0;
+        event_to_guess_to = NULL; //not nessesary, but just for cleaning up
+    }
+
+}
