@@ -2,6 +2,7 @@ harmonyseq 0.14 "enlighted"
 	- Moved GUI from buttons to an elegant toolbar.
 	- Reorganized chord logic and GUI.
 	- Added many tooltips to make it easier to use harmonySEQ.
+	- Added a pop-up menu for the sequencer list.
 	- Some major GUI improvements.
 	- Fixed many bugs.
 	- Source code cleaned-up.
