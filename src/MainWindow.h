@@ -39,6 +39,7 @@ public:
     void InitTreeData();
     /**Refreshes a single row, called when some of it's settings had changed*/
     void RefreshRow(Gtk::TreeRowReference it);
+    void RefreshRow(Gtk::TreeRow row);
 
     /**Adds a single row, when a new sequencer is spawned (and return a RowReference, so that the sequencer will know where is it's row)*/
     Gtk::TreeModel::RowReference AddSequencerRow(int n);
@@ -57,6 +58,9 @@ public:
     Gtk::SpinButton tempo_button;
 
     void UpdatePassMidiToggle();
+
+    int GetSelectedSequencerID();
+    Gtk::TreeModel::iterator GetSelectedSequencerIter();
 private:
 
     /**Reacts on double click on a row*/
@@ -75,12 +79,20 @@ private:
     void OnPassToggleClicked();
     bool OnKeyPress(GdkEventKey* event);
 
+    bool OnTreviewButtonPress(GdkEventButton* event);
+
     void OnAboutMenuClicked();
     void OnMenuQuitClicked();
     void OnMenuSaveClicked();
     void OnMenuSaveAsClicked();
     void OnMenuOpenClicked();
     void OnMenuNewClicked();
+
+    void OnPopupEdit();
+    void OnPopupPlayOnce();
+    void OnPopupRemove();
+    void OnPopupDuplicate();
+
     Gtk::TreeView m_TreeView;
 
   Glib::RefPtr<Gtk::UIManager> m_refUIManager;
@@ -90,7 +102,9 @@ private:
 
     Gtk::VBox main_vbox;
     Gtk::VBox vbox1;
-    
+
+    Gtk::Menu* popup_menu;
+
     Gtk::Label tempolabel;
     
 };

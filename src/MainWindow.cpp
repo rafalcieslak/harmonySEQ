@@ -61,6 +61,10 @@ MainWindow::MainWindow()
     m_refActionGroup->add(Gtk::Action::create("About", Gtk::Stock::ABOUT), sigc::mem_fun(*this, &MainWindow::OnAboutMenuClicked));
     m_refActionGroup->add(Gtk::Action::create("PlayPause", Gtk::Stock::MEDIA_PAUSE, _("Play/Pause"),_("Toggle play/pause")), sigc::mem_fun(*this, &MainWindow::OnPlayPauseClicked));
     m_refActionGroup->add(Gtk::ToggleAction::create("PassMidiEvents", _("Pass MIDI events"),_("States whether MIDI events are passed-through harmonySEQ.")), sigc::mem_fun(*this, &MainWindow::OnPassToggleClicked));
+    m_refActionGroup->add(Gtk::Action::create("seq/Edit", Gtk::Stock::EDIT,_("Edit"),_("Edites the sequencer.")), sigc::mem_fun(*this, &MainWindow::OnPopupEdit));
+    m_refActionGroup->add(Gtk::Action::create("seq/PlayOnce", Gtk::Stock::MEDIA_NEXT, _("Play once"), _("Plays the sequence once.")), sigc::mem_fun(*this, &MainWindow::OnPopupPlayOnce));
+    m_refActionGroup->add(Gtk::Action::create("seq/Remove", Gtk::Stock::REMOVE, _("Remove"), _("Removes the sequencer.")), sigc::mem_fun(*this, &MainWindow::OnPopupRemove));
+    m_refActionGroup->add(Gtk::Action::create("seq/Duplicate", Gtk::Stock::CONVERT, _("Duplicate"), _("Duplicates the sequencer")), sigc::mem_fun(*this, &MainWindow::OnPopupDuplicate));
 
     m_refActionGroup->add(Gtk::Action::create("Empty"));
 
@@ -103,6 +107,13 @@ MainWindow::MainWindow()
             "   <toolitem name='Tempo' action='Empty'/>"
             "   <toolitem name='PlayPauseTool' action='PlayPause'/>"
             "  </toolbar>"
+            "  <popup name='Popup'>"
+            "   <menuitem action='seq/Edit'/>"
+            "   <menuitem action='seq/PlayOnce'/>"
+            "   <separator/>"
+            "   <menuitem action='seq/Duplicate'/>"
+            "   <menuitem action='seq/Remove'/>"
+            "  </popup>"
             "</ui>";
 #ifdef GLIBMM_EXCEPTIONS_ENABLED
     try {
@@ -118,9 +129,13 @@ MainWindow::MainWindow()
     }
 #endif //GLIBMM_EXCEPTIONS_ENABLED
 
-
     Gtk::Widget* pMenubar = m_refUIManager->get_widget("/MenuBar");
-    Gtk::Widget* pToolbar = m_refUIManager->get_widget("/ToolBar"); 
+    Gtk::Widget* pToolbar = m_refUIManager->get_widget("/ToolBar");
+    Gtk::Widget* pPopup = m_refUIManager->get_widget("/Popup");
+
+    Gtk::Menu& Popup = dynamic_cast<Gtk::Menu&>(*pPopup);
+    popup_menu = &Popup;
+    popup_menu->accelerate(*this);
 
     Gtk::Toolbar& Toolbar = dynamic_cast<Gtk::Toolbar&> (*pToolbar);
     Toolbar.set_toolbar_style(Gtk::TOOLBAR_BOTH_HORIZ);
@@ -222,6 +237,8 @@ MainWindow::MainWindow()
 
         //catching row selection signal
         m_TreeView.signal_row_activated().connect(sigc::mem_fun(*this, &MainWindow::OnTreeviewRowActivated));
+        //click signal (for popup)
+        m_TreeView.signal_button_press_event().connect(sigc::mem_fun(*this,&MainWindow::OnTreviewButtonPress), false);
 
         //react on selection change (to determine whether it is empty)
         Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = m_TreeView.get_selection();
@@ -276,6 +293,7 @@ MainWindow::MainWindow()
 MainWindow::~MainWindow()
 {
 
+    delete popup_menu;
 }
  
 void MainWindow::UpdateTitle(){
@@ -333,6 +351,19 @@ MainWindow::OnTreeviewRowActivated(const Gtk::TreeModel::Path& path, Gtk::TreeVi
         gdk_threads_enter();
     }
 
+}
+
+int MainWindow::GetSelectedSequencerID(){
+     Gtk::TreeModel::iterator iter = GetSelectedSequencerIter();
+    if(!iter) return -1;
+    Gtk::TreeModel::Row row = *iter;
+    int id = row[m_columns_sequencers.col_ID];
+    return id;
+
+}
+
+Gtk::TreeModel::iterator MainWindow::GetSelectedSequencerIter(){
+    return *(m_TreeView.get_selection())->get_selected();
 }
 
 void
@@ -428,9 +459,13 @@ void MainWindow::InitTreeData(){
 }
 
 void MainWindow::RefreshRow(Gtk::TreeRowReference rowref){
+    Gtk::TreeModel::Row row = *(m_refTreeModel_sequencers->get_iter(rowref.get_path()));
+    RefreshRow(row);
+}
+
+void MainWindow::RefreshRow(Gtk::TreeRow row){
 
     *dbg << "Refreshing ROW\n";
-    Gtk::TreeModel::Row row = *(m_refTreeModel_sequencers->get_iter(rowref.get_path()));
     int x = row[m_columns_sequencers.col_ID];
     Sequencer* seq = sequencers[x];
     row[m_columns_sequencers.col_muted] = seq->GetOn();
@@ -449,15 +484,12 @@ void MainWindow::RefreshRow(Gtk::TreeRowReference rowref){
     }else{
         row[m_columns_sequencers.col_colour] = "white";
     }
-  //  m_TreeView.queue_draw();
     
 }
 
 void MainWindow::OnRemoveClicked(){
-    Gtk::TreeModel::iterator iter = *(m_TreeView.get_selection())->get_selected();
-    if(!iter) return;
-    Gtk::TreeModel::Row row = *iter;
-    int id = row[m_columns_sequencers.col_ID];
+    int id = GetSelectedSequencerID();
+    Gtk::TreeModel::iterator iter = GetSelectedSequencerIter();
     *dbg << "removing row of id " << id << ENDL;
     
     m_refTreeModel_sequencers->erase(iter);
@@ -708,4 +740,38 @@ void MainWindow::OnMenuSaveAsClicked(){
             break;
     }
     
+}
+
+bool MainWindow::OnTreviewButtonPress(GdkEventButton* event){
+   Gtk::TreePath path;
+   m_TreeView.get_path_at_pos(event->x,event->y,path);
+
+  if (path != NULL)
+  if( (event->type == GDK_BUTTON_PRESS) && (event->button == 3) )
+  {
+    popup_menu->popup(event->button, event->time);
+  }
+  return false;
+}
+
+void MainWindow::OnPopupEdit(){
+    sequencers[GetSelectedSequencerID()]->ShowWindow();
+}
+
+void MainWindow::OnPopupRemove(){
+    //should do same action as remove tool
+    OnRemoveClicked();
+}
+
+void MainWindow::OnPopupDuplicate(){
+    //should do same action as duplicate tool
+    OnCloneClicked();
+}
+
+void MainWindow::OnPopupPlayOnce(){
+    int id = GetSelectedSequencerID();
+    sequencers[id]->SetPlayOncePhase(1); //will be played once
+    Gtk::TreeModel::iterator iter = GetSelectedSequencerIter();
+    RefreshRow(*iter);
+
 }
