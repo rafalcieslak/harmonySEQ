@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonySEQ 0.14\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2011-01-11 22:26+0100\n"
+"POT-Creation-Date: 2011-01-12 22:21+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -105,7 +105,8 @@ msgstr ""
 msgid "Adds a new seqencer"
 msgstr ""
 
-#: src/MainWindow.cpp:58 src/SequencerGUI.cpp:87 src/EventsWindow.cpp:39
+#: src/MainWindow.cpp:58 src/MainWindow.cpp:66 src/SequencerGUI.cpp:87
+#: src/EventsWindow.cpp:39
 msgid "Remove"
 msgstr ""
 
@@ -113,7 +114,7 @@ msgstr ""
 msgid "Removes selected sequencer"
 msgstr ""
 
-#: src/MainWindow.cpp:59
+#: src/MainWindow.cpp:59 src/MainWindow.cpp:67
 msgid "Duplicate"
 msgstr ""
 
@@ -145,95 +146,119 @@ msgstr ""
 msgid "States whether MIDI events are passed-through harmonySEQ."
 msgstr ""
 
-#: src/MainWindow.cpp:111 src/MainWindow.cpp:117
+#: src/MainWindow.cpp:64
+msgid "Edit"
+msgstr ""
+
+#: src/MainWindow.cpp:64
+msgid "Edites the sequencer."
+msgstr ""
+
+#: src/MainWindow.cpp:65
+msgid "Play once"
+msgstr ""
+
+#: src/MainWindow.cpp:65
+msgid "Plays the sequence once."
+msgstr ""
+
+#: src/MainWindow.cpp:66
+msgid "Removes the sequencer."
+msgstr ""
+
+#: src/MainWindow.cpp:67
+msgid "Duplicates the sequencer"
+msgstr ""
+
+#: src/MainWindow.cpp:122 src/MainWindow.cpp:128
 msgid "ERROR - error while building menus: "
 msgstr ""
 
-#: src/MainWindow.cpp:158
+#: src/MainWindow.cpp:173
 msgid ""
 "Sets the <b>tempo</b> applied to all sequencers.\n"
 "It also blinks when a bar starts."
 msgstr ""
 
-#: src/MainWindow.cpp:173 src/EventsWindow.cpp:49
+#: src/MainWindow.cpp:188 src/EventsWindow.cpp:49
 msgid "ID"
 msgstr ""
 
-#: src/MainWindow.cpp:175
+#: src/MainWindow.cpp:190
 msgid "Name"
 msgstr ""
 
-#: src/MainWindow.cpp:180 src/SequencerGUI.cpp:102 src/ActionGUI.cpp:121
+#: src/MainWindow.cpp:195 src/SequencerGUI.cpp:102 src/ActionGUI.cpp:121
 msgid "On"
 msgstr ""
 
-#: src/MainWindow.cpp:194
+#: src/MainWindow.cpp:209
 msgid "Channel"
 msgstr ""
 
-#: src/MainWindow.cpp:195
+#: src/MainWindow.cpp:210
 msgid "Pattern"
 msgstr ""
 
-#: src/MainWindow.cpp:196
+#: src/MainWindow.cpp:211
 msgid "Resolution"
 msgstr ""
 
-#: src/MainWindow.cpp:197
+#: src/MainWindow.cpp:212
 msgid "Length"
 msgstr ""
 
-#: src/MainWindow.cpp:198
+#: src/MainWindow.cpp:213
 msgid "Velocity"
 msgstr ""
 
-#: src/MainWindow.cpp:250 src/MainWindow.cpp:253 src/MainWindow.cpp:256
-#: src/MainWindow.cpp:259
+#: src/MainWindow.cpp:267 src/MainWindow.cpp:270 src/MainWindow.cpp:273
+#: src/MainWindow.cpp:276
 msgid "Failed to load harmonySEQ logo icon from: "
 msgstr ""
 
-#: src/MainWindow.cpp:259
+#: src/MainWindow.cpp:276
 msgid "Icon not found.\n"
 msgstr ""
 
-#: src/MainWindow.cpp:285 src/MainWindow.cpp:287
+#: src/MainWindow.cpp:303 src/MainWindow.cpp:305
 msgid "Untitled"
 msgstr ""
 
-#: src/MainWindow.cpp:302 src/MainWindow.cpp:612 src/MainWindow.cpp:622
-#: src/MainWindow.cpp:645
+#: src/MainWindow.cpp:320 src/MainWindow.cpp:644 src/MainWindow.cpp:654
+#: src/MainWindow.cpp:677
 msgid "The file has unsaved changes."
 msgstr ""
 
-#: src/MainWindow.cpp:302 src/MainWindow.cpp:612
+#: src/MainWindow.cpp:320 src/MainWindow.cpp:644
 msgid "Are sure you want to quit?"
 msgstr ""
 
-#: src/MainWindow.cpp:327
+#: src/MainWindow.cpp:345
 msgid "activated row "
 msgstr ""
 
-#: src/MainWindow.cpp:328
+#: src/MainWindow.cpp:346
 msgid ", name is: "
 msgstr ""
 
-#: src/MainWindow.cpp:561 src/Action.cpp:179 src/ActionGUI.cpp:124
+#: src/MainWindow.cpp:593 src/Action.cpp:179 src/ActionGUI.cpp:124
 #, c-format
 msgid "Play"
 msgstr ""
 
-#: src/MainWindow.cpp:565 src/Action.cpp:176 src/ActionGUI.cpp:123
+#: src/MainWindow.cpp:597 src/Action.cpp:176 src/ActionGUI.cpp:123
 #, c-format
 msgid "Pause"
 msgstr ""
 
-#: src/MainWindow.cpp:591
+#: src/MainWindow.cpp:623
 msgid ""
 "A MIDI sequencing application helpful for music composers and live artists."
 msgstr ""
 
 #. TRANSLATORS:The GNU GPL v.3
-#: src/MainWindow.cpp:593
+#: src/MainWindow.cpp:625
 msgid ""
 "HarmonySEQ is free software: you can redistribute it and/or modify\n"
 "it under the terms of the GNU General Public License as published by\n"
@@ -249,38 +274,38 @@ msgid ""
 "along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>."
 msgstr ""
 
-#: src/MainWindow.cpp:597
+#: src/MainWindow.cpp:629
 msgid "harmonySEQ website"
 msgstr ""
 
 #. TRANSLATORS:First caption in authors list
-#: src/MainWindow.cpp:600
+#: src/MainWindow.cpp:632
 msgid "Main author"
 msgstr ""
 
 #. TRANSLATORS: The list of translators to be placed in about-box
-#: src/MainWindow.cpp:604
+#: src/MainWindow.cpp:636
 msgid "translator-credits"
 msgstr ""
 
-#: src/MainWindow.cpp:622
+#: src/MainWindow.cpp:654
 msgid "Are sure you want to loose them?"
 msgstr ""
 
-#: src/MainWindow.cpp:645
+#: src/MainWindow.cpp:677
 msgid "Are sure you want to loose them and open another file?"
 msgstr ""
 
-#: src/MainWindow.cpp:664
+#: src/MainWindow.cpp:696
 msgid "Choose a file to save..."
 msgstr ""
 
-#: src/MainWindow.cpp:695
+#: src/MainWindow.cpp:727
 #, c-format
 msgid "File '%s'  already exist."
 msgstr ""
 
-#: src/MainWindow.cpp:696
+#: src/MainWindow.cpp:728
 msgid "Do you want to overwrite this file?"
 msgstr ""
 
