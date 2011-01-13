@@ -27,6 +27,7 @@
 #include "EventsWindow.h"
 #include "TreeModels.h"
 #include "config.h"
+#include "SettingsWindow.h"
 
 Glib::RefPtr< Gdk::Pixbuf > harmonySEQ_logo_48;
 
@@ -43,7 +44,7 @@ MainWindow::MainWindow()
     tempolabel.set_text(_("Tempo:"));
     add(main_vbox);
 
-    // <editor-fold defaultstate="collapsed" desc="menus and toolbar creation and initialisation">
+    // <editor-fold defaultstate="collapsed" desc="menus, actions and toolbar creation and initialisation">
     m_refActionGroup = Gtk::ActionGroup::create();
 
     m_refActionGroup->add(Gtk::Action::create("MenuFile",_("File")));
@@ -54,6 +55,7 @@ MainWindow::MainWindow()
     m_refActionGroup->add(Gtk::Action::create("FileSave", Gtk::Stock::SAVE,_("Save"),_("Saves the current file.")), sigc::mem_fun(*this, &MainWindow::OnMenuSaveClicked));
     m_refActionGroup->add(Gtk::Action::create("FileSaveAs", Gtk::Stock::SAVE_AS,_("Save as..."),_("Saves the current file with a different name.")), sigc::mem_fun(*this, &MainWindow::OnMenuSaveAsClicked));
     m_refActionGroup->add(Gtk::Action::create("FileQuit", Gtk::Stock::QUIT,_("Quit"),_("Quits harmonySEQ.")), sigc::mem_fun(*this, &MainWindow::OnMenuQuitClicked));
+    m_refActionGroup->add(Gtk::Action::create("Preferences", Gtk::Stock::PREFERENCES,_("Preferences"),_("harmonySEQ configuration.")), sigc::mem_fun(*this, &MainWindow::OnPreferencesClicked));
     m_refActionGroup->add(Gtk::Action::create("AddSeq", Gtk::Stock::ADD, _("Add"),_("Adds a new seqencer")), sigc::mem_fun(*this, &MainWindow::OnAddSeqClicked));
     m_refActionGroup->add(Gtk::Action::create("RemoveSeq", Gtk::Stock::REMOVE, _("Remove"),_("Removes selected sequencer")), sigc::mem_fun(*this, &MainWindow::OnRemoveClicked));
     m_refActionGroup->add(Gtk::Action::create("DuplicateSeq", Gtk::Stock::CONVERT, _("Duplicate"), _("Duplicates selected sequencer")), sigc::mem_fun(*this, &MainWindow::OnCloneClicked));
@@ -86,11 +88,14 @@ MainWindow::MainWindow()
             "    </menu>" 
             "    <menu action='MenuTools'>"
             "      <menuitem action='PassMidiEvents'/>"
+            "      <separator/>"
+            "      <menuitem action='Preferences'/>"
             "    </menu>"
             "    <menu action='MenuHelp'>"
             "      <menuitem action='About'/>"
             "    </menu>"
             "  </menubar>"
+
             "  <toolbar name='ToolBar'>"
             "   <toolitem action='FileNew'/>"
             "   <toolitem action='FileOpen'/>"
@@ -107,6 +112,7 @@ MainWindow::MainWindow()
             "   <toolitem name='Tempo' action='Empty'/>"
             "   <toolitem name='PlayPauseTool' action='PlayPause'/>"
             "  </toolbar>"
+
             "  <popup name='Popup'>"
             "   <menuitem action='seq/Edit'/>"
             "   <menuitem action='seq/PlayOnce'/>"
@@ -556,7 +562,7 @@ bool MainWindow::OnKeyPress(GdkEventKey* event){
 }
 
 void MainWindow::OnEventsClicked(){
-    eventswindow->show();
+    eventswindow->present();
 
 }
 
@@ -768,4 +774,8 @@ void MainWindow::OnPopupPlayOnce(){
     Gtk::TreeModel::iterator iter = GetSelectedSequencerIter();
     RefreshRow(*iter);
 
+}
+
+void MainWindow::OnPreferencesClicked(){
+    settingswindow->present();
 }

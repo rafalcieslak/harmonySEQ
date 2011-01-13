@@ -63,7 +63,8 @@ am_harmonySEQ_OBJECTS = harmonySEQ-main.$(OBJEXT) \
 	harmonySEQ-EventGUI.$(OBJEXT) harmonySEQ-Action.$(OBJEXT) \
 	harmonySEQ-ActionGUI.$(OBJEXT) harmonySEQ-TreeModels.$(OBJEXT) \
 	harmonySEQ-Chord.$(OBJEXT) harmonySEQ-ChordWidget.$(OBJEXT) \
-	harmonySEQ-Configuration.$(OBJEXT)
+	harmonySEQ-Configuration.$(OBJEXT) \
+	harmonySEQ-SettingsWindow.$(OBJEXT)
 harmonySEQ_OBJECTS = $(am_harmonySEQ_OBJECTS)
 am__DEPENDENCIES_1 =
 harmonySEQ_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -228,7 +229,8 @@ harmonySEQ_SOURCES = main.cpp\
 						Chord.cpp \
 						ChordWidget.cpp \
 						Configuration.cpp \
-						MainWindow.h MidiDriver.h Sequencer.h SequencerGUI.h messages.h Files.h global.h Event.h EventsWindow.h EventGUI.h Action.h ActionGUI.h TreeModels.h Chord.h ChordWidget.h Configuration.h\
+						SettingsWindow.cpp \
+						MainWindow.h MidiDriver.h Sequencer.h SequencerGUI.h messages.h Files.h global.h Event.h EventsWindow.h EventGUI.h Action.h ActionGUI.h TreeModels.h Chord.h ChordWidget.h Configuration.h SettingsWindow.h\
 						gettext.h
 
 harmonySEQ_CPPFLAGS = $(GTKMM_CFLAGS) -Wall -g -O3
@@ -348,6 +350,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-MidiDriver.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-Sequencer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-SequencerGUI.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-SettingsWindow.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-TreeModels.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-global.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-main.Po@am__quote@
@@ -604,6 +607,20 @@ harmonySEQ-Configuration.obj: Configuration.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Configuration.cpp' object='harmonySEQ-Configuration.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-Configuration.obj `if test -f 'Configuration.cpp'; then $(CYGPATH_W) 'Configuration.cpp'; else $(CYGPATH_W) '$(srcdir)/Configuration.cpp'; fi`
+
+harmonySEQ-SettingsWindow.o: SettingsWindow.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-SettingsWindow.o -MD -MP -MF $(DEPDIR)/harmonySEQ-SettingsWindow.Tpo -c -o harmonySEQ-SettingsWindow.o `test -f 'SettingsWindow.cpp' || echo '$(srcdir)/'`SettingsWindow.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-SettingsWindow.Tpo $(DEPDIR)/harmonySEQ-SettingsWindow.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SettingsWindow.cpp' object='harmonySEQ-SettingsWindow.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-SettingsWindow.o `test -f 'SettingsWindow.cpp' || echo '$(srcdir)/'`SettingsWindow.cpp
+
+harmonySEQ-SettingsWindow.obj: SettingsWindow.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-SettingsWindow.obj -MD -MP -MF $(DEPDIR)/harmonySEQ-SettingsWindow.Tpo -c -o harmonySEQ-SettingsWindow.obj `if test -f 'SettingsWindow.cpp'; then $(CYGPATH_W) 'SettingsWindow.cpp'; else $(CYGPATH_W) '$(srcdir)/SettingsWindow.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-SettingsWindow.Tpo $(DEPDIR)/harmonySEQ-SettingsWindow.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SettingsWindow.cpp' object='harmonySEQ-SettingsWindow.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-SettingsWindow.obj `if test -f 'SettingsWindow.cpp'; then $(CYGPATH_W) 'SettingsWindow.cpp'; else $(CYGPATH_W) '$(srcdir)/SettingsWindow.cpp'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

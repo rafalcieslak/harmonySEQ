@@ -9,6 +9,7 @@
       <itemPath>src/ActionGUI.h</itemPath>
       <itemPath>src/Chord.h</itemPath>
       <itemPath>src/ChordWidget.h</itemPath>
+      <itemPath>src/Configuration.h</itemPath>
       <itemPath>src/Event.h</itemPath>
       <itemPath>src/EventGUI.h</itemPath>
       <itemPath>src/EventsWindow.h</itemPath>
@@ -17,6 +18,7 @@
       <itemPath>src/MidiDriver.h</itemPath>
       <itemPath>src/Sequencer.h</itemPath>
       <itemPath>src/SequencerGUI.h</itemPath>
+      <itemPath>../Programy/harmonySEQ/trunk/src/SettingsWindow.h</itemPath>
       <itemPath>src/TreeModels.h</itemPath>
       <itemPath>src/config.h</itemPath>
       <itemPath>src/gettext.h</itemPath>
@@ -42,7 +44,6 @@
       <itemPath>src/Chord.cpp</itemPath>
       <itemPath>src/ChordWidget.cpp</itemPath>
       <itemPath>src/Configuration.cpp</itemPath>
-      <itemPath>src/Configuration.h</itemPath>
       <itemPath>src/Event.cpp</itemPath>
       <itemPath>src/EventGUI.cpp</itemPath>
       <itemPath>src/EventsWindow.cpp</itemPath>
@@ -52,6 +53,7 @@
       <itemPath>src/MidiDriver.cpp</itemPath>
       <itemPath>src/Sequencer.cpp</itemPath>
       <itemPath>src/SequencerGUI.cpp</itemPath>
+      <itemPath>../Programy/harmonySEQ/trunk/src/SettingsWindow.cpp</itemPath>
       <itemPath>src/TreeModels.cpp</itemPath>
       <itemPath>src/global.cpp</itemPath>
       <itemPath>src/main.cpp</itemPath>

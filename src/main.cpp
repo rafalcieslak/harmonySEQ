@@ -34,6 +34,7 @@
 #include "Files.h"
 #include "TreeModels.h"
 #include "Configuration.h"
+#include "SettingsWindow.h"
 //global objects
 vector<Sequencer *> sequencers;
 vector<Event *> events;
@@ -45,6 +46,7 @@ error* err;     //see above
 MidiDriver* midi;
 MainWindow* mainwindow;
 EventsWindow* eventswindow;
+SettingsWindow* settingswindow;
 int passing_midi; //states whether all midi events are passed through, or not.
 Glib::ustring file;
 std::map<Glib::ustring, int> keymap_stoi; //map used for keyname -> id conversion
@@ -162,6 +164,7 @@ void InitGui(){
     {
         mainwindow = new MainWindow; 
         eventswindow = new EventsWindow;
+        settingswindow = new SettingsWindow;
     }
     gdk_threads_leave();
     

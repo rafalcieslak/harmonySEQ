@@ -87,6 +87,7 @@ private:
     void OnMenuSaveAsClicked();
     void OnMenuOpenClicked();
     void OnMenuNewClicked();
+    void OnPreferencesClicked();
 
     void OnPopupEdit();
     void OnPopupPlayOnce();
