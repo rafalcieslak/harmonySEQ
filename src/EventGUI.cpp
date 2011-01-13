@@ -25,10 +25,12 @@
 EventGUI::EventGUI(Event *prt){
     parent = prt;
 
+    //setting window attributes
     set_title(_("Event"));
     set_border_width(5);
     set_position(Gtk::WIN_POS_CENTER_ON_PARENT);
     set_resizable(0);
+    set_size_request(300,-1);
 
     add(main_box);
     main_box.set_spacing(5);
@@ -52,7 +54,7 @@ EventGUI::EventGUI(Event *prt){
     line_channel.pack_start(label_channel,Gtk::PACK_SHRINK);
 
     line_type.pack_start(Types_combo,Gtk::PACK_SHRINK);
-    line_type.pack_end(guess,Gtk::PACK_SHRINK);
+    line_type.pack_end(capture,Gtk::PACK_SHRINK);
     line_key.pack_start(Keys_combo,Gtk::PACK_SHRINK);
     line_note.pack_start(note_spinbutton,Gtk::PACK_SHRINK);
     line_controller.pack_start(ctrl_spinbutton,Gtk::PACK_SHRINK);
@@ -70,10 +72,10 @@ EventGUI::EventGUI(Event *prt){
     label_controller.set_text(_("Controller:"));
     label_key.set_text(_("Key:"));
     label_note.set_text(_("Note:"));
-    guess.set_label(_("Guess"));
-    guess.set_tooltip_markup(_("Cathes next event end fill this one's type and arguments to fit the one triggered.\n<i>Example usage: press this button and then the X key on yout keyboard. The event will be automatically set to type: keyboard, key: X.</i>"));
+    capture.set_label(_("Capture"));
+    capture.set_tooltip_markup(_("Cathes next event end fill this one's type and arguments to fit the one triggered.\n<i>Example usage: press this button and then the X key on yout keyboard. The event will be automatically set to type: keyboard, key: X.</i>"));
 
-    guess.signal_clicked().connect(sigc::mem_fun(*this,&EventGUI::OnGuessClicked));
+    capture.signal_clicked().connect(sigc::mem_fun(*this,&EventGUI::OnCaptureClicked));
 
     Types_combo.pack_start(m_columns_event_types.label);
     Types_combo.set_active(parent->type);
@@ -216,6 +218,8 @@ void EventGUI::OnNoteChanged(){
 
 }
 void EventGUI::OnOKClicked(){
+    event_capturing_mode = 0;
+    event_to_capture_to = NULL; //not nessesary, but just for cleaning up
     hide();
 }
 
@@ -264,8 +268,8 @@ void EventGUI::UpdateValues(){
 
     label_preview.set_text(parent->GetLabel());
 
-    if(event_guessing_mode == 1 && event_to_guess_to == parent) guess.set_active(1);
-    else guess.set_active(0);
+    if(event_capturing_mode == 1 && event_to_capture_to == parent) capture.set_active(1);
+    else capture.set_active(0);
 
 }
 
@@ -275,13 +279,15 @@ bool EventGUI::OnKeyPress(GdkEventKey* event){
     return 1;
 }
 
-void EventGUI::OnGuessClicked(){
-    if (guess.get_active() == 1){
-        event_guessing_mode = 1;
-        event_to_guess_to = parent;
+void EventGUI::OnCaptureClicked(){
+    if (capture.get_active() == 1){
+        event_capturing_mode = 1;
+        event_to_capture_to = parent;
+        label_preview.set_text(_("(Waiting for an event...)"));
     }else{
-        event_guessing_mode = 0;
-        event_to_guess_to = NULL; //not nessesary, but just for cleaning up
+        event_capturing_mode = 0;
+        event_to_capture_to = NULL; //not nessesary, but just for cleaning up
+        UpdateValues();
     }
 
 }

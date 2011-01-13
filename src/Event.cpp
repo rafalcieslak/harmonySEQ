@@ -21,8 +21,8 @@
 #include "EventsWindow.h"
 #include "messages.h"
 
-bool event_guessing_mode;
-Event* event_to_guess_to;
+bool event_capturing_mode;
+Event* event_to_capture_to;
 
 Event::Event(){
     type = 0;
@@ -40,6 +40,7 @@ Event::Event(int typ, int a1, int a2){
 
 
 Event::~Event(){
+    if (event_to_capture_to == this) event_to_capture_to = NULL; //if we are being captured to, unset the pointer
     delete gui_window;
     for (unsigned int x = 0; x < actions.size(); x++){
         delete actions[x];
@@ -102,13 +103,13 @@ void Event::ShowWindow(){
 void Event::UpdateGUI(){gui_window->UpdateValues();}
 
 void FindAndProcessEvents(Event::EventTypes ev,int arg1, int arg2){
-    if (event_guessing_mode == true){
-        if (event_to_guess_to != 0){ //in case the event was deleted, skip to processing the event
-            event_to_guess_to->type = ev;
-            event_to_guess_to->arg1 = arg1;
-            event_to_guess_to->arg2 = arg2;
-            event_guessing_mode = 0; //switch the mode off
-            event_to_guess_to->UpdateGUI();
+    if (event_capturing_mode == true){
+        if (event_to_capture_to != NULL){ //in case the event was deleted, skip to processing the event
+            event_to_capture_to->type = ev;
+            event_to_capture_to->arg1 = arg1;
+            event_to_capture_to->arg2 = arg2;
+            event_capturing_mode = 0; //switch the mode off
+            event_to_capture_to->UpdateGUI();
             return; //do not process this event
         }
     }

@@ -24,8 +24,8 @@
 #include "Action.h"
 class Event;
 
-extern bool event_guessing_mode;
-extern Event* event_to_guess_to;
+extern bool event_capturing_mode;
+extern Event* event_to_capture_to;
 
 class Event {
 public:
