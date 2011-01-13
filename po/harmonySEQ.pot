@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonySEQ 0.14\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2011-01-12 22:21+0100\n"
+"POT-Creation-Date: 2011-01-13 16:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -192,73 +192,73 @@ msgstr ""
 msgid "On"
 msgstr ""
 
-#: src/MainWindow.cpp:209
+#: src/MainWindow.cpp:202
 msgid "Channel"
 msgstr ""
 
-#: src/MainWindow.cpp:210
+#: src/MainWindow.cpp:203
 msgid "Pattern"
 msgstr ""
 
-#: src/MainWindow.cpp:211
+#: src/MainWindow.cpp:204
 msgid "Resolution"
 msgstr ""
 
-#: src/MainWindow.cpp:212
+#: src/MainWindow.cpp:205
 msgid "Length"
 msgstr ""
 
-#: src/MainWindow.cpp:213
+#: src/MainWindow.cpp:206
 msgid "Velocity"
 msgstr ""
 
-#: src/MainWindow.cpp:267 src/MainWindow.cpp:270 src/MainWindow.cpp:273
-#: src/MainWindow.cpp:276
+#: src/MainWindow.cpp:260 src/MainWindow.cpp:263 src/MainWindow.cpp:266
+#: src/MainWindow.cpp:269
 msgid "Failed to load harmonySEQ logo icon from: "
 msgstr ""
 
-#: src/MainWindow.cpp:276
+#: src/MainWindow.cpp:269
 msgid "Icon not found.\n"
 msgstr ""
 
-#: src/MainWindow.cpp:303 src/MainWindow.cpp:305
+#: src/MainWindow.cpp:296 src/MainWindow.cpp:298
 msgid "Untitled"
 msgstr ""
 
-#: src/MainWindow.cpp:320 src/MainWindow.cpp:644 src/MainWindow.cpp:654
-#: src/MainWindow.cpp:677
+#: src/MainWindow.cpp:313 src/MainWindow.cpp:637 src/MainWindow.cpp:647
+#: src/MainWindow.cpp:670
 msgid "The file has unsaved changes."
 msgstr ""
 
-#: src/MainWindow.cpp:320 src/MainWindow.cpp:644
+#: src/MainWindow.cpp:313 src/MainWindow.cpp:637
 msgid "Are sure you want to quit?"
 msgstr ""
 
-#: src/MainWindow.cpp:345
+#: src/MainWindow.cpp:338
 msgid "activated row "
 msgstr ""
 
-#: src/MainWindow.cpp:346
+#: src/MainWindow.cpp:339
 msgid ", name is: "
 msgstr ""
 
-#: src/MainWindow.cpp:593 src/Action.cpp:179 src/ActionGUI.cpp:124
+#: src/MainWindow.cpp:586 src/Action.cpp:179 src/ActionGUI.cpp:124
 #, c-format
 msgid "Play"
 msgstr ""
 
-#: src/MainWindow.cpp:597 src/Action.cpp:176 src/ActionGUI.cpp:123
+#: src/MainWindow.cpp:590 src/Action.cpp:176 src/ActionGUI.cpp:123
 #, c-format
 msgid "Pause"
 msgstr ""
 
-#: src/MainWindow.cpp:623
+#: src/MainWindow.cpp:616
 msgid ""
 "A MIDI sequencing application helpful for music composers and live artists."
 msgstr ""
 
 #. TRANSLATORS:The GNU GPL v.3
-#: src/MainWindow.cpp:625
+#: src/MainWindow.cpp:618
 msgid ""
 "HarmonySEQ is free software: you can redistribute it and/or modify\n"
 "it under the terms of the GNU General Public License as published by\n"
@@ -274,38 +274,38 @@ msgid ""
 "along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>."
 msgstr ""
 
-#: src/MainWindow.cpp:629
+#: src/MainWindow.cpp:622
 msgid "harmonySEQ website"
 msgstr ""
 
 #. TRANSLATORS:First caption in authors list
-#: src/MainWindow.cpp:632
+#: src/MainWindow.cpp:625
 msgid "Main author"
 msgstr ""
 
 #. TRANSLATORS: The list of translators to be placed in about-box
-#: src/MainWindow.cpp:636
+#: src/MainWindow.cpp:629
 msgid "translator-credits"
 msgstr ""
 
-#: src/MainWindow.cpp:654
+#: src/MainWindow.cpp:647
 msgid "Are sure you want to loose them?"
 msgstr ""
 
-#: src/MainWindow.cpp:677
+#: src/MainWindow.cpp:670
 msgid "Are sure you want to loose them and open another file?"
 msgstr ""
 
-#: src/MainWindow.cpp:696
+#: src/MainWindow.cpp:689
 msgid "Choose a file to save..."
 msgstr ""
 
-#: src/MainWindow.cpp:727
+#: src/MainWindow.cpp:720
 #, c-format
 msgid "File '%s'  already exist."
 msgstr ""
 
-#: src/MainWindow.cpp:728
+#: src/MainWindow.cpp:721
 msgid "Do you want to overwrite this file?"
 msgstr ""
 
@@ -487,42 +487,42 @@ msgstr ""
 msgid "ERROR - unknown error while processing file '%s': "
 msgstr ""
 
-#: src/Event.cpp:50
+#: src/Event.cpp:55
 #, c-format
 msgid "When note %d on any channel gets on..."
 msgstr ""
 
-#: src/Event.cpp:51
+#: src/Event.cpp:56
 #, c-format
 msgid "When note %d on channel %d gets on..."
 msgstr ""
 
-#: src/Event.cpp:54
+#: src/Event.cpp:59
 #, c-format
 msgid "When key %s is pressed..."
 msgstr ""
 
-#: src/Event.cpp:58
+#: src/Event.cpp:63
 #, c-format
 msgid "This is an empty event, that will never be triggered."
 msgstr ""
 
-#: src/Event.cpp:62
+#: src/Event.cpp:67
 #, c-format
 msgid "When controller %d on any channel is moved..."
 msgstr ""
 
-#: src/Event.cpp:63
+#: src/Event.cpp:68
 #, c-format
 msgid "When controller %d on channel %d is moved..."
 msgstr ""
 
-#: src/Event.cpp:67
+#: src/Event.cpp:72
 #, c-format
 msgid "Unknown event."
 msgstr ""
 
-#: src/Event.cpp:119
+#: src/Event.cpp:134
 msgid "Error - empty event would be triggered.\n"
 msgstr ""
 
@@ -534,7 +534,7 @@ msgstr ""
 msgid "Add Action"
 msgstr ""
 
-#: src/EventsWindow.cpp:53 src/EventGUI.cpp:28
+#: src/EventsWindow.cpp:53 src/EventGUI.cpp:29
 msgid "Event"
 msgstr ""
 
@@ -546,44 +546,60 @@ msgstr ""
 msgid "Error - cannot colorize triggered action: row is empty.\n"
 msgstr ""
 
-#: src/EventGUI.cpp:67 src/ActionGUI.cpp:113
+#: src/EventGUI.cpp:70 src/ActionGUI.cpp:113
 msgid "Type:"
 msgstr ""
 
-#: src/EventGUI.cpp:68
+#: src/EventGUI.cpp:71
 msgid "Channel:"
 msgstr ""
 
-#: src/EventGUI.cpp:69
+#: src/EventGUI.cpp:72
 msgid "Controller:"
 msgstr ""
 
-#: src/EventGUI.cpp:70
+#: src/EventGUI.cpp:73
 msgid "Key:"
 msgstr ""
 
-#: src/EventGUI.cpp:71 src/ChordWidget.cpp:84
+#: src/EventGUI.cpp:74 src/ChordWidget.cpp:84
 msgid "Note:"
 msgstr ""
 
-#: src/EventGUI.cpp:82 src/ActionGUI.cpp:126
+#: src/EventGUI.cpp:75
+msgid "Capture"
+msgstr ""
+
+#: src/EventGUI.cpp:76
+msgid ""
+"Cathes next event end fill this one's type and arguments to fit the one "
+"triggered.\n"
+"<i>Example usage: press this button and then the X key on yout keyboard. The "
+"event will be automatically set to type: keyboard, key: X.</i>"
+msgstr ""
+
+#: src/EventGUI.cpp:89 src/ActionGUI.cpp:126
 msgid "OK"
 msgstr ""
 
-#: src/EventGUI.cpp:172
+#: src/EventGUI.cpp:181
 msgid "Error: channel has changed, while event is not MIDI-type."
 msgstr ""
 
-#: src/EventGUI.cpp:182
+#: src/EventGUI.cpp:191
 msgid "Error: key has changed, while event is not key-type."
 msgstr ""
 
-#: src/EventGUI.cpp:193
+#: src/EventGUI.cpp:202
 msgid "Error: controller has changed, while event is not ctrl-type."
 msgstr ""
 
-#: src/EventGUI.cpp:204
+#: src/EventGUI.cpp:213
 msgid "Error: note has changed, while event is not note-type."
+msgstr ""
+
+#: src/EventGUI.cpp:286
+msgid "(Waiting for an event...)"
 msgstr ""
 
 #: src/Action.cpp:132
