@@ -41,6 +41,8 @@
       <itemPath>src/ActionGUI.cpp</itemPath>
       <itemPath>src/Chord.cpp</itemPath>
       <itemPath>src/ChordWidget.cpp</itemPath>
+      <itemPath>src/Configuration.cpp</itemPath>
+      <itemPath>src/Configuration.h</itemPath>
       <itemPath>src/Event.cpp</itemPath>
       <itemPath>src/EventGUI.cpp</itemPath>
       <itemPath>src/EventsWindow.cpp</itemPath>

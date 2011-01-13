@@ -19,8 +19,8 @@ harmonySEQ_SOURCES =  	main.cpp\
 						TreeModels.cpp \
 						Chord.cpp \
 						ChordWidget.cpp \
-						Config.cpp \
-						MainWindow.h MidiDriver.h Sequencer.h SequencerGUI.h messages.h Files.h global.h Event.h EventsWindow.h EventGUI.h Action.h ActionGUI.h TreeModels.h Chord.h ChordWidget.h Config.h\
+						Configuration.cpp \
+						MainWindow.h MidiDriver.h Sequencer.h SequencerGUI.h messages.h Files.h global.h Event.h EventsWindow.h EventGUI.h Action.h ActionGUI.h TreeModels.h Chord.h ChordWidget.h Configuration.h\
 						gettext.h
 						
 harmonySEQ_CPPFLAGS = $(GTKMM_CFLAGS) -Wall -g -O3

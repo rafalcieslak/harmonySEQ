@@ -39,6 +39,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/Chord.o \
 	${OBJECTDIR}/src/ActionGUI.o \
 	${OBJECTDIR}/src/Sequencer.o \
+	${OBJECTDIR}/src/Configuration.o \
 	${OBJECTDIR}/src/messages.o \
 	${OBJECTDIR}/src/Action.o \
 	${OBJECTDIR}/src/MainWindow.o \
@@ -104,6 +105,11 @@ ${OBJECTDIR}/src/Sequencer.o: src/Sequencer.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Sequencer.o src/Sequencer.cpp
+
+${OBJECTDIR}/src/Configuration.o: src/Configuration.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Configuration.o src/Configuration.cpp
 
 ${OBJECTDIR}/src/messages.o: src/messages.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

@@ -63,7 +63,7 @@ am_harmonySEQ_OBJECTS = harmonySEQ-main.$(OBJEXT) \
 	harmonySEQ-EventGUI.$(OBJEXT) harmonySEQ-Action.$(OBJEXT) \
 	harmonySEQ-ActionGUI.$(OBJEXT) harmonySEQ-TreeModels.$(OBJEXT) \
 	harmonySEQ-Chord.$(OBJEXT) harmonySEQ-ChordWidget.$(OBJEXT) \
-	harmonySEQ-Config.$(OBJEXT)
+	harmonySEQ-Configuration.$(OBJEXT)
 harmonySEQ_OBJECTS = $(am_harmonySEQ_OBJECTS)
 am__DEPENDENCIES_1 =
 harmonySEQ_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -227,8 +227,8 @@ harmonySEQ_SOURCES = main.cpp\
 						TreeModels.cpp \
 						Chord.cpp \
 						ChordWidget.cpp \
-						Config.cpp \
-						MainWindow.h MidiDriver.h Sequencer.h SequencerGUI.h messages.h Files.h global.h Event.h EventsWindow.h EventGUI.h Action.h ActionGUI.h TreeModels.h Chord.h ChordWidget.h Config.h\
+						Configuration.cpp \
+						MainWindow.h MidiDriver.h Sequencer.h SequencerGUI.h messages.h Files.h global.h Event.h EventsWindow.h EventGUI.h Action.h ActionGUI.h TreeModels.h Chord.h ChordWidget.h Configuration.h\
 						gettext.h
 
 harmonySEQ_CPPFLAGS = $(GTKMM_CFLAGS) -Wall -g -O3
@@ -339,7 +339,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-ActionGUI.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-Chord.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-ChordWidget.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-Config.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-Configuration.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-Event.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-EventGUI.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-EventsWindow.Po@am__quote@
@@ -591,19 +591,19 @@ harmonySEQ-ChordWidget.obj: ChordWidget.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-ChordWidget.obj `if test -f 'ChordWidget.cpp'; then $(CYGPATH_W) 'ChordWidget.cpp'; else $(CYGPATH_W) '$(srcdir)/ChordWidget.cpp'; fi`
 
-harmonySEQ-Config.o: Config.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-Config.o -MD -MP -MF $(DEPDIR)/harmonySEQ-Config.Tpo -c -o harmonySEQ-Config.o `test -f 'Config.cpp' || echo '$(srcdir)/'`Config.cpp
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-Config.Tpo $(DEPDIR)/harmonySEQ-Config.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Config.cpp' object='harmonySEQ-Config.o' libtool=no @AMDEPBACKSLASH@
+harmonySEQ-Configuration.o: Configuration.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-Configuration.o -MD -MP -MF $(DEPDIR)/harmonySEQ-Configuration.Tpo -c -o harmonySEQ-Configuration.o `test -f 'Configuration.cpp' || echo '$(srcdir)/'`Configuration.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-Configuration.Tpo $(DEPDIR)/harmonySEQ-Configuration.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Configuration.cpp' object='harmonySEQ-Configuration.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-Config.o `test -f 'Config.cpp' || echo '$(srcdir)/'`Config.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-Configuration.o `test -f 'Configuration.cpp' || echo '$(srcdir)/'`Configuration.cpp
 
-harmonySEQ-Config.obj: Config.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-Config.obj -MD -MP -MF $(DEPDIR)/harmonySEQ-Config.Tpo -c -o harmonySEQ-Config.obj `if test -f 'Config.cpp'; then $(CYGPATH_W) 'Config.cpp'; else $(CYGPATH_W) '$(srcdir)/Config.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-Config.Tpo $(DEPDIR)/harmonySEQ-Config.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Config.cpp' object='harmonySEQ-Config.obj' libtool=no @AMDEPBACKSLASH@
+harmonySEQ-Configuration.obj: Configuration.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-Configuration.obj -MD -MP -MF $(DEPDIR)/harmonySEQ-Configuration.Tpo -c -o harmonySEQ-Configuration.obj `if test -f 'Configuration.cpp'; then $(CYGPATH_W) 'Configuration.cpp'; else $(CYGPATH_W) '$(srcdir)/Configuration.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-Configuration.Tpo $(DEPDIR)/harmonySEQ-Configuration.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Configuration.cpp' object='harmonySEQ-Configuration.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-Config.obj `if test -f 'Config.cpp'; then $(CYGPATH_W) 'Config.cpp'; else $(CYGPATH_W) '$(srcdir)/Config.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-Configuration.obj `if test -f 'Configuration.cpp'; then $(CYGPATH_W) 'Configuration.cpp'; else $(CYGPATH_W) '$(srcdir)/Configuration.cpp'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

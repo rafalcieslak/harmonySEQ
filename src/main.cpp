@@ -33,6 +33,7 @@
 #include "Action.h"
 #include "Files.h"
 #include "TreeModels.h"
+#include "Configuration.h"
 //global objects
 vector<Sequencer *> sequencers;
 vector<Event *> events;
@@ -189,6 +190,11 @@ void InitMidiDriver(){
     midi->SetTempo(tempo);
 }
 
+void LoadConfig(){
+    Config::LoadDefaultConfiguration();
+    Config::LoadFromFile();
+}
+
 /**As in the name: When we got a filename from command-line, we try to open it.*/
 bool TryToOpenFileFromCommandLine(){
     gdk_threads_enter(); //lodking the threads. Loading file MAY ASK!!
@@ -283,6 +289,12 @@ int main(int argc, char** argv) {
 
     //...GUI...
     InitGui();  //(Ow... better have all the main windows constructed, before any sequencer or event is. Might cause problems elsewhere).
+
+    //...configuration...
+    gdk_threads_enter();
+    LoadConfig();
+    Config::SaveToFile();
+    gdk_threads_leave();
 
     //...and some default events.
     InitDefaultData();
