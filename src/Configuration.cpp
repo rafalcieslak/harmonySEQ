@@ -46,6 +46,32 @@ namespace Config{
     }
 
     void LoadFromFile(){
+        *dbg << "loading config from file..." << ENDL;
+        Glib::KeyFile kf;
+        char temp[200];
+
+        Glib::ustring path = GetConfigFilePath();
+
+        //We'll try to open a file. No i/o streams needed here, KeyFile provides us with a useful method load_from_file, which does all the magic.
+        try {
+            if (!kf.load_from_file(path)) {
+                //Returned 1, so confing file is wrong. So we'll not load it.
+                return;
+            }
+        } catch (Glib::Error e) {
+            //Exception cought. Leave the file, maybe it doesn't exist etc.
+            return;
+        }
+
+        //oh, the file is all right. Load the data then.
+        if(kf.has_group(CONFIG_FILE_GROUP_METRONOME)){
+           if(kf.has_key(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_CHANNEL)) MetronomeChannel = kf.get_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_CHANNEL);
+           if(kf.has_key(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H1_NOTE)) MetronomeHit1Note = kf.get_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H1_NOTE);
+           if(kf.has_key(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2_NOTE)) MetronomeHit2Note = kf.get_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2_NOTE);
+           if(kf.has_key(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H1_VELOCITY)) MetronomeHit1Velocity = kf.get_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H1_VELOCITY);
+           if(kf.has_key(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2_VELOCITY)) MetronomeHit2Velocity = kf.get_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2_VELOCITY);
+           *err << MetronomeHit2Velocity << ENDL;
+        }
 
     }
 
