@@ -28,6 +28,7 @@ namespace Config{
     extern int MetronomeHit2Note;
     extern int MetronomeHit1Velocity;
     extern int MetronomeHit2Velocity;
+    extern bool MetronomeHit2;
 
     /**Inits the configuration with default data.*/
     void LoadDefaultConfiguration();

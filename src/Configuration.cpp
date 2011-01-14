@@ -36,13 +36,16 @@ namespace Config{
     int MetronomeHit2Note;
     int MetronomeHit1Velocity;
     int MetronomeHit2Velocity;
+    bool MetronomeHit2;
 
     void LoadDefaultConfiguration(){
+        //Default values
         MetronomeChannel = 10;
         MetronomeHit1Note = 76;
         MetronomeHit2Note = 77;
         MetronomeHit1Velocity = 100;
         MetronomeHit2Velocity = 60;
+        MetronomeHit2 = true;
     }
 
     void LoadFromFile(){
@@ -70,6 +73,8 @@ namespace Config{
            if(kf.has_key(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2_NOTE)) MetronomeHit2Note = kf.get_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2_NOTE);
            if(kf.has_key(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H1_VELOCITY)) MetronomeHit1Velocity = kf.get_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H1_VELOCITY);
            if(kf.has_key(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2_VELOCITY)) MetronomeHit2Velocity = kf.get_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2_VELOCITY);
+           if(kf.has_key(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2)) MetronomeHit2 = kf.get_boolean(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2);
+
         }
 
     }
@@ -95,12 +100,14 @@ namespace Config{
             return;
         }
 
+        //Storing data
         kf.set_comment("This is harmonySEQ's config file. Manual editing is not recommended, as may result in strange crashes.");
         kf.set_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_CHANNEL,MetronomeChannel);
         kf.set_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H1_NOTE,MetronomeHit1Note);
         kf.set_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2_NOTE,MetronomeHit2Note);
         kf.set_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H1_VELOCITY,MetronomeHit1Velocity);
         kf.set_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2_VELOCITY,MetronomeHit2Velocity);
+        kf.set_boolean(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2,MetronomeHit2);
 
         output_file <<  kf.to_data().c_str();
 
