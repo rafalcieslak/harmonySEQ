@@ -18,10 +18,11 @@ iconsscalable_DATA = scalable/apps/harmonyseq.svg
 iconsscalablemdir = $(datadir)/icons/gnome/scalable/mimetypes/
 iconsscalablem_DATA = scalable/mimetypes/text-x-harmonyseq.svg
 
-EXTRA_DIST = 32x32/apps/harmonyseq.png 48x48/apps/harmonyseq.png 192x192/apps/harmonyseq.png scalable/apps/harmonyseq.svg 32x32/mimetypes/text-x-harmonyseq.png 48x48/mimetypes/gnome-mime-text-x-harmonyseq.png 192x192/mimetypes/text-x-harmonyseq.png scalable/mimetypes/text-x-harmonyseq.svg
+harmonyseqicons48dir = $(datadir)/harmonySEQ/icons/hicolor/48x48/
+harmonyseqicons48_DATA = 48x48/metronome.png
+
+EXTRA_DIST = 32x32/apps/harmonyseq.png 48x48/apps/harmonyseq.png 192x192/apps/harmonyseq.png scalable/apps/harmonyseq.svg 32x32/mimetypes/text-x-harmonyseq.png 48x48/mimetypes/gnome-mime-text-x-harmonyseq.png 192x192/mimetypes/text-x-harmonyseq.png scalable/mimetypes/text-x-harmonyseq.svg icon1.svg metronome.svg 48x48/metronome.png
 
 
 install-data-hook:
-	ln -sf $(datadir)/icons/gnome/32x32/mimetypes/text-x-harmonyseq.png $(datadir)/icons/gnome/32x32/mimetypes/gnome-mime-text-x-harmonyseq.png
 uninstall-hook:
-	rm $(datadir)/icons/gnome/32x32/mimetypes/gnome-mime-text-x-harmonyseq.png
