@@ -111,7 +111,7 @@ private:
     Gtk::Menu* popup_menu;
 
     Gtk::Label tempolabel;
-    
+    Gtk::Image metronometool_icon;
 };
 
 

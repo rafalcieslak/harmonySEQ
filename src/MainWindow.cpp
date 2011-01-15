@@ -30,7 +30,6 @@
 #include "SettingsWindow.h"
 #include "Configuration.h"
 
-Glib::RefPtr< Gdk::Pixbuf > harmonySEQ_logo_48;
 
 
 MainWindow::MainWindow()
@@ -62,7 +61,7 @@ MainWindow::MainWindow()
     m_refActionGroup->add(Gtk::Action::create("DuplicateSeq", Gtk::Stock::CONVERT, _("Duplicate"), _("Duplicates selected sequencer")), sigc::mem_fun(*this, &MainWindow::OnCloneClicked));
     m_refActionGroup->add(Gtk::Action::create("Events", Gtk::Stock::EXECUTE,_("Events"), _("Opens the events window")), sigc::mem_fun(*this, &MainWindow::OnEventsClicked));
     m_refActionGroup->add(Gtk::Action::create("About", Gtk::Stock::ABOUT), sigc::mem_fun(*this, &MainWindow::OnAboutMenuClicked));
-    m_refActionGroup->add(Gtk::ToggleAction::create("Metronome", Gtk::Stock::APPLY, _("Metronome"),_("Toggle metronome on/off")), sigc::mem_fun(*this, &MainWindow::OnMetronomeToggleClicked));
+    m_refActionGroup->add(Gtk::ToggleAction::create("Metronome", _("Metronome"),_("Toggle metronome on/off")), sigc::mem_fun(*this, &MainWindow::OnMetronomeToggleClicked));
     m_refActionGroup->add(Gtk::Action::create("PlayPause", Gtk::Stock::MEDIA_PAUSE, _("Play/Pause"),_("Toggle play/pause")), sigc::mem_fun(*this, &MainWindow::OnPlayPauseClicked));
     m_refActionGroup->add(Gtk::ToggleAction::create("PassMidiEvents", _("Pass MIDI events"),_("States whether MIDI events are passed-through harmonySEQ.")), sigc::mem_fun(*this, &MainWindow::OnPassToggleClicked));
     m_refActionGroup->add(Gtk::Action::create("seq/Edit", Gtk::Stock::EDIT,_("Edit"),_("Edites the sequencer.")), sigc::mem_fun(*this, &MainWindow::OnPopupEdit));
@@ -158,8 +157,8 @@ MainWindow::MainWindow()
     Gtk::ToolItem& PlayPauseTool = dynamic_cast<Gtk::ToolItem&> (*pPlayPauseTool);
     PlayPauseTool.set_is_important(1); // will display text text to the icon
     Gtk::Widget* pMetronome = m_refUIManager->get_widget("/ToolBar/Metronome");
-    Gtk::ToggleToolButton& Metronome = dynamic_cast<Gtk::ToggleToolButton&> (*pMetronome);
-    Metronome.set_active(metronome);
+    Gtk::ToggleToolButton& MetronomeTool = dynamic_cast<Gtk::ToggleToolButton&> (*pMetronome);
+    MetronomeTool.set_active(metronome);
     Gtk::Widget* pEventsTool = m_refUIManager->get_widget("/ToolBar/EventsTool");
     Gtk::ToolItem& EventsTool = dynamic_cast<Gtk::ToolItem&> (*pEventsTool);
     EventsTool.set_is_important(1); // will display text text to the icon
@@ -260,38 +259,17 @@ MainWindow::MainWindow()
     add_events(Gdk::KEY_PRESS_MASK);
     signal_key_press_event().connect(mem_fun(*this,&MainWindow::OnKeyPress));
 
+    //icons settings
+    if (harmonySEQ_logo_48 != NULL) set_icon(harmonySEQ_logo_48);
+    if (metronome_icon_24 != NULL){
+        metronometool_icon.set(metronome_icon_24);
+        MetronomeTool.set_icon_widget(metronometool_icon);
+    }
+
 
 
     show_all_children(1);
 
-    // <editor-fold defaultstate="collapsed" desc="loading logos">
-    //loading logo
-    bool found = 1;
-    Glib::ustring filename = "/usr";
-    filename += "/share/icons/hicolor/48x48/apps/harmonyseq.png";
-    if (!Files::fexists(filename.c_str())) {
-        *dbg << _("Failed to load harmonySEQ logo icon from: ") << filename << ENDL;
-        filename = "pixmaps/48x48/apps/harmonyseq.png";
-        if (!Files::fexists(filename.c_str())) {
-            *dbg << _("Failed to load harmonySEQ logo icon from: ") << filename << ENDL;
-            filename = "../pixmaps/48x48/apps/harmonyseq.png";
-            if (!Files::fexists(filename.c_str())) {
-                *dbg << _("Failed to load harmonySEQ logo icon from: ") << filename << ENDL;
-                filename = "/usr/local/share/icons/hicolor/48x48/apps/harmonyseq.png";
-                if (!Files::fexists(filename.c_str())) {
-                    *dbg << _("Failed to load harmonySEQ logo icon from: ") << filename << ENDL << _("Icon not found.\n");
-                    found = 0;
-                }
-            }
-        }
-    }
-
-    if (found) {
-        harmonySEQ_logo_48 = Gdk::Pixbuf::create_from_file(filename); //will be also used a.o. in about-box
-        set_icon(harmonySEQ_logo_48);
-    } else {
-        *err << ("Failed to find harmonySEQ icon file.\n");
-    }// </editor-fold>
 
 
 }

@@ -28,6 +28,8 @@
 #include <vector>
 #include <map>
 #include <glibmm/ustring.h>
+#include <glibmm/refptr.h>
+#include <gdkmm-2.4/gdkmm/pixbuf.h>
 #include "gettext.h"
 
 #define VERSION_STRING "0.14"//VERSION is provided by autotools in config.h
@@ -123,6 +125,8 @@ extern std::map<Glib::ustring, int> keymap_stoi;
 extern std::map<int, Glib::ustring> keymap_itos;
 extern std::vector<Event *> events;
 extern std::map<int,Glib::ustring> notemap;
+extern Glib::RefPtr< Gdk::Pixbuf > harmonySEQ_logo_48;
+extern Glib::RefPtr< Gdk::Pixbuf > metronome_icon_24;
 #endif
 /**Ask user a YES-NO question.*/
 bool Ask(Glib::ustring message, Glib::ustring secondary_message = "", bool lock_threads = false);

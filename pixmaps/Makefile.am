@@ -18,10 +18,14 @@ iconsscalable_DATA = scalable/apps/harmonyseq.svg
 iconsscalablemdir = $(datadir)/icons/gnome/scalable/mimetypes/
 iconsscalablem_DATA = scalable/mimetypes/text-x-harmonyseq.svg
 
-harmonyseqicons48dir = $(datadir)/harmonySEQ/icons/hicolor/48x48/
+harmonyseqicons48dir = $(datadir)/harmonyseq/icons/hicolor/48x48/actions/
 harmonyseqicons48_DATA = 48x48/metronome.png
+harmonyseqicons32dir = $(datadir)/harmonyseq/icons/hicolor/32x32/actions/
+harmonyseqicons32_DATA = 32x32/metronome.png
+harmonyseqicons24dir = $(datadir)/harmonyseq/icons/hicolor/24x24/actions/
+harmonyseqicons24_DATA = 24x24/metronome.png
 
-EXTRA_DIST = 32x32/apps/harmonyseq.png 48x48/apps/harmonyseq.png 192x192/apps/harmonyseq.png scalable/apps/harmonyseq.svg 32x32/mimetypes/text-x-harmonyseq.png 48x48/mimetypes/gnome-mime-text-x-harmonyseq.png 192x192/mimetypes/text-x-harmonyseq.png scalable/mimetypes/text-x-harmonyseq.svg icon1.svg metronome.svg 48x48/metronome.png
+EXTRA_DIST = 32x32/apps/harmonyseq.png 48x48/apps/harmonyseq.png 192x192/apps/harmonyseq.png scalable/apps/harmonyseq.svg 32x32/mimetypes/text-x-harmonyseq.png 48x48/mimetypes/gnome-mime-text-x-harmonyseq.png 192x192/mimetypes/text-x-harmonyseq.png scalable/mimetypes/text-x-harmonyseq.svg icon1.svg metronome.svg 48x48/metronome.png 32x32/metronome.png 24x24/metronome.png
 
 
 install-data-hook:

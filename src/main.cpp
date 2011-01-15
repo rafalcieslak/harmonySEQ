@@ -53,6 +53,9 @@ std::map<Glib::ustring, int> keymap_stoi; //map used for keyname -> id conversio
 std::map<int, Glib::ustring> keymap_itos; //map used for id -> keyname conversion
 std::map<int, Glib::ustring> notemap;         //map used for note_number -> note_name conversion
 
+Glib::RefPtr< Gdk::Pixbuf > harmonySEQ_logo_48;
+Glib::RefPtr< Gdk::Pixbuf > metronome_icon_24;
+
 int debugging = 0, help = 0, version = 0; //flags set by getopt, depending on command-line parameters
 
 bool metronome;
@@ -200,6 +203,39 @@ void LoadConfig(){
     Config::LoadFromFile();
 }
 
+void LoadIcons(){
+    
+    //Trying to find where are the icons located, by looking for harmonyseq.png.
+    if (Files::fexists("/usr/share/icons/hicolor/48x48/apps/harmonyseq.png")){
+        //seems we are installed defaultly in /usr/share
+        *dbg << "harmonySEQ icon found at: /usr/share/icons/hicolor/48x48/apps/harmonyseq.png" << ENDL;
+        harmonySEQ_logo_48 = Gdk::Pixbuf::create_from_file("/usr/share/icons/hicolor/48x48/apps/harmonyseq.png");
+        metronome_icon_24 = Gdk::Pixbuf::create_from_file("/usr/share/harmonyseq/icons/hicolor/24x24/actions/metronome.png");
+    } else
+    if (Files::fexists("/usr/share/local/icons/hicolor/48x48/apps/harmonyseq.png")){
+        //seems we are installed defaultly in /usr/share/local
+        *dbg << "harmonySEQ icon found at: /usr/share/local/icons/hicolor/48x48/apps/harmonyseq.png" << ENDL;
+        harmonySEQ_logo_48 = Gdk::Pixbuf::create_from_file("/usr/share/local/icons/hicolor/48x48/apps/harmonyseq.png");
+        metronome_icon_24 = Gdk::Pixbuf::create_from_file("/usr/share/local/harmonyseq/icons/hicolor/24x24/actions/harmonyseq.png");
+    } else
+    if (Files::fexists("pixmaps/48x48/apps/harmonyseq.png")){
+        //seems we are not installed, and run from main source directory
+        *dbg << "harmonySEQ icon found at: pixmaps/48x48/apps/harmonyseq.png" << ENDL;
+        harmonySEQ_logo_48 = Gdk::Pixbuf::create_from_file("pixmaps/48x48/apps/harmonyseq.png");
+        metronome_icon_24 = Gdk::Pixbuf::create_from_file("pixmaps/24x24/metronome.png");
+    } else
+   if (Files::fexists("../pixmaps/48x48/apps/harmonyseq.png")) {
+        //seems we are not installed, and run from src/ directory
+        *dbg << "harmonySEQ icon found at: ../pixmaps/48x48/apps/harmonyseq.png" << ENDL;
+        harmonySEQ_logo_48 = Gdk::Pixbuf::create_from_file("../pixmaps/48x48/apps/harmonyseq.png");
+        metronome_icon_24 = Gdk::Pixbuf::create_from_file("../pixmaps/24x24/metronome.png");
+    } else{
+       //icons not found.
+        *err << ("Failed to find harmonySEQ icon files.\n");
+    }
+    
+}
+
 /**As in the name: When we got a filename from command-line, we try to open it.*/
 bool TryToOpenFileFromCommandLine(){
     gdk_threads_enter(); //lodking the threads. Loading file MAY ASK!!
@@ -292,6 +328,9 @@ int main(int argc, char** argv) {
 
     //...tree models...
     InitAllTreeModels();
+
+    //..icons...
+    LoadIcons();
 
     //...configuration...
     gdk_threads_enter();
