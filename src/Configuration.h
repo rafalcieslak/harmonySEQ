@@ -31,6 +31,15 @@ namespace Config{
         extern int Hit2Velocity;
         extern bool Hit2;
     }
+    namespace VisibleColumns{
+        extern bool ID;
+        extern bool Channel;
+        extern bool Pattern;
+        extern bool Resolution;
+        extern bool Length;
+        extern bool Velocity;
+        extern bool Chord;
+    }
     /**Inits the configuration with default data.*/
     void LoadDefaultConfiguration();
 
@@ -48,6 +57,14 @@ namespace Config{
 
     /**Creates the config directory*/
     void MakeConfigDir();
+
+    #define KF_GROUP_METRONOME "Metronome"
+#define KF_METRONOME_KEY_CHANNEL "Channel"
+#define KF_METRONOME_KEY_H1_NOTE "H1 note"
+#define KF_METRONOME_KEY_H2_NOTE "H2 note"
+#define KF_METRONOME_KEY_H1_VELOCITY "H1 velocity"
+#define KF_METRONOME_KEY_H2_VELOCITY "H2 velocity"
+#define KF_METRONOME_KEY_H2 "H2"
 }
 
 

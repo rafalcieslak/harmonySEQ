@@ -293,14 +293,14 @@ int main(int argc, char** argv) {
     //...tree models...
     InitAllTreeModels();
 
-    //...GUI...
-    InitGui();  //(Ow... better have all the main windows constructed, before any sequencer or event is. Might cause problems elsewhere).
-
     //...configuration...
     gdk_threads_enter();
     LoadConfig();
     Config::SaveToFile();
     gdk_threads_leave();
+
+    //...GUI...
+    InitGui();  //(Ow... better have all the main windows constructed, before any sequencer or event is. Might cause problems elsewhere).
 
     //...and some default events.
     InitDefaultData();

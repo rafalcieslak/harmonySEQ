@@ -39,6 +39,17 @@ namespace Config{
         int Hit2Velocity;
         bool Hit2;
     }
+
+    namespace VisibleColumns {
+        bool ID;
+        bool Channel;
+        bool Pattern;
+        bool Resolution;
+        bool Length;
+        bool Velocity;
+        bool Chord;
+    }
+    
     void LoadDefaultConfiguration(){
         //Default values
         Metronome::Channel = 10;
@@ -47,12 +58,18 @@ namespace Config{
         Metronome::Hit1Velocity = 100;
         Metronome::Hit2Velocity = 60;
         Metronome::Hit2 = true;
+        VisibleColumns::ID = 0;
+        VisibleColumns::Channel = 1;
+        VisibleColumns::Pattern = 1;
+        VisibleColumns::Resolution = 1;
+        VisibleColumns::Length = 1;
+        VisibleColumns::Velocity = 1;
+        VisibleColumns::Chord = 1;
     }
 
     void LoadFromFile(){
         *dbg << "loading config from file..." << ENDL;
         Glib::KeyFile kf;
-        char temp[200];
 
         Glib::ustring path = GetConfigFilePath();
 
@@ -68,14 +85,22 @@ namespace Config{
         }
 
         //oh, the file is all right. Load the data then.
-        if(kf.has_group(CONFIG_FILE_GROUP_METRONOME)){
-           if(kf.has_key(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_CHANNEL)) Metronome::Channel = kf.get_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_CHANNEL);
-           if(kf.has_key(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H1_NOTE)) Metronome::Hit1Note = kf.get_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H1_NOTE);
-           if(kf.has_key(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2_NOTE)) Metronome::Hit2Note = kf.get_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2_NOTE);
-           if(kf.has_key(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H1_VELOCITY)) Metronome::Hit1Velocity = kf.get_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H1_VELOCITY);
-           if(kf.has_key(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2_VELOCITY)) Metronome::Hit2Velocity = kf.get_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2_VELOCITY);
-           if(kf.has_key(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2)) Metronome::Hit2 = kf.get_boolean(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2);
-
+        if(kf.has_group(KF_GROUP_METRONOME)){
+           if(kf.has_key(KF_GROUP_METRONOME,KF_METRONOME_KEY_CHANNEL)) Metronome::Channel = kf.get_integer(KF_GROUP_METRONOME,KF_METRONOME_KEY_CHANNEL);
+           if(kf.has_key(KF_GROUP_METRONOME,KF_METRONOME_KEY_H1_NOTE)) Metronome::Hit1Note = kf.get_integer(KF_GROUP_METRONOME,KF_METRONOME_KEY_H1_NOTE);
+           if(kf.has_key(KF_GROUP_METRONOME,KF_METRONOME_KEY_H2_NOTE)) Metronome::Hit2Note = kf.get_integer(KF_GROUP_METRONOME,KF_METRONOME_KEY_H2_NOTE);
+           if(kf.has_key(KF_GROUP_METRONOME,KF_METRONOME_KEY_H1_VELOCITY)) Metronome::Hit1Velocity = kf.get_integer(KF_GROUP_METRONOME,KF_METRONOME_KEY_H1_VELOCITY);
+           if(kf.has_key(KF_GROUP_METRONOME,KF_METRONOME_KEY_H2_VELOCITY)) Metronome::Hit2Velocity = kf.get_integer(KF_GROUP_METRONOME,KF_METRONOME_KEY_H2_VELOCITY);
+           if(kf.has_key(KF_GROUP_METRONOME,KF_METRONOME_KEY_H2)) Metronome::Hit2 = kf.get_boolean(KF_GROUP_METRONOME,KF_METRONOME_KEY_H2);
+        }
+        if(kf.has_group("Visible columns")){
+            if(kf.has_key("Visible columns","ID")) VisibleColumns::ID = kf.get_boolean("Visible columns","ID");
+            if(kf.has_key("Visible columns","Channel")) VisibleColumns::Channel = kf.get_boolean("Visible columns","Channel");
+            if(kf.has_key("Visible columns","Pattern")) VisibleColumns::Pattern = kf.get_boolean("Visible columns","Pattern");
+            if(kf.has_key("Visible columns","Resolution")) VisibleColumns::Resolution = kf.get_boolean("Visible columns","Resolution");
+            if(kf.has_key("Visible columns","Length")) VisibleColumns::Length = kf.get_boolean("Visible columns","Length");
+            if(kf.has_key("Visible columns","Velocity")) VisibleColumns::Velocity = kf.get_boolean("Visible columns","Velocity");
+            if(kf.has_key("Visible columns","Chord")) VisibleColumns::Chord = kf.get_boolean("Visible columns","Chord");
         }
 
     }
@@ -103,12 +128,19 @@ namespace Config{
 
         //Storing data
         kf.set_comment("This is harmonySEQ's config file. Manual editing is not recommended, as may result in strange crashes.");
-        kf.set_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_CHANNEL,Metronome::Channel);
-        kf.set_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H1_NOTE,Metronome::Hit1Note);
-        kf.set_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2_NOTE,Metronome::Hit2Note);
-        kf.set_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H1_VELOCITY,Metronome::Hit1Velocity);
-        kf.set_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2_VELOCITY,Metronome::Hit2Velocity);
-        kf.set_boolean(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2,Metronome::Hit2);
+        kf.set_integer(KF_GROUP_METRONOME,KF_METRONOME_KEY_CHANNEL,Metronome::Channel);
+        kf.set_integer(KF_GROUP_METRONOME,KF_METRONOME_KEY_H1_NOTE,Metronome::Hit1Note);
+        kf.set_integer(KF_GROUP_METRONOME,KF_METRONOME_KEY_H2_NOTE,Metronome::Hit2Note);
+        kf.set_integer(KF_GROUP_METRONOME,KF_METRONOME_KEY_H1_VELOCITY,Metronome::Hit1Velocity);
+        kf.set_integer(KF_GROUP_METRONOME,KF_METRONOME_KEY_H2_VELOCITY,Metronome::Hit2Velocity);
+        kf.set_boolean(KF_GROUP_METRONOME,KF_METRONOME_KEY_H2,Metronome::Hit2);
+        kf.set_boolean("Visible columns","ID",VisibleColumns::ID);
+        kf.set_boolean("Visible columns","Channel",VisibleColumns::Channel);
+        kf.set_boolean("Visible columns","Pattern",VisibleColumns::Pattern);
+        kf.set_boolean("Visible columns","Resolution",VisibleColumns::Resolution);
+        kf.set_boolean("Visible columns","Length",VisibleColumns::Length);
+        kf.set_boolean("Visible columns","Velocity",VisibleColumns::Velocity);
+        kf.set_boolean("Visible columns","Chord",VisibleColumns::Chord);
 
         output_file <<  kf.to_data().c_str();
 

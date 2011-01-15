@@ -50,20 +50,36 @@ private:
     Gtk::Notebook notebook;
 
     Gtk::VBox page_main;
-    Gtk::HBox metronome_label_hbox;
-    Gtk::Table metronome_table;
-    Gtk::Label metronome_label;
-    Gtk::Label metronome_channel_label;
-    Gtk::HBox metronome_channel_hbox;
-    Gtk::SpinButton metronome_channel;
-    Gtk::Label metronome_note_label;
-    Gtk::Label metronome_velocity_label;
-    Gtk::Label metronome_bar_label;
-    Gtk::CheckButton metronome_1_4;
-    Gtk::SpinButton metronome_bar_note;
-    Gtk::SpinButton metronome_1_4_note;
-    Gtk::SpinButton metronome_bar_velocity;
-    Gtk::SpinButton metronome_1_4_velocity;
+    
+        Gtk::HBox columns_label_hbox;
+        Gtk::Label colums_label;
+        Gtk::VBox colums_vbox;
+        Gtk::CheckButton colums_id;
+        Gtk::CheckButton colums_name;
+        Gtk::CheckButton colums_onoff;
+        Gtk::CheckButton colums_channel;
+        Gtk::CheckButton colums_pattern;
+        Gtk::CheckButton colums_resolution;
+        Gtk::CheckButton colums_length;
+        Gtk::CheckButton colums_velocity;
+        Gtk::CheckButton colums_chord;
+
+        Gtk::HSeparator sep1;
+
+        Gtk::HBox metronome_label_hbox;
+        Gtk::Table metronome_table;
+        Gtk::Label metronome_label;
+        Gtk::Label metronome_channel_label;
+        Gtk::HBox metronome_channel_hbox;
+        Gtk::SpinButton metronome_channel;
+        Gtk::Label metronome_note_label;
+        Gtk::Label metronome_velocity_label;
+        Gtk::Label metronome_bar_label;
+        Gtk::CheckButton metronome_1_4;
+        Gtk::SpinButton metronome_bar_note;
+        Gtk::SpinButton metronome_1_4_note;
+        Gtk::SpinButton metronome_bar_velocity;
+        Gtk::SpinButton metronome_1_4_velocity;
 
 
 };

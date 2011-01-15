@@ -28,6 +28,7 @@
 #include "TreeModels.h"
 #include "config.h"
 #include "SettingsWindow.h"
+#include "Configuration.h"
 
 Glib::RefPtr< Gdk::Pixbuf > harmonySEQ_logo_48;
 
@@ -191,7 +192,7 @@ MainWindow::MainWindow()
     { //creating the tree model
         m_refTreeModel_sequencers = Gtk::ListStore::create(m_columns_sequencers);
 
-        if(debugging) m_TreeView.append_column(_("ID"), m_columns_sequencers.col_ID);
+        m_TreeView.append_column(_("ID"), m_columns_sequencers.col_ID);
         
         int col_count = m_TreeView.append_column_editable(_("Name"), m_columns_sequencers.col_name);
         Gtk::CellRenderer* cell = m_TreeView.get_column_cell_renderer(col_count - 1);
@@ -216,11 +217,10 @@ MainWindow::MainWindow()
         Gtk::TreeView::Column* pColumn;
         int col_iter = 0;
         pColumn = m_TreeView.get_column(col_iter);
-        if(debugging){
-            pColumn->set_sort_column(m_columns_sequencers.col_ID);
-            col_iter++;
-            pColumn = m_TreeView.get_column(col_iter);
-        }
+
+        col_iter++;
+        pColumn = m_TreeView.get_column(col_iter);
+
 
         col_iter++;
         pColumn = m_TreeView.get_column(col_iter);
@@ -247,6 +247,8 @@ MainWindow::MainWindow()
         //initial data
         //InitTreeData();
         /*is called from main()*/
+
+        UpdateVisibleColumns();
 
     }// </editor-fold>
 
@@ -781,4 +783,37 @@ void MainWindow::OnPopupPlayOnce(){
 
 void MainWindow::OnPreferencesClicked(){
     settingswindow->present();
+}
+
+void MainWindow::UpdateVisibleColumns(){
+        Gtk::TreeView::Column* pColumn;
+        int col_iter = 0;
+        pColumn = m_TreeView.get_column(col_iter); //ID
+        pColumn->set_visible(Config::VisibleColumns::ID);
+        col_iter++;
+        pColumn = m_TreeView.get_column(col_iter); //Name
+        pColumn->set_visible(1);
+        col_iter++;
+        pColumn = m_TreeView.get_column(col_iter); //ON/OFF
+        pColumn->set_visible(1);
+        col_iter++;
+        pColumn = m_TreeView.get_column(col_iter); //Channel
+        pColumn->set_visible(Config::VisibleColumns::Channel);
+        col_iter++;
+        pColumn = m_TreeView.get_column(col_iter); //Pattern
+        pColumn->set_visible(Config::VisibleColumns::Pattern);
+        col_iter++;
+        pColumn = m_TreeView.get_column(col_iter); //Res
+        pColumn->set_visible(Config::VisibleColumns::Resolution);
+        col_iter++;
+        pColumn = m_TreeView.get_column(col_iter); //Len
+        pColumn->set_visible(Config::VisibleColumns::Length);
+        col_iter++;
+        pColumn = m_TreeView.get_column(col_iter); //Vel
+        pColumn->set_visible(Config::VisibleColumns::Velocity);
+        col_iter++;
+        pColumn = m_TreeView.get_column(col_iter); //Chord
+        pColumn->set_visible(Config::VisibleColumns::Chord);
+
+
 }

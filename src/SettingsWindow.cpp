@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
-
+#include "MainWindow.h"
 #include "SettingsWindow.h"
 #include "Configuration.h"
 
@@ -40,6 +40,41 @@ SettingsWindow::SettingsWindow(){
     notebook.append_page(page_main,_("General"));
 
     page_main.set_border_width(5);
+
+    // <editor-fold defaultstate="collapsed" desc="visible colums">
+    page_main.pack_start(columns_label_hbox);
+    page_main.pack_start(colums_vbox);
+
+    columns_label_hbox.pack_start(colums_label,Gtk::PACK_SHRINK);
+    colums_label.set_markup(_("<b>Visible colums:</b>"));
+
+    colums_vbox.pack_start(colums_id);
+    colums_vbox.pack_start(colums_name);
+    colums_vbox.pack_start(colums_onoff);
+    colums_vbox.pack_start(colums_channel);
+    colums_vbox.pack_start(colums_pattern);
+    colums_vbox.pack_start(colums_resolution);
+    colums_vbox.pack_start(colums_length);
+    colums_vbox.pack_start(colums_velocity);
+    colums_vbox.pack_start(colums_chord);
+
+    colums_id.set_label(_("ID"));
+    colums_name.set_label(_("Name"));
+    colums_onoff.set_label(_("Channel"));
+    colums_channel.set_label(_("Channel"));
+    colums_pattern.set_label(_("Patern"));
+    colums_resolution.set_label(_("Resolution"));
+    colums_length.set_label(_("Length"));
+    colums_velocity.set_label(_("Velocity"));
+    colums_chord.set_label(_("Chord"));
+
+    //these are fake checkbuttons, for it is impossible to hide the name or the on/off switch
+    colums_name.set_active(1);
+    colums_name.set_sensitive(0);
+    colums_onoff.set_active(1);
+    colums_onoff.set_sensitive(0);
+    // </editor-fold>
+    page_main.pack_start(sep1);
     // <editor-fold defaultstate="collapsed" desc="metronome setting widgets placement">
     page_main.pack_start(metronome_label_hbox,Gtk::PACK_SHRINK);
     page_main.pack_start(metronome_channel_hbox,Gtk::PACK_SHRINK);
@@ -50,7 +85,7 @@ SettingsWindow::SettingsWindow(){
     metronome_label.set_markup(_("<b>Metronome:</b>"));
     metronome_bar_label.set_text(_("Bar:"));
     metronome_1_4.set_label(_("1/4 bar:"));
-    metronome_1_4.set_tooltip_markup(_("Mark here to metronome on every 1/4 of each bar."));
+    metronome_1_4.set_tooltip_markup(_("Mark here, and the metronome will also tick on every 1/4 of each bar."));
     metronome_1_4.signal_toggled().connect(mem_fun(*this,&SettingsWindow::OnUse14BarToggled));
     metronome_note_label.set_text(_("Note:"));
     metronome_velocity_label.set_text(_("Velocity:"));
@@ -111,6 +146,13 @@ void SettingsWindow::LoadDataFromConfig(){
     metronome_bar_velocity.set_value(Config::Metronome::Hit1Velocity);
     metronome_1_4.set_active(Config::Metronome::Hit2);
     OnUse14BarToggled(); //Signal handler won't get called automatically, so we'll call it here, to update widget's sensitivity;
+    colums_id.set_active(Config::VisibleColumns::ID);
+    colums_channel.set_active(Config::VisibleColumns::Channel);
+    colums_pattern.set_active(Config::VisibleColumns::Pattern);
+    colums_resolution.set_active(Config::VisibleColumns::Resolution);
+    colums_length.set_active(Config::VisibleColumns::Length);
+    colums_velocity.set_active(Config::VisibleColumns::Velocity);
+    colums_chord.set_active(Config::VisibleColumns::Chord);
     
 }
 
@@ -121,7 +163,13 @@ void SettingsWindow::StoreDataToConfig(){
     Config::Metronome::Hit1Note = metronome_bar_note.get_value();
     Config::Metronome::Hit1Velocity = metronome_bar_velocity.get_value();
     Config::Metronome::Hit2 = metronome_1_4.get_active();
-    
+    Config::VisibleColumns::ID = colums_id.get_active();
+    Config::VisibleColumns::Channel = colums_channel.get_active();
+    Config::VisibleColumns::Pattern = colums_pattern.get_active();
+    Config::VisibleColumns::Resolution = colums_resolution.get_active();
+    Config::VisibleColumns::Length = colums_length.get_active();
+    Config::VisibleColumns::Velocity = colums_velocity.get_active();
+    Config::VisibleColumns::Chord  = colums_chord.get_active();
 }
 
 void SettingsWindow::OnCancelClicked(){
@@ -132,6 +180,7 @@ void SettingsWindow::OnCancelClicked(){
 void SettingsWindow::OnOKClicked(){
     StoreDataToConfig();
     Config::SaveToFile();
+    mainwindow->UpdateVisibleColumns();
     hide();
 }
 
@@ -151,6 +200,7 @@ void SettingsWindow::OnRestoreDefaults(){
         Config::LoadDefaultConfiguration();
         LoadDataFromConfig();
         Config::SaveToFile();
+        mainwindow->UpdateVisibleColumns();
     }else{
         return;
     }
