@@ -37,6 +37,7 @@ private:
     void OnShowed();
     void OnCancelClicked();
     void OnOKClicked();
+    void OnRestoreDefaults();
     /**Needs to update some widget's sensitivity*/
     void OnUse14BarToggled();
     Gtk::VBox main_vbox;
@@ -44,6 +45,7 @@ private:
 
     Gtk::Button ok_button;
     Gtk::Button cancel_button;
+    Gtk::Button restore_defaults_button;
 
     Gtk::Notebook notebook;
 

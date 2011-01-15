@@ -73,7 +73,7 @@ EventGUI::EventGUI(Event *prt){
     label_key.set_text(_("Key:"));
     label_note.set_text(_("Note:"));
     capture.set_label(_("Capture"));
-    capture.set_tooltip_markup(_("Cathes next event end fill this one's type and arguments to fit the one triggered.\n<i>Example usage: press this button and then the X key on yout keyboard. The event will be automatically set to type: keyboard, key: X.</i>"));
+    capture.set_tooltip_markup(_("Cathes next event end fill this one's type and arguments to fit the one triggered.\n<i>Example usage: press this button and then the X key on your keyboard. The event will be automatically set to type: keyboard, key: X.</i>"));
 
     capture.signal_clicked().connect(sigc::mem_fun(*this,&EventGUI::OnCaptureClicked));
 

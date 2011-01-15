@@ -30,9 +30,11 @@ SettingsWindow::SettingsWindow(){
 
     lower_hbox.pack_end(cancel_button);
     lower_hbox.pack_end(ok_button);
-
+    lower_hbox.pack_start(restore_defaults_button);
+    
     cancel_button.set_label(_("Cancel"));
     ok_button.set_label(_("OK"));
+    restore_defaults_button.set_label(_("Restore"));
 
     main_vbox.pack_start(notebook);
     notebook.append_page(page_main,_("General"));
@@ -87,6 +89,7 @@ SettingsWindow::SettingsWindow(){
 
     ok_button.signal_clicked().connect(mem_fun(*this,&SettingsWindow::OnOKClicked));
     cancel_button.signal_clicked().connect(mem_fun(*this,&SettingsWindow::OnCancelClicked));
+    restore_defaults_button.signal_clicked().connect(mem_fun(*this,&SettingsWindow::OnRestoreDefaults));
 
     show_all();
     hide();
@@ -140,5 +143,17 @@ void SettingsWindow::OnUse14BarToggled(){
         metronome_1_4_note.set_sensitive(0);
         metronome_1_4_velocity.set_sensitive(0);
     }
+
+}
+
+void SettingsWindow::OnRestoreDefaults(){
+    if(Ask(_("Restoring default configuration"), _("Are you sure you want to loose all your settings?"))){
+        Config::LoadDefaultConfiguration();
+        LoadDataFromConfig();
+        Config::SaveToFile();
+    }else{
+        return;
+    }
+
 
 }
