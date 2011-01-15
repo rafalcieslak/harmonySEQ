@@ -55,6 +55,8 @@ std::map<int, Glib::ustring> notemap;         //map used for note_number -> note
 
 int debugging = 0, help = 0, version = 0; //flags set by getopt, depending on command-line parameters
 
+bool metronome;
+
 void print_help(); //forward declaration of few functions
 void end_program();
 
@@ -226,6 +228,7 @@ int main(int argc, char** argv) {
     help = 0;           //by default
     ports_number = 1;   //by default
     passing_midi = 0;   //by default
+    metronome = 1; //by default
     tempo = DEFAULT_TEMPO;
     err = new error();  //error stream is never quiet! so we open it, not caring about what we got in arguments
 

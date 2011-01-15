@@ -25,6 +25,7 @@
 #include "MainWindow.h"
 #include "Sequencer.h"
 #include "Event.h"
+#include "Configuration.h"
 
 extern int running;
 
@@ -383,6 +384,40 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
             seq->last_played_note =currnote;
         }
 
+    }
+
+    //Also, playback the metronome notes.
+    if (metronome){
+        for (int x =0; x < 4;x++){
+            if (x == 0){
+                    *dbg<<"bar"<<ENDL;
+                    //Create a new event (clear it)...
+                    snd_seq_ev_clear(&ev);
+                    //Fill it with note data
+                    snd_seq_ev_set_note(&ev, Config::MetronomeChannel-1, Config::MetronomeHit1Note, Config::MetronomeHit1Velocity, TICKS_PER_QUARTERNOTE);
+                    //Schedule it in appropriate momment in time (rather: tick, not time), putting it on a queue
+                    snd_seq_ev_schedule_tick(&ev, queueid, 0, tick + x * TICKS_PER_QUARTERNOTE);
+                    //Direct it ti output port, to all it's subscribers
+                    snd_seq_ev_set_source(&ev, output_port);
+                    snd_seq_ev_set_subs(&ev);
+                    //Output the event (but it stays at the queue.)
+                    snd_seq_event_output_direct(seq_handle, &ev);
+             } else if (Config::MetronomeHit2){
+                    *dbg<<"-"<<ENDL;
+                    //Create a new event (clear it)...
+                    snd_seq_ev_clear(&ev);
+                    //Fill it with note data
+                    snd_seq_ev_set_note(&ev, Config::MetronomeChannel-1, Config::MetronomeHit2Note, Config::MetronomeHit2Velocity, TICKS_PER_QUARTERNOTE);
+                    //Schedule it in appropriate momment in time (rather: tick, not time), putting it on a queue
+                    snd_seq_ev_schedule_tick(&ev, queueid, 0, tick + x * TICKS_PER_QUARTERNOTE);
+                    //Direct it ti output port, to all it's subscribers
+                    snd_seq_ev_set_source(&ev, output_port);
+                    snd_seq_ev_set_subs(&ev);
+                    //Output the event (but it stays at the queue.)
+                    snd_seq_event_output_direct(seq_handle, &ev);
+
+            }
+        }
     }
 
     //Increment the tick counter (TICKS_PER_NOTE = TICKS_PER_BAR).

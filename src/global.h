@@ -117,6 +117,7 @@ extern double tempo;
 extern int ports_number;
 extern int running;
 extern int debugging;
+extern bool metronome;
 extern debug* dbg;
 extern error* err;
 extern MidiDriver* midi;

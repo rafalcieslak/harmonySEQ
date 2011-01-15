@@ -55,6 +55,7 @@ SettingsWindow::SettingsWindow(){
     metronome_channel_label.set_text(_("Channel:"));
 
     metronome_table.resize(3, 3);
+    metronome_table.set_border_width(2);
     metronome_table.attach(metronome_note_label,1,2,0,1);
     metronome_table.attach(metronome_velocity_label,2,3,0,1);
     metronome_table.attach(metronome_bar_label,0,1,1,2);
