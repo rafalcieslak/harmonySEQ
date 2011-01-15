@@ -5,7 +5,7 @@ SUBDIRS = po examples pixmaps src
 ACLOCAL_AMFLAGS = -I m4
 
 
-EXTRA_DIST = config.rpath CHANGELOG LICENSE harmonyseq.desktop harmonyseq-mime.xml
+EXTRA_DIST = config.rpath CHANGELOG LICENSE harmonyseq.desktop harmonyseq-mime.xml README
 
 appsmenudir = $(datadir)/applications
 appsmenu_DATA = harmonyseq.desktop
