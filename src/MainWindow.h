@@ -91,6 +91,7 @@ private:
     void OnMenuOpenClicked();
     void OnMenuNewClicked();
     void OnPreferencesClicked();
+    void OnMetronomeToggleClicked();
 
     void OnPopupEdit();
     void OnPopupPlayOnce();

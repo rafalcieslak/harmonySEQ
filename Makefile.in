@@ -35,7 +35,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 subdir = .
-DIST_COMMON = $(am__configure_deps) $(srcdir)/Makefile.am \
+DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(top_srcdir)/configure ABOUT-NLS \
 	config.guess config.rpath config.sub depcomp install-sh \
 	missing
@@ -256,7 +256,7 @@ top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = foreign
 SUBDIRS = po examples pixmaps src
 ACLOCAL_AMFLAGS = -I m4
-EXTRA_DIST = config.rpath CHANGELOG LICENSE harmonyseq.desktop harmonyseq-mime.xml
+EXTRA_DIST = config.rpath CHANGELOG LICENSE harmonyseq.desktop harmonyseq-mime.xml README
 appsmenudir = $(datadir)/applications
 appsmenu_DATA = harmonyseq.desktop
 mimedir = $(datadir)/mime/packages

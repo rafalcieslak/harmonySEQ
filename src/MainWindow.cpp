@@ -62,6 +62,7 @@ MainWindow::MainWindow()
     m_refActionGroup->add(Gtk::Action::create("DuplicateSeq", Gtk::Stock::CONVERT, _("Duplicate"), _("Duplicates selected sequencer")), sigc::mem_fun(*this, &MainWindow::OnCloneClicked));
     m_refActionGroup->add(Gtk::Action::create("Events", Gtk::Stock::EXECUTE,_("Events"), _("Opens the events window")), sigc::mem_fun(*this, &MainWindow::OnEventsClicked));
     m_refActionGroup->add(Gtk::Action::create("About", Gtk::Stock::ABOUT), sigc::mem_fun(*this, &MainWindow::OnAboutMenuClicked));
+    m_refActionGroup->add(Gtk::ToggleAction::create("Metronome", Gtk::Stock::APPLY, _("Metronome"),_("Toggle metronome on/off")), sigc::mem_fun(*this, &MainWindow::OnMetronomeToggleClicked));
     m_refActionGroup->add(Gtk::Action::create("PlayPause", Gtk::Stock::MEDIA_PAUSE, _("Play/Pause"),_("Toggle play/pause")), sigc::mem_fun(*this, &MainWindow::OnPlayPauseClicked));
     m_refActionGroup->add(Gtk::ToggleAction::create("PassMidiEvents", _("Pass MIDI events"),_("States whether MIDI events are passed-through harmonySEQ.")), sigc::mem_fun(*this, &MainWindow::OnPassToggleClicked));
     m_refActionGroup->add(Gtk::Action::create("seq/Edit", Gtk::Stock::EDIT,_("Edit"),_("Edites the sequencer.")), sigc::mem_fun(*this, &MainWindow::OnPopupEdit));
@@ -109,6 +110,7 @@ MainWindow::MainWindow()
             "   <separator/>"
             "   <toolitem name='EventsTool' action='Events'/>"
             "   <separator expand='true'/>"
+            "   <toolitem name='Metronome' action='Metronome'/>"
             "   <toolitem name='TempoLabel' action='Empty'/>"
             "   <toolitem name='Tempo' action='Empty'/>"
             "   <toolitem name='PlayPauseTool' action='PlayPause'/>"
@@ -155,6 +157,9 @@ MainWindow::MainWindow()
     Gtk::Widget* pPlayPauseTool = m_refUIManager->get_widget("/ToolBar/PlayPauseTool");
     Gtk::ToolItem& PlayPauseTool = dynamic_cast<Gtk::ToolItem&> (*pPlayPauseTool);
     PlayPauseTool.set_is_important(1); // will display text text to the icon
+    Gtk::Widget* pMetronome = m_refUIManager->get_widget("/ToolBar/Metronome");
+    Gtk::ToggleToolButton& Metronome = dynamic_cast<Gtk::ToggleToolButton&> (*pMetronome);
+    Metronome.set_active(metronome);
     Gtk::Widget* pEventsTool = m_refUIManager->get_widget("/ToolBar/EventsTool");
     Gtk::ToolItem& EventsTool = dynamic_cast<Gtk::ToolItem&> (*pEventsTool);
     EventsTool.set_is_important(1); // will display text text to the icon
@@ -814,6 +819,11 @@ void MainWindow::UpdateVisibleColumns(){
         col_iter++;
         pColumn = m_TreeView.get_column(col_iter); //Chord
         pColumn->set_visible(Config::VisibleColumns::Chord);
+}
 
+void MainWindow::OnMetronomeToggleClicked(){
+    Gtk::Widget* pMetronome = m_refUIManager->get_widget("/ToolBar/Metronome");
+    Gtk::ToggleToolButton& Metronome = dynamic_cast<Gtk::ToggleToolButton&> (*pMetronome);
+    metronome = Metronome.get_active();
 
 }
