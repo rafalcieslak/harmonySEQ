@@ -210,6 +210,7 @@ MainWindow::MainWindow()
         col_count = m_TreeView.append_column(_("Resolution"), m_columns_sequencers.col_res);
         col_count = m_TreeView.append_column_numeric(_("Length"), m_columns_sequencers.col_len,"%g");
         col_count = m_TreeView.append_column(_("Velocity"), m_columns_sequencers.col_vol);
+        col_count = m_TreeView.append_column(_("Chord"), m_columns_sequencers.col_chord);
 
 
         Gtk::TreeView::Column* pColumn;
@@ -221,7 +222,6 @@ MainWindow::MainWindow()
             pColumn = m_TreeView.get_column(col_iter);
         }
 
-        
         col_iter++;
         pColumn = m_TreeView.get_column(col_iter);
         pColumn->set_fixed_width(10);
@@ -407,6 +407,7 @@ Gtk::TreeModel::RowReference MainWindow::AddSequencerRow(int x)
     row[m_columns_sequencers.col_res] = sequencers[x]->resolution;
     row[m_columns_sequencers.col_len] = sequencers[x]->length;
     row[m_columns_sequencers.col_vol] = sequencers[x]->GetVolume();
+    row[m_columns_sequencers.col_chord] = sequencers[x]->chord.GetName();
     if(sequencers[x]->GetOn()){
         row[m_columns_sequencers.col_colour] = "green1";
     }else if (sequencers[x]->GetPlayOncePhase() == 2 || sequencers[x]->GetPlayOncePhase() == 3){
@@ -440,6 +441,7 @@ void MainWindow::InitTreeData(){
         row[m_columns_sequencers.col_pattern] = sequencers[x]->active_pattern;
         row[m_columns_sequencers.col_len] = sequencers[x]->length;
         row[m_columns_sequencers.col_vol] = sequencers[x]->GetVolume();
+        row[m_columns_sequencers.col_chord] = sequencers[x]->chord.GetName();
         Gtk::TreeRowReference rowref(m_refTreeModel_sequencers,m_refTreeModel_sequencers->get_path(iter));
         sequencers[x]->row_in_main_window = rowref;
     if(sequencers[x]->GetOn()){
@@ -474,6 +476,7 @@ void MainWindow::RefreshRow(Gtk::TreeRow row){
     row[m_columns_sequencers.col_pattern] = seq->active_pattern;
     row[m_columns_sequencers.col_len] = seq->length;
     row[m_columns_sequencers.col_vol] = seq->GetVolume();
+    row[m_columns_sequencers.col_chord] = seq->chord.GetName();
     if(sequencers[x]->GetOn()){
         row[m_columns_sequencers.col_colour] = "green1";
     }else if (sequencers[x]->GetPlayOncePhase() == 2 || sequencers[x]->GetPlayOncePhase() == 3){

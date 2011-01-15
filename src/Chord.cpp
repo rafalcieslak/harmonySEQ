@@ -163,6 +163,7 @@ void Chord::SetType(int n){
     if(type == CHORD_TYPE_GUITAR || type == CHORD_TYPE_TRIAD) base_use =1;
     if(type == CHORD_TYPE_GUITAR) base_note = 4;
     if(type == CHORD_TYPE_TRIAD) base_note = 0;
+    NoteAndOctaveToBase();
     RecalcNotes();
 
 }
@@ -264,27 +265,42 @@ Glib::ustring Chord::GetName(){
     Glib::ustring a;
     switch (type){
         case CHORD_TYPE_CUSTOM:
-            sprintf(temp,_("Custom: %d, %d, %d, %d, %d, %d"),notes[0],notes[1],notes[2],notes[3],notes[4],notes[5]);
+            if (base_use)
+                sprintf(temp,_("Custom: %d, %d, %d, %d, %d, %d (base: %d)"),notes[0],notes[1],notes[2],notes[3],notes[4],notes[5],base);
+            else
+                sprintf(temp,_("Custom: %d, %d, %d, %d, %d, %d"),notes[0],notes[1],notes[2],notes[3],notes[4],notes[5]);
             break;
         case CHORD_TYPE_GUITAR:
             if (mode_guitar == CHORD_GUITAR_MODE_MAJOR){
-                sprintf(temp,_("Guitar: %s major"),notemap.find(root)->second.c_str());
+                sprintf(temp,_("Guitar: %s major, octave: %d"),notemap.find(root)->second.c_str(),base_octave);
             }else if (mode_guitar == CHORD_GUITAR_MODE_MINOR){
-                sprintf(temp,_("Guitar: %s minor"),notemap.find(root)->second.c_str());
+                sprintf(temp,_("Guitar: %s minor, octave: %d"),notemap.find(root)->second.c_str(),base_octave);
             }
             break;
         case CHORD_TYPE_TRIAD:
             if (mode_triad ==  CHORD_TRIAD_MODE_MAJOR){
-                sprintf(temp,_("Triad: %s major"),notemap.find(root)->second.c_str());
+                if (inversion == 0)
+                    sprintf(temp,_("Triad: %s major, octave: %d"),notemap.find(root)->second.c_str(), base_octave);
+                else
+                    sprintf(temp,_("Triad: %s major, octave: %d, inversion: %d"),notemap.find(root)->second.c_str(),base_octave,inversion);
             } else
             if (mode_triad == CHORD_TRIAD_MODE_MINOR){
-                sprintf(temp,_("Triad: %s minor"),notemap.find(root)->second.c_str());
+                if (inversion == 0)
+                    sprintf(temp,_("Triad: %s minor, octave: %d"),notemap.find(root)->second.c_str(), base_octave);
+                else
+                    sprintf(temp,_("Triad: %s minor, octave: %d, inversion: %d"),notemap.find(root)->second.c_str(),base_octave,inversion);
             } else
             if (mode_triad ==  CHORD_TRIAD_MODE_AUGMENTED){
-                sprintf(temp,_("Triad: %s augumented"),notemap.find(root)->second.c_str());
+                if (inversion == 0)
+                    sprintf(temp,_("Triad: %s augmented, octave: %d"),notemap.find(root)->second.c_str(), base_octave);
+                else
+                    sprintf(temp,_("Triad: %s augmented, octave: %d, inversion: %d"),notemap.find(root)->second.c_str(),base_octave,inversion);
             } else
-            if (mode_triad ==  CHORD_TRIAD_MODE_DIMINICHED){
-                sprintf(temp,_("Triad: %s diminished"),notemap.find(root)->second.c_str());
+            if (mode_triad ==  CHORD_TRIAD_MODE_DIMINISCHED){
+                if (inversion == 0)
+                    sprintf(temp,_("Triad: %s diminisched, octave: %d"),notemap.find(root)->second.c_str(), base_octave);
+                else
+                    sprintf(temp,_("Triad: %s diminisched, octave: %d, inversion: %d"),notemap.find(root)->second.c_str(),base_octave,inversion);
             }
             break;
     }

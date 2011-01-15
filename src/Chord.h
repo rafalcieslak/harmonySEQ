@@ -46,7 +46,7 @@ public:
         CHORD_TRIAD_MODE_MAJOR,
         CHORD_TRIAD_MODE_MINOR,
         CHORD_TRIAD_MODE_AUGMENTED,
-        CHORD_TRIAD_MODE_DIMINICHED
+        CHORD_TRIAD_MODE_DIMINISCHED
     };
     
     //The following have obvious names, they does not require to be commented

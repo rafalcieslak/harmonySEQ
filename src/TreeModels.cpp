@@ -178,7 +178,7 @@ void InitTriadModesTreeModel(){
     row[m_columns_IdAndName.id] = Chord::CHORD_TRIAD_MODE_AUGMENTED;
     row[m_columns_IdAndName.name] = _("Augmented");
     row = *(m_refTreeModel_TriadModes->append());
-    row[m_columns_IdAndName.id] = Chord::CHORD_TRIAD_MODE_DIMINICHED;
+    row[m_columns_IdAndName.id] = Chord::CHORD_TRIAD_MODE_DIMINISCHED;
     row[m_columns_IdAndName.name] = _("Diminished");
 
 }

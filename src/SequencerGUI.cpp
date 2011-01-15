@@ -34,6 +34,7 @@ SequencerWindow::SequencerWindow(Sequencer* prt)
 
     parent = prt;
     chordwidget = new ChordWidget(&prt->chord);
+    chordwidget->on_changed.connect(mem_fun(*this,&SequencerWindow::OnChordWidgetChanged));
     previous_box_where_pattern_lines_were_packed = -1;
     do_not_react_on_page_changes = 0;
 
@@ -311,6 +312,7 @@ void SequencerWindow::AttachLines(int where){
 
 
 void SequencerWindow::OnChordWidgetChanged(){
+    if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
     Files::SetFileModified(1);
 }
 

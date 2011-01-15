@@ -36,6 +36,7 @@ public:
         add(col_len);
         add(col_vol);
         add(col_colour);
+        add(col_chord);
     }
     Gtk::TreeModelColumn<int> col_ID;
     Gtk::TreeModelColumn<Glib::ustring> col_name;
@@ -46,6 +47,7 @@ public:
     Gtk::TreeModelColumn<double> col_len;
     Gtk::TreeModelColumn<int> col_vol;
     Gtk::TreeModelColumn<Glib::ustring> col_colour;
+    Gtk::TreeModelColumn<Glib::ustring> col_chord;
 };
 
 

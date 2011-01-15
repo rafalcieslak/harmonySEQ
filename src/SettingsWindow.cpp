@@ -28,9 +28,9 @@ SettingsWindow::SettingsWindow(){
     add(main_vbox);
     main_vbox.pack_end(lower_hbox,Gtk::PACK_SHRINK);
 
-    lower_hbox.pack_end(cancel_button);
-    lower_hbox.pack_end(ok_button);
-    lower_hbox.pack_start(restore_defaults_button);
+    lower_hbox.pack_end(cancel_button,Gtk::PACK_SHRINK);
+    lower_hbox.pack_end(ok_button,Gtk::PACK_SHRINK);
+    lower_hbox.pack_start(restore_defaults_button,Gtk::PACK_SHRINK);
     
     cancel_button.set_label(_("Cancel"));
     ok_button.set_label(_("OK"));
