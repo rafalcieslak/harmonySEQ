@@ -31,21 +31,22 @@
 #endif
 
 namespace Config{
-    int MetronomeChannel;
-    int MetronomeHit1Note;
-    int MetronomeHit2Note;
-    int MetronomeHit1Velocity;
-    int MetronomeHit2Velocity;
-    bool MetronomeHit2;
-
+    namespace Metronome{
+        int Channel;
+        int Hit1Note;
+        int Hit2Note;
+        int Hit1Velocity;
+        int Hit2Velocity;
+        bool Hit2;
+    }
     void LoadDefaultConfiguration(){
         //Default values
-        MetronomeChannel = 10;
-        MetronomeHit1Note = 76;
-        MetronomeHit2Note = 77;
-        MetronomeHit1Velocity = 100;
-        MetronomeHit2Velocity = 60;
-        MetronomeHit2 = true;
+        Metronome::Channel = 10;
+        Metronome::Hit1Note = 76;
+        Metronome::Hit2Note = 77;
+        Metronome::Hit1Velocity = 100;
+        Metronome::Hit2Velocity = 60;
+        Metronome::Hit2 = true;
     }
 
     void LoadFromFile(){
@@ -68,12 +69,12 @@ namespace Config{
 
         //oh, the file is all right. Load the data then.
         if(kf.has_group(CONFIG_FILE_GROUP_METRONOME)){
-           if(kf.has_key(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_CHANNEL)) MetronomeChannel = kf.get_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_CHANNEL);
-           if(kf.has_key(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H1_NOTE)) MetronomeHit1Note = kf.get_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H1_NOTE);
-           if(kf.has_key(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2_NOTE)) MetronomeHit2Note = kf.get_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2_NOTE);
-           if(kf.has_key(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H1_VELOCITY)) MetronomeHit1Velocity = kf.get_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H1_VELOCITY);
-           if(kf.has_key(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2_VELOCITY)) MetronomeHit2Velocity = kf.get_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2_VELOCITY);
-           if(kf.has_key(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2)) MetronomeHit2 = kf.get_boolean(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2);
+           if(kf.has_key(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_CHANNEL)) Metronome::Channel = kf.get_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_CHANNEL);
+           if(kf.has_key(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H1_NOTE)) Metronome::Hit1Note = kf.get_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H1_NOTE);
+           if(kf.has_key(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2_NOTE)) Metronome::Hit2Note = kf.get_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2_NOTE);
+           if(kf.has_key(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H1_VELOCITY)) Metronome::Hit1Velocity = kf.get_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H1_VELOCITY);
+           if(kf.has_key(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2_VELOCITY)) Metronome::Hit2Velocity = kf.get_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2_VELOCITY);
+           if(kf.has_key(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2)) Metronome::Hit2 = kf.get_boolean(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2);
 
         }
 
@@ -102,12 +103,12 @@ namespace Config{
 
         //Storing data
         kf.set_comment("This is harmonySEQ's config file. Manual editing is not recommended, as may result in strange crashes.");
-        kf.set_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_CHANNEL,MetronomeChannel);
-        kf.set_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H1_NOTE,MetronomeHit1Note);
-        kf.set_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2_NOTE,MetronomeHit2Note);
-        kf.set_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H1_VELOCITY,MetronomeHit1Velocity);
-        kf.set_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2_VELOCITY,MetronomeHit2Velocity);
-        kf.set_boolean(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2,MetronomeHit2);
+        kf.set_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_CHANNEL,Metronome::Channel);
+        kf.set_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H1_NOTE,Metronome::Hit1Note);
+        kf.set_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2_NOTE,Metronome::Hit2Note);
+        kf.set_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H1_VELOCITY,Metronome::Hit1Velocity);
+        kf.set_integer(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2_VELOCITY,Metronome::Hit2Velocity);
+        kf.set_boolean(CONFIG_FILE_GROUP_METRONOME,CONFIG_FILE_METRONOME_KEY_H2,Metronome::Hit2);
 
         output_file <<  kf.to_data().c_str();
 

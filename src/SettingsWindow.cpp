@@ -104,23 +104,23 @@ void SettingsWindow::OnShowed(){
 }
 
 void SettingsWindow::LoadDataFromConfig(){
-    metronome_channel.set_value(Config::MetronomeChannel);
-    metronome_1_4_note.set_value(Config::MetronomeHit2Note);
-    metronome_1_4_velocity.set_value(Config::MetronomeHit2Velocity);
-    metronome_bar_note.set_value(Config::MetronomeHit1Note);
-    metronome_bar_velocity.set_value(Config::MetronomeHit1Velocity);
-    metronome_1_4.set_active(Config::MetronomeHit2);
+    metronome_channel.set_value(Config::Metronome::Channel);
+    metronome_1_4_note.set_value(Config::Metronome::Hit2Note);
+    metronome_1_4_velocity.set_value(Config::Metronome::Hit2Velocity);
+    metronome_bar_note.set_value(Config::Metronome::Hit1Note);
+    metronome_bar_velocity.set_value(Config::Metronome::Hit1Velocity);
+    metronome_1_4.set_active(Config::Metronome::Hit2);
     OnUse14BarToggled(); //Signal handler won't get called automatically, so we'll call it here, to update widget's sensitivity;
     
 }
 
 void SettingsWindow::StoreDataToConfig(){
-    Config::MetronomeChannel = metronome_channel.get_value();
-    Config::MetronomeHit2Note = metronome_1_4_note.get_value();
-    Config::MetronomeHit2Velocity = metronome_1_4_velocity.get_value();
-    Config::MetronomeHit1Note = metronome_bar_note.get_value();
-    Config::MetronomeHit1Velocity = metronome_bar_velocity.get_value();
-    Config::MetronomeHit2 = metronome_1_4.get_active();
+    Config::Metronome::Channel = metronome_channel.get_value();
+    Config::Metronome::Hit2Note = metronome_1_4_note.get_value();
+    Config::Metronome::Hit2Velocity = metronome_1_4_velocity.get_value();
+    Config::Metronome::Hit1Note = metronome_bar_note.get_value();
+    Config::Metronome::Hit1Velocity = metronome_bar_velocity.get_value();
+    Config::Metronome::Hit2 = metronome_1_4.get_active();
     
 }
 

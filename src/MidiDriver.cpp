@@ -394,7 +394,7 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                     //Create a new event (clear it)...
                     snd_seq_ev_clear(&ev);
                     //Fill it with note data
-                    snd_seq_ev_set_note(&ev, Config::MetronomeChannel-1, Config::MetronomeHit1Note, Config::MetronomeHit1Velocity, TICKS_PER_QUARTERNOTE);
+                    snd_seq_ev_set_note(&ev, Config::Metronome::Channel-1, Config::Metronome::Hit1Note, Config::Metronome::Hit1Velocity, TICKS_PER_QUARTERNOTE);
                     //Schedule it in appropriate momment in time (rather: tick, not time), putting it on a queue
                     snd_seq_ev_schedule_tick(&ev, queueid, 0, tick + x * TICKS_PER_QUARTERNOTE);
                     //Direct it ti output port, to all it's subscribers
@@ -402,12 +402,12 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                     snd_seq_ev_set_subs(&ev);
                     //Output the event (but it stays at the queue.)
                     snd_seq_event_output_direct(seq_handle, &ev);
-             } else if (Config::MetronomeHit2){
+             } else if (Config::Metronome::Hit2){
                     *dbg<<"-"<<ENDL;
                     //Create a new event (clear it)...
                     snd_seq_ev_clear(&ev);
                     //Fill it with note data
-                    snd_seq_ev_set_note(&ev, Config::MetronomeChannel-1, Config::MetronomeHit2Note, Config::MetronomeHit2Velocity, TICKS_PER_QUARTERNOTE);
+                    snd_seq_ev_set_note(&ev, Config::Metronome::Channel-1, Config::Metronome::Hit2Note, Config::Metronome::Hit2Velocity, TICKS_PER_QUARTERNOTE);
                     //Schedule it in appropriate momment in time (rather: tick, not time), putting it on a queue
                     snd_seq_ev_schedule_tick(&ev, queueid, 0, tick + x * TICKS_PER_QUARTERNOTE);
                     //Direct it ti output port, to all it's subscribers

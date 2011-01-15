@@ -23,13 +23,14 @@
 #include "global.h"
 
 namespace Config{
-   extern int MetronomeChannel;
-    extern int MetronomeHit1Note;
-    extern int MetronomeHit2Note;
-    extern int MetronomeHit1Velocity;
-    extern int MetronomeHit2Velocity;
-    extern bool MetronomeHit2;
-
+    namespace Metronome{
+       extern int Channel;
+        extern int Hit1Note;
+        extern int Hit2Note;
+        extern int Hit1Velocity;
+        extern int Hit2Velocity;
+        extern bool Hit2;
+    }
     /**Inits the configuration with default data.*/
     void LoadDefaultConfiguration();
 
