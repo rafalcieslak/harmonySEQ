@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2011-01-15 21:03+0100\n"
+"POT-Creation-Date: 2011-01-16 17:57+0100\n"
 "PO-Revision-Date: 2010-12-18 08:17+0000\n"
 "Last-Translator: Launchpad Translations Administrators <rosetta@launchpad."
 "net>\n"
@@ -198,11 +198,11 @@ msgid ""
 "It also blinks when a bar starts."
 msgstr ""
 
-#: src/MainWindow.cpp:199 src/EventsWindow.cpp:49
+#: src/MainWindow.cpp:199 src/EventsWindow.cpp:49 src/SettingsWindow.cpp:61
 msgid "ID"
 msgstr "ID"
 
-#: src/MainWindow.cpp:201
+#: src/MainWindow.cpp:201 src/SettingsWindow.cpp:62
 msgid "Name"
 msgstr "Name"
 
@@ -210,7 +210,7 @@ msgstr "Name"
 msgid "On"
 msgstr ""
 
-#: src/MainWindow.cpp:213
+#: src/MainWindow.cpp:213 src/SettingsWindow.cpp:63 src/SettingsWindow.cpp:64
 msgid "Channel"
 msgstr ""
 
@@ -218,19 +218,19 @@ msgstr ""
 msgid "Pattern"
 msgstr ""
 
-#: src/MainWindow.cpp:215
+#: src/MainWindow.cpp:215 src/SettingsWindow.cpp:66
 msgid "Resolution"
 msgstr ""
 
-#: src/MainWindow.cpp:216
+#: src/MainWindow.cpp:216 src/SettingsWindow.cpp:67
 msgid "Length"
 msgstr ""
 
-#: src/MainWindow.cpp:217
+#: src/MainWindow.cpp:217 src/SettingsWindow.cpp:68
 msgid "Velocity"
 msgstr ""
 
-#: src/MainWindow.cpp:218 src/ChordWidget.cpp:32
+#: src/MainWindow.cpp:218 src/ChordWidget.cpp:32 src/SettingsWindow.cpp:69
 msgid "Chord"
 msgstr ""
 
@@ -566,7 +566,7 @@ msgstr ""
 msgid "Type:"
 msgstr ""
 
-#: src/EventGUI.cpp:71
+#: src/EventGUI.cpp:71 src/SettingsWindow.cpp:92
 msgid "Channel:"
 msgstr ""
 
@@ -578,7 +578,7 @@ msgstr ""
 msgid "Key:"
 msgstr ""
 
-#: src/EventGUI.cpp:74 src/ChordWidget.cpp:84
+#: src/EventGUI.cpp:74 src/ChordWidget.cpp:84 src/SettingsWindow.cpp:90
 msgid "Note:"
 msgstr ""
 
@@ -594,7 +594,7 @@ msgid ""
 "event will be automatically set to type: keyboard, key: X.</i>"
 msgstr ""
 
-#: src/EventGUI.cpp:89 src/ActionGUI.cpp:126
+#: src/EventGUI.cpp:89 src/ActionGUI.cpp:126 src/SettingsWindow.cpp:36
 msgid "OK"
 msgstr ""
 
@@ -951,3 +951,75 @@ msgid ""
 "determined by the switch on the left-hand side, all notes of this chord are "
 "given relatively to this base note."
 msgstr ""
+
+#: src/Configuration.cpp:122
+#, c-format
+msgid ""
+"ERROR - error while trying to save config file %s.\n"
+"(errno = %d)"
+msgstr ""
+
+#: src/SettingsWindow.cpp:24
+msgid "Settings"
+msgstr ""
+
+#: src/SettingsWindow.cpp:35
+msgid "Cancel"
+msgstr ""
+
+#: src/SettingsWindow.cpp:37
+msgid "Restore"
+msgstr ""
+
+#: src/SettingsWindow.cpp:40
+msgid "General"
+msgstr ""
+
+#: src/SettingsWindow.cpp:49
+msgid "<b>Visible colums:</b>"
+msgstr ""
+
+#: src/SettingsWindow.cpp:65
+msgid "Patern"
+msgstr ""
+
+#: src/SettingsWindow.cpp:85
+msgid "<b>Metronome:</b>"
+msgstr ""
+
+#: src/SettingsWindow.cpp:86
+msgid "Bar:"
+msgstr ""
+
+#: src/SettingsWindow.cpp:87
+msgid "1/4 bar:"
+msgstr ""
+
+#: src/SettingsWindow.cpp:88
+msgid "Mark here, and the metronome will also tick on every 1/4 of each bar."
+msgstr ""
+
+#: src/SettingsWindow.cpp:91
+msgid "Velocity:"
+msgstr ""
+
+#: src/SettingsWindow.cpp:107
+msgid "The channel the metronome will output it's ticks to."
+msgstr ""
+
+#: src/SettingsWindow.cpp:111 src/SettingsWindow.cpp:117
+msgid "The metronome's MIDI note pitch"
+msgstr ""
+
+#: src/SettingsWindow.cpp:114 src/SettingsWindow.cpp:120
+msgid "The metronome's MIDI note velocity'"
+msgstr ""
+
+#: src/SettingsWindow.cpp:199
+msgid "Restoring default configuration"
+msgstr ""
+
+#: src/SettingsWindow.cpp:199
+#, fuzzy
+msgid "Are you sure you want to loose all your settings?"
+msgstr "Sind Sie sicher, dass Sie beenden möchten?"
