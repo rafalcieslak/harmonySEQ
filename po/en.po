@@ -11,12 +11,12 @@ msgstr ""
 "PO-Revision-Date: 2010-12-18 08:23+0000\n"
 "Last-Translator: Rafal Cieslak <Unknown>\n"
 "Language-Team: English\n"
-"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ASCII\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-01-14 06:25+0000\n"
+"X-Launchpad-Export-Date: 2011-01-16 05:37+0000\n"
 "X-Generator: Launchpad (build 12177)\n"
+"Language: en\n"
 
 #: src/main.cpp:296
 #, c-format
@@ -747,11 +747,13 @@ msgid "Error: volume has changed, while action is not volume-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:408
-msgid "Error: note to set has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note to set has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:419
-msgid "Error: note number has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note number has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:432
@@ -959,15 +961,53 @@ msgstr ""
 #~ msgid "Main Note:"
 #~ msgstr "Main Note:"
 
+#~ msgid "Mute"
+#~ msgstr "Mute"
+
+#~ msgid "Muted"
+#~ msgstr "Muted"
+
+#, c-format
 #~ msgid ""
-#~ "       --pass-midi   passes the midi events through the program by "
-#~ "default\n"
+#~ "harmonySEQ, version %s\n"
+#~ "\n"
+#~ "usage: harmonySEQ [-hdvp]\n"
+#~ "\n"
+#~ "    -p --ports n     sets ports number to n\n"
+#~ "    -d --debug       enters debug mode, prints lots of debug messeges\n"
+#~ "    -h --help        prints this help messase and exits\n"
+#~ "    -v --version     prints the program version\n"
 #~ msgstr ""
-#~ "       --pass-midi   passes the midi events through the program by "
-#~ "default\n"
+#~ "harmonySEQ, version %s\n"
+#~ "\n"
+#~ "usage: harmonySEQ [-hdvp]\n"
+#~ "\n"
+#~ "    -p --ports n     sets ports number to n\n"
+#~ "    -d --debug       enters debug mode, prints lots of debug messeges\n"
+#~ "    -h --help        prints this help messase and exits\n"
+#~ "    -v --version     prints the program version\n"
+
+#~ msgid "sequencer"
+#~ msgstr "sequencer"
+
+#~ msgid "setting ports number to "
+#~ msgstr "setting ports number to "
+
+#, c-format
+#~ msgid ""
+#~ "       --pass-midi   passes the midi events through the program by default\n"
+#~ msgstr ""
+#~ "       --pass-midi   passes the midi events through the program by default\n"
+
+#~ msgid "Chan"
+#~ msgstr "Chan"
 
 #~ msgid "Clone"
 #~ msgstr "Clone"
+
+#, c-format
+#~ msgid "ERROR - error while trying to read %s\n"
+#~ msgstr "ERROR - error while trying to read %s\n"
 
 #~ msgid "Len"
 #~ msgstr "Len"
@@ -975,5 +1015,6 @@ msgstr ""
 #~ msgid "Res"
 #~ msgstr "Res"
 
+#, c-format
 #~ msgid "When note %d on channel %d is moved..."
 #~ msgstr "When note %d on channel %d is moved..."
