@@ -218,7 +218,7 @@ msgstr "Nazwa"
 
 #: src/MainWindow.cpp:206 src/SequencerGUI.cpp:103 src/ActionGUI.cpp:121
 msgid "On"
-msgstr "Włączony"
+msgstr "Wł."
 
 #: src/MainWindow.cpp:213 src/SettingsWindow.cpp:63 src/SettingsWindow.cpp:64
 msgid "Channel"
