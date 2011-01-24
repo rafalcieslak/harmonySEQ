@@ -1,0 +1,26 @@
+(More details can be found on harmonySEQ's homepage: http://harmonyseq.wordpress.com)
+
+To run harmonySEQ you need to have {gtkmm,glibmm,alsa} run-time libriries installed on your system.
+To compile it, you will also need the developement headers of above programs.
+
+To compile:
+	./configure
+	make
+	
+It is also reccomended to install harmonySEQ (f.e for full language support):
+
+To install (as root):
+	make install
+	
+To run:
+	harmonySEQ
+	
+(or src/harmonySEQ if you didn't install it).
+
+
+In case of any errors, please contact me, using the contact details on http://harmonyseq.wordpress.com
+Any feedback is welcome.
+
+Hope you'll find harmonySEQ usefull.
+
+Rafał Cieślak, 2011
