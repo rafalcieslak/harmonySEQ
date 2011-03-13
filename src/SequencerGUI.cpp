@@ -199,21 +199,21 @@ void SequencerWindow::UpdateValues(){
 void SequencerWindow::OnChannelChanged(){
 
     parent->channel = channel_button.get_value();
-    if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
+    if(parent->my_row) mainwindow->RefreshRow(parent->my_row);
     Files::SetFileModified(1);
 }
 
 void SequencerWindow::OnToggleMuteToggled(){
     parent->on = tgl_mute.get_active();
     parent->play_once_phase = 0;
-    if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
+    if(parent->my_row) mainwindow->RefreshRow(parent->my_row);
 
     //Files::SetFileModified(1); come on, do not write mutes.
 }
 
 void SequencerWindow::OnVolumeChanged(){
     parent->volume = volume_button.get_value();
-    if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
+    if(parent->my_row) mainwindow->RefreshRow(parent->my_row);
     Files::SetFileModified(1);
 }
 
@@ -226,7 +226,7 @@ void SequencerWindow::OnResolutionChanged(){
     AttachLines(previous_box_where_pattern_lines_were_packed);
     resize(2,2);
 
-    if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
+    if(parent->my_row) mainwindow->RefreshRow(parent->my_row);
     Files::SetFileModified(1);
 }
 
@@ -234,7 +234,7 @@ void SequencerWindow::OnResolutionChanged(){
 void SequencerWindow::OnLengthChanged(){
     Gtk::TreeModel::Row row = *(length_box.get_active());
     parent->length = row[m_Columns_len.len];
-    if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
+    if(parent->my_row) mainwindow->RefreshRow(parent->my_row);
 
     Files::SetFileModified(1);
 
@@ -314,7 +314,7 @@ void SequencerWindow::AttachLines(int where){
 
 
 void SequencerWindow::OnChordWidgetChanged(){
-    if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
+    if(parent->my_row) mainwindow->RefreshRow(parent->my_row);
     Files::SetFileModified(1);
 }
 
@@ -342,7 +342,7 @@ void SequencerWindow::OnActivePatternChanged(){
     sprintf(temp,_("%d*"),activepattern);
     notebook.set_tab_label_text(*pattern_boxes[activepattern],temp);
 
-    if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
+    if(parent->my_row) mainwindow->RefreshRow(parent->my_row);
     Files::SetFileModified(1);
 }
 
@@ -423,7 +423,7 @@ void SequencerWindow::UpdatePattern(){
     sprintf(temp,_("%d*"),activepattern);
     notebook.set_tab_label_text(*pattern_boxes[activepattern],temp);
 
-    if(parent->row_in_main_window) mainwindow->RefreshRow(parent->row_in_main_window);
+    if(parent->my_row) mainwindow->RefreshRow(parent->my_row);
     
 }
 //====================PATTERNLINE=========================

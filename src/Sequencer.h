@@ -128,7 +128,7 @@ public:
     int last_played_note;
 
     /**Keeps a reference to a row in Sequencers TreeModel*/
-    Gtk::TreeRow row_in_main_window;
+    Gtk::TreeRow my_row;
     
     friend class SequencerWindow;
 

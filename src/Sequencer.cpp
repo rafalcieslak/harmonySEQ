@@ -178,7 +178,7 @@ void Sequencer::SetVolume(int v){volume = v;gui_window->volume_button.set_value(
 
 void Sequencer::SetPlayOncePhase(int p){
     play_once_phase = p;
-    if(row_in_main_window) mainwindow->RefreshRow(row_in_main_window);
+    if(my_row) mainwindow->RefreshRow(my_row);
 }
 
 int Sequencer::GetPlayOncePhase(){

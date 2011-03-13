@@ -366,7 +366,7 @@ MainWindow::OnMutedToggleToggled(const Glib::ustring& path)
 
    sequencers[row[m_columns_sequencers.col_ID]]->SetOn(!row[m_columns_sequencers.col_muted]);
    sequencers[row[m_columns_sequencers.col_ID]]->UpdateGui();
-   if(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window) RefreshRow(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window);
+   if(sequencers[row[m_columns_sequencers.col_ID]]->my_row) RefreshRow(sequencers[row[m_columns_sequencers.col_ID]]->my_row);
 
    //Files::SetFileModified(1); do not detect mutes
 }
@@ -379,7 +379,7 @@ MainWindow::OnNameEdited(const Glib::ustring& path, const Glib::ustring& newtext
     if (!iter) return;
     Gtk::TreeModel::Row row = *iter;
     sequencers[row[m_columns_sequencers.col_ID]]->SetName(newtext);
-   if(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window) RefreshRow(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window);
+   if(sequencers[row[m_columns_sequencers.col_ID]]->my_row) RefreshRow(sequencers[row[m_columns_sequencers.col_ID]]->my_row);
 
     eventswindow->UpdateAll();
     Files::SetFileModified(1);
@@ -408,7 +408,7 @@ Gtk::TreeModel::Row MainWindow::AddSequencerRow(int x)
     }else{
         row[m_columns_sequencers.col_colour] = "white";
     }
-    sequencers[x]->row_in_main_window = row;
+    sequencers[x]->my_row = row;
     return row;
 }
 
@@ -432,7 +432,7 @@ void MainWindow::InitTreeData(){
         row[m_columns_sequencers.col_len] = sequencers[x]->length;
         row[m_columns_sequencers.col_vol] = sequencers[x]->GetVolume();
         row[m_columns_sequencers.col_chord] = sequencers[x]->chord.GetName();
-        sequencers[x]->row_in_main_window = row;
+        sequencers[x]->my_row = row;
     if(sequencers[x]->GetOn()){
         row[m_columns_sequencers.col_colour] = "green1";
     }else if (sequencers[x]->GetPlayOncePhase() == 2 || sequencers[x]->GetPlayOncePhase() == 3){
@@ -832,7 +832,7 @@ void MainWindow::OnTreeModelRowDeleted(const Gtk::TreeModel::Path& path){
 
         //if a row was deleted, then we need to update the moved sequencer's row entry.
         int x = row_inserted_by_drag[m_columns_sequencers.col_ID];
-        sequencers[x]->row_in_main_window = row_inserted_by_drag;
+        sequencers[x]->my_row = row_inserted_by_drag;
     }
 
     
