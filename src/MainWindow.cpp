@@ -30,7 +30,8 @@
 #include "SettingsWindow.h"
 #include "Configuration.h"
 
-
+Gtk::TreeRow row_inserted_by_drag;
+bool drag_in_progress;
 
 MainWindow::MainWindow()
 {
@@ -231,9 +232,14 @@ MainWindow::MainWindow()
         pColumn->set_fixed_width(10);
 
         //drag and drop enabling
-        //m_TreeView.enable_model_drag_source();
-        //m_TreeView.enable_model_drag_dest();
+        m_TreeView.enable_model_drag_source();
+        m_TreeView.enable_model_drag_dest();
         //disabled, as it causes strange problems with TreeRowReference-s
+
+        m_TreeView.signal_drag_begin().connect(sigc::mem_fun(*this, &MainWindow::OnTreeviewDragBegin));
+        m_TreeView.signal_drag_end().connect(sigc::mem_fun(*this, &MainWindow::OnTreeviewDragEnd));
+        m_refTreeModel_sequencers->signal_row_deleted().connect(sigc::mem_fun(*this, &MainWindow::OnTreeModelRowDeleted));
+        m_refTreeModel_sequencers->signal_row_inserted().connect(sigc::mem_fun(*this, &MainWindow::OnTreeModelRowInserted));
 
         //forbids to typesearch
         m_TreeView.set_enable_search(0);
@@ -379,7 +385,7 @@ MainWindow::OnNameEdited(const Glib::ustring& path, const Glib::ustring& newtext
     Files::SetFileModified(1);
 }
 
-Gtk::TreeModel::RowReference MainWindow::AddSequencerRow(int x)
+Gtk::TreeModel::Row MainWindow::AddSequencerRow(int x)
 {
     *dbg << "wooho! sequener " << x << " was just added, and we have to add it now to a new row in the list!" << ENDL;
     Gtk::TreeModel::iterator iter = m_refTreeModel_sequencers->append();
@@ -402,9 +408,8 @@ Gtk::TreeModel::RowReference MainWindow::AddSequencerRow(int x)
     }else{
         row[m_columns_sequencers.col_colour] = "white";
     }
-    Gtk::TreeRowReference rowref(m_refTreeModel_sequencers,m_refTreeModel_sequencers->get_path(iter));
-    sequencers[x]->row_in_main_window = rowref;
-    return rowref;
+    sequencers[x]->row_in_main_window = row;
+    return row;
 }
 
 
@@ -427,8 +432,7 @@ void MainWindow::InitTreeData(){
         row[m_columns_sequencers.col_len] = sequencers[x]->length;
         row[m_columns_sequencers.col_vol] = sequencers[x]->GetVolume();
         row[m_columns_sequencers.col_chord] = sequencers[x]->chord.GetName();
-        Gtk::TreeRowReference rowref(m_refTreeModel_sequencers,m_refTreeModel_sequencers->get_path(iter));
-        sequencers[x]->row_in_main_window = rowref;
+        sequencers[x]->row_in_main_window = row;
     if(sequencers[x]->GetOn()){
         row[m_columns_sequencers.col_colour] = "green1";
     }else if (sequencers[x]->GetPlayOncePhase() == 2 || sequencers[x]->GetPlayOncePhase() == 3){
@@ -491,10 +495,9 @@ void MainWindow::OnRemoveClicked(){
 
 void MainWindow::OnAddSeqClicked(){
 
-    Gtk::TreeModel::RowReference rowref = spawn_sequencer();
+    Gtk::TreeModel::Row row = spawn_sequencer();
 
-    Gtk::TreeModel::iterator iter = rowref.get_model()->get_iter(rowref.get_path());
-    m_TreeView.get_selection()->select(iter);
+    m_TreeView.get_selection()->select(row);
 
     Files::SetFileModified(1);
 }
@@ -505,9 +508,8 @@ void MainWindow::OnCloneClicked(){
     Gtk::TreeModel::Row row = *iter;
     int id = row[m_columns_sequencers.col_ID];
 
-    Gtk::TreeModel::RowReference rowref = clone_sequencer(id);
-    iter = rowref.get_model()->get_iter(rowref.get_path());
-    m_TreeView.get_selection()->select(iter);
+    row = clone_sequencer(id);
+    m_TreeView.get_selection()->select(row);
 
     Files::SetFileModified(1);
 }
@@ -804,4 +806,34 @@ void MainWindow::OnMetronomeToggleClicked(){
     Gtk::ToggleToolButton& Metronome = dynamic_cast<Gtk::ToggleToolButton&> (*pMetronome);
     metronome = Metronome.get_active();
 
+}
+
+void MainWindow::OnTreeviewDragBegin(const Glib::RefPtr<Gdk::DragContext>& ct){
+    drag_in_progress= 1;
+
+}
+
+void MainWindow::OnTreeviewDragEnd(const Glib::RefPtr<Gdk::DragContext>& ct){
+    drag_in_progress = 0;
+
+}
+
+void MainWindow::OnTreeModelRowInserted(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter){
+    if (drag_in_progress == 1){
+        //great! drag'n'drop inserted a row!
+        //the point is that it first inserts a row, and then deletes it.
+        row_inserted_by_drag  = *iter;
+    }
+}
+
+void MainWindow::OnTreeModelRowDeleted(const Gtk::TreeModel::Path& path){
+    if (drag_in_progress == 1){
+       //great! drag'n'drop removed a row!
+
+        //if a row was deleted, then we need to update the moved sequencer's row entry.
+        int x = row_inserted_by_drag[m_columns_sequencers.col_ID];
+        sequencers[x]->row_in_main_window = row_inserted_by_drag;
+    }
+
+    
 }

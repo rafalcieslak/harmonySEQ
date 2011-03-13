@@ -42,7 +42,7 @@ public:
     void RefreshRow(Gtk::TreeRow row);
 
     /**Adds a single row, when a new sequencer is spawned (and return a RowReference, so that the sequencer will know where is it's row)*/
-    Gtk::TreeModel::RowReference AddSequencerRow(int n);
+    Gtk::TreeModel::Row AddSequencerRow(int n);
     
     /**Called when user changed tempo*/
     void TempoChanged();
@@ -72,7 +72,11 @@ private:
     void OnMutedToggleToggled(const Glib::ustring& path);
     void OnNameEdited(const Glib::ustring& path,const Glib::ustring& newtext);
 
-    
+    void OnTreeviewDragBegin(const Glib::RefPtr<Gdk::DragContext>& context);
+    void OnTreeviewDragEnd(const Glib::RefPtr<Gdk::DragContext>& context);
+    void OnTreeModelRowInserted(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter);
+    void OnTreeModelRowDeleted(const Gtk::TreeModel::Path& path);
+
     void OnAddSeqClicked();
     void OnRemoveClicked();
     void OnCloneClicked();

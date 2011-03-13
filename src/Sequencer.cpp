@@ -32,7 +32,7 @@ int resolutions[7] = RESOLUTIONS;
 double lengths[7] = LENGTHS;
 
 
-Gtk::TreeModel::RowReference spawn_sequencer(){
+Gtk::TreeModel::Row spawn_sequencer(){
     int n = sequencers.size();
 
     //init and push to vector
@@ -47,7 +47,7 @@ Gtk::TreeModel::RowReference spawn_sequencer(){
     
 }
 
-Gtk::TreeModel::RowReference clone_sequencer(int orig){
+Gtk::TreeModel::Row clone_sequencer(int orig){
     int n = sequencers.size();
     
     Sequencer *new_seq = new Sequencer(sequencers[orig]);

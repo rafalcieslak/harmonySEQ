@@ -182,8 +182,10 @@ void SequencerWindow::UpdateValues(){
 
     do_not_react_on_page_changes = 0;
 
-    active_pattern.set_value(parent->active_pattern); //this doesn't trigger the signal handler
-    OnActivePatternChanged();
+    if (parent->active_pattern != active_pattern.get_value()){
+        active_pattern.set_value(parent->active_pattern); //this doesn't trigger the signal handler
+        OnActivePatternChanged();
+    }
 
     InitNotebook();
     UpdateChord();
