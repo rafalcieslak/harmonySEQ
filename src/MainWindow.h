@@ -102,19 +102,19 @@ private:
     void OnPopupRemove();
     void OnPopupDuplicate();
 
-    Gtk::TreeView m_TreeView;
+    Gtk::TreeView wTreeView;
 
   Glib::RefPtr<Gtk::UIManager> m_refUIManager;
   Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
 
-  Gtk::ScrolledWindow ScrolledWindow;
+  Gtk::ScrolledWindow wScrolledWindow;
 
-    Gtk::VBox main_vbox;
-    Gtk::VBox vbox1;
+    Gtk::VBox wMainVBox;
+    Gtk::VBox wVBox1;
 
-    Gtk::Menu* popup_menu;
+    Gtk::Menu* wPopupMenu;
 
-    Gtk::Label tempolabel;
+    Gtk::Label wTempoLabel;
     Gtk::Image metronometool_icon;
 };
 

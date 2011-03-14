@@ -167,14 +167,14 @@ void Sequencer::SetResolution(int res){
 
 
 int Sequencer::GetNoteOfChord(int n){return chord.GetNotePlusBasenote(n);}
-void Sequencer::SetOn(bool m){on = m;play_once_phase=0;gui_window->tgl_mute.set_active(m);}
+void Sequencer::SetOn(bool m){on = m;play_once_phase=0;gui_window->wMuteToggle.set_active(m);}
 bool Sequencer::GetOn(){return on;}
-void Sequencer::SetChannel(int ch){channel = ch;gui_window->channel_button.set_value((double)ch);}
+void Sequencer::SetChannel(int ch){channel = ch;gui_window->wChannelButton.set_value((double)ch);}
 int Sequencer::GetChannel(){return channel;}
 void Sequencer::SetName(Glib::ustring nm){name = nm;gui_window->set_title(nm);}
 Glib::ustring Sequencer::GetName(){return name;}
 int Sequencer::GetVolume(){return volume;}
-void Sequencer::SetVolume(int v){volume = v;gui_window->volume_button.set_value((double)v);}
+void Sequencer::SetVolume(int v){volume = v;gui_window->wVolumeButton.set_value((double)v);}
 
 void Sequencer::SetPlayOncePhase(int p){
     play_once_phase = p;

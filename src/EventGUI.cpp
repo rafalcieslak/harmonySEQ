@@ -35,10 +35,10 @@ EventGUI::EventGUI(Event *prt){
     add(main_box);
     main_box.set_spacing(5);
     //preparing
-    Types_combo.set_model(m_refTreeModel_EventTypes);
-    Keys_combo.set_model(m_refTreeModel_KeyCodes);
+    Types_combo.set_model(TreeModel_EventTypes);
+    Keys_combo.set_model(TreeModel_KeyCodes);
     Keys_combo.set_wrap_width(3); //three columns
-    Channels_combo.set_model(m_refTreeModel_Channels);
+    Channels_combo.set_model(TreeModel_Channels);
 
     main_box.pack_start(line_type);
     main_box.pack_start(line_key);
@@ -225,7 +225,7 @@ void EventGUI::OnOKClicked(){
 
 void EventGUI::UpdateValues(){
     set_transient_for(*eventswindow);
-    Gtk::TreeModel::iterator it = m_refTreeModel_EventTypes->get_iter("0");
+    Gtk::TreeModel::iterator it = TreeModel_EventTypes->get_iter("0");
     Gtk::TreeModel::Row row;
     DO_NOT_INIT_TYPE = true; //causes the Types_combo.signal_changed reciver know he shouldnt clear event args with zeros;
 
@@ -242,7 +242,7 @@ void EventGUI::UpdateValues(){
 
             break;
         case Event::KEYBOARD:
-            it = m_refTreeModel_KeyCodes->get_iter("0");
+            it = TreeModel_KeyCodes->get_iter("0");
 
             for (; it; it++) {
                 row = *it;

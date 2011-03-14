@@ -127,11 +127,11 @@ ActionGUI::ActionGUI(Action *prt):
     
     ok_button.signal_clicked().connect(mem_fun(*this,&ActionGUI::OnOKClicked));
 
-    Types_combo.set_model(m_refTreeModel_ActionTypes);
+    Types_combo.set_model(TreeModel_ActionTypes);
     Types_combo.pack_start(m_columns_action_types.label);
     SetTypeCombo(parent->type); //Setting the typecombo BEFORE connecting the signal is ESSENTIAL, since otherwise when the type in Types_combo is changed (by setting it to parent->type), it emits a signal
     Types_combo.signal_changed().connect(mem_fun(*this,&ActionGUI::OnTypeChanged));
-    Seqs_combo.set_model(m_refTreeModel_sequencers);
+    Seqs_combo.set_model(TreeModel_sequencers);
     Seqs_combo.pack_start(m_columns_sequencers.col_name);
     Seqs_combo.signal_changed().connect(mem_fun(*this,&ActionGUI::OnSeqChanged));
 
@@ -475,7 +475,7 @@ void ActionGUI::OnPatternChanged(){
 //====^^Add new action gui callbacks above ^^==
 //======================================
 void ActionGUI::SetTypeCombo(int type){
-    Gtk::TreeModel::iterator iter = m_refTreeModel_ActionTypes->get_iter("0");
+    Gtk::TreeModel::iterator iter = TreeModel_ActionTypes->get_iter("0");
     for (;iter;iter++){
         if ((*iter)[m_columns_action_types.type]==type){
             Types_combo.set_active(iter);
@@ -487,7 +487,7 @@ void ActionGUI::SetTypeCombo(int type){
 }
 
 void ActionGUI::SetSeqCombo(int seq){
-    Gtk::TreeModel::iterator iter = m_refTreeModel_sequencers->get_iter("0");
+    Gtk::TreeModel::iterator iter = TreeModel_sequencers->get_iter("0");
     for (;iter;iter++){
         if ((*iter)[m_columns_sequencers.col_ID]==seq){
             Seqs_combo.set_active(iter);

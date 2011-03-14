@@ -88,7 +88,7 @@ void SaveToFile(Glib::ustring filename){
     //This is depracated
     //kf.set_integer(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_MAINNOTE,mainnote);
     kf.set_integer(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_SEQ_NUM,sequencers.size());
-    kf.set_integer(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_EVENTS_NUM,events.size());
+    kf.set_integer(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_EVENTS_NUM,Events.size());
 
     //And now, save the sequencers.
     //For each sequencer...
@@ -127,27 +127,27 @@ void SaveToFile(Glib::ustring filename){
 
     //Then, save the events.
     //For each event...
-    for (unsigned int x = 0; x < events.size(); x++){
-        if(events[x] == NULL) continue; //If it was removed, skip to the next one.
+    for (unsigned int x = 0; x < Events.size(); x++){
+        if(Events[x] == NULL) continue; //If it was removed, skip to the next one.
         //Prepare the key, according to the pattern in FILE_GROUP_TEMPLATE_EVENT...
         sprintf(temp,FILE_GROUP_TEMPLATE_EVENT,x);
         //Store some basic data.
-        kf.set_integer(temp,FILE_KEY_EVENT_TYPE,events[x]->type);
-        kf.set_integer(temp,FILE_KEY_EVENT_ARG1,events[x]->arg1);
-        kf.set_integer(temp,FILE_KEY_EVENT_ARG2,events[x]->arg2);
-        kf.set_integer(temp,FILE_KEY_EVENT_ACTIONS_NUM,events[x]->actions.size());
+        kf.set_integer(temp,FILE_KEY_EVENT_TYPE,Events[x]->type);
+        kf.set_integer(temp,FILE_KEY_EVENT_ARG1,Events[x]->arg1);
+        kf.set_integer(temp,FILE_KEY_EVENT_ARG2,Events[x]->arg2);
+        kf.set_integer(temp,FILE_KEY_EVENT_ACTIONS_NUM,Events[x]->actions.size());
 
         //Now save all actions of this event.
         //For each action of this event...
-        for (unsigned int a = 0; a < events[x]->actions.size(); a++){
-            if (events[x]->actions[a] == NULL) continue;//If the action was removed, skip to the next one.
+        for (unsigned int a = 0; a < Events[x]->actions.size(); a++){
+            if (Events[x]->actions[a] == NULL) continue;//If the action was removed, skip to the next one.
             //Save actions's data.
             sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_TYPE,a);
-            kf.set_integer(temp,temp2,events[x]->actions[a]->type);
+            kf.set_integer(temp,temp2,Events[x]->actions[a]->type);
             sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_ARGS,a);
-            kf.set_integer_list(temp,temp2,events[x]->actions[a]->args);
+            kf.set_integer_list(temp,temp2,Events[x]->actions[a]->args);
             sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_CHORD,a);
-            kf.set_integer_list(temp,temp2,events[x]->actions[a]->chord.SaveToVector());
+            kf.set_integer_list(temp,temp2,Events[x]->actions[a]->chord.SaveToVector());
         }
     }
 
@@ -424,51 +424,51 @@ bool LoadFile(Glib::ustring file){
             //If there is no key related to this number of event, this means this event was removed.
             if (!kf.has_group(temp)) {
                 //So we'll put instead a null pointer, so it'll look as a removed one, and skip to look for the next event.
-                events.push_back(NULL);
+                Events.push_back(NULL);
                 continue;
             }
             //First, create a new event...
-            events.push_back(new Event());
+            Events.push_back(new Event());
             //Put some data into it...
-            events[x]->type = kf.get_integer(temp,FILE_KEY_EVENT_TYPE);
-            events[x]->arg1 = kf.get_integer(temp,FILE_KEY_EVENT_ARG1);
-            events[x]->arg2 = kf.get_integer(temp,FILE_KEY_EVENT_ARG2);
+            Events[x]->type = kf.get_integer(temp,FILE_KEY_EVENT_TYPE);
+            Events[x]->arg1 = kf.get_integer(temp,FILE_KEY_EVENT_ARG1);
+            Events[x]->arg2 = kf.get_integer(temp,FILE_KEY_EVENT_ARG2);
             int actions_num = kf.get_integer(temp,FILE_KEY_EVENT_ACTIONS_NUM);
             //For each action of this event...
             for (int a = 0; a < actions_num; a++){
                 sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_TYPE,a);
                 if (!kf.has_key(temp,temp2)){
                     //there is no such action in file (was removed, was a NULL pointer while saving file) - skip to next action
-                    events[x]->actions.push_back(NULL);
+                    Events[x]->actions.push_back(NULL);
                     continue;
                 }
                 //Create a new action
-                events[x]->actions.push_back(new Action(Action::NONE));
+                Events[x]->actions.push_back(new Action(Action::NONE));
 
                 //Fill it with data: type...
                 sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_TYPE,a);
-                events[x]->actions[a]->type = kf.get_integer(temp,temp2);
+                Events[x]->actions[a]->type = kf.get_integer(temp,temp2);
                 //...arguments...
                 sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_ARGS,a);
-                events[x]->actions[a]->args = kf.get_integer_list(temp,temp2);
+                Events[x]->actions[a]->args = kf.get_integer_list(temp,temp2);
                 //...and a chord, if any.
                 sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_CHORD,a);
                 if (kf.has_key(temp,temp2)){
                     vector<int> vec = kf.get_integer_list(temp,temp2);
                         if (!chord_compatible_mode) {
-                            events[x]->actions[a]->chord.SetFromVector(vec);
+                            Events[x]->actions[a]->chord.SetFromVector(vec);
                         } else { //old file
-                            events[x]->actions[a]->chord.SetBaseUse(1);
-                            events[x]->actions[a]->chord.SetBase(mainnote);
-                            events[x]->actions[a]->chord.SetFromVector_OLD_FILE_PRE_0_14(vec);
+                            Events[x]->actions[a]->chord.SetBaseUse(1);
+                            Events[x]->actions[a]->chord.SetBase(mainnote);
+                            Events[x]->actions[a]->chord.SetFromVector_OLD_FILE_PRE_0_14(vec);
                         }
                  }
                 //Update the chord GUI.
-                events[x]->actions[a]->GUIUpdateChordwidget();
+                Events[x]->actions[a]->GUIUpdateChordwidget();
             }//next action.
 
             //Update this event's GUI, using newly loaded data.
-            events[x]->UpdateGUI();
+            Events[x]->UpdateGUI();
             
         }//next event.
 

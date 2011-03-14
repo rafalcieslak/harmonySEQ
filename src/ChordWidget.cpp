@@ -36,11 +36,11 @@ ChordWidget::ChordWidget(Chord* associated_chord){
     MainBox.pack_start(line2);
     MainBox.pack_start(line3);
 
-    combo_type.set_model(m_refTreeModel_ChordTypes);
-    combo_root.set_model(m_refTreeModel_Notes);
-    combo_note.set_model(m_refTreeModel_Notes);
-    combo_guitar_mode.set_model(m_refTreeModel_ChordGuitarModes);
-    combo_triad_mode.set_model(m_refTreeModel_TriadModes);
+    combo_type.set_model(TreeModel_ChordTypes);
+    combo_root.set_model(TreeModel_Notes);
+    combo_note.set_model(TreeModel_Notes);
+    combo_guitar_mode.set_model(TreeModel_ChordGuitarModes);
+    combo_triad_mode.set_model(TreeModel_TriadModes);
     combo_type.pack_start(m_columns_IdAndName.name);
     combo_root.pack_start(m_columns_notes.name);
     combo_note.pack_start(m_columns_notes.name);

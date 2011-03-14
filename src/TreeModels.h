@@ -111,21 +111,21 @@ public:
 };
 #ifndef I_DO_NOT_WANT_EXTERNS_FROM_TREE_MODELS
 extern ModelColumns_EventTypes m_columns_event_types;
-extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_EventTypes;
+extern Glib::RefPtr<Gtk::ListStore> TreeModel_EventTypes;
 extern ModelColumns_ActionTypes m_columns_action_types;
-extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_ActionTypes;
+extern Glib::RefPtr<Gtk::ListStore> TreeModel_ActionTypes;
 extern ModelColumns_KeyCodes m_columns_key_codes;
-extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_KeyCodes;
+extern Glib::RefPtr<Gtk::ListStore> TreeModel_KeyCodes;
 extern ModelColumns_Channels m_columns_channels;
-extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_Channels;
+extern Glib::RefPtr<Gtk::ListStore> TreeModel_Channels;
 extern ModelColumns_SEQUENCERS m_columns_sequencers;
-extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_sequencers;
+extern Glib::RefPtr<Gtk::ListStore> TreeModel_sequencers;
 extern ModelColumns_Notes m_columns_notes;
-extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_Notes;
+extern Glib::RefPtr<Gtk::ListStore> TreeModel_Notes;
 extern ModelColumns_Universal_IDandNAME m_columns_IdAndName;
-extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_TriadModes;
-extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_ChordGuitarModes;
-extern Glib::RefPtr<Gtk::ListStore> m_refTreeModel_ChordTypes;
+extern Glib::RefPtr<Gtk::ListStore> TreeModel_TriadModes;
+extern Glib::RefPtr<Gtk::ListStore> TreeModel_ChordGuitarModes;
+extern Glib::RefPtr<Gtk::ListStore> TreeModel_ChordTypes;
 #endif
 
 /**Init - tree models*/

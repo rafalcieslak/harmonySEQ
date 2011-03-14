@@ -123,7 +123,7 @@ extern SettingsWindow* settingswindow;
 extern int passing_midi;
 extern std::map<Glib::ustring, int> keymap_stoi;
 extern std::map<int, Glib::ustring> keymap_itos;
-extern std::vector<Event *> events;
+extern std::vector<Event *> Events;
 extern std::map<int,Glib::ustring> notemap;
 extern Glib::RefPtr< Gdk::Pixbuf > harmonySEQ_logo_48;
 extern Glib::RefPtr< Gdk::Pixbuf > metronome_icon_24;
