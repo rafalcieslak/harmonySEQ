@@ -493,7 +493,7 @@ void MainWindow::OnRemoveClicked(){
     seqHandle h  = GetSelectedSequencerHandle();
     int id = HandleToID(h);
     Gtk::TreeModel::iterator iter = GetSelectedSequencerIter();
-    *dbg << "removing row of handle " << h << "and ID " << id << ENDL;
+    *dbg << "removing row of handle " << h << " and ID " << id << ENDL;
 
     //removing the row
     TreeModel_sequencers->erase(iter);
