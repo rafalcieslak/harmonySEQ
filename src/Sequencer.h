@@ -23,6 +23,7 @@
 #include "global.h"
 #include "Chord.h"
 #include "SequencerGUI.h"
+#include "seqHandle.h"
 using namespace std;
 
 /**Spawns a new sequencer*/
@@ -129,6 +130,9 @@ public:
 
     /**Keeps a reference to a row in Sequencers TreeModel*/
     Gtk::TreeRow my_row;
+
+    /**Remembers the handle to this sequencer.*/
+    seqHandle MyHandle;
     
     friend class SequencerWindow;
 

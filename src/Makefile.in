@@ -64,7 +64,8 @@ am_harmonySEQ_OBJECTS = harmonySEQ-main.$(OBJEXT) \
 	harmonySEQ-ActionGUI.$(OBJEXT) harmonySEQ-TreeModels.$(OBJEXT) \
 	harmonySEQ-Chord.$(OBJEXT) harmonySEQ-ChordWidget.$(OBJEXT) \
 	harmonySEQ-Configuration.$(OBJEXT) \
-	harmonySEQ-SettingsWindow.$(OBJEXT)
+	harmonySEQ-SettingsWindow.$(OBJEXT) \
+	harmonySEQ-seqHandle.$(OBJEXT)
 harmonySEQ_OBJECTS = $(am_harmonySEQ_OBJECTS)
 am__DEPENDENCIES_1 =
 harmonySEQ_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -230,7 +231,8 @@ harmonySEQ_SOURCES = main.cpp\
 						ChordWidget.cpp \
 						Configuration.cpp \
 						SettingsWindow.cpp \
-						MainWindow.h MidiDriver.h Sequencer.h SequencerGUI.h messages.h Files.h global.h Event.h EventsWindow.h EventGUI.h Action.h ActionGUI.h TreeModels.h Chord.h ChordWidget.h Configuration.h SettingsWindow.h\
+						seqHandle.cpp \
+						MainWindow.h MidiDriver.h Sequencer.h SequencerGUI.h messages.h Files.h global.h Event.h EventsWindow.h EventGUI.h Action.h ActionGUI.h TreeModels.h Chord.h ChordWidget.h Configuration.h SettingsWindow.h seqHandle.h\
 						gettext.h
 
 harmonySEQ_CPPFLAGS = $(GTKMM_CFLAGS) -Wall -g -O3
@@ -355,6 +357,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-global.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-messages.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-seqHandle.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -621,6 +624,20 @@ harmonySEQ-SettingsWindow.obj: SettingsWindow.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SettingsWindow.cpp' object='harmonySEQ-SettingsWindow.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-SettingsWindow.obj `if test -f 'SettingsWindow.cpp'; then $(CYGPATH_W) 'SettingsWindow.cpp'; else $(CYGPATH_W) '$(srcdir)/SettingsWindow.cpp'; fi`
+
+harmonySEQ-seqHandle.o: seqHandle.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-seqHandle.o -MD -MP -MF $(DEPDIR)/harmonySEQ-seqHandle.Tpo -c -o harmonySEQ-seqHandle.o `test -f 'seqHandle.cpp' || echo '$(srcdir)/'`seqHandle.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-seqHandle.Tpo $(DEPDIR)/harmonySEQ-seqHandle.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='seqHandle.cpp' object='harmonySEQ-seqHandle.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-seqHandle.o `test -f 'seqHandle.cpp' || echo '$(srcdir)/'`seqHandle.cpp
+
+harmonySEQ-seqHandle.obj: seqHandle.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-seqHandle.obj -MD -MP -MF $(DEPDIR)/harmonySEQ-seqHandle.Tpo -c -o harmonySEQ-seqHandle.obj `if test -f 'seqHandle.cpp'; then $(CYGPATH_W) 'seqHandle.cpp'; else $(CYGPATH_W) '$(srcdir)/seqHandle.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-seqHandle.Tpo $(DEPDIR)/harmonySEQ-seqHandle.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='seqHandle.cpp' object='harmonySEQ-seqHandle.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-seqHandle.obj `if test -f 'seqHandle.cpp'; then $(CYGPATH_W) 'seqHandle.cpp'; else $(CYGPATH_W) '$(srcdir)/seqHandle.cpp'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

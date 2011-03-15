@@ -54,16 +54,16 @@ void Action::Trigger(int data){
     //Reactions depend on action type.
     switch (type){
         case SEQ_ON_OFF_TOGGLE:
-            if (sequencers.size()==0 || !sequencers[args[1]]) break;
+            if (seqVector.size()==0 || !seqVector[args[1]]) break;
             switch (args[2]){
                 case 0:
-                    sequencers[args[1]]->SetOn(0);
+                    seqVector[args[1]]->SetOn(0);
                     break;
                 case 1:
-                    sequencers[args[1]]->SetOn(1);
+                    seqVector[args[1]]->SetOn(1);
                     break;
                 case 2:
-                    sequencers[args[1]]->SetOn(!sequencers[args[1]]->GetOn());
+                    seqVector[args[1]]->SetOn(!seqVector[args[1]]->GetOn());
                     break;
             }
             break;
@@ -75,27 +75,27 @@ void Action::Trigger(int data){
             break;
 
         case SEQ_VOLUME_SET:
-            if (sequencers.size()==0 || !sequencers[args[1]]) break;
-            sequencers[args[1]]->SetVolume(args[2]);
+            if (seqVector.size()==0 || !seqVector[args[1]]) break;
+            seqVector[args[1]]->SetVolume(args[2]);
             Files::SetFileModified(1);
             break;
 
         case SEQ_CHANGE_ONE_NOTE:
-            if (sequencers.size()==0 || !sequencers[args[1]]) break;
-            sequencers[args[1]]->chord.SetNote(args[2]-1, args[3]);
-            sequencers[args[1]]->UpdateGuiChord(); //nessesary //its a temporary wokraround, since UpdateGui seems to crash. Howewer, it is not needed to update anything else than notes.
+            if (seqVector.size()==0 || !seqVector[args[1]]) break;
+            seqVector[args[1]]->chord.SetNote(args[2]-1, args[3]);
+            seqVector[args[1]]->UpdateGuiChord(); //nessesary //its a temporary wokraround, since UpdateGui seems to crash. Howewer, it is not needed to update anything else than notes.
             Files::SetFileModified(1);
             break;
 
         case SEQ_CHANGE_CHORD:
-            if (sequencers.size()==0 || !sequencers[args[1]]) break;
-            sequencers[args[1]]->chord.Set(chord);
-            sequencers[args[1]]->UpdateGuiChord(); //nessesary //its a temporary wokraround, since UpdateGui seems to crash. Howewer, it is not needed to update anything else than notes.
+            if (seqVector.size()==0 || !seqVector[args[1]]) break;
+            seqVector[args[1]]->chord.Set(chord);
+            seqVector[args[1]]->UpdateGuiChord(); //nessesary //its a temporary wokraround, since UpdateGui seems to crash. Howewer, it is not needed to update anything else than notes.
             Files::SetFileModified(1);
              break;
         case SEQ_PLAY_ONCE:
-            if (sequencers.size()==0 || !sequencers[args[1]]) break;
-            sequencers[args[1]]->SetPlayOncePhase(1);
+            if (seqVector.size()==0 || !seqVector[args[1]]) break;
+            seqVector[args[1]]->SetPlayOncePhase(1);
             break;
         case TOGGLE_PASS_MIDI:
             passing_midi = !passing_midi;
@@ -124,8 +124,8 @@ void Action::Trigger(int data){
             midi->Sync();
             break;
         case SEQ_CHANGE_PATTERN:
-            if (sequencers.size()==0 || !sequencers[args[1]]) break;
-            sequencers[args[1]]->ChangeActivePattern(args[2]);
+            if (seqVector.size()==0 || !seqVector[args[1]]) break;
+            seqVector[args[1]]->ChangeActivePattern(args[2]);
             break;
         default:
 
@@ -200,14 +200,14 @@ Glib::ustring Action::GetLabel(){
 
 Glib::ustring Action::GetSeqName(int n){
     char temp[100];
-    if (n >= sequencers.size()) {
-        if (sequencers.size() > 0) *err << _("Critical ERROR: Trying to get name of sequencer outside of sequencers vector.\n");
+    if (n >= seqVector.size()) {
+        if (seqVector.size() > 0) *err << _("Critical ERROR: Trying to get name of sequencer outside of sequencers vector.\n");
         return "(none)";
     }
-    if (!sequencers[n])
+    if (!seqVector[n])
         sprintf(temp,_("%d (which was removed)"),n);
     else
-        sprintf(temp,_("%s"),sequencers[n]->GetName().c_str());
+        sprintf(temp,_("%s"),seqVector[n]->GetName().c_str());
     return temp;
 }
 

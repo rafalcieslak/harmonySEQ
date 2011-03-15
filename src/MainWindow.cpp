@@ -198,6 +198,7 @@ MainWindow::MainWindow()
         TreeModel_sequencers = Gtk::ListStore::create(m_columns_sequencers);
 
         wTreeView.append_column(_("ID"), m_columns_sequencers.col_ID);
+        wTreeView.append_column(_("Handle"), m_columns_sequencers.col_handle);
         
         int col_count = wTreeView.append_column_editable(_("Name"), m_columns_sequencers.col_name);
         Gtk::CellRenderer* cell = wTreeView.get_column_cell_renderer(col_count - 1);
@@ -335,7 +336,7 @@ MainWindow::OnTreeviewRowActivated(const Gtk::TreeModel::Path& path, Gtk::TreeVi
         *dbg << _(", name is: ") << row[m_columns_sequencers.col_name] << ENDL;
         gdk_threads_leave(); //not really sure about this thread-lock, but this the only way I found to get it to work
         {
-            sequencers[row[m_columns_sequencers.col_ID]]->ShowWindow();
+            seqVector[row[m_columns_sequencers.col_ID]]->ShowWindow();
         }
         gdk_threads_enter();
     }
@@ -363,9 +364,9 @@ MainWindow::OnMutedToggleToggled(const Glib::ustring& path)
     if (!iter) return;
     Gtk::TreeModel::Row row = *iter;
 
-   sequencers[row[m_columns_sequencers.col_ID]]->SetOn(!row[m_columns_sequencers.col_muted]);
-   sequencers[row[m_columns_sequencers.col_ID]]->UpdateGui();
-   if(sequencers[row[m_columns_sequencers.col_ID]]->my_row) RefreshRow(sequencers[row[m_columns_sequencers.col_ID]]->my_row);
+   seqVector[row[m_columns_sequencers.col_ID]]->SetOn(!row[m_columns_sequencers.col_muted]);
+   seqVector[row[m_columns_sequencers.col_ID]]->UpdateGui();
+   if(seqVector[row[m_columns_sequencers.col_ID]]->my_row) RefreshRow(seqVector[row[m_columns_sequencers.col_ID]]->my_row);
 
    //Files::SetFileModified(1); do not detect mutes
 }
@@ -377,8 +378,8 @@ MainWindow::OnNameEdited(const Glib::ustring& path, const Glib::ustring& newtext
     Gtk::TreeModel::iterator iter = TreeModel_sequencers->get_iter(path);
     if (!iter) return;
     Gtk::TreeModel::Row row = *iter;
-    sequencers[row[m_columns_sequencers.col_ID]]->SetName(newtext);
-   if(sequencers[row[m_columns_sequencers.col_ID]]->my_row) RefreshRow(sequencers[row[m_columns_sequencers.col_ID]]->my_row);
+    seqVector[row[m_columns_sequencers.col_ID]]->SetName(newtext);
+   if(seqVector[row[m_columns_sequencers.col_ID]]->my_row) RefreshRow(seqVector[row[m_columns_sequencers.col_ID]]->my_row);
 
     eventswindow->UpdateAll();
     Files::SetFileModified(1);
@@ -390,24 +391,25 @@ Gtk::TreeModel::Row MainWindow::AddSequencerRow(int x)
     Gtk::TreeModel::iterator iter = TreeModel_sequencers->append();
     Gtk::TreeModel::Row row = *(iter);
     row[m_columns_sequencers.col_ID] = x;
-    row[m_columns_sequencers.col_name] = sequencers[x]->GetName();
-    row[m_columns_sequencers.col_muted] = sequencers[x]->GetOn();
-    row[m_columns_sequencers.col_channel] = sequencers[x]->GetChannel();
-    row[m_columns_sequencers.col_pattern] = sequencers[x]->active_pattern;
-    row[m_columns_sequencers.col_res] = sequencers[x]->resolution;
-    row[m_columns_sequencers.col_len] = sequencers[x]->length;
-    row[m_columns_sequencers.col_vol] = sequencers[x]->GetVolume();
-    row[m_columns_sequencers.col_chord] = sequencers[x]->chord.GetName();
-    if(sequencers[x]->GetOn()){
+    row[m_columns_sequencers.col_handle] = seqV(x)->MyHandle;
+    row[m_columns_sequencers.col_name] = seqVector[x]->GetName();
+    row[m_columns_sequencers.col_muted] = seqVector[x]->GetOn();
+    row[m_columns_sequencers.col_channel] = seqVector[x]->GetChannel();
+    row[m_columns_sequencers.col_pattern] = seqVector[x]->active_pattern;
+    row[m_columns_sequencers.col_res] = seqVector[x]->resolution;
+    row[m_columns_sequencers.col_len] = seqVector[x]->length;
+    row[m_columns_sequencers.col_vol] = seqVector[x]->GetVolume();
+    row[m_columns_sequencers.col_chord] = seqVector[x]->chord.GetName();
+    if(seqVector[x]->GetOn()){
         row[m_columns_sequencers.col_colour] = "green1";
-    }else if (sequencers[x]->GetPlayOncePhase() == 2 || sequencers[x]->GetPlayOncePhase() == 3){
+    }else if (seqVector[x]->GetPlayOncePhase() == 2 || seqVector[x]->GetPlayOncePhase() == 3){
         row[m_columns_sequencers.col_colour] = "yellow1";
-    }else if(sequencers[x]->GetPlayOncePhase()== 1){
+    }else if(seqVector[x]->GetPlayOncePhase()== 1){
         row[m_columns_sequencers.col_colour] = "yellow2";
     }else{
         row[m_columns_sequencers.col_colour] = "white";
     }
-    sequencers[x]->my_row = row;
+    seqVector[x]->my_row = row;
     return row;
 }
 
@@ -418,25 +420,26 @@ void MainWindow::InitTreeData(){
     TreeModel_sequencers->clear();
     Gtk::TreeModel::Row row;
     int rowcount = 0;
-    for (unsigned int x = 0; x < sequencers.size(); x++) {
-        if (!sequencers[x]) continue; //seems it was removed
+    for (unsigned int x = 0; x < seqVector.size(); x++) {
+        if (!seqV(x)) continue; //seems it was removed
         Gtk::TreeModel::iterator iter = TreeModel_sequencers->append();
         row = *(iter);
         row[m_columns_sequencers.col_ID] = x;
-        row[m_columns_sequencers.col_muted] = sequencers[x]->GetOn();
-        row[m_columns_sequencers.col_name] = sequencers[x]->GetName();
-        row[m_columns_sequencers.col_channel] = sequencers[x]->GetChannel();
-        row[m_columns_sequencers.col_res] = sequencers[x]->resolution;
-        row[m_columns_sequencers.col_pattern] = sequencers[x]->active_pattern;
-        row[m_columns_sequencers.col_len] = sequencers[x]->length;
-        row[m_columns_sequencers.col_vol] = sequencers[x]->GetVolume();
-        row[m_columns_sequencers.col_chord] = sequencers[x]->chord.GetName();
-        sequencers[x]->my_row = row;
-    if(sequencers[x]->GetOn()){
+        row[m_columns_sequencers.col_handle] = seqV(x)->MyHandle;
+        row[m_columns_sequencers.col_muted] = seqV(x)->GetOn();
+        row[m_columns_sequencers.col_name] = seqV(x)->GetName();
+        row[m_columns_sequencers.col_channel] = seqV(x)->GetChannel();
+        row[m_columns_sequencers.col_res] = seqV(x)->resolution;
+        row[m_columns_sequencers.col_pattern] = seqV(x)->active_pattern;
+        row[m_columns_sequencers.col_len] = seqV(x)->length;
+        row[m_columns_sequencers.col_vol] = seqV(x)->GetVolume();
+        row[m_columns_sequencers.col_chord] = seqV(x)->chord.GetName();
+        seqV(x)->my_row = row;
+    if(seqV(x)->GetOn()){
         row[m_columns_sequencers.col_colour] = "green1";
-    }else if (sequencers[x]->GetPlayOncePhase() == 2 || sequencers[x]->GetPlayOncePhase() == 3){
+    }else if (seqV(x)->GetPlayOncePhase() == 2 || seqV(x)->GetPlayOncePhase() == 3){
         row[m_columns_sequencers.col_colour] = "yellow1";
-    }else if(sequencers[x]->GetPlayOncePhase()== 1){
+    }else if(seqV(x)->GetPlayOncePhase()== 1){
         row[m_columns_sequencers.col_colour] = "yellow2";
     }else{
         row[m_columns_sequencers.col_colour] = "white";
@@ -456,7 +459,8 @@ void MainWindow::RefreshRow(Gtk::TreeRow row){
 
     *dbg << "Refreshing ROW\n";
     int x = row[m_columns_sequencers.col_ID];
-    Sequencer* seq = sequencers[x];
+    Sequencer* seq = seqVector[x];
+    row[m_columns_sequencers.col_handle] = seq->MyHandle;
     row[m_columns_sequencers.col_muted] = seq->GetOn();
     row[m_columns_sequencers.col_name] = seq->GetName();
     row[m_columns_sequencers.col_channel] = seq->GetChannel();
@@ -465,11 +469,11 @@ void MainWindow::RefreshRow(Gtk::TreeRow row){
     row[m_columns_sequencers.col_len] = seq->length;
     row[m_columns_sequencers.col_vol] = seq->GetVolume();
     row[m_columns_sequencers.col_chord] = seq->chord.GetName();
-    if(sequencers[x]->GetOn()){
+    if(seqVector[x]->GetOn()){
         row[m_columns_sequencers.col_colour] = "green1";
-    }else if (sequencers[x]->GetPlayOncePhase() == 2 || sequencers[x]->GetPlayOncePhase() == 3){
+    }else if (seqVector[x]->GetPlayOncePhase() == 2 || seqVector[x]->GetPlayOncePhase() == 3){
         row[m_columns_sequencers.col_colour] = "yellow1";
-    }else if(sequencers[x]->GetPlayOncePhase()== 1){
+    }else if(seqVector[x]->GetPlayOncePhase()== 1){
         row[m_columns_sequencers.col_colour] = "yellow2";
     }else{
         row[m_columns_sequencers.col_colour] = "white";
@@ -484,8 +488,8 @@ void MainWindow::OnRemoveClicked(){
     
     TreeModel_sequencers->erase(iter);
     
-    delete sequencers[id];
-    sequencers[id] = NULL;
+    delete seqVector[id];
+    seqVector[id] = NULL;
 
     eventswindow->InitTreeData();
 
@@ -744,7 +748,7 @@ bool MainWindow::OnTreviewButtonPress(GdkEventButton* event){
 }
 
 void MainWindow::OnPopupEdit(){
-    sequencers[GetSelectedSequencerID()]->ShowWindow();
+    seqVector[GetSelectedSequencerID()]->ShowWindow();
 }
 
 void MainWindow::OnPopupRemove(){
@@ -759,7 +763,7 @@ void MainWindow::OnPopupDuplicate(){
 
 void MainWindow::OnPopupPlayOnce(){
     int id = GetSelectedSequencerID();
-    sequencers[id]->SetPlayOncePhase(1); //will be played once
+    seqVector[id]->SetPlayOncePhase(1); //will be played once
     Gtk::TreeModel::iterator iter = GetSelectedSequencerIter();
     RefreshRow(*iter);
 
@@ -774,6 +778,9 @@ void MainWindow::UpdateVisibleColumns(){
         int col_iter = 0;
         pColumn = wTreeView.get_column(col_iter); //ID
         pColumn->set_visible(Config::VisibleColumns::ID);
+        col_iter++;
+        pColumn = wTreeView.get_column(col_iter); //Handle
+        pColumn->set_visible(debugging);
         col_iter++;
         pColumn = wTreeView.get_column(col_iter); //Name
         pColumn->set_visible(1);
@@ -831,7 +838,7 @@ void MainWindow::OnTreeModelRowDeleted(const Gtk::TreeModel::Path& path){
 
         //if a row was deleted, then we need to update the moved sequencer's row entry.
         int x = row_inserted_by_drag[m_columns_sequencers.col_ID];
-        sequencers[x]->my_row = row_inserted_by_drag;
+        seqVector[x]->my_row = row_inserted_by_drag;
     }
 
     

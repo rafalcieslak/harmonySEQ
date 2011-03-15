@@ -36,7 +36,7 @@
 #include "Configuration.h"
 #include "SettingsWindow.h"
 //global objects
-vector<Sequencer *> sequencers;
+vector<Sequencer *> seqVector;
 vector<Event *> Events;
 double tempo = DEFAULT_TEMPO;
 int ports_number;

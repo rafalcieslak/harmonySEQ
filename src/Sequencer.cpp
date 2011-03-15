@@ -23,44 +23,45 @@
 #include "messages.h"
 #include "Sequencer.h"
 #include "MainWindow.h"
+#include "seqHandle.h"
 extern debug *dbg;
 
 extern MainWindow* mainwindow;
-extern vector<Sequencer *> sequencers;
+extern vector<Sequencer *> seqVector;
 
 int resolutions[7] = RESOLUTIONS;
 double lengths[7] = LENGTHS;
 
 
 Gtk::TreeModel::Row spawn_sequencer(){
-    int n = sequencers.size();
+    int n = seqVector.size();
 
     //init and push to vector
     char temp[20];
     sprintf(temp,_("seq %d"),n+1);
     Sequencer *new_seq = new Sequencer(temp);
-    sequencers.push_back(new_seq);
+    seqVector.push_back(new_seq);
+    new_seq->MyHandle = RequestNewSeqHandle(n+1);
 
     //add to main window
     return mainwindow->AddSequencerRow(n);
-
-    
 }
 
 Gtk::TreeModel::Row clone_sequencer(int orig){
-    int n = sequencers.size();
+    int n = seqVector.size();
     
-    Sequencer *new_seq = new Sequencer(sequencers[orig]);
+    Sequencer *new_seq = new Sequencer(seqVector[orig]);
     new_seq->SetOn(0);
-    sequencers.push_back(new_seq);
+    seqVector.push_back(new_seq);
+    new_seq->MyHandle = RequestNewSeqHandle(n+1);
     return mainwindow->AddSequencerRow(n);
 
 }
 
 void ClearSequencers(){
-    for(unsigned int x = 0; x < sequencers.size(); x++) delete sequencers[x];
+    for(unsigned int x = 0; x < seqVector.size(); x++) delete seqVector[x];
 
-    sequencers.clear();
+    seqVector.clear();
 
 }
 //======begin sequencer class===============

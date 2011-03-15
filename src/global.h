@@ -108,7 +108,7 @@ class MainWindow;
 class Event;
 class EventsWindow;
 class SettingsWindow;
-extern std::vector<Sequencer *> sequencers;
+extern std::vector<Sequencer *> seqVector;
 extern double tempo;
 extern int ports_number;
 extern int running;

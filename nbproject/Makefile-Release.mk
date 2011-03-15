@@ -39,6 +39,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/Chord.o \
 	${OBJECTDIR}/src/ActionGUI.o \
 	${OBJECTDIR}/src/Sequencer.o \
+	${OBJECTDIR}/_ext/744865817/seqHandle.o \
 	${OBJECTDIR}/src/Configuration.o \
 	${OBJECTDIR}/src/messages.o \
 	${OBJECTDIR}/_ext/1045285602/SettingsWindow.o \
@@ -106,6 +107,11 @@ ${OBJECTDIR}/src/Sequencer.o: src/Sequencer.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Sequencer.o src/Sequencer.cpp
+
+${OBJECTDIR}/_ext/744865817/seqHandle.o: ../Programy/harmonySEQ/reordering/src/seqHandle.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/744865817
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/744865817/seqHandle.o ../Programy/harmonySEQ/reordering/src/seqHandle.cpp
 
 ${OBJECTDIR}/src/Configuration.o: src/Configuration.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

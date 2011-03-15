@@ -283,11 +283,11 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
     Sequencer* seq;
 
     //For each sequencer...
-    for (unsigned int n = 0; n < sequencers.size(); n++){
-        if(sequencers[n] == NULL) continue; //seems this sequencer was removed, so proceed to next one.
+    for (unsigned int n = 0; n < seqVector.size(); n++){
+        if(seqVector[n] == NULL) continue; //seems this sequencer was removed, so proceed to next one.
 
         //Shortcut pointer to the sequencer we are currently dealing with.
-        seq = sequencers[n];
+        seq = seqVector[n];
         
         //Update the seq's PlayOnce phase.
         //Phase 3 means it has already been played, and it has just ended, so now we'll just turn it off, by setting phase back to initial state: 0.
@@ -314,7 +314,7 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
             //Repeat this as many times as we'll play the melody in one bar:
             for (int i = 0; i < howmanytimes; i++){
                 //Take every note from this sequencer
-                for (int x = 0; x < sequencers[n]->resolution; x++) {
+                for (int x = 0; x < seqVector[n]->resolution; x++) {
                     for(int C = 0; C < 6; C++){
                         //If the note is inactive, take next note.
                         if(!(seq->GetActivePatternNote(x,C))) continue;

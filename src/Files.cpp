@@ -87,42 +87,42 @@ void SaveToFile(Glib::ustring filename){
     kf.set_double(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_TEMPO,tempo);
     //This is depracated
     //kf.set_integer(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_MAINNOTE,mainnote);
-    kf.set_integer(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_SEQ_NUM,sequencers.size());
+    kf.set_integer(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_SEQ_NUM,seqVector.size());
     kf.set_integer(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_EVENTS_NUM,Events.size());
 
     //And now, save the sequencers.
     //For each sequencer...
-    for (unsigned int x = 0; x < sequencers.size(); x++){
-        if(sequencers[x] == NULL) continue; //Skip this sequencer, if it was removed.
+    for (unsigned int x = 0; x < seqVector.size(); x++){
+        if(seqVector[x] == NULL) continue; //Skip this sequencer, if it was removed.
         //Prepare the KEY for this sequencer, according to the pattern in FILE_GROUP_TEMPLATE_SEQ, it will be used to store all  values of this sequencer.
         sprintf(temp,FILE_GROUP_TEMPLATE_SEQ,x);
         //And store the values, as follows:
-        kf.set_string(temp,FILE_KEY_SEQ_NAME,sequencers[x]->GetName());
-        kf.set_boolean(temp,FILE_KEY_SEQ_ON,sequencers[x]->GetOn());
-        kf.set_integer(temp,FILE_KEY_SEQ_CHANNEL,sequencers[x]->GetChannel());
+        kf.set_string(temp,FILE_KEY_SEQ_NAME,seqVector[x]->GetName());
+        kf.set_boolean(temp,FILE_KEY_SEQ_ON,seqVector[x]->GetOn());
+        kf.set_integer(temp,FILE_KEY_SEQ_CHANNEL,seqVector[x]->GetChannel());
         //This is depracated
         //kf.set_boolean(temp,FILE_KEY_SEQ_APPLY_MAIN_NOTE,sequencers[x]->GetApplyMainNote());
-        kf.set_integer(temp,FILE_KEY_SEQ_VOLUME,sequencers[x]->GetVolume());
-        kf.set_integer(temp,FILE_KEY_SEQ_RESOLUTION,sequencers[x]->resolution);
-        kf.set_double(temp,FILE_KEY_SEQ_LENGTH,sequencers[x]->length);
-        kf.set_integer(temp,FILE_KEY_SEQ_PATTERNS_NUMBER,sequencers[x]->patterns.size());
+        kf.set_integer(temp,FILE_KEY_SEQ_VOLUME,seqVector[x]->GetVolume());
+        kf.set_integer(temp,FILE_KEY_SEQ_RESOLUTION,seqVector[x]->resolution);
+        kf.set_double(temp,FILE_KEY_SEQ_LENGTH,seqVector[x]->length);
+        kf.set_integer(temp,FILE_KEY_SEQ_PATTERNS_NUMBER,seqVector[x]->patterns.size());
         //Now, save the patterns.
         //For each pattern in this sequencer...
-        for (int s=0; s<sequencers[x]->patterns.size();s++){
+        for (int s=0; s<seqVector[x]->patterns.size();s++){
             //Prepatre the value name for this pattern, according to FILE_KEY_SEQ_PATTERN_TEMPLATE.
             sprintf(temp2,FILE_KEY_SEQ_PATTERN_TEMPLATE,s);
             //Convert sequencer notes of this pattern, which is a 2-dimentional array, into one dimentional vector
-            vector<int> S(sequencers[x]->resolution*6);
-            for (int r = 0; r < sequencers[x]->resolution; r++){
+            vector<int> S(seqVector[x]->resolution*6);
+            for (int r = 0; r < seqVector[x]->resolution; r++){
                 for (int c = 0; c < 6; c++){
-                    S[r*6+c]=sequencers[x]->GetPatternNote(s,r,c);
+                    S[r*6+c]=seqVector[x]->GetPatternNote(s,r,c);
                 }
             }
             //And store this vector in the keyfile as a list.
             kf.set_integer_list(temp,temp2,S);
         }
         //Finally, store the chord as a list of parameters.
-        kf.set_integer_list(temp,FILE_KEY_SEQ_CHORD,sequencers[x]->chord.SaveToVector());
+        kf.set_integer_list(temp,FILE_KEY_SEQ_CHORD,seqVector[x]->chord.SaveToVector());
     }
 
     //Then, save the events.
@@ -300,41 +300,41 @@ bool LoadFile(Glib::ustring file){
             //If there is no such key in the file, that means this sequencer was skipped while saving.
             if (!kf.has_group(temp)) {
                 //We'll suplement it with an empty pointer, so it'll look like like a removed sequencer, and skip to look for the next one.
-                sequencers.push_back(NULL);
+                seqVector.push_back(NULL);
                 continue;
             }
 
             //If we got here, this means this sequencer was NOT removed. So: let's create it.
-            sequencers.push_back(new Sequencer());
+            seqVector.push_back(new Sequencer());
 
             //Put some data into it...
-            sequencers[x]->SetName(kf.get_string(temp, FILE_KEY_SEQ_NAME));
-            sequencers[x]->SetOn(kf.get_boolean(temp, FILE_KEY_SEQ_ON));
-            sequencers[x]->SetChannel(kf.get_integer(temp, FILE_KEY_SEQ_CHANNEL));
+            seqVector[x]->SetName(kf.get_string(temp, FILE_KEY_SEQ_NAME));
+            seqVector[x]->SetOn(kf.get_boolean(temp, FILE_KEY_SEQ_ON));
+            seqVector[x]->SetChannel(kf.get_integer(temp, FILE_KEY_SEQ_CHANNEL));
             if (chord_compatible_mode) use_main_note = kf.get_boolean(temp, FILE_KEY_SEQ_APPLY_MAIN_NOTE);
-            sequencers[x]->resolution = kf.get_integer(temp, FILE_KEY_SEQ_RESOLUTION);
-            sequencers[x]->length = kf.get_double(temp, FILE_KEY_SEQ_LENGTH);
+            seqVector[x]->resolution = kf.get_integer(temp, FILE_KEY_SEQ_RESOLUTION);
+            seqVector[x]->length = kf.get_double(temp, FILE_KEY_SEQ_LENGTH);
 
             //Check whether volume is saved in file.
             if(kf.has_key(temp,FILE_KEY_SEQ_VOLUME))
-                sequencers[x]->SetVolume(kf.get_integer(temp, FILE_KEY_SEQ_VOLUME));
+                seqVector[x]->SetVolume(kf.get_integer(temp, FILE_KEY_SEQ_VOLUME));
             //Because if it's not...
             else
                 //...we need to set it to a default value.
-                sequencers[x]->SetVolume(DEFAULT_VOLUME);
-            sequencers[x]->patterns.clear();
+                seqVector[x]->SetVolume(DEFAULT_VOLUME);
+            seqVector[x]->patterns.clear();
 
             //Now, load the patterns.
             if(kf.has_key(temp,FILE_KEY_SEQ_SEQUENCE)){
                     //VEEEERY old file, seems it uses only one pattern, this case may be abandoned in future, since noone uses soooo old files (not sure, but probably it's 0.10 or earlier)
-                    sequencers[x]->AddPattern();
+                    seqVector[x]->AddPattern();
                     std::vector<int> sequence = kf.get_integer_list(temp, FILE_KEY_SEQ_SEQUENCE);
-                        for(int r = 0; r < sequencers[x]->resolution; r++){
+                        for(int r = 0; r < seqVector[x]->resolution; r++){
                             for(int c = 0; c < 6; c++){
                                 if (c == sequence[r])
-                                    sequencers[x]->SetPatternNote(0,r,c,1);
+                                    seqVector[x]->SetPatternNote(0,r,c,1);
                                 else
-                                    sequencers[x]->SetPatternNote(0,r,c,0);
+                                    seqVector[x]->SetPatternNote(0,r,c,0);
 
                             }
                     }
@@ -345,7 +345,7 @@ bool LoadFile(Glib::ustring file){
                 //For each pattern we load...
                 for(int s =0; s < n; s++){
                     //First add an empty pattern.
-                    sequencers[x]->AddPattern();
+                    seqVector[x]->AddPattern();
                     //Prepare the value name...
                     sprintf(temp2,FILE_KEY_SEQ_PATTERN_TEMPLATE,s);
                     //And get the pattern from file
@@ -354,24 +354,24 @@ bool LoadFile(Glib::ustring file){
                     //Check for the old-file case...
                     if (slider_compatible_mode){
                         //used to load old files <=0.12.0
-                        for(int r = 0; r < sequencers[x]->resolution; r++){
+                        for(int r = 0; r < seqVector[x]->resolution; r++){
                             for(int c = 0; c < 6; c++){
                                 //(If this is the note, that is chosen in file...)
                                 if (c == pattern [r])
                                     //mark it as ON
-                                    sequencers[x]->SetPatternNote(s,r,c,1);
+                                    seqVector[x]->SetPatternNote(s,r,c,1);
                                 else
                                     //mark it as OFF
-                                    sequencers[x]->SetPatternNote(s,r,c,0);
+                                    seqVector[x]->SetPatternNote(s,r,c,0);
                             }
                         }
                     }else{
                         //used to load new files >=0.13.0
                         //Simple algorithm, just copying data from the pattern from file to the pattern in the sequencer
                         for (unsigned int n = 0; n < pattern .size(); n++) {
-                        for(int r = 0; r < sequencers[x]->resolution; r++){
+                        for(int r = 0; r < seqVector[x]->resolution; r++){
                             for(int c = 0; c < 6; c++){
-                                    sequencers[x]->SetPatternNote(s,r,c,pattern [r*6+c]);
+                                    seqVector[x]->SetPatternNote(s,r,c,pattern [r*6+c]);
                             }
                         }
                          }
@@ -380,26 +380,26 @@ bool LoadFile(Glib::ustring file){
                 }//next pattern
                 
                 //Just to make sure, check if the sequencer we've just loaded from file has any patterns...
-                if(sequencers[x]->patterns.size() == 0)
+                if(seqVector[x]->patterns.size() == 0)
                     //wtf, there were no sequences in the file? strange. We have to create one in order to prevent crashes. What would be a sequencer with no patterns? At least that's something we beeter aviod.
-                    sequencers[x]->AddPattern();
+                    seqVector[x]->AddPattern();
             }
             
             //Here we load the chord (if any)
             if (kf.has_key(temp,FILE_KEY_SEQ_CHORD)){
                 std::vector<int> vec =   kf.get_integer_list(temp,FILE_KEY_SEQ_CHORD);
                 if (!chord_compatible_mode){
-                    sequencers[x]->chord.SetFromVector(vec);
+                    seqVector[x]->chord.SetFromVector(vec);
                 }else{ //old file
-                    sequencers[x]->chord.SetBaseUse(use_main_note);
-                    sequencers[x]->chord.SetBase(mainnote);
-                    sequencers[x]->chord.SetFromVector_OLD_FILE_PRE_0_14(vec);
+                    seqVector[x]->chord.SetBaseUse(use_main_note);
+                    seqVector[x]->chord.SetBase(mainnote);
+                    seqVector[x]->chord.SetFromVector_OLD_FILE_PRE_0_14(vec);
                 }
             }
 
             //And update this sequencer's GUI.
-            sequencers[x]->UpdateGui();
-            sequencers[x]->UpdateGuiChord();
+            seqVector[x]->UpdateGui();
+            seqVector[x]->UpdateGuiChord();
             
             //Now proceed to the...
         }  //...next sequencer.

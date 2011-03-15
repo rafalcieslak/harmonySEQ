@@ -20,7 +20,7 @@
 #ifndef TREEMODELS_H
 #define	TREEMODELS_H
 #include "global.h"
-
+#include "seqHandle.h"
 #include <gtkmm.h>
 
 class ModelColumns_SEQUENCERS : public Gtk::TreeModel::ColumnRecord {
@@ -28,6 +28,7 @@ public:
 
     ModelColumns_SEQUENCERS() {
         add(col_ID);
+        add(col_handle);
         add(col_name);
         add(col_muted);
         add(col_channel);
@@ -39,6 +40,7 @@ public:
         add(col_chord);
     }
     Gtk::TreeModelColumn<int> col_ID;
+    Gtk::TreeModelColumn<seqHandle> col_handle;
     Gtk::TreeModelColumn<Glib::ustring> col_name;
     Gtk::TreeModelColumn<bool> col_muted;
     Gtk::TreeModelColumn<int> col_channel;
