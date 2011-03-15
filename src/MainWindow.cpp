@@ -791,7 +791,7 @@ void MainWindow::UpdateVisibleColumns(){
         Gtk::TreeView::Column* pColumn;
         int col_iter = 0;
         pColumn = wTreeView.get_column(col_iter); //Handle
-        pColumn->set_visible(1);
+        pColumn->set_visible(debugging);
         col_iter++;
         pColumn = wTreeView.get_column(col_iter); //Name
         pColumn->set_visible(1);

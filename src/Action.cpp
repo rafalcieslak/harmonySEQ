@@ -201,7 +201,10 @@ Glib::ustring Action::GetLabel(){
 Glib::ustring Action::GetSeqName(int h){
     char temp[100];
     if (!seqH(h))
-        sprintf(temp,_("%d (unexisting)"),h);
+        if (debugging)
+            sprintf(temp,_("(unexisting, the handle was: %d)"),h);
+        else
+            sprintf(temp,_("(unexisting)"));
     else
         sprintf(temp,_("%s"),seqH(h)->GetName().c_str());
     return temp;
