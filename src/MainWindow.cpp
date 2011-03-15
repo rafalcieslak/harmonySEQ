@@ -30,7 +30,7 @@
 #include "SettingsWindow.h"
 #include "Configuration.h"
 
-Gtk::TreeRow row_inserted_by_drag;
+Gtk::TreeModel::iterator row_inserted_by_drag;
 bool drag_in_progress;
 
 MainWindow::MainWindow()
@@ -342,7 +342,7 @@ MainWindow::OnTreeviewRowActivated(const Gtk::TreeModel::Path& path, Gtk::TreeVi
     }
 
 }
-
+/*
 int MainWindow::GetSelectedSequencerID(){
      Gtk::TreeModel::iterator iter = GetSelectedSequencerIter();
     if(!iter) return -1;
@@ -350,6 +350,14 @@ int MainWindow::GetSelectedSequencerID(){
     int id = row[m_columns_sequencers.col_ID];
     return id;
 
+}
+
+ */
+seqHandle MainWindow::GetSelectedSequencerHandle(){
+     Gtk::TreeModel::iterator iter = GetSelectedSequencerIter();
+    if(!iter) return -1;
+    Gtk::TreeModel::Row row = *iter;
+    return row[m_columns_sequencers.col_handle];
 }
 
 Gtk::TreeModel::iterator MainWindow::GetSelectedSequencerIter(){
@@ -482,14 +490,20 @@ void MainWindow::RefreshRow(Gtk::TreeRow row){
 }
 
 void MainWindow::OnRemoveClicked(){
-    int id = GetSelectedSequencerID();
+    seqHandle h  = GetSelectedSequencerHandle();
+    int id = HandleToID(h);
     Gtk::TreeModel::iterator iter = GetSelectedSequencerIter();
-    *dbg << "removing row of id " << id << ENDL;
-    
+    *dbg << "removing row of handle " << h << "and ID " << id << ENDL;
+
+    //removing the row
     TreeModel_sequencers->erase(iter);
-    
+
+    //and the corresponding sequencer
     delete seqVector[id];
-    seqVector[id] = NULL;
+    seqVector.erase(seqVector.begin()+id);
+
+    //update hande map data:
+    UpdateSeqHandlesAfterDeleting(id);
 
     eventswindow->InitTreeData();
 
@@ -748,7 +762,7 @@ bool MainWindow::OnTreviewButtonPress(GdkEventButton* event){
 }
 
 void MainWindow::OnPopupEdit(){
-    seqVector[GetSelectedSequencerID()]->ShowWindow();
+   seqH(GetSelectedSequencerHandle())->ShowWindow();
 }
 
 void MainWindow::OnPopupRemove(){
@@ -762,8 +776,7 @@ void MainWindow::OnPopupDuplicate(){
 }
 
 void MainWindow::OnPopupPlayOnce(){
-    int id = GetSelectedSequencerID();
-    seqVector[id]->SetPlayOncePhase(1); //will be played once
+    seqH(GetSelectedSequencerHandle())->SetPlayOncePhase(1); //will be played once
     Gtk::TreeModel::iterator iter = GetSelectedSequencerIter();
     RefreshRow(*iter);
 
@@ -828,7 +841,7 @@ void MainWindow::OnTreeModelRowInserted(const Gtk::TreeModel::Path& path, const 
     if (drag_in_progress == 1){
         //great! drag'n'drop inserted a row!
         //the point is that it first inserts a row, and then deletes it.
-        row_inserted_by_drag  = *iter;
+        row_inserted_by_drag  = iter;
     }
 }
 
@@ -837,9 +850,52 @@ void MainWindow::OnTreeModelRowDeleted(const Gtk::TreeModel::Path& path){
        //great! drag'n'drop removed a row!
 
         //if a row was deleted, then we need to update the moved sequencer's row entry.
-        int x = row_inserted_by_drag[m_columns_sequencers.col_ID];
-        seqVector[x]->my_row = row_inserted_by_drag;
-    }
+        int h = (*row_inserted_by_drag)[m_columns_sequencers.col_handle];
+        seqH(h)->my_row = *row_inserted_by_drag;
 
-    
+        //also, we need to REORDER sequencers in the window
+        //The ID of the moved sequencer
+        int ID = HandleToID(h);
+        //The position it was moved to:
+        int ID2 = 0;
+        //Here we compare the handles assigned to the inserted row, and the 0th row. If equal, it means it was inserted at the beggining, otherwise we cal calculate the position by counting id of above sequencer.
+        if (h != (*TreeModel_sequencers->get_iter("0"))[m_columns_sequencers.col_handle]){
+            //Get the id of sequencer with the row above
+            row_inserted_by_drag--;
+            ID2 = HandleToID ((*row_inserted_by_drag)[m_columns_sequencers.col_handle]);
+            //The point in the line below, is the fact that when we move a sequencer downwards, the position isn't equal to the above's id, as one of the above (the one we moved) was removed.z
+            if (ID > ID2) ID2++;
+        }else{
+            ID2 = 0;
+        }
+        *dbg << "Moved " << ID << "-" << ID2 << ENDL;
+
+        //OK, now we know where from and to we moved a seq, we can switch the seq's in vector.
+        if (ID == ID2) return;
+        if (ID < ID2) //moved downwards
+        {
+            Sequencer* temp;
+            temp = seqVector[ID];
+            for (int i = ID; i <= ID2; i++){
+                if (i != ID2) //not the last one, so copy from next
+                    seqVector[i] = seqVector[i+1];
+                else
+                    seqVector[i] = temp;
+            }
+
+        }else{ //moved upwards
+            Sequencer* temp;
+            temp = seqVector[ID2];
+            for(int i = ID2; i >= ID; i--){
+                if (i != ID)//not the last one, so copy from prevoius
+                    seqVector[i] = seqVector[i-1];
+                else
+                    seqVector[i] = temp;
+            }
+
+        }
+
+        //Finally, update seqHandles
+        UpdateSeqHandlesAfterMoving(ID,ID2);
+    }
 }

@@ -41,7 +41,7 @@ Gtk::TreeModel::Row spawn_sequencer(){
     sprintf(temp,_("seq %d"),n+1);
     Sequencer *new_seq = new Sequencer(temp);
     seqVector.push_back(new_seq);
-    new_seq->MyHandle = RequestNewSeqHandle(n+1);
+    new_seq->MyHandle = RequestNewSeqHandle(n);
 
     //add to main window
     return mainwindow->AddSequencerRow(n);
@@ -53,7 +53,7 @@ Gtk::TreeModel::Row clone_sequencer(int orig){
     Sequencer *new_seq = new Sequencer(seqVector[orig]);
     new_seq->SetOn(0);
     seqVector.push_back(new_seq);
-    new_seq->MyHandle = RequestNewSeqHandle(n+1);
+    new_seq->MyHandle = RequestNewSeqHandle(n);
     return mainwindow->AddSequencerRow(n);
 
 }

@@ -23,6 +23,7 @@
 #include <gtkmm.h>
 #include <gtkmm/window.h>
 #include "global.h"
+#include "seqHandle.h"
 class MainWindow: public Gtk::Window{
 
 
@@ -62,8 +63,9 @@ public:
 
     void UpdatePassMidiToggle();
 
-    int GetSelectedSequencerID();
+    //int GetSelectedSequencerID();
     Gtk::TreeModel::iterator GetSelectedSequencerIter();
+    seqHandle GetSelectedSequencerHandle();
 private:
 
     /**Reacts on double click on a row*/
