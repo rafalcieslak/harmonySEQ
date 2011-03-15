@@ -197,7 +197,6 @@ MainWindow::MainWindow()
     { //creating the tree model
         TreeModel_sequencers = Gtk::ListStore::create(m_columns_sequencers);
 
-        wTreeView.append_column(_("ID"), m_columns_sequencers.col_ID);
         wTreeView.append_column(_("Handle"), m_columns_sequencers.col_handle);
         
         int col_count = wTreeView.append_column_editable(_("Name"), m_columns_sequencers.col_name);
@@ -332,11 +331,11 @@ MainWindow::OnTreeviewRowActivated(const Gtk::TreeModel::Path& path, Gtk::TreeVi
 
 
         ///(activated row) <row number>
-        *dbg << _("activated row ") << row[m_columns_sequencers.col_ID];
+        *dbg << _("activated row of handle ") << row[m_columns_sequencers.col_handle];
         *dbg << _(", name is: ") << row[m_columns_sequencers.col_name] << ENDL;
         gdk_threads_leave(); //not really sure about this thread-lock, but this the only way I found to get it to work
         {
-            seqVector[row[m_columns_sequencers.col_ID]]->ShowWindow();
+            seqH(row[m_columns_sequencers.col_handle])->ShowWindow();
         }
         gdk_threads_enter();
     }
@@ -371,10 +370,11 @@ MainWindow::OnMutedToggleToggled(const Glib::ustring& path)
     Gtk::TreeModel::iterator iter = TreeModel_sequencers->get_iter(path);
     if (!iter) return;
     Gtk::TreeModel::Row row = *iter;
+    seqHandle h = row[m_columns_sequencers.col_handle];
 
-   seqVector[row[m_columns_sequencers.col_ID]]->SetOn(!row[m_columns_sequencers.col_muted]);
-   seqVector[row[m_columns_sequencers.col_ID]]->UpdateGui();
-   if(seqVector[row[m_columns_sequencers.col_ID]]->my_row) RefreshRow(seqVector[row[m_columns_sequencers.col_ID]]->my_row);
+   seqH(h)->SetOn(!row[m_columns_sequencers.col_muted]);
+   seqH(h)->UpdateGui();
+   if(seqH(h)->my_row) RefreshRow(seqH(h)->my_row);
 
    //Files::SetFileModified(1); do not detect mutes
 }
@@ -386,8 +386,9 @@ MainWindow::OnNameEdited(const Glib::ustring& path, const Glib::ustring& newtext
     Gtk::TreeModel::iterator iter = TreeModel_sequencers->get_iter(path);
     if (!iter) return;
     Gtk::TreeModel::Row row = *iter;
-    seqVector[row[m_columns_sequencers.col_ID]]->SetName(newtext);
-   if(seqVector[row[m_columns_sequencers.col_ID]]->my_row) RefreshRow(seqVector[row[m_columns_sequencers.col_ID]]->my_row);
+    seqHandle h = row[m_columns_sequencers.col_handle];
+    seqH(h)->SetName(newtext);
+   if(seqH(h)->my_row) RefreshRow(seqH(h)->my_row);
 
     eventswindow->UpdateAll();
     Files::SetFileModified(1);
@@ -395,10 +396,9 @@ MainWindow::OnNameEdited(const Glib::ustring& path, const Glib::ustring& newtext
 
 Gtk::TreeModel::Row MainWindow::AddSequencerRow(int x)
 {
-    *dbg << "wooho! sequener " << x << " was just added, and we have to add it now to a new row in the list!" << ENDL;
+    *dbg << "wooho! sequener " << x << " was just added, and we have to add it now to a new row in the model!" << ENDL;
     Gtk::TreeModel::iterator iter = TreeModel_sequencers->append();
     Gtk::TreeModel::Row row = *(iter);
-    row[m_columns_sequencers.col_ID] = x;
     row[m_columns_sequencers.col_handle] = seqV(x)->MyHandle;
     row[m_columns_sequencers.col_name] = seqVector[x]->GetName();
     row[m_columns_sequencers.col_muted] = seqVector[x]->GetOn();
@@ -432,7 +432,6 @@ void MainWindow::InitTreeData(){
         if (!seqV(x)) continue; //seems it was removed
         Gtk::TreeModel::iterator iter = TreeModel_sequencers->append();
         row = *(iter);
-        row[m_columns_sequencers.col_ID] = x;
         row[m_columns_sequencers.col_handle] = seqV(x)->MyHandle;
         row[m_columns_sequencers.col_muted] = seqV(x)->GetOn();
         row[m_columns_sequencers.col_name] = seqV(x)->GetName();
@@ -465,10 +464,10 @@ void MainWindow::RefreshRow(Gtk::TreeRowReference rowref){
 
 void MainWindow::RefreshRow(Gtk::TreeRow row){
 
-    *dbg << "Refreshing ROW\n";
-    int x = row[m_columns_sequencers.col_ID];
-    Sequencer* seq = seqVector[x];
-    row[m_columns_sequencers.col_handle] = seq->MyHandle;
+    *dbg << "Refreshing ROW, the handle ";
+    seqHandle h = row[m_columns_sequencers.col_handle];
+    *dbg << h << ENDL;
+    Sequencer* seq = seqH(h);
     row[m_columns_sequencers.col_muted] = seq->GetOn();
     row[m_columns_sequencers.col_name] = seq->GetName();
     row[m_columns_sequencers.col_channel] = seq->GetChannel();
@@ -477,11 +476,11 @@ void MainWindow::RefreshRow(Gtk::TreeRow row){
     row[m_columns_sequencers.col_len] = seq->length;
     row[m_columns_sequencers.col_vol] = seq->GetVolume();
     row[m_columns_sequencers.col_chord] = seq->chord.GetName();
-    if(seqVector[x]->GetOn()){
+    if(seq->GetOn()){
         row[m_columns_sequencers.col_colour] = "green1";
-    }else if (seqVector[x]->GetPlayOncePhase() == 2 || seqVector[x]->GetPlayOncePhase() == 3){
+    }else if (seq->GetPlayOncePhase() == 2 || seq->GetPlayOncePhase() == 3){
         row[m_columns_sequencers.col_colour] = "yellow1";
-    }else if(seqVector[x]->GetPlayOncePhase()== 1){
+    }else if(seq->GetPlayOncePhase()== 1){
         row[m_columns_sequencers.col_colour] = "yellow2";
     }else{
         row[m_columns_sequencers.col_colour] = "white";
@@ -496,6 +495,7 @@ void MainWindow::OnRemoveClicked(){
     *dbg << "removing row of handle " << h << " and ID " << id << ENDL;
 
     //removing the row
+    drag_in_progress = 0; //important
     TreeModel_sequencers->erase(iter);
 
     //and the corresponding sequencer
@@ -512,6 +512,7 @@ void MainWindow::OnRemoveClicked(){
 
 void MainWindow::OnAddSeqClicked(){
 
+    drag_in_progress = 0; //important
     Gtk::TreeModel::Row row = spawn_sequencer();
 
     wTreeView.get_selection()->select(row);
@@ -523,7 +524,7 @@ void MainWindow::OnCloneClicked(){
     Gtk::TreeModel::iterator iter = *(wTreeView.get_selection())->get_selected();
     if(!iter) return;
     Gtk::TreeModel::Row row = *iter;
-    int id = row[m_columns_sequencers.col_ID];
+    int id = HandleToID(row[m_columns_sequencers.col_handle]);
 
     row = clone_sequencer(id);
     wTreeView.get_selection()->select(row);
@@ -789,11 +790,8 @@ void MainWindow::OnPreferencesClicked(){
 void MainWindow::UpdateVisibleColumns(){
         Gtk::TreeView::Column* pColumn;
         int col_iter = 0;
-        pColumn = wTreeView.get_column(col_iter); //ID
-        pColumn->set_visible(Config::VisibleColumns::ID);
-        col_iter++;
         pColumn = wTreeView.get_column(col_iter); //Handle
-        pColumn->set_visible(debugging);
+        pColumn->set_visible(1);
         col_iter++;
         pColumn = wTreeView.get_column(col_iter); //Name
         pColumn->set_visible(1);
@@ -885,9 +883,9 @@ void MainWindow::OnTreeModelRowDeleted(const Gtk::TreeModel::Path& path){
 
         }else{ //moved upwards
             Sequencer* temp;
-            temp = seqVector[ID2];
-            for(int i = ID2; i >= ID; i--){
-                if (i != ID)//not the last one, so copy from prevoius
+            temp = seqVector[ID];
+            for(int i = ID; i >= ID2; i--){
+                if (i != ID2)//not the last one, so copy from prevoius
                     seqVector[i] = seqVector[i-1];
                 else
                     seqVector[i] = temp;
@@ -897,5 +895,6 @@ void MainWindow::OnTreeModelRowDeleted(const Gtk::TreeModel::Path& path){
 
         //Finally, update seqHandles
         UpdateSeqHandlesAfterMoving(ID,ID2);
+        RefreshRow(seqH(h)->my_row);
     }
 }

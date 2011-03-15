@@ -27,7 +27,6 @@ class ModelColumns_SEQUENCERS : public Gtk::TreeModel::ColumnRecord {
 public:
 
     ModelColumns_SEQUENCERS() {
-        add(col_ID);
         add(col_handle);
         add(col_name);
         add(col_muted);
@@ -39,7 +38,6 @@ public:
         add(col_colour);
         add(col_chord);
     }
-    Gtk::TreeModelColumn<int> col_ID;
     Gtk::TreeModelColumn<seqHandle> col_handle;
     Gtk::TreeModelColumn<Glib::ustring> col_name;
     Gtk::TreeModelColumn<bool> col_muted;
