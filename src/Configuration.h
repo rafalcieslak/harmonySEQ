@@ -32,7 +32,6 @@ namespace Config{
         extern bool Hit2;
     }
     namespace VisibleColumns{
-        extern bool ID;
         extern bool Channel;
         extern bool Pattern;
         extern bool Resolution;

@@ -23,6 +23,7 @@
 #include <gtkmm.h>
 #include <gtkmm/window.h>
 #include "global.h"
+#include "seqHandle.h"
 class MainWindow: public Gtk::Window{
 
 
@@ -42,7 +43,7 @@ public:
     void RefreshRow(Gtk::TreeRow row);
 
     /**Adds a single row, when a new sequencer is spawned (and return a RowReference, so that the sequencer will know where is it's row)*/
-    Gtk::TreeModel::RowReference AddSequencerRow(int n);
+    Gtk::TreeModel::Row AddSequencerRow(int n);
     
     /**Called when user changed tempo*/
     void TempoChanged();
@@ -62,8 +63,9 @@ public:
 
     void UpdatePassMidiToggle();
 
-    int GetSelectedSequencerID();
+    //int GetSelectedSequencerID();
     Gtk::TreeModel::iterator GetSelectedSequencerIter();
+    seqHandle GetSelectedSequencerHandle();
 private:
 
     /**Reacts on double click on a row*/
@@ -72,7 +74,11 @@ private:
     void OnMutedToggleToggled(const Glib::ustring& path);
     void OnNameEdited(const Glib::ustring& path,const Glib::ustring& newtext);
 
-    
+    void OnTreeviewDragBegin(const Glib::RefPtr<Gdk::DragContext>& context);
+    void OnTreeviewDragEnd(const Glib::RefPtr<Gdk::DragContext>& context);
+    void OnTreeModelRowInserted(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter);
+    void OnTreeModelRowDeleted(const Gtk::TreeModel::Path& path);
+
     void OnAddSeqClicked();
     void OnRemoveClicked();
     void OnCloneClicked();
@@ -98,19 +104,19 @@ private:
     void OnPopupRemove();
     void OnPopupDuplicate();
 
-    Gtk::TreeView m_TreeView;
+    Gtk::TreeView wTreeView;
 
   Glib::RefPtr<Gtk::UIManager> m_refUIManager;
   Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
 
-  Gtk::ScrolledWindow ScrolledWindow;
+  Gtk::ScrolledWindow wScrolledWindow;
 
-    Gtk::VBox main_vbox;
-    Gtk::VBox vbox1;
+    Gtk::VBox wMainVBox;
+    Gtk::VBox wVBox1;
 
-    Gtk::Menu* popup_menu;
+    Gtk::Menu* wPopupMenu;
 
-    Gtk::Label tempolabel;
+    Gtk::Label wTempoLabel;
     Gtk::Image metronometool_icon;
 };
 

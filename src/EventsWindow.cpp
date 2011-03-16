@@ -77,29 +77,29 @@ void EventsWindow::InitTreeData(){
 
     m_refTreeModel->clear();
     Gtk::TreeModel::Row row;
-    for (unsigned int x = 0; x < events.size(); x++) {
-        if (!events[x]) continue; //seems it was removed
+    for (unsigned int x = 0; x < Events.size(); x++) {
+        if (!Events[x]) continue; //seems it was removed
         Gtk::TreeModel::iterator iter = m_refTreeModel->append();
         row = *(iter);
         row[m_columns.col_ID] = x;
-        row[m_columns.col_label] = events[x]->GetLabel();
+        row[m_columns.col_label] = Events[x]->GetLabel();
         row[m_columns.col_colour] = "white";
         row[m_columns.col_type] = EVENT;
         row[m_columns.col_prt] = -1;
         Gtk::TreeRowReference rowref(m_refTreeModel, m_refTreeModel->get_path(iter));
-        events[x]->row_in_event_window = rowref;
+        Events[x]->row_in_event_window = rowref;
         //actions
-        for (unsigned int c = 0; c < events[x]->actions.size();c++){
-            if(!events[x]->actions[c]) continue;
+        for (unsigned int c = 0; c < Events[x]->actions.size();c++){
+            if(!Events[x]->actions[c]) continue;
             Gtk::TreeModel::iterator iter_child = m_refTreeModel->append(row.children());
             Gtk::TreeModel::Row row_child = *iter_child;
             row_child[m_columns.col_ID] = c;
-            row_child[m_columns.col_label] = events[x]->actions[c]->GetLabel();
+            row_child[m_columns.col_label] = Events[x]->actions[c]->GetLabel();
             row_child[m_columns.col_colour] = "beige";
             row_child[m_columns.col_type] = ACTION;
             row_child[m_columns.col_prt] = x;
             Gtk::TreeRowReference rowref_child(m_refTreeModel, m_refTreeModel->get_path(iter_child));
-            events[x]->actions[c]->row_in_event_window = rowref_child;
+            Events[x]->actions[c]->row_in_event_window = rowref_child;
         }
          
 
@@ -156,10 +156,10 @@ void EventsWindow::OnRowChosen(const Gtk::TreeModel::Path& path, Gtk::TreeViewCo
         Gtk::TreeModel::Row row = *iter;
         switch (row[m_columns.col_type]){
             case EVENT:
-                events[row[m_columns.col_ID]]->ShowWindow();
+                Events[row[m_columns.col_ID]]->ShowWindow();
                 break;
             case ACTION:
-                events[row[m_columns.col_prt]]->actions[row[m_columns.col_ID]]->GUIShowWindow();
+                Events[row[m_columns.col_prt]]->actions[row[m_columns.col_ID]]->GUIShowWindow();
                 break;
         }
     }
@@ -170,10 +170,10 @@ void EventsWindow::UpdateRow(Gtk::TreeRowReference rowref){
     Gtk::TreeModel::Row row = *(m_refTreeModel->get_iter(rowref.get_path()));
         switch (row[m_columns.col_type]){
             case EVENT:
-                row[m_columns.col_label] = events[row[m_columns.col_ID]]->GetLabel();
+                row[m_columns.col_label] = Events[row[m_columns.col_ID]]->GetLabel();
                 break;
             case ACTION:
-                row[m_columns.col_label] = events[row[m_columns.col_prt]]->actions[row[m_columns.col_ID]]->GetLabel();
+                row[m_columns.col_label] = Events[row[m_columns.col_prt]]->actions[row[m_columns.col_ID]]->GetLabel();
                 break;
         }
     
@@ -183,15 +183,15 @@ void EventsWindow::OnAddEventClicked(){
 
     Gtk::TreeModel::iterator iter = m_refTreeModel->append();
     Gtk::TreeModel::Row row = *(iter);
-    events.push_back(new Event(Event::NONE,0,0));
-    row[m_columns.col_ID] = events.size()-1;
-    row[m_columns.col_label] = events[events.size()-1]->GetLabel();
+    Events.push_back(new Event(Event::NONE,0,0));
+    row[m_columns.col_ID] = Events.size()-1;
+    row[m_columns.col_label] = Events[Events.size()-1]->GetLabel();
     row[m_columns.col_colour] = "white";
     row[m_columns.col_type] = EVENT;
     row[m_columns.col_prt] = -1;
     Gtk::TreeRowReference rowref(m_refTreeModel, m_refTreeModel->get_path(iter));
-    events[events.size()-1]->row_in_event_window = rowref;
-    events[events.size()-1]->ShowWindow();
+    Events[Events.size()-1]->row_in_event_window = rowref;
+    Events[Events.size()-1]->ShowWindow();
 
     Files::SetFileModified(1);
 }
@@ -208,8 +208,8 @@ void EventsWindow::OnRemoveClicked(){
             id = row[m_columns.col_ID];
             m_refTreeModel->erase(iter);
 
-            delete events[id];
-            events[id] = NULL;
+            delete Events[id];
+            Events[id] = NULL;
             break;
         case ACTION:
             id = row[m_columns.col_ID];
@@ -217,8 +217,8 @@ void EventsWindow::OnRemoveClicked(){
             m_refTreeModel->erase(iter);
 
             //TODO: checck whether we cannot do the following by erasing an item from action's std::vecctor
-            delete events[prt]->actions[id];
-            events[prt]->actions[id] = NULL;
+            delete Events[prt]->actions[id];
+            Events[prt]->actions[id] = NULL;
             break;
     }
     resize(2,2);
@@ -260,21 +260,21 @@ void EventsWindow::OnAddActionClicked(){
             break;
     }
 
-    events[id]->actions.push_back(new Action(Action::NONE));
-    int act = events[id]->actions.size() - 1;
-    Gtk::TreeModel::iterator iter_parent = m_refTreeModel->get_iter(events[id]->row_in_event_window.get_path());
+    Events[id]->actions.push_back(new Action(Action::NONE));
+    int act = Events[id]->actions.size() - 1;
+    Gtk::TreeModel::iterator iter_parent = m_refTreeModel->get_iter(Events[id]->row_in_event_window.get_path());
     row = *iter_parent;
     Gtk::TreeModel::iterator iter_new = m_refTreeModel->append(row.children());
     row = *iter_new;
     row[m_columns.col_type] = ACTION;
     row[m_columns.col_prt] = id;
     row[m_columns.col_ID] = act;
-    row[m_columns.col_label] = events[id]->actions[act]->GetLabel();
+    row[m_columns.col_label] = Events[id]->actions[act]->GetLabel();
     row[m_columns.col_colour] = "beige";
     Gtk::TreeRowReference rowref_child(m_refTreeModel, m_refTreeModel->get_path(iter_new));
-    events[id]->actions[act]->row_in_event_window = rowref_child;
+    Events[id]->actions[act]->row_in_event_window = rowref_child;
 
-    events[id]->actions[act]->GUIShowWindow();
+    Events[id]->actions[act]->GUIShowWindow();
 
     row = *iter_selected;
     if (row[m_columns.col_type] == EVENT)

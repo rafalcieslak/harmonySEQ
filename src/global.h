@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010 Rafał Cieślak
+    Copyright (C) 2010, 2011 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -75,6 +75,7 @@
 
 #define FILE_GROUP_TEMPLATE_SEQ "Seq %d"
 #define FILE_KEY_SEQ_RESOLUTION "resolution"
+#define FILE_KEY_SEQ_HANDLE "handle"
 #define FILE_KEY_SEQ_LENGTH "length"
 #define FILE_KEY_SEQ_ON "on"
 #define FILE_KEY_SEQ_APPLY_MAIN_NOTE "apply_mn"
@@ -108,7 +109,7 @@ class MainWindow;
 class Event;
 class EventsWindow;
 class SettingsWindow;
-extern std::vector<Sequencer *> sequencers;
+extern std::vector<Sequencer *> seqVector;
 extern double tempo;
 extern int ports_number;
 extern int running;
@@ -123,7 +124,7 @@ extern SettingsWindow* settingswindow;
 extern int passing_midi;
 extern std::map<Glib::ustring, int> keymap_stoi;
 extern std::map<int, Glib::ustring> keymap_itos;
-extern std::vector<Event *> events;
+extern std::vector<Event *> Events;
 extern std::map<int,Glib::ustring> notemap;
 extern Glib::RefPtr< Gdk::Pixbuf > harmonySEQ_logo_48;
 extern Glib::RefPtr< Gdk::Pixbuf > metronome_icon_24;

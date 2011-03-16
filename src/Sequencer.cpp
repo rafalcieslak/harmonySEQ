@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010 Rafał Cieślak
+    Copyright (C) 2010, 2011 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -23,44 +23,46 @@
 #include "messages.h"
 #include "Sequencer.h"
 #include "MainWindow.h"
+#include "seqHandle.h"
 extern debug *dbg;
 
 extern MainWindow* mainwindow;
-extern vector<Sequencer *> sequencers;
+extern vector<Sequencer *> seqVector;
 
 int resolutions[7] = RESOLUTIONS;
 double lengths[7] = LENGTHS;
 
 
-Gtk::TreeModel::RowReference spawn_sequencer(){
-    int n = sequencers.size();
+Gtk::TreeModel::Row spawn_sequencer(){
+    int n = seqVector.size();
 
     //init and push to vector
     char temp[20];
-    sprintf(temp,_("seq %d"),n+1);
+    seqHandle h = RequestNewSeqHandle(n);
+    sprintf(temp,_("seq %d"),h);
     Sequencer *new_seq = new Sequencer(temp);
-    sequencers.push_back(new_seq);
+    seqVector.push_back(new_seq);
+    new_seq->MyHandle = h;
 
     //add to main window
     return mainwindow->AddSequencerRow(n);
-
-    
 }
 
-Gtk::TreeModel::RowReference clone_sequencer(int orig){
-    int n = sequencers.size();
+Gtk::TreeModel::Row clone_sequencer(int orig){
+    int n = seqVector.size();
     
-    Sequencer *new_seq = new Sequencer(sequencers[orig]);
+    Sequencer *new_seq = new Sequencer(seqVector[orig]);
     new_seq->SetOn(0);
-    sequencers.push_back(new_seq);
+    seqVector.push_back(new_seq);
+    new_seq->MyHandle = RequestNewSeqHandle(n);
     return mainwindow->AddSequencerRow(n);
 
 }
 
 void ClearSequencers(){
-    for(unsigned int x = 0; x < sequencers.size(); x++) delete sequencers[x];
+    for(unsigned int x = 0; x < seqVector.size(); x++) delete seqVector[x];
 
-    sequencers.clear();
+    seqVector.clear();
 
 }
 //======begin sequencer class===============
@@ -167,18 +169,18 @@ void Sequencer::SetResolution(int res){
 
 
 int Sequencer::GetNoteOfChord(int n){return chord.GetNotePlusBasenote(n);}
-void Sequencer::SetOn(bool m){on = m;play_once_phase=0;gui_window->tgl_mute.set_active(m);}
+void Sequencer::SetOn(bool m){on = m;play_once_phase=0;gui_window->wMuteToggle.set_active(m);}
 bool Sequencer::GetOn(){return on;}
-void Sequencer::SetChannel(int ch){channel = ch;gui_window->channel_button.set_value((double)ch);}
+void Sequencer::SetChannel(int ch){channel = ch;gui_window->wChannelButton.set_value((double)ch);}
 int Sequencer::GetChannel(){return channel;}
 void Sequencer::SetName(Glib::ustring nm){name = nm;gui_window->set_title(nm);}
 Glib::ustring Sequencer::GetName(){return name;}
 int Sequencer::GetVolume(){return volume;}
-void Sequencer::SetVolume(int v){volume = v;gui_window->volume_button.set_value((double)v);}
+void Sequencer::SetVolume(int v){volume = v;gui_window->wVolumeButton.set_value((double)v);}
 
 void Sequencer::SetPlayOncePhase(int p){
     play_once_phase = p;
-    if(row_in_main_window) mainwindow->RefreshRow(row_in_main_window);
+    if(my_row) mainwindow->RefreshRow(my_row);
 }
 
 int Sequencer::GetPlayOncePhase(){

@@ -127,11 +127,11 @@ ActionGUI::ActionGUI(Action *prt):
     
     ok_button.signal_clicked().connect(mem_fun(*this,&ActionGUI::OnOKClicked));
 
-    Types_combo.set_model(m_refTreeModel_ActionTypes);
+    Types_combo.set_model(TreeModel_ActionTypes);
     Types_combo.pack_start(m_columns_action_types.label);
     SetTypeCombo(parent->type); //Setting the typecombo BEFORE connecting the signal is ESSENTIAL, since otherwise when the type in Types_combo is changed (by setting it to parent->type), it emits a signal
     Types_combo.signal_changed().connect(mem_fun(*this,&ActionGUI::OnTypeChanged));
-    Seqs_combo.set_model(m_refTreeModel_sequencers);
+    Seqs_combo.set_model(TreeModel_sequencers);
     Seqs_combo.pack_start(m_columns_sequencers.col_name);
     Seqs_combo.signal_changed().connect(mem_fun(*this,&ActionGUI::OnSeqChanged));
 
@@ -321,29 +321,29 @@ void ActionGUI::InitType(){
             break;
         case Action::SEQ_ON_OFF_TOGGLE:
             Seqs_combo.set_active(0);
-            parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
+            parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_handle];
             on_off_toggle_TOGGLE.set_active(1); //it does not triggler signal_clicked, so we have to set the mode mannually!
             parent->args[2]=2;
             break;
         case Action::SEQ_VOLUME_SET:
             Seqs_combo.set_active(0);
-            parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
+            parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_handle];
             vol_button.set_value(DEFAULT_VOLUME);
             break;
         case Action::SEQ_CHANGE_ONE_NOTE:
             Seqs_combo.set_active(0);
-            parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
+            parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_handle];
             notenr_button.set_value(1.0);
             chordseq_button.set_value(0.0);
             break;
         case Action::SEQ_CHANGE_CHORD:
             Seqs_combo.set_active(0);
-            parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
+            parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_handle];
             chordwidget.Update();
             break;
         case Action::SEQ_CHANGE_PATTERN:
             Seqs_combo.set_active(0);
-            parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
+            parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_handle];
             pattern_button.set_value(0.0);
             break;
         case Action::TEMPO_SET:
@@ -380,7 +380,7 @@ void ActionGUI::OnTempoChanged(){
 void ActionGUI::OnSeqChanged(){
     if(!Seqs_combo.get_active()) return; //empty selection
     if(parent->type == Action::SEQ_ON_OFF_TOGGLE || parent->type == Action::SEQ_VOLUME_SET || parent->type == Action::SEQ_CHANGE_ONE_NOTE || parent->type == Action::SEQ_CHANGE_CHORD || parent->type == Action::SEQ_PLAY_ONCE||parent->type == Action::SEQ_CHANGE_PATTERN){
-            parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_ID];
+            parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_handle];
     }else *err << _("Error: sequencer has changed, while action is not sequencer-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
@@ -475,7 +475,7 @@ void ActionGUI::OnPatternChanged(){
 //====^^Add new action gui callbacks above ^^==
 //======================================
 void ActionGUI::SetTypeCombo(int type){
-    Gtk::TreeModel::iterator iter = m_refTreeModel_ActionTypes->get_iter("0");
+    Gtk::TreeModel::iterator iter = TreeModel_ActionTypes->get_iter("0");
     for (;iter;iter++){
         if ((*iter)[m_columns_action_types.type]==type){
             Types_combo.set_active(iter);
@@ -487,9 +487,9 @@ void ActionGUI::SetTypeCombo(int type){
 }
 
 void ActionGUI::SetSeqCombo(int seq){
-    Gtk::TreeModel::iterator iter = m_refTreeModel_sequencers->get_iter("0");
+    Gtk::TreeModel::iterator iter = TreeModel_sequencers->get_iter("0");
     for (;iter;iter++){
-        if ((*iter)[m_columns_sequencers.col_ID]==seq){
+        if ((*iter)[m_columns_sequencers.col_handle]==seq){
             Seqs_combo.set_active(iter);
             break;
         }

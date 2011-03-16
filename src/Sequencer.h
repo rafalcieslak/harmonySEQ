@@ -23,12 +23,13 @@
 #include "global.h"
 #include "Chord.h"
 #include "SequencerGUI.h"
+#include "seqHandle.h"
 using namespace std;
 
 /**Spawns a new sequencer*/
-Gtk::TreeModel::RowReference spawn_sequencer();
+Gtk::TreeModel::Row spawn_sequencer();
 /**Spawns a new sequencer, identical to the one specified as arg*/
-Gtk::TreeModel::RowReference clone_sequencer(int orig);
+Gtk::TreeModel::Row clone_sequencer(int orig);
 /**Clears the list of sequencers, removing every sequencer*/
 void ClearSequencers();
 
@@ -128,7 +129,10 @@ public:
     int last_played_note;
 
     /**Keeps a reference to a row in Sequencers TreeModel*/
-    Gtk::TreeRowReference row_in_main_window;
+    Gtk::TreeRow my_row;
+
+    /**Remembers the handle to this sequencer.*/
+    seqHandle MyHandle;
     
     friend class SequencerWindow;
 

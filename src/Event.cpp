@@ -113,21 +113,21 @@ void FindAndProcessEvents(Event::EventTypes ev,int arg1, int arg2){
             return; //do not process this event
         }
     }
-    for (unsigned int x = 0; x < events.size();x++){
-        if (events[x]==NULL) continue;
-        if (events[x]->type == ev){
+    for (unsigned int x = 0; x < Events.size();x++){
+        if (Events[x]==NULL) continue;
+        if (Events[x]->type == ev){
             switch (ev){
                 case Event::KEYBOARD: //args: keycode
-                    if (arg1 == events[x]->arg1) //checking whether key is correct
-                        events[x]->Trigger();
+                    if (arg1 == Events[x]->arg1) //checking whether key is correct
+                        Events[x]->Trigger();
                     break;
                 case Event::NOTE:    //args: note channel
-                    if (arg1 == events[x]->arg1 && (events[x]->arg2 == 0 || events[x]->arg2 == arg2))
-                        events[x]->Trigger();
+                    if (arg1 == Events[x]->arg1 && (Events[x]->arg2 == 0 || Events[x]->arg2 == arg2))
+                        Events[x]->Trigger();
                     break;
                 case Event::CONTROLLER: //args: controller channel
-                    if (arg1 == events[x]->arg1 && (events[x]->arg2 == 0 || events[x]->arg2 == arg2))
-                        events[x]->Trigger();
+                    if (arg1 == Events[x]->arg1 && (Events[x]->arg2 == 0 || Events[x]->arg2 == arg2))
+                        Events[x]->Trigger();
 
                     break;
                 case Event::NONE:
@@ -159,8 +159,8 @@ bool FindAndProcessEventsKeyPress(GdkEventKey* event){
 
 void ClearEvents(){
 
-    for(unsigned int x = 0; x < events.size(); x++) delete events[x];
+    for(unsigned int x = 0; x < Events.size(); x++) delete Events[x];
 
-    events.clear();
+    Events.clear();
 
 }

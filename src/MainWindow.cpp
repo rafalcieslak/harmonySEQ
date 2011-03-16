@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010 Rafał Cieślak
+    Copyright (C) 2010, 2011 Rafał Cieślak
  
     This file is part of harmonySEQ.
 
@@ -30,7 +30,8 @@
 #include "SettingsWindow.h"
 #include "Configuration.h"
 
-
+Gtk::TreeModel::iterator row_inserted_by_drag;
+bool drag_in_progress;
 
 MainWindow::MainWindow()
 {
@@ -41,8 +42,8 @@ MainWindow::MainWindow()
     //set_resizable(0);
     UpdateTitle();
 
-    tempolabel.set_text(_("Tempo:"));
-    add(main_vbox);
+    wTempoLabel.set_text(_("Tempo:"));
+    add(wMainVBox);
 
     // <editor-fold defaultstate="collapsed" desc="menus, actions and toolbar creation and initialisation">
     m_refActionGroup = Gtk::ActionGroup::create();
@@ -142,8 +143,8 @@ MainWindow::MainWindow()
     Gtk::Widget* pPopup = m_refUIManager->get_widget("/Popup");
 
     Gtk::Menu& Popup = dynamic_cast<Gtk::Menu&>(*pPopup);
-    popup_menu = &Popup;
-    popup_menu->accelerate(*this);
+    wPopupMenu = &Popup;
+    wPopupMenu->accelerate(*this);
 
     Gtk::Toolbar& Toolbar = dynamic_cast<Gtk::Toolbar&> (*pToolbar);
     Toolbar.set_toolbar_style(Gtk::TOOLBAR_BOTH_HORIZ);
@@ -168,17 +169,17 @@ MainWindow::MainWindow()
     Gtk::ToolItem& TempoLabelTool = dynamic_cast<Gtk::ToolItem&> (*pTempoLabelTool);
     // </editor-fold>
 
-    main_vbox.pack_start(*pMenubar,Gtk::PACK_SHRINK);
-    main_vbox.pack_start(Toolbar,Gtk::PACK_SHRINK);
-    main_vbox.pack_start(vbox1);
-    vbox1.set_border_width(1);
+    wMainVBox.pack_start(*pMenubar,Gtk::PACK_SHRINK);
+    wMainVBox.pack_start(Toolbar,Gtk::PACK_SHRINK);
+    wMainVBox.pack_start(wVBox1);
+    wVBox1.set_border_width(1);
 
     
     TempoTool.remove();
     TempoTool.add(tempo_button);
     TempoTool.set_homogeneous(0);
     TempoLabelTool.remove();
-    TempoLabelTool.add(tempolabel);
+    TempoLabelTool.add(wTempoLabel);
     TempoLabelTool.set_homogeneous(0);
     tempo_button.set_range(30, 320);
     tempo_button.set_tooltip_markup(_("Sets the <b>tempo</b> applied to all sequencers.\nIt also blinks when a bar starts."));
@@ -189,65 +190,69 @@ MainWindow::MainWindow()
     UpdatePlayPauseTool();
     UpdatePassMidiToggle(); //sometimes we pass midi by default.
 
-    ScrolledWindow.add(m_TreeView);
-    ScrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC,Gtk::POLICY_AUTOMATIC); //The sliders should be shown only when needed
-    vbox1.pack_start(ScrolledWindow); //will expand, no shrinking
+    wScrolledWindow.add(wTreeView);
+    wScrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC,Gtk::POLICY_AUTOMATIC); //The sliders should be shown only when needed
+    wVBox1.pack_start(wScrolledWindow); //will expand, no shrinking
     // <editor-fold defaultstate="collapsed" desc="tree">
     { //creating the tree model
-        m_refTreeModel_sequencers = Gtk::ListStore::create(m_columns_sequencers);
+        TreeModel_sequencers = Gtk::ListStore::create(m_columns_sequencers);
 
-        m_TreeView.append_column(_("ID"), m_columns_sequencers.col_ID);
+        wTreeView.append_column(_("Handle"), m_columns_sequencers.col_handle);
         
-        int col_count = m_TreeView.append_column_editable(_("Name"), m_columns_sequencers.col_name);
-        Gtk::CellRenderer* cell = m_TreeView.get_column_cell_renderer(col_count - 1);
+        int col_count = wTreeView.append_column_editable(_("Name"), m_columns_sequencers.col_name);
+        Gtk::CellRenderer* cell = wTreeView.get_column_cell_renderer(col_count - 1);
         Gtk::CellRendererText& txt = dynamic_cast<Gtk::CellRendererText&> (*cell);
         txt.signal_edited().connect(mem_fun(*this, &MainWindow::OnNameEdited));
 
-        col_count = m_TreeView.append_column_editable(_("On"), m_columns_sequencers.col_muted);
-        Gtk::TreeViewColumn * column = m_TreeView.get_column(col_count-1);
-        cell = m_TreeView.get_column_cell_renderer(col_count - 1);
+        col_count = wTreeView.append_column_editable(_("On"), m_columns_sequencers.col_muted);
+        Gtk::TreeViewColumn * column = wTreeView.get_column(col_count-1);
+        cell = wTreeView.get_column_cell_renderer(col_count - 1);
         column->add_attribute(cell->property_cell_background(),m_columns_sequencers.col_colour);
         Gtk::CellRendererToggle& tgl = dynamic_cast<Gtk::CellRendererToggle&> (*cell);
         tgl.signal_toggled().connect(mem_fun(*this, &MainWindow::OnMutedToggleToggled));
         
-        col_count = m_TreeView.append_column(_("Channel"), m_columns_sequencers.col_channel);
-        col_count = m_TreeView.append_column(_("Pattern"), m_columns_sequencers.col_pattern);
-        col_count = m_TreeView.append_column(_("Resolution"), m_columns_sequencers.col_res);
-        col_count = m_TreeView.append_column_numeric(_("Length"), m_columns_sequencers.col_len,"%g");
-        col_count = m_TreeView.append_column(_("Velocity"), m_columns_sequencers.col_vol);
-        col_count = m_TreeView.append_column(_("Chord"), m_columns_sequencers.col_chord);
+        col_count = wTreeView.append_column(_("Channel"), m_columns_sequencers.col_channel);
+        col_count = wTreeView.append_column(_("Pattern"), m_columns_sequencers.col_pattern);
+        col_count = wTreeView.append_column(_("Resolution"), m_columns_sequencers.col_res);
+        col_count = wTreeView.append_column_numeric(_("Length"), m_columns_sequencers.col_len,"%g");
+        col_count = wTreeView.append_column(_("Velocity"), m_columns_sequencers.col_vol);
+        col_count = wTreeView.append_column(_("Chord"), m_columns_sequencers.col_chord);
 
 
         Gtk::TreeView::Column* pColumn;
         int col_iter = 0;
-        pColumn = m_TreeView.get_column(col_iter);
+        pColumn = wTreeView.get_column(col_iter);
 
         col_iter++;
-        pColumn = m_TreeView.get_column(col_iter);
+        pColumn = wTreeView.get_column(col_iter);
 
 
         col_iter++;
-        pColumn = m_TreeView.get_column(col_iter);
+        pColumn = wTreeView.get_column(col_iter);
         pColumn->set_fixed_width(10);
 
         //drag and drop enabling
-        //m_TreeView.enable_model_drag_source();
-        //m_TreeView.enable_model_drag_dest();
-        //disabled, as it causes strange problems with TreeRowReference-s
+        wTreeView.enable_model_drag_source();
+        wTreeView.enable_model_drag_dest();
+
+        wTreeView.signal_drag_begin().connect(sigc::mem_fun(*this, &MainWindow::OnTreeviewDragBegin));
+        wTreeView.signal_drag_end().connect(sigc::mem_fun(*this, &MainWindow::OnTreeviewDragEnd));
+        TreeModel_sequencers->signal_row_deleted().connect(sigc::mem_fun(*this, &MainWindow::OnTreeModelRowDeleted));
+        TreeModel_sequencers->signal_row_inserted().connect(sigc::mem_fun(*this, &MainWindow::OnTreeModelRowInserted));
 
         //forbids to typesearch
-        m_TreeView.set_enable_search(0);
+        wTreeView.set_enable_search(0);
 
         //catching row selection signal
-        m_TreeView.signal_row_activated().connect(sigc::mem_fun(*this, &MainWindow::OnTreeviewRowActivated));
+        wTreeView.signal_row_activated().connect(sigc::mem_fun(*this, &MainWindow::OnTreeviewRowActivated));
         //click signal (for popup)
-        m_TreeView.signal_button_press_event().connect(sigc::mem_fun(*this,&MainWindow::OnTreviewButtonPress), false);
+        wTreeView.signal_button_press_event().connect(sigc::mem_fun(*this,&MainWindow::OnTreviewButtonPress), false);
 
         //react on selection change (to determine whether it is empty)
-        Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = m_TreeView.get_selection();
+        Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = wTreeView.get_selection();
         refTreeSelection->signal_changed().connect(mem_fun(*this,&MainWindow::OnSelectionChanged));
 
-        m_TreeView.set_model(m_refTreeModel_sequencers);
+        wTreeView.set_model(TreeModel_sequencers);
         //initial data
         //InitTreeData();
         /*is called from main()*/
@@ -277,7 +282,7 @@ MainWindow::MainWindow()
 MainWindow::~MainWindow()
 {
 
-    delete popup_menu;
+    delete wPopupMenu;
 }
  
 void MainWindow::UpdateTitle(){
@@ -319,24 +324,24 @@ MainWindow::TempoChanged()
 void
 MainWindow::OnTreeviewRowActivated(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column)
 {
-    Gtk::TreeModel::iterator iter = m_refTreeModel_sequencers->get_iter(path);
+    Gtk::TreeModel::iterator iter = TreeModel_sequencers->get_iter(path);
     if (iter)
     {
         Gtk::TreeModel::Row row = *iter;
 
 
         ///(activated row) <row number>
-        *dbg << _("activated row ") << row[m_columns_sequencers.col_ID];
+        *dbg << _("activated row of handle ") << row[m_columns_sequencers.col_handle];
         *dbg << _(", name is: ") << row[m_columns_sequencers.col_name] << ENDL;
         gdk_threads_leave(); //not really sure about this thread-lock, but this the only way I found to get it to work
         {
-            sequencers[row[m_columns_sequencers.col_ID]]->ShowWindow();
+            seqH(row[m_columns_sequencers.col_handle])->ShowWindow();
         }
         gdk_threads_enter();
     }
 
 }
-
+/*
 int MainWindow::GetSelectedSequencerID(){
      Gtk::TreeModel::iterator iter = GetSelectedSequencerIter();
     if(!iter) return -1;
@@ -346,21 +351,30 @@ int MainWindow::GetSelectedSequencerID(){
 
 }
 
+ */
+seqHandle MainWindow::GetSelectedSequencerHandle(){
+     Gtk::TreeModel::iterator iter = GetSelectedSequencerIter();
+    if(!iter) return -1;
+    Gtk::TreeModel::Row row = *iter;
+    return row[m_columns_sequencers.col_handle];
+}
+
 Gtk::TreeModel::iterator MainWindow::GetSelectedSequencerIter(){
-    return *(m_TreeView.get_selection())->get_selected();
+    return *(wTreeView.get_selection())->get_selected();
 }
 
 void
 MainWindow::OnMutedToggleToggled(const Glib::ustring& path)
 {
 
-    Gtk::TreeModel::iterator iter = m_refTreeModel_sequencers->get_iter(path);
+    Gtk::TreeModel::iterator iter = TreeModel_sequencers->get_iter(path);
     if (!iter) return;
     Gtk::TreeModel::Row row = *iter;
+    seqHandle h = row[m_columns_sequencers.col_handle];
 
-   sequencers[row[m_columns_sequencers.col_ID]]->SetOn(!row[m_columns_sequencers.col_muted]);
-   sequencers[row[m_columns_sequencers.col_ID]]->UpdateGui();
-   if(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window) RefreshRow(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window);
+   seqH(h)->SetOn(!row[m_columns_sequencers.col_muted]);
+   seqH(h)->UpdateGui();
+   if(seqH(h)->my_row) RefreshRow(seqH(h)->my_row);
 
    //Files::SetFileModified(1); do not detect mutes
 }
@@ -369,71 +383,70 @@ void
 MainWindow::OnNameEdited(const Glib::ustring& path, const Glib::ustring& newtext)
 {
 
-    Gtk::TreeModel::iterator iter = m_refTreeModel_sequencers->get_iter(path);
+    Gtk::TreeModel::iterator iter = TreeModel_sequencers->get_iter(path);
     if (!iter) return;
     Gtk::TreeModel::Row row = *iter;
-    sequencers[row[m_columns_sequencers.col_ID]]->SetName(newtext);
-   if(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window) RefreshRow(sequencers[row[m_columns_sequencers.col_ID]]->row_in_main_window);
+    seqHandle h = row[m_columns_sequencers.col_handle];
+    seqH(h)->SetName(newtext);
+   if(seqH(h)->my_row) RefreshRow(seqH(h)->my_row);
 
     eventswindow->UpdateAll();
     Files::SetFileModified(1);
 }
 
-Gtk::TreeModel::RowReference MainWindow::AddSequencerRow(int x)
+Gtk::TreeModel::Row MainWindow::AddSequencerRow(int x)
 {
-    *dbg << "wooho! sequener " << x << " was just added, and we have to add it now to a new row in the list!" << ENDL;
-    Gtk::TreeModel::iterator iter = m_refTreeModel_sequencers->append();
+    *dbg << "wooho! sequener " << x << " was just added, and we have to add it now to a new row in the model!" << ENDL;
+    Gtk::TreeModel::iterator iter = TreeModel_sequencers->append();
     Gtk::TreeModel::Row row = *(iter);
-    row[m_columns_sequencers.col_ID] = x;
-    row[m_columns_sequencers.col_name] = sequencers[x]->GetName();
-    row[m_columns_sequencers.col_muted] = sequencers[x]->GetOn();
-    row[m_columns_sequencers.col_channel] = sequencers[x]->GetChannel();
-    row[m_columns_sequencers.col_pattern] = sequencers[x]->active_pattern;
-    row[m_columns_sequencers.col_res] = sequencers[x]->resolution;
-    row[m_columns_sequencers.col_len] = sequencers[x]->length;
-    row[m_columns_sequencers.col_vol] = sequencers[x]->GetVolume();
-    row[m_columns_sequencers.col_chord] = sequencers[x]->chord.GetName();
-    if(sequencers[x]->GetOn()){
+    row[m_columns_sequencers.col_handle] = seqV(x)->MyHandle;
+    row[m_columns_sequencers.col_name] = seqVector[x]->GetName();
+    row[m_columns_sequencers.col_muted] = seqVector[x]->GetOn();
+    row[m_columns_sequencers.col_channel] = seqVector[x]->GetChannel();
+    row[m_columns_sequencers.col_pattern] = seqVector[x]->active_pattern;
+    row[m_columns_sequencers.col_res] = seqVector[x]->resolution;
+    row[m_columns_sequencers.col_len] = seqVector[x]->length;
+    row[m_columns_sequencers.col_vol] = seqVector[x]->GetVolume();
+    row[m_columns_sequencers.col_chord] = seqVector[x]->chord.GetName();
+    if(seqVector[x]->GetOn()){
         row[m_columns_sequencers.col_colour] = "green1";
-    }else if (sequencers[x]->GetPlayOncePhase() == 2 || sequencers[x]->GetPlayOncePhase() == 3){
+    }else if (seqVector[x]->GetPlayOncePhase() == 2 || seqVector[x]->GetPlayOncePhase() == 3){
         row[m_columns_sequencers.col_colour] = "yellow1";
-    }else if(sequencers[x]->GetPlayOncePhase()== 1){
+    }else if(seqVector[x]->GetPlayOncePhase()== 1){
         row[m_columns_sequencers.col_colour] = "yellow2";
     }else{
         row[m_columns_sequencers.col_colour] = "white";
     }
-    Gtk::TreeRowReference rowref(m_refTreeModel_sequencers,m_refTreeModel_sequencers->get_path(iter));
-    sequencers[x]->row_in_main_window = rowref;
-    return rowref;
+    seqVector[x]->my_row = row;
+    return row;
 }
 
 
 
 void MainWindow::InitTreeData(){
     *dbg << "loading initial data to the treeview\n";
-    m_refTreeModel_sequencers->clear();
+    TreeModel_sequencers->clear();
     Gtk::TreeModel::Row row;
     int rowcount = 0;
-    for (unsigned int x = 0; x < sequencers.size(); x++) {
-        if (!sequencers[x]) continue; //seems it was removed
-        Gtk::TreeModel::iterator iter = m_refTreeModel_sequencers->append();
+    for (unsigned int x = 0; x < seqVector.size(); x++) {
+        if (!seqV(x)) continue; //seems it was removed
+        Gtk::TreeModel::iterator iter = TreeModel_sequencers->append();
         row = *(iter);
-        row[m_columns_sequencers.col_ID] = x;
-        row[m_columns_sequencers.col_muted] = sequencers[x]->GetOn();
-        row[m_columns_sequencers.col_name] = sequencers[x]->GetName();
-        row[m_columns_sequencers.col_channel] = sequencers[x]->GetChannel();
-        row[m_columns_sequencers.col_res] = sequencers[x]->resolution;
-        row[m_columns_sequencers.col_pattern] = sequencers[x]->active_pattern;
-        row[m_columns_sequencers.col_len] = sequencers[x]->length;
-        row[m_columns_sequencers.col_vol] = sequencers[x]->GetVolume();
-        row[m_columns_sequencers.col_chord] = sequencers[x]->chord.GetName();
-        Gtk::TreeRowReference rowref(m_refTreeModel_sequencers,m_refTreeModel_sequencers->get_path(iter));
-        sequencers[x]->row_in_main_window = rowref;
-    if(sequencers[x]->GetOn()){
+        row[m_columns_sequencers.col_handle] = seqV(x)->MyHandle;
+        row[m_columns_sequencers.col_muted] = seqV(x)->GetOn();
+        row[m_columns_sequencers.col_name] = seqV(x)->GetName();
+        row[m_columns_sequencers.col_channel] = seqV(x)->GetChannel();
+        row[m_columns_sequencers.col_res] = seqV(x)->resolution;
+        row[m_columns_sequencers.col_pattern] = seqV(x)->active_pattern;
+        row[m_columns_sequencers.col_len] = seqV(x)->length;
+        row[m_columns_sequencers.col_vol] = seqV(x)->GetVolume();
+        row[m_columns_sequencers.col_chord] = seqV(x)->chord.GetName();
+        seqV(x)->my_row = row;
+    if(seqV(x)->GetOn()){
         row[m_columns_sequencers.col_colour] = "green1";
-    }else if (sequencers[x]->GetPlayOncePhase() == 2 || sequencers[x]->GetPlayOncePhase() == 3){
+    }else if (seqV(x)->GetPlayOncePhase() == 2 || seqV(x)->GetPlayOncePhase() == 3){
         row[m_columns_sequencers.col_colour] = "yellow1";
-    }else if(sequencers[x]->GetPlayOncePhase()== 1){
+    }else if(seqV(x)->GetPlayOncePhase()== 1){
         row[m_columns_sequencers.col_colour] = "yellow2";
     }else{
         row[m_columns_sequencers.col_colour] = "white";
@@ -445,15 +458,16 @@ void MainWindow::InitTreeData(){
 }
 
 void MainWindow::RefreshRow(Gtk::TreeRowReference rowref){
-    Gtk::TreeModel::Row row = *(m_refTreeModel_sequencers->get_iter(rowref.get_path()));
+    Gtk::TreeModel::Row row = *(TreeModel_sequencers->get_iter(rowref.get_path()));
     RefreshRow(row);
 }
 
 void MainWindow::RefreshRow(Gtk::TreeRow row){
 
-    *dbg << "Refreshing ROW\n";
-    int x = row[m_columns_sequencers.col_ID];
-    Sequencer* seq = sequencers[x];
+    *dbg << "Refreshing ROW, the handle ";
+    seqHandle h = row[m_columns_sequencers.col_handle];
+    *dbg << h << ENDL;
+    Sequencer* seq = seqH(h);
     row[m_columns_sequencers.col_muted] = seq->GetOn();
     row[m_columns_sequencers.col_name] = seq->GetName();
     row[m_columns_sequencers.col_channel] = seq->GetChannel();
@@ -462,11 +476,11 @@ void MainWindow::RefreshRow(Gtk::TreeRow row){
     row[m_columns_sequencers.col_len] = seq->length;
     row[m_columns_sequencers.col_vol] = seq->GetVolume();
     row[m_columns_sequencers.col_chord] = seq->chord.GetName();
-    if(sequencers[x]->GetOn()){
+    if(seq->GetOn()){
         row[m_columns_sequencers.col_colour] = "green1";
-    }else if (sequencers[x]->GetPlayOncePhase() == 2 || sequencers[x]->GetPlayOncePhase() == 3){
+    }else if (seq->GetPlayOncePhase() == 2 || seq->GetPlayOncePhase() == 3){
         row[m_columns_sequencers.col_colour] = "yellow1";
-    }else if(sequencers[x]->GetPlayOncePhase()== 1){
+    }else if(seq->GetPlayOncePhase()== 1){
         row[m_columns_sequencers.col_colour] = "yellow2";
     }else{
         row[m_columns_sequencers.col_colour] = "white";
@@ -475,14 +489,21 @@ void MainWindow::RefreshRow(Gtk::TreeRow row){
 }
 
 void MainWindow::OnRemoveClicked(){
-    int id = GetSelectedSequencerID();
+    seqHandle h  = GetSelectedSequencerHandle();
+    int id = HandleToID(h);
     Gtk::TreeModel::iterator iter = GetSelectedSequencerIter();
-    *dbg << "removing row of id " << id << ENDL;
-    
-    m_refTreeModel_sequencers->erase(iter);
-    
-    delete sequencers[id];
-    sequencers[id] = NULL;
+    *dbg << "removing row of handle " << h << " and ID " << id << ENDL;
+
+    //removing the row
+    drag_in_progress = 0; //important
+    TreeModel_sequencers->erase(iter);
+
+    //and the corresponding sequencer
+    delete seqVector[id];
+    seqVector.erase(seqVector.begin()+id);
+
+    //update hande map data:
+    UpdateSeqHandlesAfterDeleting(id);
 
     eventswindow->InitTreeData();
 
@@ -491,23 +512,22 @@ void MainWindow::OnRemoveClicked(){
 
 void MainWindow::OnAddSeqClicked(){
 
-    Gtk::TreeModel::RowReference rowref = spawn_sequencer();
+    drag_in_progress = 0; //important
+    Gtk::TreeModel::Row row = spawn_sequencer();
 
-    Gtk::TreeModel::iterator iter = rowref.get_model()->get_iter(rowref.get_path());
-    m_TreeView.get_selection()->select(iter);
+    wTreeView.get_selection()->select(row);
 
     Files::SetFileModified(1);
 }
 
 void MainWindow::OnCloneClicked(){
-    Gtk::TreeModel::iterator iter = *(m_TreeView.get_selection())->get_selected();
+    Gtk::TreeModel::iterator iter = *(wTreeView.get_selection())->get_selected();
     if(!iter) return;
     Gtk::TreeModel::Row row = *iter;
-    int id = row[m_columns_sequencers.col_ID];
+    int id = HandleToID(row[m_columns_sequencers.col_handle]);
 
-    Gtk::TreeModel::RowReference rowref = clone_sequencer(id);
-    iter = rowref.get_model()->get_iter(rowref.get_path());
-    m_TreeView.get_selection()->select(iter);
+    row = clone_sequencer(id);
+    wTreeView.get_selection()->select(row);
 
     Files::SetFileModified(1);
 }
@@ -555,7 +575,7 @@ void MainWindow::OnEventsClicked(){
 }
 
 void MainWindow::OnSelectionChanged(){
-    Gtk::TreeModel::iterator iter = m_TreeView.get_selection()->get_selected();
+    Gtk::TreeModel::iterator iter = wTreeView.get_selection()->get_selected();
     if(iter){
         //something is selected
         Gtk::Widget* pRemoveTool = m_refUIManager->get_widget("/ToolBar/RemoveTool");
@@ -648,6 +668,7 @@ void MainWindow::OnMenuNewClicked(){
     //clear everything.
     ClearEvents();
     ClearSequencers();
+    ResetSeqHandles();
     eventswindow->UpdateAll();
     InitTreeData();
 
@@ -731,19 +752,19 @@ void MainWindow::OnMenuSaveAsClicked(){
 
 bool MainWindow::OnTreviewButtonPress(GdkEventButton* event){
    Gtk::TreePath path;
-   m_TreeView.get_path_at_pos(event->x,event->y,path);
+   wTreeView.get_path_at_pos(event->x,event->y,path);
 
   if (path != NULL) //right-clicked on a seq, not on the empty space
   if( (event->type == GDK_BUTTON_PRESS) && (event->button == 3) )
   {
-    popup_menu->popup(event->button, event->time);
+    wPopupMenu->popup(event->button, event->time);
   }
    
   return false;
 }
 
 void MainWindow::OnPopupEdit(){
-    sequencers[GetSelectedSequencerID()]->ShowWindow();
+   seqH(GetSelectedSequencerHandle())->ShowWindow();
 }
 
 void MainWindow::OnPopupRemove(){
@@ -757,8 +778,7 @@ void MainWindow::OnPopupDuplicate(){
 }
 
 void MainWindow::OnPopupPlayOnce(){
-    int id = GetSelectedSequencerID();
-    sequencers[id]->SetPlayOncePhase(1); //will be played once
+    seqH(GetSelectedSequencerHandle())->SetPlayOncePhase(1); //will be played once
     Gtk::TreeModel::iterator iter = GetSelectedSequencerIter();
     RefreshRow(*iter);
 
@@ -771,31 +791,31 @@ void MainWindow::OnPreferencesClicked(){
 void MainWindow::UpdateVisibleColumns(){
         Gtk::TreeView::Column* pColumn;
         int col_iter = 0;
-        pColumn = m_TreeView.get_column(col_iter); //ID
-        pColumn->set_visible(Config::VisibleColumns::ID);
+        pColumn = wTreeView.get_column(col_iter); //Handle
+        pColumn->set_visible(debugging);
         col_iter++;
-        pColumn = m_TreeView.get_column(col_iter); //Name
+        pColumn = wTreeView.get_column(col_iter); //Name
         pColumn->set_visible(1);
         col_iter++;
-        pColumn = m_TreeView.get_column(col_iter); //ON/OFF
+        pColumn = wTreeView.get_column(col_iter); //ON/OFF
         pColumn->set_visible(1);
         col_iter++;
-        pColumn = m_TreeView.get_column(col_iter); //Channel
+        pColumn = wTreeView.get_column(col_iter); //Channel
         pColumn->set_visible(Config::VisibleColumns::Channel);
         col_iter++;
-        pColumn = m_TreeView.get_column(col_iter); //Pattern
+        pColumn = wTreeView.get_column(col_iter); //Pattern
         pColumn->set_visible(Config::VisibleColumns::Pattern);
         col_iter++;
-        pColumn = m_TreeView.get_column(col_iter); //Res
+        pColumn = wTreeView.get_column(col_iter); //Res
         pColumn->set_visible(Config::VisibleColumns::Resolution);
         col_iter++;
-        pColumn = m_TreeView.get_column(col_iter); //Len
+        pColumn = wTreeView.get_column(col_iter); //Len
         pColumn->set_visible(Config::VisibleColumns::Length);
         col_iter++;
-        pColumn = m_TreeView.get_column(col_iter); //Vel
+        pColumn = wTreeView.get_column(col_iter); //Vel
         pColumn->set_visible(Config::VisibleColumns::Velocity);
         col_iter++;
-        pColumn = m_TreeView.get_column(col_iter); //Chord
+        pColumn = wTreeView.get_column(col_iter); //Chord
         pColumn->set_visible(Config::VisibleColumns::Chord);
 }
 
@@ -804,4 +824,78 @@ void MainWindow::OnMetronomeToggleClicked(){
     Gtk::ToggleToolButton& Metronome = dynamic_cast<Gtk::ToggleToolButton&> (*pMetronome);
     metronome = Metronome.get_active();
 
+}
+
+void MainWindow::OnTreeviewDragBegin(const Glib::RefPtr<Gdk::DragContext>& ct){
+    drag_in_progress= 1;
+
+}
+
+void MainWindow::OnTreeviewDragEnd(const Glib::RefPtr<Gdk::DragContext>& ct){
+    drag_in_progress = 0;
+
+}
+
+void MainWindow::OnTreeModelRowInserted(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter){
+    if (drag_in_progress == 1){
+        //great! drag'n'drop inserted a row!
+        //the point is that it first inserts a row, and then deletes it.
+        row_inserted_by_drag  = iter;
+    }
+}
+
+void MainWindow::OnTreeModelRowDeleted(const Gtk::TreeModel::Path& path){
+    if (drag_in_progress == 1){
+       //great! drag'n'drop removed a row!
+
+        //if a row was deleted, then we need to update the moved sequencer's row entry.
+        int h = (*row_inserted_by_drag)[m_columns_sequencers.col_handle];
+        seqH(h)->my_row = *row_inserted_by_drag;
+
+        //also, we need to REORDER sequencers in the window
+        //The ID of the moved sequencer
+        int ID = HandleToID(h);
+        //The position it was moved to:
+        int ID2 = 0;
+        //Here we compare the handles assigned to the inserted row, and the 0th row. If equal, it means it was inserted at the beggining, otherwise we cal calculate the position by counting id of above sequencer.
+        if (h != (*TreeModel_sequencers->get_iter("0"))[m_columns_sequencers.col_handle]){
+            //Get the id of sequencer with the row above
+            row_inserted_by_drag--;
+            ID2 = HandleToID ((*row_inserted_by_drag)[m_columns_sequencers.col_handle]);
+            //The point in the line below, is the fact that when we move a sequencer downwards, the position isn't equal to the above's id, as one of the above (the one we moved) was removed.z
+            if (ID > ID2) ID2++;
+        }else{
+            ID2 = 0;
+        }
+        *dbg << "Moved " << ID << "-" << ID2 << ENDL;
+
+        //OK, now we know where from and to we moved a seq, we can switch the seq's in vector.
+        if (ID == ID2) return;
+        if (ID < ID2) //moved downwards
+        {
+            Sequencer* temp;
+            temp = seqVector[ID];
+            for (int i = ID; i <= ID2; i++){
+                if (i != ID2) //not the last one, so copy from next
+                    seqVector[i] = seqVector[i+1];
+                else
+                    seqVector[i] = temp;
+            }
+
+        }else{ //moved upwards
+            Sequencer* temp;
+            temp = seqVector[ID];
+            for(int i = ID; i >= ID2; i--){
+                if (i != ID2)//not the last one, so copy from prevoius
+                    seqVector[i] = seqVector[i-1];
+                else
+                    seqVector[i] = temp;
+            }
+
+        }
+
+        //Finally, update seqHandles
+        UpdateSeqHandlesAfterMoving(ID,ID2);
+        RefreshRow(seqH(h)->my_row);
+    }
 }

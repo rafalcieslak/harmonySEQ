@@ -82,9 +82,9 @@ dpkg-deb  --build ${TMPDIRNAME}
 checkReturnCode
 cd "${TOP}"
 mkdir -p  ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package
-mv ${NBTMPDIR}.deb ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/harmonyseq.deb
+mv ${NBTMPDIR}.deb ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/harmonyseq-reordering.deb
 checkReturnCode
-echo Debian: ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/harmonyseq.deb
+echo Debian: ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/harmonyseq-reordering.deb
 
 # Cleanup
 cd "${TOP}"

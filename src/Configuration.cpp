@@ -41,7 +41,6 @@ namespace Config{
     }
 
     namespace VisibleColumns {
-        bool ID;
         bool Channel;
         bool Pattern;
         bool Resolution;
@@ -58,7 +57,6 @@ namespace Config{
         Metronome::Hit1Velocity = 100;
         Metronome::Hit2Velocity = 60;
         Metronome::Hit2 = true;
-        VisibleColumns::ID = 0;
         VisibleColumns::Channel = 1;
         VisibleColumns::Pattern = 1;
         VisibleColumns::Resolution = 1;
@@ -94,7 +92,6 @@ namespace Config{
            if(kf.has_key(KF_GROUP_METRONOME,KF_METRONOME_KEY_H2)) Metronome::Hit2 = kf.get_boolean(KF_GROUP_METRONOME,KF_METRONOME_KEY_H2);
         }
         if(kf.has_group("Visible columns")){
-            if(kf.has_key("Visible columns","ID")) VisibleColumns::ID = kf.get_boolean("Visible columns","ID");
             if(kf.has_key("Visible columns","Channel")) VisibleColumns::Channel = kf.get_boolean("Visible columns","Channel");
             if(kf.has_key("Visible columns","Pattern")) VisibleColumns::Pattern = kf.get_boolean("Visible columns","Pattern");
             if(kf.has_key("Visible columns","Resolution")) VisibleColumns::Resolution = kf.get_boolean("Visible columns","Resolution");
@@ -134,7 +131,6 @@ namespace Config{
         kf.set_integer(KF_GROUP_METRONOME,KF_METRONOME_KEY_H1_VELOCITY,Metronome::Hit1Velocity);
         kf.set_integer(KF_GROUP_METRONOME,KF_METRONOME_KEY_H2_VELOCITY,Metronome::Hit2Velocity);
         kf.set_boolean(KF_GROUP_METRONOME,KF_METRONOME_KEY_H2,Metronome::Hit2);
-        kf.set_boolean("Visible columns","ID",VisibleColumns::ID);
         kf.set_boolean("Visible columns","Channel",VisibleColumns::Channel);
         kf.set_boolean("Visible columns","Pattern",VisibleColumns::Pattern);
         kf.set_boolean("Visible columns","Resolution",VisibleColumns::Resolution);

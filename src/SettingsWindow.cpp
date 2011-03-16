@@ -48,7 +48,6 @@ SettingsWindow::SettingsWindow(){
     columns_label_hbox.pack_start(colums_label,Gtk::PACK_SHRINK);
     colums_label.set_markup(_("<b>Visible colums:</b>"));
 
-    colums_vbox.pack_start(colums_id);
     colums_vbox.pack_start(colums_name);
     colums_vbox.pack_start(colums_onoff);
     colums_vbox.pack_start(colums_channel);
@@ -58,7 +57,6 @@ SettingsWindow::SettingsWindow(){
     colums_vbox.pack_start(colums_velocity);
     colums_vbox.pack_start(colums_chord);
 
-    colums_id.set_label(_("ID"));
     colums_name.set_label(_("Name"));
     colums_onoff.set_label(_("Channel"));
     colums_channel.set_label(_("Channel"));
@@ -146,7 +144,6 @@ void SettingsWindow::LoadDataFromConfig(){
     metronome_bar_velocity.set_value(Config::Metronome::Hit1Velocity);
     metronome_1_4.set_active(Config::Metronome::Hit2);
     OnUse14BarToggled(); //Signal handler won't get called automatically, so we'll call it here, to update widget's sensitivity;
-    colums_id.set_active(Config::VisibleColumns::ID);
     colums_channel.set_active(Config::VisibleColumns::Channel);
     colums_pattern.set_active(Config::VisibleColumns::Pattern);
     colums_resolution.set_active(Config::VisibleColumns::Resolution);
@@ -163,7 +160,6 @@ void SettingsWindow::StoreDataToConfig(){
     Config::Metronome::Hit1Note = metronome_bar_note.get_value();
     Config::Metronome::Hit1Velocity = metronome_bar_velocity.get_value();
     Config::Metronome::Hit2 = metronome_1_4.get_active();
-    Config::VisibleColumns::ID = colums_id.get_active();
     Config::VisibleColumns::Channel = colums_channel.get_active();
     Config::VisibleColumns::Pattern = colums_pattern.get_active();
     Config::VisibleColumns::Resolution = colums_resolution.get_active();
