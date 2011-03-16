@@ -668,6 +668,7 @@ void MainWindow::OnMenuNewClicked(){
     //clear everything.
     ClearEvents();
     ClearSequencers();
+    ResetSeqHandles();
     eventswindow->UpdateAll();
     InitTreeData();
 

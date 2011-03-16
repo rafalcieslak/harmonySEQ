@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010 Rafał Cieślak
+    Copyright (C) 2010, 2011 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -38,6 +38,9 @@ namespace Files{
     void LoadFileDialog();
     /**Loads a file, but without showing the dialog (so the filename must be passed as an argument)*/
     bool LoadFile(Glib::ustring file);
+    /**Caled from LoadFile, if the file is older than 0.15*/
+    bool LoadFilePre015(Glib::KeyFile* kf);
+    bool LoadFile015(Glib::KeyFile *kf);
 }
 
 

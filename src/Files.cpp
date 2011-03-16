@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010 Rafał Cieślak
+    Copyright (C) 2010, 2011 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -225,7 +225,6 @@ bool LoadFile(Glib::ustring file){
 
 
     *dbg << "trying to open |" << file <<"|--\n";
-    int number;
     Glib::KeyFile kf;
     char temp[3000];
     char temp2[1000];
@@ -241,7 +240,7 @@ bool LoadFile(Glib::ustring file){
             return 1;
         }
     }catch(Glib::Error e){
-        //Exception cought. So can even tell what's wrong (usually some file-related problem, not a problem which it's contains).
+        //Exception cought. So can even tell what's wrong (usually some filesystem-related problem, not a problem with it's contains).
         sprintf(temp, _("ERROR - error while trying to read file '%s': "), file.c_str());
         *err << temp;
         *err << e.what();
@@ -257,10 +256,6 @@ bool LoadFile(Glib::ustring file){
         int VA = kf.get_integer("harmonySEQ","versionA");
         int VB = kf.get_integer("harmonySEQ","versionB");
         int VC = kf.get_integer("harmonySEQ","versionC");
-        //Slider-compatible mode is switched on, when the file we open does not support polyphony  (version 0.12 or earlier).
-        //In this case we must translate monophonic data, to polyphonic.
-        int slider_compatible_mode = 0;
-        int chord_compatible_mode = 0;
         //Compaing versions...
         if (VA > VERSION_A || (VA == VERSION_A && VB > VERSION_B) || (VA == VERSION_A && VB == VERSION_B && VC > VERSION_C)){
             //File is too new
@@ -276,205 +271,32 @@ bool LoadFile(Glib::ustring file){
             sprintf(temp,_("This file was created by harmonySEQ in an older version (%d.%d.%d). This means it may miss some data that is required to be in file by the version you are using (%d.%d.%d). It is recommended not to open such file, since it is very likely it may produce strange errors, or may event crash the program unexpectedly. However, in some cases one may want to open such file anyway, for example if it is sure it will open without trouble. Select YES to do so."),VA,VB,VC,VERSION_A,VERSION_B,VERSION_C);
             if (Ask(_("Do you want to open this file?"),temp,false)){
                 //anserwed YES;
-                if (VA == 0 && VB <= 12) slider_compatible_mode = 1; //That's the case, when monophonic data will be converted to polyphonic.
-                if(VA == 0 && VB <= 13) chord_compatible_mode = 1; //Chord is stored in the old format.
             }else{
                 return 1;
             }
         }
 
-        //Read some basic data...
-        tempo = kf.get_double(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_TEMPO);
-        int mainnote, use_main_note;
-        if (chord_compatible_mode) mainnote= kf.get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_MAINNOTE);
-        number = kf.get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_SEQ_NUM);
+        /**Error flag.*/
+        int e_flag = 0;
 
-        //Get rid of any seqeuncers.
-        ClearSequencers(); //woa hua hua hua!
+        if(VA == 0 && VB == 15){
+            e_flag = LoadFile015(&kf);
+        }else if(VA == 0 && VB < 15 ){
+            e_flag = LoadFilePre015(&kf);
+        }else{
+            //oh god! dunno what to do, file is in unknown version, but the user wants to open it anyway!
+            //Lets try using the newest routine, and hope it works...
+            e_flag = LoadFile015(&kf);
+        }
 
-        //Now we'll process all sequencers that are in the file.
-        for (int x = 0; x < number; x++) {
-            //First prepare the key.
-            sprintf(temp, FILE_GROUP_TEMPLATE_SEQ, x);
+        //In case of errors...
+        if (e_flag) {
+            sprintf(temp, _("ERROR - error while reading file '%s'\n"), file.c_str());
+            *err << temp;
+            Info(temp);
+            return 1;
+        }
 
-            //If there is no such key in the file, that means this sequencer was skipped while saving.
-            if (!kf.has_group(temp)) {
-                //We'll suplement it with an empty pointer, so it'll look like like a removed sequencer, and skip to look for the next one.
-                seqVector.push_back(NULL);
-                continue;
-            }
-
-            //If we got here, this means this sequencer was NOT removed. So: let's create it.
-            seqVector.push_back(new Sequencer());
-
-            //Put some data into it...
-            seqVector[x]->SetName(kf.get_string(temp, FILE_KEY_SEQ_NAME));
-            seqVector[x]->SetOn(kf.get_boolean(temp, FILE_KEY_SEQ_ON));
-            seqVector[x]->SetChannel(kf.get_integer(temp, FILE_KEY_SEQ_CHANNEL));
-            if (chord_compatible_mode) use_main_note = kf.get_boolean(temp, FILE_KEY_SEQ_APPLY_MAIN_NOTE);
-            seqVector[x]->resolution = kf.get_integer(temp, FILE_KEY_SEQ_RESOLUTION);
-            seqVector[x]->length = kf.get_double(temp, FILE_KEY_SEQ_LENGTH);
-
-            //Check whether volume is saved in file.
-            if(kf.has_key(temp,FILE_KEY_SEQ_VOLUME))
-                seqVector[x]->SetVolume(kf.get_integer(temp, FILE_KEY_SEQ_VOLUME));
-            //Because if it's not...
-            else
-                //...we need to set it to a default value.
-                seqVector[x]->SetVolume(DEFAULT_VOLUME);
-            seqVector[x]->patterns.clear();
-
-            //Now, load the patterns.
-            if(kf.has_key(temp,FILE_KEY_SEQ_SEQUENCE)){
-                    //VEEEERY old file, seems it uses only one pattern, this case may be abandoned in future, since noone uses soooo old files (not sure, but probably it's 0.10 or earlier)
-                    seqVector[x]->AddPattern();
-                    std::vector<int> sequence = kf.get_integer_list(temp, FILE_KEY_SEQ_SEQUENCE);
-                        for(int r = 0; r < seqVector[x]->resolution; r++){
-                            for(int c = 0; c < 6; c++){
-                                if (c == sequence[r])
-                                    seqVector[x]->SetPatternNote(0,r,c,1);
-                                else
-                                    seqVector[x]->SetPatternNote(0,r,c,0);
-
-                            }
-                    }
-            }else{
-                //Normal case: there are many patterns.
-                //Number of pattrens -> n
-                int n = kf.get_integer(temp,FILE_KEY_SEQ_PATTERNS_NUMBER);
-                //For each pattern we load...
-                for(int s =0; s < n; s++){
-                    //First add an empty pattern.
-                    seqVector[x]->AddPattern();
-                    //Prepare the value name...
-                    sprintf(temp2,FILE_KEY_SEQ_PATTERN_TEMPLATE,s);
-                    //And get the pattern from file
-                    std::vector<int> pattern = kf.get_integer_list(temp, temp2);
-
-                    //Check for the old-file case...
-                    if (slider_compatible_mode){
-                        //used to load old files <=0.12.0
-                        for(int r = 0; r < seqVector[x]->resolution; r++){
-                            for(int c = 0; c < 6; c++){
-                                //(If this is the note, that is chosen in file...)
-                                if (c == pattern [r])
-                                    //mark it as ON
-                                    seqVector[x]->SetPatternNote(s,r,c,1);
-                                else
-                                    //mark it as OFF
-                                    seqVector[x]->SetPatternNote(s,r,c,0);
-                            }
-                        }
-                    }else{
-                        //used to load new files >=0.13.0
-                        //Simple algorithm, just copying data from the pattern from file to the pattern in the sequencer
-                        for (unsigned int n = 0; n < pattern .size(); n++) {
-                        for(int r = 0; r < seqVector[x]->resolution; r++){
-                            for(int c = 0; c < 6; c++){
-                                    seqVector[x]->SetPatternNote(s,r,c,pattern [r*6+c]);
-                            }
-                        }
-                         }
-                    }
-                     
-                }//next pattern
-                
-                //Just to make sure, check if the sequencer we've just loaded from file has any patterns...
-                if(seqVector[x]->patterns.size() == 0)
-                    //wtf, there were no sequences in the file? strange. We have to create one in order to prevent crashes. What would be a sequencer with no patterns? At least that's something we beeter aviod.
-                    seqVector[x]->AddPattern();
-            }
-            
-            //Here we load the chord (if any)
-            if (kf.has_key(temp,FILE_KEY_SEQ_CHORD)){
-                std::vector<int> vec =   kf.get_integer_list(temp,FILE_KEY_SEQ_CHORD);
-                if (!chord_compatible_mode){
-                    seqVector[x]->chord.SetFromVector(vec);
-                }else{ //old file
-                    seqVector[x]->chord.SetBaseUse(use_main_note);
-                    seqVector[x]->chord.SetBase(mainnote);
-                    seqVector[x]->chord.SetFromVector_OLD_FILE_PRE_0_14(vec);
-                }
-            }
-
-            //And update this sequencer's GUI.
-            seqVector[x]->UpdateGui();
-            seqVector[x]->UpdateGuiChord();
-            
-            //Now proceed to the...
-        }  //...next sequencer.
-
-        //Done loading sequencers.
-
-        //Now, proceed to events.
-
-        //No such key? something really wrong. There should be an error message, TODO.
-        if(!kf.has_key(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_EVENTS_NUM)) return 1;
-
-        //Number of events.
-        number = kf.get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_EVENTS_NUM);
-
-        //Get rid of any events.
-        ClearEvents();
-
-        //For each event in file...
-        for (int x = 0; x < number; x++){
-
-            sprintf(temp, FILE_GROUP_TEMPLATE_EVENT, x);
-            //If there is no key related to this number of event, this means this event was removed.
-            if (!kf.has_group(temp)) {
-                //So we'll put instead a null pointer, so it'll look as a removed one, and skip to look for the next event.
-                Events.push_back(NULL);
-                continue;
-            }
-            //First, create a new event...
-            Events.push_back(new Event());
-            //Put some data into it...
-            Events[x]->type = kf.get_integer(temp,FILE_KEY_EVENT_TYPE);
-            Events[x]->arg1 = kf.get_integer(temp,FILE_KEY_EVENT_ARG1);
-            Events[x]->arg2 = kf.get_integer(temp,FILE_KEY_EVENT_ARG2);
-            int actions_num = kf.get_integer(temp,FILE_KEY_EVENT_ACTIONS_NUM);
-            //For each action of this event...
-            for (int a = 0; a < actions_num; a++){
-                sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_TYPE,a);
-                if (!kf.has_key(temp,temp2)){
-                    //there is no such action in file (was removed, was a NULL pointer while saving file) - skip to next action
-                    Events[x]->actions.push_back(NULL);
-                    continue;
-                }
-                //Create a new action
-                Events[x]->actions.push_back(new Action(Action::NONE));
-
-                //Fill it with data: type...
-                sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_TYPE,a);
-                Events[x]->actions[a]->type = kf.get_integer(temp,temp2);
-                //...arguments...
-                sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_ARGS,a);
-                Events[x]->actions[a]->args = kf.get_integer_list(temp,temp2);
-                //...and a chord, if any.
-                sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_CHORD,a);
-                if (kf.has_key(temp,temp2)){
-                    vector<int> vec = kf.get_integer_list(temp,temp2);
-                        if (!chord_compatible_mode) {
-                            Events[x]->actions[a]->chord.SetFromVector(vec);
-                        } else { //old file
-                            Events[x]->actions[a]->chord.SetBaseUse(1);
-                            Events[x]->actions[a]->chord.SetBase(mainnote);
-                            Events[x]->actions[a]->chord.SetFromVector_OLD_FILE_PRE_0_14(vec);
-                        }
-                 }
-                //Update the chord GUI.
-                Events[x]->actions[a]->GUIUpdateChordwidget();
-            }//next action.
-
-            //Update this event's GUI, using newly loaded data.
-            Events[x]->UpdateGUI();
-            
-        }//next event.
-
-        //To make sure all goes well:
-        midi->Sync();
-       
         //At beggining, file is unmodidied.
         SetFileModified(0);
 
@@ -482,15 +304,11 @@ bool LoadFile(Glib::ustring file){
         int found =  file.find_last_of("/\\");  //Will work on linux and windows both
         file_name = file.substr(found+1);
         file_dir = file.substr(0,found+1);
+        
          //If file name has changed, we have to show it in the title of the main window.
         mainwindow->UpdateTitle();
 
 
-
-     //And that's all, file is loaded.
-
-
-        
 
     //Only exception handles are left...
     }catch(Glib::KeyFileError e){
@@ -514,4 +332,243 @@ bool LoadFile(Glib::ustring file){
 
 
 }
+
+
+bool LoadFile015(Glib::KeyFile* kfp){
+    *err << "Loading files of version 0.15 is not yet implemented." << ENDL;
+
+}
+
+bool LoadFilePre015(Glib::KeyFile* kfp){
+
+    int number;
+    char temp[3000];
+    char temp2[1000];
+
+    //At the very beggining we should check the version of the file.
+    int VA = kfp->get_integer("harmonySEQ","versionA");
+    int VB = kfp->get_integer("harmonySEQ","versionB");
+    int VC = kfp->get_integer("harmonySEQ","versionC");
+    //Slider-compatible mode is switched on, when the file we open does not support polyphony  (version 0.12 or earlier).
+    //In this case we must translate monophonic data, to polyphonic.
+    int slider_compatible_mode = 0;
+    int chord_compatible_mode = 0;
+    if (VA == 0 && VB <= 12) slider_compatible_mode = 1; //That's the case, when monophonic data will be converted to polyphonic.
+    if(VA == 0 && VB <= 13) chord_compatible_mode = 1; //Chord is stored in the old format.
+
+    //Read some basic data...
+    tempo = kfp->get_double(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_TEMPO);
+    int mainnote, use_main_note;
+    if (chord_compatible_mode) mainnote= kfp->get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_MAINNOTE);
+    number = kfp->get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_SEQ_NUM);
+
+    //Get rid of any seqeuncers.
+    ClearSequencers(); //woa hua hua hua!
+    ResetSeqHandles();
+
+    //The sequener ID might be shifted, as the old files were full of removed empty sequencers.
+    std::map<int, int> seq_unstretching_map;
+    //Now we'll process all sequencers that are in the file.
+    for (int x = 0; x < number; x++) {
+        //First prepare the key.
+        sprintf(temp, FILE_GROUP_TEMPLATE_SEQ, x);
+        //If there is no such key in the file, that means this sequencer was skipped while saving.
+        if (!kfp->has_group(temp)) {
+            //We'll suplement it with an empty pointer, so it'll look like like a removed sequencer, and skip to look for the next one.
+            seqVector.push_back(NULL);
+            continue;
+        }
+
+        //If we got here, this means this sequencer was NOT removed. So: let's create it.
+        seqVector.push_back(new Sequencer());
+        //calculate shift...
+        seq_unstretching_map[x] = seqVector.size()-1;
+        
+        seqHandle h = RequestNewSeqHandle(x);
+        seqV(x)->MyHandle = h;
+        //Put some data into it...
+        seqVector[x]->SetName(kfp->get_string(temp, FILE_KEY_SEQ_NAME));
+        seqVector[x]->SetOn(kfp->get_boolean(temp, FILE_KEY_SEQ_ON));
+        seqVector[x]->SetChannel(kfp->get_integer(temp, FILE_KEY_SEQ_CHANNEL));
+        if (chord_compatible_mode) use_main_note = kfp->get_boolean(temp, FILE_KEY_SEQ_APPLY_MAIN_NOTE);
+        seqVector[x]->resolution = kfp->get_integer(temp, FILE_KEY_SEQ_RESOLUTION);
+        seqVector[x]->length = kfp->get_double(temp, FILE_KEY_SEQ_LENGTH);
+
+        //Check whether volume is saved in file.
+        if(kfp->has_key(temp,FILE_KEY_SEQ_VOLUME))
+            seqVector[x]->SetVolume(kfp->get_integer(temp, FILE_KEY_SEQ_VOLUME));
+        //Because if it's not...
+        else
+            //...we need to set it to a default value.
+            seqVector[x]->SetVolume(DEFAULT_VOLUME);
+        seqVector[x]->patterns.clear();
+
+        //Now, load the patterns.
+        if(kfp->has_key(temp,FILE_KEY_SEQ_SEQUENCE)){
+                //VEEEERY old file, seems it uses only one pattern, this case may be abandoned in future, since noone uses soooo old files (not sure, but probably it's 0.10 or earlier)
+                seqVector[x]->AddPattern();
+                std::vector<int> sequence = kfp->get_integer_list(temp, FILE_KEY_SEQ_SEQUENCE);
+                    for(int r = 0; r < seqVector[x]->resolution; r++){
+                        for(int c = 0; c < 6; c++){
+                            if (c == sequence[r])
+                                seqVector[x]->SetPatternNote(0,r,c,1);
+                            else
+                                seqVector[x]->SetPatternNote(0,r,c,0);
+
+                        }
+                }
+        }else{
+            //Normal case: there are many patterns.
+            //Number of pattrens -> n
+            int n = kfp->get_integer(temp,FILE_KEY_SEQ_PATTERNS_NUMBER);
+            //For each pattern we load...
+            for(int s =0; s < n; s++){
+                //First add an empty pattern.
+                seqVector[x]->AddPattern();
+                //Prepare the value name...
+                sprintf(temp2,FILE_KEY_SEQ_PATTERN_TEMPLATE,s);
+                //And get the pattern from file
+                std::vector<int> pattern = kfp->get_integer_list(temp, temp2);
+
+                //Check for the old-file case...
+                if (slider_compatible_mode){
+                    //used to load old files <=0.12.0
+                    for(int r = 0; r < seqVector[x]->resolution; r++){
+                        for(int c = 0; c < 6; c++){
+                            //(If this is the note, that is chosen in file...)
+                            if (c == pattern [r])
+                                //mark it as ON
+                                seqVector[x]->SetPatternNote(s,r,c,1);
+                            else
+                                //mark it as OFF
+                                seqVector[x]->SetPatternNote(s,r,c,0);
+                        }
+                    }
+                }else{
+                    //used to load new files >=0.13.0
+                    //Simple algorithm, just copying data from the pattern from file to the pattern in the sequencer
+                    for (unsigned int n = 0; n < pattern .size(); n++) {
+                    for(int r = 0; r < seqVector[x]->resolution; r++){
+                        for(int c = 0; c < 6; c++){
+                                seqVector[x]->SetPatternNote(s,r,c,pattern [r*6+c]);
+                        }
+                    }
+                     }
+                }
+
+            }//next pattern
+
+            //Just to make sure, check if the sequencer we've just loaded from file has any patterns...
+            if(seqVector[x]->patterns.size() == 0)
+                //wtf, there were no sequences in the file? strange. We have to create one in order to prevent crashes. What would be a sequencer with no patterns? At least that's something we beeter aviod.
+                seqVector[x]->AddPattern();
+        }
+
+        //Here we load the chord (if any)
+        if (kfp->has_key(temp,FILE_KEY_SEQ_CHORD)){
+            std::vector<int> vec =   kfp->get_integer_list(temp,FILE_KEY_SEQ_CHORD);
+            if (!chord_compatible_mode){
+                seqVector[x]->chord.SetFromVector(vec);
+            }else{ //old file
+                seqVector[x]->chord.SetBaseUse(use_main_note);
+                seqVector[x]->chord.SetBase(mainnote);
+                seqVector[x]->chord.SetFromVector_OLD_FILE_PRE_0_14(vec);
+            }
+        }
+
+        //And update this sequencer's GUI.
+        seqVector[x]->UpdateGui();
+        seqVector[x]->UpdateGuiChord();
+
+        //Now proceed to the...
+    }  //...next sequencer.
+
+    //Done loading sequencers.
+
+    //Now, proceed to events.
+
+    //No such key? something really wrong. There should be an error message, TODO.
+    if(!kfp->has_key(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_EVENTS_NUM)) return 1;
+
+    //Number of events.
+    number = kfp->get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_EVENTS_NUM);
+
+    //Get rid of any events.
+    ClearEvents();
+
+    //For each event in file...
+    for (int x = 0; x < number; x++){
+
+        sprintf(temp, FILE_GROUP_TEMPLATE_EVENT, x);
+        //If there is no key related to this number of event, this means this event was removed.
+        if (!kfp->has_group(temp)) {
+            //So we'll put instead a null pointer, so it'll look as a removed one, and skip to look for the next event.
+            Events.push_back(NULL);
+            continue;
+        }
+        //First, create a new event...
+        Events.push_back(new Event());
+        //Put some data into it...
+        Events[x]->type = kfp->get_integer(temp,FILE_KEY_EVENT_TYPE);
+        Events[x]->arg1 = kfp->get_integer(temp,FILE_KEY_EVENT_ARG1);
+        Events[x]->arg2 = kfp->get_integer(temp,FILE_KEY_EVENT_ARG2);
+        int actions_num = kfp->get_integer(temp,FILE_KEY_EVENT_ACTIONS_NUM);
+        //For each action of this event...
+        for (int a = 0; a < actions_num; a++){
+            sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_TYPE,a);
+            if (!kfp->has_key(temp,temp2)){
+                //there is no such action in file (was removed, was a NULL pointer while saving file) - skip to next action
+                Events[x]->actions.push_back(NULL);
+                continue;
+            }
+            //Create a new action
+            Events[x]->actions.push_back(new Action(Action::NONE));
+
+            //Fill it with data: type...
+            sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_TYPE,a);
+            Events[x]->actions[a]->type = kfp->get_integer(temp,temp2);
+            //...arguments...
+            sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_ARGS,a);
+            Events[x]->actions[a]->args = kfp->get_integer_list(temp,temp2);
+
+            //NOW WARNING! Some actions use ARG1 to store sequencer handle. However, older files store the ID and not the handle.
+            //So, in case the action is one of that type...
+            if (Events[x]->actions[a]->type == Action::SEQ_CHANGE_CHORD || Events[x]->actions[a]->type == Action::SEQ_CHANGE_ONE_NOTE || Events[x]->actions[a]->type == Action::SEQ_CHANGE_PATTERN||
+                    Events[x]->actions[a]->type == Action::SEQ_ON_OFF_TOGGLE || Events[x]->actions[a]->type == Action::SEQ_PLAY_ONCE || Events[x]->actions[a]->type == Action::SEQ_VOLUME_SET)
+                //substitute the ID with the handle
+            {
+                Events[x]->actions[a]->args[1] = seqV(seq_unstretching_map[Events[x]->actions[a]->args[1]])->MyHandle;
+            }
+            //...and a chord, if any.
+            sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_CHORD,a);
+            if (kfp->has_key(temp,temp2)){
+                vector<int> vec = kfp->get_integer_list(temp,temp2);
+                    if (!chord_compatible_mode) {
+                        Events[x]->actions[a]->chord.SetFromVector(vec);
+                    } else { //old file
+                        Events[x]->actions[a]->chord.SetBaseUse(1);
+                        Events[x]->actions[a]->chord.SetBase(mainnote);
+                        Events[x]->actions[a]->chord.SetFromVector_OLD_FILE_PRE_0_14(vec);
+                    }
+             }
+            //Update the chord GUI.
+            Events[x]->actions[a]->GUIUpdateChordwidget();
+        }//next action.
+
+        //Update this event's GUI, using newly loaded data.
+        Events[x]->UpdateGUI();
+
+    }//next event.
+
+    //To make sure all goes well:
+    midi->Sync();
+
+
+
+
+     //And that's all, file is loaded.
+    return 0;
+}
+
+
 }//namespace files
