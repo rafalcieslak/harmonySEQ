@@ -194,6 +194,7 @@ void SequencerWindow::UpdateValues(){
 
     void SequencerWindow::UpdateChord(){
         chordwidget->Update();
+    if(parent->my_row) mainwindow->RefreshRow(parent->my_row);
     }
 
 void SequencerWindow::OnChannelChanged(){

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010 Rafał Cieślak
+    Copyright (C) 2010, 2011 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -75,6 +75,7 @@
 
 #define FILE_GROUP_TEMPLATE_SEQ "Seq %d"
 #define FILE_KEY_SEQ_RESOLUTION "resolution"
+#define FILE_KEY_SEQ_HANDLE "handle"
 #define FILE_KEY_SEQ_LENGTH "length"
 #define FILE_KEY_SEQ_ON "on"
 #define FILE_KEY_SEQ_APPLY_MAIN_NOTE "apply_mn"

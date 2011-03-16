@@ -85,8 +85,7 @@ void SaveToFile(Glib::ustring filename){
     kf.set_integer("harmonySEQ","versionB",VERSION_B);
     kf.set_integer("harmonySEQ","versionC",VERSION_C);
     kf.set_double(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_TEMPO,tempo);
-    //This is depracated
-    //kf.set_integer(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_MAINNOTE,mainnote);
+
     kf.set_integer(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_SEQ_NUM,seqVector.size());
     kf.set_integer(FILE_GROUP_SYSTEM,FILE_KEY_SYSTEM_EVENTS_NUM,Events.size());
 
@@ -98,6 +97,7 @@ void SaveToFile(Glib::ustring filename){
         sprintf(temp,FILE_GROUP_TEMPLATE_SEQ,x);
         //And store the values, as follows:
         kf.set_string(temp,FILE_KEY_SEQ_NAME,seqVector[x]->GetName());
+        kf.set_boolean(temp,FILE_KEY_SEQ_HANDLE,seqVector[x]->MyHandle);
         kf.set_boolean(temp,FILE_KEY_SEQ_ON,seqVector[x]->GetOn());
         kf.set_integer(temp,FILE_KEY_SEQ_CHANNEL,seqVector[x]->GetChannel());
         //This is depracated
