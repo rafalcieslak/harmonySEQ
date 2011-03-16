@@ -38,10 +38,11 @@ Gtk::TreeModel::Row spawn_sequencer(){
 
     //init and push to vector
     char temp[20];
-    sprintf(temp,_("seq %d"),n+1);
+    seqHandle h = RequestNewSeqHandle(n);
+    sprintf(temp,_("seq %d"),h);
     Sequencer *new_seq = new Sequencer(temp);
     seqVector.push_back(new_seq);
-    new_seq->MyHandle = RequestNewSeqHandle(n);
+    new_seq->MyHandle = h;
 
     //add to main window
     return mainwindow->AddSequencerRow(n);
