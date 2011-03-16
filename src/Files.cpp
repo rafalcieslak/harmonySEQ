@@ -97,7 +97,7 @@ void SaveToFile(Glib::ustring filename){
         sprintf(temp,FILE_GROUP_TEMPLATE_SEQ,x);
         //And store the values, as follows:
         kf.set_string(temp,FILE_KEY_SEQ_NAME,seqVector[x]->GetName());
-        kf.set_boolean(temp,FILE_KEY_SEQ_HANDLE,seqVector[x]->MyHandle);
+        kf.set_integer(temp,FILE_KEY_SEQ_HANDLE,seqVector[x]->MyHandle);
         kf.set_boolean(temp,FILE_KEY_SEQ_ON,seqVector[x]->GetOn());
         kf.set_integer(temp,FILE_KEY_SEQ_CHANNEL,seqVector[x]->GetChannel());
         //This is depracated
@@ -297,6 +297,9 @@ bool LoadFile(Glib::ustring file){
             return 1;
         }
 
+        //To make sure all goes well:
+        midi->Sync();
+        
         //At beggining, file is unmodidied.
         SetFileModified(0);
 
@@ -333,9 +336,162 @@ bool LoadFile(Glib::ustring file){
 
 }
 
+//===============FILE LOADING ROUTINES GO HERE====================
 
 bool LoadFile015(Glib::KeyFile* kfp){
-    *err << "Loading files of version 0.15 is not yet implemented." << ENDL;
+
+    int seqNum;
+    char temp[3000];
+    char temp2[1000];
+
+    //Read some basic data...
+    tempo = kfp->get_double(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_TEMPO);
+    seqNum = kfp->get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_SEQ_NUM);
+
+    //Get rid of any seqeuncers.
+    ClearSequencers(); //woa hua hua hua!
+    ResetSeqHandles();
+
+    //Now we'll process all sequencers that are in the file.
+    for (int x = 0; x < seqNum; x++) {
+        //First prepare the key.
+        sprintf(temp, FILE_GROUP_TEMPLATE_SEQ, x);
+
+        //In case there is no such sequencer...
+        if (!kfp->has_group(temp)) {
+                sprintf(temp, _("ERROR - Missing sequencer %d in file\n"), x);
+                *err << temp;
+                return 1;
+        }
+
+        //If we got here, this means this sequencer was NOT removed. So: let's create it.
+        seqVector.push_back(new Sequencer());
+
+        seqHandle h = kfp->get_integer(temp,FILE_KEY_SEQ_HANDLE);
+        seqVector[x]->MyHandle = h;
+        AddCustomSeqHandle(h,x);
+        //Put some data into it...
+        seqVector[x]->SetName(kfp->get_string(temp, FILE_KEY_SEQ_NAME));
+        seqVector[x]->SetOn(kfp->get_boolean(temp, FILE_KEY_SEQ_ON));
+        seqVector[x]->SetChannel(kfp->get_integer(temp, FILE_KEY_SEQ_CHANNEL));
+        seqVector[x]->resolution = kfp->get_integer(temp, FILE_KEY_SEQ_RESOLUTION);
+        seqVector[x]->length = kfp->get_double(temp, FILE_KEY_SEQ_LENGTH);
+        seqVector[x]->SetVolume(kfp->get_integer(temp, FILE_KEY_SEQ_VOLUME));
+
+
+        seqVector[x]->patterns.clear();
+
+        //Now, load the patterns.
+        //Number of pattrens -> n
+        int n = kfp->get_integer(temp,FILE_KEY_SEQ_PATTERNS_NUMBER);
+        //For each pattern we load...
+        for(int s =0; s < n; s++){
+            //First add an empty pattern.
+            seqVector[x]->AddPattern();
+            //Prepare the value name...
+            sprintf(temp2,FILE_KEY_SEQ_PATTERN_TEMPLATE,s);
+            //And get the pattern from file
+            std::vector<int> pattern = kfp->get_integer_list(temp, temp2);
+
+            //Simple algorithm, just copying data from the pattern from file to the pattern in the sequencer
+            for (unsigned int n = 0; n < pattern .size(); n++) {
+                for(int r = 0; r < seqVector[x]->resolution; r++){
+                    for(int c = 0; c < 6; c++){
+                            seqVector[x]->SetPatternNote(s,r,c,pattern [r*6+c]);
+                    }
+                 }
+             }
+
+         }//next pattern
+
+        //Just to make sure, check if the sequencer we've just loaded from file has any patterns...
+        if(seqVector[x]->patterns.size() == 0)
+            //wtf, there were no sequences in the file? strange. We have to create one in order to prevent crashes. What would be a sequencer with no patterns? At least that's something we better aviod.
+            seqVector[x]->AddPattern();
+        
+
+        //Here we load the chord (if any)
+        if (kfp->has_key(temp,FILE_KEY_SEQ_CHORD)){
+            std::vector<int> vec =   kfp->get_integer_list(temp,FILE_KEY_SEQ_CHORD);
+            seqVector[x]->chord.SetFromVector(vec);
+        }
+
+        //And update this sequencer's GUI.
+        seqVector[x]->UpdateGui();
+        seqVector[x]->UpdateGuiChord();
+
+        //Now proceed to the...
+    }  //...next sequencer.
+
+    //Done loading sequencers.
+
+    //Now, proceed to events.
+
+    //No such key? something really wrong. There should be an error message, TODO.
+    if(!kfp->has_key(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_EVENTS_NUM)) { *err << "ERROR - No EventsNumber key in file.\n"; return 1;}
+
+    //Number of events.
+    seqNum = kfp->get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_EVENTS_NUM);
+
+    //Get rid of any events.
+    ClearEvents();
+
+    //For each event in file...
+    for (int x = 0; x < seqNum; x++){
+
+        sprintf(temp, FILE_GROUP_TEMPLATE_EVENT, x);
+        //If there is no key related to this number of event, this means this event was removed.
+        if (!kfp->has_group(temp)) {
+            //So we'll put instead a null pointer, so it'll look as a removed one, and skip to look for the next event.
+            Events.push_back(NULL);
+            continue;
+        }
+        //First, create a new event...
+        Events.push_back(new Event());
+        //Put some data into it...
+        Events[x]->type = kfp->get_integer(temp,FILE_KEY_EVENT_TYPE);
+        Events[x]->arg1 = kfp->get_integer(temp,FILE_KEY_EVENT_ARG1);
+        Events[x]->arg2 = kfp->get_integer(temp,FILE_KEY_EVENT_ARG2);
+        int actions_num = kfp->get_integer(temp,FILE_KEY_EVENT_ACTIONS_NUM);
+        //For each action of this event...
+        for (int a = 0; a < actions_num; a++){
+            sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_TYPE,a);
+            if (!kfp->has_key(temp,temp2)){
+                //there is no such action in file (was removed, was a NULL pointer while saving file) - skip to next action
+                Events[x]->actions.push_back(NULL);
+                continue;
+            }
+            //Create a new action
+            Events[x]->actions.push_back(new Action(Action::NONE));
+
+            //Fill it with data: type...
+            sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_TYPE,a);
+            Events[x]->actions[a]->type = kfp->get_integer(temp,temp2);
+            //...arguments...
+            sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_ARGS,a);
+            Events[x]->actions[a]->args = kfp->get_integer_list(temp,temp2);
+
+            //...and a chord, if any.
+            sprintf(temp2,FILE_GROUP_TEMPLATE_EVENT_ACTION_CHORD,a);
+            if (kfp->has_key(temp,temp2)){
+                vector<int> vec = kfp->get_integer_list(temp,temp2);
+                Events[x]->actions[a]->chord.SetFromVector(vec);
+             }
+            //Update the chord GUI.
+            Events[x]->actions[a]->GUIUpdateChordwidget();
+        }//next action.
+
+        //Update this event's GUI, using newly loaded data.
+        Events[x]->UpdateGUI();
+
+    }//next event.
+
+
+
+
+
+     //And that's all, file is loaded.
+    return 0;
 
 }
 
@@ -559,9 +715,6 @@ bool LoadFilePre015(Glib::KeyFile* kfp){
         Events[x]->UpdateGUI();
 
     }//next event.
-
-    //To make sure all goes well:
-    midi->Sync();
 
 
 
