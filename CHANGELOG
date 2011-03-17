@@ -1,3 +1,6 @@
+harmonyseq 0.15
+	- Allowed reordering sequencers.
+
 harmonyseq 0.14 "enlighted"
 	- Moved GUI from buttons to an elegant toolbar and menu.
 	- Reorganized chord logic and GUI.
