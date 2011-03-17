@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010 Rafał Cieślak
+    Copyright (C) 2010, 2011 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -79,6 +79,7 @@ private:
     void UpdateActivePatternRange();
 
     void OnChordWidgetChanged();
+    void OnChordWidgetNoteChanged(int n, int p);
     void OnPatternNoteChanged(int c, bool value, int seq);
     void OnChannelChanged();
     void OnVolumeChanged();

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010 Rafał Cieślak
+    Copyright (C) 2010, 2011 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -37,6 +37,8 @@ public:
 
     /**Called when any widget in chordwidget gets his data changed*/
     sigc::signal<void> on_changed;
+    /**Calleed when a note is MANUALLY changed. Prototype: ...(int note_number,int pitch)*/
+    sigc::signal<void,int,int> on_note_changed;
 private:
     void UpdateNotes();
     void UpdateWhatToShowAndWhatIsSensitive();

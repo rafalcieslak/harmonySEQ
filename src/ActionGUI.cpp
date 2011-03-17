@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010 Rafał Cieślak
+    Copyright (C) 2010, 2011 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -22,6 +22,9 @@
 #include "EventsWindow.h"
 #include "messages.h"
 #include "Files.h"
+#include "MidiDriver.h"
+#include "Sequencer.h"
+#include "Configuration.h"
 
 ActionGUI::ActionGUI(Action *prt):
                     chordwidget(&prt->chord)
@@ -109,6 +112,7 @@ ActionGUI::ActionGUI(Action *prt):
     vol_button.signal_value_changed().connect(mem_fun(*this,&ActionGUI::OnVolumeChanged));
 
     chordwidget.on_changed.connect(mem_fun(*this,&ActionGUI::OnChordWidgetChanged));
+    chordwidget.on_note_changed.connect(mem_fun(*this,&ActionGUI::OnChordWidgetNoteChanged));
 
     label_type.set_text(_("Type:"));
     label_seq.set_text(_("Sequencer:"));
@@ -169,6 +173,14 @@ void ActionGUI::OnShow(){
 
 void ActionGUI::UpdateChordwidget(){
     chordwidget.Update();
+}
+
+void ActionGUI::OnChordWidgetNoteChanged(int n, int p){
+    if(parent->type != Action::SEQ_CHANGE_CHORD) return;
+    Sequencer* seq = seqH(parent->args[1]);
+    if(Config::Interaction::PlayOnEdit)
+    midi->SendNoteEvent(seq->GetChannel(),p,seq->GetVolume(),PLAY_ON_EDIT_MS);
+
 }
 
 void ActionGUI::UpdateValues(){

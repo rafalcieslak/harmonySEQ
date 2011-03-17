@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010 Rafał Cieślak
+    Copyright (C) 2010, 2011 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -131,6 +131,7 @@ void ChordWidget::OnNoteChanged(int n){
     chord->SetNote(n,note_buttons[n]->get_value());
     combo_type.set_active(Chord::CHORD_TYPE_CUSTOM); //this will call the signal handler, which update widgets visibility&sensitivity
 
+    on_note_changed.emit(n,(use_base.get_active())?(note_buttons[n]->get_value()+base.get_value()):note_buttons[n]->get_value());
     on_changed.emit();
 }
 

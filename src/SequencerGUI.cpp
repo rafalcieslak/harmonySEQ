@@ -37,6 +37,7 @@ SequencerWindow::SequencerWindow(Sequencer* prt)
     parent = prt;
     chordwidget = new ChordWidget(&prt->chord);
     chordwidget->on_changed.connect(mem_fun(*this,&SequencerWindow::OnChordWidgetChanged));
+    chordwidget->on_note_changed.connect(mem_fun(*this,&SequencerWindow::OnChordWidgetNoteChanged));
     previous_box_where_pattern_lines_were_packed = -1;
     do_not_react_on_page_changes = 0;
 
@@ -166,6 +167,12 @@ void SequencerWindow::OnPatternNoteChanged(int c, bool value, int seq){
     if(value) midi->SendNoteEvent(parent->GetChannel(),parent->GetNoteOfChord(c),parent->GetVolume(),PLAY_ON_EDIT_MS);
 
     Files::SetFileModified(1);
+}
+
+
+void SequencerWindow::OnChordWidgetNoteChanged(int n, int p){
+    if(Config::Interaction::PlayOnEdit)
+    midi->SendNoteEvent(parent->GetChannel(), p,parent->GetVolume(),PLAY_ON_EDIT_MS);
 }
 
 void SequencerWindow::UpdateValues(){

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010 Rafał Cieślak
+    Copyright (C) 2010, 2011 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -61,6 +61,7 @@ private:
     void OnOnOffToggleChanged();
     void OnPlayOnOffToggleClicked();
     void OnChordWidgetChanged();
+    void OnChordWidgetNoteChanged(int n, int p);
     void OnPatternChanged();
 
     Gtk::VBox main_box;
