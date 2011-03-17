@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010 Rafał Cieślak
+    Copyright (C) 2010, 2011 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -31,19 +31,30 @@ SettingsWindow::SettingsWindow(){
     lower_hbox.pack_end(cancel_button,Gtk::PACK_SHRINK);
     lower_hbox.pack_end(ok_button,Gtk::PACK_SHRINK);
     lower_hbox.pack_start(restore_defaults_button,Gtk::PACK_SHRINK);
-    
+
     cancel_button.set_label(_("Cancel"));
     ok_button.set_label(_("OK"));
     restore_defaults_button.set_label(_("Restore"));
 
     main_vbox.pack_start(notebook);
     notebook.append_page(page_main,_("General"));
+    notebook.append_page(page_midi,_("MIDI"));
 
     page_main.set_border_width(5);
+    page_midi.set_border_width(5);
 
+    play_on_edit_vbox.pack_start(play_on_edit_label_hbox);
+    play_on_edit_label_hbox.pack_start(play_on_edit_label,Gtk::PACK_SHRINK);
+    play_on_edit_vbox.pack_start(play_on_edit,Gtk::PACK_SHRINK);
+    play_on_edit_label.set_markup(_("<b>Play on edit:</b>"));
+    play_on_edit.set_label("Play briefly a note when it's added, \nor changed manually in a chord.");
+    
     // <editor-fold defaultstate="collapsed" desc="visible colums">
+    page_main.pack_start(play_on_edit_vbox);
+    page_main.pack_start(sep1);
     page_main.pack_start(columns_label_hbox);
     page_main.pack_start(colums_vbox);
+
 
     columns_label_hbox.pack_start(colums_label,Gtk::PACK_SHRINK);
     colums_label.set_markup(_("<b>Visible colums:</b>"));
@@ -72,14 +83,14 @@ SettingsWindow::SettingsWindow(){
     colums_onoff.set_active(1);
     colums_onoff.set_sensitive(0);
     // </editor-fold>
-    page_main.pack_start(sep1);
     // <editor-fold defaultstate="collapsed" desc="metronome setting widgets placement">
-    page_main.pack_start(metronome_label_hbox,Gtk::PACK_SHRINK);
-    page_main.pack_start(metronome_channel_hbox,Gtk::PACK_SHRINK);
+    page_midi.pack_start(metronome_label_hbox,Gtk::PACK_SHRINK);
+    page_midi.pack_start(metronome_channel_hbox,Gtk::PACK_SHRINK);
     metronome_channel_hbox.pack_start(metronome_channel_label,Gtk::PACK_SHRINK);
     metronome_channel_hbox.pack_start(metronome_channel,Gtk::PACK_SHRINK);
     metronome_label_hbox.pack_start(metronome_label,Gtk::PACK_SHRINK);
-    page_main.pack_start(metronome_table);
+    page_midi.pack_start(metronome_table,Gtk::PACK_SHRINK);
+    page_midi.pack_start(sep2,Gtk::PACK_SHRINK);
     metronome_label.set_markup(_("<b>Metronome:</b>"));
     metronome_bar_label.set_text(_("Bar:"));
     metronome_1_4.set_label(_("1/4 bar:"));
@@ -129,7 +140,7 @@ SettingsWindow::SettingsWindow(){
 }
 
 SettingsWindow::~SettingsWindow(){
-    
+
 }
 
 void SettingsWindow::OnShowed(){
@@ -150,7 +161,8 @@ void SettingsWindow::LoadDataFromConfig(){
     colums_length.set_active(Config::VisibleColumns::Length);
     colums_velocity.set_active(Config::VisibleColumns::Velocity);
     colums_chord.set_active(Config::VisibleColumns::Chord);
-    
+    play_on_edit.set_active(Config::Interaction::PlayOnEdit);
+
 }
 
 void SettingsWindow::StoreDataToConfig(){
@@ -166,6 +178,8 @@ void SettingsWindow::StoreDataToConfig(){
     Config::VisibleColumns::Length = colums_length.get_active();
     Config::VisibleColumns::Velocity = colums_velocity.get_active();
     Config::VisibleColumns::Chord  = colums_chord.get_active();
+    Config::Interaction::PlayOnEdit = play_on_edit.get_active();
+    mainwindow->UpdatePlayOnEditToggle();
 }
 
 void SettingsWindow::OnCancelClicked(){

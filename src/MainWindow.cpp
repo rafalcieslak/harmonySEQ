@@ -65,6 +65,7 @@ MainWindow::MainWindow()
     m_refActionGroup->add(Gtk::ToggleAction::create("Metronome", _("Metronome"),_("Toggle metronome on/off")), sigc::mem_fun(*this, &MainWindow::OnMetronomeToggleClicked));
     m_refActionGroup->add(Gtk::Action::create("PlayPause", Gtk::Stock::MEDIA_PAUSE, _("Play/Pause"),_("Toggle play/pause")), sigc::mem_fun(*this, &MainWindow::OnPlayPauseClicked));
     m_refActionGroup->add(Gtk::ToggleAction::create("PassMidiEvents", _("Pass MIDI events"),_("States whether MIDI events are passed-through harmonySEQ.")), sigc::mem_fun(*this, &MainWindow::OnPassToggleClicked));
+    m_refActionGroup->add(Gtk::ToggleAction::create("PlayOnEdit", _("Play on edit"),_("If on, harmonySEQ will play a brief preview of note, when it's added, or changed manually in chord..")), sigc::mem_fun(*this, &MainWindow::OnPlayOnEditClicked));
     m_refActionGroup->add(Gtk::Action::create("seq/Edit", Gtk::Stock::EDIT,_("Edit"),_("Edites the sequencer.")), sigc::mem_fun(*this, &MainWindow::OnPopupEdit));
     m_refActionGroup->add(Gtk::Action::create("seq/PlayOnce", Gtk::Stock::MEDIA_NEXT, _("Play once"), _("Plays the sequence once.")), sigc::mem_fun(*this, &MainWindow::OnPopupPlayOnce));
     m_refActionGroup->add(Gtk::Action::create("seq/Remove", Gtk::Stock::REMOVE, _("Remove"), _("Removes the sequencer.")), sigc::mem_fun(*this, &MainWindow::OnPopupRemove));
@@ -90,6 +91,7 @@ MainWindow::MainWindow()
             "    </menu>" 
             "    <menu action='MenuTools'>"
             "      <menuitem action='PassMidiEvents'/>"
+            "      <menuitem action='PlayOnEdit'/>"
             "      <separator/>"
             "      <menuitem action='Preferences'/>"
             "    </menu>"
@@ -189,6 +191,7 @@ MainWindow::MainWindow()
 
     UpdatePlayPauseTool();
     UpdatePassMidiToggle(); //sometimes we pass midi by default.
+    UpdatePlayOnEditToggle(); //as above
 
     wScrolledWindow.add(wTreeView);
     wScrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC,Gtk::POLICY_AUTOMATIC); //The sliders should be shown only when needed
@@ -546,6 +549,19 @@ void MainWindow::OnPassToggleClicked(){
     Gtk::Widget* pPassToggle = m_refUIManager->get_widget("/MenuBar/MenuTools/PassMidiEvents");
     Gtk::CheckMenuItem& PassToggle = dynamic_cast<Gtk::CheckMenuItem&> (*pPassToggle);
     passing_midi = PassToggle.get_active();
+}
+
+void MainWindow::OnPlayOnEditClicked(){
+    Gtk::Widget* pPlayOnEdit = m_refUIManager->get_widget("/MenuBar/MenuTools/PlayOnEdit");
+    Gtk::CheckMenuItem& PlayOnEdit = dynamic_cast<Gtk::CheckMenuItem&>(*pPlayOnEdit);
+    Config::Interaction::PlayOnEdit = PlayOnEdit.get_active();
+    Config::SaveToFile();
+}
+
+void MainWindow::UpdatePlayOnEditToggle(){
+    Gtk::Widget* pPlayOnEdit = m_refUIManager->get_widget("/MenuBar/MenuTools/PlayOnEdit");
+    Gtk::CheckMenuItem& PlayOnEdit = dynamic_cast<Gtk::CheckMenuItem&>(*pPlayOnEdit);
+    PlayOnEdit.set_active(Config::Interaction::PlayOnEdit);
 }
 
 void MainWindow::UpdatePassMidiToggle(){

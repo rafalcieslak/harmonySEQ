@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010 Rafał Cieślak
+    Copyright (C) 2010, 2011 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -50,7 +50,13 @@ private:
     Gtk::Notebook notebook;
 
     Gtk::VBox page_main;
-    
+    Gtk::VBox page_midi;
+
+        Gtk::VBox play_on_edit_vbox;
+        Gtk::CheckButton play_on_edit;
+        Gtk::HBox play_on_edit_label_hbox;
+        Gtk::Label play_on_edit_label;
+
         Gtk::HBox columns_label_hbox;
         Gtk::Label colums_label;
         Gtk::VBox colums_vbox;
@@ -81,6 +87,7 @@ private:
         Gtk::SpinButton metronome_bar_velocity;
         Gtk::SpinButton metronome_1_4_velocity;
 
+        Gtk::HSeparator sep2;
 
 };
 

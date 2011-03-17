@@ -29,6 +29,7 @@
 #include "ChordWidget.h"
 #include "Files.h"
 #include "MidiDriver.h"
+#include "Configuration.h"
 SequencerWindow::SequencerWindow(Sequencer* prt)
 {
     *dbg << "constructing new SequencerWindow\n";
@@ -161,6 +162,7 @@ void SequencerWindow::OnPatternNoteChanged(int c, bool value, int seq){
     parent->SetPatternNote(wNotebook.get_current_page(),seq,c,value);
 
     //Playing on edit...
+    if(Config::Interaction::PlayOnEdit)
     if(value) midi->SendNoteEvent(parent->GetChannel(),parent->GetNoteOfChord(c),parent->GetVolume(),PLAY_ON_EDIT_MS);
 
     Files::SetFileModified(1);

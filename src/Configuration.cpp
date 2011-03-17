@@ -48,6 +48,9 @@ namespace Config{
         bool Velocity;
         bool Chord;
     }
+    namespace Interaction{
+        bool PlayOnEdit;
+    }
     
     void LoadDefaultConfiguration(){
         //Default values
@@ -63,6 +66,7 @@ namespace Config{
         VisibleColumns::Length = 1;
         VisibleColumns::Velocity = 1;
         VisibleColumns::Chord = 1;
+        Interaction::PlayOnEdit = 1;
     }
 
     void LoadFromFile(){
@@ -98,6 +102,9 @@ namespace Config{
             if(kf.has_key("Visible columns","Length")) VisibleColumns::Length = kf.get_boolean("Visible columns","Length");
             if(kf.has_key("Visible columns","Velocity")) VisibleColumns::Velocity = kf.get_boolean("Visible columns","Velocity");
             if(kf.has_key("Visible columns","Chord")) VisibleColumns::Chord = kf.get_boolean("Visible columns","Chord");
+        }
+        if(kf.has_group("Interaction")){
+            if(kf.has_key("Interaction","PlayOnEdit")) Interaction::PlayOnEdit = kf.get_boolean("Interaction","PlayOnEdit");
         }
 
     }
@@ -137,6 +144,7 @@ namespace Config{
         kf.set_boolean("Visible columns","Length",VisibleColumns::Length);
         kf.set_boolean("Visible columns","Velocity",VisibleColumns::Velocity);
         kf.set_boolean("Visible columns","Chord",VisibleColumns::Chord);
+        kf.set_boolean("Interaction","PlayOnEdit",Interaction::PlayOnEdit);
 
         output_file <<  kf.to_data().c_str();
 

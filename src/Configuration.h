@@ -39,6 +39,9 @@ namespace Config{
         extern bool Velocity;
         extern bool Chord;
     }
+    namespace Interaction{
+        extern bool PlayOnEdit;
+    }
     /**Inits the configuration with default data.*/
     void LoadDefaultConfiguration();
 

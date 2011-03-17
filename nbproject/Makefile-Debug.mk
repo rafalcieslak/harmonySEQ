@@ -39,10 +39,10 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/Chord.o \
 	${OBJECTDIR}/src/ActionGUI.o \
 	${OBJECTDIR}/src/Sequencer.o \
-	${OBJECTDIR}/_ext/744865817/SettingsWindow.o \
 	${OBJECTDIR}/_ext/744865817/seqHandle.o \
 	${OBJECTDIR}/src/Configuration.o \
 	${OBJECTDIR}/src/messages.o \
+	${OBJECTDIR}/_ext/1045285602/SettingsWindow.o \
 	${OBJECTDIR}/src/Action.o \
 	${OBJECTDIR}/src/MainWindow.o \
 	${OBJECTDIR}/src/TreeModels.o \
@@ -108,11 +108,6 @@ ${OBJECTDIR}/src/Sequencer.o: src/Sequencer.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Sequencer.o src/Sequencer.cpp
 
-${OBJECTDIR}/_ext/744865817/SettingsWindow.o: ../Programy/harmonySEQ/reordering/src/SettingsWindow.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/744865817
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/744865817/SettingsWindow.o ../Programy/harmonySEQ/reordering/src/SettingsWindow.cpp
-
 ${OBJECTDIR}/_ext/744865817/seqHandle.o: ../Programy/harmonySEQ/reordering/src/seqHandle.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/744865817
 	${RM} $@.d
@@ -127,6 +122,11 @@ ${OBJECTDIR}/src/messages.o: src/messages.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/messages.o src/messages.cpp
+
+${OBJECTDIR}/_ext/1045285602/SettingsWindow.o: ../Programy/harmonySEQ/trunk/src/SettingsWindow.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1045285602
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1045285602/SettingsWindow.o ../Programy/harmonySEQ/trunk/src/SettingsWindow.cpp
 
 ${OBJECTDIR}/src/Action.o: src/Action.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
