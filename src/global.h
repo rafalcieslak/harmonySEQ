@@ -55,6 +55,8 @@
 #define EVENTS_FLASH_TIMEOUT 200
     //in ms
 
+#define PLAY_ON_EDIT_MS 300
+
 #define SEQUENCE_DEFAULT_SIZE 8
 #define NOTES_CONST_SIZE 6
 #define DEFAULT_VOLUME 100

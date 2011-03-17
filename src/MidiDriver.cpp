@@ -121,7 +121,7 @@ void MidiDriver::SendNoteOnEvent(int channel, int pitch, int volume){
     snd_seq_ev_set_subs(&ev);
     snd_seq_ev_set_direct(&ev);
     //Fill it with data...
-    snd_seq_ev_set_noteon(&ev,channel,pitch,volume);
+    snd_seq_ev_set_noteon(&ev,channel-1,pitch,volume);
     //And output immidiatelly - do not push into the queue.
     snd_seq_event_output(seq_handle,&ev);
     snd_seq_drain_output(seq_handle);
@@ -138,7 +138,7 @@ void MidiDriver::SendNoteOffEvent(int channel, int pitch){
     snd_seq_ev_set_subs(&ev);
     snd_seq_ev_set_direct(&ev);
     //Fill it with data...
-    snd_seq_ev_set_noteoff(&ev,channel,pitch,0);
+    snd_seq_ev_set_noteoff(&ev,channel-1,pitch,0);
     //And output immidiatelly - do not push into the queue.
     snd_seq_event_output(seq_handle,&ev);
     snd_seq_drain_output(seq_handle);
