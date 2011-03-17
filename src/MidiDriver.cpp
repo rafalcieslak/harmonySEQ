@@ -26,7 +26,7 @@
 #include "Sequencer.h"
 #include "Event.h"
 #include "Configuration.h"
-
+#include "SettingsWindow.h"
 extern int running;
 
 MidiDriver::MidiDriver() {
@@ -112,7 +112,7 @@ void MidiDriver::Open(){
     *dbg << _("Alsa midi driver init successfull.\n");
 }
 
-void MidiDriver::SendNoteEvent(int pitch, int volume){
+void MidiDriver::SendNoteOnEvent(int channel, int pitch, int volume){
     //Create a new clear event
     snd_seq_event_t ev;
     snd_seq_ev_clear(&ev);
@@ -121,11 +121,33 @@ void MidiDriver::SendNoteEvent(int pitch, int volume){
     snd_seq_ev_set_subs(&ev);
     snd_seq_ev_set_direct(&ev);
     //Fill it with data...
-    snd_seq_ev_set_noteon(&ev,1,pitch,volume);
+    snd_seq_ev_set_noteon(&ev,channel,pitch,volume);
     //And output immidiatelly - do not push into the queue.
     snd_seq_event_output(seq_handle,&ev);
     snd_seq_drain_output(seq_handle);
 
+}
+
+
+void MidiDriver::SendNoteOffEvent(int channel, int pitch){
+    //Create a new clear event
+    snd_seq_event_t ev;
+    snd_seq_ev_clear(&ev);
+    //Direct it to output port, to it's all subsctibers
+    snd_seq_ev_set_source(&ev,output_port);
+    snd_seq_ev_set_subs(&ev);
+    snd_seq_ev_set_direct(&ev);
+    //Fill it with data...
+    snd_seq_ev_set_noteoff(&ev,channel,pitch,0);
+    //And output immidiatelly - do not push into the queue.
+    snd_seq_event_output(seq_handle,&ev);
+    snd_seq_drain_output(seq_handle);
+
+}
+
+void MidiDriver::SendNoteEvent(int channel, int pitch, int volume, int duration_ms){
+    SendNoteOnEvent(channel,pitch,volume);
+    Glib::signal_timeout().connect_once(sigc::bind(sigc::mem_fun(*this,&MidiDriver::SendNoteOffEvent),channel,pitch),duration_ms);
 }
 
 void MidiDriver::PassEvent(snd_seq_event_t* ev){

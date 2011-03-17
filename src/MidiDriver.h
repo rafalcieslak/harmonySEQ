@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010 Rafał Cieślak
+    Copyright (C) 2010, 2011 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -60,8 +60,15 @@ public:
 
 
     /**Outputs immediately a noteon*/
-    void SendNoteEvent(int pitch, int volume);
+    void SendNoteOnEvent(int channel, int pitch, int volume);
 
+    /**Outputs immediately a noteoff*/
+    void SendNoteOffEvent(int channel, int pitch);
+
+    /**Outputs a noteon and a noteoff after given time period.*/
+    void SendNoteEvent(int channel, int pitch, int volume, int duration);
+
+    
     /**Sets tempo*/
     void SetTempo(double bpm);
 
@@ -106,9 +113,6 @@ private:
 
     /**Inits Queue*/
     void InitQueue();
-
-
-
 
 
 
