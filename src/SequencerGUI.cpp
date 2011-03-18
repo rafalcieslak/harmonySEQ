@@ -180,6 +180,8 @@ SequencerWindow::SequencerWindow(Sequencer* prt)
 SequencerWindow::~SequencerWindow(){
     delete chordwidget;
     for (int x = 0; x < pattern_lines.size();x++) delete pattern_lines[x];
+    for (int x = 0; x < pattern_boxes.size();x++) delete pattern_boxes[x];
+    for (int x = 0; x < note_separators.size();x++) delete note_separators[x];
 }
 
 void SequencerWindow::OnPatternNoteChanged(int c, bool value, int seq){
@@ -331,20 +333,43 @@ void SequencerWindow::DetachLines(){
         pattern_boxes[previous_box_where_pattern_lines_were_packed]->remove(*pattern_lines[x]);
         delete pattern_lines[x];
     }
+    for(unsigned int x = 0; x < note_separators.size();x++){
+        if(!note_separators[x]) continue;
+        note_separators[x]->hide();
+        pattern_boxes[previous_box_where_pattern_lines_were_packed]->remove(*note_separators[x]);
+        delete note_separators[x];
+    }
     
     pattern_lines.clear();
+    note_separators.clear();
 
 }
 
 void SequencerWindow::AttachLines(int where){
+    char temp[50];
     *dbg << "Attaching pattern-lines to page " << where << ".\n";
     if(where >= pattern_boxes.size()) {*err<< "Cannot attach pattern-lines to box  "<<where<<", out of range.\n";return;}
 
      //assert(pattern_lines.size() == 0);
      pattern_lines.resize(parent->resolution,NULL);
+     note_separators.resize(parent->resolution/4+1);
+
+     int separator_counter = 0;
 
     for (int x= 0; x < parent->resolution; x++){
-        pattern_lines[x] = (new PatternLine); //cannot use Gtk::manage, since deleting the box would delete the lines!
+        if(x%4==0){
+            if(x!=0){ //do note add a separator at the very beggining
+                note_separators[separator_counter] = new Gtk::VSeparator;
+                pattern_boxes[where]->pack_start(*note_separators[separator_counter]);
+                note_separators[separator_counter]->show();
+                separator_counter++;
+            }
+            sprintf(temp,"%d",x+1);
+            pattern_lines[x] = (new PatternLine(temp)); //cannot use Gtk::manage, since deleting the box would delete the lines!
+        }else{
+            pattern_lines[x] = (new PatternLine); //cannot use Gtk::manage, since deleting the box would delete the lines!
+        }
+
         for(int c = 0; c < 6; c++)
             pattern_lines[x]->SetButton(c,parent->GetPatternNote(where,x,c));
                     
@@ -478,13 +503,31 @@ void SequencerWindow::OnPlayOnceButtonClicked(){
 //====================PATTERNLINE=========================
 PatternLine::PatternLine(){
     set_border_width(0);
+    pack_end(marker);
     for (int x = 0; x < 6; x++){
         buttons.push_back(new Gtk::CheckButton);
-        pack_start(*buttons[x],Gtk::PACK_EXPAND_PADDING); //check the pack flag
+        pack_end(*buttons[x],Gtk::PACK_EXPAND_PADDING); //check the pack flag
         buttons[x]->signal_toggled().connect(sigc::bind<int>(sigc::mem_fun(*this,&PatternLine::OnButtonsToggled),x));
         buttons[x]->set_border_width(0);
         buttons[x]->show();
     }
+    marker.set_text(" ");
+    marker.show();
+
+}
+
+PatternLine::PatternLine(Glib::ustring mark){
+    set_border_width(0);
+    pack_end(marker);
+    for (int x = 0; x < 6; x++){
+        buttons.push_back(new Gtk::CheckButton);
+        pack_end(*buttons[x],Gtk::PACK_EXPAND_PADDING); //check the pack flag
+        buttons[x]->signal_toggled().connect(sigc::bind<int>(sigc::mem_fun(*this,&PatternLine::OnButtonsToggled),x));
+        buttons[x]->set_border_width(0);
+        buttons[x]->show();
+    }
+    marker.set_text(mark);
+    marker.show();
 
 }
 

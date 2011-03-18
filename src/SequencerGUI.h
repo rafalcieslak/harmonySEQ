@@ -31,6 +31,7 @@ class ChordWidget;
 class PatternLine : public Gtk::VBox{
 public:
     PatternLine();
+    PatternLine(Glib::ustring mark);
     ~PatternLine();
 
     /**Sets a button to a given value.*/
@@ -42,7 +43,7 @@ public:
 private:
     void OnButtonsToggled(int c);
     std::vector<Gtk::CheckButton *> buttons;
-
+    Gtk::Label marker;
 };
 
 class SequencerWindow : public Gtk::Window {
@@ -114,6 +115,7 @@ private:
     Gtk::Notebook wNotebook;
     std::vector<PatternLine  *> pattern_lines;
     std::vector<Gtk::HBox *> pattern_boxes;
+    std::vector<Gtk::VSeparator*> note_separators;
     Gtk::SpinButton wChannelButton;
     Gtk::SpinButton wVolumeButton;
     Gtk::SpinButton wActivePattern;
