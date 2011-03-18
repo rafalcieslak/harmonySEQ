@@ -28,7 +28,7 @@ class Sequencer;
 class ChordWidget;
 
 /**A widget displaying a horisontal line with 6 CheckBoxes.*/
-class PatternLine : public Gtk::HBox{
+class PatternLine : public Gtk::VBox{
 public:
     PatternLine();
     ~PatternLine();
@@ -92,13 +92,28 @@ private:
     void OnAddPatternClicked();
     void OnRemovePatternClicked();
     void SetRemoveButtonSensitivity();
-    Gtk::VBox wMainVbox;
-    Gtk::Notebook wNotebook;
-    Gtk::VBox wBoxOfSliders;
+    void OnNameEdited();
+    void OnPlayOnceButtonClicked();
+
+    Gtk::Table wMainTable;
+    Gtk::HBox wNameBox;
+    Gtk::HBox wOnBox;
+    Gtk::VBox wUpperLeftBox;
+    Gtk::VBox wUpperVBox;
+    Gtk::HBox wUpperHBox1;
+    Gtk::HBox wUpperHBox2;
+    Gtk::HBox wNotebookAndPatternOpsHBox;
+    Gtk::VBox wPtOpsVBox;
+    Gtk::HBox wPtOpsHBox1;
+    Gtk::HBox wPtOpsHBox2;
     Gtk::HBox wBoxOfChord;
-    Gtk::HBox wUpperBox;
+
+    Gtk::HSeparator wHSep;
+    Gtk::VSeparator wVSep;
+
+    Gtk::Notebook wNotebook;
     std::vector<PatternLine  *> pattern_lines;
-    std::vector<Gtk::VBox *> pattern_boxes;
+    std::vector<Gtk::HBox *> pattern_boxes;
     Gtk::SpinButton wChannelButton;
     Gtk::SpinButton wVolumeButton;
     Gtk::SpinButton wActivePattern;
@@ -107,15 +122,11 @@ private:
     Gtk::Label wVolumeLabel;
     Gtk::Label wActivePanelLabel;
     Gtk::Label wPatternLabel;
-    Gtk::HBox wPatternOpsHbox;
+    Gtk::Label wNameLabel;
+    Gtk::Entry wNameEntry;
     Gtk::Button wAddPatternButton;
+    Gtk::Button wPlayOnceButton;
     Gtk::Button wRemovePattern;
-    Gtk::HBox wLowerHBox;
-    Gtk::HBox wLineOne;
-    Gtk::HBox wLineTwo;
-    Gtk::HBox wLineZero;
-    Gtk::VBox wSpinnersVBox;
-    Gtk::VBox wToggleVBox;
     Gtk::CheckButton wMuteToggle;
     Gtk::ComboBox wResolutionsBox;
     Gtk::ComboBox wLengthBox;

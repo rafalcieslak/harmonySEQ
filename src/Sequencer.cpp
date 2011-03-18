@@ -173,7 +173,7 @@ void Sequencer::SetOn(bool m){on = m;play_once_phase=0;gui_window->wMuteToggle.s
 bool Sequencer::GetOn(){return on;}
 void Sequencer::SetChannel(int ch){channel = ch;gui_window->wChannelButton.set_value((double)ch);}
 int Sequencer::GetChannel(){return channel;}
-void Sequencer::SetName(Glib::ustring nm){name = nm;gui_window->set_title(nm);}
+void Sequencer::SetName(Glib::ustring nm){name = nm;gui_window->set_title(nm);gui_window->wNameEntry.set_text(nm);}
 Glib::ustring Sequencer::GetName(){return name;}
 int Sequencer::GetVolume(){return volume;}
 void Sequencer::SetVolume(int v){volume = v;gui_window->wVolumeButton.set_value((double)v);}
