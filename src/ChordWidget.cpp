@@ -27,14 +27,22 @@ ChordWidget::ChordWidget(Chord* associated_chord){
 
     chord = associated_chord;
     we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = true;
-    pack_start(frame);
-    
-    frame.set_label(_("Chord"));
-    frame.add(MainBox);
+    pack_start(MainBox);
 
-    MainBox.pack_start(line1);
-    MainBox.pack_start(line2);
-    MainBox.pack_start(line3);
+    MainBox.pack_start(LeftHBox);
+    MainBox.pack_start(vsep);
+    MainBox.pack_end(NotesVBox,Gtk::PACK_SHRINK);
+
+    LeftHBox.pack_start(caption,Gtk::PACK_SHRINK);
+    LeftHBox.pack_start(line1,Gtk::PACK_SHRINK);
+    LeftHBox.pack_start(line2,Gtk::PACK_SHRINK);
+    LeftHBox.pack_start(line3,Gtk::PACK_SHRINK);
+    LeftHBox.pack_start(line4,Gtk::PACK_SHRINK);
+    LeftHBox.pack_start(line5,Gtk::PACK_SHRINK);
+
+    caption.set_markup(_("<b>Chord</b>"));
+    inv_label.set_text(_("Inversion: "));
+    type_label.set_text(_("Type: "));
 
     combo_type.set_model(TreeModel_ChordTypes);
     combo_root.set_model(TreeModel_Notes);
@@ -46,11 +54,11 @@ ChordWidget::ChordWidget(Chord* associated_chord){
     combo_note.pack_start(m_columns_notes.name);
     combo_guitar_mode.pack_start(m_columns_IdAndName.name);
     combo_triad_mode.pack_start(m_columns_IdAndName.name);
-    combo_type.signal_changed().connect(mem_fun(*this,&ChordWidget::OnTypeChanged));
-    combo_root.signal_changed().connect(mem_fun(*this,&ChordWidget::OnRootChanged));
-    combo_note.signal_changed().connect(mem_fun(*this,&ChordWidget::OnBaseNoteChanged));
-    combo_guitar_mode.signal_changed().connect(mem_fun(*this,&ChordWidget::OnGuitarModeChanged));
-    combo_triad_mode.signal_changed().connect(mem_fun(*this,&ChordWidget::OnTriadModeChanged));
+    combo_type.signal_changed().connect(sigc::mem_fun(*this,&ChordWidget::OnTypeChanged));
+    combo_root.signal_changed().connect(sigc::mem_fun(*this,&ChordWidget::OnRootChanged));
+    combo_note.signal_changed().connect(sigc::mem_fun(*this,&ChordWidget::OnBaseNoteChanged));
+    combo_guitar_mode.signal_changed().connect(sigc::mem_fun(*this,&ChordWidget::OnGuitarModeChanged));
+    combo_triad_mode.signal_changed().connect(sigc::mem_fun(*this,&ChordWidget::OnTriadModeChanged));
     //This we'll do at the end. This will trigger the signal handler, which will unactivate some other widgets, according to the type.
     //combo_type.set_active(chord->GetType());
     combo_root.set_active(chord->GetRoot()); //tricky
@@ -66,52 +74,53 @@ ChordWidget::ChordWidget(Chord* associated_chord){
     octave.set_increments(1.0,2.0);
     octave.set_width_chars(2);
     octave.set_value(chord->GetBaseOctave());
-    octave.signal_value_changed().connect(mem_fun(*this,&ChordWidget::OnBaseOctaveChanged));
+    octave.signal_value_changed().connect(sigc::mem_fun(*this,&ChordWidget::OnBaseOctaveChanged));
     octave_label.set_text(_("Octave:"));
 
     inversion.set_range(0.0,2.0);
     inversion.set_increments(1.0,1.0);
     inversion.set_width_chars(1);
     inversion.set_value(chord->GetInversion());
-    inversion.signal_value_changed().connect(mem_fun(*this,&ChordWidget::OnInversionChanged));
+    inversion.signal_value_changed().connect(sigc::mem_fun(*this,&ChordWidget::OnInversionChanged));
     inversion.set_tooltip_markup(_("Sets the <b>inversion</b> of the triad."));
     inversion_label.set_text(_("Inversion:"));
 
     use_base.set_active(chord->GetBaseUse());
     use_base.set_label(_("Base:"));
-    use_base.signal_toggled().connect(mem_fun(*this,&ChordWidget::OnUseBaseToggled));
+    use_base.signal_toggled().connect(sigc::mem_fun(*this,&ChordWidget::OnUseBaseToggled));
     use_base.set_tooltip_text(_("Sets whether this chord uses the base note.\n - If on, chord notes are set relatively to the base note.\n - If off, the chord ignores the base note."));
-    note_label.set_text(_("Note:"));
+    note_label.set_text(_("\tNote:"));
     eq_label.set_text("=");
 
-    base.set_range(-128.0, 128.0);
+    base.set_range(0.0, 128.0);
     base.set_increments(1.0, 12.0);
-    //base.set_width_chars(3);
+    base.set_width_chars(3);
     base.set_value(chord->GetBase());
-    base.signal_value_changed().connect(mem_fun(*this, &ChordWidget::OnBaseChanged));
+    base.signal_value_changed().connect(sigc::mem_fun(*this, &ChordWidget::OnBaseChanged));
     base.set_tooltip_markup(_("The <b>base note</b> for this chord. If it uses the base, which is determined by the switch on the left-hand side, all notes of this chord are given relatively to this base note."));
 
+    line1.pack_start(type_label,Gtk::PACK_SHRINK);
     line1.pack_start(combo_type,Gtk::PACK_SHRINK);
-    line1.pack_start(combo_root,Gtk::PACK_SHRINK);
-    line1.pack_start(combo_guitar_mode,Gtk::PACK_SHRINK);
-    line1.pack_start(combo_triad_mode,Gtk::PACK_SHRINK);
-    line1.pack_start(inversion,Gtk::PACK_SHRINK);
-
-    line2.pack_start(use_base,Gtk::PACK_SHRINK);
-    line2.pack_start(octave_label,Gtk::PACK_SHRINK);
-    line2.pack_start(octave,Gtk::PACK_SHRINK);
-    line2.pack_start(note_label,Gtk::PACK_SHRINK);
-    line2.pack_start(combo_note,Gtk::PACK_SHRINK);
-    line2.pack_start(eq_label,Gtk::PACK_SHRINK);
-    line2.pack_start(base,Gtk::PACK_SHRINK);
+    line2.pack_start(combo_root,Gtk::PACK_SHRINK);
+    line2.pack_start(combo_guitar_mode,Gtk::PACK_SHRINK);
+    line2.pack_start(combo_triad_mode,Gtk::PACK_SHRINK);
+    line3.pack_start(inv_label,Gtk::PACK_SHRINK);
+    line3.pack_start(inversion,Gtk::PACK_SHRINK);
+    line4.pack_start(use_base,Gtk::PACK_SHRINK);
+    line4.pack_start(octave_label,Gtk::PACK_SHRINK);
+    line4.pack_start(octave,Gtk::PACK_SHRINK);
+    line5.pack_start(note_label,Gtk::PACK_SHRINK);
+    line5.pack_start(combo_note,Gtk::PACK_SHRINK);
+    line5.pack_start(eq_label,Gtk::PACK_SHRINK);
+    line5.pack_start(base,Gtk::PACK_SHRINK);
 
     for (int x = 0; x < 6; x++) {
         note_buttons[x] = new Gtk::SpinButton;
         note_buttons[x]->set_range(-128.0, 128.0);
         note_buttons[x]->set_increments(1.0, 12.0);
         note_buttons[x]->set_width_chars(3);
-        note_buttons[x]->signal_value_changed().connect(sigc::bind<int>(mem_fun(*this, &ChordWidget::OnNoteChanged), x));
-        line3.pack_start(*note_buttons[x]);
+        note_buttons[x]->signal_value_changed().connect(sigc::bind<int>(sigc::mem_fun(*this, &ChordWidget::OnNoteChanged), x));
+        NotesVBox.pack_start(*note_buttons[x],Gtk::PACK_SHRINK);
     }
 
     we_are_copying_note_values_from_chord_so_do_not_handle_the_signals=false;
@@ -128,7 +137,7 @@ ChordWidget::~ChordWidget(){
 void ChordWidget::OnNoteChanged(int n){
     if(we_are_copying_note_values_from_chord_so_do_not_handle_the_signals) return;
 
-    chord->SetNote(n,note_buttons[n]->get_value());
+    chord->SetNote(5-n,note_buttons[n]->get_value());
     combo_type.set_active(Chord::CHORD_TYPE_CUSTOM); //this will call the signal handler, which update widgets visibility&sensitivity
 
     on_note_changed.emit(n,(use_base.get_active())?(note_buttons[n]->get_value()+base.get_value()):note_buttons[n]->get_value());
@@ -197,7 +206,7 @@ void ChordWidget::OnTypeChanged(){
 void ChordWidget::UpdateNotes(){
     we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = true;
     for (int x =0;x < 6; x++){
-        note_buttons[x]->set_value(chord->GetNote(x));
+        note_buttons[x]->set_value(chord->GetNote(5-x));
     }
     we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = false;
 

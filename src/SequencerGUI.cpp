@@ -48,7 +48,7 @@ SequencerWindow::SequencerWindow(Sequencer* prt)
     wMainTable.resize(3,3);
     wMainTable.attach(wUpperLeftBox,0,1,0,1);
     wMainTable.attach(wVSep,1,2,0,1);
-    wVSep.set_size_request(10,0);
+    wVSep.set_size_request(2,0);
     wMainTable.attach(wUpperVBox,2,3,0,1);
     wMainTable.attach(wHSep,0,3,1,2);
     wMainTable.attach(wBoxOfChord,0,1,2,3);
@@ -81,7 +81,7 @@ SequencerWindow::SequencerWindow(Sequencer* prt)
     wUpperHBox2.pack_start(wLengthsLabel,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wLengthBox,Gtk::PACK_SHRINK);
 
-   // wBoxOfChord.pack_start(*chordwidget);
+    wBoxOfChord.pack_start(*chordwidget);
 
     wNotebook.set_tab_pos(Gtk::POS_RIGHT);
     UpdateActivePatternRange();
@@ -175,6 +175,7 @@ SequencerWindow::SequencerWindow(Sequencer* prt)
     signal_key_press_event().connect(&FindAndProcessEventsKeyPress);
     
     show_all_children(1);
+    chordwidget->UpdateWhatToShowAndWhatIsSensitive();
     hide(); //hide at start, but let the children be shown
 }
 SequencerWindow::~SequencerWindow(){
