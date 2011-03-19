@@ -654,6 +654,11 @@ void MainWindow::OnAboutMenuClicked(){
     //TRANSLATORS:First caption in authors list
     authors.push_back(_("Main author"));
     authors.push_back("       Rafał Cieślak <rafalcieslak256@gmail.com>");
+    authors.push_back("");
+    authors.push_back(_("Consultants:"));
+    authors.push_back("   Joanna Łopuch");
+    authors.push_back("   Louigi Verona <http://www.louigiverona.ru>");
+    authors.push_back("   Henia Netzel");
     aboutbox.set_authors(authors);
     //TRANSLATORS: The list of translators to be placed in about-box
     aboutbox.set_translator_credits(_("translator-credits"));
