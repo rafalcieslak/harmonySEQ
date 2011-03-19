@@ -9,15 +9,15 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
 "POT-Creation-Date: 2011-03-17 22:24+0100\n"
 "PO-Revision-Date: 2010-12-18 08:46+0000\n"
-"Last-Translator: Launchpad Translations Administrators <rosetta@launchpad."
-"net>\n"
+"Last-Translator: Launchpad Translations Administrators "
+"<rosetta@launchpad.net>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
-"Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-02-23 05:38+0000\n"
-"X-Generator: Launchpad (build 12351)\n"
+"X-Launchpad-Export-Date: 2011-03-19 06:19+0000\n"
+"X-Generator: Launchpad (build 12559)\n"
+"Language: en_GB\n"
 
 #: src/main.cpp:296
 #, c-format
@@ -258,9 +258,8 @@ msgid "Are sure you want to quit?"
 msgstr ""
 
 #: src/MainWindow.cpp:337
-#, fuzzy
 msgid "activated row of handle "
-msgstr "activated row "
+msgstr ""
 
 #: src/MainWindow.cpp:338
 msgid ", name is: "
@@ -312,7 +311,7 @@ msgstr ""
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
-"  Hubert Jarosz https://launchpad.net/~hubert-jarosz\n"
+"  Marqin https://launchpad.net/~marqin\n"
 "  Rafal Cieslak https://launchpad.net/~rafalcieslak256"
 
 #: src/MainWindow.cpp:677
@@ -505,9 +504,9 @@ msgid ""
 msgstr ""
 
 #: src/Files.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "ERROR - error while reading file '%s'\n"
-msgstr "ERROR - error while trying to read %s\n"
+msgstr ""
 
 #: src/Files.cpp:319
 #, c-format
@@ -773,11 +772,13 @@ msgid "Error: volume has changed, while action is not volume-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:420
-msgid "Error: note to set has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note to set has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:431
-msgid "Error: note number has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note number has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:444
@@ -1061,15 +1062,18 @@ msgstr ""
 #~ msgid "Clone"
 #~ msgstr "Clone"
 
+#, c-format
 #~ msgid ""
-#~ "       --pass-midi   passes the midi events through the program by "
-#~ "default\n"
+#~ "       --pass-midi   passes the midi events through the program by default\n"
 #~ msgstr ""
-#~ "       --pass-midi   passes the midi events through the program by "
-#~ "default\n"
+#~ "       --pass-midi   passes the midi events through the program by default\n"
 
 #~ msgid "Chan"
 #~ msgstr "Chan"
+
+#, c-format
+#~ msgid "ERROR - error while trying to read %s\n"
+#~ msgstr "ERROR - error while trying to read %s\n"
 
 #~ msgid "MN"
 #~ msgstr "MN"
@@ -1083,9 +1087,11 @@ msgstr ""
 #~ msgid "Res"
 #~ msgstr "Res"
 
+#, c-format
 #~ msgid "When note %d on channel %d is moved..."
 #~ msgstr "When note %d on channel %d is moved..."
 
+#, c-format
 #~ msgid ""
 #~ "harmonySEQ, version %s\n"
 #~ "\n"
@@ -1104,6 +1110,9 @@ msgstr ""
 #~ "    -d --debug       enters debug mode, prints lots of debug messeges\n"
 #~ "    -h --help        prints this help messase and exits\n"
 #~ "    -v --version     prints the program version\n"
+
+#~ msgid "activated row "
+#~ msgstr "activated row "
 
 #~ msgid "sequencer"
 #~ msgstr "sequencer"
