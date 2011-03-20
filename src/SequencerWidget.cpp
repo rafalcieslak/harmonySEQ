@@ -71,7 +71,7 @@ SequencerWidget::SequencerWidget(){
     wUpperHBox2.pack_start(wLengthsLabel,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wLengthBox,Gtk::PACK_SHRINK);
 
-    //wBoxOfChord.pack_start(*chordwidget);
+    wBoxOfChord.pack_start(chordwidget);
 
     wNotebook.set_tab_pos(Gtk::POS_RIGHT);
     wNotebook.set_scrollable(1);
@@ -173,11 +173,13 @@ void SequencerWidget::SelectSeq(seqHandle h){
     *dbg << "SeqencerWidget - selected" << h << "\n";
     AnythingSelected = 1;
     selectedSeq = h;
+    chordwidget.Select(&seqH(h)->chord);
     UpdateEverything();
 }
 
 void SequencerWidget::SelectNothing(){
     AnythingSelected = 0;
+    chordwidget.UnSelect();
     UpdateEverything();
 }
 
@@ -195,7 +197,7 @@ void SequencerWidget::UpdateEverything(){
         UpdateRelLenBoxes();
         UpdateActivePatternRange();
         UpdateActivePattern();
-        //UpdateChord();
+        UpdateChord();
 
         show();
     }else{
@@ -235,6 +237,12 @@ void SequencerWidget::UpdateActivePattern(){
     UpdateAsterisk(wActivePattern.get_value(),seq->GetActivePattern());
     wActivePattern.set_value(seq->GetActivePattern());
     ignore_signals = 0;
+}
+void SequencerWidget::UpdateChord(){
+    if (AnythingSelected == 0) return;
+
+    chordwidget.Update();
+
 }
 
 void SequencerWidget::UpdateRelLenBoxes(){

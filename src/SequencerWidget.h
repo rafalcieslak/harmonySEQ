@@ -21,6 +21,7 @@
 #include <gtkmm.h>
 #include "seqHandle.h"
 #include "Sequencer.h"
+#include "ChordWidget.h"
 class Sequencer;
 
 class PatternLine : public Gtk::VBox{
@@ -69,6 +70,7 @@ private:
     void AttachLines(int where);
     void DetachLines();
 
+    ChordWidget chordwidget;
 
     int previous_box_where_pattern_lines_were_packed;
     bool ignore_signals;

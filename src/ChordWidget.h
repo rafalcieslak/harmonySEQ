@@ -26,7 +26,7 @@
 
 class ChordWidget : public Gtk::Box {
 public:
-    ChordWidget(Chord* associated_chord);
+    ChordWidget();
     virtual ~ChordWidget();
 
     /**A chord this GUI is associated with, settings & changes done by user in this chordwidget will be applied to this chord*/
@@ -42,6 +42,11 @@ public:
     sigc::signal<void> on_changed;
     /**Calleed when a note is MANUALLY changed. Prototype: ...(int note_number,int pitch)*/
     sigc::signal<void,int,int> on_note_changed;
+
+    void Select(Chord* ch);
+    void UnSelect();
+
+    bool AnythingSelected;
 private:
     void UpdateNotes();
     void OnTypeChanged();

@@ -26,14 +26,15 @@
 #include "Sequencer.h"
 #include "Configuration.h"
 
-ActionGUI::ActionGUI(Action *prt):
-                    chordwidget(&prt->chord)
+ActionGUI::ActionGUI(Action *prt)
 {
     //Set the pointer to point to the parent
     parent = prt;
 
     //by defalut default
     we_are_copying_data_from_parent_action_so_do_not_handle_signals = false;
+
+    chordwidget.Select(&parent->chord);
 
     //window's title
     set_title(_("Action"));

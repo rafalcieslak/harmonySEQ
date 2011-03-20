@@ -94,7 +94,7 @@ void Action::Trigger(int data){
             if (seqVector.size()==0 || !seqH(args[1])) break;
             seqH(args[1])->chord.Set(chord);
             mainwindow->RefreshRow(seqH(args[1])->my_row);
-           // if(mainwindow->seqWidget.selectedSeq == args[1]) mainwindow->seqWidget.UpdateChord();;
+            if(mainwindow->seqWidget.selectedSeq == args[1]) mainwindow->seqWidget.UpdateChord();;
             Files::SetFileModified(1);
              break;
         case SEQ_PLAY_ONCE:
