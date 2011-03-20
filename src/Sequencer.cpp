@@ -54,7 +54,8 @@ Gtk::TreeModel::Row clone_sequencer(int orig){
     Sequencer *new_seq = new Sequencer(seqVector[orig]);
     new_seq->SetOn(0);
     seqVector.push_back(new_seq);
-    new_seq->MyHandle = RequestNewSeqHandle(n);
+    seqHandle h = RequestNewSeqHandle(n);
+    new_seq->MyHandle = h;
     return mainwindow->AddSequencerRow(n);
 
 }
@@ -156,11 +157,26 @@ void Sequencer::SetResolution(int res){
         resolution = res;
     }
 
-
+    
 }
 
+void Sequencer::SetLength(int len){
+    length  = len;
+    
+}
 
+int Sequencer::GetLength(){
+    return length;
+}
 
+void Sequencer::SetActivePattern(int a){
+    active_pattern  = a;
+    
+}
+
+int Sequencer::GetActivePattern(){
+    return active_pattern;
+}
 
 int Sequencer::GetNoteOfChord(int n){return chord.GetNotePlusBasenote(n);}
 void Sequencer::SetOn(bool m){on = m;play_once_phase=0;}
@@ -174,7 +190,7 @@ void Sequencer::SetVolume(int v){volume = v;}
 
 void Sequencer::SetPlayOncePhase(int p){
     play_once_phase = p;
-    if(my_row) mainwindow->RefreshRow(my_row);
+    
 }
 
 int Sequencer::GetPlayOncePhase(){

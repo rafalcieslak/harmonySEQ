@@ -51,9 +51,6 @@ public:
         * So: patterns[4][1][5] representa a boolan state of the first note (5th pith of chord) in fourth pattern.
         * Hard to explain, easy to use.*/
     vector<vector<vector<bool> > > patterns;
-    
-    /**The active sequence number*/
-    int active_pattern;
 
     int AddPattern();
     bool RemovePattern(int x);
@@ -63,15 +60,20 @@ public:
     /**Fills in everything with default values*/
     void Init();
 
-    /**Stores the length of  sequence*/
-    double length;
-
     /**Stores the resolution of sequence*/
     int resolution;
 
     /**Used to change resolution of this sequencer*/
     void SetResolution(int res);
 
+    /**Used to change this seq's length*/
+    void SetLength(int len);
+
+    /**Returns seq's length*/
+    int GetLength();
+
+    void SetActivePattern(int a);
+    int GetActivePattern();
     /**Returns a one note of chord of this sequencer
      *  @parram n note number*/
     int GetNoteOfChord(int n);
@@ -128,6 +130,13 @@ public:
     friend class SequencerWindow;
 
 protected:
+
+    /**The active sequence number*/
+    int active_pattern;
+    
+    /**Stores the length of  sequence*/
+    double length;
+
     int channel;
     bool on;
     int volume;

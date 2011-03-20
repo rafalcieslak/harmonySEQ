@@ -356,6 +356,8 @@ MainWindow::OnMutedToggleToggled(const Glib::ustring& path)
     seqHandle h = row[m_columns_sequencers.col_handle];
 
    seqH(h)->SetOn(!row[m_columns_sequencers.col_muted]);
+
+    if(seqWidget.selectedSeq == h) seqWidget.UpdateOnOff();
    
    if(seqH(h)->my_row) RefreshRow(seqH(h)->my_row);
 
@@ -373,6 +375,8 @@ MainWindow::OnNameEdited(const Glib::ustring& path, const Glib::ustring& newtext
     seqH(h)->SetName(newtext);
    if(seqH(h)->my_row) RefreshRow(seqH(h)->my_row);
 
+    if(seqWidget.selectedSeq == h) seqWidget.UpdateName();
+
     eventswindow->UpdateAll();
     Files::SetFileModified(1);
 }
@@ -386,9 +390,9 @@ Gtk::TreeModel::Row MainWindow::AddSequencerRow(int x)
     row[m_columns_sequencers.col_name] = seqVector[x]->GetName();
     row[m_columns_sequencers.col_muted] = seqVector[x]->GetOn();
     row[m_columns_sequencers.col_channel] = seqVector[x]->GetChannel();
-    row[m_columns_sequencers.col_pattern] = seqVector[x]->active_pattern;
+    row[m_columns_sequencers.col_pattern] = seqVector[x]->GetActivePattern();
     row[m_columns_sequencers.col_res] = seqVector[x]->resolution;
-    row[m_columns_sequencers.col_len] = seqVector[x]->length;
+    row[m_columns_sequencers.col_len] = seqVector[x]->GetLength();
     row[m_columns_sequencers.col_vol] = seqVector[x]->GetVolume();
     row[m_columns_sequencers.col_chord] = seqVector[x]->chord.GetName();
     if(seqVector[x]->GetOn()){
@@ -420,8 +424,8 @@ void MainWindow::InitTreeData(){
         row[m_columns_sequencers.col_name] = seqV(x)->GetName();
         row[m_columns_sequencers.col_channel] = seqV(x)->GetChannel();
         row[m_columns_sequencers.col_res] = seqV(x)->resolution;
-        row[m_columns_sequencers.col_pattern] = seqV(x)->active_pattern;
-        row[m_columns_sequencers.col_len] = seqV(x)->length;
+        row[m_columns_sequencers.col_pattern] = seqV(x)->GetActivePattern();
+        row[m_columns_sequencers.col_len] = seqV(x)->GetLength();
         row[m_columns_sequencers.col_vol] = seqV(x)->GetVolume();
         row[m_columns_sequencers.col_chord] = seqV(x)->chord.GetName();
         seqV(x)->my_row = row;
@@ -446,6 +450,7 @@ void MainWindow::RefreshRow(Gtk::TreeRowReference rowref){
 }
 
 void MainWindow::RefreshRow(Gtk::TreeRow row){
+    if(!row) return;
 
     *dbg << "Refreshing ROW, the handle ";
     seqHandle h = row[m_columns_sequencers.col_handle];
@@ -455,8 +460,8 @@ void MainWindow::RefreshRow(Gtk::TreeRow row){
     row[m_columns_sequencers.col_name] = seq->GetName();
     row[m_columns_sequencers.col_channel] = seq->GetChannel();
     row[m_columns_sequencers.col_res] = seq->resolution;
-    row[m_columns_sequencers.col_pattern] = seq->active_pattern;
-    row[m_columns_sequencers.col_len] = seq->length;
+    row[m_columns_sequencers.col_pattern] = seq->GetActivePattern();
+    row[m_columns_sequencers.col_len] = seq->GetLength();
     row[m_columns_sequencers.col_vol] = seq->GetVolume();
     row[m_columns_sequencers.col_chord] = seq->chord.GetName();
     if(seq->GetOn()){
@@ -899,4 +904,8 @@ void MainWindow::OnTreeModelRowDeleted(const Gtk::TreeModel::Path& path){
         UpdateSeqHandlesAfterMoving(ID,ID2);
         RefreshRow(seqH(h)->my_row);
     }
+}
+
+void MainWindow::OnSeqEdited(seqHandle h){
+    RefreshRow(seqH(h)->my_row);
 }

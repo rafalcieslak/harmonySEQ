@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010 Rafał Cieślak
+    Copyright (C) 2010, 2011 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -43,7 +43,7 @@ public:
     void RefreshRow(Gtk::TreeRowReference it);
     void RefreshRow(Gtk::TreeRow row);
 
-    /**Adds a single row, when a new sequencer is spawned (and return a RowReference, so that the sequencer will know where is it's row)*/
+    /**Adds a single row, when a new sequencer is spawned (and return a Row, so that the sequencer will know where is it's row)*/
     Gtk::TreeModel::Row AddSequencerRow(int n);
     
     /**Called when user changed tempo*/
@@ -68,6 +68,10 @@ public:
     //int GetSelectedSequencerID();
     Gtk::TreeModel::iterator GetSelectedSequencerIter();
     seqHandle GetSelectedSequencerHandle();
+
+    void OnSeqEdited(seqHandle h);
+    
+    SequencerWidget seqWidget;
 private:
      /**Reacts on sequencer settings changes from main window*/
     void OnMutedToggleToggled(const Glib::ustring& path);
@@ -114,7 +118,6 @@ private:
     Gtk::VBox wVBox1;
 
     //Gtk::VPaned wVPaned;
-    SequencerWidget seqWidget;
 
     Gtk::Menu* wPopupMenu;
 

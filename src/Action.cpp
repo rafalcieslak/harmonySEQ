@@ -66,6 +66,8 @@ void Action::Trigger(int data){
                     seqH(args[1])->SetOn(!seqH(args[1])->GetOn());
                     break;
             }
+            mainwindow->RefreshRow(seqH(args[1])->my_row);
+            if(mainwindow->seqWidget.selectedSeq == args[1]) mainwindow->seqWidget.UpdateOnOff();
             break;
 
         case TEMPO_SET:
@@ -77,6 +79,8 @@ void Action::Trigger(int data){
         case SEQ_VOLUME_SET:
             if (seqVector.size()==0 || !seqH(args[1])) break;
             seqH(args[1])->SetVolume(args[2]);
+            mainwindow->RefreshRow(seqH(args[1])->my_row);
+            if(mainwindow->seqWidget.selectedSeq == args[1]) mainwindow->seqWidget.UpdateVolume();
             Files::SetFileModified(1);
             break;
 
@@ -89,11 +93,15 @@ void Action::Trigger(int data){
         case SEQ_CHANGE_CHORD:
             if (seqVector.size()==0 || !seqH(args[1])) break;
             seqH(args[1])->chord.Set(chord);
+            mainwindow->RefreshRow(seqH(args[1])->my_row);
+           // if(mainwindow->seqWidget.selectedSeq == args[1]) mainwindow->seqWidget.UpdateChord();;
             Files::SetFileModified(1);
              break;
         case SEQ_PLAY_ONCE:
             if (seqVector.size()==0 || !seqH(args[1])) break;
             seqH(args[1])->SetPlayOncePhase(1);
+            mainwindow->RefreshRow(seqH(args[1])->my_row);
+            if(mainwindow->seqWidget.selectedSeq == args[1]) mainwindow->seqWidget.UpdateOnOff();
             break;
         case TOGGLE_PASS_MIDI:
             passing_midi = !passing_midi;
@@ -124,6 +132,9 @@ void Action::Trigger(int data){
         case SEQ_CHANGE_PATTERN:
             if (seqVector.size()==0 || !seqH(args[1])) break;
             seqH(args[1])->ChangeActivePattern(args[2]);
+            mainwindow->RefreshRow(seqH(args[1])->my_row);
+            if(mainwindow->seqWidget.selectedSeq == args[1]) mainwindow->seqWidget.UpdateActivePattern()
+            ;
             break;
         default:
 

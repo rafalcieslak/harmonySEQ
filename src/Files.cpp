@@ -104,7 +104,7 @@ void SaveToFile(Glib::ustring filename){
         //kf.set_boolean(temp,FILE_KEY_SEQ_APPLY_MAIN_NOTE,sequencers[x]->GetApplyMainNote());
         kf.set_integer(temp,FILE_KEY_SEQ_VOLUME,seqVector[x]->GetVolume());
         kf.set_integer(temp,FILE_KEY_SEQ_RESOLUTION,seqVector[x]->resolution);
-        kf.set_double(temp,FILE_KEY_SEQ_LENGTH,seqVector[x]->length);
+        kf.set_double(temp,FILE_KEY_SEQ_LENGTH,seqVector[x]->GetLength());
         kf.set_integer(temp,FILE_KEY_SEQ_PATTERNS_NUMBER,seqVector[x]->patterns.size());
         //Now, save the patterns.
         //For each pattern in this sequencer...
@@ -375,7 +375,7 @@ bool LoadFile015(Glib::KeyFile* kfp){
         seqVector[x]->SetOn(kfp->get_boolean(temp, FILE_KEY_SEQ_ON));
         seqVector[x]->SetChannel(kfp->get_integer(temp, FILE_KEY_SEQ_CHANNEL));
         seqVector[x]->resolution = kfp->get_integer(temp, FILE_KEY_SEQ_RESOLUTION);
-        seqVector[x]->length = kfp->get_double(temp, FILE_KEY_SEQ_LENGTH);
+        seqVector[x]->SetLength(kfp->get_double(temp, FILE_KEY_SEQ_LENGTH));
         seqVector[x]->SetVolume(kfp->get_integer(temp, FILE_KEY_SEQ_VOLUME));
 
 
@@ -544,7 +544,7 @@ bool LoadFilePre015(Glib::KeyFile* kfp){
         seqVector[x]->SetChannel(kfp->get_integer(temp, FILE_KEY_SEQ_CHANNEL));
         if (chord_compatible_mode) use_main_note = kfp->get_boolean(temp, FILE_KEY_SEQ_APPLY_MAIN_NOTE);
         seqVector[x]->resolution = kfp->get_integer(temp, FILE_KEY_SEQ_RESOLUTION);
-        seqVector[x]->length = kfp->get_double(temp, FILE_KEY_SEQ_LENGTH);
+        seqVector[x]->SetLength(kfp->get_double(temp, FILE_KEY_SEQ_LENGTH));
 
         //Check whether volume is saved in file.
         if(kfp->has_key(temp,FILE_KEY_SEQ_VOLUME))

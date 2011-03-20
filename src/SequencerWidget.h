@@ -49,6 +49,12 @@ public:
     void UpdateEverything();
     void UpdateRelLenBoxes();
     void UpdateName();
+    void UpdateOnOff();
+    void UpdateChannel();
+    void UpdateVolume();
+    void UpdateChord();
+    void UpdateActivePattern();
+    void UpdateAsterisk(int from, int to);
 
     void SelectSeq(seqHandle h);
     void SelectNothing();
@@ -65,6 +71,7 @@ private:
 
 
     int previous_box_where_pattern_lines_were_packed;
+    bool ignore_signals;
     int do_not_react_on_page_changes;
     void UpdateActivePatternRange();
     void OnChordWidgetChanged();

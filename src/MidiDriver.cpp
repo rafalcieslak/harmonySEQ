@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010 Rafał Cieślak
+    Copyright (C) 2010, 2011 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -324,13 +324,13 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
 
         //OK, and now we proceed all notes from one sequencer.
         //First check the length:
-        if (seq->length<=1){
+        if (seq->GetLength()<=1){
             //Length is smaller or equal to 1, so we play the same sequence several times in a bar
 
             //Calculate how many times we play this sequence in one bar
-            double howmanytimes = (double)1.0/(seq->length);
+            double howmanytimes = (double)1.0/(seq->GetLength());
             //Calculate duration of a singular note.
-            int duration = ((double)(TICKS_PER_NOTE / seq->resolution))*seq->length;
+            int duration = ((double)(TICKS_PER_NOTE / seq->resolution))*seq->GetLength();
             //Local tick is used for calculation in one repetition, at beggining copy it from the main tick.
             int local_tick = tick;
             //Repeat this as many times as we'll play the melody in one bar:
@@ -360,7 +360,7 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                 if(seq->GetPlayOncePhase() == 2) {seq->SetPlayOncePhase(3);break;} 
 
                 //Prepare the local_tick for next repetition.
-                local_tick += (double)TICKS_PER_NOTE*seq->length;
+                local_tick += (double)TICKS_PER_NOTE*seq->GetLength();
             }
 
         }else{
@@ -369,13 +369,13 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
 
 
             //Calculate duration of a singular note.
-            int duration = ((double)(TICKS_PER_NOTE / seq->resolution))*seq->length;
+            int duration = ((double)(TICKS_PER_NOTE / seq->resolution))*seq->GetLength();
             //Get the note we'll start playback from.
             int startnote = seq->last_played_note;
             //currnote is used for iteration through consequent notes. x, however, represents the number (required for scheduling) of the note in this sequence IN this BAR.
             int x, currnote = startnote;
             //In this bar we'll play [seq->resolution/seq->length] notes, so repeat the loop (incrementing the iterator) this many times.
-            for (x = 0; x < (double)seq->resolution/seq->length;x++){
+            for (x = 0; x < (double)seq->resolution/seq->GetLength();x++){
                 //Iterate through all notes using currnote as iterator.
                 for(int C = 0; C < 6; C++){
                     //If the note is inactive, take next note.

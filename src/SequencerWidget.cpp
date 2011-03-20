@@ -34,6 +34,8 @@ SequencerWidget::SequencerWidget(){
     AnythingSelected = 0;
     previous_box_where_pattern_lines_were_packed = -1;
     do_not_react_on_page_changes = 0;
+    ignore_signals = 0;
+
     wMainTable.resize(3,3);
     wMainTable.attach(wUpperLeftBox,0,1,0,1);
     wMainTable.attach(wVSep,1,2,0,1);
@@ -185,13 +187,15 @@ void SequencerWidget::UpdateEverything(){
         //We need to update all controls to the seqlectedSeq.
         Sequencer* seq = seqH(selectedSeq);
 
-        wChannelButton.set_value(seq->GetChannel());
-        wVolumeButton.set_value(seq->GetVolume());
-        wMuteToggle.set_active(seq->GetOn());
+        UpdateChannel();
+        UpdateVolume();
+        UpdateOnOff();
         UpdateName();
         InitNotebook();
         UpdateRelLenBoxes();
         UpdateActivePatternRange();
+        UpdateActivePattern();
+        //UpdateChord();
 
         show();
     }else{
@@ -202,11 +206,41 @@ void SequencerWidget::UpdateEverything(){
     
     
 }
+void SequencerWidget::UpdateOnOff(){
+    if (AnythingSelected == 0) return;
+    Sequencer* seq = seqH(selectedSeq);
+    ignore_signals = 1;
+    wMuteToggle.set_active(seq->GetOn());
+    ignore_signals = 0;
+}
+void SequencerWidget::UpdateChannel(){
+    if (AnythingSelected == 0) return;
+    Sequencer* seq = seqH(selectedSeq);
+    ignore_signals = 1;
+    wChannelButton.set_value(seq->GetChannel());
+    ignore_signals = 0;
+}
+void SequencerWidget::UpdateVolume(){
+    if (AnythingSelected == 0) return;
+    Sequencer* seq = seqH(selectedSeq);
+    ignore_signals = 1;
+    wVolumeButton.set_value(seq->GetVolume());
+    ignore_signals = 0;
+}
+void SequencerWidget::UpdateActivePattern(){
+    if (AnythingSelected == 0) return;
+    Sequencer* seq = seqH(selectedSeq);
+
+    ignore_signals = 1;
+    UpdateAsterisk(wActivePattern.get_value(),seq->GetActivePattern());
+    wActivePattern.set_value(seq->GetActivePattern());
+    ignore_signals = 0;
+}
 
 void SequencerWidget::UpdateRelLenBoxes(){
     if (AnythingSelected == 0) return;
     Sequencer* seq = seqH(selectedSeq);
-    
+    ignore_signals = 1;
         do_not_react_on_page_changes = 1;
         int resolutions[RESOLUTIONS_NUM] = RESOLUTIONS;
         char temp[10];
@@ -219,16 +253,18 @@ void SequencerWidget::UpdateRelLenBoxes(){
         for (int x = 0; x < LENGTHS_NUM; x++){
             sprintf(temp,"%d",x);
             //Gtk::TreeModel::Row row = *(m_refTreeModel_len->get_iter(temp));
-            if(seq->length==lengths[x]) wLengthBox.set_active(x);
+            if(seq->GetLength()==lengths[x]) wLengthBox.set_active(x);
         }
         do_not_react_on_page_changes = 0;
+        ignore_signals = 0;
 }
 
 void SequencerWidget::UpdateName(){
     if (AnythingSelected == 0) return;
     Sequencer* seq = seqH(selectedSeq);
-
+    ignore_signals = 1;
     wNameEntry.set_text(seq->GetName());
+    ignore_signals = 0;
 }
 
 void SequencerWidget::InitNotebook(){
@@ -357,35 +393,40 @@ void SequencerWidget::OnPatternNoteChanged(int c, bool value, int seq){
 }
 
 void SequencerWidget::OnChannelChanged(){
+    if(ignore_signals) return;
     if(!AnythingSelected) return;
     Sequencer* seq = seqH(selectedSeq);
     
     seq->SetChannel( wChannelButton.get_value());
-    if(seq->my_row) mainwindow->RefreshRow(seq->my_row);
+    mainwindow->RefreshRow(seq->my_row);
     Files::SetFileModified(1);
 }
 
 void SequencerWidget::OnVolumeChanged(){
+    if(ignore_signals) return;
     if(!AnythingSelected) return;
     Sequencer* seq = seqH(selectedSeq);
     
     seq->SetVolume(wVolumeButton.get_value());
-    if(seq->my_row) mainwindow->RefreshRow(seq->my_row);
+    mainwindow->RefreshRow(seq->my_row);
     Files::SetFileModified(1);
 }
 void SequencerWidget::OnChordWidgetChanged(){;}
 void SequencerWidget::OnChordWidgetNoteChanged(int n, int p){;}
+
 void SequencerWidget::OnToggleMuteToggled(){
+    if(ignore_signals) return;
     if(!AnythingSelected) return;
     Sequencer* seq = seqH(selectedSeq);
 
     seq->SetOn(wMuteToggle.get_active());
+    mainwindow->RefreshRow(seq->my_row);
     seq->SetPlayOncePhase(0);
-    if(seq->my_row) mainwindow->RefreshRow(seq->my_row);
 
     //Files::SetFileModified(1); come on, do not write mutes.
 }
 void SequencerWidget::OnResolutionChanged(){
+    if(ignore_signals) return;
     if(!AnythingSelected) return;
     Sequencer* seq = seqH(selectedSeq);
 
@@ -396,41 +437,46 @@ void SequencerWidget::OnResolutionChanged(){
 
     AttachLines(previous_box_where_pattern_lines_were_packed);
 
-    if(seq->my_row) mainwindow->RefreshRow(seq->my_row);
+    mainwindow->RefreshRow(seq->my_row);
     Files::SetFileModified(1);
 }
 void SequencerWidget::OnLengthChanged(){
+    if(ignore_signals) return;
     if(!AnythingSelected) return;
     Sequencer* seq = seqH(selectedSeq);
 
     Gtk::TreeModel::Row row = *(wLengthBox.get_active());
-    seq->length = row[m_Columns_len.len];
-    if(seq->my_row) mainwindow->RefreshRow(seq->my_row);
+    seq->SetLength(row[m_Columns_len.len]);
 
+    mainwindow->RefreshRow(seq->my_row);
     Files::SetFileModified(1);
 }
 void SequencerWidget::OnActivePatternChanged(){
-    //changing notepad tab labels
-    //changing active seq in parent, but only if in range!!!!
+    if(ignore_signals) return;
     if(!AnythingSelected) return;
     Sequencer* seq = seqH(selectedSeq);
 
-    char temp[100];
     int activepattern = wActivePattern.get_value();
-    int old = seq->active_pattern;
+    int old = seq->GetActivePattern();
 
-    assert(activepattern < seq->patterns.size());
+    UpdateAsterisk(old,activepattern);
 
-    sprintf(temp,_(" %d"),old);
-    wNotebook.set_tab_label_text(*pattern_boxes[old],temp);
+    seq->SetActivePattern(activepattern); //store in parent
 
-    seq->active_pattern = activepattern; //applying to parent
-
-    sprintf(temp,_("%d*"),activepattern);
-    wNotebook.set_tab_label_text(*pattern_boxes[activepattern],temp);
-
-    if(seq->my_row) mainwindow->RefreshRow(seq->my_row);
+    mainwindow->RefreshRow(seq->my_row);
     Files::SetFileModified(1);
+}
+
+void SequencerWidget::UpdateAsterisk(int from, int to){
+    //changing notepad tab labels
+    char temp[100];
+
+    sprintf(temp,_(" %d"),from);
+    wNotebook.set_tab_label_text(*pattern_boxes[from],temp);
+
+    sprintf(temp,_("%d*"),to);
+    wNotebook.set_tab_label_text(*pattern_boxes[to],temp);
+
 }
 void SequencerWidget::OnSetAsActivePatternClicked(){
     int current = wNotebook.get_current_page();
@@ -472,13 +518,14 @@ void SequencerWidget::OnRemovePatternClicked(){
     delete pattern_boxes[n];
     pattern_boxes.erase(pattern_boxes.begin()+n);
     seq->patterns.erase(seq->patterns.begin()+n);
-    if (seq->active_pattern == n ) { seq->active_pattern = 0;wActivePattern.set_value(0.0);}
-    if (seq->active_pattern > n ) {seq->active_pattern = seq->active_pattern-1;wActivePattern.set_value(seq->active_pattern); }
+    if (seq->GetActivePattern() == n ) { seq->SetActivePattern(0);wActivePattern.set_value(0.0);}
+    if (seq->GetActivePattern() > n ) {seq->SetActivePattern(seq->GetActivePattern()-1);wActivePattern.set_value(seq->GetActivePattern()); }
     previous_box_where_pattern_lines_were_packed = -1;
     InitNotebook();
     wNotebook.set_current_page(n);
     UpdateActivePatternRange();
     SetRemoveButtonSensitivity();
+    mainwindow->RefreshRow(seq->my_row);
     Files::SetFileModified(1);
 }
 void SequencerWidget::SetRemoveButtonSensitivity(){
@@ -489,11 +536,12 @@ void SequencerWidget::SetRemoveButtonSensitivity(){
     }
 }
 void SequencerWidget::OnNameEdited(){
+    if(ignore_signals) return;
     if(!AnythingSelected) return;
     Sequencer* seq = seqH(selectedSeq);
     
     seq->SetName(wNameEntry.get_text());
-    if(seq->my_row) mainwindow->RefreshRow(seq->my_row);
+    mainwindow->RefreshRow(seq->my_row);
     Files::SetFileModified(1);
 
 }
@@ -502,6 +550,7 @@ void SequencerWidget::OnPlayOnceButtonClicked(){
     Sequencer* seq = seqH(selectedSeq);
 
     seq->SetPlayOncePhase(1);
+    mainwindow->RefreshRow(seq->my_row);
 }
 
 //====================PATTERNLINE=========================
