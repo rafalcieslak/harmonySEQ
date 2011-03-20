@@ -23,11 +23,11 @@
 #include "Sequencer.h"
 class Sequencer;
 
-class PatternLine2 : public Gtk::VBox{
+class PatternLine : public Gtk::VBox{
 public:
-    PatternLine2();
-    PatternLine2(Glib::ustring mark);
-    ~PatternLine2();
+    PatternLine();
+    PatternLine(Glib::ustring mark);
+    ~PatternLine();
 
     /**Sets a button to a given value.*/
     void SetButton(int c, bool value);
@@ -101,7 +101,7 @@ private:
     Gtk::VSeparator wVSep;
 
     Gtk::Notebook wNotebook;
-    std::vector<PatternLine2  *> pattern_lines;
+    std::vector<PatternLine  *> pattern_lines;
     std::vector<Gtk::HBox *> pattern_boxes;
     std::vector<Gtk::VSeparator*> note_separators;
     Gtk::SpinButton wChannelButton;

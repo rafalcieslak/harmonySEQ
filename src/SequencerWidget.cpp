@@ -316,9 +316,9 @@ void SequencerWidget::AttachLines(int where){
                 separator_counter++;
             }
             sprintf(temp,"%d",x+1);
-            pattern_lines[x] = (new PatternLine2(temp)); //cannot use Gtk::manage, since deleting the box would delete the lines!
+            pattern_lines[x] = (new PatternLine(temp)); //cannot use Gtk::manage, since deleting the box would delete the lines!
         }else{
-            pattern_lines[x] = (new PatternLine2); //cannot use Gtk::manage, since deleting the box would delete the lines!
+            pattern_lines[x] = (new PatternLine); //cannot use Gtk::manage, since deleting the box would delete the lines!
         }
 
         for(int c = 0; c < 6; c++)
@@ -505,13 +505,13 @@ void SequencerWidget::OnPlayOnceButtonClicked(){
 }
 
 //====================PATTERNLINE=========================
-PatternLine2::PatternLine2(){
+PatternLine::PatternLine(){
     set_border_width(0);
     pack_end(marker);
     for (int x = 0; x < 6; x++){
         buttons.push_back(new Gtk::CheckButton);
         pack_end(*buttons[x],Gtk::PACK_EXPAND_PADDING); //check the pack flag
-        buttons[x]->signal_toggled().connect(sigc::bind<int>(sigc::mem_fun(*this,&PatternLine2::OnButtonsToggled),x));
+        buttons[x]->signal_toggled().connect(sigc::bind<int>(sigc::mem_fun(*this,&PatternLine::OnButtonsToggled),x));
         buttons[x]->set_border_width(0);
         buttons[x]->show();
     }
@@ -520,13 +520,13 @@ PatternLine2::PatternLine2(){
 
 }
 
-PatternLine2::PatternLine2(Glib::ustring mark){
+PatternLine::PatternLine(Glib::ustring mark){
     set_border_width(0);
     pack_end(marker);
     for (int x = 0; x < 6; x++){
         buttons.push_back(new Gtk::CheckButton);
         pack_end(*buttons[x],Gtk::PACK_EXPAND_PADDING); //check the pack flag
-        buttons[x]->signal_toggled().connect(sigc::bind<int>(sigc::mem_fun(*this,&PatternLine2::OnButtonsToggled),x));
+        buttons[x]->signal_toggled().connect(sigc::bind<int>(sigc::mem_fun(*this,&PatternLine::OnButtonsToggled),x));
         buttons[x]->set_border_width(0);
         buttons[x]->show();
     }
@@ -535,7 +535,7 @@ PatternLine2::PatternLine2(Glib::ustring mark){
 
 }
 
-PatternLine2::~PatternLine2(){
+PatternLine::~PatternLine(){
     for (int x = 0; x < 6; x++){
         remove(*buttons[x]);
         delete buttons[x];
@@ -543,15 +543,15 @@ PatternLine2::~PatternLine2(){
 
 }
 
-void PatternLine2::SetButton(int c, bool value){
+void PatternLine::SetButton(int c, bool value){
     buttons[c]->set_active(value);
 }
 
-bool PatternLine2::GetButton(int c){
+bool PatternLine::GetButton(int c){
     return buttons[c]->get_active();
 }
 
-void PatternLine2::OnButtonsToggled(int c){
+void PatternLine::OnButtonsToggled(int c){
 
     OnButtonClicked.emit(c,buttons[c]->get_active());
 }
