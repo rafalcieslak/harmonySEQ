@@ -21,6 +21,7 @@
 #ifndef SEQUENCER_H
 #define	SEQUENCER_H
 #include "global.h"
+#include <gtkmm.h>
 #include "Chord.h"
 #include "SequencerGUI.h"
 #include "seqHandle.h"
@@ -114,15 +115,6 @@ public:
     /**Changes the pattern that is played by this sequencer*/
     void ChangeActivePattern(int new_one);
 
-    /**Shows corresponding SequencerWindow*/
-    void ShowWindow();
-
-    /**Updates values in corresponding SequencerWindow*/
-    void UpdateGui();
-
-    /**Updates note values in corresponding SequencerWindow*/
-    void UpdateGuiChord();
-
     int GetPlayOncePhase();
     void SetPlayOncePhase(int p);
     /**Remembers the last played note*/
@@ -141,7 +133,6 @@ protected:
     bool on;
     int volume;
     Glib::ustring name;
-    SequencerWindow *gui_window;
 
     int play_once_phase;
 private:

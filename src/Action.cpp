@@ -83,14 +83,12 @@ void Action::Trigger(int data){
         case SEQ_CHANGE_ONE_NOTE:
             if (seqVector.size()==0 || !seqH(args[1])) break;
             seqH(args[1])->chord.SetNote(args[2]-1, args[3]);
-            seqH(args[1])->UpdateGuiChord(); //nessesary //its a temporary wokraround, since UpdateGui seems to crash. Howewer, it is not needed to update anything else than notes.
             Files::SetFileModified(1);
             break;
 
         case SEQ_CHANGE_CHORD:
             if (seqVector.size()==0 || !seqH(args[1])) break;
             seqH(args[1])->chord.Set(chord);
-            seqH(args[1])->UpdateGuiChord(); //nessesary //its a temporary wokraround, since UpdateGui seems to crash. Howewer, it is not needed to update anything else than notes.
             Files::SetFileModified(1);
              break;
         case SEQ_PLAY_ONCE:

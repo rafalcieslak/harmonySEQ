@@ -416,10 +416,6 @@ bool LoadFile015(Glib::KeyFile* kfp){
             seqVector[x]->chord.SetFromVector(vec);
         }
 
-        //And update this sequencer's GUI.
-        seqVector[x]->UpdateGui();
-        seqVector[x]->UpdateGuiChord();
-
         //Now proceed to the...
     }  //...next sequencer.
 
@@ -631,10 +627,6 @@ bool LoadFilePre015(Glib::KeyFile* kfp){
                 seqVector[x]->chord.SetFromVector_OLD_FILE_PRE_0_14(vec);
             }
         }
-
-        //And update this sequencer's GUI.
-        seqVector[x]->UpdateGui();
-        seqVector[x]->UpdateGuiChord();
 
         //Now proceed to the...
     }  //...next sequencer.

@@ -66,7 +66,6 @@ MainWindow::MainWindow()
     m_refActionGroup->add(Gtk::Action::create("PlayPause", Gtk::Stock::MEDIA_PAUSE, _("Play/Pause"),_("Toggle play/pause")), sigc::mem_fun(*this, &MainWindow::OnPlayPauseClicked));
     m_refActionGroup->add(Gtk::ToggleAction::create("PassMidiEvents", _("Pass MIDI events"),_("States whether MIDI events are passed-through harmonySEQ.")), sigc::mem_fun(*this, &MainWindow::OnPassToggleClicked));
     m_refActionGroup->add(Gtk::ToggleAction::create("PlayOnEdit", _("Play on edit"),_("If on, harmonySEQ will play a brief preview of note, when it's added, or changed manually in chord..")), sigc::mem_fun(*this, &MainWindow::OnPlayOnEditClicked));
-    m_refActionGroup->add(Gtk::Action::create("seq/Edit", Gtk::Stock::EDIT,_("Edit"),_("Edites the sequencer.")), sigc::mem_fun(*this, &MainWindow::OnPopupEdit));
     m_refActionGroup->add(Gtk::Action::create("seq/PlayOnce", Gtk::Stock::MEDIA_NEXT, _("Play once"), _("Plays the sequence once.")), sigc::mem_fun(*this, &MainWindow::OnPopupPlayOnce));
     m_refActionGroup->add(Gtk::Action::create("seq/Remove", Gtk::Stock::REMOVE, _("Remove"), _("Removes the sequencer.")), sigc::mem_fun(*this, &MainWindow::OnPopupRemove));
     m_refActionGroup->add(Gtk::Action::create("seq/Duplicate", Gtk::Stock::CONVERT, _("Duplicate"), _("Duplicates the sequencer")), sigc::mem_fun(*this, &MainWindow::OnPopupDuplicate));
@@ -119,7 +118,6 @@ MainWindow::MainWindow()
             "  </toolbar>"
 
             "  <popup name='Popup'>"
-            "   <menuitem action='seq/Edit'/>"
             "   <menuitem action='seq/PlayOnce'/>"
             "   <separator/>"
             "   <menuitem action='seq/Duplicate'/>"
@@ -247,12 +245,10 @@ MainWindow::MainWindow()
         //forbids to typesearch
         wTreeView.set_enable_search(0);
 
-        //catching row selection signal
-        wTreeView.signal_row_activated().connect(sigc::mem_fun(*this, &MainWindow::OnTreeviewRowActivated));
         //click signal (for popup)
         wTreeView.signal_button_press_event().connect(sigc::mem_fun(*this,&MainWindow::OnTreviewButtonPress), false);
 
-        //react on selection change (to determine whether it is empty)
+        //react on selection change
         Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = wTreeView.get_selection();
         refTreeSelection->signal_changed().connect(mem_fun(*this,&MainWindow::OnSelectionChanged));
 
@@ -328,30 +324,6 @@ MainWindow::TempoChanged()
     midi->SetTempo(tempo);
     Files::SetFileModified(1);
 }
-
-void
-MainWindow::OnTreeviewRowActivated(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column)
-{
-    Gtk::TreeModel::iterator iter = TreeModel_sequencers->get_iter(path);
-    if (iter)
-    {
-        Gtk::TreeModel::Row row = *iter;
-
-
-        ///(activated row) <row number>
-        *dbg << _("activated row of handle ") << row[m_columns_sequencers.col_handle];
-        *dbg << _(", name is: ") << row[m_columns_sequencers.col_name] << ENDL;
-        gdk_threads_leave(); //not really sure about this thread-lock, but this the only way I found to get it to work
-        {
-            seqH(row[m_columns_sequencers.col_handle])->ShowWindow();
-        }
-        gdk_threads_enter();
-        seqWidget.SelectSeq(row[m_columns_sequencers.col_handle]);
-    }else{
-        seqWidget.SelectNothing();
-    }
-
-}
 /*
 int MainWindow::GetSelectedSequencerID(){
      Gtk::TreeModel::iterator iter = GetSelectedSequencerIter();
@@ -384,7 +356,7 @@ MainWindow::OnMutedToggleToggled(const Glib::ustring& path)
     seqHandle h = row[m_columns_sequencers.col_handle];
 
    seqH(h)->SetOn(!row[m_columns_sequencers.col_muted]);
-   seqH(h)->UpdateGui();
+   
    if(seqH(h)->my_row) RefreshRow(seqH(h)->my_row);
 
    //Files::SetFileModified(1); do not detect mutes
@@ -794,10 +766,6 @@ bool MainWindow::OnTreviewButtonPress(GdkEventButton* event){
   }
    
   return false;
-}
-
-void MainWindow::OnPopupEdit(){
-   seqH(GetSelectedSequencerHandle())->ShowWindow();
 }
 
 void MainWindow::OnPopupRemove(){

@@ -95,14 +95,11 @@ Sequencer::Sequencer(const Sequencer *orig) {
     channel = orig->channel;
     length = orig->length;
     volume = orig->volume;
-    gui_window = new SequencerWindow(this);
     last_played_note = orig->last_played_note;
     play_once_phase = 0;
 }
 
 Sequencer::~Sequencer() {
-    gui_window->hide();
-    delete gui_window;
 }
 
 void Sequencer::Init(){
@@ -115,9 +112,6 @@ void Sequencer::Init(){
     last_played_note = 0;
     play_once_phase = 0;
     resolution = SEQUENCE_DEFAULT_SIZE;
-    gui_window = new SequencerWindow(this);
-    //gui_window->UpdateValues();
-    //gui_window->parent = this;
 
 }
 
@@ -169,14 +163,14 @@ void Sequencer::SetResolution(int res){
 
 
 int Sequencer::GetNoteOfChord(int n){return chord.GetNotePlusBasenote(n);}
-void Sequencer::SetOn(bool m){on = m;play_once_phase=0;gui_window->wMuteToggle.set_active(m);}
+void Sequencer::SetOn(bool m){on = m;play_once_phase=0;}
 bool Sequencer::GetOn(){return on;}
-void Sequencer::SetChannel(int ch){channel = ch;gui_window->wChannelButton.set_value((double)ch);}
+void Sequencer::SetChannel(int ch){channel = ch;}
 int Sequencer::GetChannel(){return channel;}
-void Sequencer::SetName(Glib::ustring nm){name = nm;gui_window->set_title(nm);gui_window->wNameEntry.set_text(nm);}
+void Sequencer::SetName(Glib::ustring nm){name = nm;}
 Glib::ustring Sequencer::GetName(){return name;}
 int Sequencer::GetVolume(){return volume;}
-void Sequencer::SetVolume(int v){volume = v;gui_window->wVolumeButton.set_value((double)v);}
+void Sequencer::SetVolume(int v){volume = v;}
 
 void Sequencer::SetPlayOncePhase(int p){
     play_once_phase = p;
@@ -187,11 +181,6 @@ int Sequencer::GetPlayOncePhase(){
     return play_once_phase;
 }
 
-void Sequencer::ShowWindow(){
-    gui_window->present();}
-
-void Sequencer::UpdateGui(){gui_window->UpdateValues();}
-void Sequencer::UpdateGuiChord(){gui_window->UpdateChord();}
 
 
 int Sequencer::AddPattern(){
@@ -230,5 +219,4 @@ void Sequencer::SetPatternNote(int pattern, int n, int c, bool value){
 
 void Sequencer::ChangeActivePattern(int new_one){
     active_pattern = new_one%(patterns.size());
-    gui_window->UpdatePattern();
 }

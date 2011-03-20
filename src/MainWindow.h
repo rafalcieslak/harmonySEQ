@@ -69,9 +69,6 @@ public:
     Gtk::TreeModel::iterator GetSelectedSequencerIter();
     seqHandle GetSelectedSequencerHandle();
 private:
-
-    /**Reacts on double click on a row*/
-    void OnTreeviewRowActivated(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column);
      /**Reacts on sequencer settings changes from main window*/
     void OnMutedToggleToggled(const Glib::ustring& path);
     void OnNameEdited(const Glib::ustring& path,const Glib::ustring& newtext);
@@ -102,7 +99,6 @@ private:
     void OnPreferencesClicked();
     void OnMetronomeToggleClicked();
 
-    void OnPopupEdit();
     void OnPopupPlayOnce();
     void OnPopupRemove();
     void OnPopupDuplicate();
