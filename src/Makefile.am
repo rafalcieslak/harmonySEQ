@@ -7,7 +7,6 @@ harmonySEQ_SOURCES =  	main.cpp\
 						MainWindow.cpp \
 						MidiDriver.cpp \
 						Sequencer.cpp \
-						SequencerGUI.cpp \
 						messages.cpp \
 						Files.cpp \
 						global.cpp \
@@ -23,7 +22,7 @@ harmonySEQ_SOURCES =  	main.cpp\
 						SettingsWindow.cpp \
 						seqHandle.cpp \
 						SequencerWidget.cpp \
-						MainWindow.h MidiDriver.h Sequencer.h SequencerGUI.h messages.h Files.h global.h Event.h EventsWindow.h EventGUI.h Action.h ActionGUI.h TreeModels.h Chord.h ChordWidget.h Configuration.h SettingsWindow.h seqHandle.h SequencerWidget.h \
+						MainWindow.h MidiDriver.h Sequencer.h messages.h Files.h global.h Event.h EventsWindow.h EventGUI.h Action.h ActionGUI.h TreeModels.h Chord.h ChordWidget.h Configuration.h SettingsWindow.h seqHandle.h SequencerWidget.h \
 						gettext.h
 						
 harmonySEQ_CPPFLAGS = $(GTKMM_CFLAGS) -Wall -g -O3

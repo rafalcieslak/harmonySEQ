@@ -23,7 +23,6 @@
 #include "global.h"
 #include <gtkmm.h>
 #include "Chord.h"
-#include "SequencerGUI.h"
 #include "seqHandle.h"
 using namespace std;
 

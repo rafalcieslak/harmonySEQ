@@ -51,7 +51,6 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/MidiDriver.o \
 	${OBJECTDIR}/src/Files.o \
 	${OBJECTDIR}/src/Event.o \
-	${OBJECTDIR}/src/SequencerGUI.o \
 	${OBJECTDIR}/src/global.o
 
 
@@ -168,11 +167,6 @@ ${OBJECTDIR}/src/Event.o: src/Event.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Event.o src/Event.cpp
-
-${OBJECTDIR}/src/SequencerGUI.o: src/SequencerGUI.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/SequencerGUI.o src/SequencerGUI.cpp
 
 ${OBJECTDIR}/src/global.o: src/global.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

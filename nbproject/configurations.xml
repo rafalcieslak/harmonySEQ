@@ -17,7 +17,6 @@
       <itemPath>src/MainWindow.h</itemPath>
       <itemPath>src/MidiDriver.h</itemPath>
       <itemPath>src/Sequencer.h</itemPath>
-      <itemPath>src/SequencerGUI.h</itemPath>
       <itemPath>../Programy/harmonySEQ/trunk/src/SequencerWidget.h</itemPath>
       <itemPath>../Programy/harmonySEQ/trunk/src/SettingsWindow.h</itemPath>
       <itemPath>src/TreeModels.h</itemPath>
@@ -54,7 +53,6 @@
       <itemPath>src/Makefile.am</itemPath>
       <itemPath>src/MidiDriver.cpp</itemPath>
       <itemPath>src/Sequencer.cpp</itemPath>
-      <itemPath>src/SequencerGUI.cpp</itemPath>
       <itemPath>../Programy/harmonySEQ/trunk/src/SequencerWidget.cpp</itemPath>
       <itemPath>../Programy/harmonySEQ/trunk/src/SettingsWindow.cpp</itemPath>
       <itemPath>src/TreeModels.cpp</itemPath>

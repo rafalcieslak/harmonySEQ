@@ -20,7 +20,6 @@
 #include "ChordWidget.h"
 #include "TreeModels.h"
 #include "messages.h"
-#include "SequencerGUI.h"
 
 
 ChordWidget::ChordWidget(Chord* associated_chord){
