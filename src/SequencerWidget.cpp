@@ -185,15 +185,15 @@ void SequencerWidget::UpdateEverything(){
         //We need to update all controls to the seqlectedSeq.
         Sequencer* seq = seqH(selectedSeq);
 
-        show();
         wChannelButton.set_value(seq->GetChannel());
         wVolumeButton.set_value(seq->GetVolume());
         wMuteToggle.set_active(seq->GetOn());
-        UpdateRelLenBoxes();
         UpdateName();
         InitNotebook();
+        UpdateRelLenBoxes();
         UpdateActivePatternRange();
 
+        show();
     }else{
         //Nothing is selected them! The whole widget must look disabled and inactive!
         hide(); //temporary solution

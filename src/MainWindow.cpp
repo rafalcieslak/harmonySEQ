@@ -636,7 +636,7 @@ void MainWindow::OnAboutMenuClicked(){
     aboutbox.set_website_label(_("harmonySEQ website"));
     std::vector<Glib::ustring> authors;
     //TRANSLATORS:First caption in authors list
-    authors.push_back(_("Main author"));
+    authors.push_back(_("Main author:"));
     authors.push_back("       Rafał Cieślak <rafalcieslak256@gmail.com>");
     authors.push_back("");
     authors.push_back(_("Consultants:"));
