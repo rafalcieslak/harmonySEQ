@@ -72,6 +72,8 @@ SequencerWidget::SequencerWidget(){
     wUpperHBox2.pack_start(wLengthBox,Gtk::PACK_SHRINK);
 
     wBoxOfChord.pack_start(chordwidget);
+    chordwidget.on_changed.connect(sigc::mem_fun(*this,&SequencerWidget::OnChordWidgetChanged));
+    chordwidget.on_note_changed.connect(sigc::mem_fun(*this,&SequencerWidget::OnChordWidgetNoteChanged));
 
     wNotebook.set_tab_pos(Gtk::POS_RIGHT);
     wNotebook.set_scrollable(1);
@@ -419,8 +421,19 @@ void SequencerWidget::OnVolumeChanged(){
     mainwindow->RefreshRow(seq->my_row);
     Files::SetFileModified(1);
 }
-void SequencerWidget::OnChordWidgetChanged(){;}
-void SequencerWidget::OnChordWidgetNoteChanged(int n, int p){;}
+void SequencerWidget::OnChordWidgetChanged(){
+    //The chord updates the seq on it's own.
+    //Just refresh the row.
+    if(!AnythingSelected) return;
+    Sequencer* seq = seqH(selectedSeq);
+    mainwindow->RefreshRow(seq->my_row);
+}
+void SequencerWidget::OnChordWidgetNoteChanged(int n, int p){
+    if(!AnythingSelected) return;
+    Sequencer* seq = seqH(selectedSeq);
+    if(Config::Interaction::PlayOnEdit)
+        midi->SendNoteEvent(seq->GetChannel(),p,seq->GetVolume(),PLAY_ON_EDIT_MS);
+}
 
 void SequencerWidget::OnToggleMuteToggled(){
     if(ignore_signals) return;

@@ -115,7 +115,7 @@ void Sequencer::Init(){
     resolution = SEQUENCE_DEFAULT_SIZE;
     chord.SetType(Chord::CHORD_TYPE_TRIAD);
     chord.SetRoot(0);
-    chord.SetTriadMode(Chord::CHORD_TRIAD_MODE_MINOR);
+    chord.SetTriadMode(Chord::CHORD_TRIAD_MODE_MAJOR);
     chord.SetBaseOctave(0);
     chord.SetInversion(0);
 

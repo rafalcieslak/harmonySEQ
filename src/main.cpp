@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010 Rafał Cieślak
+    Copyright (C) 2010, 2011 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -364,7 +364,7 @@ int main(int argc, char** argv) {
     //Starting an instance of the threads class...
     threadb Th;
     //And creating both threads.
-    Glib::Thread::create(sigc::mem_fun(Th, &threadb::th1), true);
+    Glib::Thread::create(sigc::mem_fun(Th, &threadb::th1), 0,true,1,Glib::THREAD_PRIORITY_URGENT);
     Glib::Thread::create(sigc::mem_fun(Th, &threadb::th2), true);
 
     //Wait for signal to exit the program
