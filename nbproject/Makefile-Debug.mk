@@ -34,6 +34,7 @@ OBJECTDIR=build/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/src/ChordWidget.o \
+	${OBJECTDIR}/_ext/1045285602/SequencerWidget.o \
 	${OBJECTDIR}/src/main.o \
 	${OBJECTDIR}/src/EventGUI.o \
 	${OBJECTDIR}/src/Chord.o \
@@ -82,6 +83,11 @@ ${OBJECTDIR}/src/ChordWidget.o: src/ChordWidget.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/ChordWidget.o src/ChordWidget.cpp
+
+${OBJECTDIR}/_ext/1045285602/SequencerWidget.o: ../Programy/harmonySEQ/trunk/src/SequencerWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1045285602
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1045285602/SequencerWidget.o ../Programy/harmonySEQ/trunk/src/SequencerWidget.cpp
 
 ${OBJECTDIR}/src/main.o: src/main.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

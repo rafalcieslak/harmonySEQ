@@ -37,8 +37,8 @@ MainWindow::MainWindow()
 {
     set_border_width(0);
     //set_resizable(0);
-    set_default_size(600,300);
-    set_size_request(600,300);
+    set_default_size(700,500);
+    set_size_request(700,500);
     //set_resizable(0);
     UpdateTitle();
 
@@ -174,7 +174,8 @@ MainWindow::MainWindow()
     wMainVBox.pack_start(*pMenubar,Gtk::PACK_SHRINK);
     wMainVBox.pack_start(Toolbar,Gtk::PACK_SHRINK);
     wMainVBox.pack_start(wVBox1);
-    wVBox1.set_border_width(1);
+    //wVBox1.pack_start(wVPaned);
+    wVBox1.pack_end(seqWidget,Gtk::PACK_SHRINK);
 
     
     TempoTool.remove();
@@ -278,6 +279,10 @@ MainWindow::MainWindow()
 
     show_all_children(1);
 
+    //At first the seqwidget shows nothing, but was displayed by the show all recursive method.
+    //So, lets hide it.
+    //This is temporary workaround, it shouldn,t hide, but become diabled.
+    seqWidget.hide();
 
 
 }
@@ -341,6 +346,9 @@ MainWindow::OnTreeviewRowActivated(const Gtk::TreeModel::Path& path, Gtk::TreeVi
             seqH(row[m_columns_sequencers.col_handle])->ShowWindow();
         }
         gdk_threads_enter();
+        seqWidget.SelectSeq(row[m_columns_sequencers.col_handle]);
+    }else{
+        seqWidget.SelectNothing();
     }
 
 }
@@ -598,12 +606,16 @@ void MainWindow::OnSelectionChanged(){
         pRemoveTool->set_sensitive(1);
         Gtk::Widget* pDuplicateTool = m_refUIManager->get_widget("/ToolBar/DuplicateTool");
         pDuplicateTool->set_sensitive(1);
+
+        seqWidget.SelectSeq((*iter)[m_columns_sequencers.col_handle]);
     } else {
         //selection is empty
         Gtk::Widget* pRemoveTool = m_refUIManager->get_widget("/ToolBar/RemoveTool");
         pRemoveTool->set_sensitive(0);
         Gtk::Widget* pDuplicateTool = m_refUIManager->get_widget("/ToolBar/DuplicateTool");
         pDuplicateTool->set_sensitive(0);
+        
+        seqWidget.SelectNothing();
     }
 
 }

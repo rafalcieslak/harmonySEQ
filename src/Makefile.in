@@ -65,7 +65,8 @@ am_harmonySEQ_OBJECTS = harmonySEQ-main.$(OBJEXT) \
 	harmonySEQ-Chord.$(OBJEXT) harmonySEQ-ChordWidget.$(OBJEXT) \
 	harmonySEQ-Configuration.$(OBJEXT) \
 	harmonySEQ-SettingsWindow.$(OBJEXT) \
-	harmonySEQ-seqHandle.$(OBJEXT)
+	harmonySEQ-seqHandle.$(OBJEXT) \
+	harmonySEQ-SequencerWidget.$(OBJEXT)
 harmonySEQ_OBJECTS = $(am_harmonySEQ_OBJECTS)
 am__DEPENDENCIES_1 =
 harmonySEQ_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -232,7 +233,8 @@ harmonySEQ_SOURCES = main.cpp\
 						Configuration.cpp \
 						SettingsWindow.cpp \
 						seqHandle.cpp \
-						MainWindow.h MidiDriver.h Sequencer.h SequencerGUI.h messages.h Files.h global.h Event.h EventsWindow.h EventGUI.h Action.h ActionGUI.h TreeModels.h Chord.h ChordWidget.h Configuration.h SettingsWindow.h seqHandle.h\
+						SequencerWidget.cpp \
+						MainWindow.h MidiDriver.h Sequencer.h SequencerGUI.h messages.h Files.h global.h Event.h EventsWindow.h EventGUI.h Action.h ActionGUI.h TreeModels.h Chord.h ChordWidget.h Configuration.h SettingsWindow.h seqHandle.h SequencerWidget.h \
 						gettext.h
 
 harmonySEQ_CPPFLAGS = $(GTKMM_CFLAGS) -Wall -g -O3
@@ -352,6 +354,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-MidiDriver.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-Sequencer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-SequencerGUI.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-SequencerWidget.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-SettingsWindow.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-TreeModels.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-global.Po@am__quote@
@@ -638,6 +641,20 @@ harmonySEQ-seqHandle.obj: seqHandle.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='seqHandle.cpp' object='harmonySEQ-seqHandle.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-seqHandle.obj `if test -f 'seqHandle.cpp'; then $(CYGPATH_W) 'seqHandle.cpp'; else $(CYGPATH_W) '$(srcdir)/seqHandle.cpp'; fi`
+
+harmonySEQ-SequencerWidget.o: SequencerWidget.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-SequencerWidget.o -MD -MP -MF $(DEPDIR)/harmonySEQ-SequencerWidget.Tpo -c -o harmonySEQ-SequencerWidget.o `test -f 'SequencerWidget.cpp' || echo '$(srcdir)/'`SequencerWidget.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-SequencerWidget.Tpo $(DEPDIR)/harmonySEQ-SequencerWidget.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SequencerWidget.cpp' object='harmonySEQ-SequencerWidget.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-SequencerWidget.o `test -f 'SequencerWidget.cpp' || echo '$(srcdir)/'`SequencerWidget.cpp
+
+harmonySEQ-SequencerWidget.obj: SequencerWidget.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-SequencerWidget.obj -MD -MP -MF $(DEPDIR)/harmonySEQ-SequencerWidget.Tpo -c -o harmonySEQ-SequencerWidget.obj `if test -f 'SequencerWidget.cpp'; then $(CYGPATH_W) 'SequencerWidget.cpp'; else $(CYGPATH_W) '$(srcdir)/SequencerWidget.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-SequencerWidget.Tpo $(DEPDIR)/harmonySEQ-SequencerWidget.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SequencerWidget.cpp' object='harmonySEQ-SequencerWidget.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-SequencerWidget.obj `if test -f 'SequencerWidget.cpp'; then $(CYGPATH_W) 'SequencerWidget.cpp'; else $(CYGPATH_W) '$(srcdir)/SequencerWidget.cpp'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

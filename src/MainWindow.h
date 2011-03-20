@@ -24,6 +24,7 @@
 #include <gtkmm/window.h>
 #include "global.h"
 #include "seqHandle.h"
+#include "SequencerWidget.h"
 class MainWindow: public Gtk::Window{
 
 
@@ -115,6 +116,9 @@ private:
 
     Gtk::VBox wMainVBox;
     Gtk::VBox wVBox1;
+
+    //Gtk::VPaned wVPaned;
+    SequencerWidget seqWidget;
 
     Gtk::Menu* wPopupMenu;
 
