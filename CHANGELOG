@@ -1,5 +1,9 @@
 harmonyseq 0.15
 	- Allowed reordering sequencers.
+	- Reorganized sequencer window, and merged it into the main window.
+	- Added 4th note indicators.
+	- Added PlayOnEdit feature.
+	- Significantly improved data refreshing.
 
 harmonyseq 0.14 "enlighted"
 	- Moved GUI from buttons to an elegant toolbar and menu.
