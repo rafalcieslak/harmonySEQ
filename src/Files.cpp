@@ -177,7 +177,7 @@ void LoadFileDialog(){
     dialog.set_transient_for(*mainwindow);
     //And adding to it some buttons.
     dialog.add_button(Gtk::Stock::CANCEL,Gtk::RESPONSE_CANCEL);
-    dialog.add_button(Gtk::Stock::SAVE,Gtk::RESPONSE_OK);
+    dialog.add_button(Gtk::Stock::OPEN,Gtk::RESPONSE_OK);
 
     //Creating filters...
     Gtk::FileFilter hseq;
