@@ -83,7 +83,6 @@ private:
     Gtk::ComboBox combo_root;
     Gtk::ComboBox combo_guitar_mode;
     Gtk::ComboBox combo_triad_mode;
-    Gtk::Label inversion_label;
     Gtk::SpinButton inversion;
 
     Gtk::CheckButton use_base;

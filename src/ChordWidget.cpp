@@ -76,7 +76,6 @@ ChordWidget::ChordWidget(){
     inversion.set_width_chars(1);
     inversion.signal_value_changed().connect(sigc::mem_fun(*this,&ChordWidget::OnInversionChanged));
     inversion.set_tooltip_markup(_("Sets the <b>inversion</b> of the triad."));
-    inversion_label.set_text(_("Inversion:"));
 
 
     use_base.set_label(_("Base:"));
@@ -151,7 +150,7 @@ void ChordWidget::UpdateWhatToShowAndWhatIsSensitive(){
     combo_root.hide();
     combo_guitar_mode.hide();
     combo_triad_mode.hide();
-    inversion_label.hide();
+    inv_label.hide();
     inversion.hide();
 
     Gtk::TreeModel::Row row = *(combo_type.get_active());
@@ -163,7 +162,7 @@ void ChordWidget::UpdateWhatToShowAndWhatIsSensitive(){
         case Chord::CHORD_TYPE_TRIAD:
             combo_root.show();
             combo_triad_mode.show();
-            inversion_label.show();
+            inv_label.show();
             inversion.show();
             base.set_sensitive(0);
             note_label.set_sensitive(0);
