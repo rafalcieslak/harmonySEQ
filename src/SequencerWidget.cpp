@@ -203,10 +203,10 @@ void SequencerWidget::UpdateEverything(){
         UpdateActivePattern();
         UpdateChord();
 
-        show();
+        //show();
     }else{
         //Nothing is selected them! The whole widget must look disabled and inactive!
-        hide(); //temporary solution
+        //hide(); //temporary solution
 
     }
     

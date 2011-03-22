@@ -117,6 +117,10 @@ private:
     Gtk::VBox wMainVBox;
     Gtk::VBox wVBox1;
 
+    Gtk::Frame wFrame;
+    Gtk::VBox wFrameBox;
+    Gtk::Label wNoSeqSelected;
+
     //Gtk::VPaned wVPaned;
 
     Gtk::Menu* wPopupMenu;
