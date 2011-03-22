@@ -36,14 +36,16 @@ SequencerWidget::SequencerWidget(){
     do_not_react_on_page_changes = 0;
     ignore_signals = 0;
 
-    wMainTable.resize(3,3);
-    wMainTable.attach(wUpperLeftBox,0,1,0,1);
-    wMainTable.attach(wVSep,1,2,0,1);
-    wVSep.set_size_request(2,0);
-    wMainTable.attach(wUpperVBox,2,3,0,1);
-    wMainTable.attach(wHSep,0,3,1,2);
-    wMainTable.attach(wBoxOfChord,0,1,2,3);
-    wMainTable.attach(wNotebookAndPatternOpsHBox,2,3,2,3);
+    wMainVbox.pack_start(wUpBox,Gtk::PACK_SHRINK);
+    wMainVbox.pack_start(wHSep,Gtk::PACK_SHRINK);
+    wHSep.set_size_request(0,3);
+    wMainVbox.pack_start(wDownBox,Gtk::PACK_SHRINK);
+    wUpBox.pack_start(wUpperLeftBox,Gtk::PACK_SHRINK);
+    wUpBox.pack_start(wVSep,Gtk::PACK_SHRINK);
+    wVSep.set_size_request(10,0);
+    wUpBox.pack_start(wUpperVBox,Gtk::PACK_SHRINK);
+    wDownBox.pack_start(wBoxOfChord,Gtk::PACK_SHRINK);
+    wDownBox.pack_start(wNotebookAndPatternOpsHBox,Gtk::PACK_SHRINK);
 
     wNotebookAndPatternOpsHBox.pack_start(wNotebook,Gtk::PACK_SHRINK);
     wNotebookAndPatternOpsHBox.pack_start(wPtOpsVBox,Gtk::PACK_SHRINK);
@@ -153,7 +155,7 @@ SequencerWidget::SequencerWidget(){
     wLengthBox.pack_start(m_Columns_len.text);
     wLengthBox.signal_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnLengthChanged));
 
-    add(wMainTable);
+    add(wMainVbox);
 
     signal_key_press_event().connect(&FindAndProcessEventsKeyPress);
 

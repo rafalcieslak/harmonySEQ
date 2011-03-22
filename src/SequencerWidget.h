@@ -93,7 +93,9 @@ private:
     void OnNameEdited();
     void OnPlayOnceButtonClicked();
 
-    Gtk::Table wMainTable;
+    Gtk::VBox wMainVbox;
+    Gtk::HBox wUpBox;
+    Gtk::HBox wDownBox;
     Gtk::HBox wNameBox;
     Gtk::HBox wOnBox;
     Gtk::VBox wUpperLeftBox;
