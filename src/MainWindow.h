@@ -118,7 +118,7 @@ private:
     Gtk::VBox wVBox1;
 
     Gtk::Frame wFrame;
-    Gtk::VBox wFrameBox;
+    Gtk::Notebook wFrameNotebook;
     Gtk::Label wNoSeqSelected;
 
     //Gtk::VPaned wVPaned;

@@ -173,12 +173,16 @@ MainWindow::MainWindow()
     wMainVBox.pack_start(Toolbar,Gtk::PACK_SHRINK);
     wMainVBox.pack_start(wVBox1);
     wVBox1.pack_end(wFrame,Gtk::PACK_SHRINK);
-    wFrame.add(wFrameBox);
+    wFrame.add(wFrameNotebook);
     wFrame.set_border_width(1);
     wFrame.set_label(_("Sequencer properties"));
 
-    wFrameBox.pack_start(seqWidget,Gtk::PACK_SHRINK);
-    wFrameBox.pack_start(wNoSeqSelected,Gtk::PACK_SHRINK);
+    wFrameNotebook.append_page(wNoSeqSelected);
+    wFrameNotebook.append_page(seqWidget);
+    wFrameNotebook.set_current_page(0);
+    wFrameNotebook.set_show_tabs(0);
+    wFrameNotebook.set_show_border(0);
+
     wNoSeqSelected.set_text(_("(No sequencer selected)"));
     wNoSeqSelected.set_sensitive(0);
 
@@ -278,17 +282,6 @@ MainWindow::MainWindow()
     }
 
     show_all_children(1);
-    /*while (Gtk::Main::events_pending())
-    Gtk::Main::iteration(1);
-    *err << seqWidget.get_height() << ENDL;*/
-    wNoSeqSelected.set_size_request(-1,217);
-    
-    //At first the seqwidget shows nothing, but was displayed by the show all recursive method.
-    //So, lets hide it.
-    //This is temporary workaround, it shouldn,t hide, but become diabled.
-    seqWidget.hide();
-    wNoSeqSelected.show();
-
 }
 
 MainWindow::~MainWindow()
@@ -593,8 +586,7 @@ void MainWindow::OnSelectionChanged(){
         pDuplicateTool->set_sensitive(1);
 
         seqWidget.SelectSeq((*iter)[m_columns_sequencers.col_handle]);
-        seqWidget.show();
-        wNoSeqSelected.hide();
+        wFrameNotebook.set_current_page(1);
     } else {
         //selection is empty
         Gtk::Widget* pRemoveTool = m_refUIManager->get_widget("/ToolBar/RemoveTool");
@@ -603,8 +595,7 @@ void MainWindow::OnSelectionChanged(){
         pDuplicateTool->set_sensitive(0);
         
         seqWidget.SelectNothing();
-        seqWidget.hide();
-        wNoSeqSelected.show();
+        wFrameNotebook.set_current_page(0);
     }
 
 }

@@ -106,7 +106,7 @@ private:
     Gtk::VBox wPtOpsVBox;
     Gtk::HBox wPtOpsHBox1;
     Gtk::HBox wPtOpsHBox2;
-    Gtk::HBox wBoxOfChord;
+    Gtk::VBox wBoxOfChord;
 
     Gtk::HSeparator wHSep;
     Gtk::VSeparator wVSep;
@@ -124,6 +124,7 @@ private:
     Gtk::Label wActivePanelLabel;
     Gtk::Label wPatternLabel;
     Gtk::Label wNameLabel;
+    Gtk::Label wVirtualSpaceLabel;
     Gtk::Entry wNameEntry;
     Gtk::Button wAddPatternButton;
     Gtk::Button wPlayOnceButton;

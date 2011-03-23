@@ -73,7 +73,9 @@ SequencerWidget::SequencerWidget(){
     wUpperHBox2.pack_start(wLengthsLabel,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wLengthBox,Gtk::PACK_SHRINK);
 
-    wBoxOfChord.pack_start(chordwidget);
+    wBoxOfChord.pack_start(chordwidget,Gtk::PACK_SHRINK);
+    wBoxOfChord.pack_start(wVirtualSpaceLabel,Gtk::PACK_EXPAND_WIDGET,1); //extra alligments space - 1 stands for the notebook's border witdth
+    wVirtualSpaceLabel.set_text(" ");
     chordwidget.on_changed.connect(sigc::mem_fun(*this,&SequencerWidget::OnChordWidgetChanged));
     chordwidget.on_note_changed.connect(sigc::mem_fun(*this,&SequencerWidget::OnChordWidgetNoteChanged));
 
