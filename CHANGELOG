@@ -3,6 +3,7 @@ harmonyseq 0.15
 	- Reorganized sequencer window, and merged it into the main window.
 	- Added 4th note indicators.
 	- Added PlayOnEdit feature.
+	- Incresed tempo range, as some may need it higher tempos.
 	- Significantly improved data refreshing.
 
 harmonyseq 0.14 "enlighted"
