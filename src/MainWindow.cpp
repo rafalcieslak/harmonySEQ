@@ -24,7 +24,6 @@
 #include "Sequencer.h"
 #include "Files.h"
 #include "Event.h"
-#include "EventsWindow.h"
 #include "TreeModels.h"
 #include "config.h"
 #include "SettingsWindow.h"
@@ -37,8 +36,8 @@ MainWindow::MainWindow()
 {
     set_border_width(0);
     //set_resizable(0);
-    set_default_size(700,500);
-    set_size_request(700,500);
+    set_default_size(950,600);
+    set_size_request(600,450); //minimum size
     //set_resizable(0);
     UpdateTitle();
 
@@ -204,7 +203,12 @@ MainWindow::MainWindow()
 
     wScrolledWindow.add(wTreeView);
     wScrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC,Gtk::POLICY_AUTOMATIC); //The sliders should be shown only when needed
-    wVBox1.pack_start(wScrolledWindow); //will expand, no shrinking
+    wVBox1.pack_start(wHPaned); //will expand, no shrinking
+    wHPaned.pack1(wScrolledWindow,1,1);
+    wHPaned.pack2(eventsWidget,0,0);
+    wHPaned.set_position(675);
+
+
     // <editor-fold defaultstate="collapsed" desc="tree">
     { //creating the tree model
         TreeModel_sequencers = Gtk::ListStore::create(m_columns_sequencers);
@@ -378,7 +382,7 @@ MainWindow::OnNameEdited(const Glib::ustring& path, const Glib::ustring& newtext
 
     if(seqWidget.selectedSeq == h) seqWidget.UpdateName();
 
-    eventswindow->UpdateAll();
+    UpdateEventWidget();
     Files::SetFileModified(1);
 }
 
@@ -494,7 +498,7 @@ void MainWindow::OnRemoveClicked(){
     //update hande map data:
     UpdateSeqHandlesAfterDeleting(id);
 
-    eventswindow->InitTreeData();
+    eventsWidget.UpdateAll();
 
     Files::SetFileModified(1);
 }
@@ -572,8 +576,6 @@ bool MainWindow::OnKeyPress(GdkEventKey* event){
 }
 
 void MainWindow::OnEventsClicked(){
-    eventswindow->present();
-
 }
 
 void MainWindow::OnSelectionChanged(){
@@ -682,7 +684,7 @@ void MainWindow::OnMenuNewClicked(){
     ClearEvents();
     ClearSequencers();
     ResetSeqHandles();
-    eventswindow->UpdateAll();
+    UpdateEventWidget();
     InitTreeData();
 
     tempo = 120.0;
@@ -911,4 +913,8 @@ void MainWindow::OnTreeModelRowDeleted(const Gtk::TreeModel::Path& path){
 
 void MainWindow::OnSeqEdited(seqHandle h){
     RefreshRow(seqH(h)->my_row);
+}
+
+void MainWindow::UpdateEventWidget(){
+    eventsWidget.UpdateAll();
 }

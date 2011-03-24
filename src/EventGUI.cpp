@@ -18,10 +18,10 @@
 */
 #include "EventGUI.h"
 #include "Event.h"
-#include "EventsWindow.h"
 #include "messages.h"
 #include "TreeModels.h"
 #include "Files.h"
+#include "MainWindow.h"
 EventGUI::EventGUI(Event *prt){
     parent = prt;
 
@@ -167,7 +167,7 @@ void EventGUI::OnTypeChanged(){
     ChangeVisibleLines();
     if (!DO_NOT_INIT_TYPE) InitType();
     label_preview.set_text(parent->GetLabel());
-    if(parent->row_in_event_window) eventswindow->UpdateRow(parent->row_in_event_window);
+    if(parent->row_in_event_widget) mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
     Files::SetFileModified(1);
 }
 
@@ -181,7 +181,7 @@ void EventGUI::OnChannelChanged(){
     }else *err << _("Error: channel has changed, while event is not MIDI-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
-    if(parent->row_in_event_window) eventswindow->UpdateRow(parent->row_in_event_window);
+    if(parent->row_in_event_widget) mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
     Files::SetFileModified(1);
 }
 
@@ -191,7 +191,7 @@ void EventGUI::OnKeyChanged(){
     }else *err << _("Error: key has changed, while event is not key-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
-    if(parent->row_in_event_window) eventswindow->UpdateRow(parent->row_in_event_window);
+    if(parent->row_in_event_widget) mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
     Files::SetFileModified(1);
 }
 
@@ -202,7 +202,7 @@ void EventGUI::OnCtrlChanged(){
     }else *err << _("Error: controller has changed, while event is not ctrl-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
-    if(parent->row_in_event_window) eventswindow->UpdateRow(parent->row_in_event_window);
+    if(parent->row_in_event_widget) mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
     Files::SetFileModified(1);
 
 }
@@ -213,7 +213,7 @@ void EventGUI::OnNoteChanged(){
     }else *err << _("Error: note has changed, while event is not note-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
-    if(parent->row_in_event_window) eventswindow->UpdateRow(parent->row_in_event_window);
+    if(parent->row_in_event_widget) mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
     Files::SetFileModified(1);
 
 }
@@ -224,7 +224,7 @@ void EventGUI::OnOKClicked(){
 }
 
 void EventGUI::UpdateValues(){
-    set_transient_for(*eventswindow);
+    set_transient_for(*mainwindow);
     Gtk::TreeModel::iterator it = TreeModel_EventTypes->get_iter("0");
     Gtk::TreeModel::Row row;
     DO_NOT_INIT_TYPE = true; //causes the Types_combo.signal_changed reciver know he shouldnt clear event args with zeros;

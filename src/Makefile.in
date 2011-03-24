@@ -58,14 +58,14 @@ am_harmonySEQ_OBJECTS = harmonySEQ-main.$(OBJEXT) \
 	harmonySEQ-MidiDriver.$(OBJEXT) harmonySEQ-Sequencer.$(OBJEXT) \
 	harmonySEQ-messages.$(OBJEXT) harmonySEQ-Files.$(OBJEXT) \
 	harmonySEQ-global.$(OBJEXT) harmonySEQ-Event.$(OBJEXT) \
-	harmonySEQ-EventsWindow.$(OBJEXT) \
 	harmonySEQ-EventGUI.$(OBJEXT) harmonySEQ-Action.$(OBJEXT) \
 	harmonySEQ-ActionGUI.$(OBJEXT) harmonySEQ-TreeModels.$(OBJEXT) \
 	harmonySEQ-Chord.$(OBJEXT) harmonySEQ-ChordWidget.$(OBJEXT) \
 	harmonySEQ-Configuration.$(OBJEXT) \
 	harmonySEQ-SettingsWindow.$(OBJEXT) \
 	harmonySEQ-seqHandle.$(OBJEXT) \
-	harmonySEQ-SequencerWidget.$(OBJEXT)
+	harmonySEQ-SequencerWidget.$(OBJEXT) \
+	harmonySEQ-EventsWidget.$(OBJEXT)
 harmonySEQ_OBJECTS = $(am_harmonySEQ_OBJECTS)
 am__DEPENDENCIES_1 =
 harmonySEQ_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -221,7 +221,6 @@ harmonySEQ_SOURCES = main.cpp\
 						Files.cpp \
 						global.cpp \
 						Event.cpp \
-						EventsWindow.cpp \
 						EventGUI.cpp \
 						Action.cpp \
 						ActionGUI.cpp \
@@ -232,7 +231,8 @@ harmonySEQ_SOURCES = main.cpp\
 						SettingsWindow.cpp \
 						seqHandle.cpp \
 						SequencerWidget.cpp \
-						MainWindow.h MidiDriver.h Sequencer.h messages.h Files.h global.h Event.h EventsWindow.h EventGUI.h Action.h ActionGUI.h TreeModels.h Chord.h ChordWidget.h Configuration.h SettingsWindow.h seqHandle.h SequencerWidget.h \
+						EventsWidget.cpp \
+						MainWindow.h MidiDriver.h Sequencer.h messages.h Files.h global.h Event.h EventGUI.h Action.h ActionGUI.h TreeModels.h Chord.h ChordWidget.h Configuration.h SettingsWindow.h seqHandle.h SequencerWidget.h EventsWidget.h \
 						gettext.h
 
 harmonySEQ_CPPFLAGS = $(GTKMM_CFLAGS) -Wall -g -O3
@@ -346,7 +346,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-Configuration.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-Event.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-EventGUI.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-EventsWindow.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-EventsWidget.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-Files.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-MainWindow.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-MidiDriver.Po@am__quote@
@@ -484,20 +484,6 @@ harmonySEQ-Event.obj: Event.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Event.cpp' object='harmonySEQ-Event.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-Event.obj `if test -f 'Event.cpp'; then $(CYGPATH_W) 'Event.cpp'; else $(CYGPATH_W) '$(srcdir)/Event.cpp'; fi`
-
-harmonySEQ-EventsWindow.o: EventsWindow.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-EventsWindow.o -MD -MP -MF $(DEPDIR)/harmonySEQ-EventsWindow.Tpo -c -o harmonySEQ-EventsWindow.o `test -f 'EventsWindow.cpp' || echo '$(srcdir)/'`EventsWindow.cpp
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-EventsWindow.Tpo $(DEPDIR)/harmonySEQ-EventsWindow.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='EventsWindow.cpp' object='harmonySEQ-EventsWindow.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-EventsWindow.o `test -f 'EventsWindow.cpp' || echo '$(srcdir)/'`EventsWindow.cpp
-
-harmonySEQ-EventsWindow.obj: EventsWindow.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-EventsWindow.obj -MD -MP -MF $(DEPDIR)/harmonySEQ-EventsWindow.Tpo -c -o harmonySEQ-EventsWindow.obj `if test -f 'EventsWindow.cpp'; then $(CYGPATH_W) 'EventsWindow.cpp'; else $(CYGPATH_W) '$(srcdir)/EventsWindow.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-EventsWindow.Tpo $(DEPDIR)/harmonySEQ-EventsWindow.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='EventsWindow.cpp' object='harmonySEQ-EventsWindow.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-EventsWindow.obj `if test -f 'EventsWindow.cpp'; then $(CYGPATH_W) 'EventsWindow.cpp'; else $(CYGPATH_W) '$(srcdir)/EventsWindow.cpp'; fi`
 
 harmonySEQ-EventGUI.o: EventGUI.cpp
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-EventGUI.o -MD -MP -MF $(DEPDIR)/harmonySEQ-EventGUI.Tpo -c -o harmonySEQ-EventGUI.o `test -f 'EventGUI.cpp' || echo '$(srcdir)/'`EventGUI.cpp
@@ -638,6 +624,20 @@ harmonySEQ-SequencerWidget.obj: SequencerWidget.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SequencerWidget.cpp' object='harmonySEQ-SequencerWidget.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-SequencerWidget.obj `if test -f 'SequencerWidget.cpp'; then $(CYGPATH_W) 'SequencerWidget.cpp'; else $(CYGPATH_W) '$(srcdir)/SequencerWidget.cpp'; fi`
+
+harmonySEQ-EventsWidget.o: EventsWidget.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-EventsWidget.o -MD -MP -MF $(DEPDIR)/harmonySEQ-EventsWidget.Tpo -c -o harmonySEQ-EventsWidget.o `test -f 'EventsWidget.cpp' || echo '$(srcdir)/'`EventsWidget.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-EventsWidget.Tpo $(DEPDIR)/harmonySEQ-EventsWidget.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='EventsWidget.cpp' object='harmonySEQ-EventsWidget.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-EventsWidget.o `test -f 'EventsWidget.cpp' || echo '$(srcdir)/'`EventsWidget.cpp
+
+harmonySEQ-EventsWidget.obj: EventsWidget.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-EventsWidget.obj -MD -MP -MF $(DEPDIR)/harmonySEQ-EventsWidget.Tpo -c -o harmonySEQ-EventsWidget.obj `if test -f 'EventsWidget.cpp'; then $(CYGPATH_W) 'EventsWidget.cpp'; else $(CYGPATH_W) '$(srcdir)/EventsWidget.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-EventsWidget.Tpo $(DEPDIR)/harmonySEQ-EventsWidget.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='EventsWidget.cpp' object='harmonySEQ-EventsWidget.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-EventsWidget.obj `if test -f 'EventsWidget.cpp'; then $(CYGPATH_W) 'EventsWidget.cpp'; else $(CYGPATH_W) '$(srcdir)/EventsWidget.cpp'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

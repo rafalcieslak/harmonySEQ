@@ -25,6 +25,7 @@
 #include "global.h"
 #include "seqHandle.h"
 #include "SequencerWidget.h"
+#include "EventsWidget.h"
 class MainWindow: public Gtk::Window{
 
 
@@ -60,6 +61,9 @@ public:
     /**Hides and shows columns, according to Config::VisibleColumns*/
     void UpdateVisibleColumns();
 
+    /**Updates data in the events list*/
+    void UpdateEventWidget();
+
     Gtk::SpinButton tempo_button;
 
     void UpdatePassMidiToggle();
@@ -72,6 +76,7 @@ public:
     void OnSeqEdited(seqHandle h);
     
     SequencerWidget seqWidget;
+    EventsWidget eventsWidget;
 private:
      /**Reacts on sequencer settings changes from main window*/
     void OnMutedToggleToggled(const Glib::ustring& path);
@@ -121,7 +126,7 @@ private:
     Gtk::Notebook wFrameNotebook;
     Gtk::Label wNoSeqSelected;
 
-    //Gtk::VPaned wVPaned;
+    Gtk::HPaned wHPaned;
 
     Gtk::Menu* wPopupMenu;
 

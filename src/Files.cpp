@@ -23,7 +23,6 @@
 #include "Sequencer.h"
 #include "MainWindow.h"
 #include "Event.h"
-#include "EventsWindow.h"
 #include "Action.h"
 #include "MidiDriver.h"
 
@@ -217,7 +216,7 @@ void LoadFileDialog(){
     //Some things that must be done to update the GUI fully.
     mainwindow->InitTreeData();
     mainwindow->tempo_button.set_value(tempo);
-    eventswindow->InitTreeData();
+    mainwindow->UpdateEventWidget();
 }
 
 

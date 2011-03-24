@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010 Rafał Cieślak
+    Copyright (C) 2010, 2011 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -18,8 +18,8 @@
 */
 
 #include "Event.h"
-#include "EventsWindow.h"
 #include "messages.h"
+#include "MainWindow.h"
 
 bool event_capturing_mode;
 Event* event_to_capture_to;
@@ -83,7 +83,7 @@ void Event::Trigger(){
     *dbg << GetLabel() << "'--\n";
 
 #ifdef EVENTS_FLASH
-    eventswindow->ColorizeEvent(row_in_event_window);
+    mainwindow->eventsWidget.ColorizeEvent(row_in_event_widget);
 #endif
     
     for (unsigned int i = 0; i < actions.size(); i++){

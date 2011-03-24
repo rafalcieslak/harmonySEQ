@@ -12,7 +12,7 @@
       <itemPath>src/Configuration.h</itemPath>
       <itemPath>src/Event.h</itemPath>
       <itemPath>src/EventGUI.h</itemPath>
-      <itemPath>src/EventsWindow.h</itemPath>
+      <itemPath>../Programy/harmonySEQ/trunk/src/EventsWidget.h</itemPath>
       <itemPath>src/Files.h</itemPath>
       <itemPath>src/MainWindow.h</itemPath>
       <itemPath>src/MidiDriver.h</itemPath>
@@ -47,7 +47,7 @@
       <itemPath>src/Configuration.cpp</itemPath>
       <itemPath>src/Event.cpp</itemPath>
       <itemPath>src/EventGUI.cpp</itemPath>
-      <itemPath>src/EventsWindow.cpp</itemPath>
+      <itemPath>../Programy/harmonySEQ/trunk/src/EventsWidget.cpp</itemPath>
       <itemPath>src/Files.cpp</itemPath>
       <itemPath>src/MainWindow.cpp</itemPath>
       <itemPath>src/Makefile.am</itemPath>

@@ -60,8 +60,8 @@ public:
     /**Actions list*/
     std::vector<Action*> actions;
 
-    /**Reference to treerow in events window*/
-    Gtk::TreeRowReference row_in_event_window;
+    /**Reference to treerow in events widget*/
+    Gtk::TreeRowReference row_in_event_widget;
 
 private:
 

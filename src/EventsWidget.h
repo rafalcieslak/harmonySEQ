@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010 Rafał Cieślak
+    Copyright (C) 2010, 2011 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -17,16 +17,16 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef EVENTSWINDOW_H
-#define	EVENTSWINDOW_H
-#include "global.h"
+
+#ifndef EVENTSWIDGET_H
+#define	EVENTSWIDGET_H
 #include <gtkmm.h>
 
-class EventsWindow : public Gtk::Window {
+class EventsWidget : public Gtk::VBox{
 public:
-    EventsWindow();
-    virtual ~EventsWindow();
-
+    EventsWidget();
+    virtual ~EventsWidget();
+    
     /**Fills the treeview with all events from events list*/
     void InitTreeData();
     /**Refreshes settings for all events in the treeview*/
@@ -44,6 +44,7 @@ public:
     Gtk::Button add_button;
     Gtk::Button add_action_button;
     Gtk::Button remove_button;
+    Gtk::ScrolledWindow scrolledwindow;
 
     void OnAddEventClicked();
     void OnAddActionClicked();
@@ -76,5 +77,5 @@ private:
 
 };
 
-#endif	/* EVENTSWINDOW_H */
+#endif	/* EVENTSWIDGET_H */
 

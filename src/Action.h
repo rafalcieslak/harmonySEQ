@@ -59,7 +59,7 @@ public:
     
 
     /**Keeps a reference to events TreeModel row (a child of an event). Useful f.e. for refreshing data in that row*/
-    Gtk::TreeRowReference row_in_event_window;
+    Gtk::TreeRowReference row_in_event_widget;
 
     /**Stores the type of this action*/
     int type;

@@ -26,7 +26,6 @@
 #include "MidiDriver.h"
 #include "messages.h"
 #include "MainWindow.h"
-#include "EventsWindow.h"
 #include "Sequencer.h"
 #include "Event.h"
 #include "EventGUI.h"
@@ -45,7 +44,6 @@ debug* dbg; //the stream-like objects responsible of putting messages into stdio
 error* err;     //see above
 MidiDriver* midi;
 MainWindow* mainwindow;
-EventsWindow* eventswindow;
 SettingsWindow* settingswindow;
 int passing_midi; //states whether all midi events are passed through, or not.
 Glib::ustring file;
@@ -168,7 +166,6 @@ void InitGui(){
     gdk_threads_enter();
     {
         mainwindow = new MainWindow; 
-        eventswindow = new EventsWindow;
         settingswindow = new SettingsWindow;
     }
     gdk_threads_leave();
@@ -356,7 +353,7 @@ int main(int argc, char** argv) {
 
     //Initing trees in both windows.
     mainwindow->InitTreeData();
-    eventswindow->InitTreeData();
+    mainwindow->UpdateEventWidget();
 
     //At the beggining, file is not modified.
     Files::SetFileModified(0);
@@ -399,7 +396,6 @@ void end_program(){
         midi->DeleteQueue();
     }
     delete mainwindow;
-    delete eventswindow;
     delete midi;
     delete dbg;
     delete err;

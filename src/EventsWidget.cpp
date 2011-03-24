@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010 Rafał Cieślak
+    Copyright (C) 2010, 2011 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -17,51 +17,52 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "EventsWindow.h"
+
+#include "EventsWidget.h"
 #include "Event.h"
+#include "global.h"
 #include "messages.h"
 #include "Files.h"
 
-EventsWindow::EventsWindow(){
-    char temp[30];
-    sprintf(temp, "harmonySEQ %s - Events", VERSION);
-    set_title(temp);
-    set_border_width(5);
+EventsWidget::EventsWidget(){
+    set_size_request(100,-1);
 
-    add(main_Vbox);
-    main_Vbox.pack_start(m_TreeView);
-    main_Vbox.pack_start(lower_button_Hbox);
+    pack_start(main_Vbox);
+    main_Vbox.pack_start(scrolledwindow);
+    scrolledwindow.add(m_TreeView);
+    scrolledwindow.set_policy(Gtk::POLICY_AUTOMATIC,Gtk::POLICY_AUTOMATIC);
+    main_Vbox.pack_start(lower_button_Hbox,Gtk::PACK_SHRINK);
     lower_button_Hbox.pack_end(add_button);
     lower_button_Hbox.pack_end(add_action_button);
     lower_button_Hbox.pack_end(remove_button);
     add_button.set_label(_("Add Event"));
-    add_button.signal_clicked().connect(mem_fun(*this,&EventsWindow::OnAddEventClicked));
+    add_button.signal_clicked().connect(sigc::mem_fun(*this,&EventsWidget::OnAddEventClicked));
     remove_button.set_label(_("Remove"));
     remove_button.set_sensitive(0);
-    remove_button.signal_clicked().connect(mem_fun(*this,&EventsWindow::OnRemoveClicked));
+    remove_button.signal_clicked().connect(sigc::mem_fun(*this,&EventsWidget::OnRemoveClicked));
     add_action_button.set_sensitive(0);
     add_action_button.set_label(_("Add Action"));
-    add_action_button.signal_clicked().connect(mem_fun(*this,&EventsWindow::OnAddActionClicked));
+    add_action_button.signal_clicked().connect(sigc::mem_fun(*this,&EventsWidget::OnAddActionClicked));
 
     m_refTreeModel = Gtk::TreeStore::create(m_columns);
     m_TreeView.set_model(m_refTreeModel);
-     
+
     if (debugging) m_TreeView.append_column(_("ID"),m_columns.col_ID);
     //m_TreeView.append_column("prt",m_columns.col_prt);
     //m_TreeView.append_column("TYPE",m_columns.col_type);
     Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
-    int colcount = m_TreeView.append_column(_("Event"),*pRenderer);
+    int colcount = m_TreeView.append_column(_("Events"),*pRenderer);
     Gtk::TreeViewColumn * column = m_TreeView.get_column(colcount-1);
     column->add_attribute(pRenderer->property_cell_background(),m_columns.col_colour);
     column->add_attribute(pRenderer->property_text(),m_columns.col_label);
     column->add_attribute(pRenderer->property_cell_background(),m_columns.col_colour);
 
-    m_TreeView.set_headers_visible(0);//hiding the upper headers
+    m_TreeView.set_headers_visible(1);//showing the upper headers
 
-    m_TreeView.signal_row_activated().connect(sigc::mem_fun(*this, &EventsWindow::OnRowChosen));
+    m_TreeView.signal_row_activated().connect(sigc::mem_fun(*this, &EventsWidget::OnRowChosen));
     Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = m_TreeView.get_selection();
-    refTreeSelection->signal_changed().connect(mem_fun(*this, &EventsWindow::OnSelectionChanged));
-    m_TreeView.signal_row_collapsed().connect(mem_fun(*this, &EventsWindow::OnRowCollapsed));
+    refTreeSelection->signal_changed().connect(sigc::mem_fun(*this, &EventsWidget::OnSelectionChanged));
+    m_TreeView.signal_row_collapsed().connect(sigc::mem_fun(*this, &EventsWidget::OnRowCollapsed));
     m_TreeView.signal_key_press_event().connect(&FindAndProcessEventsKeyPress);
     signal_key_press_event().connect(&FindAndProcessEventsKeyPress);
     m_TreeView.set_enable_search(0);
@@ -70,10 +71,11 @@ EventsWindow::EventsWindow(){
 }
 
 
-EventsWindow::~EventsWindow(){
+EventsWidget::~EventsWidget(){
 }
 
-void EventsWindow::InitTreeData(){
+
+void EventsWidget::InitTreeData(){
 
     m_refTreeModel->clear();
     Gtk::TreeModel::Row row;
@@ -87,7 +89,7 @@ void EventsWindow::InitTreeData(){
         row[m_columns.col_type] = EVENT;
         row[m_columns.col_prt] = -1;
         Gtk::TreeRowReference rowref(m_refTreeModel, m_refTreeModel->get_path(iter));
-        Events[x]->row_in_event_window = rowref;
+        Events[x]->row_in_event_widget = rowref;
         //actions
         for (unsigned int c = 0; c < Events[x]->actions.size();c++){
             if(!Events[x]->actions[c]) continue;
@@ -99,20 +101,16 @@ void EventsWindow::InitTreeData(){
             row_child[m_columns.col_type] = ACTION;
             row_child[m_columns.col_prt] = x;
             Gtk::TreeRowReference rowref_child(m_refTreeModel, m_refTreeModel->get_path(iter_child));
-            Events[x]->actions[c]->row_in_event_window = rowref_child;
+            Events[x]->actions[c]->row_in_event_widget = rowref_child;
         }
-         
-
     }
-
-    resize(2,2);
 }
 
-void EventsWindow::UpdateAll(){
+void EventsWidget::UpdateAll(){
     InitTreeData();
 }
 
-void EventsWindow::ColorizeEvent(Gtk::TreeRowReference rowref){
+void EventsWidget::ColorizeEvent(Gtk::TreeRowReference rowref){
     Gtk::TreeModel::Row row = *(m_refTreeModel->get_iter(rowref.get_path()));
 
     if (!row) {
@@ -121,16 +119,16 @@ void EventsWindow::ColorizeEvent(Gtk::TreeRowReference rowref){
     }
 
     row[m_columns.col_colour] = "royal blue";
-    Glib::signal_timeout().connect(sigc::bind(mem_fun(*this,&EventsWindow::UncolorizeEvent),rowref),EVENTS_FLASH_TIMEOUT);
+    Glib::signal_timeout().connect(sigc::bind(sigc::mem_fun(*this,&EventsWidget::UncolorizeEvent),rowref),EVENTS_FLASH_TIMEOUT);
 }
 
-bool EventsWindow::UncolorizeEvent(Gtk::TreeRowReference rowref){
+bool EventsWidget::UncolorizeEvent(Gtk::TreeRowReference rowref){
     Gtk::TreeModel::Row row = *(m_refTreeModel->get_iter(rowref.get_path()));
 
     row[m_columns.col_colour] = "white";
     return 0;
 }
-void EventsWindow::ColorizeAction(Gtk::TreeRowReference rowref){
+void EventsWidget::ColorizeAction(Gtk::TreeRowReference rowref){
     Gtk::TreeModel::Row row = *(m_refTreeModel->get_iter(rowref.get_path()));
 
     if (!row) {
@@ -139,16 +137,16 @@ void EventsWindow::ColorizeAction(Gtk::TreeRowReference rowref){
     }
 
     row[m_columns.col_colour] = "light blue";
-    Glib::signal_timeout().connect(sigc::bind(mem_fun(*this,&EventsWindow::UncolorizeAction),rowref),EVENTS_FLASH_TIMEOUT);
+    Glib::signal_timeout().connect(sigc::bind(sigc::mem_fun(*this,&EventsWidget::UncolorizeAction),rowref),EVENTS_FLASH_TIMEOUT);
 }
 
-bool EventsWindow::UncolorizeAction(Gtk::TreeRowReference rowref){
+bool EventsWidget::UncolorizeAction(Gtk::TreeRowReference rowref){
     Gtk::TreeModel::Row row = *(m_refTreeModel->get_iter(rowref.get_path()));
 
     row[m_columns.col_colour] = "beige";
     return 0;
 }
-void EventsWindow::OnRowChosen(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column){
+void EventsWidget::OnRowChosen(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column){
 
     Gtk::TreeModel::iterator iter = m_refTreeModel->get_iter(path);
     if (iter)
@@ -166,7 +164,7 @@ void EventsWindow::OnRowChosen(const Gtk::TreeModel::Path& path, Gtk::TreeViewCo
 
 }
 
-void EventsWindow::UpdateRow(Gtk::TreeRowReference rowref){
+void EventsWidget::UpdateRow(Gtk::TreeRowReference rowref){
     Gtk::TreeModel::Row row = *(m_refTreeModel->get_iter(rowref.get_path()));
         switch (row[m_columns.col_type]){
             case EVENT:
@@ -176,10 +174,10 @@ void EventsWindow::UpdateRow(Gtk::TreeRowReference rowref){
                 row[m_columns.col_label] = Events[row[m_columns.col_prt]]->actions[row[m_columns.col_ID]]->GetLabel();
                 break;
         }
-    
+
 }
 
-void EventsWindow::OnAddEventClicked(){
+void EventsWidget::OnAddEventClicked(){
 
     Gtk::TreeModel::iterator iter = m_refTreeModel->append();
     Gtk::TreeModel::Row row = *(iter);
@@ -190,13 +188,13 @@ void EventsWindow::OnAddEventClicked(){
     row[m_columns.col_type] = EVENT;
     row[m_columns.col_prt] = -1;
     Gtk::TreeRowReference rowref(m_refTreeModel, m_refTreeModel->get_path(iter));
-    Events[Events.size()-1]->row_in_event_window = rowref;
+    Events[Events.size()-1]->row_in_event_widget = rowref;
     Events[Events.size()-1]->ShowWindow();
 
     Files::SetFileModified(1);
 }
 
-void EventsWindow::OnRemoveClicked(){
+void EventsWidget::OnRemoveClicked(){
 
     Gtk::TreeModel::iterator iter = *(m_TreeView.get_selection())->get_selected();
     if(!iter) return;
@@ -221,12 +219,11 @@ void EventsWindow::OnRemoveClicked(){
             Events[prt]->actions[id] = NULL;
             break;
     }
-    resize(2,2);
 
     Files::SetFileModified(1);
 }
 
-void EventsWindow::OnSelectionChanged(){
+void EventsWidget::OnSelectionChanged(){
 
     Gtk::TreeModel::iterator iter = m_TreeView.get_selection()->get_selected();
     if(iter){
@@ -240,12 +237,11 @@ void EventsWindow::OnSelectionChanged(){
 
 }
 
-void EventsWindow::OnRowCollapsed(const Gtk::TreeModel::iterator& iter, const Gtk::TreeModel::Path& path){
-    //just to make sure the window is not bigger than the treeview, if some rows got hidden
-    resize(2,2);
+void EventsWidget::OnRowCollapsed(const Gtk::TreeModel::iterator& iter, const Gtk::TreeModel::Path& path){
+    //void!
 }
 
-void EventsWindow::OnAddActionClicked(){
+void EventsWidget::OnAddActionClicked(){
     int id;
     Gtk::TreeModel::iterator iter_selected = m_TreeView.get_selection()->get_selected();
     if(!iter_selected) return; //should not happen, button wolud not be sensitive
@@ -262,7 +258,7 @@ void EventsWindow::OnAddActionClicked(){
 
     Events[id]->actions.push_back(new Action(Action::NONE));
     int act = Events[id]->actions.size() - 1;
-    Gtk::TreeModel::iterator iter_parent = m_refTreeModel->get_iter(Events[id]->row_in_event_window.get_path());
+    Gtk::TreeModel::iterator iter_parent = m_refTreeModel->get_iter(Events[id]->row_in_event_widget.get_path());
     row = *iter_parent;
     Gtk::TreeModel::iterator iter_new = m_refTreeModel->append(row.children());
     row = *iter_new;
@@ -272,13 +268,13 @@ void EventsWindow::OnAddActionClicked(){
     row[m_columns.col_label] = Events[id]->actions[act]->GetLabel();
     row[m_columns.col_colour] = "beige";
     Gtk::TreeRowReference rowref_child(m_refTreeModel, m_refTreeModel->get_path(iter_new));
-    Events[id]->actions[act]->row_in_event_window = rowref_child;
+    Events[id]->actions[act]->row_in_event_widget = rowref_child;
 
     Events[id]->actions[act]->GUIShowWindow();
 
     row = *iter_selected;
     if (row[m_columns.col_type] == EVENT)
         m_TreeView.expand_row(m_refTreeModel->get_path(iter_selected),false); //auto expanding if possible to show the action;
-    
+
     Files::SetFileModified(1);
 }

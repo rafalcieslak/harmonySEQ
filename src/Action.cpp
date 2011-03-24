@@ -21,7 +21,6 @@
 #include "Sequencer.h"
 #include "MainWindow.h"
 #include "messages.h"
-#include "EventsWindow.h"
 #include "MidiDriver.h"
 #include "Files.h"
 
@@ -48,7 +47,7 @@ void Action::Trigger(int data){
 
 #ifdef EVENTS_FLASH
     //Animating the row representing the triggered action.
-    eventswindow->ColorizeAction(row_in_event_window);
+    mainwindow->eventsWidget.ColorizeAction(row_in_event_widget);
 #endif
 
     //Reactions depend on action type.

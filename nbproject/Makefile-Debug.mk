@@ -33,6 +33,7 @@ OBJECTDIR=build/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/_ext/1045285602/EventsWidget.o \
 	${OBJECTDIR}/src/ChordWidget.o \
 	${OBJECTDIR}/_ext/1045285602/SequencerWidget.o \
 	${OBJECTDIR}/src/main.o \
@@ -47,7 +48,6 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/Action.o \
 	${OBJECTDIR}/src/MainWindow.o \
 	${OBJECTDIR}/src/TreeModels.o \
-	${OBJECTDIR}/src/EventsWindow.o \
 	${OBJECTDIR}/src/MidiDriver.o \
 	${OBJECTDIR}/src/Files.o \
 	${OBJECTDIR}/src/Event.o \
@@ -77,6 +77,11 @@ LDLIBSOPTIONS=
 src/harmonySEQ: ${OBJECTFILES}
 	${MKDIR} -p src
 	${LINK.cc} -lasound -o src/harmonySEQ ${OBJECTFILES} ${LDLIBSOPTIONS} 
+
+${OBJECTDIR}/_ext/1045285602/EventsWidget.o: ../Programy/harmonySEQ/trunk/src/EventsWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1045285602
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1045285602/EventsWidget.o ../Programy/harmonySEQ/trunk/src/EventsWidget.cpp
 
 ${OBJECTDIR}/src/ChordWidget.o: src/ChordWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -147,11 +152,6 @@ ${OBJECTDIR}/src/TreeModels.o: src/TreeModels.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/TreeModels.o src/TreeModels.cpp
-
-${OBJECTDIR}/src/EventsWindow.o: src/EventsWindow.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/EventsWindow.o src/EventsWindow.cpp
 
 ${OBJECTDIR}/src/MidiDriver.o: src/MidiDriver.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
