@@ -3,12 +3,10 @@ src/main.cpp
 src/MainWindow.cpp 
 src/MidiDriver.cpp 
 src/Sequencer.cpp 
-src/SequencerGUI.cpp 
 src/messages.cpp 
 src/Files.cpp 
 src/global.cpp 
 src/Event.cpp 
-src/EventsWindow.cpp 
 src/EventGUI.cpp 
 src/Action.cpp 
 src/ActionGUI.cpp 
@@ -17,3 +15,5 @@ src/Chord.cpp
 src/ChordWidget.cpp
 src/Configuration.cpp
 src/SettingsWindow.cpp
+src/SequencerWidget.cpp
+src/EventsWidget.cpp
