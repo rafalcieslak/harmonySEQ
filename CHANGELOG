@@ -1,6 +1,7 @@
 harmonyseq 0.15
 	- Allowed reordering sequencers.
 	- Reorganized sequencer window, and merged it into the main window.
+	- Merged the events window into the main window.
 	- Added 4th note indicators.
 	- Added PlayOnEdit feature.
 	- Incresed tempo range, as some may need it higher tempos.
