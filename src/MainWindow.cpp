@@ -59,7 +59,6 @@ MainWindow::MainWindow()
     m_refActionGroup->add(Gtk::Action::create("AddSeq", Gtk::Stock::ADD, _("Add"),_("Adds a new seqencer")), sigc::mem_fun(*this, &MainWindow::OnAddSeqClicked));
     m_refActionGroup->add(Gtk::Action::create("RemoveSeq", Gtk::Stock::REMOVE, _("Remove"),_("Removes selected sequencer")), sigc::mem_fun(*this, &MainWindow::OnRemoveClicked));
     m_refActionGroup->add(Gtk::Action::create("DuplicateSeq", Gtk::Stock::CONVERT, _("Duplicate"), _("Duplicates selected sequencer")), sigc::mem_fun(*this, &MainWindow::OnCloneClicked));
-    m_refActionGroup->add(Gtk::Action::create("Events", Gtk::Stock::EXECUTE,_("Events"), _("Opens the events window")), sigc::mem_fun(*this, &MainWindow::OnEventsClicked));
     m_refActionGroup->add(Gtk::Action::create("About", Gtk::Stock::ABOUT), sigc::mem_fun(*this, &MainWindow::OnAboutMenuClicked));
     m_refActionGroup->add(Gtk::ToggleAction::create("Metronome", _("Metronome"),_("Toggle metronome on/off")), sigc::mem_fun(*this, &MainWindow::OnMetronomeToggleClicked));
     m_refActionGroup->add(Gtk::Action::create("PlayPause", Gtk::Stock::MEDIA_PAUSE, _("Play/Pause"),_("Toggle play/pause")), sigc::mem_fun(*this, &MainWindow::OnPlayPauseClicked));
@@ -107,8 +106,6 @@ MainWindow::MainWindow()
             "   <toolitem action='AddSeq'/>"
             "   <toolitem name='RemoveTool' action='RemoveSeq'/>"
             "   <toolitem name='DuplicateTool' action='DuplicateSeq'/>"
-            "   <separator/>"
-            "   <toolitem name='EventsTool' action='Events'/>"
             "   <separator expand='true'/>"
             "   <toolitem name='Metronome' action='Metronome'/>"
             "   <toolitem name='TempoLabel' action='Empty'/>"
@@ -159,9 +156,6 @@ MainWindow::MainWindow()
     Gtk::Widget* pMetronome = m_refUIManager->get_widget("/ToolBar/Metronome");
     Gtk::ToggleToolButton& MetronomeTool = dynamic_cast<Gtk::ToggleToolButton&> (*pMetronome);
     MetronomeTool.set_active(metronome);
-    Gtk::Widget* pEventsTool = m_refUIManager->get_widget("/ToolBar/EventsTool");
-    Gtk::ToolItem& EventsTool = dynamic_cast<Gtk::ToolItem&> (*pEventsTool);
-    EventsTool.set_is_important(1); // will display text text to the icon
     Gtk::Widget* pTempo = m_refUIManager->get_widget("/ToolBar/Tempo");
     Gtk::ToolItem& TempoTool = dynamic_cast<Gtk::ToolItem&> (*pTempo);
     Gtk::Widget* pTempoLabelTool = m_refUIManager->get_widget("/ToolBar/TempoLabel");
@@ -573,9 +567,6 @@ bool MainWindow::OnKeyPress(GdkEventKey* event){
     FindAndProcessEvents(Event::KEYBOARD,event->keyval);
 
     return 1;
-}
-
-void MainWindow::OnEventsClicked(){
 }
 
 void MainWindow::OnSelectionChanged(){

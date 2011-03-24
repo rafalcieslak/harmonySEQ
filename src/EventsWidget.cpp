@@ -25,7 +25,7 @@
 #include "Files.h"
 
 EventsWidget::EventsWidget(){
-    set_size_request(100,-1);
+    set_size_request(250,-1);
 
     pack_start(main_Vbox);
     main_Vbox.pack_start(scrolledwindow);

@@ -90,7 +90,6 @@ private:
     void OnAddSeqClicked();
     void OnRemoveClicked();
     void OnCloneClicked();
-    void OnEventsClicked();
     void OnPlayPauseClicked();
     void OnSelectionChanged();
     void OnPassToggleClicked();
