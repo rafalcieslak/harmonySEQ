@@ -213,7 +213,7 @@ void LoadIcons(){
         //seems we are installed defaultly in /usr/share/local
         *dbg << "harmonySEQ icon found at: /usr/local/share/icons/hicolor/48x48/apps/harmonyseq.png" << ENDL;
         harmonySEQ_logo_48 = Gdk::Pixbuf::create_from_file("/usr/local/share/icons/hicolor/48x48/apps/harmonyseq.png");
-        metronome_icon_24 = Gdk::Pixbuf::create_from_file("/usr/local/share/harmonyseq/icons/hicolor/24x24/actions/harmonyseq.png");
+        metronome_icon_24 = Gdk::Pixbuf::create_from_file("/usr/local/share/harmonyseq/icons/hicolor/24x24/actions/metronome.png");
     } else
     if (Files::fexists("pixmaps/48x48/apps/harmonyseq.png")){
         //seems we are not installed, and run from main source directory
