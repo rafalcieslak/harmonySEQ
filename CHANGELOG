@@ -4,6 +4,7 @@ harmonyseq 0.15
 	- Merged the events window into the main window.
 	- Added 4th note indicators.
 	- Added PlayOnEdit feature.
+	- Added an action that transposes a sequencer by an octave.
 	- Incresed tempo range, as some may need it higher tempos.
 	- Significantly improved data refreshing.
 
