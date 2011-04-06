@@ -61,6 +61,8 @@
 #define NOTES_CONST_SIZE 6
 #define DEFAULT_VOLUME 100
 
+//the resolution of diode blink information
+#define DIODES_RES 128
 //the following may not work with gettext. careful!
 #define SEQUENCER_DEFAULT_NAME _("sequencer")
 

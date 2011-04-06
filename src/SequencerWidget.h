@@ -36,10 +36,16 @@ public:
     bool GetButton(int c);
     /**Signal emited when one fo the buttons is clicked.*/
     sigc::signal<void,int,bool> OnButtonClicked;
+    /**Lights the diode up*/
+    void LightOn();
+    /**Dims the light*/
+    void LightOff();
 private:
     void OnButtonsToggled(int c);
     std::vector<Gtk::CheckButton *> buttons;
     Gtk::Label marker;
+    Gtk::EventBox diode;
+    bool diode_on;
 };
 
 class SequencerWidget : public Gtk::VBox{
@@ -65,6 +71,9 @@ public:
     
     bool AnythingSelected;
     seqHandle selectedSeq;
+
+    /**Lights aproprieate diode*/
+    void Diode(int n);
 
 private:
     void AttachLines(int where);

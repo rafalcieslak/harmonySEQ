@@ -20,6 +20,7 @@
 #ifdef __linux__
 #include <alsa/asoundlib.h>
 #endif
+#include "global.h"
 #include "MidiDriver.h"
 #include "messages.h"
 #include "MainWindow.h"
@@ -27,6 +28,7 @@
 #include "Event.h"
 #include "Configuration.h"
 #include "SettingsWindow.h"
+#include "SequencerWidget.h"
 extern int running;
 
 MidiDriver::MidiDriver() {
@@ -451,7 +453,19 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
     snd_seq_ev_schedule_tick(&ev,queueid,0,tick);
     snd_seq_ev_set_dest(&ev,snd_seq_client_id(seq_handle),input_port); //here INPUT_PORT is used, so the event will be send just to harmonySEQ itself.
     snd_seq_event_output_direct(seq_handle,&ev);
-
+    {
+        double duration = (double)TICKS_PER_NOTE/(double)DIODES_RES; //may need testing in case of unusual values
+        for (int x = 0; x < DIODES_RES;x++){
+                //Moreover, output a minor echo, for controlling diodes.
+               snd_seq_ev_clear(&ev);
+               ev.type = SND_SEQ_EVENT_USR0;//Diode ON
+               ev.data.raw32.d[1] =  x;
+                snd_seq_ev_schedule_tick(&ev, queueid, 0, tick + x * duration);
+                snd_seq_ev_set_dest(&ev,snd_seq_client_id(seq_handle),input_port); //here INPUT_PORT is used, so the event will be send just to harmonySEQ itself.
+                snd_seq_event_output_direct(seq_handle,&ev);
+                snd_seq_ev_clear(&ev);
+        }
+    }
 
     if(!do_not_lock_threads)  gdk_threads_leave(); //see note on this functions beggining.
 
@@ -469,6 +483,7 @@ void MidiDriver::ProcessInput(){
         //If we are in passing_midi mode, do pass the event (Well,  unless it's the ECHO, which MUST be caught).
         if(passing_midi&&ev->type!=SND_SEQ_EVENT_ECHO) {PassEvent(ev);continue;}
 
+        int i;
         //Switch, according to the type.
         switch (ev->type){
             case SND_SEQ_EVENT_NOTEON:
@@ -511,6 +526,12 @@ void MidiDriver::ProcessInput(){
                 snd_seq_ev_set_subs(ev);
                 snd_seq_ev_set_direct(ev);
                 snd_seq_event_output_direct(seq_handle,ev);
+                break;
+            case SND_SEQ_EVENT_USR0:
+                i = ev->data.raw32.d[1];
+                gdk_threads_enter(); //to interact with gui thread we MUST lock it's thread
+                mainwindow->seqWidget.Diode(i);
+                gdk_threads_leave(); //freeing lock
                 break;
             default:
                 //Some unmatched event.

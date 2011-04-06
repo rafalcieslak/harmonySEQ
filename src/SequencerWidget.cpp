@@ -578,10 +578,23 @@ void SequencerWidget::OnPlayOnceButtonClicked(){
     mainwindow->RefreshRow(seq->my_row);
 }
 
+void SequencerWidget::Diode(int n){
+    if(!AnythingSelected) return;
+    double x = (double)n/(double)DIODES_RES;
+    int res = seqH(selectedSeq)->resolution;
+    if (res == 0) return;
+    int curr = (double)x*(double)res; //yep, rounding down
+    int prev = (curr-1);
+    if (prev == -1) prev = res-1; //if the previous is too small, wrap it and select the last one
+    if(pattern_lines[prev]) pattern_lines[prev]->LightOff();
+    if(pattern_lines[curr])  pattern_lines[curr]->LightOn();
+}
+
 //====================PATTERNLINE=========================
 PatternLine::PatternLine(){
     set_border_width(0);
     pack_end(marker);
+    pack_end(diode);
     for (int x = 0; x < 6; x++){
         buttons.push_back(new Gtk::CheckButton);
         pack_end(*buttons[x],Gtk::PACK_EXPAND_PADDING); //check the pack flag
@@ -590,13 +603,17 @@ PatternLine::PatternLine(){
         buttons[x]->show();
     }
     marker.set_text(" ");
+    diode.set_size_request(-1,4);
+    diode.modify_bg(Gtk::STATE_NORMAL,Gdk::Color("brown3"));
     marker.show();
-
+    diode.show();
+    diode_on = 0;
 }
 
 PatternLine::PatternLine(Glib::ustring mark){
     set_border_width(0);
     pack_end(marker);
+    pack_end(diode);
     for (int x = 0; x < 6; x++){
         buttons.push_back(new Gtk::CheckButton);
         pack_end(*buttons[x],Gtk::PACK_EXPAND_PADDING); //check the pack flag
@@ -605,8 +622,11 @@ PatternLine::PatternLine(Glib::ustring mark){
         buttons[x]->show();
     }
     marker.set_text(mark);
+    diode.set_size_request(-1,4);
+    diode.modify_bg(Gtk::STATE_NORMAL,Gdk::Color("brown3"));
     marker.show();
-
+    diode.show();
+    diode_on = 0;
 }
 
 PatternLine::~PatternLine(){
@@ -628,4 +648,16 @@ bool PatternLine::GetButton(int c){
 void PatternLine::OnButtonsToggled(int c){
 
     OnButtonClicked.emit(c,buttons[c]->get_active());
+}
+
+void PatternLine::LightOn(){
+    if(diode_on == 1) return;
+    diode.modify_bg(Gtk::STATE_NORMAL,Gdk::Color("green"));
+    diode_on = 1;
+}
+
+void PatternLine::LightOff(){
+    if(diode_on == 0) return;
+    diode.modify_bg(Gtk::STATE_NORMAL,Gdk::Color("brown3"));
+    diode_on = 0;
 }
