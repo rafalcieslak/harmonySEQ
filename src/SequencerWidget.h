@@ -38,6 +38,8 @@ public:
     sigc::signal<void,int,bool> OnButtonClicked;
     /**Lights the diode up*/
     void LightOn();
+    /**Lights the diode up, using alternative colur.*/
+    void LightOnAlternate();
     /**Dims the light*/
     void LightOff();
 private:

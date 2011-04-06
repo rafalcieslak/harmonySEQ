@@ -587,7 +587,11 @@ void SequencerWidget::Diode(int n){
     int prev = (curr-1);
     if (prev == -1) prev = res-1; //if the previous is too small, wrap it and select the last one
     if(pattern_lines[prev]) pattern_lines[prev]->LightOff();
-    if(pattern_lines[curr])  pattern_lines[curr]->LightOn();
+    if(seqH(selectedSeq)->GetOn()){
+        if(pattern_lines[curr])  pattern_lines[curr]->LightOn();
+    }else if(seqH(selectedSeq)->GetPlayOncePhase() == 3){
+        if(pattern_lines[curr])  pattern_lines[curr]->LightOnAlternate();
+    }
 }
 
 //====================PATTERNLINE=========================
@@ -652,7 +656,13 @@ void PatternLine::OnButtonsToggled(int c){
 
 void PatternLine::LightOn(){
     if(diode_on == 1) return;
-    diode.modify_bg(Gtk::STATE_NORMAL,Gdk::Color("green"));
+    diode.modify_bg(Gtk::STATE_NORMAL,Gdk::Color("green1"));
+    diode_on = 1;
+}
+
+void PatternLine::LightOnAlternate(){
+    if(diode_on == 1) return;
+    diode.modify_bg(Gtk::STATE_NORMAL,Gdk::Color("yellow1"));
     diode_on = 1;
 }
 
