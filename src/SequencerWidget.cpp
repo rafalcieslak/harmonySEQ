@@ -201,8 +201,8 @@ void SequencerWidget::UpdateEverything(){
         UpdateName();
         InitNotebook();
         UpdateRelLenBoxes();
-        UpdateActivePatternRange();
         UpdateActivePattern();
+        UpdateActivePatternRange();
         UpdateChord();
 
         //show();
@@ -317,7 +317,7 @@ void SequencerWidget::InitNotebook(){
     wNotebook.set_current_page(0);
     AttachLines(0); //to bring the sliders back
     UpdateActivePatternRange();
-    OnActivePatternChanged(); //this will mark active tab with a star (Pat x*)
+    UpdateAsterisk(wActivePattern.get_value(),seq->GetActivePattern()); //this will mark active tab with a star (Pat x*)
     SetRemoveButtonSensitivity(); //according to the number of pages
 }
 
@@ -386,11 +386,13 @@ void SequencerWidget::AttachLines(int where){
 void SequencerWidget::UpdateActivePatternRange(){
     if(!AnythingSelected) return;
     Sequencer* seq = seqH(selectedSeq);
-    
+
+    ignore_signals = 1;
     int v = wActivePattern.get_value();
     wActivePattern.set_range(0.0,(double)seq->patterns.size()-1);
     wActivePattern.set_increments(1.0,1.0);
     wActivePattern.set_value(v); //if it's too high, it will change to largest possible
+    ignore_signals = 0;
 }
 
 void SequencerWidget::OnPatternNoteChanged(int c, bool value, int seq){
