@@ -63,6 +63,7 @@ private:
     void OnChordWidgetChanged();
     void OnChordWidgetNoteChanged(int n, int p);
     void OnPatternChanged();
+    void OnOctaveChanged();
 
     Gtk::VBox main_box;
 
@@ -80,6 +81,10 @@ private:
     Gtk::HBox line_chord;
     Gtk::HBox line_pattern;
     Gtk::Label label_pattern;
+    Gtk::HBox line_octave;
+    Gtk::Label label_octave1;
+    Gtk::Label label_octave2;
+
 
     Gtk::HBox line_on_off_toggle;
     Gtk::RadioButton on_off_toggle_ON;
@@ -98,6 +103,7 @@ private:
     Gtk::SpinButton notenr_button;
     Gtk::SpinButton chordseq_button;
     Gtk::SpinButton pattern_button;
+    Gtk::SpinButton octave_spinbutton;
 
     Gtk::Button ok_button;
 

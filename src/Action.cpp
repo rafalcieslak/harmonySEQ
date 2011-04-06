@@ -135,9 +135,16 @@ void Action::Trigger(int data){
             if(mainwindow->seqWidget.selectedSeq == args[1]) mainwindow->seqWidget.UpdateActivePattern()
             ;
             break;
+        case SEQ_TRANSPOSE_OCTAVE:
+            if (seqVector.size()==0 || !seqH(args[1])) break;
+            seqH(args[1])->chord.SetBaseOctave(seqH(args[1])->chord.GetBaseOctave()+args[2]);
+            mainwindow->RefreshRow(seqH(args[1])->my_row);
+            if(mainwindow->seqWidget.selectedSeq == args[1]) mainwindow->seqWidget.UpdateChord();;
+            Files::SetFileModified(1);
+            break;
         default:
 
-            *err << _("WARNING: Unknown action triggered.");
+            *err << _("WARNING: Unknown action triggered.\n");
             break;
     }
 }
@@ -196,6 +203,13 @@ Glib::ustring Action::GetLabel(){
             break;
         case SEQ_CHANGE_PATTERN:
             sprintf(temp,_("Set active pattern of sequencer '%s' to %d"),GetSeqName(args[1]).c_str(),args[2]);
+            break;
+        case SEQ_TRANSPOSE_OCTAVE:
+            if (args[2] < 0){
+                sprintf(temp,_("Transpose sequencer '%s's chord %d octaves down"),GetSeqName(args[1]).c_str(),-1*args[2]);
+            }else{
+                sprintf(temp,_("Transpose sequencer '%s's chord %d octaves up"),GetSeqName(args[1]).c_str(),args[2]);
+            }
             break;
         case NONE:
             sprintf(temp,_("(empty action)"));

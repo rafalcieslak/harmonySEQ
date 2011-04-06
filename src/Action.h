@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010 Rafał Cieślak
+    Copyright (C) 2010, 2011 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -46,7 +46,8 @@ public:
         /**1)mode: 0- off, 1 - on, 2 - toggle*/
         PLAY_PAUSE,
         SYNC,
-        SEQ_CHANGE_PATTERN
+        SEQ_CHANGE_PATTERN,
+        SEQ_TRANSPOSE_OCTAVE
     };
 
     /**Constructor.

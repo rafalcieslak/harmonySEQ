@@ -54,6 +54,7 @@ ActionGUI::ActionGUI(Action *prt)
     main_box.pack_start(line_pattern);
     main_box.pack_start(line_set_one_note);
     main_box.pack_start(line_chord);
+    main_box.pack_start(line_octave);
     main_box.pack_start(line_play);
     main_box.pack_start(separator);//==========
     main_box.pack_start(label_preview);
@@ -96,6 +97,10 @@ ActionGUI::ActionGUI(Action *prt)
     line_volume.pack_start(vol_button,Gtk::PACK_SHRINK);
     line_chord.pack_start(chordwidget);
 
+    line_octave.pack_start(label_octave1,Gtk::PACK_SHRINK);
+    line_octave.pack_start(octave_spinbutton,Gtk::PACK_SHRINK);
+    line_octave.pack_start(label_octave2,Gtk::PACK_SHRINK);
+
     notenr_button.set_range(1.0,6.0);
     notenr_button.set_increments(1.0,2.0);
     notenr_button.signal_value_changed().connect(mem_fun(*this,&ActionGUI::OnNoteNrChanged));
@@ -111,6 +116,9 @@ ActionGUI::ActionGUI(Action *prt)
     vol_button.set_range(0.0,127.0);
     vol_button.set_increments(1.0,16.0);
     vol_button.signal_value_changed().connect(mem_fun(*this,&ActionGUI::OnVolumeChanged));
+    octave_spinbutton.set_range(-5.0,5.0);
+    octave_spinbutton.set_increments(1.0,2.0);
+    octave_spinbutton.signal_value_changed().connect(mem_fun(*this,&ActionGUI::OnOctaveChanged));
 
     chordwidget.on_changed.connect(mem_fun(*this,&ActionGUI::OnChordWidgetChanged));
     chordwidget.on_note_changed.connect(mem_fun(*this,&ActionGUI::OnChordWidgetNoteChanged));
@@ -129,6 +137,8 @@ ActionGUI::ActionGUI(Action *prt)
     play_ON.set_label(_("Play"));
     play_TOGGLE.set_label(_("Toggle"));
     ok_button.set_label(_("OK"));
+    label_octave1.set_text(_("Transpose by "));
+    label_octave2.set_text(_(" octave(s)."));
     
     ok_button.signal_clicked().connect(mem_fun(*this,&ActionGUI::OnOKClicked));
 
@@ -244,6 +254,10 @@ void ActionGUI::UpdateValues(){
                     play_TOGGLE.set_active(1);
                     break;
             }
+        case Action::SEQ_TRANSPOSE_OCTAVE:
+            SetSeqCombo(parent->args[1]);
+            octave_spinbutton.set_value(parent->args[2]);
+            break;
         case Action::TOGGLE_PASS_MIDI:
             break;
         default:
@@ -269,6 +283,7 @@ void ActionGUI::ChangeVisibleLines(){
     line_on_off_toggle.hide();
     line_play.hide();
     line_pattern.hide();
+    line_octave.hide();
     switch (type){
         case Action::NONE:
             break;
@@ -302,6 +317,10 @@ void ActionGUI::ChangeVisibleLines(){
             break;
         case Action::PLAY_PAUSE:
             line_play.show();
+            break;
+        case Action::SEQ_TRANSPOSE_OCTAVE:
+            line_seq.show();
+            line_octave.show();
             break;
         case Action::TOGGLE_PASS_MIDI:
             break;
@@ -371,6 +390,10 @@ void ActionGUI::InitType(){
             break;
         case Action::TOGGLE_PASS_MIDI:
             break;
+        case Action::SEQ_TRANSPOSE_OCTAVE:
+            Seqs_combo.set_active(0);
+            octave_spinbutton.set_value(1.0);
+            break;
         default:
             break;
     }
@@ -392,7 +415,7 @@ void ActionGUI::OnTempoChanged(){
 
 void ActionGUI::OnSeqChanged(){
     if(!Seqs_combo.get_active()) return; //empty selection
-    if(parent->type == Action::SEQ_ON_OFF_TOGGLE || parent->type == Action::SEQ_VOLUME_SET || parent->type == Action::SEQ_CHANGE_ONE_NOTE || parent->type == Action::SEQ_CHANGE_CHORD || parent->type == Action::SEQ_PLAY_ONCE||parent->type == Action::SEQ_CHANGE_PATTERN){
+    if(parent->type == Action::SEQ_ON_OFF_TOGGLE || parent->type == Action::SEQ_VOLUME_SET || parent->type == Action::SEQ_CHANGE_ONE_NOTE || parent->type == Action::SEQ_CHANGE_CHORD || parent->type == Action::SEQ_PLAY_ONCE||parent->type == Action::SEQ_CHANGE_PATTERN||parent->type == Action::SEQ_TRANSPOSE_OCTAVE){
             parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_handle];
     }else *err << _("Error: sequencer has changed, while action is not sequencer-type.") << ENDL;
 
@@ -472,7 +495,16 @@ void ActionGUI::OnChordWidgetChanged(){
     Files::SetFileModified(1);
 
 }
+void ActionGUI::OnOctaveChanged(){
+    if(parent->type == Action::SEQ_TRANSPOSE_OCTAVE){
+        parent->args[2] = octave_spinbutton.get_value();
+    }else *err << _("Error: octave has changed, while action is not transpose-by-octave type.") << ENDL;
 
+    label_preview.set_text(parent->GetLabel());
+    mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
+
+    Files::SetFileModified(1);
+}
 void ActionGUI::OnPatternChanged(){
 
     if(parent->type == Action::SEQ_CHANGE_PATTERN){
