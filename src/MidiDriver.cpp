@@ -338,7 +338,7 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
             //Repeat this as many times as we'll play the melody in one bar:
             for (int i = 0; i < howmanytimes; i++){
                 //Take every note from this sequencer
-                for (int x = 0; x < seqVector[n]->resolution; x++) {
+                for (int x = 0; x < seq->resolution; x++) {
                     for(int C = 0; C < 6; C++){
                         //If the note is inactive, take next note.
                         if(!(seq->GetActivePatternNote(x,C))) continue;
@@ -358,6 +358,19 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                         snd_seq_event_output_direct(seq_handle, &ev);
                     }
                 }
+
+                //Moreover, output a minor echo, for controlling diodes
+                for (int x = 0; x < seq->resolution; x++) {
+                    snd_seq_ev_clear(&ev);
+                    ev.type = SND_SEQ_EVENT_USR0; //Diode ON
+                    ev.data.raw32.d[1] = x; //diode number
+                    ev.data.raw32.d[2] = seq->MyHandle; //seq handle
+                    snd_seq_ev_schedule_tick(&ev, queueid, 0, local_tick + x * duration);
+                    snd_seq_ev_set_dest(&ev, snd_seq_client_id(seq_handle), input_port); //here INPUT_PORT is used, so the event will be send just to harmonySEQ itself.
+                    snd_seq_event_output_direct(seq_handle, &ev);
+                    snd_seq_ev_clear(&ev);
+                }
+
                 //If the sequencer had to play it's melody ONCE, then mark it as it has already played, and break the loop, because we won't repeat the melody (it had to be played ONCE!)
                 if(seq->GetPlayOncePhase() == 2) {seq->SetPlayOncePhase(3);break;} 
 
@@ -396,6 +409,16 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                     //Output the event (but it stays at the queue.)
                     snd_seq_event_output_direct(seq_handle, &ev);
                 }
+                    //Moreover, output a minor echo, for controlling diodes
+                    snd_seq_ev_clear(&ev);
+                    ev.type = SND_SEQ_EVENT_USR0; //Diode ON
+                    ev.data.raw32.d[1] = currnote; //diode number
+                    ev.data.raw32.d[2] = seq->MyHandle; //seq handle
+                    snd_seq_ev_schedule_tick(&ev, queueid, 0, tick + x * duration);
+                    snd_seq_ev_set_dest(&ev, snd_seq_client_id(seq_handle), input_port); //here INPUT_PORT is used, so the event will be send just to harmonySEQ itself.
+                    snd_seq_event_output_direct(seq_handle, &ev);
+                    snd_seq_ev_clear(&ev);
+
                 //Increment the iterator - currnote.
                 currnote++;
                 //If currnote is out of range AND we had to play the sequence once, mark it as played.
@@ -455,16 +478,7 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
     snd_seq_event_output_direct(seq_handle,&ev);
     {
         double duration = (double)TICKS_PER_NOTE/(double)DIODES_RES; //may need testing in case of unusual values
-        for (int x = 0; x < DIODES_RES;x++){
-                //Moreover, output a minor echo, for controlling diodes.
-               snd_seq_ev_clear(&ev);
-               ev.type = SND_SEQ_EVENT_USR0;//Diode ON
-               ev.data.raw32.d[1] =  x;
-                snd_seq_ev_schedule_tick(&ev, queueid, 0, tick + x * duration);
-                snd_seq_ev_set_dest(&ev,snd_seq_client_id(seq_handle),input_port); //here INPUT_PORT is used, so the event will be send just to harmonySEQ itself.
-                snd_seq_event_output_direct(seq_handle,&ev);
-                snd_seq_ev_clear(&ev);
-        }
+
     }
 
     if(!do_not_lock_threads)  gdk_threads_leave(); //see note on this functions beggining.
@@ -530,7 +544,8 @@ void MidiDriver::ProcessInput(){
             case SND_SEQ_EVENT_USR0:
                 i = ev->data.raw32.d[1];
                 gdk_threads_enter(); //to interact with gui thread we MUST lock it's thread
-                mainwindow->seqWidget.Diode(i);
+                if(mainwindow->seqWidget.selectedSeq == ev->data.raw32.d[2]) //comparing sequencer handles
+                    mainwindow->seqWidget.Diode(i);
                 gdk_threads_leave(); //freeing lock
                 break;
             default:

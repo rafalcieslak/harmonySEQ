@@ -580,17 +580,18 @@ void SequencerWidget::OnPlayOnceButtonClicked(){
 
 void SequencerWidget::Diode(int n){
     if(!AnythingSelected) return;
-    double x = (double)n/(double)DIODES_RES;
+    //double x = (double)n/(double)DIODES_RES;
     int res = seqH(selectedSeq)->resolution;
     if (res == 0) return;
-    int curr = (double)x*(double)res; //yep, rounding down
+    if(n >= res) return;
+    int curr = n;//(double)*(double)res; //yep, rounding down
     int prev = (curr-1);
     if (prev == -1) prev = res-1; //if the previous is too small, wrap it and select the last one
-    if(pattern_lines[prev]) pattern_lines[prev]->LightOff();
+    if(prev < pattern_lines.size() && pattern_lines[prev]) pattern_lines[prev]->LightOff();
     if(seqH(selectedSeq)->GetOn()){
         if(pattern_lines[curr])  pattern_lines[curr]->LightOn();
     }else if(seqH(selectedSeq)->GetPlayOncePhase() == 3){
-        if(pattern_lines[curr])  pattern_lines[curr]->LightOnAlternate();
+        if(curr < pattern_lines.size() && pattern_lines[curr])  pattern_lines[curr]->LightOnAlternate();
     }
 }
 
