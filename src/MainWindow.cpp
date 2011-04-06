@@ -200,7 +200,7 @@ MainWindow::MainWindow()
     wVBox1.pack_start(wHPaned); //will expand, no shrinking
     wHPaned.pack1(wScrolledWindow,1,1);
     wHPaned.pack2(eventsWidget,0,0);
-    wHPaned.set_position(675);
+    wHPaned.set_position(625);
 
 
     // <editor-fold defaultstate="collapsed" desc="tree">
