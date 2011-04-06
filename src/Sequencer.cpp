@@ -165,12 +165,12 @@ void Sequencer::SetResolution(int res){
     
 }
 
-void Sequencer::SetLength(int len){
+void Sequencer::SetLength(double len){
     length  = len;
     
 }
 
-int Sequencer::GetLength(){
+double Sequencer::GetLength(){
     return length;
 }
 

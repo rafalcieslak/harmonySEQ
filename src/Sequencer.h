@@ -67,10 +67,10 @@ public:
     void SetResolution(int res);
 
     /**Used to change this seq's length*/
-    void SetLength(int len);
+    void SetLength(double len);
 
     /**Returns seq's length*/
-    int GetLength();
+    double GetLength();
 
     void SetActivePattern(int a);
     int GetActivePattern();

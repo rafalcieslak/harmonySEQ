@@ -328,9 +328,9 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
             //Length is smaller or equal to 1, so we play the same sequence several times in a bar
 
             //Calculate how many times we play this sequence in one bar
-            double howmanytimes = (double)1.0/(seq->GetLength());
+            double howmanytimes = (double)1.0/((double)seq->GetLength());
             //Calculate duration of a singular note.
-            int duration = ((double)(TICKS_PER_NOTE / seq->resolution))*seq->GetLength();
+            int duration = ((double)(TICKS_PER_NOTE / (double)seq->resolution))*seq->GetLength();
             //Local tick is used for calculation in one repetition, at beggining copy it from the main tick.
             int local_tick = tick;
             //Repeat this as many times as we'll play the melody in one bar:
