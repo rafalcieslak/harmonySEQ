@@ -123,8 +123,11 @@ private:
     Gtk::VSeparator wVSep;
 
     Gtk::Notebook wNotebook;
+    Gtk::VBox wNotebookVbox;
     std::vector<PatternLine  *> pattern_lines;
-    std::vector<Gtk::HBox *> pattern_boxes;
+    std::vector<std::pair<Gtk::HBox *,Gtk::Viewport *> > pattern_boxes;
+    Gtk::HScrollbar wPatternScroll;
+    Gtk::VScrollbar wPatternScroll2;
     std::vector<Gtk::VSeparator*> note_separators;
     Gtk::SpinButton wChannelButton;
     Gtk::SpinButton wVolumeButton;

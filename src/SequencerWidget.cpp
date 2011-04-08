@@ -45,10 +45,12 @@ SequencerWidget::SequencerWidget(){
     wVSep.set_size_request(10,0);
     wUpBox.pack_start(wUpperVBox,Gtk::PACK_SHRINK);
     wDownBox.pack_start(wBoxOfChord,Gtk::PACK_SHRINK);
-    wDownBox.pack_start(wNotebookAndPatternOpsHBox,Gtk::PACK_SHRINK);
+    wDownBox.pack_start(wNotebookAndPatternOpsHBox);
 
-    wNotebookAndPatternOpsHBox.pack_start(wNotebook,Gtk::PACK_SHRINK);
-    wNotebookAndPatternOpsHBox.pack_start(wPtOpsVBox,Gtk::PACK_SHRINK);
+    wNotebookAndPatternOpsHBox.pack_start(wNotebookVbox,Gtk::PACK_EXPAND_WIDGET);
+    wNotebookAndPatternOpsHBox.pack_end(wPtOpsVBox,Gtk::PACK_SHRINK);
+    wNotebookVbox.pack_start(wNotebook);
+    wNotebookVbox.pack_end(wPatternScroll);
 
     wUpperVBox.pack_start(wUpperHBox1,Gtk::PACK_SHRINK);
     wUpperVBox.pack_start(wUpperHBox2,Gtk::PACK_SHRINK);
@@ -171,7 +173,7 @@ SequencerWidget::SequencerWidget(){
 SequencerWidget::~SequencerWidget(){
     //delete chordwidget;
     for (int x = 0; x < pattern_lines.size();x++) delete pattern_lines[x];
-    for (int x = 0; x < pattern_boxes.size();x++) delete pattern_boxes[x];
+    for (int x = 0; x < pattern_boxes.size();x++) { delete pattern_boxes[x].first; delete pattern_boxes[x].second;}
     for (int x = 0; x < note_separators.size();x++) delete note_separators[x];
 }
 
@@ -296,19 +298,27 @@ void SequencerWidget::InitNotebook(){
     DetachLines(); //to make it save to add/remove pages
 
     for (unsigned int x = 0; x < pattern_boxes.size();x++){
-        if(!pattern_boxes[x]) continue;
-        wNotebook.remove_page(*pattern_boxes[x]);
-        if(pattern_boxes[x]) //maybe .remove_page removes also the object....
-            delete pattern_boxes[x];
+        if(!pattern_boxes[x].first) continue;
+        wNotebook.remove_page(*pattern_boxes[x].second);
+        if(pattern_boxes[x].first)
+            delete pattern_boxes[x].first;
+        if(pattern_boxes[x].second) //maybe .remove_page removes also the object....
+            delete pattern_boxes[x].second;
     }
     pattern_boxes.clear();
 
-    pattern_boxes.resize(seq->patterns.size(),NULL);
+    pattern_boxes.resize(seq->patterns.size(),make_pair<Gtk::HBox *, Gtk::Viewport*>(NULL,NULL));
     for (unsigned int x = 0; x < seq->patterns.size();x++){
-        pattern_boxes[x] = /*Gtk::manage<Gtk::VBox>*/(new Gtk::HBox); //careful. may cause some strange memory leaks, should be investigated whether the Gtk::manage formule is really unneeded.
-        pattern_boxes[x]->show();
+    *dbg << "init x =  " << x << "\n";
+        pattern_boxes[x].first = new Gtk::HBox;
+        pattern_boxes[x].second = new Gtk::Viewport(*wPatternScroll.get_adjustment(),*wPatternScroll2.get_adjustment());
+        pattern_boxes[x].second->add(*pattern_boxes[x].first);
+        pattern_boxes[x].second->set_border_width(0);
+        pattern_boxes[x].second->set_shadow_type(Gtk::SHADOW_NONE);
+        pattern_boxes[x].first->show();
+        pattern_boxes[x].second->show();
         sprintf(temp,_("%d"),x);
-        wNotebook.append_page(*pattern_boxes[x],temp);
+        wNotebook.append_page(*pattern_boxes[x].second,temp);
 
     }
     do_not_react_on_page_changes = 0;
@@ -329,13 +339,13 @@ void SequencerWidget::DetachLines(){
         if(!pattern_lines[x]) continue;
         pattern_lines[x]->hide();
         *dbg << "removing " << x << " from " << previous_box_where_pattern_lines_were_packed << ENDL;
-        pattern_boxes[previous_box_where_pattern_lines_were_packed]->remove(*pattern_lines[x]);
+        pattern_boxes[previous_box_where_pattern_lines_were_packed].first->remove(*pattern_lines[x]);
         delete pattern_lines[x];
     }
     for(unsigned int x = 0; x < note_separators.size();x++){
         if(!note_separators[x]) continue;
         note_separators[x]->hide();
-        pattern_boxes[previous_box_where_pattern_lines_were_packed]->remove(*note_separators[x]);
+        pattern_boxes[previous_box_where_pattern_lines_were_packed].first->remove(*note_separators[x]);
         delete note_separators[x];
     }
 
@@ -361,7 +371,7 @@ void SequencerWidget::AttachLines(int where){
         if(x%4==0){
             if(x!=0){ //do note add a separator at the very beggining
                 note_separators[separator_counter] = new Gtk::VSeparator;
-                pattern_boxes[where]->pack_start(*note_separators[separator_counter]);
+                pattern_boxes[where].first->pack_start(*note_separators[separator_counter],Gtk::PACK_SHRINK);
                 note_separators[separator_counter]->show();
                 separator_counter++;
             }
@@ -375,7 +385,7 @@ void SequencerWidget::AttachLines(int where){
             pattern_lines[x]->SetButton(c,seq->GetPatternNote(where,x,c));
 
         pattern_lines[x]->OnButtonClicked.connect(sigc::bind(sigc::mem_fun(*this,&SequencerWidget::OnPatternNoteChanged),x));
-        pattern_boxes[where]->pack_start(*pattern_lines[x],Gtk::PACK_SHRINK);
+        pattern_boxes[where].first->pack_start(*pattern_lines[x],Gtk::PACK_SHRINK);
         pattern_lines[x]->show();
     }
 
@@ -499,10 +509,10 @@ void SequencerWidget::UpdateAsterisk(int from, int to){
     char temp[100];
 
     sprintf(temp,_(" %d"),from);
-    wNotebook.set_tab_label_text(*pattern_boxes[from],temp);
+    wNotebook.set_tab_label_text(*pattern_boxes[from].second,temp);
 
     sprintf(temp,_("%d*"),to);
-    wNotebook.set_tab_label_text(*pattern_boxes[to],temp);
+    wNotebook.set_tab_label_text(*pattern_boxes[to].second,temp);
 
 }
 void SequencerWidget::OnSetAsActivePatternClicked(){
@@ -523,12 +533,17 @@ void SequencerWidget::OnAddPatternClicked(){
 
     seq->AddPattern();
 
-    pattern_boxes.push_back(NULL);
+    pattern_boxes.push_back(make_pair<Gtk::HBox*,Gtk::Viewport*>(NULL,NULL));
     int x = pattern_boxes.size() - 1;
-    pattern_boxes[x] = new Gtk::HBox;
-    pattern_boxes[x]->show();
+    pattern_boxes[x].first = new Gtk::HBox;
+    pattern_boxes[x].second = new Gtk::Viewport(*wPatternScroll.get_adjustment(), *wPatternScroll2.get_adjustment());
+    pattern_boxes[x].second->add(*pattern_boxes[x].first);
+    pattern_boxes[x].second->set_border_width(0);
+    pattern_boxes[x].second->set_shadow_type(Gtk::SHADOW_NONE);
+    pattern_boxes[x].first->show();
+    pattern_boxes[x].second->show();
     sprintf(temp, _("%d"), x);
-    wNotebook.append_page(*pattern_boxes[x], temp);
+    wNotebook.append_page(*pattern_boxes[x].second, temp);
     wNotebook.set_current_page(wNotebook.get_n_pages()-1); //will show the last page AND THE SIGNAL HANDLER WILL ATTACH THE SLIDERS!
     UpdateActivePatternRange();
     SetRemoveButtonSensitivity();
@@ -541,8 +556,9 @@ void SequencerWidget::OnRemovePatternClicked(){
     int n = wNotebook.get_current_page();
     *dbg << "removing pattern " << n <<"\n";
     DetachLines();
-    wNotebook.remove(*pattern_boxes[n]);
-    delete pattern_boxes[n];
+    wNotebook.remove(*pattern_boxes[n].second);
+    delete pattern_boxes[n].first;
+    delete pattern_boxes[n].second;
     pattern_boxes.erase(pattern_boxes.begin()+n);
     seq->patterns.erase(seq->patterns.begin()+n);
     if (seq->GetActivePattern() == n ) { seq->SetActivePattern(0);wActivePattern.set_value(0.0);}
