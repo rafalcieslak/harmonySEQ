@@ -42,10 +42,10 @@ public:
     void LightOnAlternate();
     /**Dims the light*/
     void LightOff();
+    Gtk::Label marker;
 private:
     void OnButtonsToggled(int c);
     std::vector<Gtk::CheckButton *> buttons;
-    Gtk::Label marker;
     Gtk::EventBox diode;
     bool diode_on;
 };
@@ -78,12 +78,14 @@ public:
     void Diode(int n);
 
 private:
+    /*
     void AttachLines(int where);
     void DetachLines();
+    */
+    void UpdatePatternVbox(int pattern=-1);
 
     ChordWidget chordwidget;
 
-    int previous_box_where_pattern_lines_were_packed;
     bool ignore_signals;
     int do_not_react_on_page_changes;
     void UpdateActivePatternRange();
@@ -125,7 +127,9 @@ private:
     Gtk::Notebook wNotebook;
     Gtk::VBox wNotebookVbox;
     std::vector<PatternLine  *> pattern_lines;
-    std::vector<std::pair<Gtk::HBox *,Gtk::Viewport *> > pattern_boxes;
+    std::vector<Gtk::Label *> notebook_pages;
+    Gtk::HBox pattern_box;
+    Gtk::Viewport* wViewport; //must be a pointer, as constructor needs agruments
     Gtk::HScrollbar wPatternScroll;
     Gtk::VScrollbar wPatternScroll2;
     std::vector<Gtk::VSeparator*> note_separators;

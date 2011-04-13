@@ -47,6 +47,7 @@ public:
     void UnSelect();
 
     bool AnythingSelected;
+    Gtk::Label caption;
 private:
     void UpdateNotes();
     void OnTypeChanged();
@@ -75,7 +76,6 @@ private:
     Gtk::HBox line4;
     Gtk::HBox line5;
 
-    Gtk::Label caption;
     Gtk::Label type_label;
     Gtk::Label inv_label;
 
