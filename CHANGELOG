@@ -1,13 +1,16 @@
 harmonyseq 0.15
-	- Reorganized sequencer window, and merged it into the main window.
-	- Merged the events window into the main window.
+	- Reorganized sequencer window, significantly improving the way a pattern is presented.
+	- Merged the sequencer window and the events window into the main window.
+	- Added colourful flashing playback indicators.
 	- Added 4th note indicators.
-	- Added flashing playback indicators.
 	- Added PlayOnEdit feature.
-	- Allowed reordering sequencers.
+	- Allowed reordering sequencers (this time seriously).
 	- Added an action that transposes a sequencer by an octave.
 	- Incresed tempo range, as some may need it higher tempos.
 	- Significantly improved data refreshing.
+	- Improved support for unusual Gtk system themes.
+	- Changed sequencer's default resolution to 16.
+	- Few bugs fixed.
 
 harmonyseq 0.14 "enlighted"
 	- Moved GUI from buttons to an elegant toolbar and menu.
