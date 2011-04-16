@@ -312,155 +312,174 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
 
         //Shortcut pointer to the sequencer we are currently dealing with.
         seq = seqVector[n];
-        
+
+        bool needs_to_have_its_row_refreshed = false;
         //Update the seq's PlayOnce phase.
         //Phase 3 means it has already been played, and it has just ended, so now we'll just turn it off, by setting phase back to initial state: 0.
-        if(seq->GetPlayOncePhase() == 3) seq->SetPlayOncePhase(0);
+        if(seq->GetPlayOncePhase() == 3) {
+            seq->SetPlayOncePhase(0);
+            needs_to_have_its_row_refreshed = true;
+        }
+        
         //If phase is set to 1, this means this sequencer is about to be played once right now, so we'll change the phase to 2 (to change the colour
         //in main window corresponding to this sequencer). The last_palyed_note is set to 0, to make sure that when a loooong sequence (more
         //than one bar long) is played once, it's played from it's beggining
-        if(seq->GetPlayOncePhase() == 1) {seq->SetPlayOncePhase(2); seq->last_played_note = 0;}
+        if(seq->GetPlayOncePhase() == 1) {
+            seq->SetPlayOncePhase(2);
+            seq->last_played_note = 0;
+            needs_to_have_its_row_refreshed = true;
+        }
 
-        //If neither the sequencer is turned on nor it's in 2nd phase, proceed to next sequencer, because there is nothing to do with this one.
-        if (!(seq->GetOn() || seq->GetPlayOncePhase() == 2)) continue;
+        //Output the notes only if the sequencer is on, or it's in 2nd phase. Otherwise skip the note outputting routines....
+        if (seq->GetOn() || seq->GetPlayOncePhase() == 2){
 
-        //diode colour
-        int diode_colour;
-        if (seq->GetPlayOncePhase() == 2) diode_colour = 1;
-        else diode_colour = 0;
-        //OK, and now we proceed all notes from one sequencer.
-        //First check the length:
-        if (seq->GetLength()<=1){
-            //Length is smaller or equal to 1, so we play the same sequence several times in a bar
+            //diode colour
+            int diode_colour;
+            if (seq->GetPlayOncePhase() == 2) diode_colour = 1;
+            else diode_colour = 0;
+            //OK, and now we proceed all notes from one sequencer.
+            //First check the length:
+            if (seq->GetLength()<=1){
+                //Length is smaller or equal to 1, so we play the same sequence several times in a bar
 
-            //Calculate how many times we play this sequence in one bar
-            double howmanytimes = (double)1.0/((double)seq->GetLength());
-            //Calculate duration of a singular note.
-            int duration = ((double)(TICKS_PER_NOTE / (double)seq->resolution))*seq->GetLength();
-            //Local tick is used for calculation in one repetition, at beggining copy it from the main tick.
-            int local_tick = tick;
+                //Calculate how many times we play this sequence in one bar
+                double howmanytimes = (double)1.0/((double)seq->GetLength());
+                //Calculate duration of a singular note.
+                int duration = ((double)(TICKS_PER_NOTE / (double)seq->resolution))*seq->GetLength();
+                //Local tick is used for calculation in one repetition, at beggining copy it from the main tick.
+                int local_tick = tick;
 
-            //Repeat this as many times as we'll play the melody in one bar:
-            for (int i = 0; i < howmanytimes; i++){
-                //Take every note from this sequencer
-                for (int x = 0; x < seq->resolution; x++) {
+                //Repeat this as many times as we'll play the melody in one bar:
+                for (int i = 0; i < howmanytimes; i++){
+                    //Take every note from this sequencer
+                    for (int x = 0; x < seq->resolution; x++) {
+                        for(int C = 0; C < 6; C++){
+                            //If the note is inactive, take next note.
+                            if(!(seq->GetActivePatternNote(x,C))) continue;
+                            //Get the pitch of that note.
+                            int pitch = seq->GetNoteOfChord(C);
+                            *dbg << "outputting note " << pitch << ", at " << local_tick + x*duration << "\n";
+                            //Create a new event (clear it)...
+                            snd_seq_ev_clear(&ev);
+                            //Fill it with note data
+                            snd_seq_ev_set_note(&ev, seq->GetChannel() - 1, pitch, seq->GetVolume(), duration);
+                            //Schedule it in appropriate momment in time (rather: tick, not time), putting it on a queue
+                            snd_seq_ev_schedule_tick(&ev, queueid, 0, local_tick + x * duration);
+                            //Direct it ti output port, to all it's subscribers
+                            snd_seq_ev_set_source(&ev, output_port);
+                            snd_seq_ev_set_subs(&ev);
+                            //Output the event (but it stays at the queue.)
+                            snd_seq_event_output_direct(seq_handle, &ev);
+                        }
+                    }
+
+                    //Moreover, output a minor echo, for controlling diodes
+                    for (int x = 0; x < seq->resolution; x++) {
+                        snd_seq_ev_clear(&ev);
+                        ev.type = SND_SEQ_EVENT_USR0; //Diode ON
+                        ev.data.raw32.d[0] = x; //diode number
+                        ev.data.raw32.d[1] = seq->MyHandle; //seq handle
+                        ev.data.raw32.d[2] = diode_colour;
+                        snd_seq_ev_schedule_tick(&ev, queueid, 0, local_tick + x * duration);
+                        snd_seq_ev_set_dest(&ev, snd_seq_client_id(seq_handle), input_port); //here INPUT_PORT is used, so the event will be send just to harmonySEQ itself.
+                        snd_seq_event_output_direct(seq_handle, &ev);
+                        snd_seq_ev_clear(&ev);
+                    }
+
+                    //If the sequencer had to play it's melody ONCE, then mark it as it has already played, and break the loop, because we won't repeat the melody (it had to be played ONCE!)
+                    if(seq->GetPlayOncePhase() == 2) {seq->SetPlayOncePhase(3);break;}
+
+                    //Prepare the local_tick for next repetition.
+                    local_tick += (double)TICKS_PER_NOTE*seq->GetLength();
+                }
+
+                //One more echo, to turn all the diodes OFF
+                snd_seq_ev_clear(&ev);
+                ev.type = SND_SEQ_EVENT_USR0; //Diode ON
+                ev.data.raw32.d[0] = -1; //diode number = -1   - turning all diodes off
+                ev.data.raw32.d[1] = seq->MyHandle; //seq handle
+                ev.data.raw32.d[2] = diode_colour;
+                snd_seq_ev_schedule_tick(&ev, queueid, 0, tick+TICKS_PER_NOTE-1 ); //just before the next bar
+                snd_seq_ev_set_dest(&ev, snd_seq_client_id(seq_handle), input_port); //here INPUT_PORT is used, so the event will be send just to harmonySEQ itself.
+                snd_seq_event_output_direct(seq_handle, &ev);
+                snd_seq_ev_clear(&ev);
+
+            }else{
+                //Length is larger than 1, we play one sequence over many bars.
+                //TODO: rewrite this, so that it saves a double representing a progress of this sequence (i.e. where to start from next time)
+
+
+                //Calculate duration of a singular note.
+                int duration = ((double)(TICKS_PER_NOTE / seq->resolution))*seq->GetLength();
+                //Get the note we'll start playback from.
+                int startnote = seq->last_played_note;
+                //currnote is used for iteration through consequent notes. x, however, represents the number (required for scheduling) of the note in this sequence IN this BAR.
+                int x, currnote = startnote;
+                //In this bar we'll play [seq->resolution/seq->length] notes, so repeat the loop (incrementing the iterator) this many times.
+                for (x = 0; x < (double)seq->resolution/seq->GetLength();x++){
+                    //Iterate through all notes using currnote as iterator.
                     for(int C = 0; C < 6; C++){
                         //If the note is inactive, take next note.
-                        if(!(seq->GetActivePatternNote(x,C))) continue;
+                        if (!(seq->GetActivePatternNote(currnote, C))) continue;
                         //Get the pitch of that note.
-                        int pitch = seq->GetNoteOfChord(C);
-                        *dbg << "outputting note " << pitch << ", at " << local_tick + x*duration << "\n";
+                        int note = seq->GetNoteOfChord(C);
                         //Create a new event (clear it)...
                         snd_seq_ev_clear(&ev);
                         //Fill it with note data
-                        snd_seq_ev_set_note(&ev, seq->GetChannel() - 1, pitch, seq->GetVolume(), duration);
+                        snd_seq_ev_set_note(&ev, seq->GetChannel() - 1, note, seq->GetVolume(), duration);
                         //Schedule it in appropriate momment in time (rather: tick, not time), putting it on a queue
-                        snd_seq_ev_schedule_tick(&ev, queueid, 0, local_tick + x * duration);
+                        snd_seq_ev_schedule_tick(&ev, queueid, 0, tick + x * duration);
                         //Direct it ti output port, to all it's subscribers
                         snd_seq_ev_set_source(&ev, output_port);
                         snd_seq_ev_set_subs(&ev);
                         //Output the event (but it stays at the queue.)
                         snd_seq_event_output_direct(seq_handle, &ev);
                     }
+                        //Moreover, output a minor echo, for controlling diodes
+                        snd_seq_ev_clear(&ev);
+                        ev.type = SND_SEQ_EVENT_USR0; //Diode ON
+                        ev.data.raw32.d[0] = currnote; //diode number
+                        ev.data.raw32.d[1] = seq->MyHandle; //seq handle
+                        ev.data.raw32.d[2] = diode_colour;
+                        snd_seq_ev_schedule_tick(&ev, queueid, 0, tick + x * duration);
+                        snd_seq_ev_set_dest(&ev, snd_seq_client_id(seq_handle), input_port); //here INPUT_PORT is used, so the event will be send just to harmonySEQ itself.
+                        snd_seq_event_output_direct(seq_handle, &ev);
+                        snd_seq_ev_clear(&ev);
+
+                    //Increment the iterator - currnote.
+                    currnote++;
+                    //If currnote is out of range AND we had to play the sequence once, mark it as played.
+                    if (currnote >= seq->resolution && seq->GetPlayOncePhase() == 2) seq->SetPlayOncePhase(3);
+                    //If currnote is out of range, wrap it.
+                    currnote = currnote % seq->resolution;
+
                 }
+                //Remember which note was last played, so we'll continue from next one.
+                seq->last_played_note =currnote;
 
-                //Moreover, output a minor echo, for controlling diodes
-                for (int x = 0; x < seq->resolution; x++) {
-                    snd_seq_ev_clear(&ev);
-                    ev.type = SND_SEQ_EVENT_USR0; //Diode ON
-                    ev.data.raw32.d[0] = x; //diode number
-                    ev.data.raw32.d[1] = seq->MyHandle; //seq handle
-                    ev.data.raw32.d[2] = diode_colour;
-                    snd_seq_ev_schedule_tick(&ev, queueid, 0, local_tick + x * duration);
-                    snd_seq_ev_set_dest(&ev, snd_seq_client_id(seq_handle), input_port); //here INPUT_PORT is used, so the event will be send just to harmonySEQ itself.
-                    snd_seq_event_output_direct(seq_handle, &ev);
-                    snd_seq_ev_clear(&ev);
-                }
+                //One more echo, to turn all the diodes OFF _just before the next bar_
+                //This will also turn off all diodes in the middle of pattern, when the length > 1, but it won't be seen, for it's a very very short time before the next one is lit up.
+                snd_seq_ev_clear(&ev);
+                ev.type = SND_SEQ_EVENT_USR0; //Diode ON
+                ev.data.raw32.d[0] = -1; //diode number = -1   - turning all diodes off
+                ev.data.raw32.d[1] = seq->MyHandle; //seq handle
+                ev.data.raw32.d[2] = diode_colour;
+                snd_seq_ev_schedule_tick(&ev, queueid, 0, tick+TICKS_PER_NOTE-1); //just before the next bar
+                snd_seq_ev_set_dest(&ev, snd_seq_client_id(seq_handle), input_port); //here INPUT_PORT is used, so the event will be send just to harmonySEQ itself.
+                snd_seq_event_output_direct(seq_handle, &ev);
+                snd_seq_ev_clear(&ev);
 
-                //If the sequencer had to play it's melody ONCE, then mark it as it has already played, and break the loop, because we won't repeat the melody (it had to be played ONCE!)
-                if(seq->GetPlayOncePhase() == 2) {seq->SetPlayOncePhase(3);break;} 
+            } // [if (seq->GetLength()<=1)]
 
-                //Prepare the local_tick for next repetition.
-                local_tick += (double)TICKS_PER_NOTE*seq->GetLength();
-            }
+        } //[If seq is on or in 2nd phase]
 
-            //One more echo, to turn all the diodes OFF
-            snd_seq_ev_clear(&ev);
-            ev.type = SND_SEQ_EVENT_USR0; //Diode ON
-            ev.data.raw32.d[0] = -1; //diode number = -1   - turning all diodes off
-            ev.data.raw32.d[1] = seq->MyHandle; //seq handle
-            ev.data.raw32.d[2] = diode_colour;
-            snd_seq_ev_schedule_tick(&ev, queueid, 0, tick+TICKS_PER_NOTE-1 ); //just before the next bar
-            snd_seq_ev_set_dest(&ev, snd_seq_client_id(seq_handle), input_port); //here INPUT_PORT is used, so the event will be send just to harmonySEQ itself.
-            snd_seq_event_output_direct(seq_handle, &ev);
-            snd_seq_ev_clear(&ev);
-
-        }else{
-            //Length is larger than 1, we play one sequence over many bars.
-            //TODO: rewrite this, so that it saves a double representing a progress of this sequence (i.e. where to start from next time)
+        //Finally, no matter whether the sequencer was on or not...
+        
+        //Refreshing the sequencer's row in main window, if needed
+        if (needs_to_have_its_row_refreshed && seq->my_row) mainwindow->RefreshRow(seq->my_row);
 
 
-            //Calculate duration of a singular note.
-            int duration = ((double)(TICKS_PER_NOTE / seq->resolution))*seq->GetLength();
-            //Get the note we'll start playback from.
-            int startnote = seq->last_played_note;
-            //currnote is used for iteration through consequent notes. x, however, represents the number (required for scheduling) of the note in this sequence IN this BAR.
-            int x, currnote = startnote;
-            //In this bar we'll play [seq->resolution/seq->length] notes, so repeat the loop (incrementing the iterator) this many times.
-            for (x = 0; x < (double)seq->resolution/seq->GetLength();x++){
-                //Iterate through all notes using currnote as iterator.
-                for(int C = 0; C < 6; C++){
-                    //If the note is inactive, take next note.
-                    if (!(seq->GetActivePatternNote(currnote, C))) continue;
-                    //Get the pitch of that note.
-                    int note = seq->GetNoteOfChord(C);
-                    //Create a new event (clear it)...
-                    snd_seq_ev_clear(&ev);
-                    //Fill it with note data
-                    snd_seq_ev_set_note(&ev, seq->GetChannel() - 1, note, seq->GetVolume(), duration);
-                    //Schedule it in appropriate momment in time (rather: tick, not time), putting it on a queue
-                    snd_seq_ev_schedule_tick(&ev, queueid, 0, tick + x * duration);
-                    //Direct it ti output port, to all it's subscribers
-                    snd_seq_ev_set_source(&ev, output_port);
-                    snd_seq_ev_set_subs(&ev);
-                    //Output the event (but it stays at the queue.)
-                    snd_seq_event_output_direct(seq_handle, &ev);
-                }
-                    //Moreover, output a minor echo, for controlling diodes
-                    snd_seq_ev_clear(&ev);
-                    ev.type = SND_SEQ_EVENT_USR0; //Diode ON
-                    ev.data.raw32.d[0] = currnote; //diode number
-                    ev.data.raw32.d[1] = seq->MyHandle; //seq handle
-                    ev.data.raw32.d[2] = diode_colour;
-                    snd_seq_ev_schedule_tick(&ev, queueid, 0, tick + x * duration);
-                    snd_seq_ev_set_dest(&ev, snd_seq_client_id(seq_handle), input_port); //here INPUT_PORT is used, so the event will be send just to harmonySEQ itself.
-                    snd_seq_event_output_direct(seq_handle, &ev);
-                    snd_seq_ev_clear(&ev);
-
-                //Increment the iterator - currnote.
-                currnote++;
-                //If currnote is out of range AND we had to play the sequence once, mark it as played.
-                if (currnote >= seq->resolution && seq->GetPlayOncePhase() == 2) seq->SetPlayOncePhase(3);
-                //If currnote is out of range, wrap it.
-                currnote = currnote % seq->resolution;
-
-            }
-            //Remember which note was last played, so we'll continue from next one.
-            seq->last_played_note =currnote;
-
-            //One more echo, to turn all the diodes OFF _just before the next bar_
-            //This will also turn off all diodes in the middle of pattern, when the length > 1, but it won't be seen, for it's a very very short time before the next one is lit up.
-            snd_seq_ev_clear(&ev);
-            ev.type = SND_SEQ_EVENT_USR0; //Diode ON
-            ev.data.raw32.d[0] = -1; //diode number = -1   - turning all diodes off
-            ev.data.raw32.d[1] = seq->MyHandle; //seq handle
-            ev.data.raw32.d[2] = diode_colour;
-            snd_seq_ev_schedule_tick(&ev, queueid, 0, tick+TICKS_PER_NOTE-1); //just before the next bar
-            snd_seq_ev_set_dest(&ev, snd_seq_client_id(seq_handle), input_port); //here INPUT_PORT is used, so the event will be send just to harmonySEQ itself.
-            snd_seq_event_output_direct(seq_handle, &ev);
-            snd_seq_ev_clear(&ev);
-        }
-
+        //And proceed to next sequencer.
     }
 
     //Also, playback the metronome notes.
