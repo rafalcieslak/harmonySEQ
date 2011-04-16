@@ -349,7 +349,7 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                         if(!(seq->GetActivePatternNote(x,C))) continue;
                         //Get the pitch of that note.
                         int pitch = seq->GetNoteOfChord(C);
-                        *dbg << "outputting note " << pitch << ",\n";
+                        *dbg << "outputting note " << pitch << ", at " << local_tick + x*duration << "\n";
                         //Create a new event (clear it)...
                         snd_seq_ev_clear(&ev);
                         //Fill it with note data
@@ -390,7 +390,7 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
             ev.data.raw32.d[0] = -1; //diode number = -1   - turning all diodes off
             ev.data.raw32.d[1] = seq->MyHandle; //seq handle
             ev.data.raw32.d[2] = diode_colour;
-            snd_seq_ev_schedule_tick(&ev, queueid, 0, local_tick -1); //just before the next bar
+            snd_seq_ev_schedule_tick(&ev, queueid, 0, tick+TICKS_PER_NOTE-1 ); //just before the next bar
             snd_seq_ev_set_dest(&ev, snd_seq_client_id(seq_handle), input_port); //here INPUT_PORT is used, so the event will be send just to harmonySEQ itself.
             snd_seq_event_output_direct(seq_handle, &ev);
             snd_seq_ev_clear(&ev);
@@ -448,7 +448,8 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
             //Remember which note was last played, so we'll continue from next one.
             seq->last_played_note =currnote;
 
-            //One more echo, to turn all the diodes OFF
+            //One more echo, to turn all the diodes OFF _just before the next bar_
+            //This will also turn off all diodes in the middle of pattern, when the length > 1, but it won't be seen, for it's a very very short time before the next one is lit up.
             snd_seq_ev_clear(&ev);
             ev.type = SND_SEQ_EVENT_USR0; //Diode ON
             ev.data.raw32.d[0] = -1; //diode number = -1   - turning all diodes off
