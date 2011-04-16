@@ -75,7 +75,10 @@ public:
     seqHandle selectedSeq;
 
     /**Lights aproprieate diode*/
-    void Diode(int n);
+    void Diode(int n, int colour);
+
+    /**Turns all diodes off*/
+    void Diodes_AllOff();
 
 private:
     /*

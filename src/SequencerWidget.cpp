@@ -571,7 +571,7 @@ void SequencerWidget::OnPlayOnceButtonClicked(){
     mainwindow->RefreshRow(seq->my_row);
 }
 
-void SequencerWidget::Diode(int n){
+void SequencerWidget::Diode(int n, int c){
     if(!AnythingSelected) return;
     //double x = (double)n/(double)DIODES_RES;
     int res = seqH(selectedSeq)->resolution;
@@ -581,13 +581,20 @@ void SequencerWidget::Diode(int n){
     int prev = (curr-1);
     if (prev == -1) prev = res-1; //if the previous is too small, wrap it and select the last one
     if(prev < pattern_lines.size() && pattern_lines[prev]) pattern_lines[prev]->LightOff();
-    if(seqH(selectedSeq)->GetOn()){
-        if(curr < pattern_lines.size()  && pattern_lines[curr])  pattern_lines[curr]->LightOn();
-    }else if(seqH(selectedSeq)->GetPlayOncePhase() == 3){
-        if(curr < pattern_lines.size() && pattern_lines[curr])  pattern_lines[curr]->LightOnAlternate();
+        
+    if(curr < pattern_lines.size()  && pattern_lines[curr]) {
+        if (c == 0)
+            pattern_lines[curr]->LightOn();
+        else
+            pattern_lines[curr]->LightOnAlternate();
     }
 }
 
+void SequencerWidget::Diodes_AllOff(){
+    if(!AnythingSelected) return;
+    //double x = (double)n/(double)DIODES_RES;
+    for (int x = 0; x < pattern_lines.size(); x++) if (pattern_lines[x]) pattern_lines[x]->LightOff();
+}
 //====================PATTERNLINE=========================
 PatternLine::PatternLine(){
     set_border_width(0);
