@@ -65,8 +65,9 @@ SequencerWidget::SequencerWidget(){
     wNameBox.pack_start(wNameEntry,Gtk::PACK_SHRINK);
     wNameEntry.set_width_chars(15);
     wNameEntry.signal_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnNameEdited));
-    wOnBox.pack_start(wMuteToggle,Gtk::PACK_SHRINK);
+    wOnBox.pack_start(wOnOfColour,Gtk::PACK_SHRINK);
     wOnBox.pack_start(wPlayOnceButton,Gtk::PACK_SHRINK);
+    wOnOfColour.add(wMuteToggle);
 
     wUpperHBox1.pack_start(wChannelLabel,Gtk::PACK_SHRINK);
     wUpperHBox1.pack_start(wChannelButton,Gtk::PACK_SHRINK);
@@ -166,10 +167,12 @@ SequencerWidget::SequencerWidget(){
     add(wMainVbox);
 
     signal_key_press_event().connect(&FindAndProcessEventsKeyPress);
+    
 
     hide(); //hide at start, but let the children be shown
 
     //UpdateEverything();
+
     
     show_all_children(1);
     hide(); //hide at start, but let the children be shown
@@ -202,7 +205,7 @@ void SequencerWidget::UpdateEverything(){
 
         UpdateChannel();
         UpdateVolume();
-        UpdateOnOff();
+        UpdateOnOff(); //will also update colour
         UpdateName();
         InitNotebook();
         UpdateRelLenBoxes();
@@ -222,6 +225,7 @@ void SequencerWidget::UpdateOnOff(){
     ignore_signals = 1;
     wMuteToggle.set_active(seq->GetOn());
     ignore_signals = 0;
+    UpdateOnOffColour();
 }
 void SequencerWidget::UpdateChannel(){
     if (AnythingSelected == 0) return;
@@ -389,6 +393,19 @@ void SequencerWidget::UpdateActivePatternRange(){
     ignore_signals = 0;
 }
 
+void SequencerWidget::UpdateOnOffColour(){
+    Sequencer* seq = seqH(selectedSeq);
+    if (seq->GetOn()){
+        SetOnOffColour(ON);
+    }else if (seq->GetPlayOncePhase() == 2 || seq->GetPlayOncePhase() == 3) {
+        SetOnOffColour(ONCE);
+    } else if (seq->GetPlayOncePhase() == 1) {
+        SetOnOffColour(ONCE_PRE);
+    } else {
+        SetOnOffColour(NONE);
+    }
+}
+
 void SequencerWidget::OnPatternNoteChanged(int c, bool value, int seq){
     if(!AnythingSelected) return;
     Sequencer* sequ = seqH(selectedSeq);
@@ -441,8 +458,9 @@ void SequencerWidget::OnToggleMuteToggled(){
     Sequencer* seq = seqH(selectedSeq);
 
     seq->SetOn(wMuteToggle.get_active());
-    mainwindow->RefreshRow(seq->my_row);
     seq->SetPlayOncePhase(0);
+    mainwindow->RefreshRow(seq->my_row);
+    UpdateOnOffColour();
 
     //Files::SetFileModified(1); come on, do not write mutes.
 }
@@ -569,6 +587,24 @@ void SequencerWidget::OnPlayOnceButtonClicked(){
 
     seq->SetPlayOncePhase(1);
     mainwindow->RefreshRow(seq->my_row);
+    UpdateOnOffColour();
+}
+
+void SequencerWidget::SetOnOffColour(OnOffColour c){
+    if (c == NONE) {
+        wOnOfColour.unset_bg(Gtk::STATE_NORMAL);
+        wMuteToggle.unset_bg(Gtk::STATE_PRELIGHT);
+    }else if (c == ON) {
+        wOnOfColour.modify_bg(Gtk::STATE_NORMAL,Gdk::Color("green1"));
+        wMuteToggle.modify_bg(Gtk::STATE_PRELIGHT,Gdk::Color("green3"));
+    }else if (c ==ONCE) {
+        wOnOfColour.modify_bg(Gtk::STATE_NORMAL,Gdk::Color("yellow"));
+        wMuteToggle.modify_bg(Gtk::STATE_PRELIGHT,Gdk::Color("yellow2"));
+    }else if (c == ONCE_PRE){
+        wOnOfColour.modify_bg(Gtk::STATE_NORMAL,Gdk::Color("gold"));
+        wMuteToggle.modify_bg(Gtk::STATE_PRELIGHT,Gdk::Color("gold2"));
+        
+    }
 }
 
 void SequencerWidget::Diode(int n, int c){

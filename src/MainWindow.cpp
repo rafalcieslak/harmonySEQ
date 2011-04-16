@@ -399,7 +399,7 @@ Gtk::TreeModel::Row MainWindow::AddSequencerRow(int x)
     }else if (seqVector[x]->GetPlayOncePhase() == 2 || seqVector[x]->GetPlayOncePhase() == 3){
         row[m_columns_sequencers.col_colour] = "yellow1";
     }else if(seqVector[x]->GetPlayOncePhase()== 1){
-        row[m_columns_sequencers.col_colour] = "yellow2";
+        row[m_columns_sequencers.col_colour] = "gold";
     }else{
         row[m_columns_sequencers.col_colour] = "white";
     }
@@ -433,7 +433,7 @@ void MainWindow::InitTreeData(){
     }else if (seqV(x)->GetPlayOncePhase() == 2 || seqV(x)->GetPlayOncePhase() == 3){
         row[m_columns_sequencers.col_colour] = "yellow1";
     }else if(seqV(x)->GetPlayOncePhase()== 1){
-        row[m_columns_sequencers.col_colour] = "yellow2";
+        row[m_columns_sequencers.col_colour] = "gold";
     }else{
         row[m_columns_sequencers.col_colour] = "white";
     }
@@ -468,7 +468,7 @@ void MainWindow::RefreshRow(Gtk::TreeRow row){
     }else if (seq->GetPlayOncePhase() == 2 || seq->GetPlayOncePhase() == 3){
         row[m_columns_sequencers.col_colour] = "yellow1";
     }else if(seq->GetPlayOncePhase()== 1){
-        row[m_columns_sequencers.col_colour] = "yellow2";
+        row[m_columns_sequencers.col_colour] = "gold";
     }else{
         row[m_columns_sequencers.col_colour] = "white";
     }
@@ -783,6 +783,7 @@ void MainWindow::OnPopupPlayOnce(){
     seqH(GetSelectedSequencerHandle())->SetPlayOncePhase(1); //will be played once
     Gtk::TreeModel::iterator iter = GetSelectedSequencerIter();
     RefreshRow(*iter);
+    if (seqWidget.selectedSeq == GetSelectedSequencerHandle()) seqWidget.UpdateOnOffColour();
 
 }
 

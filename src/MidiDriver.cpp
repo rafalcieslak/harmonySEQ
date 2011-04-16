@@ -314,13 +314,19 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
         seq = seqVector[n];
 
         bool needs_to_have_its_row_refreshed = false;
+
         //Update the seq's PlayOnce phase.
+        
+        //If the sequencer is about to play it's pattern once, but it's on anyway, reset the playonce phase, and use the sequencer as if it was
+        //just simply turned on.
+        if(seq->GetPlayOncePhase()==1 && seq->GetOn() == 1){
+            seq->SetPlayOncePhase(0);
+        }
         //Phase 3 means it has already been played, and it has just ended, so now we'll just turn it off, by setting phase back to initial state: 0.
         if(seq->GetPlayOncePhase() == 3) {
             seq->SetPlayOncePhase(0);
             needs_to_have_its_row_refreshed = true;
         }
-        
         //If phase is set to 1, this means this sequencer is about to be played once right now, so we'll change the phase to 2 (to change the colour
         //in main window corresponding to this sequencer). The last_palyed_note is set to 0, to make sure that when a loooong sequence (more
         //than one bar long) is played once, it's played from it's beggining
@@ -476,7 +482,10 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
         //Finally, no matter whether the sequencer was on or not...
         
         //Refreshing the sequencer's row in main window, if needed
-        if (needs_to_have_its_row_refreshed && seq->my_row) mainwindow->RefreshRow(seq->my_row);
+        if (needs_to_have_its_row_refreshed){
+            if ( seq->my_row) mainwindow->RefreshRow(seq->my_row);
+            if (mainwindow->seqWidget.selectedSeq == seq->MyHandle) mainwindow->seqWidget.UpdateOnOffColour();
+        }
 
 
         //And proceed to next sequencer.

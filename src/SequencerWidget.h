@@ -64,6 +64,7 @@ public:
     void UpdateChord();
     void UpdateActivePattern();
     void UpdateAsterisk(int from, int to);
+    void UpdateOnOffColour();
 
     void SelectSeq(seqHandle h);
     void SelectNothing();
@@ -86,6 +87,15 @@ private:
     void DetachLines();
     */
     void UpdatePatternVbox(int pattern=-1);
+
+    enum OnOffColour{
+        NONE,
+        ON,
+        ONCE_PRE,
+        ONCE
+    };
+    void SetOnOffColour(OnOffColour i);
+
 
     ChordWidget chordwidget;
 
@@ -123,6 +133,7 @@ private:
     Gtk::HBox wPtOpsHBox1;
     Gtk::HBox wPtOpsHBox2;
     Gtk::VBox wBoxOfChord;
+    Gtk::EventBox wOnOfColour;
 
     Gtk::HSeparator wHSep;
     Gtk::VSeparator wVSep;
