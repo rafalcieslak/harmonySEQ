@@ -166,7 +166,7 @@ SequencerWidget::SequencerWidget(){
 
     add(wMainVbox);
 
-    signal_key_press_event().connect(&FindAndProcessEventsKeyPress);
+    
     
 
     hide(); //hide at start, but let the children be shown
