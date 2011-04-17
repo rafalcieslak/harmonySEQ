@@ -241,3 +241,12 @@ void Sequencer::SetPatternNote(int pattern, int n, int c, bool value){
 void Sequencer::ChangeActivePattern(int new_one){
     active_pattern = new_one%(patterns.size());
 }
+
+void Sequencer::ClearPattern(int p){
+    if (p >= patterns.size()) return;
+
+    for (int x = 0; x < resolution; x ++)
+        for (int C = 0; C < 6; C++)
+            patterns[p][x][C] = false;
+
+}

@@ -45,8 +45,8 @@ public:
     /**List of  notes in patterns:
         * In fact, it's a 3-dimentional array.
         * 1st dimention: pattern number.
-        * 2nd dimention: note number (in time - vertical)
-        * 3rd dimention: note number (pitch - horisontal)
+        * 2nd dimention: note number (in time - horisontal)
+        * 3rd dimention: note number (pitch - vertical)
         *
         * So: patterns[4][1][5] representa a boolan state of the first note (5th pith of chord) in fourth pattern.
         * Hard to explain, easy to use.*/
@@ -118,6 +118,10 @@ public:
 
     int GetPlayOncePhase();
     void SetPlayOncePhase(int p);
+
+    /**Clears the whole pattern*/
+    void ClearPattern(int p);
+
     /**Remembers the last played note*/
     int last_played_note;
 
@@ -126,7 +130,7 @@ public:
 
     /**Remembers the handle to this sequencer.*/
     seqHandle MyHandle;
-    
+
     friend class SequencerWindow;
 
 protected:

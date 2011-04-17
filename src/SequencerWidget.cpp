@@ -90,6 +90,7 @@ SequencerWidget::SequencerWidget(){
     wNotebook.set_scrollable(1);
     wNotebook.signal_switch_page().connect(sigc::mem_fun(*this, &SequencerWidget::OnNotebookPageChanged));
 
+    wPtOpsVBox.pack_end(wClearPatternHBox,Gtk::PACK_SHRINK);
     wPtOpsVBox.pack_start(wPtOpsHBox1,Gtk::PACK_SHRINK);
     wPtOpsVBox.pack_start(wSetAsActivePatternButton,Gtk::PACK_SHRINK);
     wPtOpsVBox.pack_start(wPtOpsHBox2,Gtk::PACK_SHRINK);
@@ -99,6 +100,9 @@ SequencerWidget::SequencerWidget(){
     wPtOpsHBox2.pack_start(wAddPatternButton,Gtk::PACK_SHRINK);
     wPtOpsHBox2.pack_start(wRemovePattern,Gtk::PACK_SHRINK);
 
+    wClearPatternHBox.pack_start(wClearPattern,Gtk::PACK_SHRINK);
+
+    wClearPattern.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWidget::OnClearPatternClicked));
     wSetAsActivePatternButton.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWidget::OnSetAsActivePatternClicked));
     wAddPatternButton.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWidget::OnAddPatternClicked));
     wRemovePattern.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWidget::OnRemovePatternClicked));
@@ -119,6 +123,9 @@ SequencerWidget::SequencerWidget(){
     wNameLabel.set_text(_("Name:"));
     wPlayOnceButton.set_label(_("Play once"));
     wPlayOnceButton.set_tooltip_markup(_("Plays sequence in this sequencer <b>once</b>."));
+    wClearPattern.set_label(_("Clear pattern"));
+    wClearPattern.set_tooltip_markup(_("Clears all notes of this pattern."));
+
 
     wVolumeButton.set_range(0,127);
     wChannelButton.set_range(1,16);
@@ -327,7 +334,6 @@ void SequencerWidget::InitNotebook(){
 void SequencerWidget::UpdatePatternVbox(int pattern){
     *dbg << "Updating pattern VBox... \n";
     if (!AnythingSelected) return;
-    *dbg << "Yes - it' selected!!!!!!\n";
     //if called without parameter...:
     if (pattern = -1) pattern = wNotebook.get_current_page();
     
@@ -564,6 +570,13 @@ void SequencerWidget::OnRemovePatternClicked(){
     mainwindow->RefreshRow(seq->my_row);
     Files::SetFileModified(1);
 }
+
+void SequencerWidget::OnClearPatternClicked(){
+    if(!AnythingSelected) return;
+    seqH(selectedSeq)->ClearPattern(wNotebook.get_current_page());
+    UpdatePatternVbox();
+}
+
 void SequencerWidget::SetRemoveButtonSensitivity(){
     if(wNotebook.get_n_pages() == 1){
         wRemovePattern.set_sensitive(0);

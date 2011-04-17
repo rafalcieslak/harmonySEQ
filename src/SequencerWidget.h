@@ -118,6 +118,7 @@ private:
     void SetRemoveButtonSensitivity();
     void OnNameEdited();
     void OnPlayOnceButtonClicked();
+    void OnClearPatternClicked();
 
     Gtk::VBox wMainVbox;
     Gtk::HBox wUpBox;
@@ -133,6 +134,7 @@ private:
     Gtk::HBox wPtOpsHBox1;
     Gtk::HBox wPtOpsHBox2;
     Gtk::VBox wBoxOfChord;
+    Gtk::HBox wClearPatternHBox;
     Gtk::EventBox wOnOfColour;
 
     Gtk::HSeparator wHSep;
@@ -161,6 +163,7 @@ private:
     Gtk::Button wAddPatternButton;
     Gtk::Button wPlayOnceButton;
     Gtk::Button wRemovePattern;
+    Gtk::Button wClearPattern;
     Gtk::CheckButton wMuteToggle;
     Gtk::ComboBox wResolutionsBox;
     Gtk::ComboBox wLengthBox;

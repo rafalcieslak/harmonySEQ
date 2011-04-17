@@ -23,7 +23,9 @@
 typedef unsigned int seqHandle;
 
 class Sequencer;
-/**Returns a pointer to a sequencer, taking it's handle as an argument.*/
+/**Returns a pointer to a sequencer, taking it's handle as an argument.
+    *So, as a matter of fact, it converts a handle to a sequencer.
+    **/
 Sequencer* seqH(seqHandle h);
 /**Returns a pointer to a sequencer, taking it's ID in the vector as an argument.*/
 Sequencer* seqV(int id);
