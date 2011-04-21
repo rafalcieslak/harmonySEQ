@@ -172,7 +172,7 @@ SequencerWidget::SequencerWidget(){
     wLengthBox.signal_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnLengthChanged));
 
     // <editor-fold defaultstate="collapsed" desc="Initializing the pattern lines">
-    int separator_counter;
+    int separator_counter = 0;
     pattern_lines.resize(64, NULL);
     note_separators.resize(16);
     for (int x = 0; x < 64; x++) { //MAX RESOLUTION
@@ -193,6 +193,8 @@ SequencerWidget::SequencerWidget(){
     }
     pattern_box.show();
     // </editor-fold>
+
+    wViewport->signal_scroll_event().connect(sigc::mem_fun(*this,&SequencerWidget::OnPatternMouseScroll));
 
     add(wMainVbox);
 
@@ -609,6 +611,23 @@ void SequencerWidget::SetOnOffColour(OnOffColour c){
         wMuteToggle.modify_bg(Gtk::STATE_PRELIGHT,Gdk::Color("gold2"));
         
     }
+}
+
+bool SequencerWidget::OnPatternMouseScroll(GdkEventScroll* e){
+    //Increment/decrement the viewport's adjustment by one page size
+    if(e->direction == GDK_SCROLL_UP){
+        double inc  = wViewport->get_hadjustment()->get_step_increment();
+         wViewport->get_hadjustment()->set_value(-inc + wViewport->get_hadjustment()->get_value());
+    }else if (e->direction == GDK_SCROLL_DOWN){
+        double inc  = wViewport->get_hadjustment()->get_step_increment();
+        if(!(wViewport->get_hadjustment()->get_value() + wViewport->get_hadjustment()->get_page_size() + inc > wViewport->get_hadjustment()->get_upper() ))
+            wViewport->get_hadjustment()->set_value(inc + wViewport->get_hadjustment()->get_value());
+        else
+            //too high value, trimming to desired
+            wViewport->get_hadjustment()->set_value( wViewport->get_hadjustment()->get_upper() -  wViewport->get_hadjustment()->get_page_size());
+    }
+    if ( wViewport->get_hadjustment()->get_value() >  wViewport->get_hadjustment()->get_upper() -  wViewport->get_hadjustment()->get_page_size())  wViewport->get_hadjustment()->set_value( wViewport->get_hadjustment()->get_upper() -  wViewport->get_hadjustment()->get_page_size());
+    return true;
 }
 
 void SequencerWidget::Diode(int n, int c){

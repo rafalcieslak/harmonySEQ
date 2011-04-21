@@ -119,6 +119,7 @@ private:
     void OnNameEdited();
     void OnPlayOnceButtonClicked();
     void OnClearPatternClicked();
+    bool OnPatternMouseScroll(GdkEventScroll * e);
 
     Gtk::VBox wMainVbox;
     Gtk::HBox wUpBox;
