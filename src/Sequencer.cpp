@@ -226,6 +226,7 @@ bool Sequencer::RemovePattern(int x){
 
 
 int Sequencer::GetPatternNote(int pattern, int n, int c){
+    if (n>=resolution) return 0;
     return patterns[pattern][n][c];
 }
 

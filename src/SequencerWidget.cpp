@@ -159,7 +159,7 @@ SequencerWidget::SequencerWidget(){
     m_refTreeModel_len = Gtk::ListStore::create(m_Columns_len);
     wLengthBox.set_model(m_refTreeModel_len);
 
-    char temp[10];
+    char temp[50];
     double lengths[7] = LENGTHS;
     for (int x = 0; x < LENGTHS_NUM; x++){
         Gtk::TreeModel::Row row = *(m_refTreeModel_len->append());
@@ -171,16 +171,31 @@ SequencerWidget::SequencerWidget(){
     wLengthBox.pack_start(m_Columns_len.text);
     wLengthBox.signal_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnLengthChanged));
 
+    // <editor-fold defaultstate="collapsed" desc="Initializing the pattern lines">
+    int separator_counter;
+    pattern_lines.resize(64, NULL);
+    note_separators.resize(16);
+    for (int x = 0; x < 64; x++) { //MAX RESOLUTION
+        if (x % 4 == 0) {
+            if (x != 0) { //do not add a separator at the very beggining
+                note_separators[separator_counter] = new Gtk::VSeparator;
+                pattern_box.pack_start(*note_separators[separator_counter], Gtk::PACK_SHRINK);
+                separator_counter++;
+            }
+            sprintf(temp, "%d", x + 1);
+            pattern_lines[x] = (new PatternLine(temp)); //cannot use Gtk::manage, since deleting the box would delete the lines!
+        } else {
+            pattern_lines[x] = (new PatternLine); //cannot use Gtk::manage, since deleting the box would delete the lines!
+        }
+        pattern_lines[x]->OnButtonClicked.connect(sigc::bind(sigc::mem_fun(*this, &SequencerWidget::OnPatternNoteChanged), x));
+        pattern_box.pack_start(*pattern_lines[x], Gtk::PACK_SHRINK);
+        pattern_lines[x]->hide();
+    }
+    pattern_box.show();
+    // </editor-fold>
+
     add(wMainVbox);
 
-    
-    
-
-    hide(); //hide at start, but let the children be shown
-
-    //UpdateEverything();
-
-    
     show_all_children(1);
     hide(); //hide at start, but let the children be shown
 }
@@ -198,6 +213,7 @@ void SequencerWidget::SelectSeq(seqHandle h){
     selectedSeq = h;
     chordwidget.Select(&seqH(h)->chord);
     UpdateEverything();
+    Diodes_AllOff();
 }
 
 void SequencerWidget::SelectNothing(){
@@ -336,51 +352,25 @@ void SequencerWidget::UpdatePatternVbox(int pattern){
     if (!AnythingSelected) return;
     //if called without parameter...:
     if (pattern = -1) pattern = wNotebook.get_current_page();
-    
-    for(int x = 0; x < pattern_lines.size(); x++){
-        if(!pattern_lines[x]) continue;
-        pattern_box.remove(*pattern_lines[x]);
-        delete pattern_lines[x];
-    }
-    for(unsigned int x = 0; x < note_separators.size();x++){
-        if(!note_separators[x]) continue;
-        pattern_box.remove(*note_separators[x]);
-        delete note_separators[x];
-    }
-    pattern_lines.clear();
-    note_separators.clear();
-
-    char temp[100];
     Sequencer* seq = seqH(selectedSeq);
 
-     pattern_lines.resize(seq->resolution,NULL);
-     note_separators.resize(seq->resolution/4+1);
-
-     int separator_counter = 0;
-
-    for(int x = 0; x < seq->resolution;x++){
-    //for(int x = 0; x < 1;x++){
-        if (x%4==0){
-            if(x!=0){ //do not add a separator at the very beggining
-                note_separators[separator_counter] = new Gtk::VSeparator;
-                pattern_box.pack_start(*note_separators[separator_counter],Gtk::PACK_SHRINK);
-                separator_counter++;
+    for (int x = 0; x < seq->resolution;x++){
+        if (x % 4 == 0) {
+            if (x != 0) { //do not add a separator at the very beggining
+                note_separators[x/4-1]->show();
             }
-            sprintf(temp,"%d",x+1);
-            pattern_lines[x] = (new PatternLine(temp)); //cannot use Gtk::manage, since deleting the box would delete the lines!
-        }else{
-            pattern_lines[x] = (new PatternLine); //cannot use Gtk::manage, since deleting the box would delete the lines!
         }
-
+        pattern_lines[x]->show();
         //set up values
         for(int c = 0; c < 6; c++)
             pattern_lines[x]->SetButton(c,seq->GetPatternNote(pattern,x,c));
-        
-        pattern_lines[x]->OnButtonClicked.connect(sigc::bind(sigc::mem_fun(*this, &SequencerWidget::OnPatternNoteChanged), x));
-        pattern_box.pack_start(*pattern_lines[x],Gtk::PACK_SHRINK);
-      }
-
-     wViewport->show_all_children(1);
+    }
+    for (int x = seq->resolution; x < pattern_lines.size(); x++){
+        pattern_lines[x]->hide();
+        if (x % 4 == 0) {
+                note_separators[x/4-1]->hide();
+        }
+    }
      /*Resizing the pattern_box VERTIACLLY so that it will match the chordwidget.
        *The resulting height is equal to:
       */
@@ -415,7 +405,8 @@ void SequencerWidget::UpdateOnOffColour(){
 void SequencerWidget::OnPatternNoteChanged(int c, bool value, int seq){
     if(!AnythingSelected) return;
     Sequencer* sequ = seqH(selectedSeq);
-
+    if (seq >= sequ->resolution) {*err << _("Clicked a pattern checkbox that should be hidden! \n"); return;}
+    
     sequ->SetPatternNote(wNotebook.get_current_page(),seq,c,value);
 
     //Playing on edit...
@@ -629,9 +620,9 @@ void SequencerWidget::Diode(int n, int c){
     int curr = n;//(double)*(double)res; //yep, rounding down
     int prev = (curr-1);
     if (prev == -1) prev = res-1; //if the previous is too small, wrap it and select the last one
-    if(prev < pattern_lines.size() && pattern_lines[prev]) pattern_lines[prev]->LightOff();
+    if(prev < res && pattern_lines[prev]) pattern_lines[prev]->LightOff();
         
-    if(curr < pattern_lines.size()  && pattern_lines[curr]) {
+    if(curr < res  && pattern_lines[curr]) {
         if (c == 0)
             pattern_lines[curr]->LightOn();
         else
