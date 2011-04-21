@@ -68,6 +68,7 @@ Chord::Chord(){
     base_octave = 0;
     base_note=0;
     NoteAndOctaveToBase();
+    RecalcNotes();
 }
 
 Chord::~Chord(){
