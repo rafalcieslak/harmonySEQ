@@ -70,8 +70,8 @@ void InitActionTypesTreeModel(){
     row[m_columns_action_types.type] = Action::SEQ_PLAY_ONCE;
     row[m_columns_action_types.label] = _("Sequencer/Play once");
     row = *(TreeModel_ActionTypes->append());
-    row[m_columns_action_types.type] = Action::SEQ_VOLUME_SET;
-    row[m_columns_action_types.label] = _("Sequencer/Set volume");
+    row[m_columns_action_types.type] = Action::SEQ_VELOCITY_SET;
+    row[m_columns_action_types.label] = _("Sequencer/Set velocity");
     row = *(TreeModel_ActionTypes->append());
     row[m_columns_action_types.type] = Action::SEQ_CHANGE_ONE_NOTE;
     row[m_columns_action_types.label] = _("Sequencer/Set one note");

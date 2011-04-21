@@ -95,7 +95,7 @@ Sequencer::Sequencer(const Sequencer *orig) {
     active_pattern = orig->active_pattern;
     channel = orig->channel;
     length = orig->length;
-    volume = orig->volume;
+    velocity = orig->velocity;
     last_played_note = orig->last_played_note;
     play_once_phase = 0;
 }
@@ -109,7 +109,7 @@ void Sequencer::Init(){
     active_pattern = 0;
     channel = 1;
     length = 1;
-    volume = DEFAULT_VOLUME;
+    velocity = DEFAULT_VELOCITY;
     last_played_note = 0;
     play_once_phase = 0;
     resolution = SEQUENCE_DEFAULT_SIZE;
@@ -190,8 +190,8 @@ void Sequencer::SetChannel(int ch){channel = ch;}
 int Sequencer::GetChannel(){return channel;}
 void Sequencer::SetName(Glib::ustring nm){name = nm;}
 Glib::ustring Sequencer::GetName(){return name;}
-int Sequencer::GetVolume(){return volume;}
-void Sequencer::SetVolume(int v){volume = v;}
+int Sequencer::GetVelocity(){return velocity;}
+void Sequencer::SetVelocity(int v){velocity = v;}
 
 void Sequencer::SetPlayOncePhase(int p){
     play_once_phase = p;

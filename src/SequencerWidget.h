@@ -60,7 +60,7 @@ public:
     void UpdateName();
     void UpdateOnOff();
     void UpdateChannel();
-    void UpdateVolume();
+    void UpdateVelocity();
     void UpdateChord();
     void UpdateActivePattern();
     void UpdateAsterisk(int from, int to);
@@ -106,7 +106,7 @@ private:
     void OnChordWidgetNoteChanged(int n, int p);
     void OnPatternNoteChanged(int c, bool value, int seq);
     void OnChannelChanged();
-    void OnVolumeChanged();
+    void OnVelocityChanged();
     void OnToggleMuteToggled();
     void OnResolutionChanged();
     void OnLengthChanged();
@@ -151,11 +151,11 @@ private:
     Gtk::VScrollbar wPatternScroll2;
     std::vector<Gtk::VSeparator*> note_separators;
     Gtk::SpinButton wChannelButton;
-    Gtk::SpinButton wVolumeButton;
+    Gtk::SpinButton wVelocityButton;
     Gtk::SpinButton wActivePattern;
     Gtk::Button wSetAsActivePatternButton;
     Gtk::Label wChannelLabel;
-    Gtk::Label wVolumeLabel;
+    Gtk::Label wVelocityLabel;
     Gtk::Label wActivePanelLabel;
     Gtk::Label wPatternLabel;
     Gtk::Label wNameLabel;

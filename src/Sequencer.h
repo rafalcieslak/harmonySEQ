@@ -108,10 +108,10 @@ public:
     int GetChannel();
     
     /**Sets velocity*/
-    void SetVolume(int v);
+    void SetVelocity(int v);
 
     /**Returns velocity*/
-    int GetVolume();
+    int GetVelocity();
 
     /**Changes the pattern that is played by this sequencer*/
     void ChangeActivePattern(int new_one);
@@ -143,7 +143,7 @@ protected:
 
     int channel;
     bool on;
-    int volume;
+    int velocity;
     Glib::ustring name;
 
     int play_once_phase;

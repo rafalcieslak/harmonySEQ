@@ -177,6 +177,7 @@ MainWindow::MainWindow()
     wFrameNotebook.set_show_border(0);
 
     wNoSeqSelected.set_text(_("(No sequencer selected)"));
+    wNoSeqSelected.set_tooltip_markup(_("<b>There is no sequencer selected</b>, so it's properties cannot be displayed.\n\nSelect one from the list above, or add a new one."));
     wNoSeqSelected.set_sensitive(0);
 
     TempoTool.remove();
@@ -392,7 +393,7 @@ Gtk::TreeModel::Row MainWindow::AddSequencerRow(int x)
     row[m_columns_sequencers.col_pattern] = seqVector[x]->GetActivePattern();
     row[m_columns_sequencers.col_res] = seqVector[x]->resolution;
     row[m_columns_sequencers.col_len] = seqVector[x]->GetLength();
-    row[m_columns_sequencers.col_vol] = seqVector[x]->GetVolume();
+    row[m_columns_sequencers.col_vol] = seqVector[x]->GetVelocity();
     row[m_columns_sequencers.col_chord] = seqVector[x]->chord.GetName();
     if(seqVector[x]->GetOn()){
         row[m_columns_sequencers.col_colour] = "green1";
@@ -425,7 +426,7 @@ void MainWindow::InitTreeData(){
         row[m_columns_sequencers.col_res] = seqV(x)->resolution;
         row[m_columns_sequencers.col_pattern] = seqV(x)->GetActivePattern();
         row[m_columns_sequencers.col_len] = seqV(x)->GetLength();
-        row[m_columns_sequencers.col_vol] = seqV(x)->GetVolume();
+        row[m_columns_sequencers.col_vol] = seqV(x)->GetVelocity();
         row[m_columns_sequencers.col_chord] = seqV(x)->chord.GetName();
         seqV(x)->my_row = row;
     if(seqV(x)->GetOn()){
@@ -461,7 +462,7 @@ void MainWindow::RefreshRow(Gtk::TreeRow row){
     row[m_columns_sequencers.col_res] = seq->resolution;
     row[m_columns_sequencers.col_pattern] = seq->GetActivePattern();
     row[m_columns_sequencers.col_len] = seq->GetLength();
-    row[m_columns_sequencers.col_vol] = seq->GetVolume();
+    row[m_columns_sequencers.col_vol] = seq->GetVelocity();
     row[m_columns_sequencers.col_chord] = seq->chord.GetName();
     if(seq->GetOn()){
         row[m_columns_sequencers.col_colour] = "green1";

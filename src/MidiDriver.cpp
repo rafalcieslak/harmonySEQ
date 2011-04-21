@@ -114,7 +114,7 @@ void MidiDriver::Open(){
     *dbg << _("Alsa midi driver init successfull.\n");
 }
 
-void MidiDriver::SendNoteOnEvent(int channel, int pitch, int volume){
+void MidiDriver::SendNoteOnEvent(int channel, int pitch, int velocity){
     //Create a new clear event
     snd_seq_event_t ev;
     snd_seq_ev_clear(&ev);
@@ -123,7 +123,7 @@ void MidiDriver::SendNoteOnEvent(int channel, int pitch, int volume){
     snd_seq_ev_set_subs(&ev);
     snd_seq_ev_set_direct(&ev);
     //Fill it with data...
-    snd_seq_ev_set_noteon(&ev,channel-1,pitch,volume);
+    snd_seq_ev_set_noteon(&ev,channel-1,pitch,velocity);
     //And output immidiatelly - do not push into the queue.
     snd_seq_event_output(seq_handle,&ev);
     snd_seq_drain_output(seq_handle);
@@ -147,8 +147,8 @@ void MidiDriver::SendNoteOffEvent(int channel, int pitch){
 
 }
 
-void MidiDriver::SendNoteEvent(int channel, int pitch, int volume, int duration_ms){
-    SendNoteOnEvent(channel,pitch,volume);
+void MidiDriver::SendNoteEvent(int channel, int pitch, int velocity, int duration_ms){
+    SendNoteOnEvent(channel,pitch,velocity);
     Glib::signal_timeout().connect_once(sigc::bind(sigc::mem_fun(*this,&MidiDriver::SendNoteOffEvent),channel,pitch),duration_ms);
 }
 
@@ -368,7 +368,7 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                             //Create a new event (clear it)...
                             snd_seq_ev_clear(&ev);
                             //Fill it with note data
-                            snd_seq_ev_set_note(&ev, seq->GetChannel() - 1, pitch, seq->GetVolume(), duration);
+                            snd_seq_ev_set_note(&ev, seq->GetChannel() - 1, pitch, seq->GetVelocity(), duration);
                             //Schedule it in appropriate momment in time (rather: tick, not time), putting it on a queue
                             snd_seq_ev_schedule_tick(&ev, queueid, 0, local_tick + x * duration);
                             //Direct it ti output port, to all it's subscribers
@@ -432,7 +432,7 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                         //Create a new event (clear it)...
                         snd_seq_ev_clear(&ev);
                         //Fill it with note data
-                        snd_seq_ev_set_note(&ev, seq->GetChannel() - 1, note, seq->GetVolume(), duration);
+                        snd_seq_ev_set_note(&ev, seq->GetChannel() - 1, note, seq->GetVelocity(), duration);
                         //Schedule it in appropriate momment in time (rather: tick, not time), putting it on a queue
                         snd_seq_ev_schedule_tick(&ev, queueid, 0, tick + x * duration);
                         //Direct it ti output port, to all it's subscribers

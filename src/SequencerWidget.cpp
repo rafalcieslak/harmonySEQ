@@ -71,8 +71,8 @@ SequencerWidget::SequencerWidget(){
 
     wUpperHBox1.pack_start(wChannelLabel,Gtk::PACK_SHRINK);
     wUpperHBox1.pack_start(wChannelButton,Gtk::PACK_SHRINK);
-    wUpperHBox1.pack_start(wVolumeLabel,Gtk::PACK_SHRINK);
-    wUpperHBox1.pack_start(wVolumeButton,Gtk::PACK_SHRINK);
+    wUpperHBox1.pack_start(wVelocityLabel,Gtk::PACK_SHRINK);
+    wUpperHBox1.pack_start(wVelocityButton,Gtk::PACK_SHRINK);
 
     wUpperHBox2.pack_start(wResolutionsLabel,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wResolutionsBox,Gtk::PACK_SHRINK);
@@ -110,7 +110,7 @@ SequencerWidget::SequencerWidget(){
     wPlayOnceButton.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWidget::OnPlayOnceButtonClicked));
 
     wChannelLabel.set_text(_("MIDI channel:"));
-    wVolumeLabel.set_text(_("Volume:"));
+    wVelocityLabel.set_text(_("Velocity:"));
     wActivePanelLabel.set_text(_("Active pattern:"));
     wSetAsActivePatternButton.set_label(_("Set as active pattern"));
     wSetAsActivePatternButton.set_tooltip_markup(_("Sets the chosen pattern to be the <b>active</b> one, which means the one that  will be played back."));
@@ -127,13 +127,13 @@ SequencerWidget::SequencerWidget(){
     wClearPattern.set_tooltip_markup(_("Clears all notes of this pattern."));
 
 
-    wVolumeButton.set_range(0,127);
+    wVelocityButton.set_range(0,127);
     wChannelButton.set_range(1,16);
-    wVolumeButton.set_increments(1,16);
+    wVelocityButton.set_increments(1,16);
     wChannelButton.set_increments(1,1);
-    wVolumeButton.set_tooltip_markup(_("Sets the <b>velocity</b> of the notes played by this sequencer.\nUsually higher velocities result in louder sounds."));
+    wVelocityButton.set_tooltip_markup(_("Sets the <b>velocity</b> of the notes played by this sequencer.\nUsually higher velocities result in louder sounds."));
     wChannelButton.set_tooltip_markup(_("Selects the <b>MIDI channel</b> this sequencer will output notes to. "));
-    wVolumeButton.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnVolumeChanged));
+    wVelocityButton.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnVelocityChanged));
     wChannelButton.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnChannelChanged));
     wActivePattern.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnActivePatternChanged));
     wMuteToggle.set_label(_("ON/OFF"));
@@ -229,7 +229,7 @@ void SequencerWidget::UpdateEverything(){
     if (AnythingSelected){
 
         UpdateChannel();
-        UpdateVolume();
+        UpdateVelocity();
         UpdateOnOff(); //will also update colour
         UpdateName();
         InitNotebook();
@@ -259,11 +259,11 @@ void SequencerWidget::UpdateChannel(){
     wChannelButton.set_value(seq->GetChannel());
     ignore_signals = 0;
 }
-void SequencerWidget::UpdateVolume(){
+void SequencerWidget::UpdateVelocity(){
     if (AnythingSelected == 0) return;
     Sequencer* seq = seqH(selectedSeq);
     ignore_signals = 1;
-    wVolumeButton.set_value(seq->GetVolume());
+    wVelocityButton.set_value(seq->GetVelocity());
     ignore_signals = 0;
 }
 void SequencerWidget::UpdateActivePattern(){
@@ -413,7 +413,7 @@ void SequencerWidget::OnPatternNoteChanged(int c, bool value, int seq){
 
     //Playing on edit...
     if(Config::Interaction::PlayOnEdit)
-    if(value) midi->SendNoteEvent(sequ->GetChannel(),sequ->GetNoteOfChord(c),sequ->GetVolume(),PLAY_ON_EDIT_MS);
+    if(value) midi->SendNoteEvent(sequ->GetChannel(),sequ->GetNoteOfChord(c),sequ->GetVelocity(),PLAY_ON_EDIT_MS);
 
     Files::SetFileModified(1);
 }
@@ -428,12 +428,12 @@ void SequencerWidget::OnChannelChanged(){
     Files::SetFileModified(1);
 }
 
-void SequencerWidget::OnVolumeChanged(){
+void SequencerWidget::OnVelocityChanged(){
     if(ignore_signals) return;
     if(!AnythingSelected) return;
     Sequencer* seq = seqH(selectedSeq);
     
-    seq->SetVolume(wVolumeButton.get_value());
+    seq->SetVelocity(wVelocityButton.get_value());
     mainwindow->RefreshRow(seq->my_row);
     Files::SetFileModified(1);
 }
@@ -448,7 +448,7 @@ void SequencerWidget::OnChordWidgetNoteChanged(int n, int p){
     if(!AnythingSelected) return;
     Sequencer* seq = seqH(selectedSeq);
     if(Config::Interaction::PlayOnEdit)
-        midi->SendNoteEvent(seq->GetChannel(),p,seq->GetVolume(),PLAY_ON_EDIT_MS);
+        midi->SendNoteEvent(seq->GetChannel(),p,seq->GetVelocity(),PLAY_ON_EDIT_MS);
 }
 
 void SequencerWidget::OnToggleMuteToggled(){

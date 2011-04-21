@@ -53,7 +53,7 @@ private:
     void OnTypeChanged();
     void OnSeqChanged();
     void OnTempoChanged();
-    void OnVolumeChanged();
+    void OnVelocityChanged();
     void SetTypeCombo(int type);
     void SetSeqCombo(int seq);
     void OnNoteNrChanged();
@@ -73,8 +73,8 @@ private:
     Gtk::Label label_seq;
     Gtk::HBox line_tempo;
     Gtk::Label label_tempo;
-    Gtk::HBox line_volume;
-    Gtk::Label label_volume;
+    Gtk::HBox line_velocity;
+    Gtk::Label label_velocity;
     Gtk::HBox line_set_one_note;
     Gtk::Label label_note_nr;
     Gtk::Label label_note_seq;

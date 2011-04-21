@@ -101,7 +101,7 @@ void SaveToFile(Glib::ustring filename){
         kf.set_integer(temp,FILE_KEY_SEQ_CHANNEL,seqVector[x]->GetChannel());
         //This is depracated
         //kf.set_boolean(temp,FILE_KEY_SEQ_APPLY_MAIN_NOTE,sequencers[x]->GetApplyMainNote());
-        kf.set_integer(temp,FILE_KEY_SEQ_VOLUME,seqVector[x]->GetVolume());
+        kf.set_integer(temp,FILE_KEY_SEQ_VELOCITY,seqVector[x]->GetVelocity());
         kf.set_integer(temp,FILE_KEY_SEQ_RESOLUTION,seqVector[x]->resolution);
         kf.set_double(temp,FILE_KEY_SEQ_LENGTH,seqVector[x]->GetLength());
         kf.set_integer(temp,FILE_KEY_SEQ_PATTERNS_NUMBER,seqVector[x]->patterns.size());
@@ -375,7 +375,7 @@ bool LoadFile015(Glib::KeyFile* kfp){
         seqVector[x]->SetChannel(kfp->get_integer(temp, FILE_KEY_SEQ_CHANNEL));
         seqVector[x]->resolution = kfp->get_integer(temp, FILE_KEY_SEQ_RESOLUTION);
         seqVector[x]->SetLength(kfp->get_double(temp, FILE_KEY_SEQ_LENGTH));
-        seqVector[x]->SetVolume(kfp->get_integer(temp, FILE_KEY_SEQ_VOLUME));
+        seqVector[x]->SetVelocity(kfp->get_integer(temp, FILE_KEY_SEQ_VELOCITY));
 
 
         seqVector[x]->patterns.clear();
@@ -545,13 +545,13 @@ bool LoadFilePre015(Glib::KeyFile* kfp){
         seqVector[x]->resolution = kfp->get_integer(temp, FILE_KEY_SEQ_RESOLUTION);
         seqVector[x]->SetLength(kfp->get_double(temp, FILE_KEY_SEQ_LENGTH));
 
-        //Check whether volume is saved in file.
-        if(kfp->has_key(temp,FILE_KEY_SEQ_VOLUME))
-            seqVector[x]->SetVolume(kfp->get_integer(temp, FILE_KEY_SEQ_VOLUME));
+        //Check whether velocity is saved in file.
+        if(kfp->has_key(temp,FILE_KEY_SEQ_VELOCITY))
+            seqVector[x]->SetVelocity(kfp->get_integer(temp, FILE_KEY_SEQ_VELOCITY));
         //Because if it's not...
         else
             //...we need to set it to a default value.
-            seqVector[x]->SetVolume(DEFAULT_VOLUME);
+            seqVector[x]->SetVelocity(DEFAULT_VELOCITY);
         seqVector[x]->patterns.clear();
 
         //Now, load the patterns.
@@ -681,7 +681,7 @@ bool LoadFilePre015(Glib::KeyFile* kfp){
             //NOW WARNING! Some actions use ARG1 to store sequencer handle. However, older files store the ID and not the handle.
             //So, in case the action is one of that type...
             if (Events[x]->actions[a]->type == Action::SEQ_CHANGE_CHORD || Events[x]->actions[a]->type == Action::SEQ_CHANGE_ONE_NOTE || Events[x]->actions[a]->type == Action::SEQ_CHANGE_PATTERN||
-                    Events[x]->actions[a]->type == Action::SEQ_ON_OFF_TOGGLE || Events[x]->actions[a]->type == Action::SEQ_PLAY_ONCE || Events[x]->actions[a]->type == Action::SEQ_VOLUME_SET)
+                    Events[x]->actions[a]->type == Action::SEQ_ON_OFF_TOGGLE || Events[x]->actions[a]->type == Action::SEQ_PLAY_ONCE || Events[x]->actions[a]->type == Action::SEQ_VELOCITY_SET)
                 //substitute the ID with the handle
             {
                 Events[x]->actions[a]->args[1] = seqV(seq_unstretching_map[Events[x]->actions[a]->args[1]])->MyHandle;

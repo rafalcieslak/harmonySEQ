@@ -60,13 +60,13 @@ public:
 
 
     /**Outputs immediately a noteon*/
-    void SendNoteOnEvent(int channel, int pitch, int volume);
+    void SendNoteOnEvent(int channel, int pitch, int velocity);
 
     /**Outputs immediately a noteoff*/
     void SendNoteOffEvent(int channel, int pitch);
 
     /**Outputs a noteon and a noteoff after given time period.*/
-    void SendNoteEvent(int channel, int pitch, int volume, int duration);
+    void SendNoteEvent(int channel, int pitch, int velocity, int duration);
 
     
     /**Sets tempo*/

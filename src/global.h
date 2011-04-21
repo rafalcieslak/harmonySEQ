@@ -59,7 +59,7 @@
 
 #define SEQUENCE_DEFAULT_SIZE 16
 #define NOTES_CONST_SIZE 6
-#define DEFAULT_VOLUME 100
+#define DEFAULT_VELOCITY 100
 
 //the resolution of diode blink information
 #define DIODES_RES 128
@@ -84,7 +84,7 @@
 #define FILE_KEY_SEQ_ON "on"
 #define FILE_KEY_SEQ_APPLY_MAIN_NOTE "apply_mn"
 #define FILE_KEY_SEQ_CHANNEL "channel"
-#define FILE_KEY_SEQ_VOLUME "volume"
+#define FILE_KEY_SEQ_VELOCITY "volume"
 #define FILE_KEY_SEQ_NAME "name"
 #define FILE_KEY_SEQ_SEQUENCE "sequence"
 #define FILE_KEY_SEQ_PATTERNS_NUMBER "sequences_num"
