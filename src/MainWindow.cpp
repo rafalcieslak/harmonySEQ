@@ -698,8 +698,10 @@ void MainWindow::OnMenuOpenClicked(){
 
 void MainWindow::OnMenuSaveClicked(){
 
-    if (Files::file_name == "") //first save, so behave just if we were saving as
+    if (Files::file_name == ""){ //if it's the first save, behave just if we were saving as
         OnMenuSaveAsClicked();
+        return;
+    }
 
     Files::SaveToFile(Files::file_dir+Files::file_name);
 
