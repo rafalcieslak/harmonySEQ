@@ -342,7 +342,7 @@ void SequencerWidget::InitNotebook(){
     do_not_react_on_page_changes = 0;
 
     //reset the current page
-    wNotebook.set_current_page(0);
+    wNotebook.set_current_page(seqH(selectedSeq)->GetActivePattern());
     UpdatePatternVbox();
 
     UpdateActivePatternRange();
