@@ -191,6 +191,7 @@ void EventsWidget::OnAddEventClicked(){
     Events[Events.size()-1]->row_in_event_widget = rowref;
     Events[Events.size()-1]->ShowWindow();
 
+    m_TreeView.get_selection()->select(iter); //select the event that was just added
     Files::SetFileModified(1);
 }
 
