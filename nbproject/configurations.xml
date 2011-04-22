@@ -24,7 +24,7 @@
       <itemPath>src/gettext.h</itemPath>
       <itemPath>src/global.h</itemPath>
       <itemPath>src/messages.h</itemPath>
-      <itemPath>../Programy/harmonySEQ/reordering/src/seqHandle.h</itemPath>
+      <itemPath>../Programy/harmonySEQ/trunk/src/seqHandle.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -59,7 +59,7 @@
       <itemPath>src/global.cpp</itemPath>
       <itemPath>src/main.cpp</itemPath>
       <itemPath>src/messages.cpp</itemPath>
-      <itemPath>../Programy/harmonySEQ/reordering/src/seqHandle.cpp</itemPath>
+      <itemPath>../Programy/harmonySEQ/trunk/src/seqHandle.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"

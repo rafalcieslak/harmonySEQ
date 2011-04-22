@@ -33,19 +33,19 @@ OBJECTDIR=build/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/_ext/1045285602/EventsWidget.o \
 	${OBJECTDIR}/src/ChordWidget.o \
 	${OBJECTDIR}/_ext/1045285602/SequencerWidget.o \
+	${OBJECTDIR}/_ext/1045285602/EventsWidget.o \
 	${OBJECTDIR}/src/main.o \
 	${OBJECTDIR}/src/EventGUI.o \
 	${OBJECTDIR}/src/Chord.o \
 	${OBJECTDIR}/src/ActionGUI.o \
 	${OBJECTDIR}/src/Sequencer.o \
-	${OBJECTDIR}/_ext/744865817/seqHandle.o \
 	${OBJECTDIR}/src/Configuration.o \
 	${OBJECTDIR}/src/messages.o \
 	${OBJECTDIR}/_ext/1045285602/SettingsWindow.o \
 	${OBJECTDIR}/src/Action.o \
+	${OBJECTDIR}/_ext/1045285602/seqHandle.o \
 	${OBJECTDIR}/src/MainWindow.o \
 	${OBJECTDIR}/src/TreeModels.o \
 	${OBJECTDIR}/src/MidiDriver.o \
@@ -78,11 +78,6 @@ src/harmonySEQ: ${OBJECTFILES}
 	${MKDIR} -p src
 	${LINK.cc} -lasound -o src/harmonySEQ ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
-${OBJECTDIR}/_ext/1045285602/EventsWidget.o: ../Programy/harmonySEQ/trunk/src/EventsWidget.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1045285602
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1045285602/EventsWidget.o ../Programy/harmonySEQ/trunk/src/EventsWidget.cpp
-
 ${OBJECTDIR}/src/ChordWidget.o: src/ChordWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
@@ -92,6 +87,11 @@ ${OBJECTDIR}/_ext/1045285602/SequencerWidget.o: ../Programy/harmonySEQ/trunk/src
 	${MKDIR} -p ${OBJECTDIR}/_ext/1045285602
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1045285602/SequencerWidget.o ../Programy/harmonySEQ/trunk/src/SequencerWidget.cpp
+
+${OBJECTDIR}/_ext/1045285602/EventsWidget.o: ../Programy/harmonySEQ/trunk/src/EventsWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1045285602
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1045285602/EventsWidget.o ../Programy/harmonySEQ/trunk/src/EventsWidget.cpp
 
 ${OBJECTDIR}/src/main.o: src/main.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -118,11 +118,6 @@ ${OBJECTDIR}/src/Sequencer.o: src/Sequencer.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Sequencer.o src/Sequencer.cpp
 
-${OBJECTDIR}/_ext/744865817/seqHandle.o: ../Programy/harmonySEQ/reordering/src/seqHandle.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/744865817
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/744865817/seqHandle.o ../Programy/harmonySEQ/reordering/src/seqHandle.cpp
-
 ${OBJECTDIR}/src/Configuration.o: src/Configuration.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
@@ -142,6 +137,11 @@ ${OBJECTDIR}/src/Action.o: src/Action.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Action.o src/Action.cpp
+
+${OBJECTDIR}/_ext/1045285602/seqHandle.o: ../Programy/harmonySEQ/trunk/src/seqHandle.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1045285602
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1045285602/seqHandle.o ../Programy/harmonySEQ/trunk/src/seqHandle.cpp
 
 ${OBJECTDIR}/src/MainWindow.o: src/MainWindow.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

@@ -22,7 +22,7 @@
 #include "messages.h"
 
 std::map<seqHandle, int> seqHandlesMap;
-unsigned int handlecounter;
+unsigned int handlecounter = 1;
 
 void PrintHandlesMap(){
     //debug function, prints how does the map look like.
@@ -106,7 +106,7 @@ void UpdateSeqHandlesAfterMoving(int from, int to){
 
 void ResetSeqHandles(){
     seqHandlesMap.clear();
-    handlecounter = 0;
+    handlecounter = 1;
 
 }
 
