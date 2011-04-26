@@ -17,6 +17,19 @@ AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_CPP
 
+osc_enabled=true
+
+# One might want to disable OSC supprort...
+AC_ARG_ENABLE(osc,
+     AC_HELP_STRING([--disable-osc],
+		[disables OSC (Open Sound Control protocol) support (default=enabled)]))
+
+AS_IF([test x$enable_osc = xno],[
+					osc_enabled=false
+					echo "-- OSC disabled."
+					])
+AM_CONDITIONAL(DISABLEOSC, test x$enable_osc = xno)
+
 AC_CHECK_LIB([asound], [snd_seq_open], [] , [
 					echo "Alsa library missing!"
 					exit -1 ])
@@ -31,6 +44,12 @@ PKG_CHECK_MODULES([GTKMM], [gtkmm-2.4], [] , [
 					echo "Gtkmm library missing!"
 					exit -1 ])
 
+if test "$osc_enabled" = "true"; then
+	# Need to check for liblo headers.
+	AC_CHECK_HEADERS([lo/lo.h], [] , [
+					echo "Liblo header files missing! (you can disable OSC support by using the --disable-osc flag)"
+					exit -1 ])
+fi
 
 AC_PATH_PROG(UPDATE_MIME_DB, update-mime-database, no)
 if test "x$UPDATE_MIME_DB" = "xno"; then
