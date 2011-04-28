@@ -34,6 +34,7 @@
 #include "TreeModels.h"
 #include "Configuration.h"
 #include "SettingsWindow.h"
+#include "OSC.h"
 //global objects
 vector<Sequencer *> seqVector;
 vector<Event *> Events;
@@ -170,14 +171,6 @@ void InitGui(){
     }
     gdk_threads_leave();
     
-}
-
-/**Puts some initial data to events list.*/
-void InitDefaultData(){
-        /*
-        sequencers[0] = new Sequencer(example_sequence,example_notes,"seq 0");
-        sequencers[1] = new Sequencer(example_sequence2,example_notes2,"seq 1");
-        */ //TODO: load a file instead
 }
 
 /**Inits gettext, must be called before any internationalized message is required*/
@@ -338,9 +331,11 @@ int main(int argc, char** argv) {
     //...GUI...
     InitGui();  //(Ow... better have all the main windows constructed, before any sequencer or event is. Might cause problems elsewhere).
 
-    //...and some default events.
-    InitDefaultData();
-
+    //...and the OSC server.
+#ifndef DISABLE_OSC
+    InitOSC();
+#endif /*DISABLE_OSC*/
+    
     //Here we init the filename, if it's empty, it means the file was not yet saved
     Files::file_name = "";
 

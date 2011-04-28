@@ -668,7 +668,7 @@ m4trace:configure.ac:43: -1- AC_SUBST([GTKMM_LIBS])
 m4trace:configure.ac:43: -1- AC_SUBST_TRACE([GTKMM_LIBS])
 m4trace:configure.ac:43: -1- m4_pattern_allow([^GTKMM_LIBS$])
 m4trace:configure.ac:49: -1- AC_CHECK_HEADERS([lo/lo.h], [ ], [
-					echo "Liblo header files missing! (you can disable OSC support by using the --disable-osc flag)"
+					echo "Liblo header files [lo/lo.h] missing! (either install LIBLO developement headers [liblo7 & liblo-dev on Ubuntu], or disable OSC support by using the --disable-osc flag)"
 					exit -1 ])
 m4trace:configure.ac:49: -1- AH_OUTPUT([HAVE_LO_LO_H], [/* Define to 1 if you have the <lo/lo.h> header file. */
 @%:@undef HAVE_LO_LO_H])

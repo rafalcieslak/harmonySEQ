@@ -31,23 +31,23 @@ AS_IF([test x$enable_osc = xno],[
 AM_CONDITIONAL(DISABLEOSC, test x$enable_osc = xno)
 
 AC_CHECK_LIB([asound], [snd_seq_open], [] , [
-					echo "Alsa library missing!"
+					echo "Alsa library missing - install alsa developement headers! [libasound2-dev on Ubuntu]"
 					exit -1 ])
 
 # Checks for header files.
 AC_CHECK_HEADERS([libintl.h locale.h], [] , [
-					echo "Gettext locale headers missing! [libintl.h locale.h]"
+					echo "Gettext locale header files missing! [libintl.h locale.h]"
 					exit -1 ])
 
 
 PKG_CHECK_MODULES([GTKMM], [gtkmm-2.4], [] , [
-					echo "Gtkmm library missing!"
+					echo "Gtkmm library missing - install gtkmm developement headers! [gtkmm-2.4-dev on Ubuntu]"
 					exit -1 ])
 
 if test "$osc_enabled" = "true"; then
 	# Need to check for liblo headers.
 	AC_CHECK_HEADERS([lo/lo.h], [] , [
-					echo "Liblo header files missing! (you can disable OSC support by using the --disable-osc flag)"
+					echo "Liblo header files [lo/lo.h] missing! (either install LIBLO developement headers [liblo7 & liblo-dev on Ubuntu], or disable OSC support by using the --disable-osc flag)"
 					exit -1 ])
 fi
 

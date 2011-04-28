@@ -17,19 +17,20 @@ RANLIB=ranlib
 CC=gcc
 CCC=g++
 CXX=g++
-FC=
+FC=gfortran
 AS=as
 
 # Macros
 CND_PLATFORM=GNU-Linux-x86
 CND_CONF=Release
 CND_DISTDIR=dist
+CND_BUILDDIR=build
 
 # Include project Makefile
 include Makefile
 
 # Object Directory
-OBJECTDIR=build/${CND_CONF}/${CND_PLATFORM}
+OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
@@ -37,6 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/_ext/1045285602/SequencerWidget.o \
 	${OBJECTDIR}/_ext/1045285602/EventsWidget.o \
 	${OBJECTDIR}/src/main.o \
+	${OBJECTDIR}/_ext/1045285602/OSC.o \
 	${OBJECTDIR}/src/EventGUI.o \
 	${OBJECTDIR}/src/Chord.o \
 	${OBJECTDIR}/src/ActionGUI.o \
@@ -72,10 +74,10 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-Release.mk build/Release/GNU-Linux-x86/tests/TestFiles/f1
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${TESTDIR}/TestFiles/f1
 
-build/Release/GNU-Linux-x86/tests/TestFiles/f1: ${OBJECTFILES}
-	${MKDIR} -p build/Release/GNU-Linux-x86/tests/TestFiles
+${TESTDIR}/TestFiles/f1: ${OBJECTFILES}
+	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} -lasound -o ${TESTDIR}/TestFiles/f1 -s ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
 ${OBJECTDIR}/src/ChordWidget.o: src/ChordWidget.cpp 
@@ -97,6 +99,11 @@ ${OBJECTDIR}/src/main.o: src/main.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/main.o src/main.cpp
+
+${OBJECTDIR}/_ext/1045285602/OSC.o: ../Programy/harmonySEQ/trunk/src/OSC.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1045285602
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1045285602/OSC.o ../Programy/harmonySEQ/trunk/src/OSC.cpp
 
 ${OBJECTDIR}/src/EventGUI.o: src/EventGUI.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -178,8 +185,8 @@ ${OBJECTDIR}/src/global.o: src/global.cpp
 
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
-	${RM} -r build/Release
-	${RM} build/Release/GNU-Linux-x86/tests/TestFiles/f1
+	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
+	${RM} ${TESTDIR}/TestFiles/f1
 
 # Subprojects
 .clean-subprojects:

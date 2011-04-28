@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurationDescriptor version="69">
-  <logicalFolder name="root" displayName="root" projectFiles="true">
+<configurationDescriptor version="79">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
-                   projectFiles="true"
-                   kind="SOURCE_LOGICAL_FOLDER">
+                   projectFiles="true">
       <itemPath>src/Action.h</itemPath>
       <itemPath>src/ActionGUI.h</itemPath>
       <itemPath>src/Chord.h</itemPath>
@@ -16,6 +15,7 @@
       <itemPath>src/Files.h</itemPath>
       <itemPath>src/MainWindow.h</itemPath>
       <itemPath>src/MidiDriver.h</itemPath>
+      <itemPath>../Programy/harmonySEQ/trunk/src/OSC.h</itemPath>
       <itemPath>src/Sequencer.h</itemPath>
       <itemPath>../Programy/harmonySEQ/trunk/src/SequencerWidget.h</itemPath>
       <itemPath>../Programy/harmonySEQ/trunk/src/SettingsWindow.h</itemPath>
@@ -28,8 +28,7 @@
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
-                   projectFiles="true"
-                   kind="SOURCE_LOGICAL_FOLDER">
+                   projectFiles="true">
       <itemPath>examples/complexity.hseq</itemPath>
       <itemPath>examples/example_0.10.hseq</itemPath>
       <itemPath>examples/michas_sonata.hseq</itemPath>
@@ -38,8 +37,7 @@
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
-                   projectFiles="true"
-                   kind="SOURCE_LOGICAL_FOLDER">
+                   projectFiles="true">
       <itemPath>src/Action.cpp</itemPath>
       <itemPath>src/ActionGUI.cpp</itemPath>
       <itemPath>src/Chord.cpp</itemPath>
@@ -52,6 +50,7 @@
       <itemPath>src/MainWindow.cpp</itemPath>
       <itemPath>src/Makefile.am</itemPath>
       <itemPath>src/MidiDriver.cpp</itemPath>
+      <itemPath>../Programy/harmonySEQ/trunk/src/OSC.cpp</itemPath>
       <itemPath>src/Sequencer.cpp</itemPath>
       <itemPath>../Programy/harmonySEQ/trunk/src/SequencerWidget.cpp</itemPath>
       <itemPath>../Programy/harmonySEQ/trunk/src/SettingsWindow.cpp</itemPath>
@@ -82,9 +81,8 @@
   <confs>
     <conf name="Debug" type="1">
       <toolsSet>
-        <developmentServer>localhost</developmentServer>
+        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
         <compilerSet>GNU|GNU</compilerSet>
-        <platform>2</platform>
       </toolsSet>
       <compileType>
         <cTool>
@@ -126,9 +124,8 @@
     </conf>
     <conf name="Release" type="1">
       <toolsSet>
-        <developmentServer>localhost</developmentServer>
+        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
         <compilerSet>GNU|GNU</compilerSet>
-        <platform>2</platform>
       </toolsSet>
       <compileType>
         <cTool>

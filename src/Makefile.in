@@ -65,7 +65,7 @@ am_harmonySEQ_OBJECTS = harmonySEQ-main.$(OBJEXT) \
 	harmonySEQ-SettingsWindow.$(OBJEXT) \
 	harmonySEQ-seqHandle.$(OBJEXT) \
 	harmonySEQ-SequencerWidget.$(OBJEXT) \
-	harmonySEQ-EventsWidget.$(OBJEXT)
+	harmonySEQ-EventsWidget.$(OBJEXT) harmonySEQ-OSC.$(OBJEXT)
 harmonySEQ_OBJECTS = $(am_harmonySEQ_OBJECTS)
 am__DEPENDENCIES_1 =
 harmonySEQ_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -234,7 +234,8 @@ harmonySEQ_SOURCES = main.cpp\
 						seqHandle.cpp \
 						SequencerWidget.cpp \
 						EventsWidget.cpp \
-						MainWindow.h MidiDriver.h Sequencer.h messages.h Files.h global.h Event.h EventGUI.h Action.h ActionGUI.h TreeModels.h Chord.h ChordWidget.h Configuration.h SettingsWindow.h seqHandle.h SequencerWidget.h EventsWidget.h \
+						OSC.cpp \
+						MainWindow.h MidiDriver.h Sequencer.h messages.h Files.h global.h Event.h EventGUI.h Action.h ActionGUI.h TreeModels.h Chord.h ChordWidget.h Configuration.h SettingsWindow.h seqHandle.h SequencerWidget.h EventsWidget.h OSC.h\
 						gettext.h
 
 harmonySEQ_CPPFLAGS = $(GTKMM_CFLAGS) $(ADD_DEF) -Wall -g -O3
@@ -256,9 +257,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign src/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu src/Makefile
+	  $(AUTOMAKE) --foreign src/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -352,6 +353,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-Files.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-MainWindow.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-MidiDriver.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-OSC.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-Sequencer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-SequencerWidget.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-SettingsWindow.Po@am__quote@
@@ -640,6 +642,20 @@ harmonySEQ-EventsWidget.obj: EventsWidget.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='EventsWidget.cpp' object='harmonySEQ-EventsWidget.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-EventsWidget.obj `if test -f 'EventsWidget.cpp'; then $(CYGPATH_W) 'EventsWidget.cpp'; else $(CYGPATH_W) '$(srcdir)/EventsWidget.cpp'; fi`
+
+harmonySEQ-OSC.o: OSC.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-OSC.o -MD -MP -MF $(DEPDIR)/harmonySEQ-OSC.Tpo -c -o harmonySEQ-OSC.o `test -f 'OSC.cpp' || echo '$(srcdir)/'`OSC.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-OSC.Tpo $(DEPDIR)/harmonySEQ-OSC.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='OSC.cpp' object='harmonySEQ-OSC.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-OSC.o `test -f 'OSC.cpp' || echo '$(srcdir)/'`OSC.cpp
+
+harmonySEQ-OSC.obj: OSC.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-OSC.obj -MD -MP -MF $(DEPDIR)/harmonySEQ-OSC.Tpo -c -o harmonySEQ-OSC.obj `if test -f 'OSC.cpp'; then $(CYGPATH_W) 'OSC.cpp'; else $(CYGPATH_W) '$(srcdir)/OSC.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-OSC.Tpo $(DEPDIR)/harmonySEQ-OSC.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='OSC.cpp' object='harmonySEQ-OSC.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-OSC.obj `if test -f 'OSC.cpp'; then $(CYGPATH_W) 'OSC.cpp'; else $(CYGPATH_W) '$(srcdir)/OSC.cpp'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

@@ -7719,13 +7719,13 @@ fi
 	echo "$GTKMM_PKG_ERRORS" >&5
 
 	
-					echo "Gtkmm library missing!"
+					echo "Gtkmm library missing! (install gtkmm developement headers gtkmm-dev on Ubuntu)"
 					exit -1 
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 	
-					echo "Gtkmm library missing!"
+					echo "Gtkmm library missing! (install gtkmm developement headers gtkmm-dev on Ubuntu)"
 					exit -1 
 else
 	GTKMM_CFLAGS=$pkg_cv_GTKMM_CFLAGS
@@ -7747,7 +7747,7 @@ _ACEOF
   
 else
   
-					echo "Liblo header files missing! (you can disable OSC support by using the --disable-osc flag)"
+					echo "Liblo header files lo/lo.h missing! (either install LIBLO developement headers liblo7 & liblo-dev on Ubuntu, or disable OSC support by using the --disable-osc flag)"
 					exit -1 
 fi
 
