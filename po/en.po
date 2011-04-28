@@ -11,12 +11,12 @@ msgstr ""
 "PO-Revision-Date: 2010-12-18 08:23+0000\n"
 "Last-Translator: Rafal Cieslak <rafalcieslak256@gmail.com>\n"
 "Language-Team: English\n"
-"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ASCII\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-15 06:08+0000\n"
-"X-Generator: Launchpad (build 12735)\n"
+"X-Launchpad-Export-Date: 2011-04-23 05:23+0000\n"
+"X-Generator: Launchpad (build 12758)\n"
+"Language: en\n"
 
 #: src/main.cpp:293
 #, c-format
@@ -672,11 +672,13 @@ msgid "Error: velocity has changed, while action is not velocity-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:444
-msgid "Error: note to set has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note to set has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:455
-msgid "Error: note number has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note number has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:468
@@ -1141,6 +1143,7 @@ msgstr ""
 #~ msgid "activated row "
 #~ msgstr "activated row "
 
+#, c-format
 #~ msgid ""
 #~ "harmonySEQ, version %s\n"
 #~ "\n"
@@ -1166,12 +1169,11 @@ msgstr ""
 #~ msgid "setting ports number to "
 #~ msgstr "setting ports number to "
 
+#, c-format
 #~ msgid ""
-#~ "       --pass-midi   passes the midi events through the program by "
-#~ "default\n"
+#~ "       --pass-midi   passes the midi events through the program by default\n"
 #~ msgstr ""
-#~ "       --pass-midi   passes the midi events through the program by "
-#~ "default\n"
+#~ "       --pass-midi   passes the midi events through the program by default\n"
 
 #~ msgid "Chan"
 #~ msgstr "Chan"
@@ -1179,6 +1181,7 @@ msgstr ""
 #~ msgid "Clone"
 #~ msgstr "Clone"
 
+#, c-format
 #~ msgid "ERROR - error while trying to read %s\n"
 #~ msgstr "ERROR - error while trying to read %s\n"
 
@@ -1188,5 +1191,6 @@ msgstr ""
 #~ msgid "Res"
 #~ msgstr "Res"
 
+#, c-format
 #~ msgid "When note %d on channel %d is moved..."
 #~ msgstr "When note %d on channel %d is moved..."
