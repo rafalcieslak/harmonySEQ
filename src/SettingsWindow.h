@@ -51,6 +51,7 @@ private:
 
     Gtk::VBox page_main;
     Gtk::VBox page_midi;
+    Gtk::VBox page_OSC;
 
         Gtk::VBox play_on_edit_vbox;
         Gtk::CheckButton play_on_edit;
@@ -88,6 +89,14 @@ private:
         Gtk::SpinButton metronome_1_4_velocity;
 
         Gtk::HSeparator sep2;
+        
+        Gtk::HBox osc_port_label_hbox;
+        Gtk::Label osc_port_label;
+        Gtk::SpinButton osc_port;
+        Gtk::Label osc_note_restart;
+        Gtk::HSeparator osc_sep;
+        Gtk::Label osc_description;
+        Gtk::HBox osc_description_hbox;
 
 };
 

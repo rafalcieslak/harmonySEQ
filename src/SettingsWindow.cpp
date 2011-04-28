@@ -39,9 +39,11 @@ SettingsWindow::SettingsWindow(){
     main_vbox.pack_start(notebook);
     notebook.append_page(page_main,_("General"));
     notebook.append_page(page_midi,_("MIDI"));
+    notebook.append_page(page_OSC,_("OSC"));
 
     page_main.set_border_width(5);
     page_midi.set_border_width(5);
+    page_OSC.set_border_width(5);
 
     play_on_edit_vbox.pack_start(play_on_edit_label_hbox);
     play_on_edit_label_hbox.pack_start(play_on_edit_label,Gtk::PACK_SHRINK);
@@ -129,6 +131,20 @@ SettingsWindow::SettingsWindow(){
     metronome_bar_velocity.set_tooltip_markup(_("The metronome's MIDI note velocity'"));
     // </editor-fold>
 
+    page_OSC.pack_start(osc_port_label_hbox,Gtk::PACK_SHRINK);
+    page_OSC.pack_start(osc_note_restart,Gtk::PACK_SHRINK);
+    page_OSC.pack_start(osc_sep,Gtk::PACK_SHRINK);
+    page_OSC.pack_start(osc_description_hbox,Gtk::PACK_SHRINK);
+    osc_port_label_hbox.pack_start(osc_port_label,Gtk::PACK_SHRINK);
+    osc_port_label_hbox.pack_start(osc_port,Gtk::PACK_SHRINK);
+    osc_port_label.set_text(_("OSC port: "));
+    osc_port.set_range(0.0,65536.0);
+    osc_port.set_increments(1.0,1024.0);
+    osc_port.set_tooltip_markup(_("The port OSC server will listen at."));
+    osc_note_restart.set_markup(_("<span size='small'>Changing this setting needs restarting\nharmonySEQ to take effect.</span>"));
+    osc_description_hbox.pack_start(osc_description,Gtk::PACK_SHRINK);
+    osc_description.set_markup("There will land some\n<b>very usefull info</b>\nconcerning the open\nsound control protocol.");
+    
     signal_show().connect(mem_fun(*this,&SettingsWindow::OnShowed));
 
     ok_button.signal_clicked().connect(mem_fun(*this,&SettingsWindow::OnOKClicked));
@@ -162,6 +178,7 @@ void SettingsWindow::LoadDataFromConfig(){
     colums_velocity.set_active(Config::VisibleColumns::Velocity);
     colums_chord.set_active(Config::VisibleColumns::Chord);
     play_on_edit.set_active(Config::Interaction::PlayOnEdit);
+    osc_port.set_value(Config::OSC::Port);
 
 }
 
@@ -179,6 +196,7 @@ void SettingsWindow::StoreDataToConfig(){
     Config::VisibleColumns::Velocity = colums_velocity.get_active();
     Config::VisibleColumns::Chord  = colums_chord.get_active();
     Config::Interaction::PlayOnEdit = play_on_edit.get_active();
+    Config::OSC::Port = osc_port.get_value();
     mainwindow->UpdatePlayOnEditToggle();
 }
 

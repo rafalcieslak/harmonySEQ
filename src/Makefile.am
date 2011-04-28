@@ -32,7 +32,11 @@ harmonySEQ_SOURCES =  	main.cpp\
 						gettext.h
 						
 harmonySEQ_CPPFLAGS = $(GTKMM_CFLAGS) $(ADD_DEF) -Wall -g -O3
+if DISABLEOSC
 harmonySEQ_LDADD = $(GTKMM_LIBS) -lgthread-2.0 -lasound
+else
+harmonySEQ_LDADD = $(GTKMM_LIBS) -lgthread-2.0 -lasound -llo
+endif
 harmonySEQ_LDFLAGS =  -Wall -g -O3
 
 ACLOCAL_AMFLAGS = -I m4

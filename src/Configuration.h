@@ -42,6 +42,9 @@ namespace Config{
     namespace Interaction{
         extern bool PlayOnEdit;
     }
+    namespace OSC{
+        extern int Port;
+    }
     /**Inits the configuration with default data.*/
     void LoadDefaultConfiguration();
 

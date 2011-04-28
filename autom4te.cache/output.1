@@ -7388,7 +7388,7 @@ if test "x$ac_cv_lib_asound_snd_seq_open" = x""yes; then :
    
 else
   
-					echo "Alsa library missing!"
+					echo "Alsa library missing - install alsa developement headers! libasound2-dev on Ubuntu"
 					exit -1 
 fi
 
@@ -7534,7 +7534,7 @@ _ACEOF
   
 else
   
-					echo "Gettext locale headers missing! libintl.h locale.h"
+					echo "Gettext locale header files missing! libintl.h locale.h"
 					exit -1 
 fi
 
@@ -7719,13 +7719,13 @@ fi
 	echo "$GTKMM_PKG_ERRORS" >&5
 
 	
-					echo "Gtkmm library missing! (install gtkmm developement headers gtkmm-dev on Ubuntu)"
+					echo "Gtkmm library missing - install gtkmm developement headers! gtkmm-2.4-dev on Ubuntu"
 					exit -1 
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 	
-					echo "Gtkmm library missing! (install gtkmm developement headers gtkmm-dev on Ubuntu)"
+					echo "Gtkmm library missing - install gtkmm developement headers! gtkmm-2.4-dev on Ubuntu"
 					exit -1 
 else
 	GTKMM_CFLAGS=$pkg_cv_GTKMM_CFLAGS

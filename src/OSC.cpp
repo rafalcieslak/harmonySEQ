@@ -21,12 +21,29 @@
 #ifndef DISABLE_OSC
 
 #include "OSC.h"
+#include "Configuration.h"
 #include "messages.h"
 extern error* err;
+
+void error_handler(int num, const char *msg, const char *path){
+    *err << "OSC error!\n";
+}
+
+int generic_handler(const char *path, const char *types, lo_arg **argv,
+		    int argc, void *data, void *user_data)
+{
+    *dbg << "OSC message got: path = " << path << ENDL;
+    return 0;
+}
+
 void InitOSC(){
     //Not much to do yet.
-    *err << "Initing OSC...\n";
-    
+    *dbg << "Initing OSC...\n";
+    char port[20];
+    sprintf(port,"%d",Config::OSC::Port);
+    lo_server_thread st = lo_server_thread_new(port,error_handler);
+    lo_server_thread_add_method(st,NULL,NULL,generic_handler,NULL);
+    lo_server_thread_start(st);
 }
  
 

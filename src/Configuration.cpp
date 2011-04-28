@@ -51,6 +51,9 @@ namespace Config{
     namespace Interaction{
         bool PlayOnEdit;
     }
+    namespace OSC{
+        int Port;
+    }
     
     void LoadDefaultConfiguration(){
         //Default values
@@ -67,6 +70,7 @@ namespace Config{
         VisibleColumns::Velocity = 1;
         VisibleColumns::Chord = 1;
         Interaction::PlayOnEdit = 1;
+        OSC::Port = 7773;
     }
 
     void LoadFromFile(){
@@ -105,6 +109,9 @@ namespace Config{
         }
         if(kf.has_group("Interaction")){
             if(kf.has_key("Interaction","PlayOnEdit")) Interaction::PlayOnEdit = kf.get_boolean("Interaction","PlayOnEdit");
+        }
+        if(kf.has_group("OSC")){
+            if(kf.has_key("OSC","Port")) OSC::Port = kf.get_integer("OSC","Port");
         }
 
     }
@@ -145,6 +152,7 @@ namespace Config{
         kf.set_boolean("Visible columns","Velocity",VisibleColumns::Velocity);
         kf.set_boolean("Visible columns","Chord",VisibleColumns::Chord);
         kf.set_boolean("Interaction","PlayOnEdit",Interaction::PlayOnEdit);
+        kf.set_integer("OSC","Port",OSC::Port);
 
         output_file <<  kf.to_data().c_str();
 
