@@ -23,7 +23,11 @@
 #include "OSC.h"
 #include "Configuration.h"
 #include "messages.h"
+#include "MidiDriver.h"
+#include "MainWindow.h"
+extern MidiDriver* midi;
 extern error* err;
+extern MainWindow* mainwindow;
 
 void error_handler(int num, const char *msg, const char *path){
     *err << "OSC error!\n";
@@ -33,6 +37,29 @@ int generic_handler(const char *path, const char *types, lo_arg **argv,
 		    int argc, void *data, void *user_data)
 {
     *dbg << "OSC message got: path = " << path << ENDL;
+    return 1;
+}
+
+int pause_handler(const char *path, const char *types, lo_arg **argv,
+ 		    int argc, void *data, void *user_data)
+{
+    *dbg << "OSC: pause signal got.\n";
+    if (midi->GetPaused() == 0){
+        gdk_threads_enter(); //this is necessary, because PauseQueueImmediately updates the play/pause button in the main window
+        midi->PauseQueueImmediately();
+        gdk_threads_leave();
+    }
+    return 0;
+}
+int unpause_handler(const char *path, const char *types, lo_arg **argv,
+ 		    int argc, void *data, void *user_data)
+{
+    *dbg << "OSC: unpause signal got.\n";
+    if (midi->GetPaused() == 1){
+        gdk_threads_enter();//this is necessary, because ContinueQueue updates the play/pause button in the main window
+        midi->ContinueQueue();
+        gdk_threads_leave();
+    }
     return 0;
 }
 
@@ -43,6 +70,9 @@ void InitOSC(){
     sprintf(port,"%d",Config::OSC::Port);
     lo_server_thread st = lo_server_thread_new(port,error_handler);
     lo_server_thread_add_method(st,NULL,NULL,generic_handler,NULL);
+    lo_server_thread_add_method(st,"/harmonyseq/pause",NULL,pause_handler,NULL);
+    lo_server_thread_add_method(st,"/harmonyseq/play",NULL,unpause_handler,NULL);
+    lo_server_thread_add_method(st,"/harmonyseq/unpause",NULL,unpause_handler,NULL);
     lo_server_thread_start(st);
 }
  
