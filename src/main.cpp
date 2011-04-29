@@ -384,6 +384,9 @@ void print_help(){
 void end_program(){
 
     *dbg << "ending the program...\n";
+    
+    gdk_threads_enter();//to ensure thread safety...
+    
     if (midi != NULL) { //maybe we are ending the program before midi driver was constructed
         midi->ClearQueue();
         sleep(1); //giving it some time, for the noteoffs that are left on
