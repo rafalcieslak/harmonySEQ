@@ -37,7 +37,8 @@ public:
         NONE = 0,        //no arguments
         KEYBOARD = 1,    //keyboard key code
         NOTE = 2,        //note pitch, channel [0 - all]
-        CONTROLLER = 3   //ctrl num, channel [0 - all]
+        CONTROLLER = 3  //ctrl num, channel [0 - all]
+        ,OSC = 4 //tag
     };
 
     int type;

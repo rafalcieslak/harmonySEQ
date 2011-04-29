@@ -51,10 +51,13 @@ void InitEventTypesTreeModel(){
     row[m_columns_event_types.label] = _("Keyboard");
     row = *(TreeModel_EventTypes->append());
     row[m_columns_event_types.type] = Event::NOTE;
-    row[m_columns_event_types.label] = _("Note");
+    row[m_columns_event_types.label] = _("MIDI Note");
     row = *(TreeModel_EventTypes->append());
     row[m_columns_event_types.type] = Event::CONTROLLER;
-    row[m_columns_event_types.label] = _("Controller");
+    row[m_columns_event_types.label] = _("MIDI Controller");
+    row = *(TreeModel_EventTypes->append());
+    row[m_columns_event_types.type] = Event::OSC;
+    row[m_columns_event_types.label] = _("OSC");
 }
 
 void InitActionTypesTreeModel(){

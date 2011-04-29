@@ -25,6 +25,7 @@
 #include "messages.h"
 #include "MidiDriver.h"
 #include "MainWindow.h"
+#include "Event.h"
 extern MidiDriver* midi;
 extern error* err;
 extern MainWindow* mainwindow;
@@ -89,6 +90,16 @@ int sync_handler(const char *path, const char *types, lo_arg **argv,
         midi->Sync();
     return 0;
 }
+int events_handler(const char *path, const char *types, lo_arg **argv,
+ 		    int argc, void *data, void *user_data)
+{
+    int TAG = argv[0]->i;
+    *dbg << "OSC : event signal got, TAG = " << TAG << ".\n";
+    gdk_threads_enter();
+    FindAndProcessEvents(Event::OSC,TAG,0);
+    gdk_threads_leave();
+    return 0;
+}
 
 
 void InitOSC(){
@@ -97,6 +108,8 @@ void InitOSC(){
     char port[20];
     sprintf(port,"%d",Config::OSC::Port);
     lo_server_thread st = lo_server_thread_new(port,error_handler);
+    lo_server_thread_add_method(st,"/harmonyseq/event","i",events_handler,NULL);
+    lo_server_thread_add_method(st,"/harmonyseq/triger","i",events_handler,NULL);
     lo_server_thread_add_method(st,"/harmonyseq/pause",NULL,pause_handler,NULL);
     lo_server_thread_add_method(st,"/harmonyseq/play",NULL,unpause_handler,NULL);
     lo_server_thread_add_method(st,"/harmonyseq/unpause",NULL,unpause_handler,NULL);

@@ -22,6 +22,7 @@
 #include "TreeModels.h"
 #include "Files.h"
 #include "MainWindow.h"
+#include "Configuration.h"
 EventGUI::EventGUI(Event *prt){
     parent = prt;
 
@@ -45,13 +46,26 @@ EventGUI::EventGUI(Event *prt){
     main_box.pack_start(line_note);
     main_box.pack_start(line_controller);
     main_box.pack_start(line_channel);
+    main_box.pack_start(line_osc_tag);
     main_box.pack_start(separator);
+    main_box.pack_start(osc_note);
     main_box.pack_start(label_preview);
+    
+    char temp[200];
+#ifndef DISABLE_OSC
+    sprintf(temp,_("<span size='small'>harmonySEQ listens for OSC messages at port %d</span>"),Config::OSC::Port);
+#else
+    sprintf(temp,_("<span size='small'><b>harmonySEQ was compiled without OSC support!</b>\nThis means this event cannot be triggered.</span>"));
+#endif
+    
+    osc_note.set_markup(temp);
+    
     line_type.pack_start(label_type,Gtk::PACK_SHRINK);
     line_key.pack_start(label_key,Gtk::PACK_SHRINK);
     line_note.pack_start(label_note,Gtk::PACK_SHRINK);
     line_controller.pack_start(label_controller,Gtk::PACK_SHRINK);
     line_channel.pack_start(label_channel,Gtk::PACK_SHRINK);
+    line_osc_tag.pack_start(label_osc_tag,Gtk::PACK_SHRINK);
 
     line_type.pack_start(Types_combo,Gtk::PACK_SHRINK);
     line_type.pack_end(capture,Gtk::PACK_SHRINK);
@@ -59,19 +73,24 @@ EventGUI::EventGUI(Event *prt){
     line_note.pack_start(note_spinbutton,Gtk::PACK_SHRINK);
     line_controller.pack_start(ctrl_spinbutton,Gtk::PACK_SHRINK);
     line_channel.pack_start(Channels_combo,Gtk::PACK_SHRINK);
+    line_osc_tag.pack_start(osc_tag,Gtk::PACK_SHRINK);
 
     note_spinbutton.set_range(0.0,127.0);
     ctrl_spinbutton.set_range(0.0,127.0);
+    osc_tag.set_range(0.0,127.0);
     note_spinbutton.set_increments(1.0,16.0);
     ctrl_spinbutton.set_increments(1.0,16.0);
+    osc_tag.set_increments(1.0,16.0);
     note_spinbutton.signal_value_changed().connect(mem_fun(*this,&EventGUI::OnNoteChanged));
     ctrl_spinbutton.signal_value_changed().connect(mem_fun(*this,&EventGUI::OnCtrlChanged));
+    osc_tag.signal_value_changed().connect(mem_fun(*this,&EventGUI::OnOSCPortChanged));
 
     label_type.set_text(_("Type:"));
     label_channel.set_text(_("Channel:"));
     label_controller.set_text(_("Controller:"));
     label_key.set_text(_("Key:"));
     label_note.set_text(_("Note:"));
+    label_osc_tag.set_text(_("OSC message tag:"));
     capture.set_label(_("Capture"));
     capture.set_tooltip_markup(_("Cathes next event end fill this one's type and arguments to fit the one triggered.\n<i>Example usage: press this button and then the X key on your keyboard. The event will be automatically set to type: keyboard, key: X.</i>"));
 
@@ -112,6 +131,8 @@ void EventGUI::ChangeVisibleLines(){
     line_note.hide();
     line_controller.hide();
     line_channel.hide();
+    line_osc_tag.hide();
+    osc_note.hide();
 
     switch (type){
         case Event::NONE:
@@ -127,6 +148,10 @@ void EventGUI::ChangeVisibleLines(){
             break;
         case Event::KEYBOARD:
             line_key.show();
+            break;
+        case Event::OSC:
+            line_osc_tag.show();
+            osc_note.show();
             break;
         default:
             break;
@@ -151,6 +176,10 @@ void EventGUI::InitType(){
             ctrl_spinbutton.set_value(0.0);
             parent->arg1=0;
             Channels_combo.set_active(0);
+            break;
+        case Event::OSC:
+            osc_tag.set_value(0.0);
+            parent->arg1=0;
             break;
         default:
             break;
@@ -217,6 +246,17 @@ void EventGUI::OnNoteChanged(){
     Files::SetFileModified(1);
 
 }
+
+void EventGUI::OnOSCPortChanged(){
+   if(parent->type == Event::OSC){
+        parent->arg1 = osc_tag.get_value();
+    }else *err << _("Error: porthas changed, while event is not OSC-type.") << ENDL;
+
+    label_preview.set_text(parent->GetLabel());
+    if(parent->row_in_event_widget) mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
+    Files::SetFileModified(1); 
+}
+
 void EventGUI::OnOKClicked(){
     event_capturing_mode = 0;
     event_to_capture_to = NULL; //not nessesary, but just for cleaning up
@@ -260,6 +300,9 @@ void EventGUI::UpdateValues(){
         case Event::CONTROLLER:
             ctrl_spinbutton.set_value(parent->arg1);
             Channels_combo.set_active(parent->arg2);
+            break;
+        case Event::OSC:
+            osc_tag.set_value(parent->arg1);
             break;
         default:
             break;

@@ -68,6 +68,10 @@ std::string Event::GetLabel(){
             else sprintf(temp,_("When controller %d on channel %d is moved..."),arg1,arg2);
 
             break;
+        case OSC:
+            sprintf(temp,_("When OSC message '/harmonyseq/event i %d' is got..."),arg1);
+            
+            break;
         default:
             sprintf(temp,_("Unknown event."));
 
@@ -129,6 +133,10 @@ void FindAndProcessEvents(Event::EventTypes ev,int arg1, int arg2){
                     if (arg1 == Events[x]->arg1 && (Events[x]->arg2 == 0 || Events[x]->arg2 == arg2))
                         Events[x]->Trigger();
 
+                    break;
+                case Event::OSC:
+                    if (arg1 == Events[x]->arg1)
+                        Events[x]->Trigger();
                     break;
                 case Event::NONE:
                     *err << _("Error - empty event would be triggered.\n");

@@ -48,7 +48,8 @@ private:
     void OnTypeChanged();
     void OnKeyChanged();
     void OnNoteChanged();
-    void OnCtrlChanged();;
+    void OnCtrlChanged();
+    void OnOSCPortChanged();
     void OnChannelChanged();
     bool OnKeyPress(GdkEventKey* event);
     void OnOKClicked();
@@ -68,7 +69,11 @@ private:
     Gtk::HBox line_controller;
     Gtk::Label label_controller;
     Gtk::Button ok_button;
+    Gtk::HBox line_osc_tag;
+    Gtk::Label label_osc_tag;
+    Gtk::SpinButton osc_tag;
 
+    Gtk::Label osc_note;
     Gtk::Label label_preview;
     Gtk::HSeparator separator;
     Gtk::ComboBox Types_combo;
