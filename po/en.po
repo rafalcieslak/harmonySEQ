@@ -7,28 +7,28 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2011-04-21 22:12+0200\n"
+"POT-Creation-Date: 2011-04-30 12:33+0200\n"
 "PO-Revision-Date: 2010-12-18 08:23+0000\n"
 "Last-Translator: Rafal Cieslak <rafalcieslak256@gmail.com>\n"
 "Language-Team: English\n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ASCII\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2011-04-29 06:26+0000\n"
 "X-Generator: Launchpad (build 12758)\n"
-"Language: en\n"
 
-#: src/main.cpp:293
+#: src/main.cpp:286
 #, c-format
 msgid "unknown option '%c'\n"
 msgstr "unknown option '%c'\n"
 
-#: src/main.cpp:296
+#: src/main.cpp:289
 #, c-format
 msgid "unrecognized option '%s'\n"
 msgstr "unrecognized option '%s'\n"
 
-#: src/main.cpp:378
+#: src/main.cpp:373
 #, c-format
 msgid ""
 "harmonySEQ, version %s\n"
@@ -211,7 +211,7 @@ msgstr ""
 msgid "Handle"
 msgstr ""
 
-#: src/MainWindow.cpp:213 src/SettingsWindow.cpp:71
+#: src/MainWindow.cpp:213 src/SettingsWindow.cpp:73
 msgid "Name"
 msgstr "Name"
 
@@ -219,7 +219,7 @@ msgstr "Name"
 msgid "On"
 msgstr "On"
 
-#: src/MainWindow.cpp:225 src/SettingsWindow.cpp:72 src/SettingsWindow.cpp:73
+#: src/MainWindow.cpp:225 src/SettingsWindow.cpp:74 src/SettingsWindow.cpp:75
 msgid "Channel"
 msgstr ""
 
@@ -227,19 +227,19 @@ msgstr ""
 msgid "Pattern"
 msgstr ""
 
-#: src/MainWindow.cpp:227 src/SettingsWindow.cpp:75
+#: src/MainWindow.cpp:227 src/SettingsWindow.cpp:77
 msgid "Resolution"
 msgstr ""
 
-#: src/MainWindow.cpp:228 src/SettingsWindow.cpp:76
+#: src/MainWindow.cpp:228 src/SettingsWindow.cpp:78
 msgid "Length"
 msgstr ""
 
-#: src/MainWindow.cpp:229 src/SettingsWindow.cpp:77
+#: src/MainWindow.cpp:229 src/SettingsWindow.cpp:79
 msgid "Velocity"
 msgstr ""
 
-#: src/MainWindow.cpp:230 src/SettingsWindow.cpp:78
+#: src/MainWindow.cpp:230 src/SettingsWindow.cpp:80
 msgid "Chord"
 msgstr ""
 
@@ -316,16 +316,16 @@ msgstr ""
 msgid "Are sure you want to loose them and open another file?"
 msgstr ""
 
-#: src/MainWindow.cpp:711
+#: src/MainWindow.cpp:713
 msgid "Choose a file to save..."
 msgstr "Choose a file to save..."
 
-#: src/MainWindow.cpp:742
+#: src/MainWindow.cpp:744
 #, c-format
 msgid "File '%s'  already exist."
 msgstr ""
 
-#: src/MainWindow.cpp:743
+#: src/MainWindow.cpp:745
 msgid "Do you want to overwrite this file?"
 msgstr ""
 
@@ -453,42 +453,64 @@ msgstr ""
 
 #: src/Event.cpp:72
 #, c-format
+msgid "When OSC message '/harmonyseq/event i %d' is got..."
+msgstr ""
+
+#: src/Event.cpp:76
+#, c-format
 msgid "Unknown event."
 msgstr ""
 
-#: src/Event.cpp:134
+#: src/Event.cpp:142
 msgid "Error - empty event would be triggered.\n"
 msgstr "Error - empty event would be triggered.\n"
 
-#: src/EventGUI.cpp:29
+#: src/EventGUI.cpp:30
 msgid "Event"
 msgstr "Event"
 
-#: src/EventGUI.cpp:70 src/ActionGUI.cpp:126
+#: src/EventGUI.cpp:56
+#, c-format
+msgid ""
+"<span size='small'>harmonySEQ listens for OSC messages at port %d</span>"
+msgstr ""
+
+#: src/EventGUI.cpp:58
+#, c-format
+msgid ""
+"<span size='small'><b>harmonySEQ was compiled without OSC support!</b>\n"
+"This means this event cannot be triggered.</span>"
+msgstr ""
+
+#: src/EventGUI.cpp:88 src/ActionGUI.cpp:126
 msgid "Type:"
 msgstr ""
 
-#: src/EventGUI.cpp:71 src/SettingsWindow.cpp:101
+#: src/EventGUI.cpp:89 src/SettingsWindow.cpp:103
 msgid "Channel:"
 msgstr ""
 
-#: src/EventGUI.cpp:72
+#: src/EventGUI.cpp:90
 msgid "Controller:"
 msgstr ""
 
-#: src/EventGUI.cpp:73
+#: src/EventGUI.cpp:91
 msgid "Key:"
 msgstr ""
 
-#: src/EventGUI.cpp:74 src/SettingsWindow.cpp:99
+#: src/EventGUI.cpp:92 src/SettingsWindow.cpp:101
 msgid "Note:"
 msgstr ""
 
-#: src/EventGUI.cpp:75
+#: src/EventGUI.cpp:93
+msgid "OSC message tag:"
+msgstr ""
+
+#: src/EventGUI.cpp:94
 msgid "Capture"
 msgstr ""
 
-#: src/EventGUI.cpp:76
+#: src/EventGUI.cpp:95
 msgid ""
 "Cathes next event end fill this one's type and arguments to fit the one "
 "triggered.\n"
@@ -496,27 +518,31 @@ msgid ""
 "event will be automatically set to type: keyboard, key: X.</i>"
 msgstr ""
 
-#: src/EventGUI.cpp:89 src/ActionGUI.cpp:139 src/SettingsWindow.cpp:36
+#: src/EventGUI.cpp:108 src/ActionGUI.cpp:139 src/SettingsWindow.cpp:36
 msgid "OK"
 msgstr ""
 
-#: src/EventGUI.cpp:181
+#: src/EventGUI.cpp:210
 msgid "Error: channel has changed, while event is not MIDI-type."
 msgstr ""
 
-#: src/EventGUI.cpp:191
+#: src/EventGUI.cpp:220
 msgid "Error: key has changed, while event is not key-type."
 msgstr ""
 
-#: src/EventGUI.cpp:202
+#: src/EventGUI.cpp:231
 msgid "Error: controller has changed, while event is not ctrl-type."
 msgstr ""
 
-#: src/EventGUI.cpp:213
+#: src/EventGUI.cpp:242
 msgid "Error: note has changed, while event is not note-type."
 msgstr ""
 
-#: src/EventGUI.cpp:286
+#: src/EventGUI.cpp:253
+msgid "Error: porthas changed, while event is not OSC-type."
+msgstr ""
+
+#: src/EventGUI.cpp:329
 msgid "(Waiting for an event...)"
 msgstr ""
 
@@ -564,7 +590,7 @@ msgstr ""
 msgid "Play sequence in '%s' once"
 msgstr ""
 
-#: src/Action.cpp:186 src/TreeModels.cpp:98
+#: src/Action.cpp:186 src/TreeModels.cpp:101
 #, c-format
 msgid "Toggle passing MIDI events"
 msgstr ""
@@ -574,7 +600,7 @@ msgstr ""
 msgid "Toggle pause/play"
 msgstr ""
 
-#: src/Action.cpp:202 src/TreeModels.cpp:95
+#: src/Action.cpp:202 src/TreeModels.cpp:98
 #, c-format
 msgid "Synchronize"
 msgstr ""
@@ -672,13 +698,11 @@ msgid "Error: velocity has changed, while action is not velocity-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:444
-msgid ""
-"Error: note to set has changed, while action is not set-seq-note-type."
+msgid "Error: note to set has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:455
-msgid ""
-"Error: note number has changed, while action is not set-seq-note-type."
+msgid "Error: note number has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:468
@@ -700,7 +724,7 @@ msgstr ""
 msgid "Error: pattern has changed, while action is not pattern-type."
 msgstr ""
 
-#: src/TreeModels.cpp:48 src/TreeModels.cpp:65
+#: src/TreeModels.cpp:48 src/TreeModels.cpp:68
 msgid "Empty"
 msgstr ""
 
@@ -709,78 +733,83 @@ msgid "Keyboard"
 msgstr ""
 
 #: src/TreeModels.cpp:54
-msgid "Note"
-msgstr ""
+#, fuzzy
+msgid "MIDI Note"
+msgstr "Main Note:"
 
 #: src/TreeModels.cpp:57
-msgid "Controller"
+msgid "MIDI Controller"
 msgstr ""
 
-#: src/TreeModels.cpp:68
-msgid "Sequencer/Switch On-Off"
+#: src/TreeModels.cpp:60 src/SettingsWindow.cpp:42
+msgid "OSC"
 msgstr ""
 
 #: src/TreeModels.cpp:71
-msgid "Sequencer/Play once"
+msgid "Sequencer/Switch On-Off"
 msgstr ""
 
 #: src/TreeModels.cpp:74
-msgid "Sequencer/Set velocity"
+msgid "Sequencer/Play once"
 msgstr ""
 
 #: src/TreeModels.cpp:77
-msgid "Sequencer/Set one note"
+msgid "Sequencer/Set velocity"
 msgstr ""
 
 #: src/TreeModels.cpp:80
-msgid "Sequencer/Set chord"
+msgid "Sequencer/Set one note"
 msgstr ""
 
 #: src/TreeModels.cpp:83
-msgid "Sequencer/Transpose by octave"
+msgid "Sequencer/Set chord"
 msgstr ""
 
 #: src/TreeModels.cpp:86
-msgid "Sequencer/Set active pattern"
+msgid "Sequencer/Transpose by octave"
 msgstr ""
 
 #: src/TreeModels.cpp:89
-msgid "Set tempo"
+msgid "Sequencer/Set active pattern"
 msgstr ""
 
 #: src/TreeModels.cpp:92
+msgid "Set tempo"
+msgstr ""
+
+#: src/TreeModels.cpp:95
 msgid "Play/pause"
 msgstr ""
 
-#: src/TreeModels.cpp:118
+#: src/TreeModels.cpp:121
 msgid "All"
 msgstr ""
 
-#: src/TreeModels.cpp:176 src/TreeModels.cpp:193
+#: src/TreeModels.cpp:179 src/TreeModels.cpp:196
 msgid "Major"
 msgstr ""
 
-#: src/TreeModels.cpp:179 src/TreeModels.cpp:196
+#: src/TreeModels.cpp:182 src/TreeModels.cpp:199
 msgid "Minor"
 msgstr ""
 
-#: src/TreeModels.cpp:182
+#: src/TreeModels.cpp:185
 msgid "Augmented"
 msgstr ""
 
-#: src/TreeModels.cpp:185
+#: src/TreeModels.cpp:188
 msgid "Diminished"
 msgstr ""
 
-#: src/TreeModels.cpp:204
+#: src/TreeModels.cpp:207
 msgid "Custom"
 msgstr ""
 
-#: src/TreeModels.cpp:207
+#: src/TreeModels.cpp:210
 msgid "Triad"
 msgstr ""
 
-#: src/TreeModels.cpp:210
+#: src/TreeModels.cpp:213
 msgid "Guitar"
 msgstr ""
 
@@ -898,7 +927,7 @@ msgid ""
 "given relatively to this base note."
 msgstr ""
 
-#: src/Configuration.cpp:126
+#: src/Configuration.cpp:133
 #, c-format
 msgid ""
 "ERROR - error while trying to save config file %s.\n"
@@ -925,55 +954,81 @@ msgstr ""
 msgid "MIDI"
 msgstr ""
 
-#: src/SettingsWindow.cpp:49
+#: src/SettingsWindow.cpp:51
 msgid "<b>Play on edit:</b>"
 msgstr ""
 
-#: src/SettingsWindow.cpp:60
+#: src/SettingsWindow.cpp:62
 msgid "<b>Visible colums:</b>"
 msgstr ""
 
-#: src/SettingsWindow.cpp:74
+#: src/SettingsWindow.cpp:76
 msgid "Patern"
 msgstr ""
 
-#: src/SettingsWindow.cpp:94
+#: src/SettingsWindow.cpp:96
 msgid "<b>Metronome:</b>"
 msgstr ""
 
-#: src/SettingsWindow.cpp:95
+#: src/SettingsWindow.cpp:97
 msgid "Bar:"
 msgstr ""
 
-#: src/SettingsWindow.cpp:96
+#: src/SettingsWindow.cpp:98
 msgid "1/4 bar:"
 msgstr ""
 
-#: src/SettingsWindow.cpp:97
+#: src/SettingsWindow.cpp:99
 msgid "Mark here, and the metronome will also tick on every 1/4 of each bar."
 msgstr ""
 
-#: src/SettingsWindow.cpp:100 src/SequencerWidget.cpp:113
+#: src/SettingsWindow.cpp:102 src/SequencerWidget.cpp:113
 msgid "Velocity:"
 msgstr ""
 
-#: src/SettingsWindow.cpp:116
+#: src/SettingsWindow.cpp:118
 msgid "The channel the metronome will output it's ticks to."
 msgstr ""
 
-#: src/SettingsWindow.cpp:120 src/SettingsWindow.cpp:126
+#: src/SettingsWindow.cpp:122 src/SettingsWindow.cpp:128
 msgid "The metronome's MIDI note pitch"
 msgstr ""
 
-#: src/SettingsWindow.cpp:123 src/SettingsWindow.cpp:129
+#: src/SettingsWindow.cpp:125 src/SettingsWindow.cpp:131
 msgid "The metronome's MIDI note velocity'"
 msgstr ""
 
-#: src/SettingsWindow.cpp:209
+#: src/SettingsWindow.cpp:140
+msgid "OSC port: "
+msgstr ""
+
+#: src/SettingsWindow.cpp:143
+msgid "The port OSC server will listen at."
+msgstr ""
+
+#: src/SettingsWindow.cpp:144
+msgid ""
+"<span size='small'>Changing this setting needs restarting\n"
+"harmonySEQ to take effect.</span>"
+msgstr ""
+
+#: src/SettingsWindow.cpp:146
+msgid ""
+"\n"
+"<span size='small'><b>harmonySEQ supports following OSC messages:</b>\n"
+"<i>/harmonyseq/pause</i> and <i>/harmonyseq/play</i>\n"
+"<i>/harmonyseq/tempo [float]</i>\n"
+"<i>/harmonyseq/sync</i> (for synchronizing)\n"
+"<i>/karmonyseq/kill</i> (to quit immidiatelly)\n"
+"<i>/harmonyseq/event [int]</i> (to trigger events with\n"
+"the given tag).</span>"
+msgstr ""
+
+#: src/SettingsWindow.cpp:227
 msgid "Restoring default configuration"
 msgstr ""
 
-#: src/SettingsWindow.cpp:209
+#: src/SettingsWindow.cpp:227
 msgid "Are you sure you want to loose all your settings?"
 msgstr ""
 
@@ -1074,26 +1129,26 @@ msgid ""
 "sequence will be repeated few times in each bar."
 msgstr ""
 
-#: src/SequencerWidget.cpp:317
+#: src/SequencerWidget.cpp:318
 msgid ""
 "ERROR - Cannot init SequencerWidget's notebook - no sequencer selected.\n"
 msgstr ""
 
-#: src/SequencerWidget.cpp:338 src/SequencerWidget.cpp:538
+#: src/SequencerWidget.cpp:339 src/SequencerWidget.cpp:542
 #, c-format
 msgid "%d"
 msgstr ""
 
-#: src/SequencerWidget.cpp:410
+#: src/SequencerWidget.cpp:414
 msgid "Clicked a pattern checkbox that should be hidden! \n"
 msgstr ""
 
-#: src/SequencerWidget.cpp:511
+#: src/SequencerWidget.cpp:515
 #, c-format
 msgid " %d"
 msgstr ""
 
-#: src/SequencerWidget.cpp:514
+#: src/SequencerWidget.cpp:518
 #, c-format
 msgid "%d*"
 msgstr ""
@@ -1131,9 +1186,6 @@ msgstr ""
 #~ msgid "MN"
 #~ msgstr "MN"
 
-#~ msgid "Main Note:"
-#~ msgstr "Main Note:"
-
 #~ msgid "Mute"
 #~ msgstr "Mute"
 
@@ -1143,7 +1195,6 @@ msgstr ""
 #~ msgid "activated row "
 #~ msgstr "activated row "
 
-#, c-format
 #~ msgid ""
 #~ "harmonySEQ, version %s\n"
 #~ "\n"
@@ -1169,11 +1220,12 @@ msgstr ""
 #~ msgid "setting ports number to "
 #~ msgstr "setting ports number to "
 
-#, c-format
 #~ msgid ""
-#~ "       --pass-midi   passes the midi events through the program by default\n"
+#~ "       --pass-midi   passes the midi events through the program by "
+#~ "default\n"
 #~ msgstr ""
-#~ "       --pass-midi   passes the midi events through the program by default\n"
+#~ "       --pass-midi   passes the midi events through the program by "
+#~ "default\n"
 
 #~ msgid "Chan"
 #~ msgstr "Chan"
@@ -1181,7 +1233,6 @@ msgstr ""
 #~ msgid "Clone"
 #~ msgstr "Clone"
 
-#, c-format
 #~ msgid "ERROR - error while trying to read %s\n"
 #~ msgstr "ERROR - error while trying to read %s\n"
 
@@ -1191,6 +1242,5 @@ msgstr ""
 #~ msgid "Res"
 #~ msgstr "Res"
 
-#, c-format
 #~ msgid "When note %d on channel %d is moved..."
 #~ msgstr "When note %d on channel %d is moved..."
