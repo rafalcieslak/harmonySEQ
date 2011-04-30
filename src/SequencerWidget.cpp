@@ -357,6 +357,7 @@ void SequencerWidget::UpdatePatternVbox(int pattern){
     if (pattern = -1) pattern = wNotebook.get_current_page();
     Sequencer* seq = seqH(selectedSeq);
 
+    ignore_signals = 1; //this will avoid calling signal handler when updating pattern...
     for (int x = 0; x < seq->resolution;x++){
         if (x % 4 == 0) {
             if (x != 0) { //do not add a separator at the very beggining
@@ -374,6 +375,7 @@ void SequencerWidget::UpdatePatternVbox(int pattern){
                 note_separators[x/4-1]->hide();
         }
     }
+    ignore_signals = 0;
      /*Resizing the pattern_box VERTIACLLY so that it will match the chordwidget.
        *The resulting height is equal to:
       */
@@ -406,6 +408,7 @@ void SequencerWidget::UpdateOnOffColour(){
 }
 
 void SequencerWidget::OnPatternNoteChanged(int c, bool value, int seq){
+    if(ignore_signals) return;
     if(!AnythingSelected) return;
     Sequencer* sequ = seqH(selectedSeq);
     if (seq >= sequ->resolution) {*err << _("Clicked a pattern checkbox that should be hidden! \n"); return;}

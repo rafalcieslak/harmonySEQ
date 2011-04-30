@@ -200,6 +200,8 @@ void MidiDriver::PauseQueueImmediately(){
     *dbg << "Queue paused!\n";
     //Choose an icon/label for the toggle in the main window
     mainwindow->UpdatePlayPauseTool();
+    //All diodes off...
+    mainwindow->seqWidget.Diodes_AllOff();
 }
 
 void MidiDriver::PauseOnNextBar(){
@@ -219,6 +221,8 @@ void MidiDriver::Sync(){
     UpdateQueue(1);
     //Indicate graphically a starting bar
     mainwindow->FlashTempoStart();
+    //All diodes off...
+    mainwindow->seqWidget.Diodes_AllOff();
 }
 
 snd_seq_tick_time_t MidiDriver::GetTick() {

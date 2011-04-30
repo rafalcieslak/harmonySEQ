@@ -86,8 +86,10 @@ int sync_handler(const char *path, const char *types, lo_arg **argv,
  		    int argc, void *data, void *user_data)
 {
     *dbg << "OSC : sync signal got.\n";
+    gdk_threads_enter();
     if (!midi->GetPaused()) //do not sync while in pause!
         midi->Sync();
+    gdk_threads_leave();
     return 0;
 }
 int events_handler(const char *path, const char *types, lo_arg **argv,
