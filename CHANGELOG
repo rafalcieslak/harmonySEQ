@@ -10,7 +10,7 @@ harmonyseq 0.15 "arising"
 	- New event that allows triggering events by an OSC message.
 	- Incresed tempo range, as some may need higher tempos.
 	- Added a button that clears selected pattern.
-	- Significantly improved data refreshing.
+	- Significantly improved data refreshing speed.
 	- Many optimizations, in some cases harmonySEQ may use now up to 30% less CPU.
 	- Improved support for unusual Gtk system themes.
 	- Changed sequencer's default resolution to 16.
