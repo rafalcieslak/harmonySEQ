@@ -501,7 +501,7 @@ msgstr "Gdy kontoller %d na kanale %d jest poruszany..."
 #: src/Event.cpp:72
 #, c-format
 msgid "When OSC message '/harmonyseq/event i %d' is got..."
-msgstr ""
+msgstr "Po odebraniu wiadomości OSC '/harmonyseq/event i %d'..."
 
 #: src/Event.cpp:76
 #, c-format
@@ -521,6 +521,7 @@ msgstr "Zdarzenie"
 msgid ""
 "<span size='small'>harmonySEQ listens for OSC messages at port %d</span>"
 msgstr ""
+"<span size='small'>harmonySEQ nasłuchuje wiadomości OSC na porcie %d</span>"
 
 #: src/EventGUI.cpp:58
 #, c-format
@@ -528,6 +529,9 @@ msgid ""
 "<span size='small'><b>harmonySEQ was compiled without OSC support!</b>\n"
 "This means this event cannot be triggered.</span>"
 msgstr ""
+"<span size='small'><b>harmonySEQ jest skompilowany z wyłączoną obsługą OSC!</"
+"b>\n"
+"To znaczy że tego zdarzenia nie da się wywołać.</span>"
 
 #: src/EventGUI.cpp:88 src/ActionGUI.cpp:126
 msgid "Type:"
@@ -551,7 +555,7 @@ msgstr "Nuta:"
 
 #: src/EventGUI.cpp:93
 msgid "OSC message tag:"
-msgstr ""
+msgstr "Tag wiadomości OSC:"
 
 #: src/EventGUI.cpp:94
 msgid "Capture"
@@ -596,10 +600,8 @@ msgstr ""
 "Błąd: nuta została zmieniona, podczas gdy zdarzenie nie jest typu nuty."
 
 #: src/EventGUI.cpp:253
-#, fuzzy
 msgid "Error: porthas changed, while event is not OSC-type."
-msgstr ""
-"Błąd: nuta została zmieniona, podczas gdy zdarzenie nie jest typu nuty."
+msgstr "Błąd: port został zmieniony, podczas gdy zdarzenie nie jest typu OSC."
 
 #: src/EventGUI.cpp:329
 msgid "(Waiting for an event...)"
@@ -806,18 +808,16 @@ msgid "Keyboard"
 msgstr "Klawiatura"
 
 #: src/TreeModels.cpp:54
-#, fuzzy
 msgid "MIDI Note"
-msgstr "Nuta główna:"
+msgstr "Nuta MIDI"
 
 #: src/TreeModels.cpp:57
-#, fuzzy
 msgid "MIDI Controller"
-msgstr "Kontroler"
+msgstr "Kontroler MIDI"
 
 #: src/TreeModels.cpp:60 src/SettingsWindow.cpp:42
 msgid "OSC"
-msgstr ""
+msgstr "OSC"
 
 #: src/TreeModels.cpp:71
 msgid "Sequencer/Switch On-Off"
@@ -1082,17 +1082,19 @@ msgstr "Prędkość uderzenia nuty MIDI metronomu"
 
 #: src/SettingsWindow.cpp:140
 msgid "OSC port: "
-msgstr ""
+msgstr "Port OSC: "
 
 #: src/SettingsWindow.cpp:143
 msgid "The port OSC server will listen at."
-msgstr ""
+msgstr "Port na którym serwer OSC będzie nasłuchiwał."
 
 #: src/SettingsWindow.cpp:144
 msgid ""
 "<span size='small'>Changing this setting needs restarting\n"
 "harmonySEQ to take effect.</span>"
 msgstr ""
+"<span size='small'>Zniana tego ustawienia wymaga ponownego\n"
+"uruchomienia harmonySEQ.</span>"
 
 #: src/SettingsWindow.cpp:146
 msgid ""
@@ -1105,6 +1107,14 @@ msgid ""
 "<i>/harmonyseq/event [int]</i> (to trigger events with\n"
 "the given tag).</span>"
 msgstr ""
+"\n"
+"<span size='small'><b>Wiadomości OSC obsługiwane przez harmonySEQ:</b>\n"
+"<i>/harmonyseq/pause</i> oraz <i>/harmonyseq/play</i>\n"
+"<i>/harmonyseq/tempo [float]</i>\n"
+"<i>/harmonyseq/sync</i> (do synchronizacji)\n"
+"<i>/karmonyseq/kill</i> (by natychmiast wyłączyć)\n"
+"<i>/harmonyseq/event [int]</i> (by wyzwolić zdrarzenie z\n"
+"podanym tagiem).</span>"
 
 #: src/SettingsWindow.cpp:227
 msgid "Restoring default configuration"
