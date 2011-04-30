@@ -143,7 +143,7 @@ SettingsWindow::SettingsWindow(){
     osc_port.set_tooltip_markup(_("The port OSC server will listen at."));
     osc_note_restart.set_markup(_("<span size='small'>Changing this setting needs restarting\nharmonySEQ to take effect.</span>"));
     osc_description_hbox.pack_start(osc_description,Gtk::PACK_SHRINK);
-    osc_description.set_markup("There will land some\n<b>very usefull info</b>\nconcerning the open\nsound control protocol.");
+    osc_description.set_markup(_("\n<span size='small'><b>harmonySEQ supports following OSC messages:</b>\n<i>/harmonyseq/pause</i> and <i>/harmonyseq/play</i>\n<i>/harmonyseq/tempo [float]</i>\n<i>/harmonyseq/sync</i> (for synchronizing)\n<i>/karmonyseq/kill</i> (to quit immidiatelly)\n<i>/harmonyseq/event [int]</i> (to trigger events with\nthe given tag).</span>"));
     
     signal_show().connect(mem_fun(*this,&SettingsWindow::OnShowed));
 
