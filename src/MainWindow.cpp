@@ -628,7 +628,7 @@ void MainWindow::OnAboutMenuClicked(){
     aboutbox.set_program_name("harmonySEQ");
     aboutbox.set_version(VERSION);
     aboutbox.set_logo(harmonySEQ_logo_48);
-    aboutbox.set_copyright("Copyright © 2010 Rafał Cieślak");
+    aboutbox.set_copyright("Copyright © 2010,2011 Rafał Cieślak");
     aboutbox.set_comments(_("A MIDI sequencing application helpful for music composers and live artists."));
     //TRANSLATORS:The GNU GPL v.3
      aboutbox.set_license(_("HarmonySEQ is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n"
