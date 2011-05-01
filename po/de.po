@@ -9,15 +9,15 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
 "POT-Creation-Date: 2011-04-30 12:33+0200\n"
 "PO-Revision-Date: 2010-12-18 08:17+0000\n"
-"Last-Translator: Launchpad Translations Administrators <rosetta@launchpad."
-"net>\n"
+"Last-Translator: Launchpad Translations Administrators "
+"<rosetta@launchpad.net>\n"
 "Language-Team: German <de@li.org>\n"
-"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-29 06:26+0000\n"
+"X-Launchpad-Export-Date: 2011-05-01 05:32+0000\n"
 "X-Generator: Launchpad (build 12758)\n"
+"Language: de\n"
 
 #: src/main.cpp:286
 #, c-format
@@ -700,11 +700,13 @@ msgid "Error: velocity has changed, while action is not velocity-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:444
-msgid "Error: note to set has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note to set has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:455
-msgid "Error: note number has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note number has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:468
