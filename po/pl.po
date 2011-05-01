@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2011-05-01 19:38+0200\n"
+"POT-Creation-Date: 2011-05-01 20:13+0200\n"
 "PO-Revision-Date: 2011-04-30 22:40+0000\n"
 "Last-Translator: Rafal Cieslak <rafalcieslak256@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -1039,6 +1039,15 @@ msgstr "MIDI"
 #: src/SettingsWindow.cpp:51
 msgid "<b>Play on edit:</b>"
 msgstr "<b>Podgląd przy edycji:</b>"
+
+#: src/SettingsWindow.cpp:52
+#, fuzzy
+msgid ""
+"Play briefly a note when it's added, \n"
+"or changed manually in a chord."
+msgstr ""
+"Podgląd - Odtwórz nutę po jej dodaniu, \n"
+"lub ręcznie wstawiona do akordu."
 
 #: src/SettingsWindow.cpp:62
 msgid "<b>Visible colums:</b>"

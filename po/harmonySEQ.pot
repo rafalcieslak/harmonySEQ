@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonySEQ 0.15\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2011-05-01 19:38+0200\n"
+"POT-Creation-Date: 2011-05-01 20:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -952,6 +952,12 @@ msgstr ""
 
 #: src/SettingsWindow.cpp:51
 msgid "<b>Play on edit:</b>"
+msgstr ""
+
+#: src/SettingsWindow.cpp:52
+msgid ""
+"Play briefly a note when it's added, \n"
+"or changed manually in a chord."
 msgstr ""
 
 #: src/SettingsWindow.cpp:62
