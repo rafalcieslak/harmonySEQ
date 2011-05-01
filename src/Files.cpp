@@ -193,10 +193,16 @@ void LoadFileDialog(){
 
     //Obtaining the file the user has chosen..
     Glib::ustring filename = dialog.get_filename();
-
+    
     //Hiding the dialog...
     dialog.hide();
-
+    
+    //To avoid lag....
+    bool was_paused = false;
+    if (!midi->GetPaused()){
+        midi->PauseQueueImmediately();
+        was_paused = true;
+    }
     //And depending on which button did the user choose
     switch (result){
         case Gtk::RESPONSE_OK:
@@ -206,10 +212,14 @@ void LoadFileDialog(){
             break;
         case Gtk::RESPONSE_CANCEL:
             //User clicked CANCEL. Do nothing.
+            if (was_paused) midi->ContinueQueue();
+            return;
             break;
         default:
             //User uses cheat codes.
             *dbg << "unknown response returned!\n";
+            if (was_paused) midi->ContinueQueue();
+            return;
         break;
     }
 
@@ -217,6 +227,8 @@ void LoadFileDialog(){
     mainwindow->InitTreeData();
     mainwindow->tempo_button.set_value(tempo);
     mainwindow->UpdateEventWidget();
+
+    if (was_paused) midi->ContinueQueue();
 }
 
 
