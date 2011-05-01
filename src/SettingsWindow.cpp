@@ -49,7 +49,7 @@ SettingsWindow::SettingsWindow(){
     play_on_edit_label_hbox.pack_start(play_on_edit_label,Gtk::PACK_SHRINK);
     play_on_edit_vbox.pack_start(play_on_edit,Gtk::PACK_SHRINK);
     play_on_edit_label.set_markup(_("<b>Play on edit:</b>"));
-    play_on_edit.set_label("Play briefly a note when it's added, \nor changed manually in a chord.");
+    play_on_edit.set_label(_("Play briefly a note when it's added, \nor changed manually in a chord."));
     
     // <editor-fold defaultstate="collapsed" desc="visible colums">
     page_main.pack_start(play_on_edit_vbox);
