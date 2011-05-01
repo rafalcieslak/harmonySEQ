@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonySEQ 0.15\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2011-04-30 12:33+0200\n"
+"POT-Creation-Date: 2011-05-01 19:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -361,17 +361,17 @@ msgstr ""
 msgid "Choose a file to open..."
 msgstr ""
 
-#: src/Files.cpp:236
+#: src/Files.cpp:248
 #, c-format
 msgid "ERROR - error while trying to read file '%s'\n"
 msgstr ""
 
-#: src/Files.cpp:243
+#: src/Files.cpp:255
 #, c-format
 msgid "ERROR - error while trying to read file '%s': "
 msgstr ""
 
-#: src/Files.cpp:261
+#: src/Files.cpp:273
 #, c-format
 msgid ""
 "This file was created by harmonySEQ in a newer version (%d.%d.%d). This "
@@ -383,11 +383,11 @@ msgid ""
 "Select YES to do so."
 msgstr ""
 
-#: src/Files.cpp:262 src/Files.cpp:271
+#: src/Files.cpp:274 src/Files.cpp:283
 msgid "Do you want to open this file?"
 msgstr ""
 
-#: src/Files.cpp:270
+#: src/Files.cpp:282
 #, c-format
 msgid ""
 "This file was created by harmonySEQ in an older version (%d.%d.%d). This "
@@ -398,22 +398,22 @@ msgid ""
 "for example if it is sure it will open without trouble. Select YES to do so."
 msgstr ""
 
-#: src/Files.cpp:293
+#: src/Files.cpp:305
 #, c-format
 msgid "ERROR - error while reading file '%s'\n"
 msgstr ""
 
-#: src/Files.cpp:318
+#: src/Files.cpp:330
 #, c-format
 msgid "ERROR - Glib::KeyFile error while processing file '%s': "
 msgstr ""
 
-#: src/Files.cpp:326
+#: src/Files.cpp:338
 #, c-format
 msgid "ERROR - unknown error while processing file '%s': "
 msgstr ""
 
-#: src/Files.cpp:361
+#: src/Files.cpp:373
 #, c-format
 msgid "ERROR - Missing sequencer %d in file\n"
 msgstr ""

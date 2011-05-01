@@ -1,6 +1,6 @@
 (More details can be found on harmonySEQ's homepage: http://harmonyseq.wordpress.com)
 
-To run harmonySEQ you need to have {gtkmm,glibmm,alsa} run-time libriries installed on your system.
+To run harmonySEQ you need to have {gtkmm,glibmm,alsa,liblo} run-time libriries installed on your system.
 To compile it, you will also need the developement headers of above programs.
 
 To compile:
