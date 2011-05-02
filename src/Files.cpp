@@ -25,6 +25,7 @@
 #include "Event.h"
 #include "Action.h"
 #include "MidiDriver.h"
+#include "seqHandle.h"
 
 namespace Files {
 
@@ -362,7 +363,8 @@ bool LoadFile015(Glib::KeyFile* kfp){
     //Get rid of any seqeuncers.
     ClearSequencers(); //woa hua hua hua!
     ResetSeqHandles();
-
+    //Needed to determine the next free handle...
+    int maximal_handle = 0;
     //Now we'll process all sequencers that are in the file.
     for (int x = 0; x < seqNum; x++) {
         //First prepare the key.
@@ -380,6 +382,7 @@ bool LoadFile015(Glib::KeyFile* kfp){
 
         seqHandle h = kfp->get_integer(temp,FILE_KEY_SEQ_HANDLE);
         seqVector[x]->MyHandle = h;
+        if(h > maximal_handle) maximal_handle = h;
         AddCustomSeqHandle(h,x);
         //Put some data into it...
         seqVector[x]->SetName(kfp->get_string(temp, FILE_KEY_SEQ_NAME));
@@ -430,6 +433,8 @@ bool LoadFile015(Glib::KeyFile* kfp){
         //Now proceed to the...
     }  //...next sequencer.
 
+    ManuallySetSeqHandleCounter(maximal_handle+1);
+    
     //Done loading sequencers.
 
     //Now, proceed to events.

@@ -42,5 +42,6 @@ void UpdateSeqHandlesAfterMoving(int from, int to);
 void ResetSeqHandles();
 
 void AddCustomSeqHandle(seqHandle h, int ID);
+void ManuallySetSeqHandleCounter(int c);
 #endif	/* SEQHANDLE_H */
 

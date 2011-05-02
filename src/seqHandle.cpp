@@ -114,3 +114,7 @@ void ResetSeqHandles(){
 void AddCustomSeqHandle(seqHandle h, int ID){
     seqHandlesMap[h] = ID;
 }
+
+void ManuallySetSeqHandleCounter(int c){
+    handlecounter = c;
+}
