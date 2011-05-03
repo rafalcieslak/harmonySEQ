@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2011-04-30 12:33+0200\n"
+"POT-Creation-Date: 2011-05-01 20:13+0200\n"
 "PO-Revision-Date: 2010-12-18 08:38+0000\n"
 "Last-Translator: Launchpad Translations Administrators "
 "<rosetta@launchpad.net>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-02 05:32+0000\n"
+"X-Launchpad-Export-Date: 2011-05-03 05:30+0000\n"
 "X-Generator: Launchpad (build 12758)\n"
 "Language: tr\n"
 
@@ -368,17 +368,17 @@ msgstr "HATA - %s dosyasına yazmak için açılması sırasında hata.\n"
 msgid "Choose a file to open..."
 msgstr "Açılacak dosyayı seçin..."
 
-#: src/Files.cpp:236
+#: src/Files.cpp:248
 #, c-format
 msgid "ERROR - error while trying to read file '%s'\n"
 msgstr "HATA - '%s' dosyasının okunmasında hata\n"
 
-#: src/Files.cpp:243
+#: src/Files.cpp:255
 #, c-format
 msgid "ERROR - error while trying to read file '%s': "
 msgstr "HATA - '%s' dosyasının okunmasında hata: "
 
-#: src/Files.cpp:261
+#: src/Files.cpp:273
 #, c-format
 msgid ""
 "This file was created by harmonySEQ in a newer version (%d.%d.%d). This "
@@ -390,11 +390,11 @@ msgid ""
 "Select YES to do so."
 msgstr ""
 
-#: src/Files.cpp:262 src/Files.cpp:271
+#: src/Files.cpp:274 src/Files.cpp:283
 msgid "Do you want to open this file?"
 msgstr "Bu dosyayı açmak istiyor musunuz?"
 
-#: src/Files.cpp:270
+#: src/Files.cpp:282
 #, c-format
 msgid ""
 "This file was created by harmonySEQ in an older version (%d.%d.%d). This "
@@ -405,22 +405,22 @@ msgid ""
 "for example if it is sure it will open without trouble. Select YES to do so."
 msgstr ""
 
-#: src/Files.cpp:293
+#: src/Files.cpp:305
 #, c-format
 msgid "ERROR - error while reading file '%s'\n"
 msgstr ""
 
-#: src/Files.cpp:318
+#: src/Files.cpp:330
 #, c-format
 msgid "ERROR - Glib::KeyFile error while processing file '%s': "
 msgstr ""
 
-#: src/Files.cpp:326
+#: src/Files.cpp:338
 #, c-format
 msgid "ERROR - unknown error while processing file '%s': "
 msgstr "HATA - '%s' dosyasının işlenmesi sırasında bilinmeyen hata: "
 
-#: src/Files.cpp:361
+#: src/Files.cpp:373
 #, c-format
 msgid "ERROR - Missing sequencer %d in file\n"
 msgstr ""
@@ -961,6 +961,12 @@ msgstr ""
 
 #: src/SettingsWindow.cpp:51
 msgid "<b>Play on edit:</b>"
+msgstr ""
+
+#: src/SettingsWindow.cpp:52
+msgid ""
+"Play briefly a note when it's added, \n"
+"or changed manually in a chord."
 msgstr ""
 
 #: src/SettingsWindow.cpp:62
