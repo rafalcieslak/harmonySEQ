@@ -6,9 +6,10 @@ harmonyseq 0.15 "arising"
 	- Added PlayOnEdit feature.
 	- Implemented OSC support.
 	- Allowed reordering sequencers (this time seriously).
+	- Actions that change chords overwrite octave only optionally (one can change chord without changing octave).
 	- Added an action that transposes a sequencer by an octave.
 	- New event that allows triggering events by an OSC message.
-	- Incresed tempo range, as some may need higher tempos.
+	- Increased tempo range, as some may need higher tempos.
 	- Added a button that clears selected pattern.
 	- Significantly improved data refreshing speed.
 	- Many optimizations, in some cases harmonySEQ may use now up to 30% less CPU.

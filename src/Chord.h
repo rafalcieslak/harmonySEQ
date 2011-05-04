@@ -84,7 +84,7 @@ public:
     bool GetBaseUse();
     
    /**Copies all data from another chord (fe. from an action)*/
-   void Set(const Chord& other);
+   void Set(const Chord& other, bool apply_octave=1);
 
 
    /**Load chord settings from vector. Should have following format: mode, guitar_root, guitar_note, triad_root,triad_note,octave,inversion,notes(6)(if custom).*/

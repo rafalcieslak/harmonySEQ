@@ -34,6 +34,9 @@ public:
 
     /**Refreshes the GUI using data from parent chord*/
     void Update();
+    
+    void ShowApplyOctave(bool show);
+    void UpdateApplyOctave(bool apply);
 
     /**Updates the visibility/sensitivity (f.e. hides chors root selector, it the type is CUSTOM)*/
     void UpdateWhatToShowAndWhatIsSensitive();
@@ -42,6 +45,8 @@ public:
     sigc::signal<void> on_changed;
     /**Calleed when a note is MANUALLY changed. Prototype: ...(int note_number,int pitch)*/
     sigc::signal<void,int,int> on_note_changed;
+    /**Called when the Apply Octave toggle is toggled*/
+    sigc::signal<void,bool> on_apply_octave_toggled;
 
     void Select(Chord* ch);
     void UnSelect();
@@ -60,10 +65,14 @@ private:
     void OnBaseChanged();
     void OnUseBaseToggled();
     void OnNoteChanged(int n);
-
+    void OnShow();
+    void OnApplyOctaveClicked();
+    
     /**Flag disabling reaction on signals, used to set data in widgets without reacting (react only if it was the user that changes the data)*/
     bool we_are_copying_note_values_from_chord_so_do_not_handle_the_signals;
 
+    bool show_dnao;
+    
     Gtk::HBox MainBox;
 
     Gtk::VBox LeftHBox;
@@ -74,6 +83,7 @@ private:
     Gtk::HBox line2;
     Gtk::HBox line3;
     Gtk::HBox line4;
+    Gtk::HBox line4_5;
     Gtk::HBox line5;
 
     Gtk::Label type_label;
@@ -86,6 +96,7 @@ private:
     Gtk::SpinButton inversion;
 
     Gtk::CheckButton use_base;
+    Gtk::CheckButton do_not_apply_octave;
 
     Gtk::Label octave_label;
     Gtk::SpinButton octave;

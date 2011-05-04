@@ -246,13 +246,14 @@ void Chord::NoteAndOctaveToBase(){
     base = (base_octave+5)*12+base_note;
 }
 
-void Chord::Set(const Chord& other){
+void Chord::Set(const Chord& other,bool apply_octave){
     *dbg << "copying chord." << ENDL;
     type = other.type;
     if (type == CHORD_TYPE_CUSTOM) for (int x = 0 ; x < 6; x++) notes[x] = other.notes[x];
-    base = other.base;
+    if (apply_octave) base_octave = other.base_octave;
+    base_note = other.base_note;
     base_use = other.base_use;
-    BaseToOctaveAndNote();
+    NoteAndOctaveToBase();
     mode_triad = other.mode_triad;
     mode_guitar = other.mode_guitar;
     root = other.root;

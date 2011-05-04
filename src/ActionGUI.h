@@ -64,6 +64,7 @@ private:
     void OnChordWidgetNoteChanged(int n, int p);
     void OnPatternChanged();
     void OnOctaveChanged();
+    void OnApplyOctaveToogled(bool apply);
 
     Gtk::VBox main_box;
 

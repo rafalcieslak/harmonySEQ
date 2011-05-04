@@ -35,7 +35,8 @@ ActionGUI::ActionGUI(Action *prt)
     we_are_copying_data_from_parent_action_so_do_not_handle_signals = false;
 
     chordwidget.Select(&parent->chord);
-
+    chordwidget.ShowApplyOctave(1);
+    chordwidget.on_apply_octave_toggled.connect(sigc::mem_fun(*this,&ActionGUI::OnApplyOctaveToogled));
     //window's title
     set_title(_("Action"));
  
@@ -238,6 +239,7 @@ void ActionGUI::UpdateValues(){
         case Action::SEQ_CHANGE_CHORD:
             SetSeqCombo(parent->args[1]);
             chordwidget.Update();
+            chordwidget.UpdateApplyOctave(parent->args[3]);
             break;
         case Action::SEQ_PLAY_ONCE:
             SetSeqCombo(parent->args[1]);
@@ -371,6 +373,7 @@ void ActionGUI::InitType(){
         case Action::SEQ_CHANGE_CHORD:
             Seqs_combo.set_active(0);
             parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_handle];
+            parent->args[3] = 0;
             chordwidget.Update();
             break;
         case Action::SEQ_CHANGE_PATTERN:
@@ -510,6 +513,18 @@ void ActionGUI::OnPatternChanged(){
     if(parent->type == Action::SEQ_CHANGE_PATTERN){
         parent->args[2] = pattern_button.get_value();
     }else *err << _("Error: pattern has changed, while action is not pattern-type.") << ENDL;
+
+    label_preview.set_text(parent->GetLabel());
+    mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
+
+    Files::SetFileModified(1);
+}
+
+void ActionGUI::OnApplyOctaveToogled(bool apply){
+
+    if(parent->type == Action::SEQ_CHANGE_CHORD){
+        parent->args[3] = apply;
+    }else *err << _("Error: apply octave has changed, while action is not change-chord-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
     mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);

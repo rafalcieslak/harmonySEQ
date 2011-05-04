@@ -39,6 +39,7 @@ ChordWidget::ChordWidget(){
     LeftHBox.pack_start(line2,Gtk::PACK_SHRINK);
     LeftHBox.pack_start(line3,Gtk::PACK_SHRINK);
     LeftHBox.pack_start(line4,Gtk::PACK_SHRINK);
+    LeftHBox.pack_start(line4_5,Gtk::PACK_SHRINK);
     LeftHBox.pack_start(line5,Gtk::PACK_SHRINK);
 
     caption.set_markup(_("<b>Chord</b>"));
@@ -90,6 +91,10 @@ ChordWidget::ChordWidget(){
     base.signal_value_changed().connect(sigc::mem_fun(*this, &ChordWidget::OnBaseChanged));
     base.set_tooltip_markup(_("The <b>base note</b> for this chord. If it uses the base, which is determined by the switch on the left-hand side, all notes of this chord are given relatively to this base note."));
 
+    do_not_apply_octave.set_label(_("Do not change chord's octave"));
+    do_not_apply_octave.set_tooltip_markup(_("If checked, the octave will not be applied to the chord."));
+    do_not_apply_octave.signal_toggled().connect(sigc::mem_fun(*this,&ChordWidget::OnApplyOctaveClicked));
+    
     line1.pack_start(type_label,Gtk::PACK_SHRINK);
     line1.pack_start(combo_type,Gtk::PACK_SHRINK);
     line2.pack_start(combo_root,Gtk::PACK_SHRINK);
@@ -116,9 +121,13 @@ ChordWidget::ChordWidget(){
         focus_list.push_front(note_buttons[x]); //Push_front-ing IS complex, BUT: a) we call it only 6 times b) we store pointers there. This is ok then.
     }
 
+    
     NotesVBox.set_focus_chain(focus_list);
 
     we_are_copying_note_values_from_chord_so_do_not_handle_the_signals=false;
+}
+
+void ChordWidget::OnShow(){
 }
 
 void ChordWidget::Select(Chord* ch){
@@ -308,4 +317,36 @@ void ChordWidget::Update(){
     UpdateWhatToShowAndWhatIsSensitive();
     we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = false;
     UpdateNotes();
+}
+
+void ChordWidget::ShowApplyOctave(bool show){
+    if (show_dnao == show) return;
+    if (show == 0){
+        line4_5.remove(do_not_apply_octave);
+        octave.set_sensitive(1);
+    }else{
+        line4_5.pack_start(do_not_apply_octave,Gtk::PACK_SHRINK);
+    }
+    show_dnao = show;
+}
+
+void ChordWidget::OnApplyOctaveClicked(){
+    if(we_are_copying_note_values_from_chord_so_do_not_handle_the_signals) return;
+    if(do_not_apply_octave.get_active() == 1){
+        on_apply_octave_toggled.emit(1);
+        octave.set_sensitive(0);
+    }else{
+        on_apply_octave_toggled.emit(0);
+        octave.set_sensitive(1);
+    }
+}
+
+void ChordWidget::UpdateApplyOctave(bool apply){
+    we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = 1;
+    do_not_apply_octave.set_active(apply);
+    if (apply) 
+        octave.set_sensitive(0);
+    else
+        octave.set_sensitive(1);
+    we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = 0;
 }

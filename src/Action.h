@@ -40,6 +40,7 @@ public:
         DEPRACATED_3,
         TEMPO_SET,
         SEQ_CHANGE_ONE_NOTE,
+        /**1)seq 3) do not apply octave?*/
         SEQ_CHANGE_CHORD,
         SEQ_PLAY_ONCE,
         TOGGLE_PASS_MIDI,
