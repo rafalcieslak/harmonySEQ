@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonySEQ 0.15\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2011-05-05 19:11+0200\n"
+"POT-Creation-Date: 2011-05-05 20:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -813,64 +813,64 @@ msgstr ""
 msgid "Guitar"
 msgstr ""
 
-#: src/Chord.cpp:273
+#: src/Chord.cpp:277
 #, c-format
 msgid "Custom: %d, %d, %d, %d, %d, %d (base: %d)"
 msgstr ""
 
-#: src/Chord.cpp:275
+#: src/Chord.cpp:279
 #, c-format
 msgid "Custom: %d, %d, %d, %d, %d, %d"
 msgstr ""
 
-#: src/Chord.cpp:279
+#: src/Chord.cpp:283
 #, c-format
-msgid "Guitar: %s major, octave: %d"
+msgid "Guitar: %s major"
 msgstr ""
 
-#: src/Chord.cpp:281
+#: src/Chord.cpp:285
 #, c-format
-msgid "Guitar: %s minor, octave: %d"
-msgstr ""
-
-#: src/Chord.cpp:287
-#, c-format
-msgid "Triad: %s major, octave: %d"
-msgstr ""
-
-#: src/Chord.cpp:289
-#, c-format
-msgid "Triad: %s major, octave: %d, inversion: %d"
-msgstr ""
-
-#: src/Chord.cpp:293
-#, c-format
-msgid "Triad: %s minor, octave: %d"
+msgid "Guitar: %s minor"
 msgstr ""
 
 #: src/Chord.cpp:295
 #, c-format
-msgid "Triad: %s minor, octave: %d, inversion: %d"
+msgid "Triad: %s major"
 msgstr ""
 
-#: src/Chord.cpp:299
+#: src/Chord.cpp:297
 #, c-format
-msgid "Triad: %s augmented, octave: %d"
+msgid "Triad: %s major, inversion: %d"
 msgstr ""
 
 #: src/Chord.cpp:301
 #, c-format
-msgid "Triad: %s augmented, octave: %d, inversion: %d"
+msgid "Triad: %s minor"
 msgstr ""
 
-#: src/Chord.cpp:305
+#: src/Chord.cpp:303
 #, c-format
-msgid "Triad: %s diminisched, octave: %d"
+msgid "Triad: %s minor, inversion: %d"
 msgstr ""
 
 #: src/Chord.cpp:307
 #, c-format
-msgid "Triad: %s diminisched, octave: %d, inversion: %d"
+msgid "Triad: %s augmented"
+msgstr ""
+
+#: src/Chord.cpp:309
+#, c-format
+msgid "Triad: %s augmented, inversion: %d"
+msgstr ""
+
+#: src/Chord.cpp:313
+#, c-format
+msgid "Triad: %s diminisched"
+msgstr ""
+
+#: src/Chord.cpp:315
+#, c-format
+msgid "Triad: %s diminisched, inversion: %d"
 msgstr ""
 
 #: src/ChordWidget.cpp:45

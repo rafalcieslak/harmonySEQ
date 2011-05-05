@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2011-05-05 19:11+0200\n"
+"POT-Creation-Date: 2011-05-05 20:12+0200\n"
 "PO-Revision-Date: 2011-05-03 18:22+0000\n"
 "Last-Translator: Rafal Cieslak <rafalcieslak256@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -893,64 +893,64 @@ msgstr "Trójdźwięk"
 msgid "Guitar"
 msgstr "Gitara"
 
-#: src/Chord.cpp:273
+#: src/Chord.cpp:277
 #, c-format
 msgid "Custom: %d, %d, %d, %d, %d, %d (base: %d)"
 msgstr "Własny: %d, %d, %d, %d, %d, %d (baza: %d)"
 
-#: src/Chord.cpp:275
+#: src/Chord.cpp:279
 #, c-format
 msgid "Custom: %d, %d, %d, %d, %d, %d"
 msgstr "Własny: %d, %d, %d, %d, %d, %d"
 
-#: src/Chord.cpp:279
+#: src/Chord.cpp:283
 #, c-format
-msgid "Guitar: %s major, octave: %d"
-msgstr "Gitara: %s dur, oktawa: %d"
+msgid "Guitar: %s major"
+msgstr "Gitara: %s-dur"
 
-#: src/Chord.cpp:281
+#: src/Chord.cpp:285
 #, c-format
-msgid "Guitar: %s minor, octave: %d"
-msgstr "Gitara: %s moll, oktawa: %d"
-
-#: src/Chord.cpp:287
-#, c-format
-msgid "Triad: %s major, octave: %d"
-msgstr "Trójdźwięk: %s dur, oktawa: %d"
-
-#: src/Chord.cpp:289
-#, c-format
-msgid "Triad: %s major, octave: %d, inversion: %d"
-msgstr "Trójdźwięk: %s dur, oktawa: %d, przewrót: %d"
-
-#: src/Chord.cpp:293
-#, c-format
-msgid "Triad: %s minor, octave: %d"
-msgstr "Trójdźwięk: %s moll, oktawa: %d"
+msgid "Guitar: %s minor"
+msgstr "Gitara: %s-moll"
 
 #: src/Chord.cpp:295
 #, c-format
-msgid "Triad: %s minor, octave: %d, inversion: %d"
-msgstr "Trójdźwięk: %s moll, oktawa: %d, przewrót: %d"
+msgid "Triad: %s major"
+msgstr "Trójdźwięk: %s-dur"
 
-#: src/Chord.cpp:299
-#, c-format
-msgid "Triad: %s augmented, octave: %d"
-msgstr "Trójdźwięk: %s zwiększony, oktawa: %d"
+#: src/Chord.cpp:297
+#, fuzzy, c-format
+msgid "Triad: %s major, inversion: %d"
+msgstr "Trójdźwięk: %s dur, oktawa: %d, przewrót: %d"
 
 #: src/Chord.cpp:301
 #, c-format
-msgid "Triad: %s augmented, octave: %d, inversion: %d"
-msgstr "Trójdźwięk: %s zwiększony, oktawa: %d, przewrót: %d"
+msgid "Triad: %s minor"
+msgstr "Trójdźwięk: %s-moll"
 
-#: src/Chord.cpp:305
-#, c-format
-msgid "Triad: %s diminisched, octave: %d"
-msgstr "Trójdźwięk: %s zmniejszony, oktawa: %d"
+#: src/Chord.cpp:303
+#, fuzzy, c-format
+msgid "Triad: %s minor, inversion: %d"
+msgstr "Trójdźwięk: %s moll, oktawa: %d, przewrót: %d"
 
 #: src/Chord.cpp:307
-#, c-format
-msgid "Triad: %s diminisched, octave: %d, inversion: %d"
+#, fuzzy, c-format
+msgid "Triad: %s augmented"
+msgstr "Trójdźwięk: %s-zwiększony"
+
+#: src/Chord.cpp:309
+#, fuzzy, c-format
+msgid "Triad: %s augmented, inversion: %d"
+msgstr "Trójdźwięk: %s zwiększony, oktawa: %d, przewrót: %d"
+
+#: src/Chord.cpp:313
+#, fuzzy, c-format
+msgid "Triad: %s diminisched"
+msgstr "Trójdźwięk: %s-zmniejszony"
+
+#: src/Chord.cpp:315
+#, fuzzy, c-format
+msgid "Triad: %s diminisched, inversion: %d"
 msgstr "Trójdźwięk: %s zmniejszony, oktawa: %d, przewrót: %d"
 
 #: src/ChordWidget.cpp:45
@@ -1311,6 +1311,24 @@ msgstr ""
 msgid "Error - cannot colorize triggered action: row is empty.\n"
 msgstr "Błąd - nie można pokolorować wywołanej akcji: wiersz jest pusty.\n"
 
+#~ msgid "Guitar: %s major, octave: %d"
+#~ msgstr "Gitara: %s dur, oktawa: %d"
+
+#~ msgid "Guitar: %s minor, octave: %d"
+#~ msgstr "Gitara: %s moll, oktawa: %d"
+
+#~ msgid "Triad: %s major, octave: %d"
+#~ msgstr "Trójdźwięk: %s dur, oktawa: %d"
+
+#~ msgid "Triad: %s minor, octave: %d"
+#~ msgstr "Trójdźwięk: %s moll, oktawa: %d"
+
+#~ msgid "Triad: %s augmented, octave: %d"
+#~ msgstr "Trójdźwięk: %s zwiększony, oktawa: %d"
+
+#~ msgid "Triad: %s diminisched, octave: %d"
+#~ msgstr "Trójdźwięk: %s zmniejszony, oktawa: %d"
+
 #~ msgid "Transpose sequencer '%s's chord %d octaves up"
 #~ msgstr "Transponuj akord sekwencera '%s' o %d oktaw w górę."
 
@@ -1514,26 +1532,8 @@ msgstr "Błąd - nie można pokolorować wywołanej akcji: wiersz jest pusty.\n"
 #~ "BŁĄD krytyczny: Próba zdobycia nazwy sekwencera poza wektorem "
 #~ "sekwencerów.\n"
 
-#~ msgid "Guitar: %s major"
-#~ msgstr "Gitara: %s-dur"
-
-#~ msgid "Triad: %s augumented"
-#~ msgstr "Trójdźwięk: %s-zwiększony"
-
-#~ msgid "Triad: %s minor"
-#~ msgstr "Trójdźwięk: %s-moll"
-
-#~ msgid "Triad: %s major"
-#~ msgstr "Trójdźwięk: %s-dur"
-
-#~ msgid "Guitar: %s minor"
-#~ msgstr "Gitara: %s-moll"
-
 #~ msgid "Guitar mode"
 #~ msgstr "Tryb gitary"
-
-#~ msgid "Triad: %s diminished"
-#~ msgstr "Trójdźwięk: %s-zmniejszony"
 
 #~ msgid "Octave"
 #~ msgstr "Oktawa"
