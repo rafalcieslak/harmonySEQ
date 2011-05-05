@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonySEQ 0.15\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2011-05-05 18:54+0200\n"
+"POT-Creation-Date: 2011-05-05 19:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -609,12 +609,12 @@ msgstr ""
 
 #: src/Action.cpp:209
 #, c-format
-msgid "Transpose sequencer '%s's chord %d octaves down"
+msgid "Decrease sequencer '%s' chord's  octave by %d"
 msgstr ""
 
 #: src/Action.cpp:211
 #, c-format
-msgid "Transpose sequencer '%s's chord %d octaves up"
+msgid "Increase sequencer '%s's chord's octave by %d"
 msgstr ""
 
 #: src/Action.cpp:215
@@ -766,7 +766,7 @@ msgid "Sequencer/Set chord"
 msgstr ""
 
 #: src/TreeModels.cpp:86
-msgid "Sequencer/Transpose by octave"
+msgid "Sequencer/Change chord's octave"
 msgstr ""
 
 #: src/TreeModels.cpp:89
@@ -813,62 +813,62 @@ msgstr ""
 msgid "Guitar"
 msgstr ""
 
-#: src/Chord.cpp:271
+#: src/Chord.cpp:273
 #, c-format
 msgid "Custom: %d, %d, %d, %d, %d, %d (base: %d)"
 msgstr ""
 
-#: src/Chord.cpp:273
+#: src/Chord.cpp:275
 #, c-format
 msgid "Custom: %d, %d, %d, %d, %d, %d"
 msgstr ""
 
-#: src/Chord.cpp:277
+#: src/Chord.cpp:279
 #, c-format
 msgid "Guitar: %s major, octave: %d"
 msgstr ""
 
-#: src/Chord.cpp:279
+#: src/Chord.cpp:281
 #, c-format
 msgid "Guitar: %s minor, octave: %d"
 msgstr ""
 
-#: src/Chord.cpp:285
+#: src/Chord.cpp:287
 #, c-format
 msgid "Triad: %s major, octave: %d"
 msgstr ""
 
-#: src/Chord.cpp:287
+#: src/Chord.cpp:289
 #, c-format
 msgid "Triad: %s major, octave: %d, inversion: %d"
 msgstr ""
 
-#: src/Chord.cpp:291
+#: src/Chord.cpp:293
 #, c-format
 msgid "Triad: %s minor, octave: %d"
 msgstr ""
 
-#: src/Chord.cpp:293
+#: src/Chord.cpp:295
 #, c-format
 msgid "Triad: %s minor, octave: %d, inversion: %d"
 msgstr ""
 
-#: src/Chord.cpp:297
+#: src/Chord.cpp:299
 #, c-format
 msgid "Triad: %s augmented, octave: %d"
 msgstr ""
 
-#: src/Chord.cpp:299
+#: src/Chord.cpp:301
 #, c-format
 msgid "Triad: %s augmented, octave: %d, inversion: %d"
 msgstr ""
 
-#: src/Chord.cpp:303
+#: src/Chord.cpp:305
 #, c-format
 msgid "Triad: %s diminisched, octave: %d"
 msgstr ""
 
-#: src/Chord.cpp:305
+#: src/Chord.cpp:307
 #, c-format
 msgid "Triad: %s diminisched, octave: %d, inversion: %d"
 msgstr ""
