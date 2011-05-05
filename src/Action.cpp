@@ -177,7 +177,7 @@ Glib::ustring Action::GetLabel(){
             sprintf(temp,_("Set note %d of sequencer '%s' to %d"),args[2],GetSeqName(args[1]).c_str(),args[3]);
             break;
         case SEQ_CHANGE_CHORD:
-            sprintf(temp,_("Set chord of sequencer '%s' to %s"),GetSeqName(args[1]).c_str(),chord.GetName().c_str());
+            sprintf(temp,_("Set chord of sequencer '%s' to %s"),GetSeqName(args[1]).c_str(),chord.GetName(args[3]).c_str());
             break;
         case SEQ_PLAY_ONCE:
             sprintf(temp,_("Play sequence in '%s' once"),GetSeqName(args[1]).c_str());

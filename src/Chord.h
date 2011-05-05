@@ -96,7 +96,7 @@ public:
    std::vector<int> SaveToVector();
 
    /**Generates a name for the chord, like "Guitar, E-moll"*/
-    Glib::ustring GetName();
+    Glib::ustring GetName(bool do_not_use_octave=0);
 
     void BaseToOctaveAndNote();
     void NoteAndOctaveToBase();
