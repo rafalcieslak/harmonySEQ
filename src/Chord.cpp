@@ -202,6 +202,8 @@ int Chord::GetInversion(){
 
 void Chord::SetBaseOctave(int n){
     base_octave = n;
+    if (base_octave > 5) base_octave =5;
+    if (base_octave < -5) base_octave = -5;
     NoteAndOctaveToBase();
     RecalcNotes();
 }
