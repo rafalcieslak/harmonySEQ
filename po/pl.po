@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2011-05-01 20:13+0200\n"
+"POT-Creation-Date: 2011-05-05 18:54+0200\n"
 "PO-Revision-Date: 2011-05-03 18:22+0000\n"
 "Last-Translator: Rafal Cieslak <rafalcieslak256@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2011-05-05 05:36+0000\n"
 "X-Generator: Launchpad (build 12959)\n"
-"Language: pl\n"
 
 #: src/main.cpp:286
 #, c-format
@@ -51,7 +51,7 @@ msgstr ""
 "   -h    --help        wyświetla tę wiadomość pomocy\n"
 "   -v    --version     wyświetla wersję programu\n"
 
-#: src/MainWindow.cpp:44 src/ActionGUI.cpp:128
+#: src/MainWindow.cpp:44 src/ActionGUI.cpp:129
 msgid "Tempo:"
 msgstr "Tempo:"
 
@@ -232,7 +232,7 @@ msgstr "Uchwyt"
 msgid "Name"
 msgstr "Nazwa"
 
-#: src/MainWindow.cpp:218 src/ActionGUI.cpp:134
+#: src/MainWindow.cpp:218 src/ActionGUI.cpp:135
 msgid "On"
 msgstr "Wł."
 
@@ -273,12 +273,12 @@ msgstr "Plik zawiera niezapisane zmiany."
 msgid "Are sure you want to quit?"
 msgstr "Czy na pewno chcesz zakończyć pracę programu?"
 
-#: src/MainWindow.cpp:602 src/Action.cpp:194 src/ActionGUI.cpp:137
+#: src/MainWindow.cpp:602 src/Action.cpp:194 src/ActionGUI.cpp:138
 #, c-format
 msgid "Play"
 msgstr "Start"
 
-#: src/MainWindow.cpp:606 src/Action.cpp:191 src/ActionGUI.cpp:136
+#: src/MainWindow.cpp:606 src/Action.cpp:191 src/ActionGUI.cpp:137
 #, c-format
 msgid "Pause"
 msgstr "Pauza"
@@ -316,8 +316,8 @@ msgstr ""
 "zapoznania się ze szczegółami.\n"
 "\n"
 "Powinieneś otrzymać kopię GNU Powszechnej Licencji Publicznej wraz z\n"
-"harmonySEQ. Jeżeli nie otrzymałeś jej, zobacz na "
-"<http://www.gnu.org/licenses/>."
+"harmonySEQ. Jeżeli nie otrzymałeś jej, zobacz na <http://www.gnu.org/"
+"licenses/>."
 
 #: src/MainWindow.cpp:638
 msgid "harmonySEQ website"
@@ -388,26 +388,26 @@ msgstr "seq %d"
 msgid "Debug mode started.\n"
 msgstr "Włączono tryb Debug.\n"
 
-#: src/Files.cpp:71
+#: src/Files.cpp:72
 #, c-format
 msgid "ERROR - error while opening file %s to write.\n"
 msgstr "BŁĄD - błąd podczas otwierania pliku %s do zapisu.\n"
 
-#: src/Files.cpp:175
+#: src/Files.cpp:176
 msgid "Choose a file to open..."
 msgstr "Wybierz plik do otwarcia..."
 
-#: src/Files.cpp:248
+#: src/Files.cpp:249
 #, c-format
 msgid "ERROR - error while trying to read file '%s'\n"
 msgstr "BŁĄD - błąd podczas próby otwarcia pliku '%s'\n"
 
-#: src/Files.cpp:255
+#: src/Files.cpp:256
 #, c-format
 msgid "ERROR - error while trying to read file '%s': "
 msgstr "BŁĄD - błąd podczas próby otwarcia pliku '%s': "
 
-#: src/Files.cpp:273
+#: src/Files.cpp:274
 #, c-format
 msgid ""
 "This file was created by harmonySEQ in a newer version (%d.%d.%d). This "
@@ -426,11 +426,11 @@ msgstr ""
 "gdy wiadomo, że otworzenie tego pliku mimo wszystko nie spowoduje awarii, "
 "można zaryzykować, i otworzyć ten plik. Wybierz TAK, by tak uczynić."
 
-#: src/Files.cpp:274 src/Files.cpp:283
+#: src/Files.cpp:275 src/Files.cpp:284
 msgid "Do you want to open this file?"
 msgstr "Czy chcesz otworzyć ten plik?"
 
-#: src/Files.cpp:282
+#: src/Files.cpp:283
 #, c-format
 msgid ""
 "This file was created by harmonySEQ in an older version (%d.%d.%d). This "
@@ -448,22 +448,22 @@ msgstr ""
 "tego pliku mimo wszystko nie spowoduje awarii, można zaryzykować, i otworzyć "
 "ten plik. Wybierz TAK, by tak uczynić."
 
-#: src/Files.cpp:305
+#: src/Files.cpp:306
 #, c-format
 msgid "ERROR - error while reading file '%s'\n"
 msgstr "BŁĄD - błąd podczas czytania pliku '%s'\n"
 
-#: src/Files.cpp:330
+#: src/Files.cpp:331
 #, c-format
 msgid "ERROR - Glib::KeyFile error while processing file '%s': "
 msgstr "BŁĄD - błąd Glib::KeyFile podczas przetwarzania pliku '%s' "
 
-#: src/Files.cpp:338
+#: src/Files.cpp:339
 #, c-format
 msgid "ERROR - unknown error while processing file '%s': "
 msgstr "BŁĄD - nieznany błąd podczas przetwarzania pliku '%s' "
 
-#: src/Files.cpp:373
+#: src/Files.cpp:375
 #, c-format
 msgid "ERROR - Missing sequencer %d in file\n"
 msgstr "BŁĄD - Brakujący sekwencer %d w pliku\n"
@@ -529,11 +529,11 @@ msgid ""
 "<span size='small'><b>harmonySEQ was compiled without OSC support!</b>\n"
 "This means this event cannot be triggered.</span>"
 msgstr ""
-"<span size='small'><b>harmonySEQ jest skompilowany z wyłączoną obsługą "
-"OSC!</b>\n"
+"<span size='small'><b>harmonySEQ jest skompilowany z wyłączoną obsługą OSC!</"
+"b>\n"
 "To znaczy że tego zdarzenia nie da się wywołać.</span>"
 
-#: src/EventGUI.cpp:88 src/ActionGUI.cpp:126
+#: src/EventGUI.cpp:88 src/ActionGUI.cpp:127
 msgid "Type:"
 msgstr "Typ:"
 
@@ -574,7 +574,7 @@ msgstr ""
 "Twojej klawiaturze. Zdarzenie będzie automatycznie ustawione na typ: "
 "klawiatura, klawisz: X.</i>"
 
-#: src/EventGUI.cpp:108 src/ActionGUI.cpp:139 src/SettingsWindow.cpp:36
+#: src/EventGUI.cpp:108 src/ActionGUI.cpp:140 src/SettingsWindow.cpp:36
 msgid "OK"
 msgstr "OK"
 
@@ -601,8 +601,7 @@ msgstr ""
 
 #: src/EventGUI.cpp:253
 msgid "Error: porthas changed, while event is not OSC-type."
-msgstr ""
-"Błąd: port został zmieniony, podczas gdy zdarzenie nie jest typu OSC."
+msgstr "Błąd: port został zmieniony, podczas gdy zdarzenie nie jest typu OSC."
 
 #: src/EventGUI.cpp:329
 msgid "(Waiting for an event...)"
@@ -707,101 +706,103 @@ msgstr "(nieistniejący)"
 msgid "%s"
 msgstr "%s"
 
-#: src/ActionGUI.cpp:40
+#: src/ActionGUI.cpp:41
 msgid "Action"
 msgstr "Akcja"
 
-#: src/ActionGUI.cpp:127
+#: src/ActionGUI.cpp:128
 msgid "Sequencer:"
 msgstr "Sekwencer:"
 
-#: src/ActionGUI.cpp:129
+#: src/ActionGUI.cpp:130
 msgid "Volume:"
 msgstr "Głośność:"
 
-#: src/ActionGUI.cpp:130
+#: src/ActionGUI.cpp:131
 msgid "Set note "
 msgstr "Ustaw nutę "
 
-#: src/ActionGUI.cpp:131
+#: src/ActionGUI.cpp:132
 msgid " to: "
 msgstr " na: "
 
-#: src/ActionGUI.cpp:132
+#: src/ActionGUI.cpp:133
 msgid "Pattern number: "
 msgstr "Numer wzoru: "
 
-#: src/ActionGUI.cpp:133
+#: src/ActionGUI.cpp:134
 msgid "Off"
 msgstr "Wył."
 
-#: src/ActionGUI.cpp:135 src/ActionGUI.cpp:138
+#: src/ActionGUI.cpp:136 src/ActionGUI.cpp:139
 msgid "Toggle"
 msgstr "Przełącz"
 
-#: src/ActionGUI.cpp:140
+#: src/ActionGUI.cpp:141
 msgid "Transpose by "
 msgstr "Transponuj o "
 
-#: src/ActionGUI.cpp:141
+#: src/ActionGUI.cpp:142
 msgid " octave(s)."
 msgstr " oktaw."
 
-#: src/ActionGUI.cpp:408
+#: src/ActionGUI.cpp:411
 msgid "Error: tempo has changed, while action is not tempo-type."
-msgstr ""
-"Błąd: tempo zostało zmienione, podczas gdy akcja nie jest typu tempo."
+msgstr "Błąd: tempo zostało zmienione, podczas gdy akcja nie jest typu tempo."
 
-#: src/ActionGUI.cpp:420
+#: src/ActionGUI.cpp:423
 msgid "Error: sequencer has changed, while action is not sequencer-type."
 msgstr ""
 "Błąd: sekwencer zostało zmieniony, podczas gdy akcja nie jest typu "
 "sekwencera."
 
-#: src/ActionGUI.cpp:433
+#: src/ActionGUI.cpp:436
 msgid "Error: velocity has changed, while action is not velocity-type."
 msgstr ""
 "Błąd: prędkość została zmieniona, podczas gdy akcja nie jest typu zmiany "
 "prędkości."
 
-#: src/ActionGUI.cpp:444
-msgid ""
-"Error: note to set has changed, while action is not set-seq-note-type."
+#: src/ActionGUI.cpp:447
+msgid "Error: note to set has changed, while action is not set-seq-note-type."
 msgstr ""
 "Błąd: nuta do ustawienia została zmieniona, podczas gdy akcja nie jest typu "
 "zmień-nutę-sekwencera."
 
-#: src/ActionGUI.cpp:455
-msgid ""
-"Error: note number has changed, while action is not set-seq-note-type."
+#: src/ActionGUI.cpp:458
+msgid "Error: note number has changed, while action is not set-seq-note-type."
 msgstr ""
 "Błąd: numer nuty do ustawienia został zmieniony, podczas gdy akcja nie jest "
 "typu zmień-nutę-sekwencera."
 
-#: src/ActionGUI.cpp:468
+#: src/ActionGUI.cpp:471
 msgid ""
 "Error: on-off-toggle has changed, while action is not on-off-toggle-type."
 msgstr ""
 "Błąd: on-off-toggle zmieniony, podczas gdy akcja nie jest typu on-off-toggle."
 
-#: src/ActionGUI.cpp:481
+#: src/ActionGUI.cpp:484
 msgid ""
 "Error: play-pause-toggle has changed, while action is not play-pause-type."
 msgstr ""
 "Błąd: graj-pauza-przełącz zmienione, podczas gdy akcja nie jest typu graj-"
 "pauza-przełącz."
 
-#: src/ActionGUI.cpp:501
+#: src/ActionGUI.cpp:504
 msgid ""
 "Error: octave has changed, while action is not transpose-by-octave type."
 msgstr ""
 "Błąd: oktawa została zmieniona, podczas gdy akcja nie jest typu "
 "transponowania oktawy."
 
-#: src/ActionGUI.cpp:512
+#: src/ActionGUI.cpp:515
 msgid "Error: pattern has changed, while action is not pattern-type."
 msgstr ""
 "Błąd: wzór został zmieniony, podczas gdy akcja nie jest typu zmiany wzoru."
+
+#: src/ActionGUI.cpp:527
+#, fuzzy
+msgid "Error: apply octave has changed, while action is not change-chord-type."
+msgstr "Błąd: nuta została zmieniona, podczas gdy akcja nie jest typu nuty."
 
 #: src/TreeModels.cpp:48 src/TreeModels.cpp:68
 msgid "Empty"
@@ -891,103 +892,103 @@ msgstr "Trójdźwięk"
 msgid "Guitar"
 msgstr "Gitara"
 
-#: src/Chord.cpp:270
+#: src/Chord.cpp:271
 #, c-format
 msgid "Custom: %d, %d, %d, %d, %d, %d (base: %d)"
 msgstr "Własny: %d, %d, %d, %d, %d, %d (baza: %d)"
 
-#: src/Chord.cpp:272
+#: src/Chord.cpp:273
 #, c-format
 msgid "Custom: %d, %d, %d, %d, %d, %d"
 msgstr "Własny: %d, %d, %d, %d, %d, %d"
 
-#: src/Chord.cpp:276
+#: src/Chord.cpp:277
 #, c-format
 msgid "Guitar: %s major, octave: %d"
 msgstr "Gitara: %s dur, oktawa: %d"
 
-#: src/Chord.cpp:278
+#: src/Chord.cpp:279
 #, c-format
 msgid "Guitar: %s minor, octave: %d"
 msgstr "Gitara: %s moll, oktawa: %d"
 
-#: src/Chord.cpp:284
+#: src/Chord.cpp:285
 #, c-format
 msgid "Triad: %s major, octave: %d"
 msgstr "Trójdźwięk: %s dur, oktawa: %d"
 
-#: src/Chord.cpp:286
+#: src/Chord.cpp:287
 #, c-format
 msgid "Triad: %s major, octave: %d, inversion: %d"
 msgstr "Trójdźwięk: %s dur, oktawa: %d, przewrót: %d"
 
-#: src/Chord.cpp:290
+#: src/Chord.cpp:291
 #, c-format
 msgid "Triad: %s minor, octave: %d"
 msgstr "Trójdźwięk: %s moll, oktawa: %d"
 
-#: src/Chord.cpp:292
+#: src/Chord.cpp:293
 #, c-format
 msgid "Triad: %s minor, octave: %d, inversion: %d"
 msgstr "Trójdźwięk: %s moll, oktawa: %d, przewrót: %d"
 
-#: src/Chord.cpp:296
+#: src/Chord.cpp:297
 #, c-format
 msgid "Triad: %s augmented, octave: %d"
 msgstr "Trójdźwięk: %s zwiększony, oktawa: %d"
 
-#: src/Chord.cpp:298
+#: src/Chord.cpp:299
 #, c-format
 msgid "Triad: %s augmented, octave: %d, inversion: %d"
 msgstr "Trójdźwięk: %s zwiększony, oktawa: %d, przewrót: %d"
 
-#: src/Chord.cpp:302
+#: src/Chord.cpp:303
 #, c-format
 msgid "Triad: %s diminisched, octave: %d"
 msgstr "Trójdźwięk: %s zmniejszony, oktawa: %d"
 
-#: src/Chord.cpp:304
+#: src/Chord.cpp:305
 #, c-format
 msgid "Triad: %s diminisched, octave: %d, inversion: %d"
 msgstr "Trójdźwięk: %s zmniejszony, oktawa: %d, przewrót: %d"
 
-#: src/ChordWidget.cpp:44
+#: src/ChordWidget.cpp:45
 msgid "<b>Chord</b>"
 msgstr "<b>Akord</b>"
 
-#: src/ChordWidget.cpp:45
+#: src/ChordWidget.cpp:46
 msgid "Inversion: "
 msgstr "Przewrót: "
 
-#: src/ChordWidget.cpp:46
+#: src/ChordWidget.cpp:47
 msgid "Type: "
 msgstr "Typ: "
 
-#: src/ChordWidget.cpp:63
+#: src/ChordWidget.cpp:64
 msgid "Sets <b>type</b> of this chord."
 msgstr "Określa <b>typ</b> tego akordu."
 
-#: src/ChordWidget.cpp:64 src/ChordWidget.cpp:65
+#: src/ChordWidget.cpp:65 src/ChordWidget.cpp:66
 msgid "Sets <b>mode</b> of this chord."
 msgstr "Określa <b>tryb</b> tego akordu."
 
-#: src/ChordWidget.cpp:66
+#: src/ChordWidget.cpp:67
 msgid "Sets <b>root</b> of this chord."
 msgstr "Określa <b>podstawę</b> tego akordu."
 
-#: src/ChordWidget.cpp:72
+#: src/ChordWidget.cpp:73
 msgid "Octave:"
 msgstr "Oktawa:"
 
-#: src/ChordWidget.cpp:78
+#: src/ChordWidget.cpp:79
 msgid "Sets the <b>inversion</b> of the triad."
 msgstr "Ustawia <b>przewrót</b> trójdźwięku."
 
-#: src/ChordWidget.cpp:81
+#: src/ChordWidget.cpp:82
 msgid "Base:"
 msgstr "Baza:"
 
-#: src/ChordWidget.cpp:83
+#: src/ChordWidget.cpp:84
 msgid ""
 "Sets whether this chord uses the base note.\n"
 " - If on, chord notes are set relatively to the base note.\n"
@@ -997,11 +998,11 @@ msgstr ""
 " - Jeżeli włączone, nuty akordu są ustawione względem nuty bazowej\n"
 " - Jeżeli wyłączone, akord ignoruje nutę bazową."
 
-#: src/ChordWidget.cpp:84
+#: src/ChordWidget.cpp:85
 msgid "\tNote:"
 msgstr "\tNuta:"
 
-#: src/ChordWidget.cpp:91
+#: src/ChordWidget.cpp:92
 msgid ""
 "The <b>base note</b> for this chord. If it uses the base, which is "
 "determined by the switch on the left-hand side, all notes of this chord are "
@@ -1010,6 +1011,14 @@ msgstr ""
 "<b>Nuta bazowa</b> tego akordu. Jeżeli ten akord używa bazy, co jest "
 "określone przez przełącznik po lewej stronie, wszystkie nuty tego akordu są "
 "podane względem nuty głównej."
+
+#: src/ChordWidget.cpp:94
+msgid "Do not change chord's octave"
+msgstr ""
+
+#: src/ChordWidget.cpp:95
+msgid "If checked, the octave will not be applied to the chord."
+msgstr ""
 
 #: src/Configuration.cpp:133
 #, c-format
@@ -1210,8 +1219,7 @@ msgstr ""
 
 #: src/SequencerWidget.cpp:135
 msgid "Selects the <b>MIDI channel</b> this sequencer will output notes to. "
-msgstr ""
-"Wybiera <b>kanał MIDI</b> do którego odtwarzać będzie ten sekwencer. "
+msgstr "Wybiera <b>kanał MIDI</b> do którego odtwarzać będzie ten sekwencer. "
 
 #: src/SequencerWidget.cpp:139
 msgid "ON/OFF"
@@ -1302,7 +1310,6 @@ msgstr ""
 msgid "Error - cannot colorize triggered action: row is empty.\n"
 msgstr "Błąd - nie można pokolorować wywołanej akcji: wiersz jest pusty.\n"
 
-#, c-format
 #~ msgid "harmonySEQ, version %s\n"
 #~ msgstr "harmonySEQ, wersja %s\n"
 
@@ -1318,7 +1325,6 @@ msgstr "Błąd - nie można pokolorować wywołanej akcji: wiersz jest pusty.\n"
 #~ msgid ", name is: "
 #~ msgstr ", nazwa to: "
 
-#, c-format
 #~ msgid ""
 #~ "    -p --ports n     sets ports number to n\n"
 #~ "    -d --debug       enters debug mode, prints lots of debug messeges\n"
@@ -1340,7 +1346,6 @@ msgstr "Błąd - nie można pokolorować wywołanej akcji: wiersz jest pusty.\n"
 #~ msgid "Muted"
 #~ msgstr "Wyciszony"
 
-#, c-format
 #~ msgid ""
 #~ "harmonySEQ, version %s\n"
 #~ "\n"
@@ -1370,7 +1375,6 @@ msgstr "Błąd - nie można pokolorować wywołanej akcji: wiersz jest pusty.\n"
 #~ msgid "Mute"
 #~ msgstr "Wycisz"
 
-#, c-format
 #~ msgid "ERROR - error while trying to read %s\n"
 #~ msgstr "BŁĄD - błąd podczas czytania pliku %s\n"
 
@@ -1386,14 +1390,13 @@ msgstr "Błąd - nie można pokolorować wywołanej akcji: wiersz jest pusty.\n"
 #~ msgid "Len"
 #~ msgstr "Dł"
 
-#, c-format
 #~ msgid ""
-#~ "       --pass-midi   passes the midi events through the program by default\n"
+#~ "       --pass-midi   passes the midi events through the program by "
+#~ "default\n"
 #~ msgstr ""
 #~ "       --pass-midi   włącz domyślnie przesyłanie wszystkich zdarzeń MIDI "
 #~ "przez program.\n"
 
-#, c-format
 #~ msgid "When note %d on channel %d is moved..."
 #~ msgstr "Gdy kontroler %d na kanale %d jest poruszany..."
 
@@ -1403,38 +1406,30 @@ msgstr "Błąd - nie można pokolorować wywołanej akcji: wiersz jest pusty.\n"
 #~ msgid "Note"
 #~ msgstr "Nuta"
 
-#, c-format
 #~ msgid "Set tempo to %d"
 #~ msgstr "Ustaw tempo na %d"
 
-#, c-format
 #~ msgid "Set volume of sequencer %d to %d"
 #~ msgstr "Ustaw głośność sekwencera %d na %d"
 
-#, c-format
 #~ msgid "Set main note to %d"
 #~ msgstr "Ustaw nutę główną na %d"
 
-#, c-format
 #~ msgid "(empty event)"
 #~ msgstr "(puste zdarzenie)"
 
 #~ msgid "Vol"
 #~ msgstr "Gł"
 
-#, c-format
 #~ msgid "Switch sequencer %d ON"
 #~ msgstr "Włącz sekewncer %d"
 
-#, c-format
 #~ msgid "Switch sequencer %d OFF"
 #~ msgstr "Wyłącz sekwencer %d"
 
-#, c-format
 #~ msgid "Toggle sequencer %d"
 #~ msgstr "Przełącz sekwencer %d"
 
-#, c-format
 #~ msgid "%d (which was removed)"
 #~ msgstr "%d (który został usunięty)"
 
@@ -1453,22 +1448,19 @@ msgstr "Błąd - nie można pokolorować wywołanej akcji: wiersz jest pusty.\n"
 #~ msgid "Sequencer/Toggle"
 #~ msgstr "Sekwencer/Przełącz"
 
-#, c-format
 #~ msgid "Set volume of sequencer '%s' to %d"
 #~ msgstr "Ustaw głośność sekwencera '%s' na %d"
 
 #~ msgid "Error: sequencer has changed, while action is not key-type."
 #~ msgstr ""
-#~ "Błąd: sekwencer został zmieniony, podczas gdy akcja nie jest typu sekwencera."
-
-#~ msgid "Error: note has changed, while action is not note-type."
-#~ msgstr "Błąd: nuta została zmieniona, podczas gdy akcja nie jest typu nuty."
+#~ "Błąd: sekwencer został zmieniony, podczas gdy akcja nie jest typu "
+#~ "sekwencera."
 
 #~ msgid "Error: volume has changed, while action is not volume-type."
 #~ msgstr ""
-#~ "Błąd: Głośność została zmieniona, podczas gdy akcja nie jest typu głośności."
+#~ "Błąd: Głośność została zmieniona, podczas gdy akcja nie jest typu "
+#~ "głośności."
 
-#, c-format
 #~ msgid ""
 #~ "harmonySEQ, version %s\n"
 #~ "\n"
@@ -1502,13 +1494,12 @@ msgstr "Błąd - nie można pokolorować wywołanej akcji: wiersz jest pusty.\n"
 #~ msgstr "Sekwencer/Ustaw wszystkie nuty"
 
 #~ msgid ""
-#~ "Error: one of 6 notes to set has changed, while action is not of change-all-"
-#~ "notes type."
+#~ "Error: one of 6 notes to set has changed, while action is not of change-"
+#~ "all-notes type."
 #~ msgstr ""
-#~ "Błąd: jedna z 6 nut do ustawienia została zmieniona, podczas gdy akcja nie "
-#~ "jest typy zmien-wszystkie-nuty."
+#~ "Błąd: jedna z 6 nut do ustawienia została zmieniona, podczas gdy akcja "
+#~ "nie jest typy zmien-wszystkie-nuty."
 
-#, c-format
 #~ msgid "Set notes of sequencer '%s' to %d,%d,%d,%d,%d,%d "
 #~ msgstr "Ustaw nuty sekwencera '%s' na %d,%d,%d,%d,%d,%d "
 
@@ -1516,32 +1507,27 @@ msgstr "Błąd - nie można pokolorować wywołanej akcji: wiersz jest pusty.\n"
 #~ "Critical ERROR: Trying to get name of sequencer outside of sequencers "
 #~ "vector.\n"
 #~ msgstr ""
-#~ "BŁĄD krytyczny: Próba zdobycia nazwy sekwencera poza wektorem sekwencerów.\n"
+#~ "BŁĄD krytyczny: Próba zdobycia nazwy sekwencera poza wektorem "
+#~ "sekwencerów.\n"
 
-#, c-format
 #~ msgid "Guitar: %s major"
 #~ msgstr "Gitara: %s-dur"
 
-#, c-format
 #~ msgid "Triad: %s augumented"
 #~ msgstr "Trójdźwięk: %s-zwiększony"
 
-#, c-format
 #~ msgid "Triad: %s minor"
 #~ msgstr "Trójdźwięk: %s-moll"
 
-#, c-format
 #~ msgid "Triad: %s major"
 #~ msgstr "Trójdźwięk: %s-dur"
 
-#, c-format
 #~ msgid "Guitar: %s minor"
 #~ msgstr "Gitara: %s-moll"
 
 #~ msgid "Guitar mode"
 #~ msgstr "Tryb gitary"
 
-#, c-format
 #~ msgid "Triad: %s diminished"
 #~ msgstr "Trójdźwięk: %s-zmniejszony"
 
@@ -1574,7 +1560,6 @@ msgstr "Błąd - nie można pokolorować wywołanej akcji: wiersz jest pusty.\n"
 #~ msgid "Sequencer/Set active melody"
 #~ msgstr "Sekwencer/Ustaw aktywną melodię"
 
-#, c-format
 #~ msgid "Set active melody of sequencer '%s' to %d"
 #~ msgstr "Ustaw aktywną melodię sekwencera '%s' na %d"
 
@@ -1608,8 +1593,8 @@ msgstr "Błąd - nie można pokolorować wywołanej akcji: wiersz jest pusty.\n"
 #~ msgid ""
 #~ "Cathes next event end fill this one's type and arguments to fit the one "
 #~ "triggered.\n"
-#~ "<i>Example usage: press this button and then the X key on yout keyboard. The "
-#~ "event will be automatically set to type: keyboard, key: X.</i>"
+#~ "<i>Example usage: press this button and then the X key on yout keyboard. "
+#~ "The event will be automatically set to type: keyboard, key: X.</i>"
 #~ msgstr ""
 #~ "Przechwytuje następne zdarzenie i wypełnia te tak, by pasowało do "
 #~ "przechwyconego zdarzenia.\n"
