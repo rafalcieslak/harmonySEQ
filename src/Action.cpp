@@ -206,9 +206,9 @@ Glib::ustring Action::GetLabel(){
             break;
         case SEQ_TRANSPOSE_OCTAVE:
             if (args[2] < 0){
-                sprintf(temp,_("Transpose sequencer '%s's chord %d octaves down"),GetSeqName(args[1]).c_str(),-1*args[2]);
+                sprintf(temp,_("Decrease sequencer '%s' chord's  octave by %d"),GetSeqName(args[1]).c_str(),-1*args[2]);
             }else{
-                sprintf(temp,_("Transpose sequencer '%s's chord %d octaves up"),GetSeqName(args[1]).c_str(),args[2]);
+                sprintf(temp,_("Increase sequencer '%s's chord's octave by %d"),GetSeqName(args[1]).c_str(),args[2]);
             }
             break;
         case NONE:

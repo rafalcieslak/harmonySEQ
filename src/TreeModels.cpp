@@ -83,7 +83,7 @@ void InitActionTypesTreeModel(){
     row[m_columns_action_types.label] = _("Sequencer/Set chord");
     row = *(TreeModel_ActionTypes->append());
     row[m_columns_action_types.type] = Action::SEQ_TRANSPOSE_OCTAVE;
-    row[m_columns_action_types.label] = _("Sequencer/Transpose by octave");
+    row[m_columns_action_types.label] = _("Sequencer/Change chord's octave");
     row = *(TreeModel_ActionTypes->append());
     row[m_columns_action_types.type] = Action::SEQ_CHANGE_PATTERN;
     row[m_columns_action_types.label] = _("Sequencer/Set active pattern");
