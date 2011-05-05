@@ -274,9 +274,9 @@ Glib::ustring Chord::GetName(bool do_not_use_octave){
     switch (type){
         case CHORD_TYPE_CUSTOM:
             if (base_use)
-                sprintf(temp,_("Custom: %d, %d, %d, %d, %d, %d (base: %d)"),notes[0],notes[1],notes[2],notes[3],notes[4],notes[5],base);
+                sprintf(temp2,_("Custom: %d, %d, %d, %d, %d, %d (base: %d)"),notes[0],notes[1],notes[2],notes[3],notes[4],notes[5],base);
             else
-                sprintf(temp,_("Custom: %d, %d, %d, %d, %d, %d"),notes[0],notes[1],notes[2],notes[3],notes[4],notes[5]);
+                sprintf(temp2,_("Custom: %d, %d, %d, %d, %d, %d"),notes[0],notes[1],notes[2],notes[3],notes[4],notes[5]);
             break;
         case CHORD_TYPE_GUITAR:
             if (mode_guitar == CHORD_GUITAR_MODE_MAJOR){
