@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2011-05-05 20:12+0200\n"
+"POT-Creation-Date: 2011-05-06 20:50+0200\n"
 "PO-Revision-Date: 2010-12-18 08:17+0000\n"
 "Last-Translator: Launchpad Translations Administrators <rosetta@launchpad."
 "net>\n"
@@ -816,6 +816,11 @@ msgstr ""
 
 #: src/TreeModels.cpp:213
 msgid "Guitar"
+msgstr ""
+
+#: src/Chord.cpp:272
+#, c-format
+msgid "octave: %d"
 msgstr ""
 
 #: src/Chord.cpp:277

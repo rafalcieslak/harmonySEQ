@@ -269,7 +269,7 @@ Glib::ustring Chord::GetName(bool do_not_use_octave){
     char temp2[100];
     char octave[100];
     bool use_octave = !do_not_use_octave;
-    if(use_octave) sprintf(octave,"octave: %d",base_octave);
+    if(use_octave) sprintf(octave,_("octave: %d"),base_octave);
     Glib::ustring a;
     switch (type){
         case CHORD_TYPE_CUSTOM:
