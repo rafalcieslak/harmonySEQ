@@ -25,6 +25,7 @@
 ChordWidget::ChordWidget(){
 
     AnythingSelected = 0;
+    show_dnao = 0;
     chord = NULL;
 
     we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = true;
