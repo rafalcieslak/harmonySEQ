@@ -7,17 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2011-05-07 21:38+0200\n"
+"POT-Creation-Date: 2011-05-06 20:50+0200\n"
 "PO-Revision-Date: 2010-12-18 08:38+0000\n"
-"Last-Translator: Launchpad Translations Administrators <rosetta@launchpad."
-"net>\n"
+"Last-Translator: Launchpad Translations Administrators "
+"<rosetta@launchpad.net>\n"
 "Language-Team: Turkish <tr@li.org>\n"
-"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-07 05:23+0000\n"
+"X-Launchpad-Export-Date: 2011-05-08 05:06+0000\n"
 "X-Generator: Launchpad (build 12959)\n"
+"Language: tr\n"
 
 #: src/main.cpp:286
 #, c-format
@@ -702,11 +702,13 @@ msgid "Error: velocity has changed, while action is not velocity-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:447
-msgid "Error: note to set has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note to set has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:458
-msgid "Error: note number has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note number has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:471
@@ -729,7 +731,8 @@ msgid "Error: pattern has changed, while action is not pattern-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:527
-msgid "Error: apply octave has changed, while action is not change-chord-type."
+msgid ""
+"Error: apply octave has changed, while action is not change-chord-type."
 msgstr ""
 
 #: src/TreeModels.cpp:48 src/TreeModels.cpp:68
@@ -885,65 +888,65 @@ msgstr ""
 msgid "Triad: %s diminisched, inversion: %d"
 msgstr ""
 
-#: src/ChordWidget.cpp:46
+#: src/ChordWidget.cpp:45
 msgid "<b>Chord</b>"
 msgstr ""
 
-#: src/ChordWidget.cpp:47
+#: src/ChordWidget.cpp:46
 msgid "Inversion: "
 msgstr ""
 
-#: src/ChordWidget.cpp:48
+#: src/ChordWidget.cpp:47
 msgid "Type: "
 msgstr ""
 
-#: src/ChordWidget.cpp:65
+#: src/ChordWidget.cpp:64
 msgid "Sets <b>type</b> of this chord."
 msgstr ""
 
-#: src/ChordWidget.cpp:66 src/ChordWidget.cpp:67
+#: src/ChordWidget.cpp:65 src/ChordWidget.cpp:66
 msgid "Sets <b>mode</b> of this chord."
 msgstr ""
 
-#: src/ChordWidget.cpp:68
+#: src/ChordWidget.cpp:67
 msgid "Sets <b>root</b> of this chord."
 msgstr ""
 
-#: src/ChordWidget.cpp:74
+#: src/ChordWidget.cpp:73
 msgid "Octave:"
 msgstr ""
 
-#: src/ChordWidget.cpp:80
+#: src/ChordWidget.cpp:79
 msgid "Sets the <b>inversion</b> of the triad."
 msgstr ""
 
-#: src/ChordWidget.cpp:83
+#: src/ChordWidget.cpp:82
 msgid "Base:"
 msgstr ""
 
-#: src/ChordWidget.cpp:85
+#: src/ChordWidget.cpp:84
 msgid ""
 "Sets whether this chord uses the base note.\n"
 " - If on, chord notes are set relatively to the base note.\n"
 " - If off, the chord ignores the base note."
 msgstr ""
 
-#: src/ChordWidget.cpp:86
+#: src/ChordWidget.cpp:85
 msgid "\tNote:"
 msgstr ""
 
-#: src/ChordWidget.cpp:93
+#: src/ChordWidget.cpp:92
 msgid ""
 "The <b>base note</b> for this chord. If it uses the base, which is "
 "determined by the switch on the left-hand side, all notes of this chord are "
 "given relatively to this base note."
 msgstr ""
 
-#: src/ChordWidget.cpp:95
+#: src/ChordWidget.cpp:94
 msgid "Do not change chord's octave"
 msgstr ""
 
-#: src/ChordWidget.cpp:96
+#: src/ChordWidget.cpp:95
 msgid "If checked, the octave will not be applied to the chord."
 msgstr ""
 
