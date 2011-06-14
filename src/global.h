@@ -32,9 +32,9 @@
 #include <gdkmm-2.4/gdkmm/pixbuf.h>
 #include "gettext.h"
 
-#define VERSION_STRING "0.15"//VERSION is provided by autotools in config.h
+#define VERSION_STRING "0.16"//VERSION is provided by autotools in config.h
 #define VERSION_A 0
-#define VERSION_B 15
+#define VERSION_B 16
 #define VERSION_C 0
 
 #define ENDL "\n"
