@@ -18,6 +18,7 @@
 */
 
 #include "messages.h"
+#include <ctime>
 
 debug::debug(int debug) {
     if (debug != 0){
@@ -64,6 +65,14 @@ debug & operator <<(debug &dbg, int number){
     dbg.say(temp);
     return dbg;
 }
+/*
+debug & operator <<(debug &dbg, double number){
+    if(!dbg.debug_mode) return dbg;
+    char temp[20];
+    sprintf(temp,"%f",number);
+    dbg.say(temp);
+    return dbg;
+}*/
 //================================================
 
 error::error() {
@@ -92,6 +101,12 @@ error & operator <<(error &err, int number){
     err.say(temp);
     return err;
 }
+//error & operator <<(error &err, double number){
+//    char temp[20];
+//    sprintf(temp,"%f",number);
+//    err.say(temp);
+//    return err;
+//}
 
 
 error & operator <<(error &err, Glib::ustring message){
@@ -100,4 +115,24 @@ error & operator <<(error &err, Glib::ustring message){
     err.say(message.c_str());
     return err;
 
+}
+
+//======================
+
+timer::timer(bool start){
+    if(start) Start();
+}
+
+void timer::Start(){
+    starttime = clock();
+}
+
+double timer::Stop(){
+    clock_t temp = clock() - starttime;
+    time = temp/CLOCKS_PER_SEC;
+    return time;
+}
+
+double timer::Time(){
+    return time;
 }
