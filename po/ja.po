@@ -1,33 +1,31 @@
-# English (United Kingdom) translation for harmonyseq
-# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+# Japanese translation for harmonyseq
+# Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
 # This file is distributed under the same license as the harmonyseq package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
-"Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-05-07 21:38+0200\n"
-"PO-Revision-Date: 2011-03-19 17:06+0000\n"
-"Last-Translator: Launchpad Translations Administrators "
-"<rosetta@launchpad.net>\n"
-"Language-Team: English (United Kingdom) <en_GB@li.org>\n"
+"PO-Revision-Date: 2011-06-23 23:41+0000\n"
+"Last-Translator: Nel Pogorzelska <Unknown>\n"
+"Language-Team: Japanese <ja@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-06-22 05:01+0000\n"
+"X-Launchpad-Export-Date: 2011-06-24 05:18+0000\n"
 "X-Generator: Launchpad (build 13168)\n"
-"Language: en_GB\n"
 
 #: src/main.cpp:286
 #, c-format
 msgid "unknown option '%c'\n"
-msgstr "unknown option '%c'\n"
+msgstr ""
 
 #: src/main.cpp:289
 #, c-format
 msgid "unrecognized option '%s'\n"
-msgstr "unrecognized option '%s'\n"
+msgstr ""
 
 #: src/main.cpp:373
 #, c-format
@@ -45,7 +43,7 @@ msgstr ""
 
 #: src/MainWindow.cpp:44 src/ActionGUI.cpp:129
 msgid "Tempo:"
-msgstr "Tempo:"
+msgstr ""
 
 #: src/MainWindow.cpp:50
 msgid "File"
@@ -61,7 +59,7 @@ msgstr ""
 
 #: src/MainWindow.cpp:53
 msgid "New"
-msgstr ""
+msgstr "新規"
 
 #: src/MainWindow.cpp:53
 msgid "Creates a new file."
@@ -69,7 +67,7 @@ msgstr ""
 
 #: src/MainWindow.cpp:54
 msgid "Open"
-msgstr "Open"
+msgstr ""
 
 #: src/MainWindow.cpp:54
 msgid "Opens a file."
@@ -77,7 +75,7 @@ msgstr ""
 
 #: src/MainWindow.cpp:55
 msgid "Save"
-msgstr "Save"
+msgstr ""
 
 #: src/MainWindow.cpp:55
 msgid "Saves the current file."
@@ -109,7 +107,7 @@ msgstr ""
 
 #: src/MainWindow.cpp:59 src/SequencerWidget.cpp:119
 msgid "Add"
-msgstr "Add"
+msgstr ""
 
 #: src/MainWindow.cpp:59
 msgid "Adds a new seqencer"
@@ -118,7 +116,7 @@ msgstr ""
 #: src/MainWindow.cpp:60 src/MainWindow.cpp:68 src/SequencerWidget.cpp:121
 #: src/EventsWidget.cpp:40
 msgid "Remove"
-msgstr "Remove"
+msgstr ""
 
 #: src/MainWindow.cpp:60
 msgid "Removes selected sequencer"
@@ -150,7 +148,7 @@ msgstr ""
 
 #: src/MainWindow.cpp:65
 msgid "Pass MIDI events"
-msgstr "Pass MIDI events"
+msgstr ""
 
 #: src/MainWindow.cpp:65
 msgid "States whether MIDI events are passed-through harmonySEQ."
@@ -214,11 +212,11 @@ msgstr ""
 
 #: src/MainWindow.cpp:213 src/SettingsWindow.cpp:73
 msgid "Name"
-msgstr "Name"
+msgstr ""
 
 #: src/MainWindow.cpp:218 src/ActionGUI.cpp:135
 msgid "On"
-msgstr "On"
+msgstr ""
 
 #: src/MainWindow.cpp:225 src/SettingsWindow.cpp:74 src/SettingsWindow.cpp:75
 msgid "Channel"
@@ -307,8 +305,7 @@ msgstr ""
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
-"  Marqin https://launchpad.net/~marqin\n"
-"  Rafal Cieslak https://launchpad.net/~rafalcieslak256"
+"  Nel Pogorzelska https://launchpad.net/~neriel"
 
 #: src/MainWindow.cpp:668
 msgid "Are sure you want to loose them?"
@@ -320,7 +317,7 @@ msgstr ""
 
 #: src/MainWindow.cpp:713
 msgid "Choose a file to save..."
-msgstr "Choose a file to save..."
+msgstr ""
 
 #: src/MainWindow.cpp:744
 #, c-format
@@ -333,38 +330,38 @@ msgstr ""
 
 #: src/MidiDriver.cpp:87
 msgid "Failed to open ALSA sequencer.\n"
-msgstr "Failed to open ALSA sequencer.\n"
+msgstr ""
 
 #: src/MidiDriver.cpp:99
 msgid "Failed to create output port.\n"
-msgstr "Failed to create output port.\n"
+msgstr ""
 
 #: src/MidiDriver.cpp:108
 msgid "Failed to create input port.\n"
-msgstr "Failed to create input port.\n"
+msgstr ""
 
 #: src/MidiDriver.cpp:114
 msgid "Alsa midi driver init successfull.\n"
-msgstr "Alsa midi driver init successfull.\n"
+msgstr ""
 
 #: src/Sequencer.cpp:42
 #, c-format
 msgid "seq %d"
-msgstr "seq %d"
+msgstr ""
 
 #: src/messages.cpp:24
 #, c-format
 msgid "Debug mode started.\n"
-msgstr "Debug mode started.\n"
+msgstr ""
 
 #: src/Files.cpp:72
 #, c-format
 msgid "ERROR - error while opening file %s to write.\n"
-msgstr "ERROR - error while opening file %s to write.\n"
+msgstr ""
 
 #: src/Files.cpp:176
 msgid "Choose a file to open..."
-msgstr "Choose a file to open..."
+msgstr ""
 
 #: src/Files.cpp:249
 #, c-format
@@ -426,27 +423,27 @@ msgstr ""
 #: src/Event.cpp:55
 #, c-format
 msgid "When note %d on any channel gets on..."
-msgstr "When note %d on any channel gets on..."
+msgstr ""
 
 #: src/Event.cpp:56
 #, c-format
 msgid "When note %d on channel %d gets on..."
-msgstr "When note %d on channel %d gets on..."
+msgstr ""
 
 #: src/Event.cpp:59
 #, c-format
 msgid "When key %s is pressed..."
-msgstr "When key %s is pressed..."
+msgstr ""
 
 #: src/Event.cpp:63
 #, c-format
 msgid "This is an empty event, that will never be triggered."
-msgstr "This is an empty event, that will never be triggered."
+msgstr ""
 
 #: src/Event.cpp:67
 #, c-format
 msgid "When controller %d on any channel is moved..."
-msgstr "When controller %d on any channel is moved..."
+msgstr ""
 
 #: src/Event.cpp:68
 #, c-format
@@ -465,11 +462,11 @@ msgstr ""
 
 #: src/Event.cpp:142
 msgid "Error - empty event would be triggered.\n"
-msgstr "Error - empty event would be triggered.\n"
+msgstr ""
 
 #: src/EventGUI.cpp:30
 msgid "Event"
-msgstr "Event"
+msgstr ""
 
 #: src/EventGUI.cpp:56
 #, c-format
@@ -1061,7 +1058,7 @@ msgstr ""
 
 #: src/SequencerWidget.cpp:112
 msgid "MIDI channel:"
-msgstr "MIDI channel:"
+msgstr ""
 
 #: src/SequencerWidget.cpp:114
 msgid "Active pattern:"
@@ -1135,7 +1132,7 @@ msgstr ""
 
 #: src/SequencerWidget.cpp:144
 msgid "Resolution:"
-msgstr "Resolution:"
+msgstr ""
 
 #: src/SequencerWidget.cpp:153
 msgid ""
@@ -1147,7 +1144,7 @@ msgstr ""
 
 #: src/SequencerWidget.cpp:158
 msgid "Length:"
-msgstr "Length:"
+msgstr ""
 
 #: src/SequencerWidget.cpp:170
 msgid ""
@@ -1190,83 +1187,16 @@ msgstr ""
 
 #: src/EventsWidget.cpp:50
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #: src/EventsWidget.cpp:54
 msgid "Events"
-msgstr "Events"
+msgstr ""
 
 #: src/EventsWidget.cpp:117
 msgid "Error - cannot colorize triggered event: row is empty.\n"
-msgstr "Error - cannot colorize triggered event: row is empty.\n"
+msgstr ""
 
 #: src/EventsWidget.cpp:135
 msgid "Error - cannot colorize triggered action: row is empty.\n"
 msgstr ""
-
-#~ msgid "Apply main note"
-#~ msgstr "Apply main note"
-
-#~ msgid ", name is: "
-#~ msgstr ", name is: "
-
-#~ msgid "Clone"
-#~ msgstr "Clone"
-
-#, c-format
-#~ msgid ""
-#~ "       --pass-midi   passes the midi events through the program by default\n"
-#~ msgstr ""
-#~ "       --pass-midi   passes the midi events through the program by default\n"
-
-#~ msgid "Chan"
-#~ msgstr "Chan"
-
-#, c-format
-#~ msgid "ERROR - error while trying to read %s\n"
-#~ msgstr "ERROR - error while trying to read %s\n"
-
-#~ msgid "MN"
-#~ msgstr "MN"
-
-#~ msgid "Main Note:"
-#~ msgstr "Main Note:"
-
-#~ msgid "Len"
-#~ msgstr "Len"
-
-#~ msgid "Res"
-#~ msgstr "Res"
-
-#, c-format
-#~ msgid "When note %d on channel %d is moved..."
-#~ msgstr "When note %d on channel %d is moved..."
-
-#, c-format
-#~ msgid ""
-#~ "harmonySEQ, version %s\n"
-#~ "\n"
-#~ "usage: harmonySEQ [-hdvp]\n"
-#~ "\n"
-#~ "    -p --ports n     sets ports number to n\n"
-#~ "    -d --debug       enters debug mode, prints lots of debug messeges\n"
-#~ "    -h --help        prints this help messase and exits\n"
-#~ "    -v --version     prints the program version\n"
-#~ msgstr ""
-#~ "harmonySEQ, version %s\n"
-#~ "\n"
-#~ "usage: harmonySEQ [-hdvp]\n"
-#~ "\n"
-#~ "    -p --ports n     sets ports number to n\n"
-#~ "    -d --debug       enters debug mode, prints lots of debug messeges\n"
-#~ "    -h --help        prints this help messase and exits\n"
-#~ "    -v --version     prints the program version\n"
-
-#~ msgid "activated row "
-#~ msgstr "activated row "
-
-#~ msgid "sequencer"
-#~ msgstr "sequencer"
-
-#~ msgid "The file had unsaved changes."
-#~ msgstr "The file has unsaved changes."
