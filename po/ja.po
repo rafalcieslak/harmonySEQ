@@ -6,11 +6,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-05-07 21:38+0200\n"
+"Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
+"POT-Creation-Date: 2011-06-27 22:32+0200\n"
 "PO-Revision-Date: 2011-06-25 22:31+0000\n"
 "Last-Translator: Rafal Cieslak <rafalcieslak256@gmail.com>\n"
 "Language-Team: Japanese <ja@li.org>\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -350,7 +351,7 @@ msgstr ""
 msgid "seq %d"
 msgstr ""
 
-#: src/messages.cpp:24
+#: src/messages.cpp:25
 #, c-format
 msgid "Debug mode started.\n"
 msgstr ""
@@ -698,13 +699,11 @@ msgid "Error: velocity has changed, while action is not velocity-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:447
-msgid ""
-"Error: note to set has changed, while action is not set-seq-note-type."
+msgid "Error: note to set has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:458
-msgid ""
-"Error: note number has changed, while action is not set-seq-note-type."
+msgid "Error: note number has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:471
@@ -727,8 +726,7 @@ msgid "Error: pattern has changed, while action is not pattern-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:527
-msgid ""
-"Error: apply octave has changed, while action is not change-chord-type."
+msgid "Error: apply octave has changed, while action is not change-chord-type."
 msgstr ""
 
 #: src/TreeModels.cpp:48 src/TreeModels.cpp:68

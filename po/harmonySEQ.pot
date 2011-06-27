@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: harmonySEQ 0.15\n"
+"Project-Id-Version: harmonySEQ 0.16\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2011-05-07 21:38+0200\n"
+"POT-Creation-Date: 2011-06-27 22:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -347,7 +347,7 @@ msgstr ""
 msgid "seq %d"
 msgstr ""
 
-#: src/messages.cpp:24
+#: src/messages.cpp:25
 #, c-format
 msgid "Debug mode started.\n"
 msgstr ""
