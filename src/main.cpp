@@ -357,7 +357,7 @@ int main(int argc, char** argv) {
     threadb Th;
     //And creating both threads.
     Glib::Thread::create(sigc::mem_fun(Th, &threadb::th1), 0,true,1,Glib::THREAD_PRIORITY_URGENT);
-    Glib::Thread::create(sigc::mem_fun(Th, &threadb::th2), true);
+    Glib::Thread::create(sigc::mem_fun(Th, &threadb::th2),0, true,1,Glib::THREAD_PRIORITY_LOW);
 
     //Wait for signal to exit the program
     while (running == 1)

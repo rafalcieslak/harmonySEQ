@@ -456,7 +456,7 @@ void MainWindow::RefreshRow(Gtk::TreeRow row){
     seqHandle h = row[m_columns_sequencers.col_handle];
     //*dbg << h << ENDL;
     Sequencer* seq = seqH(h);
-    /*
+    
     row[m_columns_sequencers.col_muted] = seq->GetOn();
     row[m_columns_sequencers.col_name] = seq->GetName();
     row[m_columns_sequencers.col_channel] = seq->GetChannel();
@@ -473,7 +473,7 @@ void MainWindow::RefreshRow(Gtk::TreeRow row){
         row[m_columns_sequencers.col_colour] = "gold";
     }else{
         row[m_columns_sequencers.col_colour] = "white";
-    }*/
+    }
 }
 
 void MainWindow::OnRemoveClicked(){
