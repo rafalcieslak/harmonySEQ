@@ -55,10 +55,10 @@ AC_PATH_PROG(UPDATE_MIME_DB, update-mime-database, no)
 if test "x$UPDATE_MIME_DB" = "xno"; then
 	AC_MSG_ERROR([You need to install update-mime-database])
 fi
-AC_PATH_PROG(UPDATE_ICON_C, gtk-update-icon-cache, no)
-if test "x$UPDATE_ICON_C" = "xno"; then
-	AC_MSG_ERROR([You need to install gtk-update-icon-cache])
-fi
+#AC_PATH_PROG(UPDATE_ICON_C, gtk-update-icon-cache, no)
+#if test "x$UPDATE_ICON_C" = "xno"; then
+#	AC_MSG_ERROR([You need to install gtk-update-icon-cache])
+#fi
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL
