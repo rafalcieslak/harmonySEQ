@@ -34,9 +34,17 @@ AtomContainer::~AtomContainer(){
 int AtomContainer::Add(Atom * a){
     AtmVec.push_back(a);
     Sort();
-    
+}
+
+void AtomContainer::Remove(int n){
+    AtmVec.erase(AtmVec.begin()+n);
+    //No need to sort. Removing does not change order.
 }
 
 void AtomContainer::Sort(){
     std::sort(AtmVec.begin(),AtmVec.end(),AtomComparison);
+}
+
+Atom* AtomContainer::operator[](int n){
+    return AtmVec[n];
 }

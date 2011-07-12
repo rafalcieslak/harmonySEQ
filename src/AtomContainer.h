@@ -35,7 +35,11 @@ public:
     /**Adds an atom to the container*/
     int Add(Atom * a);
     
+    /**Removes an atom from container*/
+    void Remove(int n);
     
+    /**Gets n-th atom*/
+    Atom* operator[](int n);
     
 private:
     std::vector<Atom *> AtmVec;
