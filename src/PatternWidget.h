@@ -25,12 +25,14 @@ class PatternWidget : public Gtk::DrawingArea {
 public:
     PatternWidget();
     virtual ~PatternWidget();
+    void SetInternalHeight(int h);
     
 protected:
     //Override default signal handler:
   virtual bool on_expose_event(GdkEventExpose* event);
     
 private:
+    int internal_height;
     
 };
 

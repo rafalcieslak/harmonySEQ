@@ -46,14 +46,14 @@ SequencerWidget::SequencerWidget(){
     wDownBox.pack_start(wBoxOfChord,Gtk::PACK_SHRINK);
     wDownBox.pack_start(wNotebookAndPatternOpsHBox);
 
-    /**FIXME temporarily added for testing, will ignore everything, its here just to get it displayed*/
-    wNotebookAndPatternOpsHBox.pack_start(pattern_widget,Gtk::PACK_EXPAND_WIDGET);//was: wNotebookVbox
+
+    wNotebookAndPatternOpsHBox.pack_start(wNotebookVbox,Gtk::PACK_EXPAND_WIDGET);
     wNotebookAndPatternOpsHBox.pack_start(wNotebook,Gtk::PACK_SHRINK);
     wNotebookAndPatternOpsHBox.pack_end(wPtOpsVBox,Gtk::PACK_SHRINK);
     wViewport = new Gtk::Viewport(*wPatternScroll.get_adjustment(),*wPatternScroll2.get_adjustment());
-    wNotebookVbox.pack_start(*wViewport,Gtk::PACK_EXPAND_WIDGET);
-    wNotebookVbox.pack_end(wPatternScroll);
-    wViewport->add(pattern_box);
+    wNotebookVbox.pack_start(*wViewport);
+    wNotebookVbox.pack_end(wPatternScroll,Gtk::PACK_SHRINK);
+    wViewport->add(pattern_widget);
     
     wViewport->set_shadow_type(Gtk::SHADOW_NONE);
 
@@ -381,6 +381,7 @@ void SequencerWidget::UpdatePatternVbox(int pattern){
      /*Resizing the pattern_box VERTIACLLY so that it will match the chordwidget.
        *The resulting height is equal to:
       */
+    pattern_widget.SetInternalHeight(chordwidget.get_height());
      pattern_box.set_size_request(-1,chordwidget.get_height()+chordwidget.caption.get_height()+4);
 }
 

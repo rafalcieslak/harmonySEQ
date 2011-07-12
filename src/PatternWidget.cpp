@@ -21,11 +21,16 @@
 #include "global.h"
 #include "messages.h"
 PatternWidget::PatternWidget(){
+    set_size_request(600,0);
+    internal_height=50; //random guess.
 }
 
-
-
 PatternWidget::~PatternWidget(){
+}
+
+void PatternWidget::SetInternalHeight(int h){
+    internal_height = h;
+    *err << h << ENDL;
 }
 
 
@@ -38,13 +43,16 @@ PatternWidget::~PatternWidget(){
   const int width = allocation.get_width();
   const int height = allocation.get_height();
   
-  ct.set_line_width(2);
-  ct.set_source_rgb(1.0,0.0,1.0);
+  ct.set_line_width(1);
+  ct.set_source_rgb(0.0,0.0,0.0);
   
-  ct.move_to(-width/2,-height/2);
-  ct.line_to(width/2,height/2);
-  
-  ct.stroke();
+  for(int x = 1; x <= 6; x++){
+        ct.move_to(0,x*internal_height/6);
+        ct.line_to(width,x*internal_height/6);
+        
+        ct.stroke();
+      
+  }
   
   return true;
       
