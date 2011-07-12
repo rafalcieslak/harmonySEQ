@@ -83,6 +83,8 @@
     <itemPath>src/NoteAtom.h</itemPath>
     <itemPath>src/NoteContainer.cpp</itemPath>
     <itemPath>src/NoteContainer.h</itemPath>
+    <itemPath>src/PatternWidget.cpp</itemPath>
+    <itemPath>src/PatternWidget.h</itemPath>
   </logicalFolder>
   <sourceRootList>
     <Elem>src</Elem>

@@ -51,6 +51,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/messages.o \
 	${OBJECTDIR}/_ext/1045285602/SettingsWindow.o \
 	${OBJECTDIR}/src/ControllerAtom.o \
+	${OBJECTDIR}/src/PatternWidget.o \
 	${OBJECTDIR}/src/Action.o \
 	${OBJECTDIR}/_ext/1045285602/seqHandle.o \
 	${OBJECTDIR}/src/MainWindow.o \
@@ -169,6 +170,11 @@ ${OBJECTDIR}/src/ControllerAtom.o: src/ControllerAtom.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/ControllerAtom.o src/ControllerAtom.cpp
+
+${OBJECTDIR}/src/PatternWidget.o: src/PatternWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/PatternWidget.o src/PatternWidget.cpp
 
 ${OBJECTDIR}/src/Action.o: src/Action.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

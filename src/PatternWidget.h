@@ -25,8 +25,13 @@ class PatternWidget : Gtk::DrawingArea {
 public:
     PatternWidget();
     virtual ~PatternWidget();
+    
+protected:
+    //Override default signal handler:
+  virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr);
+    
 private:
-
+    
 };
 
 #endif	/* PATTERNWIDGET_H */

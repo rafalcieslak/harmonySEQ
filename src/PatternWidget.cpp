@@ -18,7 +18,7 @@
 */
 
 #include "PatternWidget.h"
-
+#include "cairomm/context.h"
 
 PatternWidget::PatternWidget(){
 }
@@ -28,3 +28,20 @@ PatternWidget::PatternWidget(){
 PatternWidget::~PatternWidget(){
 }
 
+
+  bool PatternWidget::on_draw(const Cairo::RefPtr<Cairo::Context>& cr){
+   Gtk::Allocation allocation = get_allocation();
+  const int width = allocation.get_width();
+  const int height = allocation.get_height();
+  
+  cr->set_line_width(2);
+  cr->set_source_rgb(1.0,0.0,1.0);
+  
+  cr->move_to(-width/2,-height/2);
+  cr->line_to(width/2,height/2);
+  
+  cr->stroke();
+  
+  return true;
+      
+  }

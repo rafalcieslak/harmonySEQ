@@ -69,7 +69,8 @@ am_harmonySEQ_OBJECTS = harmonySEQ-main.$(OBJEXT) \
 	harmonySEQ-Atom.$(OBJEXT) harmonySEQ-NoteAtom.$(OBJEXT) \
 	harmonySEQ-ControllerAtom.$(OBJEXT) \
 	harmonySEQ-AtomContainer.$(OBJEXT) \
-	harmonySEQ-NoteContainer.$(OBJEXT)
+	harmonySEQ-NoteContainer.$(OBJEXT) \
+	harmonySEQ-PatternWidget.$(OBJEXT)
 harmonySEQ_OBJECTS = $(am_harmonySEQ_OBJECTS)
 am__DEPENDENCIES_1 =
 @DISABLEOSC_FALSE@harmonySEQ_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -244,7 +245,8 @@ harmonySEQ_SOURCES = main.cpp\
 						ControllerAtom.cpp \
 						AtomContainer.cpp \
 						NoteContainer.cpp \
-						MainWindow.h MidiDriver.h Sequencer.h messages.h Files.h global.h Event.h EventGUI.h Action.h ActionGUI.h TreeModels.h Chord.h ChordWidget.h Configuration.h SettingsWindow.h seqHandle.h SequencerWidget.h EventsWidget.h OSC.h Atom.h NoteAtom.h ControllerAtom.h AtomContainer.h AtomContainer.h\
+						PatternWidget.cpp \
+						MainWindow.h MidiDriver.h Sequencer.h messages.h Files.h global.h Event.h EventGUI.h Action.h ActionGUI.h TreeModels.h Chord.h ChordWidget.h Configuration.h SettingsWindow.h seqHandle.h SequencerWidget.h EventsWidget.h OSC.h Atom.h NoteAtom.h ControllerAtom.h AtomContainer.h AtomContainer.h PatternWidget.h\
 						gettext.h
 
 harmonySEQ_CPPFLAGS = $(GTKMM_CFLAGS) $(ADD_DEF) -Wall -g -O3
@@ -369,6 +371,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-NoteAtom.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-NoteContainer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-OSC.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-PatternWidget.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-Sequencer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-SequencerWidget.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-SettingsWindow.Po@am__quote@
@@ -741,6 +744,20 @@ harmonySEQ-NoteContainer.obj: NoteContainer.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='NoteContainer.cpp' object='harmonySEQ-NoteContainer.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-NoteContainer.obj `if test -f 'NoteContainer.cpp'; then $(CYGPATH_W) 'NoteContainer.cpp'; else $(CYGPATH_W) '$(srcdir)/NoteContainer.cpp'; fi`
+
+harmonySEQ-PatternWidget.o: PatternWidget.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-PatternWidget.o -MD -MP -MF $(DEPDIR)/harmonySEQ-PatternWidget.Tpo -c -o harmonySEQ-PatternWidget.o `test -f 'PatternWidget.cpp' || echo '$(srcdir)/'`PatternWidget.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-PatternWidget.Tpo $(DEPDIR)/harmonySEQ-PatternWidget.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PatternWidget.cpp' object='harmonySEQ-PatternWidget.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-PatternWidget.o `test -f 'PatternWidget.cpp' || echo '$(srcdir)/'`PatternWidget.cpp
+
+harmonySEQ-PatternWidget.obj: PatternWidget.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-PatternWidget.obj -MD -MP -MF $(DEPDIR)/harmonySEQ-PatternWidget.Tpo -c -o harmonySEQ-PatternWidget.obj `if test -f 'PatternWidget.cpp'; then $(CYGPATH_W) 'PatternWidget.cpp'; else $(CYGPATH_W) '$(srcdir)/PatternWidget.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-PatternWidget.Tpo $(DEPDIR)/harmonySEQ-PatternWidget.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PatternWidget.cpp' object='harmonySEQ-PatternWidget.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-PatternWidget.obj `if test -f 'PatternWidget.cpp'; then $(CYGPATH_W) 'PatternWidget.cpp'; else $(CYGPATH_W) '$(srcdir)/PatternWidget.cpp'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
