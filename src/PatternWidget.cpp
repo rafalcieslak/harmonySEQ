@@ -16,9 +16,6 @@
     You should have received a copy of the GNU General Public License
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-#include <gtk-2.0/gdk/gdkcairo.h>
-
 #include "PatternWidget.h"
 #include "cairomm/context.h"
 #include "global.h"
