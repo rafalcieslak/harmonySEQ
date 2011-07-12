@@ -19,13 +19,17 @@
 
 #ifndef ATOMCONTAINER_H
 #define	ATOMCONTAINER_H
+#include <vector>
+#include "Atom.h"
 
 class AtomContainer {
 public:
     AtomContainer();
     virtual ~AtomContainer();
+    
+    
 private:
-
+    std::vector<Atom> AtmVec;
 };
 
 #endif	/* ATOMCONTAINER_H */

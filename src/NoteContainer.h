@@ -19,8 +19,9 @@
 
 #ifndef NOTECONTAINER_H
 #define	NOTECONTAINER_H
+#include "AtomContainer.h"
 
-class NoteContainer {
+class NoteContainer : public AtomContainer {
 public:
     NoteContainer();
     virtual ~NoteContainer();
