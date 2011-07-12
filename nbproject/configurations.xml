@@ -75,10 +75,14 @@
     </logicalFolder>
     <itemPath>src/Atom.cpp</itemPath>
     <itemPath>src/Atom.h</itemPath>
+    <itemPath>src/AtomContainer.cpp</itemPath>
+    <itemPath>src/AtomContainer.h</itemPath>
     <itemPath>src/ControllerAtom.cpp</itemPath>
     <itemPath>src/ControllerAtom.h</itemPath>
     <itemPath>src/NoteAtom.cpp</itemPath>
     <itemPath>src/NoteAtom.h</itemPath>
+    <itemPath>src/NoteContainer.cpp</itemPath>
+    <itemPath>src/NoteContainer.h</itemPath>
   </logicalFolder>
   <sourceRootList>
     <Elem>src</Elem>

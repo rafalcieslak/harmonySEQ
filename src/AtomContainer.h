@@ -22,14 +22,25 @@
 #include <vector>
 #include "Atom.h"
 
+bool AtomComparison(Atom * a1, Atom * a2);
+
 class AtomContainer {
 public:
     AtomContainer();
     virtual ~AtomContainer();
     
+    /**Returns the number of atoms inside*/
+    int GetSize();
+    
+    /**Adds an atom to the container*/
+    int Add(Atom * a);
+    
+    
     
 private:
-    std::vector<Atom> AtmVec;
+    std::vector<Atom *> AtmVec;
+    
+    void Sort();
 };
 
 #endif	/* ATOMCONTAINER_H */

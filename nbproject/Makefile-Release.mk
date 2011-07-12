@@ -34,7 +34,9 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/src/AtomContainer.o \
 	${OBJECTDIR}/src/ChordWidget.o \
+	${OBJECTDIR}/src/NoteContainer.o \
 	${OBJECTDIR}/_ext/1045285602/SequencerWidget.o \
 	${OBJECTDIR}/_ext/1045285602/EventsWidget.o \
 	${OBJECTDIR}/src/main.o \
@@ -83,10 +85,20 @@ ${TESTDIR}/TestFiles/f1: ${OBJECTFILES}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} -lasound -o ${TESTDIR}/TestFiles/f1 -s ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
+${OBJECTDIR}/src/AtomContainer.o: src/AtomContainer.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/AtomContainer.o src/AtomContainer.cpp
+
 ${OBJECTDIR}/src/ChordWidget.o: src/ChordWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/ChordWidget.o src/ChordWidget.cpp
+
+${OBJECTDIR}/src/NoteContainer.o: src/NoteContainer.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/NoteContainer.o src/NoteContainer.cpp
 
 ${OBJECTDIR}/_ext/1045285602/SequencerWidget.o: ../Programy/harmonySEQ/trunk/src/SequencerWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1045285602

@@ -27,6 +27,8 @@ public:
     /**Value from 0 to 1, representing relative location (in time) in parent container*/
     double time;
     
+    /**This is here just to force compiler to make Atom a base abstract class*/
+    virtual int bac() = 0;
 private:
 
 };

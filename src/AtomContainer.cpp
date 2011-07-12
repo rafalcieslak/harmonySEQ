@@ -18,12 +18,25 @@
 */
 
 #include "AtomContainer.h"
+#include <algorithm>
 
+bool AtomComparison(Atom * a1, Atom * a2)
+{
+    return (a1->time)<(a2->time);
+}
 
 AtomContainer::AtomContainer(){
 }
 
-
 AtomContainer::~AtomContainer(){
 }
 
+int AtomContainer::Add(Atom * a){
+    AtmVec.push_back(a);
+    Sort();
+    
+}
+
+void AtomContainer::Sort(){
+    std::sort(AtmVec.begin(),AtmVec.end(),AtomComparison);
+}
