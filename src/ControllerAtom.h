@@ -20,11 +20,16 @@
 #ifndef CONTROLLERATOM_H
 #define	CONTROLLERATOM_H
 
+#include "Atom.h"
+
 class ControllerAtom : public Atom {
 public:
-    ControllerAtom();
-    ControllerAtom(const ControllerAtom& orig);
+    ControllerAtom(double _ time, int _value);
     virtual ~ControllerAtom();
+    
+    /**From 0 to 127*/
+    int value;
+    
 private:
 
 };

@@ -21,12 +21,12 @@
 
 class Atom {
 public:
-    Atom();
-    Atom(const Atom& orig);
+    Atom(double _time);
     virtual ~Atom();
     
     /**Value from 0 to 1, representing relative location (in time) in parent container*/
     double time;
+    
 private:
 
 };

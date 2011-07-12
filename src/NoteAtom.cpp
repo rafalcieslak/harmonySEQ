@@ -20,11 +20,11 @@
 #include "NoteAtom.h"
 
 
-NoteAtom::NoteAtom(){
-}
-
-
-NoteAtom::NoteAtom(const NoteAtom& orig){
+NoteAtom::NoteAtom(double _time = 0, double _length = 0.125, int _pitch = 0)
+                                        : public Atom(_time)
+{
+    length = _length;
+    pitch = _pitch;
 }
 
 

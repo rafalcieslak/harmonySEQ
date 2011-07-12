@@ -20,13 +20,9 @@
 #include "Atom.h"
 
 
-Atom::Atom(){
+Atom::Atom(double _time){
+    time = _time;
 }
-
-
-Atom::Atom(const Atom& orig){
-}
-
 
 Atom::~Atom(){
 }

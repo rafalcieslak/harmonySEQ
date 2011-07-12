@@ -20,14 +20,22 @@
 #ifndef NOTEATOM_H
 #define	NOTEATOM_H
 
+#include "Atom.h"
+
 class NoteAtom : public Atom {
 public:
-    NoteAtom();
-    NoteAtom(const NoteAtom& orig);
+    NoteAtom(double _time = 0, double _length = 0.125, int _pitch = 0);
     virtual ~NoteAtom();
     
-    /**Currently - 1 to 6*/
+    /**Currently - 0 to 5*/
     int pitch;
+    
+    /**Duration time, where 0 = none and 1 = full parent container*/
+    double length;
+    
+    /**Velocity, from 0 to 127*/
+    int velocity;
+    
 private:
 
 };

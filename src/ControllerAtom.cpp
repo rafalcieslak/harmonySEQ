@@ -20,13 +20,11 @@
 #include "ControllerAtom.h"
 
 
-ControllerAtom::ControllerAtom(){
+ControllerAtom::ControllerAtom(double _ time, int _value)
+                                : public Atom(_time)
+{
+    value = _value;
 }
-
-
-ControllerAtom::ControllerAtom(const ControllerAtom& orig){
-}
-
 
 ControllerAtom::~ControllerAtom(){
 }
