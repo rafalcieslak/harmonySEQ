@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=harmonySEQ
+PROJECTNAME=harmonySEQ-piano-roll
 
 # Active Configuration
 DEFAULTCONF=Debug

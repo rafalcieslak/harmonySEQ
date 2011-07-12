@@ -65,7 +65,9 @@ am_harmonySEQ_OBJECTS = harmonySEQ-main.$(OBJEXT) \
 	harmonySEQ-SettingsWindow.$(OBJEXT) \
 	harmonySEQ-seqHandle.$(OBJEXT) \
 	harmonySEQ-SequencerWidget.$(OBJEXT) \
-	harmonySEQ-EventsWidget.$(OBJEXT) harmonySEQ-OSC.$(OBJEXT)
+	harmonySEQ-EventsWidget.$(OBJEXT) harmonySEQ-OSC.$(OBJEXT) \
+	harmonySEQ-Atom.$(OBJEXT) harmonySEQ-NoteAtom.$(OBJEXT) \
+	harmonySEQ-ControllerAtom.$(OBJEXT)
 harmonySEQ_OBJECTS = $(am_harmonySEQ_OBJECTS)
 am__DEPENDENCIES_1 =
 @DISABLEOSC_FALSE@harmonySEQ_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -235,7 +237,10 @@ harmonySEQ_SOURCES = main.cpp\
 						SequencerWidget.cpp \
 						EventsWidget.cpp \
 						OSC.cpp \
-						MainWindow.h MidiDriver.h Sequencer.h messages.h Files.h global.h Event.h EventGUI.h Action.h ActionGUI.h TreeModels.h Chord.h ChordWidget.h Configuration.h SettingsWindow.h seqHandle.h SequencerWidget.h EventsWidget.h OSC.h\
+						Atom.cpp \
+						NoteAtom.cpp \
+						ControllerAtom.cpp \
+						MainWindow.h MidiDriver.h Sequencer.h messages.h Files.h global.h Event.h EventGUI.h Action.h ActionGUI.h TreeModels.h Chord.h ChordWidget.h Configuration.h SettingsWindow.h seqHandle.h SequencerWidget.h EventsWidget.h OSC.h Atom.h NoteAtom.h ControllerAtom.h \
 						gettext.h
 
 harmonySEQ_CPPFLAGS = $(GTKMM_CFLAGS) $(ADD_DEF) -Wall -g -O3
@@ -345,15 +350,18 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-Action.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-ActionGUI.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-Atom.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-Chord.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-ChordWidget.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-Configuration.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-ControllerAtom.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-Event.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-EventGUI.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-EventsWidget.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-Files.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-MainWindow.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-MidiDriver.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-NoteAtom.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-OSC.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-Sequencer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-SequencerWidget.Po@am__quote@
@@ -657,6 +665,48 @@ harmonySEQ-OSC.obj: OSC.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='OSC.cpp' object='harmonySEQ-OSC.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-OSC.obj `if test -f 'OSC.cpp'; then $(CYGPATH_W) 'OSC.cpp'; else $(CYGPATH_W) '$(srcdir)/OSC.cpp'; fi`
+
+harmonySEQ-Atom.o: Atom.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-Atom.o -MD -MP -MF $(DEPDIR)/harmonySEQ-Atom.Tpo -c -o harmonySEQ-Atom.o `test -f 'Atom.cpp' || echo '$(srcdir)/'`Atom.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-Atom.Tpo $(DEPDIR)/harmonySEQ-Atom.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Atom.cpp' object='harmonySEQ-Atom.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-Atom.o `test -f 'Atom.cpp' || echo '$(srcdir)/'`Atom.cpp
+
+harmonySEQ-Atom.obj: Atom.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-Atom.obj -MD -MP -MF $(DEPDIR)/harmonySEQ-Atom.Tpo -c -o harmonySEQ-Atom.obj `if test -f 'Atom.cpp'; then $(CYGPATH_W) 'Atom.cpp'; else $(CYGPATH_W) '$(srcdir)/Atom.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-Atom.Tpo $(DEPDIR)/harmonySEQ-Atom.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Atom.cpp' object='harmonySEQ-Atom.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-Atom.obj `if test -f 'Atom.cpp'; then $(CYGPATH_W) 'Atom.cpp'; else $(CYGPATH_W) '$(srcdir)/Atom.cpp'; fi`
+
+harmonySEQ-NoteAtom.o: NoteAtom.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-NoteAtom.o -MD -MP -MF $(DEPDIR)/harmonySEQ-NoteAtom.Tpo -c -o harmonySEQ-NoteAtom.o `test -f 'NoteAtom.cpp' || echo '$(srcdir)/'`NoteAtom.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-NoteAtom.Tpo $(DEPDIR)/harmonySEQ-NoteAtom.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='NoteAtom.cpp' object='harmonySEQ-NoteAtom.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-NoteAtom.o `test -f 'NoteAtom.cpp' || echo '$(srcdir)/'`NoteAtom.cpp
+
+harmonySEQ-NoteAtom.obj: NoteAtom.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-NoteAtom.obj -MD -MP -MF $(DEPDIR)/harmonySEQ-NoteAtom.Tpo -c -o harmonySEQ-NoteAtom.obj `if test -f 'NoteAtom.cpp'; then $(CYGPATH_W) 'NoteAtom.cpp'; else $(CYGPATH_W) '$(srcdir)/NoteAtom.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-NoteAtom.Tpo $(DEPDIR)/harmonySEQ-NoteAtom.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='NoteAtom.cpp' object='harmonySEQ-NoteAtom.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-NoteAtom.obj `if test -f 'NoteAtom.cpp'; then $(CYGPATH_W) 'NoteAtom.cpp'; else $(CYGPATH_W) '$(srcdir)/NoteAtom.cpp'; fi`
+
+harmonySEQ-ControllerAtom.o: ControllerAtom.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-ControllerAtom.o -MD -MP -MF $(DEPDIR)/harmonySEQ-ControllerAtom.Tpo -c -o harmonySEQ-ControllerAtom.o `test -f 'ControllerAtom.cpp' || echo '$(srcdir)/'`ControllerAtom.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-ControllerAtom.Tpo $(DEPDIR)/harmonySEQ-ControllerAtom.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ControllerAtom.cpp' object='harmonySEQ-ControllerAtom.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-ControllerAtom.o `test -f 'ControllerAtom.cpp' || echo '$(srcdir)/'`ControllerAtom.cpp
+
+harmonySEQ-ControllerAtom.obj: ControllerAtom.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-ControllerAtom.obj -MD -MP -MF $(DEPDIR)/harmonySEQ-ControllerAtom.Tpo -c -o harmonySEQ-ControllerAtom.obj `if test -f 'ControllerAtom.cpp'; then $(CYGPATH_W) 'ControllerAtom.cpp'; else $(CYGPATH_W) '$(srcdir)/ControllerAtom.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-ControllerAtom.Tpo $(DEPDIR)/harmonySEQ-ControllerAtom.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ControllerAtom.cpp' object='harmonySEQ-ControllerAtom.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-ControllerAtom.obj `if test -f 'ControllerAtom.cpp'; then $(CYGPATH_W) 'ControllerAtom.cpp'; else $(CYGPATH_W) '$(srcdir)/ControllerAtom.cpp'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

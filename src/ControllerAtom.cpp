@@ -20,8 +20,8 @@
 #include "ControllerAtom.h"
 
 
-ControllerAtom::ControllerAtom(double _ time, int _value)
-                                : public Atom(_time)
+ControllerAtom::ControllerAtom(double _time, int _value)
+                                :  Atom(_time)
 {
     value = _value;
 }

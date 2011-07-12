@@ -24,7 +24,7 @@
 
 class ControllerAtom : public Atom {
 public:
-    ControllerAtom(double _ time, int _value);
+    ControllerAtom(double _time, int _value);
     virtual ~ControllerAtom();
     
     /**From 0 to 127*/

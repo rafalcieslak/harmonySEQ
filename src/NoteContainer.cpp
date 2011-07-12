@@ -17,17 +17,13 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "NoteAtom.h"
+#include "NoteContainer.h"
 
 
-NoteAtom::NoteAtom(double _time, double _length, int _pitch)
-                                        :  Atom(_time)
-{
-    length = _length;
-    pitch = _pitch;
+NoteContainer::NoteContainer(){
 }
 
 
-NoteAtom::~NoteAtom(){
+NoteContainer::~NoteContainer(){
 }
 

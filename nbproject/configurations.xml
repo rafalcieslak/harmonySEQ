@@ -73,6 +73,12 @@
       <itemPath>Makefile.am</itemPath>
       <itemPath>src/Makefile.am</itemPath>
     </logicalFolder>
+    <itemPath>src/Atom.cpp</itemPath>
+    <itemPath>src/Atom.h</itemPath>
+    <itemPath>src/ControllerAtom.cpp</itemPath>
+    <itemPath>src/ControllerAtom.h</itemPath>
+    <itemPath>src/NoteAtom.cpp</itemPath>
+    <itemPath>src/NoteAtom.h</itemPath>
   </logicalFolder>
   <sourceRootList>
     <Elem>src</Elem>

@@ -40,12 +40,15 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/main.o \
 	${OBJECTDIR}/_ext/1045285602/OSC.o \
 	${OBJECTDIR}/src/EventGUI.o \
+	${OBJECTDIR}/src/NoteAtom.o \
 	${OBJECTDIR}/src/Chord.o \
 	${OBJECTDIR}/src/ActionGUI.o \
 	${OBJECTDIR}/src/Sequencer.o \
+	${OBJECTDIR}/src/Atom.o \
 	${OBJECTDIR}/src/Configuration.o \
 	${OBJECTDIR}/src/messages.o \
 	${OBJECTDIR}/_ext/1045285602/SettingsWindow.o \
+	${OBJECTDIR}/src/ControllerAtom.o \
 	${OBJECTDIR}/src/Action.o \
 	${OBJECTDIR}/_ext/1045285602/seqHandle.o \
 	${OBJECTDIR}/src/MainWindow.o \
@@ -110,6 +113,11 @@ ${OBJECTDIR}/src/EventGUI.o: src/EventGUI.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/EventGUI.o src/EventGUI.cpp
 
+${OBJECTDIR}/src/NoteAtom.o: src/NoteAtom.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/NoteAtom.o src/NoteAtom.cpp
+
 ${OBJECTDIR}/src/Chord.o: src/Chord.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
@@ -125,6 +133,11 @@ ${OBJECTDIR}/src/Sequencer.o: src/Sequencer.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Sequencer.o src/Sequencer.cpp
 
+${OBJECTDIR}/src/Atom.o: src/Atom.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Atom.o src/Atom.cpp
+
 ${OBJECTDIR}/src/Configuration.o: src/Configuration.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
@@ -139,6 +152,11 @@ ${OBJECTDIR}/_ext/1045285602/SettingsWindow.o: ../Programy/harmonySEQ/trunk/src/
 	${MKDIR} -p ${OBJECTDIR}/_ext/1045285602
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1045285602/SettingsWindow.o ../Programy/harmonySEQ/trunk/src/SettingsWindow.cpp
+
+${OBJECTDIR}/src/ControllerAtom.o: src/ControllerAtom.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/ControllerAtom.o src/ControllerAtom.cpp
 
 ${OBJECTDIR}/src/Action.o: src/Action.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
