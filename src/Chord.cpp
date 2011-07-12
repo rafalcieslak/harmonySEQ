@@ -19,7 +19,7 @@
 
 
 #include "Chord.h"
-
+#include "global.h"
 #include "messages.h"
 extern debug *dbg;
 int STANDARD_GUITAR_TUNING[6] =

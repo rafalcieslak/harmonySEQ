@@ -20,8 +20,8 @@
 
 #ifndef DEBUG_H
 #define	DEBUG_H
+#include <glibmm/ustring.h>
 #include <cstdio>
-#include "global.h"
 class debug {
 public:
     int debug_mode;

@@ -21,14 +21,14 @@
 #define	PATTERNWIDGET_H
 #include "gtkmm.h"
 /**PatternWidget is basically a GUI for NoteContainer, that uses DrawingArea to display a piano-roll interface.*/
-class PatternWidget : Gtk::DrawingArea {
+class PatternWidget : public Gtk::DrawingArea {
 public:
     PatternWidget();
     virtual ~PatternWidget();
     
 protected:
     //Override default signal handler:
-  virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr);
+  virtual bool on_expose_event(GdkEventExpose* event);
     
 private:
     

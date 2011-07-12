@@ -17,9 +17,12 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <gtk-2.0/gdk/gdkcairo.h>
+
 #include "PatternWidget.h"
 #include "cairomm/context.h"
-
+#include "global.h"
+#include "messages.h"
 PatternWidget::PatternWidget(){
 }
 
@@ -29,18 +32,22 @@ PatternWidget::~PatternWidget(){
 }
 
 
-  bool PatternWidget::on_draw(const Cairo::RefPtr<Cairo::Context>& cr){
+  bool PatternWidget::on_expose_event(GdkEventExpose* event){
+   cairo_t * c_t = gdk_cairo_create(event->window);
+   Cairo::Context ct(c_t);
+   //Cairo::RefPtr<Cairo::Context> cr(&ct);
+    
    Gtk::Allocation allocation = get_allocation();
   const int width = allocation.get_width();
   const int height = allocation.get_height();
   
-  cr->set_line_width(2);
-  cr->set_source_rgb(1.0,0.0,1.0);
+  ct.set_line_width(2);
+  ct.set_source_rgb(1.0,0.0,1.0);
   
-  cr->move_to(-width/2,-height/2);
-  cr->line_to(width/2,height/2);
+  ct.move_to(-width/2,-height/2);
+  ct.line_to(width/2,height/2);
   
-  cr->stroke();
+  ct.stroke();
   
   return true;
       

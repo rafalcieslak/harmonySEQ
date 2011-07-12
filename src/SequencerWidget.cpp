@@ -46,13 +46,15 @@ SequencerWidget::SequencerWidget(){
     wDownBox.pack_start(wBoxOfChord,Gtk::PACK_SHRINK);
     wDownBox.pack_start(wNotebookAndPatternOpsHBox);
 
-    wNotebookAndPatternOpsHBox.pack_start(wNotebookVbox,Gtk::PACK_EXPAND_WIDGET);
+    /**FIXME temporarily added for testing, will ignore everything, its here just to get it displayed*/
+    wNotebookAndPatternOpsHBox.pack_start(pattern_widget,Gtk::PACK_EXPAND_WIDGET);//was: wNotebookVbox
     wNotebookAndPatternOpsHBox.pack_start(wNotebook,Gtk::PACK_SHRINK);
     wNotebookAndPatternOpsHBox.pack_end(wPtOpsVBox,Gtk::PACK_SHRINK);
     wViewport = new Gtk::Viewport(*wPatternScroll.get_adjustment(),*wPatternScroll2.get_adjustment());
     wNotebookVbox.pack_start(*wViewport,Gtk::PACK_EXPAND_WIDGET);
     wNotebookVbox.pack_end(wPatternScroll);
     wViewport->add(pattern_box);
+    
     wViewport->set_shadow_type(Gtk::SHADOW_NONE);
 
     wUpperVBox.pack_start(wUpperHBox1,Gtk::PACK_SHRINK);

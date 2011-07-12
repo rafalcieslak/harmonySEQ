@@ -17,8 +17,13 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <libintl.h>
+#include <locale.h>
 #include "messages.h"
+#include "gettext.h"
 #include <ctime>
+//Makro for easier internalisation.
+#define _(STRING) gettext(STRING)
 
 debug::debug(int debug) {
     if (debug != 0){

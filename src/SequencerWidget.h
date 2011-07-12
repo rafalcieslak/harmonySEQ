@@ -22,6 +22,7 @@
 #include "seqHandle.h"
 #include "Sequencer.h"
 #include "ChordWidget.h"
+#include "PatternWidget.h"
 class Sequencer;
 
 class PatternLine : public Gtk::VBox{
@@ -121,6 +122,8 @@ private:
     void OnClearPatternClicked();
     bool OnPatternMouseScroll(GdkEventScroll * e);
 
+    PatternWidget pattern_widget;
+    
     Gtk::VBox wMainVbox;
     Gtk::HBox wUpBox;
     Gtk::HBox wDownBox;
