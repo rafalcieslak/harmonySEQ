@@ -24,7 +24,7 @@
 #include "ChordWidget.h"
 #include "PatternWidget.h"
 class Sequencer;
-
+#ifdef YES_I_HOMEHOW_NEED_TO_ACCESS_DEPRACATED_CONTENTS
 class PatternLine : public Gtk::VBox{
 public:
     PatternLine();
@@ -50,7 +50,7 @@ private:
     Gtk::EventBox diode;
     bool diode_on;
 };
-
+#endif
 class SequencerWidget : public Gtk::VBox{
 public:
     SequencerWidget();
