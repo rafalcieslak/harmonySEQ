@@ -21,7 +21,6 @@
 #include "global.h"
 #include "messages.h"
 PatternWidget::PatternWidget(){
-    set_size_request(600,0);
     internal_height=50; //random guess.
 }
 
@@ -30,6 +29,7 @@ PatternWidget::~PatternWidget(){
 
 void PatternWidget::SetInternalHeight(int h){
     internal_height = h;
+    set_size_request(600,h+20);
     *err << h << ENDL;
 }
 
@@ -43,16 +43,27 @@ void PatternWidget::SetInternalHeight(int h){
   const int width = allocation.get_width();
   const int height = allocation.get_height();
   
+  
+  //The +0.5 that often appears below in coordinates it to prevent cairo from antyaliasing lines.
+  
+  //horizontal grid
   ct.set_line_width(1);
   ct.set_source_rgb(0.0,0.0,0.0);
-  
-  for(int x = 1; x <= 6; x++){
-        ct.move_to(0,x*internal_height/6);
-        ct.line_to(width,x*internal_height/6);
-        
+  for(int x = 0; x <= 6; x++){
+        ct.move_to(0,x*internal_height/6+0.5);
+        ct.line_to(width,x*internal_height/6+0.5);
         ct.stroke();
-      
   }
+  
+  //vertival grid
+  ct.set_line_width(1);
+  ct.set_source_rgb(0.3,0.3,0.2);
+  for(int x = 0; x <= 8; x++){
+        ct.move_to(x*width/8 + 0.5,0);
+        ct.line_to(x*width/8 + 0.5,internal_height);
+        ct.stroke();
+  }
+  
   
   return true;
       
