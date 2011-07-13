@@ -173,29 +173,6 @@ SequencerWidget::SequencerWidget(){
     wLengthBox.pack_start(m_Columns_len.text);
     wLengthBox.signal_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnLengthChanged));
 
-    // <editor-fold defaultstate="collapsed" desc="Initializing the pattern lines">
-    int separator_counter = 0;
-    pattern_lines.resize(64, NULL);
-    note_separators.resize(16);
-    for (int x = 0; x < 64; x++) { //MAX RESOLUTION
-        if (x % 4 == 0) {
-            if (x != 0) { //do not add a separator at the very beggining
-                note_separators[separator_counter] = new Gtk::VSeparator;
-                pattern_box.pack_start(*note_separators[separator_counter], Gtk::PACK_SHRINK);
-                separator_counter++;
-            }
-            sprintf(temp, "%d", x + 1);
-            pattern_lines[x] = (new PatternLine(temp)); //cannot use Gtk::manage, since deleting the box would delete the lines!
-        } else {
-            pattern_lines[x] = (new PatternLine); //cannot use Gtk::manage, since deleting the box would delete the lines!
-        }
-        pattern_lines[x]->OnButtonClicked.connect(sigc::bind(sigc::mem_fun(*this, &SequencerWidget::OnPatternNoteChanged), x));
-        pattern_box.pack_start(*pattern_lines[x], Gtk::PACK_SHRINK);
-        pattern_lines[x]->hide();
-    }
-    pattern_box.show();
-    // </editor-fold>
-
     wViewport->signal_scroll_event().connect(sigc::mem_fun(*this,&SequencerWidget::OnPatternMouseScroll));
 
     add(wMainVbox);
@@ -205,7 +182,6 @@ SequencerWidget::SequencerWidget(){
 }
 
 SequencerWidget::~SequencerWidget(){
-    for (int x = 0; x < pattern_lines.size();x++) delete pattern_lines[x];
     do_not_react_on_page_changes = 1;
     for(int x = 0; x < notebook_pages.size();x++) delete notebook_pages[x]; //TODO: check if they need to be removed from notebook first.
     for (int x = 0; x < note_separators.size();x++) delete note_separators[x];
@@ -345,44 +321,17 @@ void SequencerWidget::InitNotebook(){
 
     //reset the current page
     wNotebook.set_current_page(seqH(selectedSeq)->GetActivePattern());
-    UpdatePatternVbox();
+    UpdatePatternWidget();
 
     UpdateActivePatternRange();
     UpdateAsterisk(wActivePattern.get_value(),seq->GetActivePattern()); //this will mark active tab with a star (Pat x*)
     SetRemoveButtonSensitivity(); //according to the number of pages
 }
 
-void SequencerWidget::UpdatePatternVbox(int pattern){
+void SequencerWidget::UpdatePatternWidget(int pattern){
     *dbg << "Updating pattern VBox... \n";
     if (!AnythingSelected) return;
-    //if called without parameter...:
-    if (pattern = -1) pattern = wNotebook.get_current_page();
-    Sequencer* seq = seqH(selectedSeq);
-
-    ignore_signals = 1; //this will avoid calling signal handler when updating pattern...
-    for (int x = 0; x < seq->resolution;x++){
-        if (x % 4 == 0) {
-            if (x != 0) { //do not add a separator at the very beggining
-                note_separators[x/4-1]->show();
-            }
-        }
-        pattern_lines[x]->show();
-        //set up values
-        for(int c = 0; c < 6; c++)
-            pattern_lines[x]->SetButton(c,seq->GetPatternNote(pattern,x,c));
-    }
-    for (int x = seq->resolution; x < pattern_lines.size(); x++){
-        pattern_lines[x]->hide();
-        if (x % 4 == 0) {
-                note_separators[x/4-1]->hide();
-        }
-    }
-    ignore_signals = 0;
-     /*Resizing the pattern_box VERTIACLLY so that it will match the chordwidget.
-       *The resulting height is equal to:
-      */
     pattern_widget.SetInternalHeight(chordwidget.get_height());
-     pattern_box.set_size_request(-1,chordwidget.get_height()+chordwidget.caption.get_height()+4);
 }
 
 void SequencerWidget::UpdateActivePatternRange(){
@@ -482,7 +431,6 @@ void SequencerWidget::OnResolutionChanged(){
 
     seq->SetResolution(row[m_Columns_resol.resol]);
 
-    UpdatePatternVbox();
     //FIXME: following is no longer needed. Whole column should be removed.
     mainwindow->RefreshRow(seq->my_row);
     
@@ -533,7 +481,7 @@ void SequencerWidget::OnSetAsActivePatternClicked(){
 void SequencerWidget::OnNotebookPageChanged(GtkNotebookPage* page, guint page_num){
     if(do_not_react_on_page_changes) return;
     *dbg << "page changed!\n";
-    UpdatePatternVbox();
+    UpdatePatternWidget();
 }
 void SequencerWidget::OnAddPatternClicked(){
     if(!AnythingSelected) return;
@@ -578,7 +526,7 @@ void SequencerWidget::OnRemovePatternClicked(){
 void SequencerWidget::OnClearPatternClicked(){
     if(!AnythingSelected) return;
     seqH(selectedSeq)->ClearPattern(wNotebook.get_current_page());
-    UpdatePatternVbox();
+    UpdatePatternWidget();
 }
 
 void SequencerWidget::SetRemoveButtonSensitivity(){
@@ -643,6 +591,7 @@ bool SequencerWidget::OnPatternMouseScroll(GdkEventScroll* e){
 
 void SequencerWidget::Diode(int n, int c){
     if(!AnythingSelected) return;
+    /*
     //double x = (double)n/(double)DIODES_RES;
     int res = seqH(selectedSeq)->resolution;
     if (res == 0) return;
@@ -657,15 +606,17 @@ void SequencerWidget::Diode(int n, int c){
             pattern_lines[curr]->LightOn();
         else
             pattern_lines[curr]->LightOnAlternate();
-    }
+    }*/
 }
 
 void SequencerWidget::Diodes_AllOff(){
     if(!AnythingSelected) return;
     //double x = (double)n/(double)DIODES_RES;
-    for (int x = 0; x < pattern_lines.size(); x++) if (pattern_lines[x]) pattern_lines[x]->LightOff();
+    /*
+    for (int x = 0; x < pattern_lines.size(); x++) if (pattern_lines[x]) pattern_lines[x]->LightOff();**/
 }
 //====================PATTERNLINE=========================
+/* Depracated.
 PatternLine::PatternLine(){
     set_border_width(0);
     pack_end(marker,Gtk::PACK_SHRINK);
@@ -742,3 +693,4 @@ void PatternLine::LightOff(){
     diode.modify_bg(Gtk::STATE_NORMAL,Gdk::Color("brown3"));
     diode_on = 0;
 }
+ **/

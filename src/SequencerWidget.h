@@ -76,7 +76,7 @@ public:
     bool AnythingSelected;
     seqHandle selectedSeq;
 
-    /**Lights aproprieate diode*/
+    /**Lights aproprieate diode, where colour is 0 when normal, or 1 when alternate*/
     void Diode(int n, int colour);
 
     /**Turns all diodes off*/
@@ -87,7 +87,7 @@ private:
     void AttachLines(int where);
     void DetachLines();
     */
-    void UpdatePatternVbox(int pattern=-1);
+    void UpdatePatternWidget(int pattern=-1);
 
     enum OnOffColour{
         NONE,
@@ -146,9 +146,9 @@ private:
 
     Gtk::Notebook wNotebook;
     Gtk::VBox wNotebookVbox;
-    std::vector<PatternLine  *> pattern_lines;
+    //std::vector<PatternLine  *> pattern_lines;
     std::vector<Gtk::Label *> notebook_pages;
-    Gtk::HBox pattern_box;
+    //Gtk::HBox pattern_box;
     Gtk::Viewport* wViewport; //must be a pointer, as constructor needs agruments
     Gtk::HScrollbar wPatternScroll;
     Gtk::VScrollbar wPatternScroll2;
