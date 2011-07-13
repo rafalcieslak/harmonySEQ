@@ -24,6 +24,7 @@
 #include "NoteAtom.h"
 PatternWidget::PatternWidget(){
     internal_height=50; //random guess.
+    vert_size = 450.0; //adjust for better default size
 }
 
 PatternWidget::~PatternWidget(){
@@ -31,7 +32,7 @@ PatternWidget::~PatternWidget(){
 
 void PatternWidget::SetInternalHeight(int h){
     internal_height = h;
-    set_size_request(600,h+20);
+    UpdateSizeRequest();
 }
 
 void PatternWidget::SetResolution(int r){
@@ -47,9 +48,25 @@ void PatternWidget::Redraw(){
     queue_draw();
 }
 
+void PatternWidget::UpdateSizeRequest(){
+    *err << "sizerequest " << vert_size << " " << internal_height+20 << ENDL;
+    set_size_request(vert_size,internal_height+20);
+}
+
+void PatternWidget::ZoomIn(){
+    vert_size = vert_size/1.2;
+    UpdateSizeRequest();
+}
+
+void PatternWidget::ZoomOut(){
+    vert_size = vert_size*1.2;
+    UpdateSizeRequest();
+}
+
 void PatternWidget::AssignPattern(AtomContainer* cont){
     *err << "assigning pattern \n";
     container = cont;
+    Redraw();
 }
 
   bool PatternWidget::on_expose_event(GdkEventExpose* event){
@@ -73,7 +90,7 @@ void PatternWidget::AssignPattern(AtomContainer* cont){
       double x1 = note->time*width;
       double w = note->length*width;
       ct.set_source_rgb(0.5,0.0,0.0);
-      x1++;y1++; // This is because the very first 1px line is the upper border.
+      ;y1++; // This is because the very first 1px line is the upper border.
     *err << "drawing note... "<< x1 << " " << y1 << " " << w << " " <<  h << "\n";
       ct.rectangle(x1,y1,w,h);
       ct.fill();

@@ -95,6 +95,8 @@ private:
     void OnPassToggleClicked();
     void OnPlayOnEditClicked();
     bool OnKeyPress(GdkEventKey* event);
+    bool OnKeyRelease(GdkEventKey* event);
+
 
     bool OnTreviewButtonPress(GdkEventButton* event);
 

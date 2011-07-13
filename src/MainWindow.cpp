@@ -29,6 +29,9 @@
 #include "SettingsWindow.h"
 #include "Configuration.h"
 
+bool CtrlKeyDown;
+bool ShiftKeyDown;
+
 Gtk::TreeModel::iterator row_inserted_by_drag;
 bool drag_in_progress;
 
@@ -272,6 +275,7 @@ MainWindow::MainWindow()
 
     add_events(Gdk::KEY_PRESS_MASK);
     signal_key_press_event().connect(mem_fun(*this,&MainWindow::OnKeyPress));
+    signal_key_release_event().connect(mem_fun(*this,&MainWindow::OnKeyRelease));
 
     //icons settings
     if (harmonySEQ_logo_48 != NULL) set_icon(harmonySEQ_logo_48);
@@ -562,11 +566,25 @@ bool MainWindow::OnKeyPress(GdkEventKey* event){
     }else
         *dbg << "Unknown key pressed\n";
 
+    if (event->keyval == 65507){ //Ctrl (left)
+        if (!CtrlKeyDown) CtrlKeyDown = true;
+    } else if (event->keyval == 65505){ // Shift(left)
+        if (!ShiftKeyDown) ShiftKeyDown = true;
+    }
+    
     FindAndProcessEvents(Event::KEYBOARD,event->keyval);
 
     return 1;
 }
+bool MainWindow::OnKeyRelease(GdkEventKey* event){
 
+    if (event->keyval == 65507){ //Ctrl (left)
+        if (CtrlKeyDown) CtrlKeyDown = false;
+    } else if (event->keyval == 65505){ // Shift(left)
+        if (ShiftKeyDown) ShiftKeyDown = false;
+    }
+    return 1;
+}
 void MainWindow::OnSelectionChanged(){
     Gtk::TreeModel::iterator iter = wTreeView.get_selection()->get_selected();
     if(iter){

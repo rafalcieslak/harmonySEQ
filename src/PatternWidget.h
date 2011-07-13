@@ -34,13 +34,19 @@ public:
     void Redraw();
     
     void AssignPattern(AtomContainer* cont);
+    
+    void ZoomIn();
+    void ZoomOut();
 protected:
     //Override default signal handler:
-  virtual bool on_expose_event(GdkEventExpose* event);
+   virtual bool on_expose_event(GdkEventExpose* event);
     
 private:
-    int internal_height;
     
+    void UpdateSizeRequest();
+    
+    int internal_height;
+    double vert_size; //used to controll zooming
     int resolution;
     AtomContainer* container;
     

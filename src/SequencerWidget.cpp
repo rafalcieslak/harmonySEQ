@@ -17,8 +17,6 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <assert.h>
-
 #include "SequencerWidget.h"
 #include "messages.h"
 #include "Event.h"
@@ -27,6 +25,8 @@
 #include "MidiDriver.h"
 #include "global.h"
 #include "MainWindow.h"
+
+extern bool CtrlKeyDown;
 
 SequencerWidget::SequencerWidget(){
     *dbg << "constructing new SEQUENCERWIDGET\n";
@@ -334,6 +334,7 @@ void SequencerWidget::UpdatePatternWidget(int pattern){
     //if called without parameter...:
     if (pattern = -1) pattern = wNotebook.get_current_page();
     Sequencer* seq = seqH(selectedSeq);
+    *err<<"Asking to update pw to " << pattern << ENDL;
     pattern_widget.AssignPattern(&seq->patterns[pattern]);
     pattern_widget.SetInternalHeight(chordwidget.get_height());
 }
@@ -575,19 +576,26 @@ void SequencerWidget::SetOnOffColour(OnOffColour c){
 }
 
 bool SequencerWidget::OnPatternMouseScroll(GdkEventScroll* e){
-    //Increment/decrement the viewport's adjustment by one page size
-    if(e->direction == GDK_SCROLL_UP){
-        double inc  = wViewport->get_hadjustment()->get_step_increment();
-         wViewport->get_hadjustment()->set_value(-inc + wViewport->get_hadjustment()->get_value());
-    }else if (e->direction == GDK_SCROLL_DOWN){
-        double inc  = wViewport->get_hadjustment()->get_step_increment();
-        if(!(wViewport->get_hadjustment()->get_value() + wViewport->get_hadjustment()->get_page_size() + inc > wViewport->get_hadjustment()->get_upper() ))
-            wViewport->get_hadjustment()->set_value(inc + wViewport->get_hadjustment()->get_value());
-        else
-            //too high value, trimming to desired
-            wViewport->get_hadjustment()->set_value( wViewport->get_hadjustment()->get_upper() -  wViewport->get_hadjustment()->get_page_size());
+    if(!CtrlKeyDown){ //Crtl key not pressed, we'll increment/decrement the viewport's adjustment by one page size
+        if(e->direction == GDK_SCROLL_UP){
+            double inc  = wViewport->get_hadjustment()->get_step_increment();
+             wViewport->get_hadjustment()->set_value(-inc + wViewport->get_hadjustment()->get_value());
+        }else if (e->direction == GDK_SCROLL_DOWN){
+            double inc  = wViewport->get_hadjustment()->get_step_increment();
+            if(!(wViewport->get_hadjustment()->get_value() + wViewport->get_hadjustment()->get_page_size() + inc > wViewport->get_hadjustment()->get_upper() ))
+                wViewport->get_hadjustment()->set_value(inc + wViewport->get_hadjustment()->get_value());
+            else
+                //too high value, trimming to desired
+                wViewport->get_hadjustment()->set_value( wViewport->get_hadjustment()->get_upper() -  wViewport->get_hadjustment()->get_page_size());
+        }
+        if ( wViewport->get_hadjustment()->get_value() >  wViewport->get_hadjustment()->get_upper() -  wViewport->get_hadjustment()->get_page_size())  wViewport->get_hadjustment()->set_value( wViewport->get_hadjustment()->get_upper() -  wViewport->get_hadjustment()->get_page_size());
+    }else{ //Ctrl key pressed, we'll zoom in/out
+        if(e->direction == GDK_SCROLL_UP){
+            pattern_widget.ZoomIn();
+        }else if (e->direction == GDK_SCROLL_DOWN){
+            pattern_widget.ZoomOut();
+        }
     }
-    if ( wViewport->get_hadjustment()->get_value() >  wViewport->get_hadjustment()->get_upper() -  wViewport->get_hadjustment()->get_page_size())  wViewport->get_hadjustment()->set_value( wViewport->get_hadjustment()->get_upper() -  wViewport->get_hadjustment()->get_page_size());
     return true;
 }
 
