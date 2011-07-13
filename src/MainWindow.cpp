@@ -644,6 +644,7 @@ void MainWindow::OnAboutMenuClicked(){
     authors.push_back(_("Consultants:"));
     authors.push_back("   Joanna Łopuch");
     authors.push_back("   Louigi Verona <http://www.louigiverona.ru>");
+    authors.push_back("   Krzysztof Platis");
     authors.push_back("   Henia Netzel");
     aboutbox.set_authors(authors);
     //TRANSLATORS: The list of translators to be placed in about-box
