@@ -20,6 +20,7 @@
 #ifndef PATTERNWIDGET_H
 #define	PATTERNWIDGET_H
 #include "gtkmm.h"
+#include "AtomContainer.h"
 /**PatternWidget is basically a GUI for NoteContainer, that uses DrawingArea to display a piano-roll interface.*/
 class PatternWidget : public Gtk::DrawingArea {
 public:
@@ -32,6 +33,7 @@ public:
     
     void Redraw();
     
+    void AssignPattern(AtomContainer* cont);
 protected:
     //Override default signal handler:
   virtual bool on_expose_event(GdkEventExpose* event);
@@ -40,6 +42,7 @@ private:
     int internal_height;
     
     int resolution;
+    AtomContainer* container;
     
 };
 

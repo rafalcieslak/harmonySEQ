@@ -25,6 +25,7 @@
 #include "MainWindow.h"
 #include "seqHandle.h"
 #include "AtomContainer.h"
+#include "NoteAtom.h"
 extern debug *dbg;
 
 extern MainWindow* mainwindow;
@@ -118,6 +119,14 @@ void Sequencer::Init(){
     chord.SetBaseOctave(0);
     chord.SetInversion(0);
 
+    //FIXME: following is temporary. Just for testing purposes!
+    patterns[0].Add(new NoteAtom(0,0.125,0));
+    patterns[0].Add(new NoteAtom(0.25,0.125,0));
+    patterns[0].Add(new NoteAtom(0,0.5,1));
+    patterns[0].Add(new NoteAtom(0,0.125,2));
+    patterns[0].Add(new NoteAtom(0.5,0.25,3));
+    patterns[0].Add(new NoteAtom(0.75,0.25,4));
+    
 }
 
 void Sequencer::SetResolution(int res){

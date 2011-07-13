@@ -28,7 +28,7 @@ public:
     double time;
     
     /**This is here just to force compiler to make Atom a base abstract class*/
-    virtual int bac() = 0;
+   // virtual int bac() = 0;
 private:
 
 };

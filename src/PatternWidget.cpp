@@ -20,6 +20,8 @@
 #include "cairomm/context.h"
 #include "global.h"
 #include "messages.h"
+#include "AtomContainer.h"
+#include "NoteAtom.h"
 PatternWidget::PatternWidget(){
     internal_height=50; //random guess.
 }
@@ -45,6 +47,11 @@ void PatternWidget::Redraw(){
     queue_draw();
 }
 
+void PatternWidget::AssignPattern(AtomContainer* cont){
+    *err << "assigning pattern \n";
+    container = cont;
+}
+
   bool PatternWidget::on_expose_event(GdkEventExpose* event){
    cairo_t * c_t = gdk_cairo_create(event->window);
    Cairo::Context ct(c_t);
@@ -56,6 +63,21 @@ void PatternWidget::Redraw(){
   
   
   //The +0.5 that often appears below in coordinates it to prevent cairo from antyaliasing lines.
+    
+  if (container) //just in case it's NULL...
+  for (int x = 0; x < container->GetSize(); x++){
+      Atom* atm = (*container)[x];
+      NoteAtom* note = dynamic_cast<NoteAtom*>(atm);
+      double y1 = (5-note->pitch)*internal_height/6;
+      double h = internal_height/6;
+      double x1 = note->time*width;
+      double w = note->length*width;
+      ct.set_source_rgb(0.5,0.0,0.0);
+      x1++;y1++; // This is because the very first 1px line is the upper border.
+    *err << "drawing note... "<< x1 << " " << y1 << " " << w << " " <<  h << "\n";
+      ct.rectangle(x1,y1,w,h);
+      ct.fill();
+  }
   
   //horizontal grid
   ct.set_line_width(1);
@@ -70,11 +92,10 @@ void PatternWidget::Redraw(){
   ct.set_line_width(1);
   ct.set_source_rgb(0.3,0.3,0.2);
   for(int x = 0; x <= resolution; x++){
-        ct.move_to((double)x*(double)width/resolution + 0.5,0);
-        ct.line_to((double)x*(double)width/resolution + 0.5,internal_height);
+        ct.move_to((int)((double)x*(double)width/resolution) + 0.5,0);
+        ct.line_to((int)((double)x*(double)width/resolution) + 0.5,internal_height);
         ct.stroke();
   }
-  
   
   return true;
       
