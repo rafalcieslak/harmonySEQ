@@ -52,7 +52,6 @@
       <itemPath>src/MidiDriver.cpp</itemPath>
       <itemPath>../Programy/harmonySEQ/trunk/src/OSC.cpp</itemPath>
       <itemPath>src/Sequencer.cpp</itemPath>
-      <itemPath>../Programy/harmonySEQ/trunk/src/SequencerWidget.cpp</itemPath>
       <itemPath>../Programy/harmonySEQ/trunk/src/SettingsWindow.cpp</itemPath>
       <itemPath>src/TreeModels.cpp</itemPath>
       <itemPath>src/global.cpp</itemPath>
@@ -85,6 +84,7 @@
     <itemPath>src/NoteContainer.h</itemPath>
     <itemPath>src/PatternWidget.cpp</itemPath>
     <itemPath>src/PatternWidget.h</itemPath>
+    <itemPath>src/SequencerWidget.cpp</itemPath>
   </logicalFolder>
   <sourceRootList>
     <Elem>src</Elem>

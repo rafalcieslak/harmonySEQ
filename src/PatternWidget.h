@@ -27,12 +27,19 @@ public:
     virtual ~PatternWidget();
     void SetInternalHeight(int h);
     
+    void SetResolution(int r);
+    int GetResoution();
+    
+    void Redraw();
+    
 protected:
     //Override default signal handler:
   virtual bool on_expose_event(GdkEventExpose* event);
     
 private:
     int internal_height;
+    
+    int resolution;
     
 };
 

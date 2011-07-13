@@ -37,7 +37,6 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/AtomContainer.o \
 	${OBJECTDIR}/src/ChordWidget.o \
 	${OBJECTDIR}/src/NoteContainer.o \
-	${OBJECTDIR}/_ext/1045285602/SequencerWidget.o \
 	${OBJECTDIR}/_ext/1045285602/EventsWidget.o \
 	${OBJECTDIR}/src/main.o \
 	${OBJECTDIR}/_ext/1045285602/OSC.o \
@@ -46,6 +45,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/Chord.o \
 	${OBJECTDIR}/src/ActionGUI.o \
 	${OBJECTDIR}/src/Sequencer.o \
+	${OBJECTDIR}/src/SequencerWidget.o \
 	${OBJECTDIR}/src/Atom.o \
 	${OBJECTDIR}/src/Configuration.o \
 	${OBJECTDIR}/src/messages.o \
@@ -101,11 +101,6 @@ ${OBJECTDIR}/src/NoteContainer.o: src/NoteContainer.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/NoteContainer.o src/NoteContainer.cpp
 
-${OBJECTDIR}/_ext/1045285602/SequencerWidget.o: ../Programy/harmonySEQ/trunk/src/SequencerWidget.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1045285602
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1045285602/SequencerWidget.o ../Programy/harmonySEQ/trunk/src/SequencerWidget.cpp
-
 ${OBJECTDIR}/_ext/1045285602/EventsWidget.o: ../Programy/harmonySEQ/trunk/src/EventsWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1045285602
 	${RM} $@.d
@@ -145,6 +140,11 @@ ${OBJECTDIR}/src/Sequencer.o: src/Sequencer.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Sequencer.o src/Sequencer.cpp
+
+${OBJECTDIR}/src/SequencerWidget.o: src/SequencerWidget.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/SequencerWidget.o src/SequencerWidget.cpp
 
 ${OBJECTDIR}/src/Atom.o: src/Atom.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

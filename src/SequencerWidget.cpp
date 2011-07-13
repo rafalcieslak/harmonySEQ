@@ -473,15 +473,19 @@ void SequencerWidget::OnToggleMuteToggled(){
 void SequencerWidget::OnResolutionChanged(){
     if(ignore_signals) return;
     if(!AnythingSelected) return;
+    Gtk::TreeModel::Row row = *(wResolutionsBox.get_active());
+    //===
+    pattern_widget.SetResolution(row[m_Columns_resol.resol]);
+    //===
     Sequencer* seq = seqH(selectedSeq);
 
-    Gtk::TreeModel::Row row = *(wResolutionsBox.get_active());
 
     seq->SetResolution(row[m_Columns_resol.resol]);
 
     UpdatePatternVbox();
-    
+    //FIXME: following is no longer needed. Whole column should be removed.
     mainwindow->RefreshRow(seq->my_row);
+    
     Files::SetFileModified(1);
 }
 void SequencerWidget::OnLengthChanged(){

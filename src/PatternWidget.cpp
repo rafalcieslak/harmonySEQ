@@ -30,9 +30,20 @@ PatternWidget::~PatternWidget(){
 void PatternWidget::SetInternalHeight(int h){
     internal_height = h;
     set_size_request(600,h+20);
-    *err << h << ENDL;
 }
 
+void PatternWidget::SetResolution(int r){
+    resolution = r;
+    Redraw();
+}
+
+int PatternWidget::GetResoution(){
+    return resolution;
+}
+
+void PatternWidget::Redraw(){
+    queue_draw();
+}
 
   bool PatternWidget::on_expose_event(GdkEventExpose* event){
    cairo_t * c_t = gdk_cairo_create(event->window);
@@ -55,12 +66,12 @@ void PatternWidget::SetInternalHeight(int h){
         ct.stroke();
   }
   
-  //vertival grid
+  //vertical grid
   ct.set_line_width(1);
   ct.set_source_rgb(0.3,0.3,0.2);
-  for(int x = 0; x <= 8; x++){
-        ct.move_to(x*width/8 + 0.5,0);
-        ct.line_to(x*width/8 + 0.5,internal_height);
+  for(int x = 0; x <= resolution; x++){
+        ct.move_to((double)x*(double)width/resolution + 0.5,0);
+        ct.line_to((double)x*(double)width/resolution + 0.5,internal_height);
         ct.stroke();
   }
   
