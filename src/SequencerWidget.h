@@ -146,9 +146,9 @@ private:
 
     Gtk::Notebook wNotebook;
     Gtk::VBox wNotebookVbox;
-    //std::vector<PatternLine  *> pattern_lines;
     std::vector<Gtk::Label *> notebook_pages;
-    //Gtk::HBox pattern_box;
+    /**It allows the patternwidget to not fill the whole viewport area.*/
+    Gtk::HBox wPatternWidgetBox;
     Gtk::Viewport* wViewport; //must be a pointer, as constructor needs agruments
     Gtk::HScrollbar wPatternScroll;
     Gtk::VScrollbar wPatternScroll2;

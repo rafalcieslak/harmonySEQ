@@ -47,13 +47,14 @@ SequencerWidget::SequencerWidget(){
     wDownBox.pack_start(wNotebookAndPatternOpsHBox);
 
 
-    wNotebookAndPatternOpsHBox.pack_start(wNotebookVbox,Gtk::PACK_EXPAND_WIDGET);
+    wNotebookAndPatternOpsHBox.pack_start(wNotebookVbox/*,Gtk::PACK_EXPAND_WIDGET*/);
     wNotebookAndPatternOpsHBox.pack_start(wNotebook,Gtk::PACK_SHRINK);
     wNotebookAndPatternOpsHBox.pack_end(wPtOpsVBox,Gtk::PACK_SHRINK);
     wViewport = new Gtk::Viewport(*wPatternScroll.get_adjustment(),*wPatternScroll2.get_adjustment());
     wNotebookVbox.pack_start(*wViewport);
     wNotebookVbox.pack_end(wPatternScroll,Gtk::PACK_SHRINK);
-    wViewport->add(pattern_widget);
+    wViewport->add(wPatternWidgetBox);
+    wPatternWidgetBox.pack_start(pattern_widget,Gtk::PACK_SHRINK);
     
     wViewport->set_shadow_type(Gtk::SHADOW_NONE);
 
