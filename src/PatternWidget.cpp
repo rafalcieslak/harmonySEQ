@@ -81,6 +81,8 @@ void PatternWidget::AssignPattern(AtomContainer* cont){
   
   //The +0.5 that often appears below in coordinates it to prevent cairo from antyaliasing lines.
     
+  ct.set_line_width(3.0);
+  ct.set_line_join(Cairo::LINE_JOIN_ROUND);
   if (container) //just in case it's NULL...
   for (int x = 0; x < container->GetSize(); x++){
       Atom* atm = (*container)[x];
@@ -89,11 +91,13 @@ void PatternWidget::AssignPattern(AtomContainer* cont){
       double h = internal_height/6;
       double x1 = note->time*width;
       double w = note->length*width;
-      ct.set_source_rgb(0.5,0.0,0.0);
       ;y1++; // This is because the very first 1px line is the upper border.
     *err << "drawing note... "<< x1 << " " << y1 << " " << w << " " <<  h << "\n";
-      ct.rectangle(x1,y1,w,h);
-      ct.fill();
+      ct.rectangle(x1+1.5,y1+1.5,w-3,h-3);
+      ct.set_source_rgb(0.0,0.0,0.8);
+      ct.fill_preserve();
+      ct.set_source_rgb(0.0,0.0,0.4);
+      ct.stroke();
   }
   
   //horizontal grid
