@@ -75,14 +75,6 @@ void Action::Trigger(int data){
             Files::SetFileModified(1);
             break;
 
-        case SEQ_VELOCITY_SET:
-            if (seqVector.size()==0 || !seqH(args[1])) break;
-            seqH(args[1])->SetVelocity(args[2]);
-            mainwindow->RefreshRow(seqH(args[1])->my_row);
-            if(mainwindow->seqWidget.selectedSeq == args[1]) mainwindow->seqWidget.UpdateVelocity();
-            Files::SetFileModified(1);
-            break;
-
         case SEQ_CHANGE_ONE_NOTE:
             if (seqVector.size()==0 || !seqH(args[1])) break;
             seqH(args[1])->chord.SetNote(args[2]-1, args[3]);
@@ -170,9 +162,6 @@ Glib::ustring Action::GetLabel(){
             sprintf(temp,_("Set tempo to %d BPM"),args[1]);
             break;
 
-        case SEQ_VELOCITY_SET:
-            sprintf(temp,_("Set velocity of sequencer '%s' to %d"),GetSeqName(args[1]).c_str(),args[2]);
-            break;
         case SEQ_CHANGE_ONE_NOTE:
             sprintf(temp,_("Set note %d of sequencer '%s' to %d"),args[2],GetSeqName(args[1]).c_str(),args[3]);
             break;

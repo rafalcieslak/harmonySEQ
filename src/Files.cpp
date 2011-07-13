@@ -92,6 +92,7 @@ void SaveToFile(Glib::ustring filename){
     //And now, save the sequencers.
     //For each sequencer...
     for (unsigned int x = 0; x < seqVector.size(); x++){
+        /* THIS HAS TO BE REWRITTEN!!
         if(seqVector[x] == NULL) continue; //Skip this sequencer, if it was removed.
         //Prepare the KEY for this sequencer, according to the pattern in FILE_GROUP_TEMPLATE_SEQ, it will be used to store all  values of this sequencer.
         sprintf(temp,FILE_GROUP_TEMPLATE_SEQ,x);
@@ -123,6 +124,7 @@ void SaveToFile(Glib::ustring filename){
         }
         //Finally, store the chord as a list of parameters.
         kf.set_integer_list(temp,FILE_KEY_SEQ_CHORD,seqVector[x]->chord.SaveToVector());
+         * **/
     }
 
     //Then, save the events.
@@ -376,7 +378,7 @@ bool LoadFile015(Glib::KeyFile* kfp){
                 *err << temp;
                 return 1;
         }
-
+        /*THIS HAS TO BE REWRITTEN
         //If we got here, this means this sequencer was NOT removed. So: let's create it.
         seqVector.push_back(new Sequencer());
 
@@ -429,7 +431,7 @@ bool LoadFile015(Glib::KeyFile* kfp){
             std::vector<int> vec =   kfp->get_integer_list(temp,FILE_KEY_SEQ_CHORD);
             seqVector[x]->chord.SetFromVector(vec);
         }
-
+         * **/
         //Now proceed to the...
     }  //...next sequencer.
 
@@ -546,7 +548,7 @@ bool LoadFilePre015(Glib::KeyFile* kfp){
             seqVector.push_back(NULL);
             continue;
         }
-
+        /*THIS HAS TO BE REWRITTEN
         //If we got here, this means this sequencer was NOT removed. So: let's create it.
         seqVector.push_back(new Sequencer());
         //calculate shift...
@@ -645,6 +647,7 @@ bool LoadFilePre015(Glib::KeyFile* kfp){
         }
 
         //Now proceed to the...
+         * **/
     }  //...next sequencer.
 
     //Done loading sequencers.
@@ -698,7 +701,7 @@ bool LoadFilePre015(Glib::KeyFile* kfp){
             //NOW WARNING! Some actions use ARG1 to store sequencer handle. However, older files store the ID and not the handle.
             //So, in case the action is one of that type...
             if (Events[x]->actions[a]->type == Action::SEQ_CHANGE_CHORD || Events[x]->actions[a]->type == Action::SEQ_CHANGE_ONE_NOTE || Events[x]->actions[a]->type == Action::SEQ_CHANGE_PATTERN||
-                    Events[x]->actions[a]->type == Action::SEQ_ON_OFF_TOGGLE || Events[x]->actions[a]->type == Action::SEQ_PLAY_ONCE || Events[x]->actions[a]->type == Action::SEQ_VELOCITY_SET)
+                    Events[x]->actions[a]->type == Action::SEQ_ON_OFF_TOGGLE || Events[x]->actions[a]->type == Action::SEQ_PLAY_ONCE)
                 //substitute the ID with the handle
             {
                 Events[x]->actions[a]->args[1] = seqV(seq_unstretching_map[Events[x]->actions[a]->args[1]])->MyHandle;

@@ -41,6 +41,8 @@ public:
     /**Gets n-th atom*/
     Atom* operator[](int n);
     
+    /**Removes all atoms from pattern.*/
+    void Clear();
 private:
     std::vector<Atom *> AtmVec;
     

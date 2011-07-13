@@ -19,6 +19,7 @@
 
 #include "AtomContainer.h"
 #include <algorithm>
+#include <vector>
 
 bool AtomComparison(Atom * a1, Atom * a2)
 {
@@ -29,6 +30,14 @@ AtomContainer::AtomContainer(){
 }
 
 AtomContainer::~AtomContainer(){
+}
+
+int AtomContainer::GetSize(){
+    return AtmVec.size();
+}
+
+void AtomContainer::Clear(){
+    AtmVec.clear();
 }
 
 int AtomContainer::Add(Atom * a){

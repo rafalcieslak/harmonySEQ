@@ -24,6 +24,7 @@
 #include <gtkmm.h>
 #include "Chord.h"
 #include "seqHandle.h"
+#include "AtomContainer.h"
 using namespace std;
 
 /**Spawns a new sequencer*/
@@ -42,15 +43,10 @@ public:
     Sequencer(const Sequencer* orig);
     virtual ~Sequencer();
 
-    /**List of  notes in patterns:
-        * In fact, it's a 3-dimentional array.
-        * 1st dimention: pattern number.
-        * 2nd dimention: note number (in time - horisontal)
-        * 3rd dimention: note number (pitch - vertical)
-        *
-        * So: patterns[4][1][5] representa a boolan state of the first note (5th pith of chord) in fourth pattern.
-        * Hard to explain, easy to use.*/
-    vector<vector<vector<bool> > > patterns;
+    /**List of  patterns.
+     *    Each pattern is an AtomContainer, which basically
+     *    is a list of notes */
+    vector<AtomContainer> patterns;
 
     int AddPattern();
     bool RemovePattern(int x);
@@ -60,7 +56,7 @@ public:
     /**Fills in everything with default values*/
     void Init();
 
-    /**Stores the resolution of sequence*/
+    /**Stores the resolution of sequence. Note it should be used only to store in file, the actual resolution is no more used - that's graphical.*/
     int resolution;
 
     /**Used to change resolution of this sequencer*/
@@ -77,17 +73,6 @@ public:
     /**Returns a one note of chord of this sequencer
      *  @parram n note number*/
     int GetNoteOfChord(int n);
-
-    /**Returns a one note from a given sequence
-     * @parram n sequence note tumber*/
-    int GetPatternNote(int pattern, int n, int c);
-
-    /**Returns a one note from the active sequence
-     * @parram n sequence note tumber*/
-    bool GetActivePatternNote( int n, int c);
-
-    /**Sets a note in a given sequence*/
-    void SetPatternNote(int sequence, int n, int c, bool value);
 
     /**Sets the sequencer on/off*/
     void SetOn(bool m);
@@ -106,12 +91,6 @@ public:
 
     /**Returns channel*/
     int GetChannel();
-    
-    /**Sets velocity*/
-    void SetVelocity(int v);
-
-    /**Returns velocity*/
-    int GetVelocity();
 
     /**Changes the pattern that is played by this sequencer*/
     void ChangeActivePattern(int new_one);
@@ -143,7 +122,6 @@ protected:
 
     int channel;
     bool on;
-    int velocity;
     Glib::ustring name;
 
     int play_once_phase;

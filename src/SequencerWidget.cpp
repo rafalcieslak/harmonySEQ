@@ -242,7 +242,7 @@ void SequencerWidget::UpdateVelocity(){
     if (AnythingSelected == 0) return;
     Sequencer* seq = seqH(selectedSeq);
     ignore_signals = 1;
-    wVelocityButton.set_value(seq->GetVelocity());
+    
     ignore_signals = 0;
 }
 void SequencerWidget::UpdateActivePattern(){
@@ -365,11 +365,11 @@ void SequencerWidget::OnPatternNoteChanged(int c, bool value, int seq){
     Sequencer* sequ = seqH(selectedSeq);
     if (seq >= sequ->resolution) {*err << _("Clicked a pattern checkbox that should be hidden! \n"); return;}
     
-    sequ->SetPatternNote(wNotebook.get_current_page(),seq,c,value);
+    //sequ->SetPatternNote(wNotebook.get_current_page(),seq,c,value);
 
     //Playing on edit...
     if(Config::Interaction::PlayOnEdit)
-    if(value) midi->SendNoteEvent(sequ->GetChannel(),sequ->GetNoteOfChord(c),sequ->GetVelocity(),PLAY_ON_EDIT_MS);
+    if(value) midi->SendNoteEvent(sequ->GetChannel(),sequ->GetNoteOfChord(c),100,PLAY_ON_EDIT_MS);
 
     Files::SetFileModified(1);
 }
@@ -387,10 +387,8 @@ void SequencerWidget::OnChannelChanged(){
 void SequencerWidget::OnVelocityChanged(){
     if(ignore_signals) return;
     if(!AnythingSelected) return;
-    Sequencer* seq = seqH(selectedSeq);
     
-    seq->SetVelocity(wVelocityButton.get_value());
-    mainwindow->RefreshRow(seq->my_row);
+    
     Files::SetFileModified(1);
 }
 void SequencerWidget::OnChordWidgetChanged(){
@@ -404,7 +402,7 @@ void SequencerWidget::OnChordWidgetNoteChanged(int n, int p){
     if(!AnythingSelected) return;
     Sequencer* seq = seqH(selectedSeq);
     if(Config::Interaction::PlayOnEdit)
-        midi->SendNoteEvent(seq->GetChannel(),p,seq->GetVelocity(),PLAY_ON_EDIT_MS);
+        midi->SendNoteEvent(seq->GetChannel(),p,100,PLAY_ON_EDIT_MS);
 }
 
 void SequencerWidget::OnToggleMuteToggled(){

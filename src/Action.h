@@ -36,7 +36,7 @@ public:
         SEQ_ON_OFF_TOGGLE,
         DEPRACATED_1,
         DEPRACATED_2,
-        SEQ_VELOCITY_SET,
+        DEPRACATED_4,
         DEPRACATED_3,
         TEMPO_SET,
         SEQ_CHANGE_ONE_NOTE,

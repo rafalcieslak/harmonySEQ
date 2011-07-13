@@ -347,6 +347,12 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
             int diode_colour;
             if (seq->GetPlayOncePhase() == 2) diode_colour = 1;
             else diode_colour = 0;
+            /* WHOLE THIS HAS TO BE REWRITTEN!
+             * 
+             * 
+             * 
+             * 
+             * 
             //OK, and now we proceed all notes from one sequencer.
             //First check the length:
             if (seq->GetLength()<=1){
@@ -466,7 +472,7 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                 }
                 //Remember which note was last played, so we'll continue from next one.
                 seq->last_played_note =currnote;
-
+             * *
                 //One more echo, to turn all the diodes OFF _just before the next bar_
                 //This will also turn off all diodes in the middle of pattern, when the length > 1, but it won't be seen, for it's a very very short time before the next one is lit up.
                 snd_seq_ev_clear(&ev);
@@ -480,7 +486,7 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                 snd_seq_ev_clear(&ev);
 
             } // [if (seq->GetLength()<=1)]
-
+             * **/
         } //[If seq is on or in 2nd phase]
 
         //Finally, no matter whether the sequencer was on or not...
@@ -490,7 +496,7 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
             if ( seq->my_row) mainwindow->RefreshRow(seq->my_row);
             if (mainwindow->seqWidget.selectedSeq == seq->MyHandle) mainwindow->seqWidget.UpdateOnOffColour();
         }
-
+             
 
         //And proceed to next sequencer.
     }

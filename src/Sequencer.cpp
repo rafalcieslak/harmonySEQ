@@ -24,6 +24,7 @@
 #include "Sequencer.h"
 #include "MainWindow.h"
 #include "seqHandle.h"
+#include "AtomContainer.h"
 extern debug *dbg;
 
 extern MainWindow* mainwindow;
@@ -95,7 +96,6 @@ Sequencer::Sequencer(const Sequencer *orig) {
     active_pattern = orig->active_pattern;
     channel = orig->channel;
     length = orig->length;
-    velocity = orig->velocity;
     last_played_note = orig->last_played_note;
     play_once_phase = 0;
 }
@@ -109,7 +109,6 @@ void Sequencer::Init(){
     active_pattern = 0;
     channel = 1;
     length = 1;
-    velocity = DEFAULT_VELOCITY;
     last_played_note = 0;
     play_once_phase = 0;
     resolution = SEQUENCE_DEFAULT_SIZE;
@@ -122,47 +121,7 @@ void Sequencer::Init(){
 }
 
 void Sequencer::SetResolution(int res){
-    if (res == resolution) return;
-    
-    if (res < resolution){
-        //the new resolution is smaller
-        int ratio = resolution/res;
-        *dbg << "ensmalling resolution ratio = " << ratio << ENDL;
-
-        for(int s=0; s<patterns.size();s++){
-            vector<vector<bool> > new_sequence(res,vector<bool>(6,0));
-            assert(ratio>=1);
-            int x = 0, i = 0;
-            for (; x < resolution;x+=ratio){
-                for(int c = 0; c < 6;c++){
-                    new_sequence[i][c] = patterns[s][x][c]; //to be checked
-                }
-                i++;
-            }
-            patterns[s] = new_sequence;
-        }
-        resolution = res;
-    } else {
-        //the new resolution is larger
-        int ratio = res/resolution;
-        *dbg << "enlarging resolution ratio = " << ratio << ENDL;
-        for(int s=0; s<patterns.size();s++){
-         vector<vector<bool> > new_sequence(res,vector<bool>(6,0));
-            int x = 0;
-            for (int p =0; p < resolution;p++){
-                for (int i = 0; i < ratio;i++){
-                    for(int c = 0; c < 6; c++){
-                        new_sequence[x][c]=patterns[s][p][c];
-                    }
-                    x++;
-                }
-            }
-            patterns[s]=new_sequence;
-        }
-        resolution = res;
-    }
-
-    
+    resolution = res;
 }
 
 void Sequencer::SetLength(double len){
@@ -190,8 +149,6 @@ void Sequencer::SetChannel(int ch){channel = ch;}
 int Sequencer::GetChannel(){return channel;}
 void Sequencer::SetName(Glib::ustring nm){name = nm;}
 Glib::ustring Sequencer::GetName(){return name;}
-int Sequencer::GetVelocity(){return velocity;}
-void Sequencer::SetVelocity(int v){velocity = v;}
 
 void Sequencer::SetPlayOncePhase(int p){
     play_once_phase = p;
@@ -205,12 +162,8 @@ int Sequencer::GetPlayOncePhase(){
 
 
 int Sequencer::AddPattern(){
-    vector<bool> line(6,false);
-    vector<vector<bool> > seq;
-    for(int x = 0; x < resolution;x++){
-        seq.push_back(line);
-    }
-    patterns.push_back(seq);
+    AtomContainer notecont;
+    patterns.push_back(notecont);
     *dbg<< "Added pattern " << patterns.size() << ".\n";
     return patterns.size()-1;
 }
@@ -224,30 +177,12 @@ bool Sequencer::RemovePattern(int x){
     return 0;
 }
 
-
-int Sequencer::GetPatternNote(int pattern, int n, int c){
-    if (n>=resolution) return 0;
-    return patterns[pattern][n][c];
-}
-
-bool Sequencer::GetActivePatternNote(int n, int c){
-    return patterns[active_pattern][n][c];
-}
-
-void Sequencer::SetPatternNote(int pattern, int n, int c, bool value){
-    patterns[pattern][n][c] = value;
-
-}
-
 void Sequencer::ChangeActivePattern(int new_one){
     active_pattern = new_one%(patterns.size());
 }
 
 void Sequencer::ClearPattern(int p){
     if (p >= patterns.size()) return;
-
-    for (int x = 0; x < resolution; x ++)
-        for (int C = 0; C < 6; C++)
-            patterns[p][x][C] = false;
+    patterns[p].Clear();
 
 }

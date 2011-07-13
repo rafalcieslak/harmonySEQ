@@ -74,8 +74,6 @@ private:
     Gtk::Label label_seq;
     Gtk::HBox line_tempo;
     Gtk::Label label_tempo;
-    Gtk::HBox line_velocity;
-    Gtk::Label label_velocity;
     Gtk::HBox line_set_one_note;
     Gtk::Label label_note_nr;
     Gtk::Label label_note_seq;
@@ -100,7 +98,6 @@ private:
     Gtk::ComboBox Types_combo;
     Gtk::ComboBox Seqs_combo;
     Gtk::SpinButton tempo_button;
-    Gtk::SpinButton vol_button;
     Gtk::SpinButton notenr_button;
     Gtk::SpinButton chordseq_button;
     Gtk::SpinButton pattern_button;
