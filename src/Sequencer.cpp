@@ -17,9 +17,6 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-#include <gtkmm/widget.h>
-#include <assert.h>
 #include "messages.h"
 #include "Sequencer.h"
 #include "MainWindow.h"
@@ -31,8 +28,8 @@ extern debug *dbg;
 extern MainWindow* mainwindow;
 extern vector<Sequencer *> seqVector;
 
-int resolutions[7] = RESOLUTIONS;
-double lengths[7] = LENGTHS;
+int resolutions[RESOLUTIONS_NUM] = RESOLUTIONS;
+double lengths[LENGTHS_NUM] = LENGTHS;
 
 
 Gtk::TreeModel::Row spawn_sequencer(){

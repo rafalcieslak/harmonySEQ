@@ -148,7 +148,7 @@ SequencerWidget::SequencerWidget(){
     m_refTreeModel_res = Gtk::ListStore::create(m_Columns_resol);
     wResolutionsBox.set_model(m_refTreeModel_res);
 
-    int resolutions[7] = RESOLUTIONS;
+    int resolutions[RESOLUTIONS_NUM] = RESOLUTIONS;
     for (int x = 0; x < RESOLUTIONS_NUM; x++){
         Gtk::TreeModel::Row row = *(m_refTreeModel_res->append());
         row[m_Columns_resol.resol] = resolutions[x];
