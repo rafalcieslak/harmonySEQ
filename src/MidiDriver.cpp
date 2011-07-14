@@ -662,7 +662,7 @@ void MidiDriver::ProcessInput(){
         //Obtain the event from input
         snd_seq_event_input(seq_handle,&ev);
         //If we are in passing_midi mode, do pass the event (Well,  unless it's the ECHO, which MUST be caught).
-        if(passing_midi&&ev->type!=SND_SEQ_EVENT_ECHO) {PassEvent(ev);continue;}
+        if(passing_midi&&ev->type!=SND_SEQ_EVENT_ECHO&&ev->type!=SND_SEQ_EVENT_USR0) {PassEvent(ev);continue;}
 
         int i, c;
         //Switch, according to the type.
