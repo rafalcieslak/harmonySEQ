@@ -106,8 +106,13 @@ void PatternWidget::AssignPattern(AtomContainer* cont){
   ct.set_line_width(1);
   ct.set_source_rgb(0.3,0.3,0.2);
   for(int x = 0; x <= resolution; x++){
-        ct.move_to((int)((double)x*(double)width/resolution) + 0.5,0);
-        ct.line_to((int)((double)x*(double)width/resolution) + 0.5,internal_height);
+        if (x!=resolution){
+                ct.move_to((int)((double)x*(double)width/resolution) + 0.5,0);
+                ct.line_to((int)((double)x*(double)width/resolution) + 0.5,internal_height);
+        }else{
+                ct.move_to((int)((double)x*(double)width/resolution) - 0.5,0);
+                ct.line_to((int)((double)x*(double)width/resolution) - 0.5,internal_height); //the last one must be in drawing area, so let's put it a 1 px before
+        }  
         ct.stroke();
   }
   
