@@ -115,42 +115,42 @@ void MidiDriver::Open(){
     *dbg << _("Alsa midi driver init successfull.\n");
 }
 
-void MidiDriver::SendNoteOnEvent(int channel, int pitch, int velocity){
+void MidiDriver::SendNoteOnEventImmediatelly(int channel, int pitch, int velocity){
     //Create a new clear event
     snd_seq_event_t ev;
     snd_seq_ev_clear(&ev);
-    //Direct it to output port, to it's all subsctibers
+    //Direct it to output port, to it's all subscribers
     snd_seq_ev_set_source(&ev,output_port);
     snd_seq_ev_set_subs(&ev);
     snd_seq_ev_set_direct(&ev);
     //Fill it with data...
     snd_seq_ev_set_noteon(&ev,channel-1,pitch,velocity);
-    //And output immidiatelly - do not push into the queue.
+    //And output immediatelly - do not push into the queue.
     snd_seq_event_output(seq_handle,&ev);
     snd_seq_drain_output(seq_handle);
 
 }
 
 
-void MidiDriver::SendNoteOffEvent(int channel, int pitch){
+void MidiDriver::SendNoteOffEventImmediatelly(int channel, int pitch){
     //Create a new clear event
     snd_seq_event_t ev;
     snd_seq_ev_clear(&ev);
-    //Direct it to output port, to it's all subsctibers
+    //Direct it to output port, to it's all subscribers
     snd_seq_ev_set_source(&ev,output_port);
     snd_seq_ev_set_subs(&ev);
     snd_seq_ev_set_direct(&ev);
     //Fill it with data...
     snd_seq_ev_set_noteoff(&ev,channel-1,pitch,0);
-    //And output immidiatelly - do not push into the queue.
+    //And output immediatelly - do not push into the queue.
     snd_seq_event_output(seq_handle,&ev);
     snd_seq_drain_output(seq_handle);
 
 }
 
 void MidiDriver::SendNoteEvent(int channel, int pitch, int velocity, int duration_ms){
-    SendNoteOnEvent(channel,pitch,velocity);
-    Glib::signal_timeout().connect_once(sigc::bind(sigc::mem_fun(*this,&MidiDriver::SendNoteOffEvent),channel,pitch),duration_ms);
+    SendNoteOnEventImmediatelly(channel,pitch,velocity);
+    Glib::signal_timeout().connect_once(sigc::bind(sigc::mem_fun(*this,&MidiDriver::SendNoteOffEventImmediatelly),channel,pitch),duration_ms);
 }
 
 void MidiDriver::PassEvent(snd_seq_event_t* ev){
@@ -345,38 +345,47 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
         //Output the notes only if the sequencer is on, or it's in 2nd phase. Otherwise skip the note outputting routines....
         if (seq->GetOn() || seq->GetPlayOncePhase() == 2){
 
-            //diode colour
+            //Selecting diode color according to mode
             int diode_colour;
             if (seq->GetPlayOncePhase() == 2) diode_colour = 1;
             else diode_colour = 0;
             
-            
+            //Local tick is the tick at which this sequence repetition had began. Occasionally it may be lower than tick, for
+            //example in case this repetition has already been played in 1/3.
             double local_tick = tick-seq->play_from_here_marker*TICKS_PER_NOTE*seq->GetLength();
+            //Shortcut to the pattern we'll play.
             AtomContainer* pattern = seq->GetActivePattern();
+            //Number of notes in one sequence
             int n = pattern->GetSize();
+            //The time (in ticks)  how long one sequence repetition will last. Note it can be larger than TICKS_PER_NOTE and that's OK.
             double sequence_time = TICKS_PER_NOTE*seq->GetLength();
+            //The note.
             NoteAtom* note;
             
+            //Now let's find the note we'll begin the playback from.
             int currnote = 0;
             if (seq->play_from_here_marker == 0.0) 
                 currnote = 0;
             else{
-              //we have to find the note we'll be now playing. this should be done using binary search, but as for now it's brute force.
+                //We have to find the note we'll be now playing. This should be done using binary search, but as for now it's brute force.
                 while((*pattern)[currnote]->time < seq->play_from_here_marker ) currnote++;
             }
-            *err << "currnote = " << currnote << ENDL;
             
             if(n != 0) //in case the pattern is empty, output nothing.
             while(1){
                 *dbg << "currnote = " << currnote << ENDL;
+                //First, fetch the note from pattern.
                 note = dynamic_cast<NoteAtom*>((*pattern)[currnote]);
                 *dbg << "localtick = " << local_tick << ", tick = " << tick << ENDL;
+                //Now check if we exceeded one tact
                 if(local_tick + note->time*TICKS_PER_NOTE*seq->GetLength() >= tick + TICKS_PER_NOTE)
                 { //that means: if this note should be played in next bar...
                     *dbg << "end of bar. setting marker to... " <<((double)tick+(double)TICKS_PER_NOTE-local_tick)/sequence_time<< "\n";
+                    //Calculate and set the marker...
                     seq->play_from_here_marker = ((double)tick+(double)TICKS_PER_NOTE-local_tick)/sequence_time;
                     break; //stop playing.
                 }
+                //Schedule the note for playback.
                 {
                     int pitch = seq->GetNoteOfChord(note->pitch);
                     *dbg << "playing it! p = " << pitch << ENDL;
@@ -384,7 +393,7 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                     snd_seq_ev_clear(&ev);
                     //Fill it with note data
                     snd_seq_ev_set_note(&ev, seq->GetChannel() - 1, pitch, note->velocity, note->length*TICKS_PER_NOTE*seq->GetLength());
-                    //Schedule it in appropriate momment in time (rather: tick, not time), putting it on a queue
+                    //Schedule it in appropriate moment in time (rather: tick, not time), putting it on a queue
                     snd_seq_ev_schedule_tick(&ev, queueid, 0, local_tick + note->time*TICKS_PER_NOTE*seq->GetLength());
                     //Direct it ti output port, to all it's subscribers
                     snd_seq_ev_set_source(&ev, output_port);
@@ -392,16 +401,21 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                     //Output the event (but it stays at the queue.)
                     snd_seq_event_output_direct(seq_handle, &ev);
                 }
+                //Proceed to next note.
                 currnote++;
-                if(currnote == n){ // this means we have completed the sequence!
+                //Check if it isn't last+1 note...
+                if(currnote == n){ // ...this means we have completed the sequence!
+                    //So let's get back to the very first note
                     currnote = 0;
+                    //Increment locak_tick
                     local_tick+= sequence_time;
+                    //And stop playing, if wa were to play sequence just once.
                     if (seq->GetPlayOncePhase() == 2){ //if we were playing only once...
                       seq->SetPlayOncePhase(3);
                       break;
                     }
                 }
-                
+                //And repeat the loop.
                 
             }
             /*
