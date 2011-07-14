@@ -106,12 +106,12 @@ error & operator <<(error &err, int number){
     err.say(temp);
     return err;
 }
-//error & operator <<(error &err, double number){
-//    char temp[20];
-//    sprintf(temp,"%f",number);
-//    err.say(temp);
-//    return err;
-//}
+error & operator <<(error &err, double number){
+    char temp[20];
+    sprintf(temp,"%f",number);
+    err.say(temp);
+    return err;
+}
 
 
 error & operator <<(error &err, Glib::ustring message){

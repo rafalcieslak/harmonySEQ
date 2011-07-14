@@ -94,7 +94,7 @@ Sequencer::Sequencer(const Sequencer *orig) {
     active_pattern = orig->active_pattern;
     channel = orig->channel;
     length = orig->length;
-    last_played_note = orig->last_played_note;
+    play_from_here_marker = orig->play_from_here_marker;
     play_once_phase = 0;
 }
 
@@ -107,7 +107,7 @@ void Sequencer::Init(){
     active_pattern = 0;
     channel = 1;
     length = 1;
-    last_played_note = 0;
+    play_from_here_marker = 0.0;
     play_once_phase = 0;
     resolution = SEQUENCE_DEFAULT_SIZE;
     chord.SetType(Chord::CHORD_TYPE_TRIAD);
@@ -139,13 +139,16 @@ double Sequencer::GetLength(){
     return length;
 }
 
-void Sequencer::SetActivePattern(int a){
+void Sequencer::SetActivePatternNumber(int a){
     active_pattern  = a;
-    
 }
 
-int Sequencer::GetActivePattern(){
+int Sequencer::GetActivePatternNumber(){
     return active_pattern;
+}
+
+AtomContainer* Sequencer::GetActivePattern(){
+    return &patterns[active_pattern];
 }
 
 int Sequencer::GetNoteOfChord(int n){return chord.GetNotePlusBasenote(n);}

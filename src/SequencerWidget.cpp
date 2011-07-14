@@ -251,8 +251,8 @@ void SequencerWidget::UpdateActivePattern(){
     Sequencer* seq = seqH(selectedSeq);
 
     ignore_signals = 1;
-    UpdateAsterisk(wActivePattern.get_value(),seq->GetActivePattern());
-    wActivePattern.set_value(seq->GetActivePattern());
+    UpdateAsterisk(wActivePattern.get_value(),seq->GetActivePatternNumber());
+    wActivePattern.set_value(seq->GetActivePatternNumber());
     ignore_signals = 0;
 }
 void SequencerWidget::UpdateChord(){
@@ -321,11 +321,11 @@ void SequencerWidget::InitNotebook(){
     do_not_react_on_page_changes = 0;
 
     //reset the current page
-    wNotebook.set_current_page(seqH(selectedSeq)->GetActivePattern());
+    wNotebook.set_current_page(seqH(selectedSeq)->GetActivePatternNumber());
     UpdatePatternWidget();
 
     UpdateActivePatternRange();
-    UpdateAsterisk(wActivePattern.get_value(),seq->GetActivePattern()); //this will mark active tab with a star (Pat x*)
+    UpdateAsterisk(wActivePattern.get_value(),seq->GetActivePatternNumber()); //this will mark active tab with a star (Pat x*)
     SetRemoveButtonSensitivity(); //according to the number of pages
 }
 
@@ -457,11 +457,11 @@ void SequencerWidget::OnActivePatternChanged(){
     Sequencer* seq = seqH(selectedSeq);
 
     int activepattern = wActivePattern.get_value();
-    int old = seq->GetActivePattern();
+    int old = seq->GetActivePatternNumber();
 
     UpdateAsterisk(old,activepattern);
 
-    seq->SetActivePattern(activepattern); //store in parent
+    seq->SetActivePatternNumber(activepattern); //store in parent
 
     mainwindow->RefreshRow(seq->my_row);
     Files::SetFileModified(1);
@@ -517,8 +517,8 @@ void SequencerWidget::OnRemovePatternClicked(){
     delete notebook_pages[n];
     notebook_pages.erase(notebook_pages.begin()+n);
     seq->patterns.erase(seq->patterns.begin()+n);
-    if (seq->GetActivePattern() == n ) { seq->SetActivePattern(0);wActivePattern.set_value(0.0);}
-    if (seq->GetActivePattern() > n ) {seq->SetActivePattern(seq->GetActivePattern()-1);wActivePattern.set_value(seq->GetActivePattern()); }
+    if (seq->GetActivePatternNumber() == n ) { seq->SetActivePatternNumber(0);wActivePattern.set_value(0.0);}
+    if (seq->GetActivePatternNumber() > n ) {seq->SetActivePatternNumber(seq->GetActivePatternNumber()-1);wActivePattern.set_value(seq->GetActivePatternNumber()); }
     InitNotebook();
     wNotebook.set_current_page(n);
     UpdateActivePatternRange();

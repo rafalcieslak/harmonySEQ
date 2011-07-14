@@ -68,8 +68,9 @@ public:
     /**Returns seq's length*/
     double GetLength();
 
-    void SetActivePattern(int a);
-    int GetActivePattern();
+    void SetActivePatternNumber(int a);
+    int GetActivePatternNumber();
+    AtomContainer* GetActivePattern();
     /**Returns a one note of chord of this sequencer
      *  @parram n note number*/
     int GetNoteOfChord(int n);
@@ -101,8 +102,8 @@ public:
     /**Clears the whole pattern*/
     void ClearPattern(int p);
 
-    /**Remembers the last played note*/
-    int last_played_note;
+    /**Remembers where to start playback in next bar.*/
+    double play_from_here_marker;
 
     /**Keeps a reference to a row in Sequencers TreeModel*/
     Gtk::TreeRow my_row;

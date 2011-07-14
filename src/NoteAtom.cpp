@@ -25,6 +25,7 @@ NoteAtom::NoteAtom(double _time, double _length, int _pitch)
 {
     length = _length;
     pitch = _pitch;
+    velocity = 100;
 }
 
 

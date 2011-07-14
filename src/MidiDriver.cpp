@@ -29,6 +29,7 @@
 #include "Configuration.h"
 #include "SettingsWindow.h"
 #include "SequencerWidget.h"
+#include "NoteAtom.h"
 extern int running;
 
 MidiDriver::MidiDriver() {
@@ -329,14 +330,15 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
         //Phase 3 means it has already been played, and it has just ended, so now we'll just turn it off, by setting phase back to initial state: 0.
         if(seq->GetPlayOncePhase() == 3) {
             seq->SetPlayOncePhase(0);
+            seq->play_from_here_marker = 0.0; //reset the starting playback position.
             needs_to_have_its_row_refreshed = true;
         }
         //If phase is set to 1, this means this sequencer is about to be played once right now, so we'll change the phase to 2 (to change the colour
-        //in main window corresponding to this sequencer). The last_palyed_note is set to 0, to make sure that when a loooong sequence (more
+        //in main window corresponding to this sequencer). The last_played_note is set to 0, to make sure that when a loooong sequence (more
         //than one bar long) is played once, it's played from it's beggining
         if(seq->GetPlayOncePhase() == 1) {
             seq->SetPlayOncePhase(2);
-            seq->last_played_note = 0;
+            seq->play_from_here_marker = 0.0;
             needs_to_have_its_row_refreshed = true;
         }
 
@@ -347,6 +349,89 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
             int diode_colour;
             if (seq->GetPlayOncePhase() == 2) diode_colour = 1;
             else diode_colour = 0;
+            
+            
+            double local_tick = tick-seq->play_from_here_marker*TICKS_PER_NOTE*seq->GetLength();
+            AtomContainer* pattern = seq->GetActivePattern();
+            int n = pattern->GetSize();
+            double sequence_time = TICKS_PER_NOTE*seq->GetLength();
+            NoteAtom* note;
+            
+            int currnote = 0;
+            if (seq->play_from_here_marker == 0.0) 
+                currnote = 0;
+            else{
+              //we have to find the note we'll be now playing. this should be done using binary search, but as for now it's brute force.
+                while((*pattern)[currnote]->time < seq->play_from_here_marker ) currnote++;
+            }
+            *err << "currnote = " << currnote << ENDL;
+            
+            if(n != 0) //in case the pattern is empty, output nothing.
+            while(1){
+                *err << "currnote = " << currnote << ENDL;
+                note = dynamic_cast<NoteAtom*>((*pattern)[currnote]);
+                *err << "localtick = " << local_tick << ", tick = " << tick << ENDL;
+                if(local_tick + note->time*TICKS_PER_NOTE*seq->GetLength() >= tick + TICKS_PER_NOTE)
+                { //that means: if this note should be played in next bar...
+                    *err << "end of bar. setting marker to... " <<((double)tick+(double)TICKS_PER_NOTE-local_tick)/sequence_time<< "\n";
+                    seq->play_from_here_marker = ((double)tick+(double)TICKS_PER_NOTE-local_tick)/sequence_time;
+                    break; //stop playing.
+                }
+                {
+                    int pitch = seq->GetNoteOfChord(note->pitch);
+                    *err << "playing it! p = " << pitch << ENDL;
+                    //Create a new event (clear it)...
+                    snd_seq_ev_clear(&ev);
+                    //Fill it with note data
+                    snd_seq_ev_set_note(&ev, seq->GetChannel() - 1, pitch, note->velocity, note->length*TICKS_PER_NOTE*seq->GetLength());
+                    //Schedule it in appropriate momment in time (rather: tick, not time), putting it on a queue
+                    snd_seq_ev_schedule_tick(&ev, queueid, 0, local_tick + note->time*TICKS_PER_NOTE*seq->GetLength());
+                    //Direct it ti output port, to all it's subscribers
+                    snd_seq_ev_set_source(&ev, output_port);
+                    snd_seq_ev_set_subs(&ev);
+                    //Output the event (but it stays at the queue.)
+                    snd_seq_event_output_direct(seq_handle, &ev);
+                }
+                currnote++;
+                if(currnote == n){ // this means we have completed the sequence!
+                    currnote = 0;
+                    local_tick+= sequence_time;
+                    if (seq->GetPlayOncePhase() == 2){ //if we were playing only once...
+                      seq->SetPlayOncePhase(3);
+                      break;
+                    }
+                }
+                
+                
+            }
+            /*
+            if(seq->GetPlayOncePhase() == 2){
+                //playing once. simplier.  
+                AtomContainer* pattern = seq->GetActivePattern();
+                int n = pattern->GetSize();
+                for (int x = 0; x < n; x++){
+                    NoteAtom* note = dynamic_cast<NoteAtom*>((*pattern)[x]);
+                    //output each note.
+                    int pitch = seq->GetNoteOfChord(note->pitch);
+                    //Create a new event (clear it)...
+                    snd_seq_ev_clear(&ev);
+                    //Fill it with note data
+                    snd_seq_ev_set_note(&ev, seq->GetChannel() - 1, pitch, note->velocity, note->length*TICKS_PER_NOTE*seq->GetLength());
+                    //Schedule it in appropriate momment in time (rather: tick, not time), putting it on a queue
+                    snd_seq_ev_schedule_tick(&ev, queueid, 0, tick + note->time*TICKS_PER_NOTE*seq->GetLength());
+                    //Direct it ti output port, to all it's subscribers
+                    snd_seq_ev_set_source(&ev, output_port);
+                    snd_seq_ev_set_subs(&ev);
+                    //Output the event (but it stays at the queue.)
+                    snd_seq_event_output_direct(seq_handle, &ev);
+                    
+                }
+                seq->SetPlayOncePhase(3);
+            } else {
+              //playing looped.  
+            }
+            */
+            
             /* WHOLE THIS HAS TO BE REWRITTEN!
              * 
              * 

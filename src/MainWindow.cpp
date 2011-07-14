@@ -394,7 +394,7 @@ Gtk::TreeModel::Row MainWindow::AddSequencerRow(int x)
     row[m_columns_sequencers.col_name] = seqVector[x]->GetName();
     row[m_columns_sequencers.col_muted] = seqVector[x]->GetOn();
     row[m_columns_sequencers.col_channel] = seqVector[x]->GetChannel();
-    row[m_columns_sequencers.col_pattern] = seqVector[x]->GetActivePattern();
+    row[m_columns_sequencers.col_pattern] = seqVector[x]->GetActivePatternNumber();
     row[m_columns_sequencers.col_res] = seqVector[x]->resolution;
     row[m_columns_sequencers.col_len] = seqVector[x]->GetLength();
     row[m_columns_sequencers.col_chord] = seqVector[x]->chord.GetName();
@@ -427,7 +427,7 @@ void MainWindow::InitTreeData(){
         row[m_columns_sequencers.col_name] = seqV(x)->GetName();
         row[m_columns_sequencers.col_channel] = seqV(x)->GetChannel();
         row[m_columns_sequencers.col_res] = seqV(x)->resolution;
-        row[m_columns_sequencers.col_pattern] = seqV(x)->GetActivePattern();
+        row[m_columns_sequencers.col_pattern] = seqV(x)->GetActivePatternNumber();
         row[m_columns_sequencers.col_len] = seqV(x)->GetLength();
         row[m_columns_sequencers.col_chord] = seqV(x)->chord.GetName();
         seqV(x)->my_row = row;
@@ -463,7 +463,7 @@ void MainWindow::RefreshRow(Gtk::TreeRow row){
     row[m_columns_sequencers.col_name] = seq->GetName();
     row[m_columns_sequencers.col_channel] = seq->GetChannel();
     row[m_columns_sequencers.col_res] = seq->resolution;
-    row[m_columns_sequencers.col_pattern] = seq->GetActivePattern();
+    row[m_columns_sequencers.col_pattern] = seq->GetActivePatternNumber();
     row[m_columns_sequencers.col_len] = seq->GetLength();
     row[m_columns_sequencers.col_chord] = seq->chord.GetName();
     if(seq->GetOn()){
