@@ -22,6 +22,9 @@
 #include <vector>
 #include "Atom.h"
 
+class Sequencer;
+
+//Used for sorting atoms. Compares it's time.
 bool AtomComparison(Atom * a1, Atom * a2);
 
 class AtomContainer {
@@ -43,6 +46,13 @@ public:
     
     /**Removes all atoms from pattern.*/
     void Clear();
+    
+    /**Tell the container who's its owner.*/
+    void SetParent(Sequencer* parent);
+    
+    /**The sequencer this container belongs to, if known.*/
+    Sequencer* parent;
+    
 private:
     std::vector<Atom *> AtmVec;
     

@@ -32,6 +32,10 @@ AtomContainer::AtomContainer(){
 AtomContainer::~AtomContainer(){
 }
 
+void AtomContainer::SetParent(Sequencer* _parent){
+    parent = _parent;
+}
+
 int AtomContainer::GetSize(){
     return AtmVec.size();
 }

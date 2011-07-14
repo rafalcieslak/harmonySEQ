@@ -427,13 +427,12 @@ void SequencerWidget::OnResolutionChanged(){
     if(ignore_signals) return;
     if(!AnythingSelected) return;
     Gtk::TreeModel::Row row = *(wResolutionsBox.get_active());
-    //===
-    pattern_widget.SetResolution(row[m_Columns_resol.resol]);
-    //===
+    
     Sequencer* seq = seqH(selectedSeq);
 
 
     seq->SetResolution(row[m_Columns_resol.resol]);
+    pattern_widget.Redraw();
 
     //FIXME: following is no longer needed. Whole column should be removed.
     mainwindow->RefreshRow(seq->my_row);
@@ -578,10 +577,10 @@ void SequencerWidget::SetOnOffColour(OnOffColour c){
 
 bool SequencerWidget::OnPatternMouseScroll(GdkEventScroll* e){
     if(!CtrlKeyDown){ //Crtl key not pressed, we'll increment/decrement the viewport's adjustment by one page size
-        if(e->direction == GDK_SCROLL_UP){
+        if(e->direction == GDK_SCROLL_DOWN){
             double inc  = wViewport->get_hadjustment()->get_step_increment();
              wViewport->get_hadjustment()->set_value(-inc + wViewport->get_hadjustment()->get_value());
-        }else if (e->direction == GDK_SCROLL_DOWN){
+        }else if (e->direction == GDK_SCROLL_UP){
             double inc  = wViewport->get_hadjustment()->get_step_increment();
             if(!(wViewport->get_hadjustment()->get_value() + wViewport->get_hadjustment()->get_page_size() + inc > wViewport->get_hadjustment()->get_upper() ))
                 wViewport->get_hadjustment()->set_value(inc + wViewport->get_hadjustment()->get_value());

@@ -28,9 +28,6 @@ public:
     virtual ~PatternWidget();
     void SetInternalHeight(int h);
     
-    void SetResolution(int r);
-    int GetResoution();
-    
     void Redraw();
     
     void AssignPattern(AtomContainer* cont);
@@ -47,7 +44,6 @@ private:
     
     int internal_height;
     double vert_size; //used to controll zooming
-    int resolution;
     AtomContainer* container;
     
 };

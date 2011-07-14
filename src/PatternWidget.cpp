@@ -22,6 +22,7 @@
 #include "messages.h"
 #include "AtomContainer.h"
 #include "NoteAtom.h"
+#include "Sequencer.h"
 PatternWidget::PatternWidget(){
     internal_height=50; //random guess. will be reset soon anyway by the SequencerWidget, but better protect from 0-like values.
     vert_size = 450.0; //adjust for better default size
@@ -33,15 +34,6 @@ PatternWidget::~PatternWidget(){
 void PatternWidget::SetInternalHeight(int h){
     internal_height = h;
     UpdateSizeRequest();
-}
-
-void PatternWidget::SetResolution(int r){
-    resolution = r;
-    Redraw();
-}
-
-int PatternWidget::GetResoution(){
-    return resolution;
 }
 
 void PatternWidget::Redraw(){
@@ -78,6 +70,7 @@ void PatternWidget::AssignPattern(AtomContainer* cont){
   const int width = allocation.get_width();
   const int height = allocation.get_height();
   
+  int resolution = container->parent->resolution;
   
   //The +0.5 that often appears below in coordinates it to prevent cairo from antyaliasing lines.
     
