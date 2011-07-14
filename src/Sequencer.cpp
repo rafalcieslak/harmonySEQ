@@ -171,8 +171,7 @@ int Sequencer::GetPlayOncePhase(){
 
 
 int Sequencer::AddPattern(){
-    AtomContainer notecont;
-    notecont.SetParent(this);
+    AtomContainer notecont(this);
     patterns.push_back(notecont);
     *dbg<< "Added pattern " << patterns.size() << ".\n";
     return patterns.size()-1;

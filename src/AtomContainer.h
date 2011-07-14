@@ -29,6 +29,7 @@ bool AtomComparison(Atom * a1, Atom * a2);
 
 class AtomContainer {
 public:
+    AtomContainer(Sequencer* parent);
     AtomContainer();
     virtual ~AtomContainer();
     
@@ -48,10 +49,10 @@ public:
     void Clear();
     
     /**Tell the container who's its owner.*/
-    void SetParent(Sequencer* parent);
+    void SetOwner(Sequencer* owner);
     
     /**The sequencer this container belongs to, if known.*/
-    Sequencer* parent;
+    Sequencer* owner;
     
 private:
     std::vector<Atom *> AtmVec;

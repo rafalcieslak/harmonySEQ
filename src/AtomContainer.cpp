@@ -27,13 +27,18 @@ bool AtomComparison(Atom * a1, Atom * a2)
 }
 
 AtomContainer::AtomContainer(){
+    owner = NULL;
+}
+
+AtomContainer::AtomContainer(Sequencer* _owner){
+    owner = _owner;
 }
 
 AtomContainer::~AtomContainer(){
 }
 
-void AtomContainer::SetParent(Sequencer* _parent){
-    parent = _parent;
+void AtomContainer::SetOwner(Sequencer* _owner){
+    owner = _owner;
 }
 
 int AtomContainer::GetSize(){

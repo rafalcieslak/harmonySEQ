@@ -70,7 +70,7 @@ void PatternWidget::AssignPattern(AtomContainer* cont){
   const int width = allocation.get_width();
   const int height = allocation.get_height();
   
-  int resolution = container->parent->resolution;
+  int resolution = container->owner->resolution;
   
   //The +0.5 that often appears below in coordinates it to prevent cairo from antyaliasing lines.
     
