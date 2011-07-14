@@ -163,7 +163,7 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
                         const int width = allocation.get_width();
                         const int height = allocation.get_height();
                         //count position
-                        int line = 5 - drag_beggining_y / (internal_height / 6);
+                        int line = 5 - drag_beggining_y / (internal_height / 6); //I HAVE NO IDEA WHY THERE SHOULD BE 5 AND NOT 6, DO NOT ASK THAT SEEMS TO BE ****** WEIRD
                         double time = (double) drag_beggining_x / (double) width;
                         //looking if there is a note where drag was began...
                         int found = -1;
@@ -198,8 +198,22 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
                 }
             }
         }else{ //drag in process
-        *err << event->x << " " << event->y <<ENDL;
+            Gtk::Allocation allocation = get_allocation();
+            const int width = allocation.get_width();
+            const int height = allocation.get_height();
+            //count position
+            int line = 6 - event->y / (internal_height / 6);
+            double time = (double) event->x / (double) width;
+            *err << line << " " << time <<ENDL;
             
+            std::set<int>::iterator it = selection.begin();
+            for (; it != selection.end(); it++) {
+                NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[*it]);
+                note->pitch = line+note->drag_offset_line;
+                note->time = time+note->drag_offset_time;
+            *err << " " << note->pitch << " " << note->time <<ENDL;
+            }
+            Redraw();
         }
         
     }
