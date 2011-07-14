@@ -64,7 +64,7 @@ void PatternWidget::ZoomOut(){
 }
 
 void PatternWidget::AssignPattern(AtomContainer* cont){
-    *err << "assigning pattern \n";
+    *dbg << "assigning pattern \n";
     container = cont;
     Redraw();
 }

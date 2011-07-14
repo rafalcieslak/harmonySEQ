@@ -330,12 +330,12 @@ void SequencerWidget::InitNotebook(){
 }
 
 void SequencerWidget::UpdatePatternWidget(int pattern){
-    *dbg << "Updating pattern VBox... \n";
+    *dbg << "Updating pattern widget... \n";
     if (!AnythingSelected) return;
     //if called without parameter...:
     if (pattern = -1) pattern = wNotebook.get_current_page();
     Sequencer* seq = seqH(selectedSeq);
-    *err<<"Asking to update pw to " << pattern << ENDL;
+    *dbg<<"Asking to update pw to " << pattern << ENDL;
     pattern_widget.AssignPattern(&seq->patterns[pattern]);
     pattern_widget.SetInternalHeight(chordwidget.get_height());
 }
