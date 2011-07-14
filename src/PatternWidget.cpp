@@ -23,10 +23,13 @@
 #include "AtomContainer.h"
 #include "NoteAtom.h"
 #include "Sequencer.h"
+
 PatternWidget::PatternWidget(){
     internal_height=50; //random guess. will be reset soon anyway by the SequencerWidget, but better protect from 0-like values.
     vert_size = 450.0; //adjust for better default size
     add_events(Gdk::BUTTON_PRESS_MASK);
+    add_events(Gdk::BUTTON_RELEASE_MASK);
+    add_events(Gdk::BUTTON1_MOTION_MASK);
 }
 
 PatternWidget::~PatternWidget(){
@@ -71,6 +74,10 @@ void PatternWidget::ClearSelection(){
 bool PatternWidget::on_button_press_event(GdkEventButton* event){
     if(event->button == 1) //LMB
     {
+        mouse_button_is_down = 1;
+        drag_beggining_x = event->x;
+        drag_beggining_y = event->y;
+        
         Gtk::Allocation allocation = get_allocation();
         const int width = allocation.get_width();
         const int height = allocation.get_height();
@@ -100,7 +107,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
             }else{
                 //clicked a note.
                 if (event->state & (1 << 0)) {//shift key was pressed...
-                    //we'll add the note to selection, unless it's already selecte, then we de-select it.
+                    //we'll add the note to selection, unless it's already selected, then we de-select it.
                     std::set<int>::iterator it= selection.find(found);
                      if(it != selection.end()) 
                          //it's already selected, then:
@@ -108,16 +115,76 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                      else
                          //it was not selected, select it.
                          selection.insert(found);
-                } else {
-                    //we'll make a new selection
-                    selection.clear();
-                    selection.insert(found);
+                } else {//shift key was not pressed
+                    std::set<int>::iterator it= selection.find(found);
+                     if(it != selection.end()) 
+                         //it's already selected, then:
+                         ;
+                     else{
+                         //it was not selected
+                         selection.clear();
+                         selection.insert(found);
+                     }
                 }
             }
             
             Redraw();
         } //(event->y <= internal_height)
     }
+}
+
+bool PatternWidget::on_button_release_event(GdkEventButton* event){
+    if(event->button == 1)
+        if(!selection_is_being_dragged){
+            mouse_button_is_down = 0;
+        }else{
+            mouse_button_is_down = 0;
+            selection_is_being_dragged = 0;
+        }
+    
+}
+
+bool PatternWidget::on_leave_notify_event(GdkEventCrossing* event){
+    mouse_button_is_down = 0;
+    selection_is_being_dragged = 0;
+}
+
+bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
+    if(event->state & (1 << 8)){ //LMB down 
+        if(!selection_is_being_dragged){
+            if(mouse_button_is_down){
+                if(!selection.empty()){
+                    //if moved some distance, mark drag as in progress. 
+                    //if we use SHIFT to precise moving, do not apply this distance, and mark as drag regardless of it.
+                    const int distance = 9;
+                    if(event->state & (1 << 0) || event->x > drag_beggining_x+distance || event->y > drag_beggining_y + distance || event->x < drag_beggining_x - distance || event->y < drag_beggining_y - distance){
+                        selection_is_being_dragged = 1;
+                        //beggining drag. 
+                        Gtk::Allocation allocation = get_allocation();
+                        const int width = allocation.get_width();
+                        const int height = allocation.get_height();
+                        int line = 6-drag_beggining_y/(internal_height/6);
+                        drag_beggining_line = line;
+                        double time = (double)drag_beggining_x/(double)width;
+                        drag_beggining_time = time;
+                        //Store note offsets...
+                        std::set<int>::iterator it = selection.begin();
+                        for (;it!=selection.end();it++) {
+                            NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[*it]);
+                            note->drag_offset_line = note->pitch - line;
+                            note->drag_offset_time = note->time-time;
+                            *err << note->drag_offset_line << " " << note->drag_offset_time << ENDL;
+                        }
+                    }
+                }
+            }
+        }else{ //drag in process
+        *err << event->x << " " << event->y <<ENDL;
+            
+        }
+        
+    }
+    
 }
 
 void PatternWidget::on_drag_begin(const Glib::RefPtr<Gdk::DragContext>& context){

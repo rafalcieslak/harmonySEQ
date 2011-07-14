@@ -42,11 +42,19 @@ protected:
    virtual bool on_expose_event(GdkEventExpose* event);
     
    virtual bool on_button_press_event(GdkEventButton* event);
+   virtual bool on_button_release_event(GdkEventButton* event);
    
    virtual void on_drag_begin(const Glib::RefPtr<Gdk::DragContext>& context);
+   virtual bool on_motion_notify_event(GdkEventMotion* event);
+   virtual bool on_leave_notify_event(GdkEventCrossing* event);
 private:
     
     std::set<int> selection;
+    bool mouse_button_is_down;
+    int drag_beggining_x, drag_beggining_y;
+    int drag_beggining_line;
+    double drag_beggining_time;
+    bool selection_is_being_dragged;
     
     void UpdateSizeRequest();
     
