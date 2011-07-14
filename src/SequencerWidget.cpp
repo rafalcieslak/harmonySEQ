@@ -446,6 +446,7 @@ void SequencerWidget::OnLengthChanged(){
 
     Gtk::TreeModel::Row row = *(wLengthBox.get_active());
     seq->SetLength(row[m_Columns_len.len]);
+    seq->play_from_here_marker = 0.0; //important, to avoid shifts
 
     mainwindow->RefreshRow(seq->my_row);
     Files::SetFileModified(1);
