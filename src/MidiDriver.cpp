@@ -368,18 +368,18 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
             
             if(n != 0) //in case the pattern is empty, output nothing.
             while(1){
-                *err << "currnote = " << currnote << ENDL;
+                *dbg << "currnote = " << currnote << ENDL;
                 note = dynamic_cast<NoteAtom*>((*pattern)[currnote]);
-                *err << "localtick = " << local_tick << ", tick = " << tick << ENDL;
+                *dbg << "localtick = " << local_tick << ", tick = " << tick << ENDL;
                 if(local_tick + note->time*TICKS_PER_NOTE*seq->GetLength() >= tick + TICKS_PER_NOTE)
                 { //that means: if this note should be played in next bar...
-                    *err << "end of bar. setting marker to... " <<((double)tick+(double)TICKS_PER_NOTE-local_tick)/sequence_time<< "\n";
+                    *dbg << "end of bar. setting marker to... " <<((double)tick+(double)TICKS_PER_NOTE-local_tick)/sequence_time<< "\n";
                     seq->play_from_here_marker = ((double)tick+(double)TICKS_PER_NOTE-local_tick)/sequence_time;
                     break; //stop playing.
                 }
                 {
                     int pitch = seq->GetNoteOfChord(note->pitch);
-                    *err << "playing it! p = " << pitch << ENDL;
+                    *dbg << "playing it! p = " << pitch << ENDL;
                     //Create a new event (clear it)...
                     snd_seq_ev_clear(&ev);
                     //Fill it with note data

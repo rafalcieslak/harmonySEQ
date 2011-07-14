@@ -49,7 +49,7 @@ void PatternWidget::Redraw(){
 }
 
 void PatternWidget::UpdateSizeRequest(){
-    *err << "sizerequest " << vert_size << " " << internal_height+20 << ENDL;
+    //*dbg << "sizerequest " << vert_size << " " << internal_height+20 << ENDL;
     set_size_request(vert_size,internal_height+20);
 }
 
@@ -92,7 +92,7 @@ void PatternWidget::AssignPattern(AtomContainer* cont){
       double x1 = note->time*width;
       double w = note->length*width;
       ;y1++; // This is because the very first 1px line is the upper border.
-    *err << "drawing note... "<< x1 << " " << y1 << " " << w << " " <<  h << "\n";
+    //*dbg << "drawing note... "<< x1 << " " << y1 << " " << w << " " <<  h << "\n";
       ct.rectangle(x1+1.5,y1+1.5,w-3,h-3);
       ct.set_source_rgb(0.0,0.0,0.8);
       ct.fill_preserve();
