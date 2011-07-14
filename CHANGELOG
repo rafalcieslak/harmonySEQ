@@ -1,3 +1,6 @@
+harmonyseq 0.16 
+	- Added new chords.
+
 harmonyseq 0.15 "arising"
 	- Reorganized sequencer window, significantly improving the way a pattern is presented.
 	- Merged the sequencer window and the events window into the main window.

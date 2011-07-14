@@ -59,6 +59,35 @@ int GUITAR_TABS_MINOR[12][6] = {
 
 };
 
+int GUITAR_TABS_MAJ7[12][6] = {
+    {0,3,2,0,0,0}, //C
+    {0,5,4,2,2,2}, //C#
+    {0,4,3,1,1,1}, //D
+    {0,0,1,3,3,3}, //D#
+    {0,2,1,1,0,0}, //E
+    {1,0,2,2,1,0}, //F
+    {0,0,4,3,2,1}, //F#
+    {3,2,0,0,0,2}, //G
+    {0,0,1,1,1,3}, //G#
+    {0,0,2,1,2,0}, //A
+    {0,1,3,2,3,1}, //A#
+    {2,2,1,3,0,0}  //H
+};
+int GUITAR_TABS_M7[12][6] = {
+    {0,0,1,3,1,3}, //C
+    {0,4,2,1,0,0}, //C#
+    {0,0,0,2,1,1}, //D
+    {0,0,1,3,2,2}, //D#
+    {0,2,2,0,3,0}, //E
+    {1,3,3,1,4,1}, //F
+    {2,0,2,2,2,0}, //F#
+    {0,1,3,0,3,0}, //G
+    {1,3,1,1,4,1}, //G#
+    {0,0,2,0,1,0}, //A
+    {0,1,3,1,2,1}, //A#
+    {0,2,0,2,0,2}  //H
+};
+
 Chord::Chord(){
     type = CHORD_TYPE_TRIAD;
     inversion = 0;
@@ -89,6 +118,12 @@ void Chord::RecalcNotes(){
             }else if (mode_guitar == CHORD_GUITAR_MODE_MINOR){
                 for(int x = 0; x < 6; x++)
                     notes[x]=STANDARD_GUITAR_TUNING[x] + GUITAR_TABS_MINOR[root][x];
+            }else if (mode_guitar == CHORD_GUITAR_MODE_MAJ7){
+                for(int x = 0; x < 6; x++)
+                    notes[x]=STANDARD_GUITAR_TUNING[x] + GUITAR_TABS_MAJ7[root][x];
+            }else if (mode_guitar == CHORD_GUITAR_MODE_M7){
+                for(int x = 0; x < 6; x++)
+                    notes[x]=STANDARD_GUITAR_TUNING[x] + GUITAR_TABS_M7[root][x];
             }
             break;
         case CHORD_TYPE_TRIAD:
@@ -280,9 +315,13 @@ Glib::ustring Chord::GetName(bool do_not_use_octave){
             break;
         case CHORD_TYPE_GUITAR:
             if (mode_guitar == CHORD_GUITAR_MODE_MAJOR){
-                sprintf(temp,_("Guitar: %s major"),notemap.find(root)->second.c_str());
+                sprintf(temp,_("Guitar: %s maj"),notemap.find(root)->second.c_str());
             }else if (mode_guitar == CHORD_GUITAR_MODE_MINOR){
-                sprintf(temp,_("Guitar: %s minor"),notemap.find(root)->second.c_str());
+                sprintf(temp,_("Guitar: %s m"),notemap.find(root)->second.c_str());
+            }else if (mode_guitar == CHORD_GUITAR_MODE_MAJ7){
+                sprintf(temp,_("Guitar: %s maj7"),notemap.find(root)->second.c_str());
+            }else if (mode_guitar == CHORD_GUITAR_MODE_M7){
+                sprintf(temp,_("Guitar: %s m7"),notemap.find(root)->second.c_str());
             }
             if(use_octave)
                 sprintf(temp2,"%s, %s",temp,octave);
