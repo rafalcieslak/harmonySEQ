@@ -157,23 +157,42 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
                     //if moved some distance, mark drag as in progress. 
                     //if we use SHIFT to precise moving, do not apply this distance, and mark as drag regardless of it.
                     const int distance = 9;
-                    if(event->state & (1 << 0) || event->x > drag_beggining_x+distance || event->y > drag_beggining_y + distance || event->x < drag_beggining_x - distance || event->y < drag_beggining_y - distance){
-                        selection_is_being_dragged = 1;
-                        //beggining drag. 
+                    if(event->state & (1 << 0) || event->x > drag_beggining_x+distance || event->y > drag_beggining_y + distance || event->x < drag_beggining_x - distance || event->y < drag_beggining_y - distance) {
+
                         Gtk::Allocation allocation = get_allocation();
                         const int width = allocation.get_width();
                         const int height = allocation.get_height();
-                        int line = 6-drag_beggining_y/(internal_height/6);
-                        drag_beggining_line = line;
-                        double time = (double)drag_beggining_x/(double)width;
-                        drag_beggining_time = time;
-                        //Store note offsets...
-                        std::set<int>::iterator it = selection.begin();
-                        for (;it!=selection.end();it++) {
-                            NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[*it]);
-                            note->drag_offset_line = note->pitch - line;
-                            note->drag_offset_time = note->time-time;
-                            *err << note->drag_offset_line << " " << note->drag_offset_time << ENDL;
+                        //count position
+                        int line = 5 - drag_beggining_y / (internal_height / 6);
+                        double time = (double) drag_beggining_x / (double) width;
+                        //looking if there is a note where drag was began...
+                        int found = -1;
+                        int size = container->GetSize();
+                        for (int x = 0; x < size; x++) {
+                            NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[x]);
+                            if (note->pitch == line && note->time < time && time < note->time + note->length) {
+                                found = x;
+                                break;
+                            }
+                        }
+                        //and checking if it's in a selection
+                        std::set<int>::iterator it= selection.find(found);
+                        if(it!=selection.end()){// so it is in selection...
+                            //===
+                            //beggining drag. 
+                            selection_is_being_dragged = 1;
+                            drag_beggining_line = line;
+                            drag_beggining_time = time;
+                            //Store note offsets...
+                            std::set<int>::iterator it = selection.begin();
+                            for (;it!=selection.end();it++) {
+                                NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[*it]);
+                                *err << "   " << line << ENDL;
+                                note->drag_offset_line = note->pitch - line;
+                                note->drag_offset_time = note->time-time;
+                                *err << note->drag_offset_line << " " << note->drag_offset_time << ENDL;
+                            }
+                            //===
                         }
                     }
                 }
