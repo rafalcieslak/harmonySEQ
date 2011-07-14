@@ -38,7 +38,9 @@ public:
     /**Guitar chord modes*/
     enum {
         CHORD_GUITAR_MODE_MAJOR,
-        CHORD_GUITAR_MODE_MINOR
+        CHORD_GUITAR_MODE_MINOR,
+        CHORD_GUITAR_MODE_MAJ7,
+        CHORD_GUITAR_MODE_M7
     };
 
     /**Triad chord modes*/

@@ -190,10 +190,16 @@ void InitChordGuitarModesTreeModel(){
     TreeModel_ChordGuitarModes = Gtk::ListStore::create(m_columns_IdAndName);
     Gtk::TreeModel::Row row = *(TreeModel_ChordGuitarModes->append());
     row[m_columns_IdAndName.id] = Chord::CHORD_GUITAR_MODE_MAJOR;
-    row[m_columns_IdAndName.name] = _("Major");
+    row[m_columns_IdAndName.name] = _("maj");
     row = *(TreeModel_ChordGuitarModes->append());
     row[m_columns_IdAndName.id] = Chord::CHORD_GUITAR_MODE_MINOR;
-    row[m_columns_IdAndName.name] = _("Minor");
+    row[m_columns_IdAndName.name] = _("m");
+    row = *(TreeModel_ChordGuitarModes->append());
+    row[m_columns_IdAndName.id] = Chord::CHORD_GUITAR_MODE_MAJ7;
+    row[m_columns_IdAndName.name] = _("maj7");
+    row = *(TreeModel_ChordGuitarModes->append());
+    row[m_columns_IdAndName.id] = Chord::CHORD_GUITAR_MODE_M7;
+    row[m_columns_IdAndName.name] = _("m7");
     
 }
 
