@@ -26,6 +26,7 @@
 PatternWidget::PatternWidget(){
     internal_height=50; //random guess. will be reset soon anyway by the SequencerWidget, but better protect from 0-like values.
     vert_size = 450.0; //adjust for better default size
+    add_events(Gdk::BUTTON_PRESS_MASK);
 }
 
 PatternWidget::~PatternWidget(){
@@ -58,7 +59,69 @@ void PatternWidget::ZoomOut(){
 void PatternWidget::AssignPattern(AtomContainer* cont){
     *dbg << "assigning pattern \n";
     container = cont;
+    selection.clear();
     Redraw();
+}
+
+void PatternWidget::ClearSelection(){
+    selection.clear();
+    Redraw();
+}
+
+bool PatternWidget::on_button_press_event(GdkEventButton* event){
+    if(event->button == 1) //LMB
+    {
+        Gtk::Allocation allocation = get_allocation();
+        const int width = allocation.get_width();
+        const int height = allocation.get_height();
+        //determine line:
+        if(event->y <= internal_height){
+            int line = 6-event->y/(internal_height/6);
+            *err << line << ENDL;
+            double time = (double)event->x/(double)width;
+            *err << time <<ENDL;
+            int found = -1;
+            int size = container->GetSize();
+            for(int x = 0; x <size;x++){
+                NoteAtom* note = dynamic_cast<NoteAtom*>((*container)[x]);
+                if(note->pitch == line &&note->time < time && time < note->time+note->length){
+                    found = x;
+                    break;
+                }
+            }
+            if(found == -1){
+                //clicked empty space, clear selection.
+                if (event->state & (1 << 0)) {//shift key was pressed...
+                    //Do nothing, do not clear selection.
+                } else {
+                    //Empty space with no shift... clear selection.
+                    selection.clear();
+                }
+            }else{
+                //clicked a note.
+                if (event->state & (1 << 0)) {//shift key was pressed...
+                    //we'll add the note to selection, unless it's already selecte, then we de-select it.
+                    std::set<int>::iterator it= selection.find(found);
+                     if(it != selection.end()) 
+                         //it's already selected, then:
+                         selection.erase(it);
+                     else
+                         //it was not selected, select it.
+                         selection.insert(found);
+                } else {
+                    //we'll make a new selection
+                    selection.clear();
+                    selection.insert(found);
+                }
+            }
+            
+            Redraw();
+        } //(event->y <= internal_height)
+    }
+}
+
+void PatternWidget::on_drag_begin(const Glib::RefPtr<Gdk::DragContext>& context){
+    
 }
 
   bool PatternWidget::on_expose_event(GdkEventExpose* event){
@@ -86,10 +149,16 @@ void PatternWidget::AssignPattern(AtomContainer* cont){
       double w = note->length*width;
       ;y1++; // This is because the very first 1px line is the upper border.
     //*dbg << "drawing note... "<< x1 << " " << y1 << " " << w << " " <<  h << "\n";
+      //Check if note is in selection.
+      bool selected = false;
+      if(selection.find(x) != selection.end()) selected = true;
+      
       ct.rectangle(x1+1.5,y1+1.5,w-3,h-3);
-      ct.set_source_rgb(0.0,0.0,0.8);
+      if(!selected) ct.set_source_rgb(0.0,0.0,0.8);
+      else ct.set_source_rgb(0.8,0.0,0.0);
       ct.fill_preserve();
-      ct.set_source_rgb(0.0,0.0,0.4);
+      if(!selected) ct.set_source_rgb(0.0,0.0,0.4);
+      else ct.set_source_rgb(0.4,0.0,0.0);
       ct.stroke();
   }
   

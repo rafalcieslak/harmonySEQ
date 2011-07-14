@@ -578,7 +578,7 @@ void SequencerWidget::SetOnOffColour(OnOffColour c){
 }
 
 bool SequencerWidget::OnPatternMouseScroll(GdkEventScroll* e){
-    if(!CtrlKeyDown){ //Crtl key not pressed, we'll increment/decrement the viewport's adjustment by one page size
+    if(!(e->state & (1<<2))){//ctrl key was not pressed...
         if(e->direction == GDK_SCROLL_DOWN){
             double inc  = wViewport->get_hadjustment()->get_step_increment();
              wViewport->get_hadjustment()->set_value(-inc + wViewport->get_hadjustment()->get_value());
