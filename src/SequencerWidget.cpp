@@ -66,14 +66,15 @@ SequencerWidget::SequencerWidget(){
 
     wNameBox.pack_start(wNameLabel,Gtk::PACK_SHRINK);
     wNameBox.pack_start(wNameEntry,Gtk::PACK_SHRINK);
-    wNameEntry.set_width_chars(15);
+    wNameEntry.set_width_chars(10);
     wNameEntry.signal_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnNameEdited));
-    wOnBox.pack_start(wOnOfColour,Gtk::PACK_SHRINK);
-    wOnBox.pack_start(wPlayOnceButton,Gtk::PACK_SHRINK);
+    wNameBox.pack_end(wOnOfColour,Gtk::PACK_SHRINK);
     wOnOfColour.add(wMuteToggle);
+    wOnBox.pack_start(wChannelLabel,Gtk::PACK_SHRINK);
+    wOnBox.pack_start(wChannelButton,Gtk::PACK_SHRINK);
+    wOnBox.pack_end(wPlayOnceButton,Gtk::PACK_SHRINK);
+    wChannelButton.set_width_chars(2);
 
-    wUpperHBox1.pack_start(wChannelLabel,Gtk::PACK_SHRINK);
-    wUpperHBox1.pack_start(wChannelButton,Gtk::PACK_SHRINK);
     wUpperHBox1.pack_start(wVelocityLabel,Gtk::PACK_SHRINK);
     wUpperHBox1.pack_start(wVelocityButton,Gtk::PACK_SHRINK);
 
