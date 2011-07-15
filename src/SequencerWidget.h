@@ -121,6 +121,8 @@ private:
     void OnPlayOnceButtonClicked();
     void OnClearPatternClicked();
     bool OnPatternMouseScroll(GdkEventScroll * e);
+    /**Called when pattern's selection was changed and we need to display new velocity*/
+    void OnSelectionChanged(int n);
 
     PatternWidget pattern_widget;
     

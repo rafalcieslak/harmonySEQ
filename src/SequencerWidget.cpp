@@ -54,9 +54,11 @@ SequencerWidget::SequencerWidget(){
     wNotebookVbox.pack_start(*wViewport);
     wNotebookVbox.pack_end(wPatternScroll,Gtk::PACK_SHRINK);
     wViewport->add(wPatternWidgetBox);
+    wViewport->set_shadow_type(Gtk::SHADOW_NONE);
     wPatternWidgetBox.pack_start(pattern_widget,Gtk::PACK_SHRINK);
     
-    wViewport->set_shadow_type(Gtk::SHADOW_NONE);
+    pattern_widget.on_selection_changed.connect(sigc::mem_fun(*this,&SequencerWidget::OnSelectionChanged));
+    
 
     wUpperVBox.pack_start(wUpperHBox1,Gtk::PACK_SHRINK);
     wUpperVBox.pack_start(wUpperHBox2,Gtk::PACK_SHRINK);
@@ -75,13 +77,13 @@ SequencerWidget::SequencerWidget(){
     wOnBox.pack_end(wPlayOnceButton,Gtk::PACK_SHRINK);
     wChannelButton.set_width_chars(2);
 
-    wUpperHBox1.pack_start(wVelocityLabel,Gtk::PACK_SHRINK);
-    wUpperHBox1.pack_start(wVelocityButton,Gtk::PACK_SHRINK);
-
-    wUpperHBox2.pack_start(wResolutionsLabel,Gtk::PACK_SHRINK);
-    wUpperHBox2.pack_start(wResolutionsBox,Gtk::PACK_SHRINK);
-    wUpperHBox2.pack_start(wLengthsLabel,Gtk::PACK_SHRINK);
-    wUpperHBox2.pack_start(wLengthBox,Gtk::PACK_SHRINK);
+    wUpperHBox1.pack_start(wResolutionsLabel,Gtk::PACK_SHRINK);
+    wUpperHBox1.pack_start(wResolutionsBox,Gtk::PACK_SHRINK);
+    wUpperHBox1.pack_start(wLengthsLabel,Gtk::PACK_SHRINK);
+    wUpperHBox1.pack_start(wLengthBox,Gtk::PACK_SHRINK);
+    
+    wUpperHBox2.pack_start(wVelocityLabel,Gtk::PACK_SHRINK);
+    wUpperHBox2.pack_start(wVelocityButton,Gtk::PACK_SHRINK);
 
     wBoxOfChord.pack_start(chordwidget,Gtk::PACK_SHRINK);
     wBoxOfChord.pack_start(wVirtualSpaceLabel,Gtk::PACK_EXPAND_WIDGET,1); //extra alligments space - 1 stands for the notebook's border witdth
@@ -395,6 +397,7 @@ void SequencerWidget::OnVelocityChanged(){
     if(ignore_signals) return;
     if(!AnythingSelected) return;
     
+    pattern_widget.SetVelocity(wVelocityButton.get_value());
     
     Files::SetFileModified(1);
 }
@@ -558,6 +561,18 @@ void SequencerWidget::OnPlayOnceButtonClicked(){
     seq->SetPlayOncePhase(1);
     mainwindow->RefreshRow(seq->my_row);
     UpdateOnOffColour();
+}
+
+void SequencerWidget::OnSelectionChanged(int n){
+    ignore_signals = 1;
+    if(n == 0){
+        //empty selection
+        wVelocityButton.set_sensitive(0);
+    }else{
+        wVelocityButton.set_sensitive(1);
+        wVelocityButton.set_value(pattern_widget.velocity);
+    }
+    ignore_signals = 0;
 }
 
 void SequencerWidget::SetOnOffColour(OnOffColour c){

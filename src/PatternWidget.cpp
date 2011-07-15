@@ -26,6 +26,7 @@
 
 PatternWidget::PatternWidget(){
     internal_height=50; //random guess. will be reset soon anyway by the SequencerWidget, but better protect from 0-like values.
+    velocity = 0; //as above
     vert_size = 450.0; //adjust for better default size
     add_events(Gdk::BUTTON_PRESS_MASK);
     add_events(Gdk::BUTTON_RELEASE_MASK);
@@ -63,12 +64,34 @@ void PatternWidget::AssignPattern(AtomContainer* cont){
     *dbg << "assigning pattern \n";
     container = cont;
     selection.clear();
+    on_selection_changed.emit(0);
     Redraw();
 }
 
 void PatternWidget::ClearSelection(){
     selection.clear();
+    on_selection_changed.emit(0);
     Redraw();
+}
+
+void PatternWidget::SetVelocity(int v){
+    std::set<int>::iterator it = selection.begin();
+    for (; it != selection.end(); it++) {
+        NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[*it]);
+        note->velocity = v;
+    }    
+    Redraw();
+}
+
+int PatternWidget::CalculateAverageVelocity(){
+    int sum = 0;
+    std::set<int>::iterator it = selection.begin();
+    for (; it != selection.end(); it++) {
+        NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[*it]);
+        sum += note->velocity;
+    }    
+    if(selection.size()==0) return 0;
+    return sum/(selection.size());
 }
 
 bool PatternWidget::on_button_press_event(GdkEventButton* event){
@@ -103,18 +126,28 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                 } else {
                     //Empty space with no shift... clear selection.
                     selection.clear();
+                    on_selection_changed.emit(selection.size());
                 }
             }else{
                 //clicked a note.
                 if (event->state & (1 << 0)) {//shift key was pressed...
                     //we'll add the note to selection, unless it's already selected, then we de-select it.
                     std::set<int>::iterator it= selection.find(found);
-                     if(it != selection.end()) 
+                     if(it != selection.end()) {
                          //it's already selected, then:
+                         //REMOVING NOTE FROM SELECTION
                          selection.erase(it);
-                     else
+                         
+                         velocity = CalculateAverageVelocity();
+                         on_selection_changed.emit(selection.size());
+                     }else{
                          //it was not selected, select it.
+                         //ADDING NOTE TO SELECTION
                          selection.insert(found);
+                         
+                         velocity = CalculateAverageVelocity();
+                         on_selection_changed.emit(selection.size());
+                     }
                 } else {//shift key was not pressed
                     std::set<int>::iterator it= selection.find(found);
                      if(it != selection.end()) 
@@ -122,8 +155,12 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                          ;
                      else{
                          //it was not selected
+                         //SELECTING A NEW NOTE
                          selection.clear();
                          selection.insert(found);
+                         
+                         velocity = CalculateAverageVelocity();
+                         on_selection_changed.emit(selection.size());
                      }
                 }
             }
@@ -260,8 +297,9 @@ void PatternWidget::on_drag_begin(const Glib::RefPtr<Gdk::DragContext>& context)
       if(selection.find(x) != selection.end()) selected = true;
       
       ct.rectangle(x1+1.5,y1+1.5,w-3,h-3);
-      if(!selected) ct.set_source_rgb(0.0,0.0,0.8);
-      else ct.set_source_rgb(0.8,0.0,0.0);
+      double af = (double)note->velocity/127; //may be changed to 128, this will not affect the graphics visibly, but may work slightly faster.
+      if(!selected) ct.set_source_rgba(0.0,0.0,0.8,af);
+      else ct.set_source_rgba(0.8,0.0,0.0,af);
       ct.fill_preserve();
       if(!selected) ct.set_source_rgb(0.0,0.0,0.4);
       else ct.set_source_rgb(0.4,0.0,0.0);

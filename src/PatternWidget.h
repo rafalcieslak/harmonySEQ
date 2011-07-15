@@ -37,6 +37,12 @@ public:
     void ZoomOut();
     
     void ClearSelection();
+    
+    void SetVelocity(int v);
+    /**Emitted when selection is changed. Provides an argument that is equal to number of notes in selection.*/
+    sigc::signal<void,int> on_selection_changed;
+    
+    int velocity;
 protected:
     //Override default signal handler:
    virtual bool on_expose_event(GdkEventExpose* event);
@@ -57,7 +63,7 @@ private:
     bool selection_is_being_dragged;
     
     void UpdateSizeRequest();
-    
+    int CalculateAverageVelocity();
     int internal_height;
     double vert_size; //used to controll zooming
     AtomContainer* container;
