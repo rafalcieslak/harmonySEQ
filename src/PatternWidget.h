@@ -60,7 +60,15 @@ private:
     int drag_beggining_x, drag_beggining_y;
     int drag_beggining_line;
     double drag_beggining_time;
-    bool selection_is_being_dragged;
+    int drag_current_x, drag_current_y;
+    int drag_current_line;
+    double drag_current_time;
+    bool drag_in_progress;
+    int drag_mode;
+    enum DragModes{
+        DRAG_MODE_MOVE_SELECTION,
+        DRAG_MODE_SELECT_AREA
+    };
     
     void UpdateSizeRequest();
     int CalculateAverageVelocity();

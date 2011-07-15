@@ -172,25 +172,25 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
 
 bool PatternWidget::on_button_release_event(GdkEventButton* event){
     if(event->button == 1)
-        if(!selection_is_being_dragged){
+        if(!drag_in_progress){
             mouse_button_is_down = 0;
         }else{
             mouse_button_is_down = 0;
-            selection_is_being_dragged = 0;
+            drag_in_progress = 0;
+            if(drag_mode == DRAG_MODE_SELECT_AREA)Redraw();
         }
     
 }
 
 bool PatternWidget::on_leave_notify_event(GdkEventCrossing* event){
     mouse_button_is_down = 0;
-    selection_is_being_dragged = 0;
+    drag_in_progress = 0;
 }
 
 bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
     if(event->state & (1 << 8)){ //LMB down 
-        if(!selection_is_being_dragged){
+        if(!drag_in_progress){
             if(mouse_button_is_down){
-                if(!selection.empty()){
                     //if moved some distance, mark drag as in progress. 
                     //if we use SHIFT to precise moving, do not apply this distance, and mark as drag regardless of it.
                     const int distance = 9;
@@ -215,9 +215,9 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
                         //and checking if it's in a selection
                         std::set<int>::iterator it= selection.find(found);
                         if(it!=selection.end()){// so it is in selection...
-                            //===
                             //beggining drag. 
-                            selection_is_being_dragged = 1;
+                            drag_mode=DRAG_MODE_MOVE_SELECTION;
+                            drag_in_progress = 1;
                             drag_beggining_line = line;
                             drag_beggining_time = time;
                             //Store note offsets...
@@ -229,32 +229,51 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
                                 note->drag_offset_time = note->time-time;
                                 //*err << note->drag_offset_line << " " << note->drag_offset_time << ENDL;
                             }
-                            //===
+                        }else{
+                            //drag begun in place where was no selection
+                            drag_mode = DRAG_MODE_SELECT_AREA;
+                            drag_in_progress = 1;
+                            drag_beggining_line = line; 
+                            drag_beggining_time = time;
                         }
                     }
-                }
             }
         }else{ //drag in process
-            Gtk::Allocation allocation = get_allocation();
-            const int width = allocation.get_width();
-            const int height = allocation.get_height();
-            //count position
-            int line = 6 - event->y / (internal_height / 6);
-            double time = (double) event->x / (double) width;
-            //*err << line << " " << time <<ENDL;
-            
-            std::set<int>::iterator it = selection.begin();
-            for (; it != selection.end(); it++) {
-                NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[*it]);
-                int temp_pitch =  line+note->drag_offset_line;
-                double temp_time = time+note->drag_offset_time;
-                temp_pitch = temp_pitch%6; //wrap to 0-5;
-                temp_time =  temp_time - (int)temp_time; //wrap to 0.0 - 0.9999...
-                if(temp_pitch < 0) temp_pitch+= 6;
-                if(temp_time < 0) temp_time += 1.0;
-                note->pitch = temp_pitch;
-                note->time =temp_time;
-                //*err << " " << note->pitch << " " << note->time <<ENDL;
+            if(drag_mode == DRAG_MODE_MOVE_SELECTION){
+                Gtk::Allocation allocation = get_allocation();
+                const int width = allocation.get_width();
+                const int height = allocation.get_height();
+                //count position
+                int line = 6 - event->y / (internal_height / 6);
+                double time = (double) event->x / (double) width;
+                //*err << line << " " << time <<ENDL;
+
+                std::set<int>::iterator it = selection.begin();
+                for (; it != selection.end(); it++) {
+                    NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[*it]);
+                    int temp_pitch =  line+note->drag_offset_line;
+                    double temp_time = time+note->drag_offset_time;
+                    temp_pitch = temp_pitch%6; //wrap to 0-5;
+                    temp_time =  temp_time - (int)temp_time; //wrap to 0.0 - 0.9999...
+                    if(temp_pitch < 0) temp_pitch+= 6;
+                    if(temp_time < 0) temp_time += 1.0;
+                    note->pitch = temp_pitch;
+                    note->time =temp_time;
+                    //*err << " " << note->pitch << " " << note->time <<ENDL;
+                }
+
+            }else if(drag_mode == DRAG_MODE_SELECT_AREA){
+                drag_current_x = event->x;
+                drag_current_y = event->y;
+                Gtk::Allocation allocation = get_allocation();
+                const int width = allocation.get_width();
+                const int height = allocation.get_height();
+                //count position
+                int line = 6 - event->y / (internal_height / 6);
+                double time = (double) event->x / (double) width;
+                drag_current_line = line;
+                drag_current_time = time;
+                
             }
             Redraw();
         }
@@ -327,6 +346,15 @@ void PatternWidget::on_drag_begin(const Glib::RefPtr<Gdk::DragContext>& context)
                 ct.line_to((int)((double)x*(double)width/resolution) - 0.5,internal_height); //the last one must be in drawing area, so let's put it a 1 px before
         }  
         ct.stroke();
+  }
+  
+  //drag_selection rectangle
+  if(drag_in_progress && drag_mode==DRAG_MODE_SELECT_AREA){
+      ct.set_line_width(2);
+      ct.set_source_rgb(0.9,0.4,0.3);
+      ct.rectangle(drag_beggining_x,drag_beggining_y,drag_current_x-drag_beggining_x,drag_current_y-drag_beggining_y);
+      ct.stroke();
+      
   }
   
   return true;

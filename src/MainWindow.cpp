@@ -33,7 +33,7 @@ bool CtrlKeyDown;
 bool ShiftKeyDown;
 
 Gtk::TreeModel::iterator row_inserted_by_drag;
-bool drag_in_progress;
+bool seq_list_drag_in_progress;
 
 MainWindow::MainWindow()
 {
@@ -484,7 +484,7 @@ void MainWindow::OnRemoveClicked(){
     *dbg << "removing row of handle " << h << " and ID " << id << ENDL;
 
     //removing the row
-    drag_in_progress = 0; //important
+    seq_list_drag_in_progress = 0; //important
     TreeModel_sequencers->erase(iter);
 
     //and the corresponding sequencer
@@ -501,7 +501,7 @@ void MainWindow::OnRemoveClicked(){
 
 void MainWindow::OnAddSeqClicked(){
 
-    drag_in_progress = 0; //important
+    seq_list_drag_in_progress = 0; //important
     Gtk::TreeModel::Row row = spawn_sequencer();
     
     wTreeView.get_selection()->select(row);
@@ -849,17 +849,17 @@ void MainWindow::OnMetronomeToggleClicked(){
 }
 
 void MainWindow::OnTreeviewDragBegin(const Glib::RefPtr<Gdk::DragContext>& ct){
-    drag_in_progress= 1;
+    seq_list_drag_in_progress= 1;
 
 }
 
 void MainWindow::OnTreeviewDragEnd(const Glib::RefPtr<Gdk::DragContext>& ct){
-    drag_in_progress = 0;
+    seq_list_drag_in_progress = 0;
 
 }
 
 void MainWindow::OnTreeModelRowInserted(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter){
-    if (drag_in_progress == 1){
+    if (seq_list_drag_in_progress == 1){
         //great! drag'n'drop inserted a row!
         //the point is that it first inserts a row, and then deletes it.
         row_inserted_by_drag  = iter;
@@ -867,7 +867,7 @@ void MainWindow::OnTreeModelRowInserted(const Gtk::TreeModel::Path& path, const 
 }
 
 void MainWindow::OnTreeModelRowDeleted(const Gtk::TreeModel::Path& path){
-    if (drag_in_progress == 1){
+    if (seq_list_drag_in_progress == 1){
        //great! drag'n'drop removed a row!
 
         //if a row was deleted, then we need to update the moved sequencer's row entry.
