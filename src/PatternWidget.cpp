@@ -84,9 +84,9 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
         //determine line:
         if(event->y <= internal_height){
             int line = 6-event->y/(internal_height/6);
-            *err << line << ENDL;
+            //*err << line << ENDL;
             double time = (double)event->x/(double)width;
-            *err << time <<ENDL;
+            //*err << time <<ENDL;
             int found = -1;
             int size = container->GetSize();
             for(int x = 0; x <size;x++){
@@ -187,10 +187,10 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
                             std::set<int>::iterator it = selection.begin();
                             for (;it!=selection.end();it++) {
                                 NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[*it]);
-                                *err << "   " << line << ENDL;
+                                //*err << "   " << line << ENDL;
                                 note->drag_offset_line = note->pitch - line;
                                 note->drag_offset_time = note->time-time;
-                                *err << note->drag_offset_line << " " << note->drag_offset_time << ENDL;
+                                //*err << note->drag_offset_line << " " << note->drag_offset_time << ENDL;
                             }
                             //===
                         }
@@ -204,7 +204,7 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
             //count position
             int line = 6 - event->y / (internal_height / 6);
             double time = (double) event->x / (double) width;
-            *err << line << " " << time <<ENDL;
+            //*err << line << " " << time <<ENDL;
             
             std::set<int>::iterator it = selection.begin();
             for (; it != selection.end(); it++) {
@@ -213,7 +213,7 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
                 double temp_time = time+note->drag_offset_time;
                 note->pitch = temp_pitch%6;
                 note->time = temp_time - (int)temp_time; //wrap to 0.0 - 0.9999...
-                *err << " " << note->pitch << " " << note->time <<ENDL;
+                //*err << " " << note->pitch << " " << note->time <<ENDL;
             }
             Redraw();
         }
