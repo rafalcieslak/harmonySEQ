@@ -84,6 +84,10 @@ SequencerWidget::SequencerWidget(){
     
     wUpperHBox2.pack_start(wVelocityLabel,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wVelocityButton,Gtk::PACK_SHRINK);
+    wUpperHBox2.pack_start(wSnapToggle,Gtk::PACK_SHRINK);
+    
+    wSnapToggle.set_label(_("Snap to grid"));
+    wSnapToggle.signal_toggled().connect(sigc::mem_fun(*this,&SequencerWidget::OnSnapClicked));
 
     wBoxOfChord.pack_start(chordwidget,Gtk::PACK_SHRINK);
     wBoxOfChord.pack_start(wVirtualSpaceLabel,Gtk::PACK_EXPAND_WIDGET,1); //extra alligments space - 1 stands for the notebook's border witdth
@@ -573,6 +577,10 @@ void SequencerWidget::OnSelectionChanged(int n){
         wVelocityButton.set_value(pattern_widget.velocity);
     }
     ignore_signals = 0;
+}
+
+void SequencerWidget::OnSnapClicked(){
+    pattern_widget.SetSnap(wSnapToggle.get_active());
 }
 
 void SequencerWidget::SetOnOffColour(OnOffColour c){

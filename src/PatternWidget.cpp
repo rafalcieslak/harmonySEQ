@@ -28,9 +28,11 @@ PatternWidget::PatternWidget(){
     internal_height=50; //random guess. will be reset soon anyway by the SequencerWidget, but better protect from 0-like values.
     velocity = 0; //as above
     vert_size = 450.0; //adjust for better default size
+    snap = true;
     add_events(Gdk::BUTTON_PRESS_MASK);
     add_events(Gdk::BUTTON_RELEASE_MASK);
     add_events(Gdk::BUTTON1_MOTION_MASK);
+    add_events(Gdk::LEAVE_NOTIFY_MASK);
 }
 
 PatternWidget::~PatternWidget(){
@@ -74,6 +76,14 @@ void PatternWidget::ClearSelection(){
     Redraw();
 }
 
+void PatternWidget::SetSnap(bool s){
+    snap = s;
+}
+
+bool PatternWidget::GetSnap(){
+    return snap;
+}
+
 void PatternWidget::SetVelocity(int v){
     std::set<int>::iterator it = selection.begin();
     for (; it != selection.end(); it++) {
@@ -92,6 +102,17 @@ int PatternWidget::CalculateAverageVelocity(){
     }    
     if(selection.size()==0) return 0;
     return sum/(selection.size());
+}
+
+double PatternWidget::Snap(double t){
+    if (!container->owner) // if no owner...
+        return t; //do not snap, if we can't get the resolution.
+    
+    t*= container->owner->resolution;
+    t += 0.5;
+    t = (int)t;
+    t /= container->owner->resolution;
+    return t;
 }
 
 bool PatternWidget::on_button_press_event(GdkEventButton* event){
@@ -193,8 +214,8 @@ bool PatternWidget::on_button_release_event(GdkEventButton* event){
 }
 
 bool PatternWidget::on_leave_notify_event(GdkEventCrossing* event){
-    mouse_button_is_down = 0;
-    drag_in_progress = 0;
+    //mouse_button_is_down = 0;
+    //drag_in_progress = 0;
 }
 
 bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
@@ -268,6 +289,9 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
                     temp_time =  temp_time - (int)temp_time; //wrap to 0.0 - 0.9999...
                     if(temp_pitch < 0) temp_pitch+= 6;
                     if(temp_time < 0) temp_time += 1.0;
+                    if(snap && !(event->state & (1 << 0))){ //if snap & not shift key...
+                        temp_time = Snap(temp_time);
+                    }
                     note->pitch = temp_pitch;
                     note->time =temp_time;
                     //*dbg << " " << note->pitch << " " << note->time <<ENDL;
@@ -332,6 +356,7 @@ void PatternWidget::on_drag_begin(const Glib::RefPtr<Gdk::DragContext>& context)
   
   //The +0.5 that often appears below in coordinates it to prevent cairo from antyaliasing lines.
     
+  //notes
   ct.set_line_width(3.0);
   ct.set_line_join(Cairo::LINE_JOIN_ROUND);
   if (container) //just in case it's NULL...

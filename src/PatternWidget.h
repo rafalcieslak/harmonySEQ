@@ -38,6 +38,9 @@ public:
     
     void ClearSelection();
     
+    void SetSnap(bool s);
+    bool GetSnap();
+    
     void SetVelocity(int v);
     /**Emitted when selection is changed. Provides an argument that is equal to number of notes in selection.*/
     sigc::signal<void,int> on_selection_changed;
@@ -57,6 +60,7 @@ private:
     
     std::set<int> selection;
     bool mouse_button_is_down;
+    bool snap;
     std::set<int> drag_temporary_selection;
     int drag_beggining_x, drag_beggining_y;
     int drag_beggining_line;
@@ -73,6 +77,7 @@ private:
     
     void UpdateSizeRequest();
     int CalculateAverageVelocity();
+    double Snap(double t);
     int internal_height;
     double vert_size; //used to controll zooming
     AtomContainer* container;
