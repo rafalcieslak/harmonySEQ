@@ -142,7 +142,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
             }
             if(found == -1){
                 //clicked empty space, clear selection.
-                if (event->state & (1 << 0)) {//shift key was pressed...
+                if (event->state & (1 << 0) || event->state & (1 << 2)) {//shift or ctrl key was pressed...
                     //Do nothing, do not clear selection.
                 } else {
                     //Empty space with no shift... clear selection.
@@ -151,7 +151,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                 }
             }else{
                 //clicked a note.
-                if (event->state & (1 << 0)) {//shift key was pressed...
+                if (event->state & (1 << 2)) {//ctrl key was pressed...
                     //we'll add the note to selection, unless it's already selected, then we de-select it.
                     std::set<int>::iterator it= selection.find(found);
                      if(it != selection.end()) {
@@ -287,11 +287,11 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
                     double temp_time = time+note->drag_offset_time;
                     temp_pitch = temp_pitch%6; //wrap to 0-5;
                     temp_time =  temp_time - (int)temp_time; //wrap to 0.0 - 0.9999...
-                    if(temp_pitch < 0) temp_pitch+= 6;
-                    if(temp_time < 0) temp_time += 1.0;
                     if(snap && !(event->state & (1 << 0))){ //if snap & not shift key...
                         temp_time = Snap(temp_time);
                     }
+                    if(temp_pitch < 0) temp_pitch+= 6;
+                    if(temp_time < 0) temp_time += 1.0;
                     note->pitch = temp_pitch;
                     note->time =temp_time;
                     //*dbg << " " << note->pitch << " " << note->time <<ENDL;
