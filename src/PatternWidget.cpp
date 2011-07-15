@@ -209,9 +209,11 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
             std::set<int>::iterator it = selection.begin();
             for (; it != selection.end(); it++) {
                 NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[*it]);
-                note->pitch = line+note->drag_offset_line;
-                note->time = time+note->drag_offset_time;
-            *err << " " << note->pitch << " " << note->time <<ENDL;
+                int temp_pitch =  line+note->drag_offset_line;
+                double temp_time = time+note->drag_offset_time;
+                note->pitch = temp_pitch%6;
+                note->time = temp_time - (int)temp_time; //wrap to 0.0 - 0.9999...
+                *err << " " << note->pitch << " " << note->time <<ENDL;
             }
             Redraw();
         }
