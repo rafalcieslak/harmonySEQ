@@ -57,6 +57,7 @@ private:
     
     std::set<int> selection;
     bool mouse_button_is_down;
+    std::set<int> drag_temporary_selection;
     int drag_beggining_x, drag_beggining_y;
     int drag_beggining_line;
     double drag_beggining_time;

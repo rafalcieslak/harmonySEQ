@@ -177,7 +177,15 @@ bool PatternWidget::on_button_release_event(GdkEventButton* event){
         }else{
             mouse_button_is_down = 0;
             drag_in_progress = 0;
-            if(drag_mode == DRAG_MODE_SELECT_AREA)Redraw();
+            if(drag_mode == DRAG_MODE_SELECT_AREA){
+                //Finished selection by dragging.
+                std::set<int>::iterator it = drag_temporary_selection.begin();
+                for(;it!=drag_temporary_selection.end();it++){
+                    selection.insert(*it);
+                }
+                drag_temporary_selection.clear();
+                Redraw();
+            }
         }
     
 }
@@ -235,6 +243,7 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
                             drag_in_progress = 1;
                             drag_beggining_line = line; 
                             drag_beggining_time = time;
+                            drag_temporary_selection.clear();
                         }
                     }
             }
@@ -246,7 +255,7 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
                 //count position
                 int line = 6 - event->y / (internal_height / 6);
                 double time = (double) event->x / (double) width;
-                //*err << line << " " << time <<ENDL;
+                //*dbg << line << " " << time <<ENDL;
 
                 std::set<int>::iterator it = selection.begin();
                 for (; it != selection.end(); it++) {
@@ -259,7 +268,7 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
                     if(temp_time < 0) temp_time += 1.0;
                     note->pitch = temp_pitch;
                     note->time =temp_time;
-                    //*err << " " << note->pitch << " " << note->time <<ENDL;
+                    //*dbg << " " << note->pitch << " " << note->time <<ENDL;
                 }
 
             }else if(drag_mode == DRAG_MODE_SELECT_AREA){
@@ -273,6 +282,28 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
                 double time = (double) event->x / (double) width;
                 drag_current_line = line;
                 drag_current_time = time;
+                
+                //Determining drag selection.
+                drag_temporary_selection.clear();
+                int sel_pith_min = min(drag_current_line,drag_beggining_line);
+                int sel_pith_max = max(drag_current_line,drag_beggining_line);
+                double sel_time_min = min(drag_current_time,drag_beggining_time);
+                double sel_time_max = max(drag_current_time,drag_beggining_time);
+                int size = container->GetSize();
+                for (int x = 0; x < size; x++) {
+                    NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[x]);
+                    //check if pitch is in bounds...
+                    if(note->pitch <= sel_pith_max && note->pitch >= sel_pith_min){
+                         //*dbg << " note " << x << " pith ("<<note->pitch <<")  in bounds.\n";
+                        //check time...
+                        double start = note->time;
+                        double end = note->time+note->length;
+                        if((start<=sel_time_max && start >=sel_time_min) || (end<=sel_time_max && end >=sel_time_min) || (start <= sel_time_min && end >= sel_time_max)){
+                            //is inside!
+                            drag_temporary_selection.insert(x);
+                        }
+                    }
+                }//check next note.
                 
             }
             Redraw();
@@ -314,14 +345,16 @@ void PatternWidget::on_drag_begin(const Glib::RefPtr<Gdk::DragContext>& context)
       //Check if note is in selection.
       bool selected = false;
       if(selection.find(x) != selection.end()) selected = true;
+      //check if in temp. selection
+      if(drag_temporary_selection.find(x) != drag_temporary_selection.end()) selected = true;
       
       ct.rectangle(x1+1.5,y1+1.5,w-3,h-3);
       double af = (double)note->velocity/127; //may be changed to 128, this will not affect the graphics visibly, but may work slightly faster.
-      if(!selected) ct.set_source_rgba(0.0,0.0,0.8,af);
-      else ct.set_source_rgba(0.8,0.0,0.0,af);
+      if(selected) ct.set_source_rgba(0.8,0.0,0.0,af);
+      else ct.set_source_rgba(0.,0.0,0.8,af);
       ct.fill_preserve();
-      if(!selected) ct.set_source_rgb(0.0,0.0,0.4);
-      else ct.set_source_rgb(0.4,0.0,0.0);
+      if(selected) ct.set_source_rgb(0.4,0.0,0.0);
+      else ct.set_source_rgb(0.0,0.0,0.4);
       ct.stroke();
   }
   
