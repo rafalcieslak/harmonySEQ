@@ -211,8 +211,12 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
                 NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[*it]);
                 int temp_pitch =  line+note->drag_offset_line;
                 double temp_time = time+note->drag_offset_time;
-                note->pitch = temp_pitch%6;
-                note->time = temp_time - (int)temp_time; //wrap to 0.0 - 0.9999...
+                temp_pitch = temp_pitch%6; //wrap to 0-5;
+                temp_time =  temp_time - (int)temp_time; //wrap to 0.0 - 0.9999...
+                if(temp_pitch < 0) temp_pitch+= 6;
+                if(temp_time < 0) temp_time += 1.0;
+                note->pitch = temp_pitch;
+                note->time =temp_time;
                 //*err << " " << note->pitch << " " << note->time <<ENDL;
             }
             Redraw();
