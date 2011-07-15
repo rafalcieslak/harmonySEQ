@@ -251,6 +251,9 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
                             drag_in_progress = 1;
                             drag_beggining_line = line;
                             drag_beggining_time = time;
+                            drag_note_dragged = found;
+                            NoteAtom* dragged_note = dynamic_cast<NoteAtom*> ((*container)[found]);
+                            drag_time_offset_to_dragged_note = drag_beggining_time - dragged_note->time;
                             //Store note offsets...
                             std::set<int>::iterator it = selection.begin();
                             for (;it!=selection.end();it++) {
@@ -279,17 +282,24 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
                 int line = 6 - event->y / (internal_height / 6);
                 double time = (double) event->x / (double) width;
                 //*dbg << line << " " << time <<ENDL;
-
+                NoteAtom* dragged_note = dynamic_cast<NoteAtom*> ((*container)[drag_note_dragged]);
+                double temp_time = time+dragged_note->drag_offset_time;
+                temp_time = temp_time - (int) temp_time; //wrap to 0.0 - 0.9999...
+                double snapped_time = temp_time;
+                if(snap && !(event->state & (1 << 0))){ //if snap & not shift key...
+                    snapped_time = Snap(temp_time);
+                }
+                //Remembers how much was the dragged note moved due to snapping feature, so that we can move other notes by the same distance.
+                double snap_offset = snapped_time-temp_time;
+                //*dbg << snap_offset << ENDL;
+                
                 std::set<int>::iterator it = selection.begin();
                 for (; it != selection.end(); it++) {
                     NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[*it]);
                     int temp_pitch =  line+note->drag_offset_line;
-                    double temp_time = time+note->drag_offset_time;
+                   temp_time  = time+note->drag_offset_time+snap_offset;
                     temp_pitch = temp_pitch%6; //wrap to 0-5;
                     temp_time =  temp_time - (int)temp_time; //wrap to 0.0 - 0.9999...
-                    if(snap && !(event->state & (1 << 0))){ //if snap & not shift key...
-                        temp_time = Snap(temp_time);
-                    }
                     if(temp_pitch < 0) temp_pitch+= 6;
                     if(temp_time < 0) temp_time += 1.0;
                     note->pitch = temp_pitch;

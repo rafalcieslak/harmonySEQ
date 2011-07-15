@@ -70,6 +70,8 @@ private:
     double drag_current_time;
     bool drag_in_progress;
     int drag_mode;
+    int drag_note_dragged;
+    double drag_time_offset_to_dragged_note;
     enum DragModes{
         DRAG_MODE_MOVE_SELECTION,
         DRAG_MODE_SELECT_AREA
