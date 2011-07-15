@@ -157,7 +157,7 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
                     //if moved some distance, mark drag as in progress. 
                     //if we use SHIFT to precise moving, do not apply this distance, and mark as drag regardless of it.
                     const int distance = 9;
-                    if(event->state & (1 << 0) || event->x > drag_beggining_x+distance || event->y > drag_beggining_y + distance || event->x < drag_beggining_x - distance || event->y < drag_beggining_y - distance) {
+                    if(event->x > drag_beggining_x+distance || event->y > drag_beggining_y + distance || event->x < drag_beggining_x - distance || event->y < drag_beggining_y - distance) {
 
                         Gtk::Allocation allocation = get_allocation();
                         const int width = allocation.get_width();
