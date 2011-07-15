@@ -36,6 +36,13 @@ public:
     void ZoomIn();
     void ZoomOut();
     
+    void EnterAddMode();
+    void LeaveAddMode();
+    
+    void DeleteSelected();
+    
+    sigc::signal<void> on_add_mode_left;
+    
     void ClearSelection();
     
     void SetSnap(bool s);
@@ -57,6 +64,7 @@ protected:
    virtual bool on_motion_notify_event(GdkEventMotion* event);
    virtual bool on_leave_notify_event(GdkEventCrossing* event);
 private:
+    bool add_mode;
     
     std::set<int> selection;
     bool mouse_button_is_down;
@@ -80,6 +88,7 @@ private:
     void UpdateSizeRequest();
     int CalculateAverageVelocity();
     double Snap(double t);
+    void DeleteNth(int n);
     int internal_height;
     double vert_size; //used to controll zooming
     AtomContainer* container;

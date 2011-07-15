@@ -122,8 +122,11 @@ private:
     void OnClearPatternClicked();
     bool OnPatternMouseScroll(GdkEventScroll * e);
     void OnSnapClicked();
+    void OnAddToggled();
+    void OnDeleteClicked();
     /**Called when pattern's selection was changed and we need to display new velocity*/
     void OnSelectionChanged(int n);
+    
 
     PatternWidget pattern_widget;
     
@@ -173,6 +176,8 @@ private:
     Gtk::Button wClearPattern;
     Gtk::CheckButton wMuteToggle;
     Gtk::CheckButton wSnapToggle;
+    Gtk::ToggleButton wAddToggle;
+    Gtk::Button wDelete;
     Gtk::ComboBox wResolutionsBox;
     Gtk::ComboBox wLengthBox;
     Gtk::Label wResolutionsLabel, wLengthsLabel;

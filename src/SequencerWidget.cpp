@@ -82,10 +82,16 @@ SequencerWidget::SequencerWidget(){
     wUpperHBox1.pack_start(wLengthsLabel,Gtk::PACK_SHRINK);
     wUpperHBox1.pack_start(wLengthBox,Gtk::PACK_SHRINK);
     
+    wUpperHBox2.pack_start(wAddToggle,Gtk::PACK_SHRINK);
+    wUpperHBox2.pack_start(wDelete,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wVelocityLabel,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wVelocityButton,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wSnapToggle,Gtk::PACK_SHRINK);
     
+    wAddToggle.set_label(_("Add"));
+    wAddToggle.signal_toggled().connect(sigc::mem_fun(*this,&SequencerWidget::OnAddToggled));
+    wDelete.set_label(_("Delete"));
+    wDelete.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWidget::OnDeleteClicked));
     wSnapToggle.set_label(_("Snap to grid"));
     wSnapToggle.signal_toggled().connect(sigc::mem_fun(*this,&SequencerWidget::OnSnapClicked));
 
@@ -581,6 +587,18 @@ void SequencerWidget::OnSelectionChanged(int n){
 
 void SequencerWidget::OnSnapClicked(){
     pattern_widget.SetSnap(wSnapToggle.get_active());
+}
+
+void SequencerWidget::OnAddToggled(){
+    if(wAddToggle.get_active()){
+        pattern_widget.EnterAddMode();
+    }else{
+        pattern_widget.LeaveAddMode();
+    }
+}
+
+void SequencerWidget::OnDeleteClicked(){
+    pattern_widget.DeleteSelected();
 }
 
 void SequencerWidget::SetOnOffColour(OnOffColour c){

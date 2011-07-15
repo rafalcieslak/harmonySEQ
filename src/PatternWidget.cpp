@@ -29,6 +29,7 @@ PatternWidget::PatternWidget(){
     velocity = 0; //as above
     vert_size = 450.0; //adjust for better default size
     snap = true;
+    add_mode = 0;
     add_events(Gdk::BUTTON_PRESS_MASK);
     add_events(Gdk::BUTTON_RELEASE_MASK);
     add_events(Gdk::BUTTON1_MOTION_MASK);
@@ -62,6 +63,15 @@ void PatternWidget::ZoomOut(){
     UpdateSizeRequest();
 }
 
+void PatternWidget::EnterAddMode(){
+    selection.clear();
+    on_selection_changed.emit(0);
+    add_mode = 1;
+}
+void PatternWidget::LeaveAddMode(){
+    add_mode = 0;
+}
+
 void PatternWidget::AssignPattern(AtomContainer* cont){
     *dbg << "assigning pattern \n";
     container = cont;
@@ -71,6 +81,28 @@ void PatternWidget::AssignPattern(AtomContainer* cont){
 }
 
 void PatternWidget::ClearSelection(){
+    selection.clear();
+    on_selection_changed.emit(0);
+    Redraw();
+}
+
+void PatternWidget::DeleteNth(int n){
+    /*container->Remove(n);
+    std::set<int>::iterator it = selection.begin();
+    for (; it != selection.end(); it++) {
+        if(*it == n) selection.erase(it);
+        if(*it < n) selection.;
+    }   */ 
+}
+
+void PatternWidget::DeleteSelected(){
+    std::vector<Atom*> notes_to_delete;
+    std::set<int>::iterator it = selection.begin();
+    for (; it != selection.end(); it++) {
+        NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[*it]);
+        notes_to_delete.push_back(note);
+    }    
+    container->RemoveList(&notes_to_delete);
     selection.clear();
     on_selection_changed.emit(0);
     Redraw();
@@ -131,61 +163,70 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
             //*err << line << ENDL;
             double time = (double)event->x/(double)width;
             //*err << time <<ENDL;
-            int found = -1;
-            int size = container->GetSize();
-            for(int x = 0; x <size;x++){
-                NoteAtom* note = dynamic_cast<NoteAtom*>((*container)[x]);
-                if(note->pitch == line &&note->time < time && time < note->time+note->length){
-                    found = x;
-                    break;
+            if(!add_mode){
+                        int found = -1;
+                        int size = container->GetSize();
+                        for(int x = 0; x <size;x++){
+                            NoteAtom* note = dynamic_cast<NoteAtom*>((*container)[x]);
+                            if(note->pitch == line &&note->time < time && time < note->time+note->length){
+                                found = x;
+                                break;
+                            }
+                        }
+                        if(found == -1){
+                            //clicked empty space, clear selection.
+                            if (event->state & (1 << 0) || event->state & (1 << 2)) {//shift or ctrl key was pressed...
+                                //Do nothing, do not clear selection.
+                            } else {
+                                //Empty space with no shift... clear selection.
+                                selection.clear();
+                                on_selection_changed.emit(selection.size());
+                            }
+                        }else{
+                            //clicked a note.
+                            if (event->state & (1 << 2)) {//ctrl key was pressed...
+                                //we'll add the note to selection, unless it's already selected, then we de-select it.
+                                std::set<int>::iterator it= selection.find(found);
+                                 if(it != selection.end()) {
+                                     //it's already selected, then:
+                                     //REMOVING NOTE FROM SELECTION
+                                     selection.erase(it);
+
+                                     velocity = CalculateAverageVelocity();
+                                     on_selection_changed.emit(selection.size());
+                                 }else{
+                                     //it was not selected, select it.
+                                     //ADDING NOTE TO SELECTION
+                                     selection.insert(found);
+
+                                     velocity = CalculateAverageVelocity();
+                                     on_selection_changed.emit(selection.size());
+                                 }
+                            } else {//shift key was not pressed
+                                std::set<int>::iterator it= selection.find(found);
+                                 if(it != selection.end()) 
+                                     //it's already selected, then:
+                                     ;
+                                 else{
+                                     //it was not selected
+                                     //SELECTING A NEW NOTE
+                                     selection.clear();
+                                     selection.insert(found);
+
+                                     velocity = CalculateAverageVelocity();
+                                     on_selection_changed.emit(selection.size());
+                                 }
+                            }
+                        }
+            }else{ //ADD MODE ON
+                double temp_time=time;
+                if(snap && !(event->state & (1 << 0))){
+                    temp_time = Snap(temp_time);
                 }
+                double len = (double)1.0/container->owner->resolution;    
+                NoteAtom* note = new NoteAtom(temp_time,len,line);
+                container->Add(note);
             }
-            if(found == -1){
-                //clicked empty space, clear selection.
-                if (event->state & (1 << 0) || event->state & (1 << 2)) {//shift or ctrl key was pressed...
-                    //Do nothing, do not clear selection.
-                } else {
-                    //Empty space with no shift... clear selection.
-                    selection.clear();
-                    on_selection_changed.emit(selection.size());
-                }
-            }else{
-                //clicked a note.
-                if (event->state & (1 << 2)) {//ctrl key was pressed...
-                    //we'll add the note to selection, unless it's already selected, then we de-select it.
-                    std::set<int>::iterator it= selection.find(found);
-                     if(it != selection.end()) {
-                         //it's already selected, then:
-                         //REMOVING NOTE FROM SELECTION
-                         selection.erase(it);
-                         
-                         velocity = CalculateAverageVelocity();
-                         on_selection_changed.emit(selection.size());
-                     }else{
-                         //it was not selected, select it.
-                         //ADDING NOTE TO SELECTION
-                         selection.insert(found);
-                         
-                         velocity = CalculateAverageVelocity();
-                         on_selection_changed.emit(selection.size());
-                     }
-                } else {//shift key was not pressed
-                    std::set<int>::iterator it= selection.find(found);
-                     if(it != selection.end()) 
-                         //it's already selected, then:
-                         ;
-                     else{
-                         //it was not selected
-                         //SELECTING A NEW NOTE
-                         selection.clear();
-                         selection.insert(found);
-                         
-                         velocity = CalculateAverageVelocity();
-                         on_selection_changed.emit(selection.size());
-                     }
-                }
-            }
-            
             Redraw();
         } //(event->y <= internal_height)
     }

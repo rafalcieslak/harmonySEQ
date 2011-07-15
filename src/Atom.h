@@ -27,6 +27,9 @@ public:
     /**Value from 0 to 1, representing relative location (in time) in parent container*/
     double time;
     
+    //TODO: instead of random, apply consequent numbers
+    int random_number;
+    int random_number2;
     /**Used when dragging, to store relative position to drag beggining.*/
     double drag_offset_line,drag_offset_time;
     

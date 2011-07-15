@@ -41,6 +41,7 @@ public:
     
     /**Removes an atom from container*/
     void Remove(int n);
+    void RemoveList(std::vector<Atom*>* V);
     
     /**Gets n-th atom*/
     Atom* operator[](int n);

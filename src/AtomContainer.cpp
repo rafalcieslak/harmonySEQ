@@ -20,9 +20,18 @@
 #include "AtomContainer.h"
 #include <algorithm>
 #include <vector>
+#include <set>
+#include "messages.h"
+#include "global.h"
 
 bool AtomComparison(Atom * a1, Atom * a2)
 {
+    if( (a1->time)==(a2->time)){
+        if((a1->random_number)==(a2->random_number)){
+            return(a1->random_number2)<(a2->random_number2);
+        }
+        return (a1->random_number)<(a2->random_number);
+    }else //just:
     return (a1->time)<(a2->time);
 }
 
@@ -56,6 +65,22 @@ int AtomContainer::Add(Atom * a){
 
 void AtomContainer::Remove(int n){
     AtmVec.erase(AtmVec.begin()+n);
+    //No need to sort. Removing does not change order.
+}
+
+void AtomContainer::RemoveList(std::vector<Atom*>* V){
+    int n = V->size();
+    std::vector<Atom*> result(1000,NULL);
+    std::vector<Atom*> atoms = *V;
+    std::sort(atoms.begin(),atoms.end(),AtomComparison);
+    std::set_difference(AtmVec.begin(),AtmVec.end(),atoms.begin(),atoms.end(),result.begin(),AtomComparison);
+    AtmVec.clear();
+    int x = 0;
+    while(result[x] != NULL){
+        AtmVec.push_back(result[x]);
+        x++;
+    }
+
     //No need to sort. Removing does not change order.
 }
 

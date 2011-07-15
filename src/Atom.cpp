@@ -17,11 +17,15 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <stdlib.h>
+
 #include "Atom.h"
 
 
 Atom::Atom(double _time){
     time = _time;
+    random_number = rand();
+    random_number2 = rand();
 }
 
 Atom::~Atom(){
