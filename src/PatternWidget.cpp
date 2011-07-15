@@ -184,6 +184,8 @@ bool PatternWidget::on_button_release_event(GdkEventButton* event){
                     selection.insert(*it);
                 }
                 drag_temporary_selection.clear();
+                velocity = CalculateAverageVelocity();
+                on_selection_changed.emit(selection.size());
                 Redraw();
             }
         }
@@ -197,7 +199,7 @@ bool PatternWidget::on_leave_notify_event(GdkEventCrossing* event){
 
 bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
     if(event->state & (1 << 8)){ //LMB down 
-        if(!drag_in_progress){
+        if(!drag_in_progress){//there is no drag in progress, maybe we need to initiate one?
             if(mouse_button_is_down){
                     //if moved some distance, mark drag as in progress. 
                     //if we use SHIFT to precise moving, do not apply this distance, and mark as drag regardless of it.
@@ -384,8 +386,10 @@ void PatternWidget::on_drag_begin(const Glib::RefPtr<Gdk::DragContext>& context)
   //drag_selection rectangle
   if(drag_in_progress && drag_mode==DRAG_MODE_SELECT_AREA){
       ct.set_line_width(2);
-      ct.set_source_rgb(0.9,0.4,0.3);
       ct.rectangle(drag_beggining_x,drag_beggining_y,drag_current_x-drag_beggining_x,drag_current_y-drag_beggining_y);
+      ct.set_source_rgba(0.9,0.4,0.3,0.2);
+      ct.fill_preserve();
+      ct.set_source_rgb(0.9,0.4,0.3);
       ct.stroke();
       
   }
