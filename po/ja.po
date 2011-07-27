@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
 "POT-Creation-Date: 2011-06-27 22:32+0200\n"
-"PO-Revision-Date: 2011-07-25 17:53+0000\n"
+"PO-Revision-Date: 2011-07-27 01:24+0000\n"
 "Last-Translator: Nel Pogorzelska <Unknown>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-07-26 04:53+0000\n"
+"X-Launchpad-Export-Date: 2011-07-27 04:44+0000\n"
 "X-Generator: Launchpad (build 13405)\n"
 "Language: ja\n"
 
@@ -108,32 +108,32 @@ msgstr ""
 
 #: src/MainWindow.cpp:59 src/SequencerWidget.cpp:119
 msgid "Add"
-msgstr ""
+msgstr "加算"
 
 #: src/MainWindow.cpp:59
 msgid "Adds a new seqencer"
-msgstr ""
+msgstr "新しいシーケンサーを加算する"
 
 #: src/MainWindow.cpp:60 src/MainWindow.cpp:68 src/SequencerWidget.cpp:121
 #: src/EventsWidget.cpp:40
 msgid "Remove"
-msgstr ""
+msgstr "削除"
 
 #: src/MainWindow.cpp:60
 msgid "Removes selected sequencer"
-msgstr ""
+msgstr "選定したシーケンサーを削除する"
 
 #: src/MainWindow.cpp:61 src/MainWindow.cpp:69
 msgid "Duplicate"
-msgstr ""
+msgstr "剥製"
 
 #: src/MainWindow.cpp:61
 msgid "Duplicates selected sequencer"
-msgstr ""
+msgstr "選定したシーケンサーを剥製する"
 
 #: src/MainWindow.cpp:63
 msgid "Metronome"
-msgstr ""
+msgstr "メトロノーム"
 
 #: src/MainWindow.cpp:63
 msgid "Toggle metronome on/off"
@@ -175,11 +175,11 @@ msgstr ""
 
 #: src/MainWindow.cpp:68
 msgid "Removes the sequencer."
-msgstr ""
+msgstr "シーケンサーを削除する"
 
 #: src/MainWindow.cpp:69
 msgid "Duplicates the sequencer"
-msgstr ""
+msgstr "シーケンサーを剥製する"
 
 #: src/MainWindow.cpp:127 src/MainWindow.cpp:133
 msgid "ERROR - error while building menus: "
@@ -221,7 +221,7 @@ msgstr ""
 
 #: src/MainWindow.cpp:225 src/SettingsWindow.cpp:74 src/SettingsWindow.cpp:75
 msgid "Channel"
-msgstr ""
+msgstr "チャンネル"
 
 #: src/MainWindow.cpp:226
 msgid "Pattern"
@@ -290,7 +290,7 @@ msgstr ""
 
 #: src/MainWindow.cpp:638
 msgid "harmonySEQ website"
-msgstr ""
+msgstr "harmonySEQのウェブサイト"
 
 #. TRANSLATORS:First caption in authors list
 #: src/MainWindow.cpp:641
@@ -468,7 +468,7 @@ msgstr ""
 
 #: src/EventGUI.cpp:30
 msgid "Event"
-msgstr ""
+msgstr "イベント"
 
 #: src/EventGUI.cpp:56
 #, c-format
@@ -489,7 +489,7 @@ msgstr ""
 
 #: src/EventGUI.cpp:89 src/SettingsWindow.cpp:103
 msgid "Channel:"
-msgstr ""
+msgstr "チャンネル:"
 
 #: src/EventGUI.cpp:90
 msgid "Controller:"
@@ -521,7 +521,7 @@ msgstr ""
 
 #: src/EventGUI.cpp:108 src/ActionGUI.cpp:140 src/SettingsWindow.cpp:36
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: src/EventGUI.cpp:210
 msgid "Error: channel has changed, while event is not MIDI-type."
@@ -652,7 +652,7 @@ msgstr ""
 
 #: src/ActionGUI.cpp:128
 msgid "Sequencer:"
-msgstr ""
+msgstr "シーケンサー:"
 
 #: src/ActionGUI.cpp:130
 msgid "Volume:"
@@ -734,11 +734,11 @@ msgstr ""
 
 #: src/TreeModels.cpp:48 src/TreeModels.cpp:68
 msgid "Empty"
-msgstr ""
+msgstr "空"
 
 #: src/TreeModels.cpp:51
 msgid "Keyboard"
-msgstr ""
+msgstr "キーボード"
 
 #: src/TreeModels.cpp:54
 msgid "MIDI Note"
@@ -818,7 +818,7 @@ msgstr ""
 
 #: src/TreeModels.cpp:213
 msgid "Guitar"
-msgstr ""
+msgstr "ギター"
 
 #: src/Chord.cpp:272
 #, c-format
@@ -960,7 +960,7 @@ msgstr ""
 
 #: src/SettingsWindow.cpp:35
 msgid "Cancel"
-msgstr ""
+msgstr "キャンセル"
 
 #: src/SettingsWindow.cpp:37
 msgid "Restore"
@@ -1100,7 +1100,7 @@ msgstr ""
 
 #: src/SequencerWidget.cpp:123
 msgid "Name:"
-msgstr ""
+msgstr "名前:"
 
 #: src/SequencerWidget.cpp:125
 msgid "Plays sequence in this sequencer <b>once</b>."
@@ -1193,7 +1193,7 @@ msgstr ""
 
 #: src/EventsWidget.cpp:54
 msgid "Events"
-msgstr ""
+msgstr "イベント"
 
 #: src/EventsWidget.cpp:117
 msgid "Error - cannot colorize triggered event: row is empty.\n"
