@@ -229,7 +229,6 @@ MainWindow::MainWindow()
         col_count = wTreeView.append_column(_("Pattern"), m_columns_sequencers.col_pattern);
         col_count = wTreeView.append_column(_("Resolution"), m_columns_sequencers.col_res);
         col_count = wTreeView.append_column_numeric(_("Length"), m_columns_sequencers.col_len,"%g");
-        col_count = wTreeView.append_column(_("Velocity"), m_columns_sequencers.col_vol);
         col_count = wTreeView.append_column(_("Chord"), m_columns_sequencers.col_chord);
 
 
@@ -833,9 +832,6 @@ void MainWindow::UpdateVisibleColumns(){
         col_iter++;
         pColumn = wTreeView.get_column(col_iter); //Len
         pColumn->set_visible(Config::VisibleColumns::Length);
-        col_iter++;
-        pColumn = wTreeView.get_column(col_iter); //Vel
-        pColumn->set_visible(Config::VisibleColumns::Velocity);
         col_iter++;
         pColumn = wTreeView.get_column(col_iter); //Chord
         pColumn->set_visible(Config::VisibleColumns::Chord);

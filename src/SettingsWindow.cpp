@@ -67,7 +67,6 @@ SettingsWindow::SettingsWindow(){
     colums_vbox.pack_start(colums_pattern);
     colums_vbox.pack_start(colums_resolution);
     colums_vbox.pack_start(colums_length);
-    colums_vbox.pack_start(colums_velocity);
     colums_vbox.pack_start(colums_chord);
 
     colums_name.set_label(_("Name"));
@@ -76,7 +75,6 @@ SettingsWindow::SettingsWindow(){
     colums_pattern.set_label(_("Patern"));
     colums_resolution.set_label(_("Resolution"));
     colums_length.set_label(_("Length"));
-    colums_velocity.set_label(_("Velocity"));
     colums_chord.set_label(_("Chord"));
 
     //these are fake checkbuttons, for it is impossible to hide the name or the on/off switch
@@ -175,7 +173,6 @@ void SettingsWindow::LoadDataFromConfig(){
     colums_pattern.set_active(Config::VisibleColumns::Pattern);
     colums_resolution.set_active(Config::VisibleColumns::Resolution);
     colums_length.set_active(Config::VisibleColumns::Length);
-    colums_velocity.set_active(Config::VisibleColumns::Velocity);
     colums_chord.set_active(Config::VisibleColumns::Chord);
     play_on_edit.set_active(Config::Interaction::PlayOnEdit);
     osc_port.set_value(Config::OSC::Port);
@@ -193,7 +190,6 @@ void SettingsWindow::StoreDataToConfig(){
     Config::VisibleColumns::Pattern = colums_pattern.get_active();
     Config::VisibleColumns::Resolution = colums_resolution.get_active();
     Config::VisibleColumns::Length = colums_length.get_active();
-    Config::VisibleColumns::Velocity = colums_velocity.get_active();
     Config::VisibleColumns::Chord  = colums_chord.get_active();
     Config::Interaction::PlayOnEdit = play_on_edit.get_active();
     Config::OSC::Port = osc_port.get_value();

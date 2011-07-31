@@ -68,7 +68,6 @@ private:
         Gtk::CheckButton colums_pattern;
         Gtk::CheckButton colums_resolution;
         Gtk::CheckButton colums_length;
-        Gtk::CheckButton colums_velocity;
         Gtk::CheckButton colums_chord;
 
         Gtk::HSeparator sep1;
