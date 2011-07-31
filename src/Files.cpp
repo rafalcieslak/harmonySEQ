@@ -274,7 +274,7 @@ bool LoadFile(Glib::ustring file){
         if (VA > VERSION_A || (VA == VERSION_A && VB > VERSION_B) || (VA == VERSION_A && VB == VERSION_B && VC > VERSION_C)){
             //File is too new
             sprintf(temp,_("This file was created by harmonySEQ in a newer version (%d.%d.%d). This means it may contain data that is suppored by the newer wersion, but not by the version you are using (%d.%d.%d). It is recommended not to open such file, since it is very likely it may produce strange errors, or may event crash the program unexpectedly. However, in some cases one may want to open such file anyway, for example if it is sure it will open without trouble. Select YES to do so."),VA,VB,VC,VERSION_A,VERSION_B,VERSION_C);
-            if (Ask(_("Do you want to open this file?"),temp,false)){
+            if (Ask(_("Do you want to open this file?"),temp)){
                 //anserwed YES;
             }else{
                 return 1;
@@ -283,7 +283,7 @@ bool LoadFile(Glib::ustring file){
         } else if (VA < VERSION_A || (VA == VERSION_A && VB < VERSION_B) || (VA == VERSION_A && VB == VERSION_B && VC < VERSION_C)){
             //File is too old
             sprintf(temp,_("This file was created by harmonySEQ in an older version (%d.%d.%d). This means it may miss some data that is required to be in file by the version you are using (%d.%d.%d). It is recommended not to open such file, since it is very likely it may produce strange errors, or may event crash the program unexpectedly. However, in some cases one may want to open such file anyway, for example if it is sure it will open without trouble. Select YES to do so."),VA,VB,VC,VERSION_A,VERSION_B,VERSION_C);
-            if (Ask(_("Do you want to open this file?"),temp,false)){
+            if (Ask(_("Do you want to open this file?"),temp)){
                 //anserwed YES;
             }else{
                 return 1;

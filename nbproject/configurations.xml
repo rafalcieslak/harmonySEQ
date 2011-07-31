@@ -6,16 +6,22 @@
                    projectFiles="true">
       <itemPath>src/Action.h</itemPath>
       <itemPath>src/ActionGUI.h</itemPath>
+      <itemPath>src/Atom.h</itemPath>
+      <itemPath>src/AtomContainer.h</itemPath>
       <itemPath>src/Chord.h</itemPath>
       <itemPath>src/ChordWidget.h</itemPath>
       <itemPath>src/Configuration.h</itemPath>
+      <itemPath>src/ControllerAtom.h</itemPath>
       <itemPath>src/Event.h</itemPath>
       <itemPath>src/EventGUI.h</itemPath>
       <itemPath>../Programy/harmonySEQ/trunk/src/EventsWidget.h</itemPath>
       <itemPath>src/Files.h</itemPath>
       <itemPath>src/MainWindow.h</itemPath>
       <itemPath>src/MidiDriver.h</itemPath>
+      <itemPath>src/NoteAtom.h</itemPath>
+      <itemPath>src/NoteContainer.h</itemPath>
       <itemPath>../Programy/harmonySEQ/trunk/src/OSC.h</itemPath>
+      <itemPath>src/PatternWidget.h</itemPath>
       <itemPath>src/Sequencer.h</itemPath>
       <itemPath>src/SequencerWidget.h</itemPath>
       <itemPath>src/TreeModels.h</itemPath>
@@ -39,9 +45,12 @@
                    projectFiles="true">
       <itemPath>src/Action.cpp</itemPath>
       <itemPath>src/ActionGUI.cpp</itemPath>
+      <itemPath>src/Atom.cpp</itemPath>
+      <itemPath>src/AtomContainer.cpp</itemPath>
       <itemPath>src/Chord.cpp</itemPath>
       <itemPath>src/ChordWidget.cpp</itemPath>
       <itemPath>src/Configuration.cpp</itemPath>
+      <itemPath>src/ControllerAtom.cpp</itemPath>
       <itemPath>src/Event.cpp</itemPath>
       <itemPath>src/EventGUI.cpp</itemPath>
       <itemPath>../Programy/harmonySEQ/trunk/src/EventsWidget.cpp</itemPath>
@@ -49,8 +58,12 @@
       <itemPath>src/MainWindow.cpp</itemPath>
       <itemPath>src/Makefile.am</itemPath>
       <itemPath>src/MidiDriver.cpp</itemPath>
+      <itemPath>src/NoteAtom.cpp</itemPath>
+      <itemPath>src/NoteContainer.cpp</itemPath>
       <itemPath>../Programy/harmonySEQ/trunk/src/OSC.cpp</itemPath>
+      <itemPath>src/PatternWidget.cpp</itemPath>
       <itemPath>src/Sequencer.cpp</itemPath>
+      <itemPath>src/SequencerWidget.cpp</itemPath>
       <itemPath>../Programy/harmonySEQ/trunk/src/SettingsWindow.cpp</itemPath>
       <itemPath>src/TreeModels.cpp</itemPath>
       <itemPath>src/global.cpp</itemPath>
@@ -71,19 +84,6 @@
       <itemPath>Makefile.am</itemPath>
       <itemPath>src/Makefile.am</itemPath>
     </logicalFolder>
-    <itemPath>src/Atom.cpp</itemPath>
-    <itemPath>src/Atom.h</itemPath>
-    <itemPath>src/AtomContainer.cpp</itemPath>
-    <itemPath>src/AtomContainer.h</itemPath>
-    <itemPath>src/ControllerAtom.cpp</itemPath>
-    <itemPath>src/ControllerAtom.h</itemPath>
-    <itemPath>src/NoteAtom.cpp</itemPath>
-    <itemPath>src/NoteAtom.h</itemPath>
-    <itemPath>src/NoteContainer.cpp</itemPath>
-    <itemPath>src/NoteContainer.h</itemPath>
-    <itemPath>src/PatternWidget.cpp</itemPath>
-    <itemPath>src/PatternWidget.h</itemPath>
-    <itemPath>src/SequencerWidget.cpp</itemPath>
   </logicalFolder>
   <sourceRootList>
     <Elem>src</Elem>

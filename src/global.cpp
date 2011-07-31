@@ -21,13 +21,11 @@
 #include "global.h"
 #include "messages.h"
 #include "MainWindow.h"
-bool Ask(Glib::ustring message, Glib::ustring secondary_message, bool lock_threads){
-    if (lock_threads) gdk_threads_enter();
+bool Ask(Glib::ustring message, Glib::ustring secondary_message){
     Gtk::MessageDialog dialog(*mainwindow,message,false,Gtk::MESSAGE_QUESTION,Gtk::BUTTONS_YES_NO);
     dialog.set_secondary_text(secondary_message);
 
     int result = dialog.run();
-    if (lock_threads) gdk_threads_leave();
 
     switch (result){
         case Gtk::RESPONSE_YES:
@@ -40,13 +38,11 @@ bool Ask(Glib::ustring message, Glib::ustring secondary_message, bool lock_threa
 
     return 0;
 }
-void Info(Glib::ustring message, Glib::ustring secondary_message, bool lock_threads){
+void Info(Glib::ustring message, Glib::ustring secondary_message){
 
-    if (lock_threads) gdk_threads_enter();
     Gtk::MessageDialog dialog(*mainwindow,message,false,Gtk::MESSAGE_INFO,Gtk::BUTTONS_OK);
     dialog.set_secondary_text(secondary_message);
 
     dialog.run();
-    if (lock_threads) gdk_threads_leave();
 
 }

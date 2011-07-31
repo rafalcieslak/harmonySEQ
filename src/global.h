@@ -132,9 +132,9 @@ extern Glib::RefPtr< Gdk::Pixbuf > harmonySEQ_logo_48;
 extern Glib::RefPtr< Gdk::Pixbuf > metronome_icon_24;
 #endif
 /**Ask user a YES-NO question.*/
-bool Ask(Glib::ustring message, Glib::ustring secondary_message = "", bool lock_threads = false);
+bool Ask(Glib::ustring message, Glib::ustring secondary_message = "");
 /**Shows user a message.*/
-void Info(Glib::ustring message, Glib::ustring secondary_message = "", bool lock_threads = false);
+void Info(Glib::ustring message, Glib::ustring secondary_message = "");
 
 #endif	/* GLOBAL_H */
 
