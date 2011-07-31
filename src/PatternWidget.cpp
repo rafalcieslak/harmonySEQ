@@ -466,7 +466,7 @@ void PatternWidget::on_drag_begin(const Glib::RefPtr<Gdk::DragContext>& context)
   ct.set_line_width(3.0);
   ct.set_line_join(Cairo::LINE_JOIN_ROUND);
   if (container) //just in case it's NULL...
-  for (int x = 0; x < container->GetSize(); x++){
+  for (int x = container->GetSize()-1; x >= 0; x--){ //iterating backwards, to draw shades below notes
       Atom* atm = (*container)[x];
       NoteAtom* note = dynamic_cast<NoteAtom*>(atm);
       double y1 = (5-note->pitch)*internal_height/6;
@@ -489,6 +489,16 @@ void PatternWidget::on_drag_begin(const Glib::RefPtr<Gdk::DragContext>& context)
       if(selected) ct.set_source_rgb(0.4,0.0,0.0);
       else ct.set_source_rgb(0.0,0.0,0.4);
       ct.stroke();
+      
+      if(note->time + note->length > 1.0){
+          //draw shade
+          x1 -= width;
+         ct.rectangle(x1+1.5,y1+1.5,w-3,h-3);
+         ct.set_source_rgba(0.8,0.8,0.8,af/0.75);
+         ct.fill_preserve();
+         ct.set_source_rgb(0.7,0.7,0.7);
+         ct.stroke();
+      }
   }
   
   //horizontal grid
