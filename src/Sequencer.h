@@ -72,8 +72,8 @@ public:
     /**Returns seq's length*/
     double GetLength();
 
-    void SetActivePattern(int a);
-    int GetActivePattern();
+    void SetActivePatternNumber(int a);
+    int GetActivePatternNumber();
     /**Returns a one note of chord of this sequencer
      *  @parram n note number*/
     int GetNoteOfChord(int n);
