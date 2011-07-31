@@ -69,7 +69,7 @@ private:
     EventGUI *gui_window;
 };
 /**Magic function that triggers all events that are of appropriate type and args (as specified in function arguments)*/
-void FindAndProcessEvents(Event::EventTypes ev,int arg1 = 0, int arg2 = 0, bool lock_threads = false);
+void FindAndProcessEvents(Event::EventTypes ev,int arg1 = 0, int arg2 = 0);
 
 /**Triggers all key-press events, using GdkKeyEvent as argument, very useful when capturing keypresses from widgets*/
 bool FindAndProcessEventsKeyPress(GdkEventKey* event);

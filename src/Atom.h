@@ -27,15 +27,16 @@ public:
     /**Value from 0 to 1, representing relative location (in time) in parent container*/
     double time;
     
-    //TODO: instead of random, apply consequent numbers
-    int random_number;
-    int random_number2;
+    /**Unique number used for sorting*/
+    int ID;
+    
     /**Used when dragging, to store relative position to drag beggining.*/
     double drag_offset_line,drag_offset_time;
     
     /**This is here just to force compiler to make Atom a base abstract class*/
    // virtual int bac() = 0;
 private:
+    static int counter;
 
 };
 

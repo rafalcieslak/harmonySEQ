@@ -21,11 +21,12 @@
 
 #include "Atom.h"
 
+int Atom::counter = 0;
 
 Atom::Atom(double _time){
     time = _time;
-    random_number = rand();
-    random_number2 = rand();
+    ID = counter;
+    counter++;
 }
 
 Atom::~Atom(){

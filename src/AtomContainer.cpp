@@ -27,10 +27,7 @@
 bool AtomComparison(Atom * a1, Atom * a2)
 {
     if( (a1->time)==(a2->time)){
-        if((a1->random_number)==(a2->random_number)){
-            return(a1->random_number2)<(a2->random_number2);
-        }
-        return (a1->random_number)<(a2->random_number);
+        return (a1->ID)<(a2->ID);
     }else //just:
     return (a1->time)<(a2->time);
 }
