@@ -67,7 +67,7 @@ private:
     bool add_mode;
     
     std::set<int> selection;
-    bool mouse_button_is_down;
+    
     bool snap;
     std::set<int> drag_temporary_selection;
     int drag_beggining_x, drag_beggining_y;

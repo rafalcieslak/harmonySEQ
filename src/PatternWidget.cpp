@@ -269,7 +269,6 @@ void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
 bool PatternWidget::on_button_press_event(GdkEventButton* event){
     if(event->button == 1) //LMB
     {
-        mouse_button_is_down = 1;
         drag_beggining_x = event->x;
         drag_beggining_y = event->y;
         
@@ -354,9 +353,8 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
 bool PatternWidget::on_button_release_event(GdkEventButton* event){
     if(event->button == 1)
         if(!drag_in_progress){
-            mouse_button_is_down = 0;
+            
         }else{
-            mouse_button_is_down = 0;
             drag_in_progress = 0;
             if(drag_mode == DRAG_MODE_SELECT_AREA){
                 //Finished selection by dragging.
@@ -381,7 +379,7 @@ bool PatternWidget::on_leave_notify_event(GdkEventCrossing* event){
 bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
     if(event->state & (1 << 8)){ //LMB down 
         if(!drag_in_progress){//there is no drag in progress, maybe we need to initiate one?
-            if(mouse_button_is_down){
+            
                     //if moved some distance, mark drag as in progress. 
                     //if we use SHIFT to precise moving, do not apply this distance, and mark as drag regardless of it.
                     const int distance = 9;
@@ -389,7 +387,6 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
                         InitDrag();
                         ProcessDrag(event->x, event->y,(event->state & (1 << 0)));
                     }
-            }
         }else{ //drag in process
             ProcessDrag(event->x,event->y,(event->state & (1 << 0)));
         }
