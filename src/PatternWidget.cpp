@@ -147,6 +147,125 @@ double PatternWidget::Snap(double t){
     return t;
 }
 
+void PatternWidget::InitDrag(){
+    Gtk::Allocation allocation = get_allocation();
+    const int width = allocation.get_width();
+    const int height = allocation.get_height();
+    //count position
+    int line = 5 - drag_beggining_y / (internal_height / 6); //I HAVE NO IDEA WHY THERE SHOULD BE 5 AND NOT 6, DO NOT ASK THAT SEEMS TO BE ****** WEIRD
+    double time = (double) drag_beggining_x / (double) width;
+    //looking if there is a note where drag was began...
+    int found = -1;
+    int size = container->GetSize();
+    for (int x = 0; x < size; x++) {
+        NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[x]);
+        if (note->pitch == line && note->time < time && time < note->time + note->length) {
+            found = x;
+            break;
+        }
+    }
+    //and checking if it's in a selection
+    std::set<int>::iterator it = selection.find(found);
+    if (it != selection.end()) {// so it is in selection...
+        //beggining drag. 
+        drag_mode = DRAG_MODE_MOVE_SELECTION;
+        drag_in_progress = 1;
+        drag_beggining_line = line;
+        drag_beggining_time = time;
+        drag_note_dragged = found;
+        NoteAtom* dragged_note = dynamic_cast<NoteAtom*> ((*container)[found]);
+        drag_time_offset_to_dragged_note = drag_beggining_time - dragged_note->time;
+        //Store note offsets...
+        std::set<int>::iterator it = selection.begin();
+        for (; it != selection.end(); it++) {
+            NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[*it]);
+            //*err << "   " << line << ENDL;
+            note->drag_offset_line = note->pitch - line;
+            note->drag_offset_time = note->time - time;
+            //*err << note->drag_offset_line << " " << note->drag_offset_time << ENDL;
+        }
+    } else {
+        //drag begun in place where was no selection
+        drag_mode = DRAG_MODE_SELECT_AREA;
+        drag_in_progress = 1;
+        drag_beggining_line = line;
+        drag_beggining_time = time;
+        drag_temporary_selection.clear();
+    }
+}
+
+void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
+    if (drag_mode == DRAG_MODE_MOVE_SELECTION) {
+        Gtk::Allocation allocation = get_allocation();
+        const int width = allocation.get_width();
+        const int height = allocation.get_height();
+        //count position
+        int line = 6 -  y / (internal_height / 6);
+        double time = (double) x / (double) width;
+        //*dbg << line << " " << time <<ENDL;
+        NoteAtom* dragged_note = dynamic_cast<NoteAtom*> ((*container)[drag_note_dragged]);
+        double temp_time = time + dragged_note->drag_offset_time;
+        temp_time = temp_time - (int) temp_time; //wrap to 0.0 - 0.9999...
+        double snapped_time = temp_time;
+        if (snap && !(shift_key)) { //if snap & not shift key...
+            snapped_time = Snap(temp_time);
+        }
+        //Remembers how much was the dragged note moved due to snapping feature, so that we can move other notes by the same distance.
+        double snap_offset = snapped_time - temp_time;
+        //*dbg << snap_offset << ENDL;
+
+        std::set<int>::iterator it = selection.begin();
+        for (; it != selection.end(); it++) {
+            NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[*it]);
+            int temp_pitch = line + note->drag_offset_line;
+            temp_time = time + note->drag_offset_time + snap_offset;
+            temp_pitch = temp_pitch % 6; //wrap to 0-5;
+            temp_time = temp_time - (int) temp_time; //wrap to 0.0 - 0.9999...
+            if (temp_pitch < 0) temp_pitch += 6;
+            if (temp_time < 0) temp_time += 1.0;
+            note->pitch = temp_pitch;
+            note->time = temp_time;
+            //*dbg << " " << note->pitch << " " << note->time <<ENDL;
+        }
+
+    } else if (drag_mode == DRAG_MODE_SELECT_AREA) {
+        drag_current_x = x;
+        drag_current_y = y;
+        Gtk::Allocation allocation = get_allocation();
+        const int width = allocation.get_width();
+        const int height = allocation.get_height();
+        //count position
+        int line = 6 - y/ (internal_height / 6);
+        double time = (double) x/ (double) width;
+        drag_current_line = line;
+        drag_current_time = time;
+
+        //Determining drag selection.
+        drag_temporary_selection.clear();
+        int sel_pith_min = min(drag_current_line, drag_beggining_line);
+        int sel_pith_max = max(drag_current_line, drag_beggining_line);
+        double sel_time_min = min(drag_current_time, drag_beggining_time);
+        double sel_time_max = max(drag_current_time, drag_beggining_time);
+        int size = container->GetSize();
+        for (int x = 0; x < size; x++) {
+            NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[x]);
+            //check if pitch is in bounds...
+            if (note->pitch <= sel_pith_max && note->pitch >= sel_pith_min) {
+                //*dbg << " note " << x << " pith ("<<note->pitch <<")  in bounds.\n";
+                //check time...
+                double start = note->time;
+                double end = note->time + note->length;
+                if ((start <= sel_time_max && start >= sel_time_min) || (end <= sel_time_max && end >= sel_time_min) || (start <= sel_time_min && end >= sel_time_max)) {
+                    //is inside!
+                    drag_temporary_selection.insert(x);
+                }
+            }
+        }//check next note.
+
+    }
+    Redraw();
+}
+
 bool PatternWidget::on_button_press_event(GdkEventButton* event){
     if(event->button == 1) //LMB
     {
@@ -267,123 +386,12 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
                     //if we use SHIFT to precise moving, do not apply this distance, and mark as drag regardless of it.
                     const int distance = 9;
                     if(event->x > drag_beggining_x+distance || event->y > drag_beggining_y + distance || event->x < drag_beggining_x - distance || event->y < drag_beggining_y - distance) {
-
-                        Gtk::Allocation allocation = get_allocation();
-                        const int width = allocation.get_width();
-                        const int height = allocation.get_height();
-                        //count position
-                        int line = 5 - drag_beggining_y / (internal_height / 6); //I HAVE NO IDEA WHY THERE SHOULD BE 5 AND NOT 6, DO NOT ASK THAT SEEMS TO BE ****** WEIRD
-                        double time = (double) drag_beggining_x / (double) width;
-                        //looking if there is a note where drag was began...
-                        int found = -1;
-                        int size = container->GetSize();
-                        for (int x = 0; x < size; x++) {
-                            NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[x]);
-                            if (note->pitch == line && note->time < time && time < note->time + note->length) {
-                                found = x;
-                                break;
-                            }
-                        }
-                        //and checking if it's in a selection
-                        std::set<int>::iterator it= selection.find(found);
-                        if(it!=selection.end()){// so it is in selection...
-                            //beggining drag. 
-                            drag_mode=DRAG_MODE_MOVE_SELECTION;
-                            drag_in_progress = 1;
-                            drag_beggining_line = line;
-                            drag_beggining_time = time;
-                            drag_note_dragged = found;
-                            NoteAtom* dragged_note = dynamic_cast<NoteAtom*> ((*container)[found]);
-                            drag_time_offset_to_dragged_note = drag_beggining_time - dragged_note->time;
-                            //Store note offsets...
-                            std::set<int>::iterator it = selection.begin();
-                            for (;it!=selection.end();it++) {
-                                NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[*it]);
-                                //*err << "   " << line << ENDL;
-                                note->drag_offset_line = note->pitch - line;
-                                note->drag_offset_time = note->time-time;
-                                //*err << note->drag_offset_line << " " << note->drag_offset_time << ENDL;
-                            }
-                        }else{
-                            //drag begun in place where was no selection
-                            drag_mode = DRAG_MODE_SELECT_AREA;
-                            drag_in_progress = 1;
-                            drag_beggining_line = line; 
-                            drag_beggining_time = time;
-                            drag_temporary_selection.clear();
-                        }
+                        InitDrag();
+                        ProcessDrag(event->x, event->y,(event->state & (1 << 0)));
                     }
             }
         }else{ //drag in process
-            if(drag_mode == DRAG_MODE_MOVE_SELECTION){
-                Gtk::Allocation allocation = get_allocation();
-                const int width = allocation.get_width();
-                const int height = allocation.get_height();
-                //count position
-                int line = 6 - event->y / (internal_height / 6);
-                double time = (double) event->x / (double) width;
-                //*dbg << line << " " << time <<ENDL;
-                NoteAtom* dragged_note = dynamic_cast<NoteAtom*> ((*container)[drag_note_dragged]);
-                double temp_time = time+dragged_note->drag_offset_time;
-                temp_time = temp_time - (int) temp_time; //wrap to 0.0 - 0.9999...
-                double snapped_time = temp_time;
-                if(snap && !(event->state & (1 << 0))){ //if snap & not shift key...
-                    snapped_time = Snap(temp_time);
-                }
-                //Remembers how much was the dragged note moved due to snapping feature, so that we can move other notes by the same distance.
-                double snap_offset = snapped_time-temp_time;
-                //*dbg << snap_offset << ENDL;
-                
-                std::set<int>::iterator it = selection.begin();
-                for (; it != selection.end(); it++) {
-                    NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[*it]);
-                    int temp_pitch =  line+note->drag_offset_line;
-                   temp_time  = time+note->drag_offset_time+snap_offset;
-                    temp_pitch = temp_pitch%6; //wrap to 0-5;
-                    temp_time =  temp_time - (int)temp_time; //wrap to 0.0 - 0.9999...
-                    if(temp_pitch < 0) temp_pitch+= 6;
-                    if(temp_time < 0) temp_time += 1.0;
-                    note->pitch = temp_pitch;
-                    note->time =temp_time;
-                    //*dbg << " " << note->pitch << " " << note->time <<ENDL;
-                }
-
-            }else if(drag_mode == DRAG_MODE_SELECT_AREA){
-                drag_current_x = event->x;
-                drag_current_y = event->y;
-                Gtk::Allocation allocation = get_allocation();
-                const int width = allocation.get_width();
-                const int height = allocation.get_height();
-                //count position
-                int line = 6 - event->y / (internal_height / 6);
-                double time = (double) event->x / (double) width;
-                drag_current_line = line;
-                drag_current_time = time;
-                
-                //Determining drag selection.
-                drag_temporary_selection.clear();
-                int sel_pith_min = min(drag_current_line,drag_beggining_line);
-                int sel_pith_max = max(drag_current_line,drag_beggining_line);
-                double sel_time_min = min(drag_current_time,drag_beggining_time);
-                double sel_time_max = max(drag_current_time,drag_beggining_time);
-                int size = container->GetSize();
-                for (int x = 0; x < size; x++) {
-                    NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[x]);
-                    //check if pitch is in bounds...
-                    if(note->pitch <= sel_pith_max && note->pitch >= sel_pith_min){
-                         //*dbg << " note " << x << " pith ("<<note->pitch <<")  in bounds.\n";
-                        //check time...
-                        double start = note->time;
-                        double end = note->time+note->length;
-                        if((start<=sel_time_max && start >=sel_time_min) || (end<=sel_time_max && end >=sel_time_min) || (start <= sel_time_min && end >= sel_time_max)){
-                            //is inside!
-                            drag_temporary_selection.insert(x);
-                        }
-                    }
-                }//check next note.
-                
-            }
-            Redraw();
+            ProcessDrag(event->x,event->y,(event->state & (1 << 0)));
         }
         
     }

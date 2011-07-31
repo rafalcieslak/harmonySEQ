@@ -93,6 +93,9 @@ private:
     double vert_size; //used to controll zooming
     AtomContainer* container;
     
+    void InitDrag();
+    void ProcessDrag(double x, double y,bool shift_key=false);
+    
 };
 
 #endif	/* PATTERNWIDGET_H */
