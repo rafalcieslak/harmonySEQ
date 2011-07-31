@@ -67,7 +67,7 @@ void AtomContainer::Remove(int n){
 
 void AtomContainer::RemoveList(std::vector<Atom*>* V){
     int n = V->size();
-    std::vector<Atom*> result(1000,NULL);
+    std::vector<Atom*> result(1000);
     std::vector<Atom*> atoms = *V;
     std::sort(atoms.begin(),atoms.end(),AtomComparison);
     std::set_difference(AtmVec.begin(),AtmVec.end(),atoms.begin(),atoms.end(),result.begin(),AtomComparison);
