@@ -36,6 +36,8 @@ public:
     /**Velocity, from 0 to 127*/
     int velocity;
     
+    /**Used to store/remember this note's length at drag's beggining*/
+    double drag_beggining_length;
 private:
 
 };

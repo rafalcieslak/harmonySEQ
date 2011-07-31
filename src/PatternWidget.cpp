@@ -142,6 +142,7 @@ double PatternWidget::Snap(double t){
     
     t*= container->owner->resolution;
     t += 0.5;
+    if(t<0) t--;
     t = (int)t;
     t /= container->owner->resolution;
     return t;
@@ -155,25 +156,46 @@ void PatternWidget::InitDrag(){
     int line = 5 - drag_beggining_y / (internal_height / 6); //I HAVE NO IDEA WHY THERE SHOULD BE 5 AND NOT 6, DO NOT ASK THAT SEEMS TO BE ****** WEIRD
     double time = (double) drag_beggining_x / (double) width;
     //looking if there is a note where drag was began...
-    int found = -1;
+    int note_found = -1;
+    int note_ending_found = -1;
+    const int ending = 10;
+    const double ending_size = (double)ending/width;
     int size = container->GetSize();
     for (int x = 0; x < size; x++) {
         NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[x]);
+        if (note->pitch == line && note->time + note->length - ending_size < time && time < note->time + note->length + ending_size) {
+            note_ending_found = x;
+            break;
+        }
         if (note->pitch == line && note->time < time && time < note->time + note->length) {
-            found = x;
+            note_found = x;
             break;
         }
     }
     //and checking if it's in a selection
-    std::set<int>::iterator it = selection.find(found);
-    if (it != selection.end()) {// so it is in selection...
+    std::set<int>::iterator it = selection.find(note_found);
+    if(note_ending_found != -1){
+        //user tries to resize the note
+        drag_mode = DRAG_MODE_RESIZE;
+        drag_in_progress = 1;
+        drag_beggining_line = line;
+        drag_beggining_time = time;
+        drag_note_dragged = note_ending_found;
+        NoteAtom* dragged_note = dynamic_cast<NoteAtom*> ((*container)[note_ending_found]);
+        //Store note offsets...
+        std::set<int>::iterator it = selection.begin();
+        for (; it != selection.end(); it++) {
+            NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[*it]);
+            note->drag_beggining_length = note->length;
+        }
+    }else if (it != selection.end()) {// so it is in selection...
         //beggining drag. 
         drag_mode = DRAG_MODE_MOVE_SELECTION;
         drag_in_progress = 1;
         drag_beggining_line = line;
         drag_beggining_time = time;
-        drag_note_dragged = found;
-        NoteAtom* dragged_note = dynamic_cast<NoteAtom*> ((*container)[found]);
+        drag_note_dragged = note_found;
+        NoteAtom* dragged_note = dynamic_cast<NoteAtom*> ((*container)[note_found]);
         drag_time_offset_to_dragged_note = drag_beggining_time - dragged_note->time;
         //Store note offsets...
         std::set<int>::iterator it = selection.begin();
@@ -195,14 +217,16 @@ void PatternWidget::InitDrag(){
 }
 
 void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
+
+    Gtk::Allocation allocation = get_allocation();
+    const int width = allocation.get_width();
+    const int height = allocation.get_height();
+    //count position
+    int line = 6 - y / (internal_height / 6);
+    double time = (double) x / (double) width;
+    
     if (drag_mode == DRAG_MODE_MOVE_SELECTION) {
-        Gtk::Allocation allocation = get_allocation();
-        const int width = allocation.get_width();
-        const int height = allocation.get_height();
-        //count position
-        int line = 6 -  y / (internal_height / 6);
-        double time = (double) x / (double) width;
-        //*dbg << line << " " << time <<ENDL;
+        
         NoteAtom* dragged_note = dynamic_cast<NoteAtom*> ((*container)[drag_note_dragged]);
         double temp_time = time + dragged_note->drag_offset_time;
         temp_time = temp_time - (int) temp_time; //wrap to 0.0 - 0.9999...
@@ -231,12 +255,6 @@ void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
     } else if (drag_mode == DRAG_MODE_SELECT_AREA) {
         drag_current_x = x;
         drag_current_y = y;
-        Gtk::Allocation allocation = get_allocation();
-        const int width = allocation.get_width();
-        const int height = allocation.get_height();
-        //count position
-        int line = 6 - y/ (internal_height / 6);
-        double time = (double) x/ (double) width;
         drag_current_line = line;
         drag_current_time = time;
 
@@ -262,7 +280,30 @@ void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
             }
         }//check next note.
 
+    } else if (drag_mode == DRAG_MODE_RESIZE) {
+        
+        NoteAtom* dragged_note = dynamic_cast<NoteAtom*> ((*container)[drag_note_dragged]);
+        if (snap && !(shift_key)) { //if snap & not shift key...
+            time = Snap(time);
+        }
+        double added_length = time-dragged_note->time-dragged_note->drag_beggining_length;
+
+        double note_min_len = 0.01;
+        if (snap && !(shift_key)) { //if snap & not shift key...
+            note_min_len = (double)1.0/container->owner->resolution;
+        }
+        double note_max_len = 1.0;
+        
+        std::set<int>::iterator it = selection.begin();
+        for (; it != selection.end(); it++) {
+            NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[*it]);
+            double temp_length = note->drag_beggining_length+added_length;
+            if(temp_length < note_min_len) temp_length = note_min_len;
+            else if(temp_length > note_max_len) temp_length = note_max_len;
+            note->length = temp_length;
+        }
     }
+    
     Redraw();
 }
 
@@ -343,7 +384,16 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                 }
                 double len = (double)1.0/container->owner->resolution;    
                 NoteAtom* note = new NoteAtom(temp_time,len,line);
+                int id = note->ID;
                 container->Add(note);
+                int N = container->FindID(id);
+                drag_in_progress=1;
+                drag_mode=DRAG_MODE_RESIZE;
+                drag_beggining_line = line;
+                drag_beggining_time = time;
+                drag_note_dragged = N;
+                selection.clear();
+                selection.insert(N);
             }
             Redraw();
         } //(event->y <= internal_height)
@@ -382,7 +432,7 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
             
                     //if moved some distance, mark drag as in progress. 
                     //if we use SHIFT to precise moving, do not apply this distance, and mark as drag regardless of it.
-                    const int distance = 9;
+                    const int distance = 5;
                     if(event->x > drag_beggining_x+distance || event->y > drag_beggining_y + distance || event->x < drag_beggining_x - distance || event->y < drag_beggining_y - distance) {
                         InitDrag();
                         ProcessDrag(event->x, event->y,(event->state & (1 << 0)));

@@ -36,7 +36,6 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/src/AtomContainer.o \
 	${OBJECTDIR}/src/ChordWidget.o \
-	${OBJECTDIR}/src/NoteContainer.o \
 	${OBJECTDIR}/_ext/1045285602/EventsWidget.o \
 	${OBJECTDIR}/src/main.o \
 	${OBJECTDIR}/_ext/1045285602/OSC.o \
@@ -95,11 +94,6 @@ ${OBJECTDIR}/src/ChordWidget.o: src/ChordWidget.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/ChordWidget.o src/ChordWidget.cpp
-
-${OBJECTDIR}/src/NoteContainer.o: src/NoteContainer.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/NoteContainer.o src/NoteContainer.cpp
 
 ${OBJECTDIR}/_ext/1045285602/EventsWidget.o: ../Programy/harmonySEQ/trunk/src/EventsWidget.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1045285602

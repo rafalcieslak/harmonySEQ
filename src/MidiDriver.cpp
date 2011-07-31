@@ -418,34 +418,6 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                 //And repeat the loop.
                 
             }
-            /*
-            if(seq->GetPlayOncePhase() == 2){
-                //playing once. simplier.  
-                AtomContainer* pattern = seq->GetActivePattern();
-                int n = pattern->GetSize();
-                for (int x = 0; x < n; x++){
-                    NoteAtom* note = dynamic_cast<NoteAtom*>((*pattern)[x]);
-                    //output each note.
-                    int pitch = seq->GetNoteOfChord(note->pitch);
-                    //Create a new event (clear it)...
-                    snd_seq_ev_clear(&ev);
-                    //Fill it with note data
-                    snd_seq_ev_set_note(&ev, seq->GetChannel() - 1, pitch, note->velocity, note->length*TICKS_PER_NOTE*seq->GetLength());
-                    //Schedule it in appropriate momment in time (rather: tick, not time), putting it on a queue
-                    snd_seq_ev_schedule_tick(&ev, queueid, 0, tick + note->time*TICKS_PER_NOTE*seq->GetLength());
-                    //Direct it ti output port, to all it's subscribers
-                    snd_seq_ev_set_source(&ev, output_port);
-                    snd_seq_ev_set_subs(&ev);
-                    //Output the event (but it stays at the queue.)
-                    snd_seq_event_output_direct(seq_handle, &ev);
-                    
-                }
-                seq->SetPlayOncePhase(3);
-            } else {
-              //playing looped.  
-            }
-            */
-            
             /* WHOLE THIS HAS TO BE REWRITTEN!
              * 
              * 

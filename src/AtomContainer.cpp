@@ -85,6 +85,14 @@ void AtomContainer::Sort(){
     std::sort(AtmVec.begin(),AtmVec.end(),AtomComparison);
 }
 
+
+int AtomContainer::FindID(int ID){
+    for(int x = 0; x < AtmVec.size();x++)
+        if(AtmVec[x]->ID == ID)
+            return x;
+    return -1;
+}
+
 Atom* AtomContainer::operator[](int n){
     return AtmVec[n];
 }
