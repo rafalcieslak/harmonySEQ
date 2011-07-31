@@ -70,6 +70,7 @@ public:
 
     void SetActivePatternNumber(int a);
     int GetActivePatternNumber();
+    
     AtomContainer* GetActivePattern();
     /**Returns a one note of chord of this sequencer
      *  @parram n note number*/
