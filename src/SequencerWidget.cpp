@@ -93,6 +93,7 @@ SequencerWidget::SequencerWidget(){
     wDelete.set_label(_("Delete"));
     wDelete.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWidget::OnDeleteClicked));
     wSnapToggle.set_label(_("Snap to grid"));
+    wSnapToggle.set_active(1); //As this is default value
     wSnapToggle.signal_toggled().connect(sigc::mem_fun(*this,&SequencerWidget::OnSnapClicked));
 
     wBoxOfChord.pack_start(chordwidget,Gtk::PACK_SHRINK);
