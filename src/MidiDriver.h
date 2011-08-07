@@ -68,6 +68,7 @@ public:
     /**Outputs a noteon and a noteoff after given time period.*/
     void SendNoteEvent(int channel, int pitch, int velocity, int duration);
 
+    void ScheduleNote(int channel, int tick_time, int pitch, int velocity, int length);
     
     /**Sets tempo*/
     void SetTempo(double bpm);

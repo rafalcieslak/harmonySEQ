@@ -44,7 +44,7 @@
 //Makro for easier internalisation.
 #define _(STRING) gettext(STRING)
 
-#define DEFAULT_TEMPO 240.0
+#define DEFAULT_TEMPO 60.0
 
 //How long is the tempo indicatior RED.
 #define FLASH_INTERVAL 50

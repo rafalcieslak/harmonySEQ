@@ -153,6 +153,22 @@ void MidiDriver::SendNoteEvent(int channel, int pitch, int velocity, int duratio
     Glib::signal_timeout().connect_once(sigc::bind(sigc::mem_fun(*this,&MidiDriver::SendNoteOffEventImmediatelly),channel,pitch),duration_ms);
 }
 
+void MidiDriver::ScheduleNote(int channel, int tick_time, int pitch, int velocity, int length){
+        snd_seq_event_t ev;
+        //Create a new event (clear it)...
+        snd_seq_ev_clear(&ev);
+        //Fill it with note data
+        snd_seq_ev_set_note(&ev, channel, pitch, velocity, length);
+        //Schedule it in appropriate moment in time (rather: tick, not time), putting it on a queue
+        snd_seq_ev_schedule_tick(&ev, queueid, 0, tick_time);
+        //Direct it ti output port, to all it's subscribers
+        snd_seq_ev_set_source(&ev, output_port);
+        snd_seq_ev_set_subs(&ev);
+        //Output the event (but it stays at the queue.)
+        snd_seq_event_output_direct(seq_handle, &ev);
+}
+    
+
 void MidiDriver::PassEvent(snd_seq_event_t* ev){
     *dbg << "passing an event...";
     //Direct the event to output port, to it's all subsctibers
@@ -179,7 +195,7 @@ void MidiDriver::SetTempo(double bpm){
     snd_seq_queue_tempo_t* queue_tempo;
     snd_seq_queue_tempo_malloc(&queue_tempo);
     //Calculate the real tempo value from the BPM
-    snd_seq_queue_tempo_set_tempo(queue_tempo,((double)6e7/(double)bpm));
+    snd_seq_queue_tempo_set_tempo(queue_tempo,((double)6e7/((double)bpm*4.0)));
     //Set number of ticks per quarternote
     snd_seq_queue_tempo_set_ppq(queue_tempo,TICKS_PER_QUARTERNOTE);
     //Apply the tempo to the queue
@@ -389,17 +405,7 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                 {
                     int pitch = seq->GetNoteOfChord(note->pitch);
                     *dbg << "playing it! p = " << pitch << ENDL;
-                    //Create a new event (clear it)...
-                    snd_seq_ev_clear(&ev);
-                    //Fill it with note data
-                    snd_seq_ev_set_note(&ev, seq->GetChannel() - 1, pitch, note->velocity, note->length*TICKS_PER_NOTE*seq->GetLength());
-                    //Schedule it in appropriate moment in time (rather: tick, not time), putting it on a queue
-                    snd_seq_ev_schedule_tick(&ev, queueid, 0, local_tick + note->time*TICKS_PER_NOTE*seq->GetLength());
-                    //Direct it ti output port, to all it's subscribers
-                    snd_seq_ev_set_source(&ev, output_port);
-                    snd_seq_ev_set_subs(&ev);
-                    //Output the event (but it stays at the queue.)
-                    snd_seq_event_output_direct(seq_handle, &ev);
+                    ScheduleNote(seq->GetChannel()-1,local_tick + note->time*TICKS_PER_NOTE*seq->GetLength(),pitch,note->velocity,note->length*TICKS_PER_NOTE*seq->GetLength());
                 }
                 //Proceed to next note.
                 currnote++;
