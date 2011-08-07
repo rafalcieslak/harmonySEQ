@@ -83,7 +83,6 @@ void AtomContainer::RemoveList(std::set<Atom*>* V){
 
 void AtomContainer::Sort(){
     std::sort(AtmVec.begin(),AtmVec.end(),AtomComparison);
-    *err << "sorted\n";
 }
 
 
