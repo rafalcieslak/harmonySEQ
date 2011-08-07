@@ -19,6 +19,7 @@
 
 #ifndef ATOMCONTAINER_H
 #define	ATOMCONTAINER_H
+#include <set>
 #include <vector>
 #include "Atom.h"
 
@@ -41,7 +42,7 @@ public:
     
     /**Removes an atom from container*/
     void Remove(int n);
-    void RemoveList(std::vector<Atom*>* V);
+    void RemoveList(std::set<Atom*>* V);
     
     /**Gets n-th atom*/
     Atom* operator[](int n);
@@ -58,10 +59,11 @@ public:
     /**Finds if there is and if is then where, note with given ID. Complexity linear.*/
     int FindID(int ID);
     
+    /**Call if notes were moved or added.*/
+    void Sort();
 private:
     std::vector<Atom *> AtmVec;
     
-    void Sort();
 };
 
 #endif	/* ATOMCONTAINER_H */

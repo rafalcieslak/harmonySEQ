@@ -66,10 +66,10 @@ protected:
 private:
     bool add_mode;
     
-    std::set<int> selection;
+    std::set<Atom *> selection;
     
     bool snap;
-    std::set<int> drag_temporary_selection;
+    std::set<Atom *> drag_temporary_selection;
     int drag_beggining_x, drag_beggining_y;
     int drag_beggining_line;
     double drag_beggining_time;
@@ -78,7 +78,7 @@ private:
     double drag_current_time;
     bool drag_in_progress;
     int drag_mode;
-    int drag_note_dragged;
+    Atom* drag_note_dragged;
     double drag_time_offset_to_dragged_note;
     enum DragModes{
         DRAG_MODE_MOVE_SELECTION,
@@ -89,6 +89,7 @@ private:
     void UpdateSizeRequest();
     int CalculateAverageVelocity();
     double Snap(double t);
+    double SnapDown(double t);
     void DeleteNth(int n);
     int internal_height;
     double vert_size; //used to controll zooming
