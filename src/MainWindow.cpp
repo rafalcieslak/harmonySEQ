@@ -191,7 +191,7 @@ MainWindow::MainWindow()
     TempoLabelTool.set_homogeneous(0);
     tempo_button.set_range(2, 1000);
     tempo_button.set_tooltip_markup(_("Sets the <b>tempo</b> applied to all sequencers.\nIt also blinks when a bar starts."));
-    tempo_button.set_increments(1, 10);
+    tempo_button.set_increments(0.01, 10);
     tempo_button.set_value(tempo);
     tempo_button.signal_value_changed().connect(sigc::mem_fun(*this, &MainWindow::TempoChanged));
 
