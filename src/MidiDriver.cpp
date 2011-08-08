@@ -322,6 +322,16 @@ void MidiDriver::AllNotesOff(){
 
 }
 
+double RoundTimeDouble(double marker){
+    
+            long long int temp = (long long int)((double)marker*(double)1e9);
+            return ((double)(temp))/(double)(1e9);
+}
+
+double Wrap(double x){
+   return x - (int) x;
+}
+
 void MidiDriver::UpdateQueue(bool do_not_lock_threads){
     if(!do_not_lock_threads) gdk_threads_enter(); //for safety. any calls to GUI will be thread-protected
     snd_seq_event_t ev;
@@ -366,68 +376,65 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
             if (seq->GetPlayOncePhase() == 2) diode_colour = 1;
             else diode_colour = 0;
             
+            
+            //The time (in ticks)  how long one sequence repetition will last. Note it can be larger than TICKS_PER_NOTE and that's OK.
+            double sequence_time = TICKS_PER_NOTE*seq->GetLength();
+            double sequence_lenght = seq->GetLength();
             //Local tick is the tick at which this sequence repetition had began. Occasionally it may be lower than tick, for
             //example in case this repetition has already been played in 1/3.
+                //*err <<"starting. marker = " << seq->play_from_here_marker << ", tick = " << tick <<", local_tick = ";
             double local_tick = tick-seq->play_from_here_marker*TICKS_PER_NOTE*seq->GetLength();
+                //*err << local_tick << ENDL; 
             //Shortcut to the pattern we'll play.
             AtomContainer* pattern = seq->GetActivePattern();
             //Number of notes in one sequence
-            int n = pattern->GetSize();
-            //The time (in ticks)  how long one sequence repetition will last. Note it can be larger than TICKS_PER_NOTE and that's OK.
-            double sequence_time = TICKS_PER_NOTE*seq->GetLength();
+            int size = pattern->GetSize();
             //The note.
             NoteAtom* note;
             
-            //Now let's find the note we'll begin the playback from.
-            int currnote = 0;
-            if (seq->play_from_here_marker == 0.0) 
-                currnote = 0;
-            else{
-                //We have to find the note we'll be now playing. This should be done using binary search, but as for now it's brute force.
-                while((*pattern)[currnote]->time < seq->play_from_here_marker ) currnote++;
+            double start_marker = seq->play_from_here_marker;
+            double end_marker = seq->play_from_here_marker+(1.0/seq->GetLength());
+
+            //s: the number of the first note that has time greater than the start_marker
+            int s = -1;
+            //e: the number of the last note that has time smaller then the end_marker
+            int e = -1;
+            //Note that s and e can be left as -1, this means there is no such note, and causes harmonseq not to output enything in this bar
+            //It may also happen that e>size, usually in case when seq->GetLength() > 1.0.
+            
+            //ok, now find the s and e.
+            if(size != 0){//ensure there are any notes
+                int X = -1;
+                while(1){
+                    X++;
+                    //*err << "at note " << X << ", X/size = " << X/size << ENDL; 
+                    note = dynamic_cast<NoteAtom*>((*pattern)[X%size]);
+                    if(note->time + (X/size)*1.0 >= start_marker && s == -1) s = X ;
+                    if(note->time + (X/size)*1.0 < end_marker) e = X;
+                    if(note->time + (X/size)*1.0 >= end_marker) break;
+                }
             }
             
-            if(n != 0) //in case the pattern is empty, output nothing.
-            while(1){
-                *dbg << "currnote = " << currnote << ENDL;
-                //First, fetch the note from pattern.
-                note = dynamic_cast<NoteAtom*>((*pattern)[currnote]);
-                *dbg << "localtick = " << local_tick << ", tick = " << tick << ENDL;
-                //Now check if we exceeded one tact
-                if(local_tick + note->time*TICKS_PER_NOTE*seq->GetLength() >= tick + TICKS_PER_NOTE)
-                { //that means: if this note should be played in next bar...
-                    *dbg << "end of bar. setting marker to... " <<((double)tick+(double)TICKS_PER_NOTE-local_tick)/sequence_time<< "\n";
-                    //Calculate and set the marker...
-                    seq->play_from_here_marker = ((double)tick+(double)TICKS_PER_NOTE-local_tick)/sequence_time;
-                    break; //stop playing.
-                }
-                //Schedule the note for playback.
-                {
-                    int pitch = seq->GetNoteOfChord(note->pitch);
-                    *dbg << "playing it! p = " << pitch << ENDL;
-                    ScheduleNote(seq->GetChannel()-1,local_tick + note->time*TICKS_PER_NOTE*seq->GetLength(),pitch,note->velocity,note->length*TICKS_PER_NOTE*seq->GetLength());
-                }
-                //Proceed to next note.
-                currnote++;
-                //Check if it isn't last+1 note...
-                if(currnote == n){ // ...this means we have completed the sequence!
-                    //So let's get back to the very first note
-                    currnote = 0;
-                    //Increment locak_tick
-                    local_tick+= sequence_time;
-                    //And stop playing, if wa were to play sequence just once.
-                    if (seq->GetPlayOncePhase() == 2){ //if we were playing only once...
-                      seq->SetPlayOncePhase(3);
-                      break;
-                    }
-                }
-                //And repeat the loop.
-                
+            *dbg << "sm = " << start_marker << ", em = " << end_marker << ", s = " << s << ", e = " << e << ENDL;
+            
+            if(e != -1 && s != -1 && e>=s){
+              *dbg << "-> playing from " << s << " to " << e <<  ENDL;
+              for(int V = s; V<=e;V++){
+                note = dynamic_cast<NoteAtom*>((*pattern)[V%size]);
+                int pitch = seq->GetNoteOfChord(note->pitch);
+                ScheduleNote(seq->GetChannel()-1,local_tick + (V/size)*sequence_time + note->time*TICKS_PER_NOTE*seq->GetLength(),pitch,note->velocity,note->length*TICKS_PER_NOTE*seq->GetLength());
+              }
             }
-            /* WHOLE THIS HAS TO BE REWRITTEN!
+            double play_from_here_marker = Wrap(end_marker);
+            //rounding to ensure sync...
+            if(play_from_here_marker > -0.000000001 && play_from_here_marker < 0.000000001) play_from_here_marker = 0.0;
+            seq->play_from_here_marker = play_from_here_marker;
+            
+            
+            /* OLD DEPRACATED CODE
+             * KEPT JUST IN CASE
              * 
-             * 
-             * 
+             * AND FOR HISTORICAL AND CULTURAL REASONS
              * 
              * 
             //OK, and now we proceed all notes from one sequencer.

@@ -106,9 +106,18 @@ error & operator <<(error &err, int number){
     err.say(temp);
     return err;
 }
+
+error & operator <<(error &err, long int number){
+    char temp[20];
+    sprintf(temp,"%lld",number);
+    err.say(temp);
+    return err;
+    
+}
+
 error & operator <<(error &err, double number){
     char temp[20];
-    sprintf(temp,"%f",number);
+    sprintf(temp,"%.13f",number);
     err.say(temp);
     return err;
 }
