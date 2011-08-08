@@ -407,12 +407,16 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                 int X = -1;
                 while(1){
                     X++;
+                    if(seq->GetPlayOncePhase() == 2 && X == size) {seq->SetPlayOncePhase(3); break;}
                     //*err << "at note " << X << ", X/size = " << X/size << ENDL; 
                     note = dynamic_cast<NoteAtom*>((*pattern)[X%size]);
                     if(note->time + (X/size)*1.0 >= start_marker && s == -1) s = X ;
                     if(note->time + (X/size)*1.0 < end_marker) e = X;
                     if(note->time + (X/size)*1.0 >= end_marker) break;
                 }
+            }else{
+                //if empty thing was played once...
+                if(seq->GetPlayOncePhase() == 2) seq->SetPlayOncePhase(3);
             }
             
             *dbg << "sm = " << start_marker << ", em = " << end_marker << ", s = " << s << ", e = " << e << ENDL;
