@@ -1,5 +1,10 @@
 harmonyseq 0.16 
+	- Implemented a piano-roll interface for sequencers.
+	- Added support for custom lengths and resolutions (this allows to play melodies in any time signature).
+	- German translation thanks to Jan Fuchsman.
+	- Added possibility to hide chord's detailed settings.
 	- Added new chords.
+	- Some bug fixes.
 
 harmonyseq 0.15 "arising"
 	- Reorganized sequencer window, significantly improving the way a pattern is presented.
