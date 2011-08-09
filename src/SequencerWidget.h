@@ -131,12 +131,13 @@ private:
     PatternWidget pattern_widget;
     
     Gtk::VBox wMainVbox;
-    Gtk::HBox wUpBox;
-    Gtk::HBox wDownBox;
-    Gtk::HBox wNameBox;
-    Gtk::HBox wOnBox;
-    Gtk::VBox wUpperLeftBox;
-    Gtk::VBox wUpperVBox;
+    Gtk::VBox wUpBox;
+    //Gtk::HBox wDownBox;
+    Gtk::Table wDownTable;
+    //Gtk::HBox wNameBox;
+    //Gtk::HBox wOnBox;
+    //Gtk::VBox wUpperLeftBox;
+    //Gtk::VBox wUpperVBox;
     Gtk::HBox wUpperHBox1;
     Gtk::HBox wUpperHBox2;
     Gtk::HBox wNotebookAndPatternOpsHBox;
@@ -181,7 +182,10 @@ private:
     Gtk::ComboBox wResolutionsBox;
     Gtk::ComboBox wLengthBox;
     Gtk::Label wResolutionsLabel, wLengthsLabel;
+    Gtk::ToggleButton wShowChordButton;
 
+    Gtk::Image wImageAdd;
+    Gtk::Image wImageRemove;
     /**ModelColums used for comboboxes*/
     class ModelColumns : public Gtk::TreeModel::ColumnRecord {
     public:

@@ -318,6 +318,7 @@ void ChordWidget::Update(){
     UpdateWhatToShowAndWhatIsSensitive();
     we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = false;
     UpdateNotes();
+    on_changed.emit();
 }
 
 void ChordWidget::ShowApplyOctave(bool show){

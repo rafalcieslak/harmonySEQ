@@ -171,6 +171,7 @@ MainWindow::MainWindow()
     wVBox1.pack_end(wFrame,Gtk::PACK_SHRINK);
     wFrame.add(wFrameNotebook);
     wFrame.set_border_width(1);
+    wFrame.set_label_align(0.2,0.5);
     wFrame.set_label(_("Sequencer properties"));
 
     wFrameNotebook.append_page(wNoSeqSelected);

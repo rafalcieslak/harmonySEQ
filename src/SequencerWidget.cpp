@@ -28,7 +28,9 @@
 
 extern bool CtrlKeyDown;
 
-SequencerWidget::SequencerWidget(){
+SequencerWidget::SequencerWidget()
+                : wImageAdd(Gtk::Stock::ADD,Gtk::ICON_SIZE_BUTTON), wImageRemove(Gtk::Stock::REMOVE,Gtk::ICON_SIZE_BUTTON)
+{
     *dbg << "constructing new SEQUENCERWIDGET\n";
 
     AnythingSelected = 0;
@@ -36,17 +38,22 @@ SequencerWidget::SequencerWidget(){
     ignore_signals = 0;
 
     wMainVbox.pack_start(wUpBox,Gtk::PACK_SHRINK);
-    wMainVbox.pack_start(wHSep,Gtk::PACK_SHRINK);
+    //wMainVbox.pack_start(wHSep,Gtk::PACK_SHRINK);
     wHSep.set_size_request(0,3);
-    wMainVbox.pack_start(wDownBox,Gtk::PACK_SHRINK);
-    wUpBox.pack_start(wUpperLeftBox,Gtk::PACK_SHRINK);
+    wMainVbox.pack_start(wDownTable,Gtk::PACK_SHRINK);
+    wUpBox.pack_start(wUpperHBox1,Gtk::PACK_SHRINK);
     wUpBox.pack_start(wVSep,Gtk::PACK_SHRINK);
     wVSep.set_size_request(10,0);
-    wUpBox.pack_start(wUpperVBox,Gtk::PACK_SHRINK);
-    wDownBox.pack_start(wBoxOfChord,Gtk::PACK_SHRINK);
-    wDownBox.pack_start(wNotebookAndPatternOpsHBox);
-
-
+    //wUpBox.pack_start(wUpperHBox2,Gtk::PACK_SHRINK);
+    //wDownBox.pack_start(wBoxOfChord,Gtk::PACK_SHRINK);
+    //wDownBox.pack_start(wNotebookAndPatternOpsHBox);
+    wDownTable.resize(3,2);
+    wDownTable.attach(wShowChordButton,0,1,0,2,Gtk::FILL);
+    wDownTable.attach(wUpperHBox2,1,2,0,1);
+    wDownTable.attach(wHSep,1,2,1,2);
+    wDownTable.attach(wBoxOfChord,0,1,2,3,Gtk::SHRINK);
+    wDownTable.attach(wNotebookAndPatternOpsHBox,1,2,2,3);
+    
     wNotebookAndPatternOpsHBox.pack_start(wNotebookVbox/*,Gtk::PACK_EXPAND_WIDGET*/);
     wNotebookAndPatternOpsHBox.pack_start(wNotebook,Gtk::PACK_SHRINK);
     wNotebookAndPatternOpsHBox.pack_end(wPtOpsVBox,Gtk::PACK_SHRINK);
@@ -59,22 +66,15 @@ SequencerWidget::SequencerWidget(){
     
     pattern_widget.on_selection_changed.connect(sigc::mem_fun(*this,&SequencerWidget::OnSelectionChanged));
     
-
-    wUpperVBox.pack_start(wUpperHBox1,Gtk::PACK_SHRINK);
-    wUpperVBox.pack_start(wUpperHBox2,Gtk::PACK_SHRINK);
-
-    wUpperLeftBox.pack_start(wNameBox,Gtk::PACK_SHRINK);
-    wUpperLeftBox.pack_start(wOnBox,Gtk::PACK_SHRINK);
-
-    wNameBox.pack_start(wNameLabel,Gtk::PACK_SHRINK);
-    wNameBox.pack_start(wNameEntry,Gtk::PACK_SHRINK);
+    wUpperHBox1.pack_start(wNameLabel,Gtk::PACK_SHRINK);
+    wUpperHBox1.pack_start(wNameEntry,Gtk::PACK_SHRINK);
     wNameEntry.set_width_chars(10);
     wNameEntry.signal_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnNameEdited));
-    wNameBox.pack_end(wOnOfColour,Gtk::PACK_SHRINK);
+    wUpperHBox1.pack_start(wOnOfColour,Gtk::PACK_SHRINK);
     wOnOfColour.add(wMuteToggle);
-    wOnBox.pack_start(wChannelLabel,Gtk::PACK_SHRINK);
-    wOnBox.pack_start(wChannelButton,Gtk::PACK_SHRINK);
-    wOnBox.pack_end(wPlayOnceButton,Gtk::PACK_SHRINK);
+    wUpperHBox1.pack_start(wPlayOnceButton,Gtk::PACK_SHRINK);
+    wUpperHBox1.pack_start(wChannelLabel,Gtk::PACK_SHRINK);
+    wUpperHBox1.pack_start(wChannelButton,Gtk::PACK_SHRINK);
     wChannelButton.set_width_chars(2);
 
     wUpperHBox1.pack_start(wResolutionsLabel,Gtk::PACK_SHRINK);
@@ -82,15 +82,22 @@ SequencerWidget::SequencerWidget(){
     wUpperHBox1.pack_start(wLengthsLabel,Gtk::PACK_SHRINK);
     wUpperHBox1.pack_start(wLengthBox,Gtk::PACK_SHRINK);
     
+    //wUpperHBox2.pack_start(wShowChordButton,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wAddToggle,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wDelete,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wVelocityLabel,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wVelocityButton,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wSnapToggle,Gtk::PACK_SHRINK);
     
+    wShowChordButton.set_label(_("Chord"));
     wAddToggle.set_label(_("Add"));
+    wAddToggle.set_image(wImageAdd);
+    wImageAdd.show();
+    wAddToggle.show_all();
     wAddToggle.signal_toggled().connect(sigc::mem_fun(*this,&SequencerWidget::OnAddToggled));
     wDelete.set_label(_("Delete"));
+    wDelete.set_image(wImageRemove);
+    wImageRemove.show();
     wDelete.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWidget::OnDeleteClicked));
     wSnapToggle.set_label(_("Snap to grid"));
     wSnapToggle.set_active(1); //As this is default value
@@ -191,7 +198,7 @@ SequencerWidget::SequencerWidget(){
     wViewport->signal_scroll_event().connect(sigc::mem_fun(*this,&SequencerWidget::OnPatternMouseScroll));
 
     add(wMainVbox);
-
+    
     show_all_children(1);
     hide(); //hide at start, but let the children be shown
 }
