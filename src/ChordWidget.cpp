@@ -31,11 +31,16 @@ ChordWidget::ChordWidget(){
     we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = true;
     pack_start(MainBox);
 
+    MainBox.pack_start(summary_label);
+    summary_label.set_angle(90.0);
+    ///TRANSLATORS: This is default message shown when chord details are hidden. It is likely it will be never displayed, but is left there just in case of problems with displaying chordwidgets assigned to no chord.
+    summary_label.set_text(_("Chord summary"));
+    summary_label.hide();
     MainBox.pack_start(LeftHBox);
     MainBox.pack_start(vsep);
     MainBox.pack_end(NotesVBox,Gtk::PACK_SHRINK);
 
-    LeftHBox.pack_start(caption,Gtk::PACK_SHRINK);
+    //LeftHBox.pack_start(caption,Gtk::PACK_SHRINK);
     LeftHBox.pack_start(line1,Gtk::PACK_SHRINK);
     LeftHBox.pack_start(line2,Gtk::PACK_SHRINK);
     LeftHBox.pack_start(line3,Gtk::PACK_SHRINK);
@@ -121,7 +126,6 @@ ChordWidget::ChordWidget(){
         NotesVBox.pack_start(*note_buttons[x],Gtk::PACK_SHRINK);
         focus_list.push_front(note_buttons[x]); //Push_front-ing IS complex, BUT: a) we call it only 6 times b) we store pointers there. This is ok then.
     }
-
     
     NotesVBox.set_focus_chain(focus_list);
 
@@ -351,4 +355,15 @@ void ChordWidget::UpdateApplyOctave(bool apply){
     else
         octave.set_sensitive(1);
     we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = 0;
+}
+
+void ChordWidget::SetExpandDetails(bool e){
+    if(e){
+        summary_label.hide();
+        LeftHBox.show();
+        
+    }else{
+        summary_label.show();
+        LeftHBox.hide();
+    }
 }

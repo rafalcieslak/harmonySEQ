@@ -51,6 +51,8 @@ public:
     void Select(Chord* ch);
     void UnSelect();
 
+    void SetExpandDetails(bool e);
+    
     bool AnythingSelected;
     Gtk::Label caption;
 private:
@@ -105,6 +107,8 @@ private:
     Gtk::Label eq_label;
     Gtk::SpinButton base;
 
+    Gtk::Label summary_label;
+    
     Gtk::SpinButton* note_buttons[6];
 };
 

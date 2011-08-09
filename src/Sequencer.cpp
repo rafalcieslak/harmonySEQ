@@ -96,6 +96,7 @@ Sequencer::Sequencer(const Sequencer *orig) {
     length = orig->length;
     play_from_here_marker = orig->play_from_here_marker;
     play_once_phase = 0;
+    expand_chord = orig->expand_chord;
 }
 
 Sequencer::~Sequencer() {
@@ -109,6 +110,7 @@ void Sequencer::Init(){
     length = 1;
     play_from_here_marker = 0.0;
     play_once_phase = 0;
+    expand_chord = 1;
     resolution = SEQUENCE_DEFAULT_SIZE;
     chord.SetType(Chord::CHORD_TYPE_TRIAD);
     chord.SetRoot(0);

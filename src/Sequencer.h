@@ -72,6 +72,7 @@ public:
     int GetActivePatternNumber();
     
     AtomContainer* GetActivePattern();
+    
     /**Returns a one note of chord of this sequencer
      *  @parram n note number*/
     int GetNoteOfChord(int n);
@@ -112,8 +113,8 @@ public:
     /**Remembers the handle to this sequencer.*/
     seqHandle MyHandle;
 
-    friend class SequencerWindow;
-
+    bool expand_chord;
+    
 protected:
 
     /**The active sequence number*/

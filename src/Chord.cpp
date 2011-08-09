@@ -96,6 +96,7 @@ Chord::Chord(){
     mode_triad = CHORD_TRIAD_MODE_MAJOR;
     base_octave = 0;
     base_note=0;
+    base_use = 1;
     NoteAndOctaveToBase();
     RecalcNotes();
 }

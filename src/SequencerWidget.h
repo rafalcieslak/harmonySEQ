@@ -66,6 +66,7 @@ public:
     void UpdateActivePattern();
     void UpdateAsterisk(int from, int to);
     void UpdateOnOffColour();
+    void UpdateShowChord();
 
     void SelectSeq(seqHandle h);
     void SelectNothing();
@@ -124,6 +125,7 @@ private:
     void OnSnapClicked();
     void OnAddToggled();
     void OnDeleteClicked();
+    void OnShowChordButtonClicked();
     /**Called when pattern's selection was changed and we need to display new velocity*/
     void OnSelectionChanged(int n);
     
@@ -132,12 +134,7 @@ private:
     
     Gtk::VBox wMainVbox;
     Gtk::VBox wUpBox;
-    //Gtk::HBox wDownBox;
     Gtk::Table wDownTable;
-    //Gtk::HBox wNameBox;
-    //Gtk::HBox wOnBox;
-    //Gtk::VBox wUpperLeftBox;
-    //Gtk::VBox wUpperVBox;
     Gtk::HBox wUpperHBox1;
     Gtk::HBox wUpperHBox2;
     Gtk::HBox wNotebookAndPatternOpsHBox;
@@ -183,6 +180,7 @@ private:
     Gtk::ComboBox wLengthBox;
     Gtk::Label wResolutionsLabel, wLengthsLabel;
     Gtk::ToggleButton wShowChordButton;
+    Gtk::Label wShowChordLabel;
 
     Gtk::Image wImageAdd;
     Gtk::Image wImageRemove;

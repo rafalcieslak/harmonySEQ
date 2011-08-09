@@ -89,7 +89,10 @@ SequencerWidget::SequencerWidget()
     wUpperHBox2.pack_start(wVelocityButton,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wSnapToggle,Gtk::PACK_SHRINK);
     
-    wShowChordButton.set_label(_("Chord"));
+    wShowChordButton.add(wShowChordLabel);
+    wShowChordLabel.set_markup(_("<b>Chord</b>"));
+    wShowChordButton.set_tooltip_markup(_("Shows/hides the chord's detailed settings."));
+    wShowChordButton.signal_toggled().connect(sigc::mem_fun(*this,&SequencerWidget::OnShowChordButtonClicked));
     wAddToggle.set_label(_("Add"));
     wAddToggle.set_image(wImageAdd);
     wImageAdd.show();
@@ -228,7 +231,7 @@ void SequencerWidget::SelectNothing(){
 void SequencerWidget::UpdateEverything(){
     *dbg << "SeqencerWidget - Updating everything\n";
     if (AnythingSelected){
-
+        UpdateShowChord();
         UpdateChannel();
         UpdateVelocity();
         UpdateOnOff(); //will also update colour
@@ -238,7 +241,6 @@ void SequencerWidget::UpdateEverything(){
         UpdateActivePattern();
         UpdateActivePatternRange();
         UpdateChord();
-
     }else{
 
     }
@@ -281,6 +283,15 @@ void SequencerWidget::UpdateChord(){
 
     chordwidget.Update();
 
+}
+
+void SequencerWidget::UpdateShowChord(){
+    if (AnythingSelected == 0) return;
+    Sequencer* seq = seqH(selectedSeq);
+    ignore_signals = 1;
+    wShowChordButton.set_active(seq->expand_chord);
+    ignore_signals = 0;
+    chordwidget.SetExpandDetails(seq->expand_chord);
 }
 
 void SequencerWidget::UpdateRelLenBoxes(){
@@ -493,6 +504,8 @@ void SequencerWidget::UpdateAsterisk(int from, int to){
     //changing notepad tab labels
     char temp[100];
 
+    if(wNotebook.get_n_pages() == 0) return;
+    
     sprintf(temp,_(" %d"),from);
     wNotebook.set_tab_label_text(*notebook_pages[from],temp);
 
@@ -607,6 +620,15 @@ void SequencerWidget::OnAddToggled(){
 
 void SequencerWidget::OnDeleteClicked(){
     pattern_widget.DeleteSelected();
+}
+
+void SequencerWidget::OnShowChordButtonClicked(){
+    if(ignore_signals) return;
+    if(!AnythingSelected) return;
+    Sequencer* seq = seqH(selectedSeq);
+    bool show = wShowChordButton.get_active();
+    seq->expand_chord = show;
+    chordwidget.SetExpandDetails(show);
 }
 
 void SequencerWidget::SetOnOffColour(OnOffColour c){

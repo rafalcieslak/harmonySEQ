@@ -155,6 +155,7 @@ ActionGUI::ActionGUI(Action *prt)
      //Hide some of widgets according to the type
     ChangeVisibleLines();
 
+    chordwidget.SetExpandDetails(1);
     //And hide the window at first.
     hide();
 
