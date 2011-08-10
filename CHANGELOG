@@ -1,4 +1,4 @@
-harmonyseq 0.16 
+harmonyseq 0.16 "ranpiollo"
 	- Implemented a piano-roll interface for sequencers.
 	- Added support for custom lengths and resolutions (this allows to play melodies in any time signature).
 	- German translation thanks to Jan Fuchsman.
