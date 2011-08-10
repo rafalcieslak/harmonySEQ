@@ -28,9 +28,6 @@ extern debug *dbg;
 extern MainWindow* mainwindow;
 extern vector<Sequencer *> seqVector;
 
-int resolutions[RESOLUTIONS_NUM] = RESOLUTIONS;
-double lengths[LENGTHS_NUM] = LENGTHS;
-
 
 Gtk::TreeModel::Row spawn_sequencer(){
     int n = seqVector.size();
@@ -93,7 +90,8 @@ Sequencer::Sequencer(const Sequencer *orig) {
     patterns = orig->patterns;
     active_pattern = orig->active_pattern;
     channel = orig->channel;
-    length = orig->length;
+    length_numerator = orig->length_numerator;
+    length_denominator = orig->length_denominator;
     play_from_here_marker = orig->play_from_here_marker;
     play_once_phase = 0;
     expand_chord = orig->expand_chord;
@@ -107,7 +105,8 @@ void Sequencer::Init(){
     on = false;
     active_pattern = 0;
     channel = 1;
-    length = 1;
+    length_numerator = 1;
+    length_denominator = 1;
     play_from_here_marker = 0.0;
     play_once_phase = 0;
     expand_chord = 1;
@@ -123,13 +122,21 @@ void Sequencer::SetResolution(int res){
     resolution = res;
 }
 
-void Sequencer::SetLength(double len){
-    length  = len;
-    
+void Sequencer::SetLength(int numerator, int denominator){
+    length_numerator = numerator;
+    length_denominator = denominator;
 }
 
 double Sequencer::GetLength(){
-    return length;
+    return (double)length_numerator/(double)length_denominator;
+}
+
+int Sequencer::GetLengthNumerator(){
+    return length_numerator;
+}
+
+int Sequencer::GetLengthDenominator(){
+    return length_denominator;
 }
 
 void Sequencer::SetActivePatternNumber(int a){

@@ -63,11 +63,13 @@ public:
     void SetResolution(int res);
 
     /**Used to change this seq's length*/
-    void SetLength(double len);
+    void SetLength(int numerator, int denominator);
 
     /**Returns seq's length*/
     double GetLength();
-
+    int GetLengthNumerator();
+    int GetLengthDenominator();
+    
     void SetActivePatternNumber(int a);
     int GetActivePatternNumber();
     
@@ -121,8 +123,9 @@ protected:
     int active_pattern;
     
     /**Stores the length of  sequence*/
-    double length;
-
+    int length_numerator;
+    int length_denominator;
+    
     int channel;
     bool on;
     Glib::ustring name;

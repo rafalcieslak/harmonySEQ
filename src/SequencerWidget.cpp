@@ -80,7 +80,10 @@ SequencerWidget::SequencerWidget()
     wUpperHBox1.pack_start(wResolutionsLabel,Gtk::PACK_SHRINK);
     wUpperHBox1.pack_start(wResolutions,Gtk::PACK_SHRINK);
     wUpperHBox1.pack_start(wLengthsLabel,Gtk::PACK_SHRINK);
-    wUpperHBox1.pack_start(wLengthBox,Gtk::PACK_SHRINK);
+    wUpperHBox1.pack_start(wLengthNumerator,Gtk::PACK_SHRINK);
+    wUpperHBox1.pack_start(wLengthDivision,Gtk::PACK_SHRINK);
+    wUpperHBox1.pack_start(wLengthDenominator,Gtk::PACK_SHRINK);
+    wUpperHBox1.pack_start(wLengthResult,Gtk::PACK_SHRINK);
     
     //wUpperHBox2.pack_start(wShowChordButton,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wAddToggle,Gtk::PACK_SHRINK);
@@ -177,21 +180,20 @@ SequencerWidget::SequencerWidget()
 
 
     wLengthsLabel.set_text(_("Length:"));
-    m_refTreeModel_len = Gtk::ListStore::create(m_Columns_len);
-    wLengthBox.set_model(m_refTreeModel_len);
-
-    char temp[50];
-    double lengths[7] = LENGTHS;
-    for (int x = 0; x < LENGTHS_NUM; x++){
-        Gtk::TreeModel::Row row = *(m_refTreeModel_len->append());
-        row[m_Columns_len.len] = lengths[x];
-        sprintf(temp,"%g",lengths[x]);
-        row[m_Columns_len.text] = temp;
-    }
-    wLengthBox.set_tooltip_markup(_("Selects the <b>length</b> of this sequencer. It defines <i>how many bars</i> the sequence in this sequencer will last. In case it's smaller then 1, the sequence will be repeated few times in each bar."));
-    wLengthBox.pack_start(m_Columns_len.text);
-    wLengthBox.signal_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnLengthChanged));
-
+    
+    wLengthNumerator.set_tooltip_markup(_("Selects the <b>length</b> of this sequencer. It defines <i>how many bars</i> the sequence in this sequencer will last. In case it's smaller then 1, the sequence will be repeated few times in each bar."));
+    wLengthDenominator.set_tooltip_markup(_("Selects the <b>length</b> of this sequencer. It defines <i>how many bars</i> the sequence in this sequencer will last. In case it's smaller then 1, the sequence will be repeated few times in each bar."));
+    wLengthResult.set_tooltip_markup(_("Selects the <b>length</b> of this sequencer. It defines <i>how many bars</i> the sequence in this sequencer will last. In case it's smaller then 1, the sequence will be repeated few times in each bar."));
+    wLengthNumerator.set_increments(1.0,1.0);
+    wLengthDenominator.set_increments(1.0,1.0);
+    wLengthNumerator.set_width_chars(2);
+    wLengthDenominator.set_width_chars(2);
+    wLengthNumerator.set_range(1.0,16.0);
+    wLengthDenominator.set_range(1.0,16.0);
+    wLengthDivision.set_text(" / ");
+    wLengthNumerator.signal_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnLengthChanged));
+    wLengthDenominator.signal_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnLengthChanged));
+    
     wViewport->signal_scroll_event().connect(sigc::mem_fun(*this,&SequencerWidget::OnPatternMouseScroll));
 
     add(wMainVbox);
@@ -285,18 +287,17 @@ void SequencerWidget::UpdateShowChord(){
 void SequencerWidget::UpdateRelLenBoxes(){
     if (AnythingSelected == 0) return;
     Sequencer* seq = seqH(selectedSeq);
+    
     ignore_signals = 1;
+    
+   wLengthNumerator.set_value(seq->GetLengthNumerator());
+   wLengthDenominator.set_value(seq->GetLengthDenominator());
     char temp[20];
-        do_not_react_on_page_changes = 1;
-        double lengths[7] = LENGTHS;
-        for (int x = 0; x < LENGTHS_NUM; x++){
-            sprintf(temp,"%d",x);
-            //Gtk::TreeModel::Row row = *(m_refTreeModel_len->get_iter(temp));
-            if(seq->GetLength()==lengths[x]) wLengthBox.set_active(x);
-        }
-        do_not_react_on_page_changes = 0;
+   sprintf(temp," = %.4f",seq->GetLength());
+   wLengthResult.set_text(temp);
         
-        wResolutions.set_value(seq->resolution);
+   wResolutions.set_value(seq->resolution);
+   
    ignore_signals = 0;
 }
 
@@ -448,8 +449,10 @@ void SequencerWidget::OnLengthChanged(){
     if(!AnythingSelected) return;
     Sequencer* seq = seqH(selectedSeq);
 
-    Gtk::TreeModel::Row row = *(wLengthBox.get_active());
-    seq->SetLength(row[m_Columns_len.len]);
+    seq->SetLength(wLengthNumerator.get_value(),wLengthDenominator.get_value());
+    char temp[20];
+    sprintf(temp, " = %.4f", seq->GetLength());
+    wLengthResult.set_text(temp);
     seq->play_from_here_marker = 0.0; //important, to avoid shifts
 
     LeaveAddMode();

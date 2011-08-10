@@ -176,7 +176,10 @@ private:
     Gtk::ToggleButton wAddToggle;
     Gtk::Button wDelete;
     Gtk::SpinButton wResolutions;
-    Gtk::ComboBox wLengthBox;
+    Gtk::SpinButton wLengthNumerator;
+    Gtk::Label wLengthDivision;
+    Gtk::SpinButton wLengthDenominator;
+    Gtk::Label wLengthResult;
     Gtk::Label wResolutionsLabel, wLengthsLabel;
     Gtk::ToggleButton wShowChordButton;
     Gtk::Label wShowChordLabel;
