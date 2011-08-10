@@ -99,6 +99,9 @@ public:
 
    /**Generates a name for the chord, like "Guitar, E-moll"*/
     Glib::ustring GetName(bool do_not_use_octave=0);
+    
+   /**Generates a summarized name for the chord, like "Triad, a-moll, i:1, o:2"*/
+    Glib::ustring GetSummary(bool do_not_use_octave=0);
 
     void BaseToOctaveAndNote();
     void NoteAndOctaveToBase();

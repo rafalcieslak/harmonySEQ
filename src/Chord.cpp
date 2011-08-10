@@ -366,6 +366,74 @@ Glib::ustring Chord::GetName(bool do_not_use_octave){
 
 }
 
+
+Glib::ustring Chord::GetSummary(bool do_not_use_octave){
+    char temp[100];
+    char temp2[100];
+    char octave[100];
+    bool use_octave = !do_not_use_octave;
+    if(use_octave) sprintf(octave,_("o:%d"),base_octave);
+    Glib::ustring a;
+    switch (type){
+        case CHORD_TYPE_CUSTOM:
+            if (base_use)
+                sprintf(temp2,_("Custom, base %d"),base);
+            else
+                sprintf(temp2,_("Custom"));
+            break;
+        case CHORD_TYPE_GUITAR:
+            if (mode_guitar == CHORD_GUITAR_MODE_MAJOR){
+                sprintf(temp,_("Guitar %s maj"),notemap.find(root)->second.c_str());
+            }else if (mode_guitar == CHORD_GUITAR_MODE_MINOR){
+                sprintf(temp,_("Guitar %s m"),notemap.find(root)->second.c_str());
+            }else if (mode_guitar == CHORD_GUITAR_MODE_MAJ7){
+                sprintf(temp,_("Guitar %s maj7"),notemap.find(root)->second.c_str());
+            }else if (mode_guitar == CHORD_GUITAR_MODE_M7){
+                sprintf(temp,_("Guitar %s m7"),notemap.find(root)->second.c_str());
+            }
+            if(use_octave)
+                sprintf(temp2,"%s, %s",temp,octave);
+            else
+                sprintf(temp2,"%s",temp);
+            break;
+        case CHORD_TYPE_TRIAD:
+            if (mode_triad ==  CHORD_TRIAD_MODE_MAJOR){
+                if (inversion == 0)
+                    sprintf(temp,_("Triad %s maj"),notemap.find(root)->second.c_str());
+                else
+                    sprintf(temp,_("Triad %s maj, i:%d"),notemap.find(root)->second.c_str(),inversion);
+            } else
+            if (mode_triad == CHORD_TRIAD_MODE_MINOR){
+                if (inversion == 0)
+                    sprintf(temp,_("Triad %s min"),notemap.find(root)->second.c_str());
+                else
+                    sprintf(temp,_("Triad %s min, i:%d"),notemap.find(root)->second.c_str(),inversion);
+            } else
+            if (mode_triad ==  CHORD_TRIAD_MODE_AUGMENTED){
+                if (inversion == 0)
+                    sprintf(temp,_("Triad %s aug"),notemap.find(root)->second.c_str());
+                else
+                    sprintf(temp,_("Triad %s aug, i:%d"),notemap.find(root)->second.c_str(),inversion);
+            } else
+            if (mode_triad ==  CHORD_TRIAD_MODE_DIMINISCHED){
+                if (inversion == 0)
+                    sprintf(temp,_("Triad %s dim"),notemap.find(root)->second.c_str());
+                else
+                    sprintf(temp,_("Triad %s dim, i:%d"),notemap.find(root)->second.c_str(),inversion);
+            }
+            if(use_octave)
+                sprintf(temp2,"%s, %s",temp,octave);
+            else
+                sprintf(temp2,"%s",temp);
+            break;
+    }
+
+    a = temp2;
+    return a;
+
+}
+
+
 std::vector<int> Chord::SaveToVector(){
    /**Should have following format: type, root, guitar_mode, triad_mode,inversion,base,use_base, notes(6)(if custom)*/
     std::vector<int> V;

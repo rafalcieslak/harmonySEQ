@@ -66,8 +66,8 @@
 //the following may not work with gettext. careful!
 #define SEQUENCER_DEFAULT_NAME _("sequencer")
 
-#define RESOLUTIONS_NUM 12
-#define RESOLUTIONS {1,2,3,4,5,7,8,9,12,16,32,64}
+#define RESOLUTIONS_NUM 13
+#define RESOLUTIONS {1,2,3,4,5,7,8,9,12,14,16,32,64}
 #define LENGTHS_NUM 7
 #define LENGTHS {(double)1.0/3,0.25,0.5,1.0,2.0,4.0,(double)2.0/3.0}
 

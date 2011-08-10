@@ -57,6 +57,7 @@ public:
     Gtk::Label caption;
 private:
     void UpdateNotes();
+    void UpdateSummary();
     void OnTypeChanged();
     void OnGuitarModeChanged();
     void OnTriadModeChanged();

@@ -155,6 +155,7 @@ void ChordWidget::OnNoteChanged(int n){
 
     chord->SetNote(5-n,note_buttons[n]->get_value());
     combo_type.set_active(Chord::CHORD_TYPE_CUSTOM); //this will call the signal handler, which update widgets visibility&sensitivity
+    UpdateSummary();
 
     on_note_changed.emit(n,(use_base.get_active())?(note_buttons[n]->get_value()+base.get_value()):note_buttons[n]->get_value());
     on_changed.emit();
@@ -322,6 +323,7 @@ void ChordWidget::Update(){
     UpdateWhatToShowAndWhatIsSensitive();
     we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = false;
     UpdateNotes();
+    UpdateSummary();
     on_changed.emit();
 }
 
@@ -363,7 +365,12 @@ void ChordWidget::SetExpandDetails(bool e){
         LeftHBox.show();
         
     }else{
+    	UpdateSummary();
         summary_label.show();
         LeftHBox.hide();
     }
+}
+
+void ChordWidget::UpdateSummary(){
+    summary_label.set_text(chord->GetSummary());
 }
