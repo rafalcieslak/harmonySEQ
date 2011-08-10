@@ -78,7 +78,7 @@ SequencerWidget::SequencerWidget()
     wChannelButton.set_width_chars(2);
 
     wUpperHBox1.pack_start(wResolutionsLabel,Gtk::PACK_SHRINK);
-    wUpperHBox1.pack_start(wResolutionsBox,Gtk::PACK_SHRINK);
+    wUpperHBox1.pack_start(wResolutions,Gtk::PACK_SHRINK);
     wUpperHBox1.pack_start(wLengthsLabel,Gtk::PACK_SHRINK);
     wUpperHBox1.pack_start(wLengthBox,Gtk::PACK_SHRINK);
     
@@ -169,17 +169,11 @@ SequencerWidget::SequencerWidget()
 
     //lengths selector
     wResolutionsLabel.set_text(_("Resolution:"));
-    m_refTreeModel_res = Gtk::ListStore::create(m_Columns_resol);
-    wResolutionsBox.set_model(m_refTreeModel_res);
-
-    int resolutions[RESOLUTIONS_NUM] = RESOLUTIONS;
-    for (int x = 0; x < RESOLUTIONS_NUM; x++){
-        Gtk::TreeModel::Row row = *(m_refTreeModel_res->append());
-        row[m_Columns_resol.resol] = resolutions[x];
-    }
-    wResolutionsBox.set_tooltip_markup(_("Selects the <b>resolution</b> of this sequencer. It defines how many <i>notes per one sequence</i> the sequencer has.\nIf the length is set to one, than the resolution will determine how many notes will be played in one bar."));
-    wResolutionsBox.pack_start(m_Columns_resol.resol);
-    wResolutionsBox.signal_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnResolutionChanged));
+    wResolutions.set_range(1.0,32.0);
+    wResolutions.set_increments(1.0,4.0);
+    wResolutions.set_width_chars(2);
+    wResolutions.set_tooltip_markup(_("Selects the <b>resolution</b> of this sequencer. It defines the grid density in this sequencer's patterns."));
+    wResolutions.signal_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnResolutionChanged));
 
 
     wLengthsLabel.set_text(_("Length:"));
@@ -298,14 +292,8 @@ void SequencerWidget::UpdateRelLenBoxes(){
     if (AnythingSelected == 0) return;
     Sequencer* seq = seqH(selectedSeq);
     ignore_signals = 1;
+    char temp[20];
         do_not_react_on_page_changes = 1;
-        int resolutions[RESOLUTIONS_NUM] = RESOLUTIONS;
-        char temp[10];
-        for (int x = 0; x < RESOLUTIONS_NUM; x++){
-            sprintf(temp,"%d",x);
-            //Gtk::TreeModel::Row row = *(m_refTreeModel_res->get_iter(temp));
-            if (resolutions[x] == (seq->resolution)){wResolutionsBox.set_active(x);continue;}
-        }
         double lengths[7] = LENGTHS;
         for (int x = 0; x < LENGTHS_NUM; x++){
             sprintf(temp,"%d",x);
@@ -313,7 +301,9 @@ void SequencerWidget::UpdateRelLenBoxes(){
             if(seq->GetLength()==lengths[x]) wLengthBox.set_active(x);
         }
         do_not_react_on_page_changes = 0;
-        ignore_signals = 0;
+        
+        wResolutions.set_value(seq->resolution);
+   ignore_signals = 0;
 }
 
 void SequencerWidget::UpdateName(){
@@ -459,15 +449,13 @@ void SequencerWidget::OnToggleMuteToggled(){
 void SequencerWidget::OnResolutionChanged(){
     if(ignore_signals) return;
     if(!AnythingSelected) return;
-    Gtk::TreeModel::Row row = *(wResolutionsBox.get_active());
     
     Sequencer* seq = seqH(selectedSeq);
 
 
-    seq->SetResolution(row[m_Columns_resol.resol]);
+    seq->SetResolution(wResolutions.get_value());
     pattern_widget.Redraw();
 
-    //FIXME: following is no longer needed. Whole column should be removed.
     mainwindow->RefreshRow(seq->my_row);
     
     Files::SetFileModified(1);

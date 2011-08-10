@@ -176,7 +176,7 @@ private:
     Gtk::CheckButton wSnapToggle;
     Gtk::ToggleButton wAddToggle;
     Gtk::Button wDelete;
-    Gtk::ComboBox wResolutionsBox;
+    Gtk::SpinButton wResolutions;
     Gtk::ComboBox wLengthBox;
     Gtk::Label wResolutionsLabel, wLengthsLabel;
     Gtk::ToggleButton wShowChordButton;
@@ -184,17 +184,6 @@ private:
 
     Gtk::Image wImageAdd;
     Gtk::Image wImageRemove;
-    /**ModelColums used for comboboxes*/
-    class ModelColumns : public Gtk::TreeModel::ColumnRecord {
-    public:
-        ModelColumns() {
-            add(resol);
-        }
-        Gtk::TreeModelColumn<int> resol;
-    };
-    ModelColumns m_Columns_resol;
-
-    Glib::RefPtr<Gtk::ListStore> m_refTreeModel_res;
 
     class ModelColumns2 : public Gtk::TreeModel::ColumnRecord {
     public:

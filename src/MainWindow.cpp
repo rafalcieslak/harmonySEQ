@@ -190,9 +190,9 @@ MainWindow::MainWindow()
     TempoLabelTool.remove();
     TempoLabelTool.add(wTempoLabel);
     TempoLabelTool.set_homogeneous(0);
-    tempo_button.set_range(2, 1000);
+    tempo_button.set_range(2.0, 1000.0);
     tempo_button.set_tooltip_markup(_("Sets the <b>tempo</b> applied to all sequencers.\nIt also blinks when a bar starts."));
-    tempo_button.set_increments(0.01, 10);
+    tempo_button.set_increments(0.1, 10.0);
     tempo_button.set_value(tempo);
     tempo_button.signal_value_changed().connect(sigc::mem_fun(*this, &MainWindow::TempoChanged));
 
@@ -695,8 +695,8 @@ void MainWindow::OnMenuNewClicked(){
     UpdateEventWidget();
     InitTreeData();
 
-    tempo = 120.0;
-    tempo_button.set_value(120.0);
+    tempo = DEFAULT_TEMPO;
+    tempo_button.set_value((double)DEFAULT_TEMPO);
 
     UpdateTitle();
     
