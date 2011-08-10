@@ -397,6 +397,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                 drag_note_dragged = note;
                 selection.clear();
                 selection.insert(note);
+                on_selection_changed.emit(selection.size());
             }
             Redraw();
         } //(event->y <= internal_height)
@@ -440,7 +441,7 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
             
                     //if moved some distance, mark drag as in progress. 
                     //if we use SHIFT to precise moving, do not apply this distance, and mark as drag regardless of it.
-                    const int distance = 5;
+                    const int distance = 3;
                     if(event->x > drag_beggining_x+distance || event->y > drag_beggining_y + distance || event->x < drag_beggining_x - distance || event->y < drag_beggining_y - distance) {
                         InitDrag();
                         ProcessDrag(event->x, event->y,(event->state & (1 << 0)));
@@ -481,7 +482,7 @@ void PatternWidget::on_drag_begin(const Glib::RefPtr<Gdk::DragContext>& context)
       double h = internal_height/6;
       double x1 = note->time*width;
       double w = note->length*width;
-      ;y1++; // This is because the very first 1px line is the upper border.
+      y1++; // This is because the very first 1px line is the upper border.
     //*dbg << "drawing note... "<< x1 << " " << y1 << " " << w << " " <<  h << "\n";
       //Check if note is in selection.
       bool selected = false;
@@ -507,6 +508,13 @@ void PatternWidget::on_drag_begin(const Glib::RefPtr<Gdk::DragContext>& context)
          ct.set_source_rgb(0.7,0.7,0.7);
          ct.stroke();
       }
+      
+     double velbar_up = y1+(127.0-(double)note->velocity)*h/127.0;
+     double velbar_h = h*(double)note->velocity/127.0;
+     ct.rectangle(x1+3,velbar_up,4,velbar_h);
+     if(selected) ct.set_source_rgb(0.8,0.0,0.0);
+     else ct.set_source_rgb(0.0,0.0,0.8);
+     ct.fill();
   }
   
   //horizontal grid

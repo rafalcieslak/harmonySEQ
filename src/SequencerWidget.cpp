@@ -595,6 +595,7 @@ void SequencerWidget::OnAddToggled(){
         pattern_widget.EnterAddMode();
     }else{
         pattern_widget.LeaveAddMode();
+        pattern_widget.ClearSelection();
     }
 }
 
