@@ -26,7 +26,6 @@
 
 PatternWidget::PatternWidget(){
     internal_height=50; //random guess. will be reset soon anyway by the SequencerWidget, but better protect from 0-like values.
-    velocity = 0; //as above
     vert_size = 450.0; //adjust for better default size
     snap = true;
     add_mode = 0;
@@ -119,7 +118,7 @@ void PatternWidget::SetVelocity(int v){
     Redraw();
 }
 
-int PatternWidget::CalculateAverageVelocity(){
+int PatternWidget::Velocity(){
     int sum = 0;
     std::set<Atom *>::iterator it = selection.begin();
     for (; it != selection.end(); it++) {
@@ -355,15 +354,13 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                                      //it's already selected, then:
                                      //REMOVING NOTE FROM SELECTION
                                      selection.erase(it);
-
-                                     velocity = CalculateAverageVelocity();
+                                     
                                      on_selection_changed.emit(selection.size());
                                  }else{
                                      //it was not selected, select it.
                                      //ADDING NOTE TO SELECTION
                                      selection.insert(found);
 
-                                     velocity = CalculateAverageVelocity();
                                      on_selection_changed.emit(selection.size());
                                  }
                             } else {//shift key was not pressed
@@ -376,8 +373,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                                      //SELECTING A NEW NOTE
                                      selection.clear();
                                      selection.insert(found);
-
-                                     velocity = CalculateAverageVelocity();
+                                     
                                      on_selection_changed.emit(selection.size());
                                  }
                             }
@@ -418,7 +414,7 @@ bool PatternWidget::on_button_release_event(GdkEventButton* event){
                     selection.insert(*it);
                 }
                 drag_temporary_selection.clear();
-                velocity = CalculateAverageVelocity();
+                
                 on_selection_changed.emit(selection.size());
                 Redraw();
             }else if (drag_mode == DRAG_MODE_MOVE_SELECTION) {

@@ -105,7 +105,6 @@ private:
     void UpdateActivePatternRange();
     void OnChordWidgetChanged();
     void OnChordWidgetNoteChanged(int n, int p);
-    void OnPatternNoteChanged(int c, bool value, int seq);
     void OnChannelChanged();
     void OnVelocityChanged();
     void OnToggleMuteToggled();
@@ -127,6 +126,7 @@ private:
     void OnShowChordButtonClicked();
     /**Called when pattern's selection was changed and we need to display new velocity*/
     void OnSelectionChanged(int n);
+    void LeaveAddMode();
     
 
     PatternWidget pattern_widget;

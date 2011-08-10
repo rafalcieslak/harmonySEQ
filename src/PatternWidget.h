@@ -52,7 +52,7 @@ public:
     /**Emitted when selection is changed. Provides an argument that is equal to number of notes in selection.*/
     sigc::signal<void,int> on_selection_changed;
     
-    int velocity;
+    int Velocity();
 protected:
     //Override default signal handler:
    virtual bool on_expose_event(GdkEventExpose* event);
@@ -87,7 +87,6 @@ private:
     };
     
     void UpdateSizeRequest();
-    int CalculateAverageVelocity();
     double Snap(double t);
     double SnapDown(double t);
     void DeleteNth(int n);

@@ -212,6 +212,7 @@ void SequencerWidget::SelectSeq(seqHandle h){
     AnythingSelected = 1;
     selectedSeq = h;
     chordwidget.Select(&seqH(h)->chord);
+    LeaveAddMode();
     UpdateEverything();
     Diodes_AllOff();
 }
@@ -219,6 +220,7 @@ void SequencerWidget::SelectSeq(seqHandle h){
 void SequencerWidget::SelectNothing(){
     AnythingSelected = 0;
     chordwidget.UnSelect();
+    LeaveAddMode();
     UpdateEverything();
 }
 
@@ -379,27 +381,13 @@ void SequencerWidget::UpdateOnOffColour(){
     }
 }
 
-void SequencerWidget::OnPatternNoteChanged(int c, bool value, int seq){
-    if(ignore_signals) return;
-    if(!AnythingSelected) return;
-    Sequencer* sequ = seqH(selectedSeq);
-    if (seq >= sequ->resolution) {*err << _("Clicked a pattern checkbox that should be hidden! \n"); return;}
-    
-    //sequ->SetPatternNote(wNotebook.get_current_page(),seq,c,value);
-
-    //Playing on edit...
-    if(Config::Interaction::PlayOnEdit)
-    if(value) midi->SendNoteEvent(sequ->GetChannel(),sequ->GetNoteOfChord(c),100,PLAY_ON_EDIT_MS);
-
-    Files::SetFileModified(1);
-}
-
 void SequencerWidget::OnChannelChanged(){
     if(ignore_signals) return;
     if(!AnythingSelected) return;
     Sequencer* seq = seqH(selectedSeq);
     
     seq->SetChannel( wChannelButton.get_value());
+    LeaveAddMode();
     mainwindow->RefreshRow(seq->my_row);
     Files::SetFileModified(1);
 }
@@ -410,6 +398,7 @@ void SequencerWidget::OnVelocityChanged(){
     
     pattern_widget.SetVelocity(wVelocityButton.get_value());
     
+    LeaveAddMode();
     Files::SetFileModified(1);
 }
 void SequencerWidget::OnChordWidgetChanged(){
@@ -417,6 +406,7 @@ void SequencerWidget::OnChordWidgetChanged(){
     //Just refresh the row.
     if(!AnythingSelected) return;
     Sequencer* seq = seqH(selectedSeq);
+    LeaveAddMode();
     mainwindow->RefreshRow(seq->my_row);
 }
 void SequencerWidget::OnChordWidgetNoteChanged(int n, int p){
@@ -433,6 +423,7 @@ void SequencerWidget::OnToggleMuteToggled(){
 
     seq->SetOn(wMuteToggle.get_active());
     seq->SetPlayOncePhase(0);
+    LeaveAddMode();
     mainwindow->RefreshRow(seq->my_row);
     UpdateOnOffColour();
 
@@ -448,8 +439,8 @@ void SequencerWidget::OnResolutionChanged(){
     seq->SetResolution(wResolutions.get_value());
     pattern_widget.Redraw();
 
+    LeaveAddMode();
     mainwindow->RefreshRow(seq->my_row);
-    
     Files::SetFileModified(1);
 }
 void SequencerWidget::OnLengthChanged(){
@@ -461,6 +452,7 @@ void SequencerWidget::OnLengthChanged(){
     seq->SetLength(row[m_Columns_len.len]);
     seq->play_from_here_marker = 0.0; //important, to avoid shifts
 
+    LeaveAddMode();
     mainwindow->RefreshRow(seq->my_row);
     Files::SetFileModified(1);
 }
@@ -476,6 +468,7 @@ void SequencerWidget::OnActivePatternChanged(){
 
     seq->SetActivePatternNumber(activepattern); //store in parent
 
+    LeaveAddMode();
     mainwindow->RefreshRow(seq->my_row);
     Files::SetFileModified(1);
 }
@@ -495,12 +488,14 @@ void SequencerWidget::UpdateAsterisk(int from, int to){
 }
 void SequencerWidget::OnSetAsActivePatternClicked(){
     int current = wNotebook.get_current_page();
-    wActivePattern.set_value((double)current);
+    wActivePattern.set_value((double)current);    
+    LeaveAddMode();
 }
 void SequencerWidget::OnNotebookPageChanged(GtkNotebookPage* page, guint page_num){
     if(do_not_react_on_page_changes) return;
     *dbg << "page changed!\n";
     UpdatePatternWidget();
+    LeaveAddMode();
 }
 void SequencerWidget::OnAddPatternClicked(){
     if(!AnythingSelected) return;
@@ -519,6 +514,7 @@ void SequencerWidget::OnAddPatternClicked(){
     //In case you wonder why the patternbox is NOT updated: read the comment above.
     UpdateActivePatternRange();
     SetRemoveButtonSensitivity();
+    LeaveAddMode();
     Files::SetFileModified(1);
 }
 void SequencerWidget::OnRemovePatternClicked(){
@@ -538,6 +534,7 @@ void SequencerWidget::OnRemovePatternClicked(){
     wNotebook.set_current_page(n);
     UpdateActivePatternRange();
     SetRemoveButtonSensitivity();
+    LeaveAddMode();
     mainwindow->RefreshRow(seq->my_row);
     Files::SetFileModified(1);
 }
@@ -546,6 +543,7 @@ void SequencerWidget::OnClearPatternClicked(){
     if(!AnythingSelected) return;
     seqH(selectedSeq)->ClearPattern(wNotebook.get_current_page());
     UpdatePatternWidget();
+    LeaveAddMode();
 }
 
 void SequencerWidget::SetRemoveButtonSensitivity(){
@@ -561,6 +559,7 @@ void SequencerWidget::OnNameEdited(){
     Sequencer* seq = seqH(selectedSeq);
     
     seq->SetName(wNameEntry.get_text());
+    LeaveAddMode();
     mainwindow->RefreshRow(seq->my_row);
     Files::SetFileModified(1);
 
@@ -570,6 +569,7 @@ void SequencerWidget::OnPlayOnceButtonClicked(){
     Sequencer* seq = seqH(selectedSeq);
 
     seq->SetPlayOncePhase(1);
+    LeaveAddMode();
     mainwindow->RefreshRow(seq->my_row);
     UpdateOnOffColour();
 }
@@ -581,7 +581,7 @@ void SequencerWidget::OnSelectionChanged(int n){
         wVelocityButton.set_sensitive(0);
     }else{
         wVelocityButton.set_sensitive(1);
-        wVelocityButton.set_value(pattern_widget.velocity);
+        wVelocityButton.set_value(pattern_widget.Velocity());
     }
     ignore_signals = 0;
 }
@@ -596,6 +596,12 @@ void SequencerWidget::OnAddToggled(){
     }else{
         pattern_widget.LeaveAddMode();
         pattern_widget.ClearSelection();
+    }
+}
+
+void SequencerWidget::LeaveAddMode(){
+    if(wAddToggle.get_active()){
+        wAddToggle.set_active(0); //the signal handler should do the trick
     }
 }
 
