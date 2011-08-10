@@ -184,7 +184,7 @@ void Sequencer::ChangeActivePattern(int new_one){
 }
 
 void Sequencer::ClearPattern(int p){
-    if (p >= patterns.size()) return;
+    if (p >= (int)patterns.size()) return;
     patterns[p].Clear();
 
 }

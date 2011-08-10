@@ -241,7 +241,6 @@ bool LoadFile(Glib::ustring file){
     *dbg << "trying to open |" << file <<"|--\n";
     Glib::KeyFile kf;
     char temp[3000];
-    char temp2[1000];
 
 
     //We'll try to open a file. No i/o streams needed here, KeyFile provides us with a useful method load_from_file, which does all the magic.
@@ -518,17 +517,17 @@ bool LoadFilePre015(Glib::KeyFile* kfp){
     //At the very beggining we should check the version of the file.
     int VA = kfp->get_integer("harmonySEQ","versionA");
     int VB = kfp->get_integer("harmonySEQ","versionB");
-    int VC = kfp->get_integer("harmonySEQ","versionC");
+    //int VC = kfp->get_integer("harmonySEQ","versionC");
     //Slider-compatible mode is switched on, when the file we open does not support polyphony  (version 0.12 or earlier).
     //In this case we must translate monophonic data, to polyphonic.
-    int slider_compatible_mode = 0;
+    //int slider_compatible_mode = 0;
     int chord_compatible_mode = 0;
-    if (VA == 0 && VB <= 12) slider_compatible_mode = 1; //That's the case, when monophonic data will be converted to polyphonic.
+    //if (VA == 0 && VB <= 12) slider_compatible_mode = 1; //That's the case, when monophonic data will be converted to polyphonic.
     if(VA == 0 && VB <= 13) chord_compatible_mode = 1; //Chord is stored in the old format.
 
     //Read some basic data...
     tempo = kfp->get_double(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_TEMPO);
-    int mainnote, use_main_note;
+    int mainnote = 0;
     if (chord_compatible_mode) mainnote= kfp->get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_MAINNOTE);
     number = kfp->get_integer(FILE_GROUP_SYSTEM, FILE_KEY_SYSTEM_SEQ_NUM);
 
@@ -536,7 +535,7 @@ bool LoadFilePre015(Glib::KeyFile* kfp){
     ClearSequencers(); //woa hua hua hua!
     ResetSeqHandles();
 
-    //The sequener ID might be shifted, as the old files were full of removed empty sequencers.
+    //The sequencer ID might be shifted, as the old files were full of removed empty sequencers.
     std::map<int, int> seq_unstretching_map;
     //Now we'll process all sequencers that are in the file.
     for (int x = 0; x < number; x++) {

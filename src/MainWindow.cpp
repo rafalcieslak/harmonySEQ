@@ -278,8 +278,8 @@ MainWindow::MainWindow()
     signal_key_release_event().connect(mem_fun(*this,&MainWindow::OnKeyRelease));
 
     //icons settings
-    if (harmonySEQ_logo_48 != NULL) set_icon(harmonySEQ_logo_48);
-    if (metronome_icon_24 != NULL){
+    if (harmonySEQ_logo_48) set_icon(harmonySEQ_logo_48);
+    if (metronome_icon_24){
         metronometool_icon.set(metronome_icon_24);
         MetronomeTool.set_icon_widget(metronometool_icon);
     }
@@ -779,7 +779,7 @@ bool MainWindow::OnTreviewButtonPress(GdkEventButton* event){
    Gtk::TreePath path;
    wTreeView.get_path_at_pos(event->x,event->y,path);
 
-  if (path != NULL) //right-clicked on a seq, not on the empty space
+  if (path) //right-clicked on a seq, not on the empty space
   if( (event->type == GDK_BUTTON_PRESS) && (event->button == 3) )
   {
     wPopupMenu->popup(event->button, event->time);
@@ -877,7 +877,7 @@ void MainWindow::OnTreeModelRowDeleted(const Gtk::TreeModel::Path& path){
         //The position it was moved to:
         int ID2 = 0;
         //Here we compare the handles assigned to the inserted row, and the 0th row. If equal, it means it was inserted at the beggining, otherwise we cal calculate the position by counting id of above sequencer.
-        if (h != (*TreeModel_sequencers->get_iter("0"))[m_columns_sequencers.col_handle]){
+        if (h != (int)(*TreeModel_sequencers->get_iter("0"))[m_columns_sequencers.col_handle]){
             //Get the id of sequencer with the row above
             row_inserted_by_drag--;
             ID2 = HandleToID ((*row_inserted_by_drag)[m_columns_sequencers.col_handle]);

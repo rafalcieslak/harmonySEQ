@@ -61,7 +61,6 @@ public:
     void UpdateName();
     void UpdateOnOff();
     void UpdateChannel();
-    void UpdateVelocity();
     void UpdateChord();
     void UpdateActivePattern();
     void UpdateAsterisk(int from, int to);

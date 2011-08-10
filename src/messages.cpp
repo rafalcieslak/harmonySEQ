@@ -107,7 +107,7 @@ error & operator <<(error &err, int number){
     return err;
 }
 
-error & operator <<(error &err, long int number){
+error & operator <<(error &err, long long int number){
     char temp[20];
     sprintf(temp,"%lld",number);
     err.say(temp);

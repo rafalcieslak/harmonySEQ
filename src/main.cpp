@@ -112,7 +112,7 @@ void InitKeyMap()
     }
 
     //keys a-z
-    temp[1] = NULL;
+    temp[1] = 0;
     for (int i = 97; i < 123; i++) {
         temp[0] = i;
         keymap_itos[i] = temp;

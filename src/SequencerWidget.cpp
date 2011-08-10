@@ -202,8 +202,8 @@ SequencerWidget::SequencerWidget()
 
 SequencerWidget::~SequencerWidget(){
     do_not_react_on_page_changes = 1;
-    for(int x = 0; x < notebook_pages.size();x++) delete notebook_pages[x]; //TODO: check if they need to be removed from notebook first.
-    for (int x = 0; x < note_separators.size();x++) delete note_separators[x];
+    for(int x = 0; x < (int) notebook_pages.size();x++) delete notebook_pages[x]; //TODO: check if they need to be removed from notebook first.
+    for (int x = 0; x < (int) note_separators.size();x++) delete note_separators[x];
     delete wViewport;
 }
 
@@ -227,7 +227,6 @@ void SequencerWidget::UpdateEverything(){
     if (AnythingSelected){
         UpdateShowChord();
         UpdateChannel();
-        UpdateVelocity();
         UpdateOnOff(); //will also update colour
         UpdateName();
         InitNotebook();
@@ -254,13 +253,6 @@ void SequencerWidget::UpdateChannel(){
     Sequencer* seq = seqH(selectedSeq);
     ignore_signals = 1;
     wChannelButton.set_value(seq->GetChannel());
-    ignore_signals = 0;
-}
-void SequencerWidget::UpdateVelocity(){
-    if (AnythingSelected == 0) return;
-    Sequencer* seq = seqH(selectedSeq);
-    ignore_signals = 1;
-    
     ignore_signals = 0;
 }
 void SequencerWidget::UpdateActivePattern(){
@@ -355,7 +347,7 @@ void SequencerWidget::UpdatePatternWidget(int pattern){
     *dbg << "Updating pattern widget... \n";
     if (!AnythingSelected) return;
     //if called without parameter...:
-    if (pattern = -1) pattern = wNotebook.get_current_page();
+    if (pattern == -1) pattern = wNotebook.get_current_page();
     Sequencer* seq = seqH(selectedSeq);
     *dbg<<"Asking to update pw to " << pattern << ENDL;
     pattern_widget.AssignPattern(&seq->patterns[pattern]);

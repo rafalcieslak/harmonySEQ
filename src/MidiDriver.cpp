@@ -372,14 +372,13 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
         if (seq->GetOn() || seq->GetPlayOncePhase() == 2){
 
             //Selecting diode color according to mode
-            int diode_colour;
-            if (seq->GetPlayOncePhase() == 2) diode_colour = 1;
-            else diode_colour = 0;
+            //int diode_colour;
+            //if (seq->GetPlayOncePhase() == 2) diode_colour = 1;
+            //else diode_colour = 0;
             
             
             //The time (in ticks)  how long one sequence repetition will last. Note it can be larger than TICKS_PER_NOTE and that's OK.
             double sequence_time = TICKS_PER_NOTE*seq->GetLength();
-            double sequence_lenght = seq->GetLength();
             //Local tick is the tick at which this sequence repetition had began. Occasionally it may be lower than tick, for
             //example in case this repetition has already been played in 1/3.
                 //*err <<"starting. marker = " << seq->play_from_here_marker << ", tick = " << tick <<", local_tick = ";
@@ -632,10 +631,6 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
     snd_seq_ev_schedule_tick(&ev,queueid,0,tick);
     snd_seq_ev_set_dest(&ev,snd_seq_client_id(seq_handle),input_port); //here INPUT_PORT is used, so the event will be send just to harmonySEQ itself.
     snd_seq_event_output_direct(seq_handle,&ev);
-    {
-        double duration = (double)TICKS_PER_NOTE/(double)DIODES_RES; //may need testing in case of unusual values
-
-    }
 
     if(!do_not_lock_threads)  gdk_threads_leave(); //see note on this functions beggining.
 
@@ -702,7 +697,7 @@ void MidiDriver::ProcessInput(){
                 c = ev->data.raw32.d[2];
                 gdk_threads_enter(); //to interact with gui thread we MUST lock it's thread
 
-                    if(mainwindow->seqWidget.selectedSeq == ev->data.raw32.d[1]){ //comparing sequencer handles
+                    if(mainwindow->seqWidget.selectedSeq == (int)ev->data.raw32.d[1]){ //comparing sequencer handles
                         if (i != -1)
                             mainwindow->seqWidget.Diode(i,c);
                         else

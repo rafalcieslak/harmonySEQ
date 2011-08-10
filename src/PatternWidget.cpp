@@ -156,7 +156,7 @@ double PatternWidget::SnapDown(double t){
 void PatternWidget::InitDrag(){
     Gtk::Allocation allocation = get_allocation();
     const int width = allocation.get_width();
-    const int height = allocation.get_height();
+    //const int height = allocation.get_height();
     //count position
     int line = 5 - drag_beggining_y / (internal_height / 6); //I HAVE NO IDEA WHY THERE SHOULD BE 5 AND NOT 6, DO NOT ASK THAT SEEMS TO BE ****** WEIRD
     double time = (double) drag_beggining_x / (double) width;
@@ -225,7 +225,7 @@ void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
 
     Gtk::Allocation allocation = get_allocation();
     const int width = allocation.get_width();
-    const int height = allocation.get_height();
+    //const int height = allocation.get_height();
     //count position
     int line = 6 - y / (internal_height / 6);
     double time = (double) x / (double) width;
@@ -320,7 +320,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
         
         Gtk::Allocation allocation = get_allocation();
         const int width = allocation.get_width();
-        const int height = allocation.get_height();
+        //const int height = allocation.get_height();
         //determine line:
         if(event->y <= internal_height){
             int line = 6-event->y/(internal_height/6);
@@ -401,10 +401,11 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
             Redraw();
         } //(event->y <= internal_height)
     }
+    return false;
 }
 
 bool PatternWidget::on_button_release_event(GdkEventButton* event){
-    if(event->button == 1)
+    if(event->button == 1){
         if(!drag_in_progress){
             
         }else{
@@ -423,12 +424,14 @@ bool PatternWidget::on_button_release_event(GdkEventButton* event){
                 container->Sort();
             }
         }
-    
+    }
+    return false;
 }
 
 bool PatternWidget::on_leave_notify_event(GdkEventCrossing* event){
     //mouse_button_is_down = 0;
     //drag_in_progress = 0;
+    return false;
 }
 
 bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
@@ -447,7 +450,7 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
         }
         
     }
-    
+    return false;
 }
 
 void PatternWidget::on_drag_begin(const Glib::RefPtr<Gdk::DragContext>& context){
@@ -461,7 +464,7 @@ void PatternWidget::on_drag_begin(const Glib::RefPtr<Gdk::DragContext>& context)
     
    Gtk::Allocation allocation = get_allocation();
   const int width = allocation.get_width();
-  const int height = allocation.get_height();
+  //const int height = allocation.get_height();
   
   int resolution = container->owner->resolution;
   

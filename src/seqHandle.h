@@ -20,7 +20,7 @@
 #ifndef SEQHANDLE_H
 #define	SEQHANDLE_H
 
-typedef unsigned int seqHandle;
+typedef int seqHandle;
 
 class Sequencer;
 /**Returns a pointer to a sequencer, taking it's handle as an argument.

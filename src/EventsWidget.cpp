@@ -243,7 +243,7 @@ void EventsWidget::OnRowCollapsed(const Gtk::TreeModel::iterator& iter, const Gt
 }
 
 void EventsWidget::OnAddActionClicked(){
-    int id;
+    int id = -1; //assert
     Gtk::TreeModel::iterator iter_selected = m_TreeView.get_selection()->get_selected();
     if(!iter_selected) return; //should not happen, button wolud not be sensitive
 

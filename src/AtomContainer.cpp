@@ -58,6 +58,7 @@ void AtomContainer::Clear(){
 int AtomContainer::Add(Atom * a){
     AtmVec.push_back(a);
     Sort();
+    return AtmVec.size()-1;
 }
 
 void AtomContainer::Remove(int n){
@@ -66,7 +67,6 @@ void AtomContainer::Remove(int n){
 }
 
 void AtomContainer::RemoveList(std::set<Atom*>* V){
-    int n = V->size();
     std::vector<Atom*> result(1000);
     std::set<Atom*> atoms = *V;
     //std::sort(atoms.begin(),atoms.end(),AtomComparison);
@@ -87,7 +87,7 @@ void AtomContainer::Sort(){
 
 
 int AtomContainer::FindID(int ID){
-    for(int x = 0; x < AtmVec.size();x++)
+    for(int x = 0; x < (int)AtmVec.size();x++)
         if(AtmVec[x]->ID == ID)
             return x;
     return -1;
