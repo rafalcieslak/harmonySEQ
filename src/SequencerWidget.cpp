@@ -351,7 +351,7 @@ void SequencerWidget::UpdatePatternWidget(int pattern){
     //if called without parameter...:
     if (pattern == -1) pattern = wNotebook.get_current_page();
     Sequencer* seq = seqH(selectedSeq);
-    *dbg<<"Asking to update pw to " << pattern << ENDL;
+    *dbg<<"Assigining pattern no. " << pattern << ENDL;
     pattern_widget.AssignPattern(&seq->patterns[pattern]);
     pattern_widget.SetInternalHeight(chordwidget.get_height());
 }
@@ -512,7 +512,7 @@ void SequencerWidget::OnAddPatternClicked(){
     notebook_pages[x]->show();
     sprintf(temp, _("%d"), x);
     wNotebook.append_page(*notebook_pages[x], temp);
-    wNotebook.set_current_page(wNotebook.get_n_pages()-1); //will show the last page AND THE SIGNAL HANDLER WILL UPDATE THE PATTERNBOX!
+    wNotebook.set_current_page(wNotebook.get_n_pages()-1); //will show the last page AND THE SIGNAL HANDLER WILL UPDATE THE PATTERNWIDGET!
     //In case you wonder why the patternbox is NOT updated: read the comment above.
     UpdateActivePatternRange();
     SetRemoveButtonSensitivity();
@@ -525,11 +525,13 @@ void SequencerWidget::OnRemovePatternClicked(){
 
     int n = wNotebook.get_current_page();
     *dbg << "removing pattern " << n <<"\n";
-
+    do_not_react_on_page_changes = 1;
     wNotebook.remove(*notebook_pages[n]);
     delete notebook_pages[n];
     notebook_pages.erase(notebook_pages.begin()+n);
+    *err<<"!!!Erasing pattern\n";
     seq->patterns.erase(seq->patterns.begin()+n);
+    do_not_react_on_page_changes = 0;
     if (seq->GetActivePatternNumber() == n ) { seq->SetActivePatternNumber(0);wActivePattern.set_value(0.0);}
     if (seq->GetActivePatternNumber() > n ) {seq->SetActivePatternNumber(seq->GetActivePatternNumber()-1);wActivePattern.set_value(seq->GetActivePatternNumber()); }
     InitNotebook();

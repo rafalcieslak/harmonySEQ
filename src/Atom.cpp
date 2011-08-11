@@ -43,6 +43,15 @@ Atom::Atom(double _time){
     counter++;
 }
 
+Atom::Atom(const Atom&  orig){
+    time = orig.time;
+    ID = counter;
+    counter++;
+}
+
 Atom::~Atom(){
 }
 
+Atom* Atom::Clone(){
+    return new Atom(*this);
+}

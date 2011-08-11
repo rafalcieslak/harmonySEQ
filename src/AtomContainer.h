@@ -28,6 +28,7 @@ class Sequencer;
 class AtomContainer {
 public:
     AtomContainer(Sequencer* parent);
+    AtomContainer(const AtomContainer& orig);
     AtomContainer();
     virtual ~AtomContainer();
     
@@ -58,6 +59,8 @@ public:
     
     /**Call if notes were moved or added.*/
     void Sort();
+    
+    AtomContainer & operator= (const AtomContainer & other);
 private:
     std::vector<Atom *> AtmVec;
     

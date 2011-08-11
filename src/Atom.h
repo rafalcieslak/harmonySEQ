@@ -32,7 +32,11 @@ struct AtomComparingClass {
 class Atom {
 public:
     Atom(double _time);
+    Atom(const Atom&  orig);
     virtual ~Atom();
+    
+    /**Returns a pointer to a new identical atom*/
+    virtual Atom* Clone();
     
     /**Value from 0 to 1, representing relative location (in time) in parent container*/
     double time;

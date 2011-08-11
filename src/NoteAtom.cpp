@@ -28,6 +28,18 @@ NoteAtom::NoteAtom(double _time, double _length, int _pitch)
     velocity = 100;
 }
 
+NoteAtom::NoteAtom(const NoteAtom& orig)
+                                        :Atom(orig.time){
+    length = orig.length;
+    pitch = orig.pitch;
+    velocity = orig.velocity;
+}
+
+NoteAtom* NoteAtom::Clone(){
+    return new NoteAtom(*this);
+        
+}
+
 
 NoteAtom::~NoteAtom(){
 }

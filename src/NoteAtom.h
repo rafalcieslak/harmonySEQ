@@ -25,7 +25,10 @@
 class NoteAtom : public Atom {
 public:
     NoteAtom(double _time = 0, double _length = 0.125, int _pitch = 0);
+    NoteAtom(const NoteAtom& orig);
     virtual ~NoteAtom();
+    
+    virtual NoteAtom* Clone();
     
     /**Currently - 0 to 5*/
     int pitch;

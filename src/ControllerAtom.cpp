@@ -26,6 +26,15 @@ ControllerAtom::ControllerAtom(double _time, int _value)
     value = _value;
 }
 
+ControllerAtom::ControllerAtom(const ControllerAtom& orig)
+                                : Atom(orig.time)
+{
+    value = orig.value;
+}
+
 ControllerAtom::~ControllerAtom(){
 }
 
+ControllerAtom* ControllerAtom::Clone(){
+    return new ControllerAtom(*this);
+}

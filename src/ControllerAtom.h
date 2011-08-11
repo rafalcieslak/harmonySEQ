@@ -25,7 +25,10 @@
 class ControllerAtom : public Atom {
 public:
     ControllerAtom(double _time, int _value);
+    ControllerAtom(const ControllerAtom& orig);
     virtual ~ControllerAtom();
+    
+    virtual ControllerAtom* Clone();
     
     /**From 0 to 127*/
     int value;
