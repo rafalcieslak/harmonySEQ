@@ -344,6 +344,7 @@ void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
         //*dbg << snap_offset << ENDL;
 
         std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
+        std::set<Atom *, AtomComparingClass> resulting_selection;
         for (; it != selection.end(); it++) {
             NoteAtom* note = dynamic_cast<NoteAtom*> (*it);
             int temp_pitch = line + note->drag_offset_line;
@@ -352,13 +353,12 @@ void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
             temp_time = temp_time - (int) temp_time; //wrap to 0.0 - 0.9999...
             if (temp_pitch < 0) temp_pitch += 6;
             if (temp_time < 0) temp_time += 1.0;
-            selection.erase(note);
             note->pitch = temp_pitch;
             note->time = temp_time;
-            selection.insert(note);
+            resulting_selection.insert(note);
             //*dbg << " " << note->pitch << " " << note->time <<ENDL;
         }
-
+        selection = resulting_selection;
     } else if (drag_mode == DRAG_MODE_SELECT_AREA) {
         drag_current_x = x;
         drag_current_y = y;
