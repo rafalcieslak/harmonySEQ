@@ -23,8 +23,6 @@
 #include <set>
 #include "AtomContainer.h"
 
-
-
 /**PatternWidget is basically a GUI for NoteContainer, that uses DrawingArea to display a piano-roll interface.*/
 class PatternWidget : public Gtk::DrawingArea {
 public:
@@ -68,6 +66,7 @@ protected:
    virtual void on_drag_begin(const Glib::RefPtr<Gdk::DragContext>& context);
    virtual bool on_motion_notify_event(GdkEventMotion* event);
    virtual bool on_leave_notify_event(GdkEventCrossing* event);
+   virtual bool on_key_press_event(GdkEventKey* event);
 private:
     bool add_mode;
     

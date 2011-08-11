@@ -23,6 +23,7 @@
 #include "AtomContainer.h"
 #include "NoteAtom.h"
 #include "Sequencer.h"
+#include "Event.h"
 
 
 PatternWidget::PatternWidget(){
@@ -34,7 +35,8 @@ PatternWidget::PatternWidget(){
     add_events(Gdk::BUTTON_RELEASE_MASK);
     add_events(Gdk::BUTTON1_MOTION_MASK);
     add_events(Gdk::BUTTON3_MOTION_MASK);
-    add_events(Gdk::LEAVE_NOTIFY_MASK);
+    add_events(Gdk::KEY_PRESS_MASK);
+    set_can_focus(1);//required to receive key_presses
 }
 
 PatternWidget::~PatternWidget(){
@@ -321,6 +323,8 @@ void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
 
 bool PatternWidget::on_button_press_event(GdkEventButton* event){
     
+    grab_focus();//required to receive key_presses
+    
     Gtk::Allocation allocation = get_allocation();
     const int width = allocation.get_width();
         //const int height = allocation.get_height();
@@ -485,6 +489,19 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
 
 void PatternWidget::on_drag_begin(const Glib::RefPtr<Gdk::DragContext>& context){
     
+}
+
+bool PatternWidget::on_key_press_event(GdkEventKey* event){
+    switch(event->keyval){
+        case GDK_KEY_BackSpace:
+        case GDK_KEY_Delete:
+            DeleteSelected();
+            break;
+        default:
+            FindAndProcessEventsKeyPress(event);
+            break;
+    }
+    return false;
 }
 
   bool PatternWidget::on_expose_event(GdkEventExpose* event){
