@@ -26,8 +26,6 @@
 #include "global.h"
 #include "MainWindow.h"
 
-extern bool CtrlKeyDown;
-
 SequencerWidget::SequencerWidget()
                 : wImageAdd(Gtk::Stock::ADD,Gtk::ICON_SIZE_BUTTON), wImageRemove(Gtk::Stock::REMOVE,Gtk::ICON_SIZE_BUTTON)
 {
@@ -65,6 +63,7 @@ SequencerWidget::SequencerWidget()
     wPatternWidgetBox.pack_start(pattern_widget,Gtk::PACK_SHRINK);
     
     pattern_widget.on_selection_changed.connect(sigc::mem_fun(*this,&SequencerWidget::OnSelectionChanged));
+    pattern_widget.on_add_mode_changed.connect(sigc::mem_fun(*this,&SequencerWidget::UpdateAddMode));
     
     wUpperHBox1.pack_start(wNameLabel,Gtk::PACK_SHRINK);
     wUpperHBox1.pack_start(wNameEntry,Gtk::PACK_SHRINK);
@@ -594,6 +593,7 @@ void SequencerWidget::OnSnapClicked(){
 }
 
 void SequencerWidget::OnAddToggled(){
+    if(ignore_signals) return;
     if(wAddToggle.get_active()){
         pattern_widget.EnterAddMode();
     }else{
@@ -606,6 +606,12 @@ void SequencerWidget::LeaveAddMode(){
     if(wAddToggle.get_active()){
         wAddToggle.set_active(0); //the signal handler should do the trick
     }
+}
+
+void SequencerWidget::UpdateAddMode(){
+    ignore_signals = 1;
+    wAddToggle.set_active(pattern_widget.GetAddMode());
+    ignore_signals = 0;
 }
 
 void SequencerWidget::OnDeleteClicked(){

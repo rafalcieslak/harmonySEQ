@@ -66,6 +66,7 @@ public:
     void UpdateAsterisk(int from, int to);
     void UpdateOnOffColour();
     void UpdateShowChord();
+    void UpdateAddMode();
 
     void SelectSeq(seqHandle h);
     void SelectNothing();

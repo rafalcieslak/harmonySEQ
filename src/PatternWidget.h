@@ -41,10 +41,9 @@ public:
     
     void EnterAddMode();
     void LeaveAddMode();
+    bool GetAddMode();
     
     void DeleteSelected();
-    
-    sigc::signal<void> on_add_mode_left;
     
     void ClearSelection();
     
@@ -54,6 +53,9 @@ public:
     void SetVelocity(int v);
     /**Emitted when selection is changed. Provides an argument that is equal to number of notes in selection.*/
     sigc::signal<void,int> on_selection_changed;
+    
+    /**Emmited when patter changed add_mode and parent widget needs to update button*/
+    sigc::signal<void> on_add_mode_changed;
     
     int Velocity();
 protected:

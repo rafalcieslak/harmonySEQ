@@ -33,6 +33,7 @@ PatternWidget::PatternWidget(){
     add_events(Gdk::BUTTON_PRESS_MASK);
     add_events(Gdk::BUTTON_RELEASE_MASK);
     add_events(Gdk::BUTTON1_MOTION_MASK);
+    add_events(Gdk::BUTTON3_MOTION_MASK);
     add_events(Gdk::LEAVE_NOTIFY_MASK);
 }
 
@@ -70,6 +71,10 @@ void PatternWidget::EnterAddMode(){
 }
 void PatternWidget::LeaveAddMode(){
     add_mode = 0;
+}
+
+bool PatternWidget::GetAddMode(){
+    return add_mode;
 }
 
 void PatternWidget::AssignPattern(AtomContainer* cont){
@@ -178,7 +183,10 @@ void PatternWidget::InitDrag(){
         }
     }
     //and checking if it's in a selection
-    std::set<Atom *>::iterator it = selection.find(note_found);
+    std::set<Atom *>::iterator it;
+    if (note_found != NULL) it = selection.find(note_found);
+    else it = selection.end(); //pretend the search failed
+    
     if(note_ending_found != NULL){
         //user tries to resize the note
         drag_mode = DRAG_MODE_RESIZE;
@@ -222,7 +230,6 @@ void PatternWidget::InitDrag(){
 }
 
 void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
-
     Gtk::Allocation allocation = get_allocation();
     const int width = allocation.get_width();
     //const int height = allocation.get_height();
@@ -313,20 +320,18 @@ void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
 }
 
 bool PatternWidget::on_button_press_event(GdkEventButton* event){
+    
+    Gtk::Allocation allocation = get_allocation();
+    const int width = allocation.get_width();
+        //const int height = allocation.get_height();
+    int line = 6 - event->y / (internal_height / 6);
+    double time = (double) event->x / (double) width;
+    
     if(event->button == 1) //LMB
     {
         drag_beggining_x = event->x;
         drag_beggining_y = event->y;
-        
-        Gtk::Allocation allocation = get_allocation();
-        const int width = allocation.get_width();
-        //const int height = allocation.get_height();
-        //determine line:
         if(event->y <= internal_height){
-            int line = 6-event->y/(internal_height/6);
-            //*err << line << ENDL;
-            double time = (double)event->x/(double)width;
-            //*err << time <<ENDL;
             if(!add_mode){
                         Atom* found = NULL;
                         int size = container->GetSize();
@@ -398,6 +403,32 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
             }
             Redraw();
         } //(event->y <= internal_height)
+        
+        
+    }else if(event->button == 3){ //RMB
+        if(add_mode){
+            add_mode = 0;
+            drag_in_progress = 0;
+            on_add_mode_changed.emit();
+        }//else{
+            on_add_mode_changed.emit();
+            double temp_time = time;
+            if (snap && !(event->state & (1 << 0))) {
+                temp_time = SnapDown(temp_time);
+            }
+            double len = (double) 1.0 / container->owner->resolution;
+            NoteAtom* note = new NoteAtom(temp_time, len, line);
+            container->Add(note);
+            drag_in_progress = 1;
+            drag_mode = DRAG_MODE_RESIZE;
+            drag_beggining_line = line;
+            drag_beggining_time = time;
+            drag_note_dragged = note;
+            selection.clear();
+            selection.insert(note);
+            on_selection_changed.emit(selection.size());
+            Redraw();
+        //}
     }
     return false;
 }
@@ -422,6 +453,8 @@ bool PatternWidget::on_button_release_event(GdkEventButton* event){
                 container->Sort();
             }
         }
+    }else if(event->button == 3){
+        if(drag_in_progress) drag_in_progress = 0;
     }
     return false;
 }
@@ -433,21 +466,20 @@ bool PatternWidget::on_leave_notify_event(GdkEventCrossing* event){
 }
 
 bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
-    if(event->state & (1 << 8)){ //LMB down 
         if(!drag_in_progress){//there is no drag in progress, maybe we need to initiate one?
-            
-                    //if moved some distance, mark drag as in progress. 
-                    //if we use SHIFT to precise moving, do not apply this distance, and mark as drag regardless of it.
-                    const int distance = 3;
-                    if(event->x > drag_beggining_x+distance || event->y > drag_beggining_y + distance || event->x < drag_beggining_x - distance || event->y < drag_beggining_y - distance) {
-                        InitDrag();
-                        ProcessDrag(event->x, event->y,(event->state & (1 << 0)));
-                    }
+            if (event->state & (1 << 8)) { //LMB down 
+                //if moved some distance, mark drag as in progress. 
+                //if we use SHIFT to precise moving, do not apply this distance, and mark as drag regardless of it.
+                const int distance = 3;
+                if (event->x > drag_beggining_x + distance || event->y > drag_beggining_y + distance || event->x < drag_beggining_x - distance || event->y < drag_beggining_y - distance) {
+                    InitDrag();
+                    ProcessDrag(event->x, event->y, (event->state & (1 << 0)));
+                }
+            }
         }else{ //drag in process
             ProcessDrag(event->x,event->y,(event->state & (1 << 0)));
         }
         
-    }
     return false;
 }
 
