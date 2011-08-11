@@ -584,6 +584,7 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
     switch(event->keyval){
         case GDK_KEY_BackSpace:
         case GDK_KEY_Delete:
+        case GDK_KEY_KP_Delete:
             DeleteSelected();
            if(add_mode){ add_mode = 0; on_add_mode_changed.emit();}
             return true;
