@@ -33,6 +33,7 @@ AtomContainer::AtomContainer(Sequencer* _owner){
 }
 
 AtomContainer::~AtomContainer(){
+    Clear();
 }
 
 void AtomContainer::SetOwner(Sequencer* _owner){
@@ -44,6 +45,7 @@ int AtomContainer::GetSize(){
 }
 
 void AtomContainer::Clear(){
+    for(int x = 0; x < AtmVec.size(); x++) delete AtmVec[x];
     AtmVec.clear();
 }
 
@@ -54,6 +56,7 @@ int AtomContainer::Add(Atom * a){
 }
 
 void AtomContainer::Remove(int n){
+    delete AtmVec[n];
     AtmVec.erase(AtmVec.begin()+n);
     //No need to sort. Removing does not change order.
 }

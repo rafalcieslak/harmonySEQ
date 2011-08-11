@@ -63,9 +63,9 @@ protected:
    virtual bool on_button_press_event(GdkEventButton* event);
    virtual bool on_button_release_event(GdkEventButton* event);
    
-   virtual void on_drag_begin(const Glib::RefPtr<Gdk::DragContext>& context);
    virtual bool on_motion_notify_event(GdkEventMotion* event);
    virtual bool on_leave_notify_event(GdkEventCrossing* event);
+   
    virtual bool on_key_press_event(GdkEventKey* event);
 private:
     bool add_mode;
@@ -73,7 +73,7 @@ private:
     std::set<Atom *,AtomComparingClass> selection;
     
     bool snap;
-    std::set<Atom *> drag_temporary_selection;
+    std::set<Atom *,AtomComparingClass> drag_temporary_selection;
     int drag_beggining_x, drag_beggining_y;
     int drag_beggining_line;
     double drag_beggining_time;
@@ -100,6 +100,13 @@ private:
     
     void InitDrag();
     void ProcessDrag(double x, double y,bool shift_key=false);
+    
+    void MoveSelectionUp();
+    void MoveSelectionDown();
+    void MoveSelectionLeft();
+    void MoveSelectionRight();
+    void IncreaseSelectionVelocity();
+    void DecraseSelecionVelocity();
     
 };
 

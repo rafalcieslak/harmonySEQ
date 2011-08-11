@@ -104,6 +104,7 @@ void PatternWidget::DeleteNth(int n){
 
 void PatternWidget::DeleteSelected(){
     container->RemoveList(&selection);
+    for(std::set<Atom*, AtomComparingClass>::iterator it = selection.begin(); it != selection.end(); it++) delete *it;
     selection.clear();
     on_selection_changed.emit(0);
     Redraw();
@@ -118,7 +119,7 @@ bool PatternWidget::GetSnap(){
 }
 
 void PatternWidget::SetVelocity(int v){
-    std::set<Atom *>::iterator it = selection.begin();
+    std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
     for (; it != selection.end(); it++) {
         NoteAtom* note = dynamic_cast<NoteAtom*>(*it);
         note->velocity = v;
@@ -128,7 +129,7 @@ void PatternWidget::SetVelocity(int v){
 
 int PatternWidget::Velocity(){
     int sum = 0;
-    std::set<Atom *>::iterator it = selection.begin();
+    std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
     for (; it != selection.end(); it++) {
         NoteAtom* note = dynamic_cast<NoteAtom*> (*it);
         sum += note->velocity;
@@ -136,6 +137,96 @@ int PatternWidget::Velocity(){
     if(selection.size()==0) return 0;
     return sum/(selection.size());
 }
+
+void PatternWidget::MoveSelectionUp(){
+        std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
+        std::set<Atom *, AtomComparingClass> resulting_selection;
+        for (; it != selection.end(); it++) {
+            NoteAtom* note = dynamic_cast<NoteAtom*> (*it);
+            note->pitch = (note->pitch+1)%6;
+            resulting_selection.insert(note);
+        }
+        selection = resulting_selection;
+        container->Sort();
+        Redraw();
+}
+
+void PatternWidget::MoveSelectionDown(){
+        std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
+        std::set<Atom *, AtomComparingClass> resulting_selection;
+        for (; it != selection.end(); it++) {
+            NoteAtom* note = dynamic_cast<NoteAtom*> (*it);
+            note->pitch = (note->pitch-1)%6;
+            resulting_selection.insert(note);
+        }
+        selection = resulting_selection;
+        container->Sort();
+        Redraw();
+}
+
+
+void PatternWidget::MoveSelectionRight(){
+        std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
+        std::set<Atom *, AtomComparingClass> resulting_selection;
+        for (; it != selection.end(); it++) {
+            NoteAtom* note = dynamic_cast<NoteAtom*> (*it);
+            note->time = (note->time+1.0/(double)container->owner->resolution);
+            if(note->time >= 1.0) note->time -= 1.0;
+            if(note->time < 0.0) note->time += 1.0;
+            resulting_selection.insert(note);
+        }
+        selection = resulting_selection;
+        container->Sort();
+        Redraw();
+}
+
+void PatternWidget::MoveSelectionLeft(){
+        std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
+        std::set<Atom *, AtomComparingClass> resulting_selection;
+        for (; it != selection.end(); it++) {
+            NoteAtom* note = dynamic_cast<NoteAtom*> (*it);
+            note->time = (note->time-1.0/(double)container->owner->resolution);
+            if(note->time >= 1.0) note->time -= 1.0;
+            if(note->time < 0.0) note->time += 1.0;
+            resulting_selection.insert(note);
+        }
+        selection = resulting_selection;
+        container->Sort();
+        Redraw();
+}
+
+void PatternWidget::IncreaseSelectionVelocity(){
+        std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
+        std::set<Atom *, AtomComparingClass> resulting_selection;
+        for (; it != selection.end(); it++) {
+            NoteAtom* note = dynamic_cast<NoteAtom*> (*it);
+            note->velocity = (note->velocity+10);
+            if(note->velocity > 127) note->velocity = 127;
+            if(note->velocity < 0) note->velocity = 0;
+            resulting_selection.insert(note);
+        }
+        selection = resulting_selection;
+        container->Sort();
+        on_selection_changed.emit(selection.size());//this will update the velocity spinbutton
+        Redraw();
+}
+
+void PatternWidget::DecraseSelecionVelocity(){
+        std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
+        std::set<Atom *, AtomComparingClass> resulting_selection;
+        for (; it != selection.end(); it++) {
+            NoteAtom* note = dynamic_cast<NoteAtom*> (*it);
+            note->velocity = (note->velocity-10);
+            if(note->velocity > 127) note->velocity = 127;
+            if(note->velocity < 0) note->velocity = 0;
+            resulting_selection.insert(note);
+        }
+        selection = resulting_selection;
+        container->Sort();
+        on_selection_changed.emit(selection.size());//this will update the velocity spinbutton
+        Redraw();
+}
+
 
 double PatternWidget::Snap(double t){
     if (!container->owner) // if no owner...
@@ -185,7 +276,7 @@ void PatternWidget::InitDrag(){
         }
     }
     //and checking if it's in a selection
-    std::set<Atom *>::iterator it;
+    std::set<Atom *, AtomComparingClass>::iterator it;
     if (note_found != NULL) it = selection.find(note_found);
     else it = selection.end(); //pretend the search failed
     
@@ -252,7 +343,7 @@ void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
         double snap_offset = snapped_time - temp_time;
         //*dbg << snap_offset << ENDL;
 
-        std::set<Atom *>::iterator it = selection.begin();
+        std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
         for (; it != selection.end(); it++) {
             NoteAtom* note = dynamic_cast<NoteAtom*> (*it);
             int temp_pitch = line + note->drag_offset_line;
@@ -261,8 +352,10 @@ void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
             temp_time = temp_time - (int) temp_time; //wrap to 0.0 - 0.9999...
             if (temp_pitch < 0) temp_pitch += 6;
             if (temp_time < 0) temp_time += 1.0;
+            selection.erase(note);
             note->pitch = temp_pitch;
             note->time = temp_time;
+            selection.insert(note);
             //*dbg << " " << note->pitch << " " << note->time <<ENDL;
         }
 
@@ -308,7 +401,7 @@ void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
         }
         double note_max_len = 1.0;
         
-        std::set<Atom *>::iterator it = selection.begin();
+        std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
         for (; it != selection.end(); it++) {
             NoteAtom* note = dynamic_cast<NoteAtom*> (*it);
             double temp_length = note->drag_beggining_length+added_length;
@@ -374,7 +467,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                                      on_selection_changed.emit(selection.size());
                                  }
                             } else {//shift key was not pressed
-                                std::set<Atom *>::iterator it= selection.find(found);
+                                std::set<Atom *, AtomComparingClass>::iterator it= selection.find(found);
                                  if(it != selection.end()) 
                                      //it's already selected, then:
                                      ;
@@ -445,7 +538,7 @@ bool PatternWidget::on_button_release_event(GdkEventButton* event){
             drag_in_progress = 0;
             if(drag_mode == DRAG_MODE_SELECT_AREA){
                 //Finished selection by dragging.
-                std::set<Atom *>::iterator it = drag_temporary_selection.begin();
+                std::set<Atom *, AtomComparingClass>::iterator it = drag_temporary_selection.begin();
                 for(;it!=drag_temporary_selection.end();it++){
                     selection.insert(*it);
                 }
@@ -487,18 +580,47 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
     return false;
 }
 
-void PatternWidget::on_drag_begin(const Glib::RefPtr<Gdk::DragContext>& context){
-    
-}
-
 bool PatternWidget::on_key_press_event(GdkEventKey* event){
     switch(event->keyval){
         case GDK_KEY_BackSpace:
         case GDK_KEY_Delete:
             DeleteSelected();
+           if(add_mode){ add_mode = 0; on_add_mode_changed.emit();}
+            return true;
+            break;
+        case GDK_KEY_Up:
+            if(event->state & (1 << 0)) //shift key down
+                IncreaseSelectionVelocity();
+            else
+                MoveSelectionUp();
+            
+           if(add_mode){ add_mode = 0; on_add_mode_changed.emit();}
+            return true;
+            break;
+        case GDK_KEY_Down:
+            if(event->state & (1 << 0)) //shift key down
+                DecraseSelecionVelocity();
+            else
+                MoveSelectionDown();
+            
+           if(add_mode){ add_mode = 0; on_add_mode_changed.emit();}
+            return true;
+            break;
+        case GDK_KEY_Right:
+            MoveSelectionRight();
+            
+           if(add_mode){ add_mode = 0; on_add_mode_changed.emit();}
+            return true;
+            break;
+        case GDK_KEY_Left:
+            MoveSelectionLeft();
+            
+           if(add_mode){ add_mode = 0; on_add_mode_changed.emit();}
+            return true;
             break;
         default:
             FindAndProcessEventsKeyPress(event);
+            return false;
             break;
     }
     return false;
