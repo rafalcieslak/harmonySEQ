@@ -21,6 +21,20 @@
 
 #include "Atom.h"
 
+bool AtomComparison(Atom * a1, Atom * a2)
+{
+    if( (a1->time)==(a2->time)){
+        return (a1->ID)<(a2->ID);
+    }else //just:
+    return (a1->time)<(a2->time);
+}
+
+//Needed by std::set
+bool AtomComparingClass::operator ()(Atom* lhs, Atom* rhs) const{
+    return AtomComparison(lhs, rhs);
+}
+
+
 int Atom::counter = 0;
 
 Atom::Atom(double _time){

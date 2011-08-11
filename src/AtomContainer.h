@@ -25,9 +25,6 @@
 
 class Sequencer;
 
-//Used for sorting atoms. Compares it's time.
-bool AtomComparison(Atom * a1, Atom * a2);
-
 class AtomContainer {
 public:
     AtomContainer(Sequencer* parent);
@@ -42,7 +39,7 @@ public:
     
     /**Removes an atom from container*/
     void Remove(int n);
-    void RemoveList(std::set<Atom*>* V);
+    void RemoveList(std::set<Atom*,AtomComparingClass>* V);
     
     /**Gets n-th atom*/
     Atom* operator[](int n);

@@ -24,6 +24,7 @@
 #include "NoteAtom.h"
 #include "Sequencer.h"
 
+
 PatternWidget::PatternWidget(){
     internal_height=50; //random guess. will be reset soon anyway by the SequencerWidget, but better protect from 0-like values.
     vert_size = 450.0; //adjust for better default size

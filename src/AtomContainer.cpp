@@ -24,14 +24,6 @@
 #include "messages.h"
 #include "global.h"
 
-bool AtomComparison(Atom * a1, Atom * a2)
-{
-    if( (a1->time)==(a2->time)){
-        return (a1->ID)<(a2->ID);
-    }else //just:
-    return (a1->time)<(a2->time);
-}
-
 AtomContainer::AtomContainer(){
     owner = NULL;
 }
@@ -66,10 +58,9 @@ void AtomContainer::Remove(int n){
     //No need to sort. Removing does not change order.
 }
 
-void AtomContainer::RemoveList(std::set<Atom*>* V){
+void AtomContainer::RemoveList(std::set<Atom*,AtomComparingClass>* V){
     std::vector<Atom*> result(1000);
-    std::set<Atom*> atoms = *V;
-    //std::sort(atoms.begin(),atoms.end(),AtomComparison);
+    std::set<Atom*, AtomComparingClass> atoms = *V;
     std::set_difference(AtmVec.begin(),AtmVec.end(),atoms.begin(),atoms.end(),result.begin(),AtomComparison);
     AtmVec.clear();
     int x = 0;

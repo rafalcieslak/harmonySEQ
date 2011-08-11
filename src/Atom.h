@@ -19,6 +19,16 @@
 #ifndef ATOM_H
 #define	ATOM_H
 
+class Atom;
+
+//Used for sorting atoms. Compares it's time.
+bool AtomComparison(Atom * a1, Atom * a2);
+
+//Needed by std::set
+struct AtomComparingClass {
+  bool operator() (Atom* lhs, Atom* rhs) const;
+};
+
 class Atom {
 public:
     Atom(double _time);

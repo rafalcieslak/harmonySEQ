@@ -22,6 +22,9 @@
 #include "gtkmm.h"
 #include <set>
 #include "AtomContainer.h"
+
+
+
 /**PatternWidget is basically a GUI for NoteContainer, that uses DrawingArea to display a piano-roll interface.*/
 class PatternWidget : public Gtk::DrawingArea {
 public:
@@ -66,7 +69,7 @@ protected:
 private:
     bool add_mode;
     
-    std::set<Atom *> selection;
+    std::set<Atom *,AtomComparingClass> selection;
     
     bool snap;
     std::set<Atom *> drag_temporary_selection;
