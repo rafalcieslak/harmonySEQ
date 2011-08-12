@@ -67,6 +67,7 @@ public:
     void UpdateOnOffColour();
     void UpdateShowChord();
     void UpdateAddMode();
+    void UpdateController();
 
     void SelectSeq(seqHandle h);
     void SelectNothing();
@@ -128,6 +129,7 @@ private:
     void OnAddToggled();
     void OnDeleteClicked();
     void OnShowChordButtonClicked();
+    void OnControllerChanged();
     /**Called when pattern's selection was changed and we need to display new velocity*/
     void OnSelectionChanged(int n);
     void LeaveAddMode();
@@ -174,6 +176,8 @@ private:
     Gtk::Label wNameLabel;
     Gtk::Label wVirtualSpaceLabel;
     Gtk::Entry wNameEntry;
+    Gtk::Label wControllerLabel;
+    Gtk::SpinButton wControllerButton;
     Gtk::Button wAddPatternButton;
     Gtk::Button wPlayOnceButton;
     Gtk::Button wRemovePattern;

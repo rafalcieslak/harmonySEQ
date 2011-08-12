@@ -26,6 +26,7 @@
 #include "global.h"
 #include "MainWindow.h"
 #include "NoteSequencer.h"
+#include "ControlSequencer.h"
 
 SequencerWidget::SequencerWidget()
                 : wImageAdd(Gtk::Stock::ADD,Gtk::ICON_SIZE_BUTTON), wImageRemove(Gtk::Stock::REMOVE,Gtk::ICON_SIZE_BUTTON)
@@ -73,8 +74,9 @@ SequencerWidget::SequencerWidget()
     wUpperHBox1.pack_start(wChannelSep,Gtk::PACK_SHRINK);
     wUpperHBox1.pack_start(wChannelLabel,Gtk::PACK_SHRINK);
     wUpperHBox1.pack_start(wChannelButton,Gtk::PACK_SHRINK);
-    wChannelButton.set_width_chars(2);
     wChannelSep.set_size_request(8,0);
+    wUpperHBox1.pack_start(wControllerLabel,Gtk::PACK_SHRINK);
+    wUpperHBox1.pack_start(wControllerButton,Gtk::PACK_SHRINK);
 
     wRightBox.pack_start(wRightBox1,Gtk::PACK_SHRINK);
     wRightBox.pack_start(wRightBox2,Gtk::PACK_SHRINK);
@@ -156,16 +158,24 @@ SequencerWidget::SequencerWidget()
     wPlayOnceButton.set_tooltip_markup(_("Plays sequence in this sequencer <b>once</b>."));
     wClearPattern.set_label(_("Clear pattern"));
     wClearPattern.set_tooltip_markup(_("Clears all notes of this pattern."));
-
+    ///TRANSLATORS: The space befor this string is to force a tiny space between widgets, please keep it in translations.
+    wControllerLabel.set_text(_(" Controller no."));
+    wControllerButton.set_tooltip_markup(_("The <b>MIDI controller number</b> this sequencer outputs data on.\n\nFor example, synthesizers supporting GM standard should interpret data from controller 7 as volume setting."));
 
     wVelocityButton.set_range(0,127);
     wChannelButton.set_range(1,16);
+    wControllerButton.set_range(0.0,127.0);
     wVelocityButton.set_increments(1,16);
     wChannelButton.set_increments(1,1);
+    wControllerButton.set_increments(1.0,16.0);
     wVelocityButton.set_tooltip_markup(_("Sets the <b>velocity</b> of the notes played by this sequencer.\nUsually higher velocities result in louder sounds."));
     wChannelButton.set_tooltip_markup(_("Selects the <b>MIDI channel</b> this sequencer will output notes to. "));
+    wChannelButton.set_width_chars(2);
+    wVelocityButton.set_width_chars(3);
+    wControllerButton.set_width_chars(3);
     wVelocityButton.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnVelocityChanged));
     wChannelButton.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnChannelChanged));
+    wControllerButton.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnControllerChanged));
     wActivePattern.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnActivePatternChanged));
     wMuteToggle.set_label(_("ON/OFF"));
     wMuteToggle.set_tooltip_markup(_("Turns this sequencer <b>on/off</b>."));
@@ -182,8 +192,8 @@ SequencerWidget::SequencerWidget()
 
     wLengthsLabel.set_text(_("Length:"));
     
-    wLengthNumerator.set_tooltip_markup(_("Selects the <b>length</b> of this sequencer. It defines <i>how many bars</i> the sequence in this sequencer will last. In case it's smaller then 1, the sequence will be repeated few times in each bar."));
-    wLengthDenominator.set_tooltip_markup(_("Selects the <b>length</b> of this sequencer. It defines <i>how many bars</i> the sequence in this sequencer will last. In case it's smaller then 1, the sequence will be repeated few times in each bar."));
+    wLengthNumerator.set_tooltip_markup(_("Selects the <b>length</b> of this sequencer. It defines <i>how many bars</i> the sequence in this sequencer will last. In case it's smaller then 1, the sequence will be repeated few times in each bar.\n\nThis it the length's fraction numerator."));
+    wLengthDenominator.set_tooltip_markup(_("Selects the <b>length</b> of this sequencer. It defines <i>how many bars</i> the sequence in this sequencer will last. In case it's smaller then 1, the sequence will be repeated few times in each bar.\n\nThis it the length's fraction denominator."));
     wLengthResult.set_tooltip_markup(_("Selects the <b>length</b> of this sequencer. It defines <i>how many bars</i> the sequence in this sequencer will last. In case it's smaller then 1, the sequence will be repeated few times in each bar."));
     wLengthNumerator.set_increments(1.0,1.0);
     wLengthDenominator.set_increments(1.0,1.0);
@@ -254,6 +264,7 @@ void SequencerWidget::UpdateEverything(){
                 UpdateRelLenBoxes();
                 UpdateActivePattern();
                 UpdateActivePatternRange();
+                UpdateController();
         }
     }else{
 
@@ -264,10 +275,18 @@ void SequencerWidget::HideAndShowWidgetsDependingOnSeqType(){
     if(!AnythingSelected) return;
     if(selectedSeqType == SEQ_TYPE_NOTE){
         wShowChordButton.show();
+        wVelocityButton.show();
+        wVelocityLabel.show();
+        wControllerButton.hide();
+        wControllerLabel.hide();
     }else if(selectedSeqType == SEQ_TYPE_CONTROL){
         chordwidget.UnSelect();
         chordwidget.SetExpandDetails(0);
         wShowChordButton.hide();
+        wVelocityLabel.hide();
+        wVelocityButton.hide();
+        wControllerButton.show();
+        wControllerLabel.show();
     }
 }
 
@@ -309,6 +328,14 @@ void SequencerWidget::UpdateShowChord(){
     wShowChordButton.set_active(noteseq->expand_chord);
     ignore_signals = 0;
     chordwidget.SetExpandDetails(noteseq->expand_chord);
+}
+
+void SequencerWidget::UpdateController(){
+    if (AnythingSelected == 0 || selectedSeqType != SEQ_TYPE_CONTROL) return;
+    ignore_signals = 1;
+    ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*>(seqH(selectedSeq));
+    wControllerButton.set_value(ctrlseq->controller_number);
+    ignore_signals = 0;
 }
 
 void SequencerWidget::UpdateRelLenBoxes(){
@@ -607,18 +634,27 @@ void SequencerWidget::OnPlayOnceButtonClicked(){
 
 void SequencerWidget::OnSelectionChanged(int n){
     ignore_signals = 1;
-    if(n == 0){
-        //empty selection
-        wVelocityButton.set_sensitive(0);
-    }else{
-        wVelocityButton.set_sensitive(1);
-        wVelocityButton.set_value(pattern_widget.Velocity());
+    if(selectedSeqType == SEQ_TYPE_NOTE){
+        if(n == 0){
+            //empty selection
+            wVelocityButton.set_sensitive(0);
+        }else{
+            wVelocityButton.set_sensitive(1);
+            wVelocityButton.set_value(pattern_widget.Velocity());
+        }
     }
     ignore_signals = 0;
 }
 
 void SequencerWidget::OnSnapClicked(){
     pattern_widget.SetSnap(wSnapToggle.get_active());
+}
+
+void SequencerWidget::OnControllerChanged(){
+    if(ignore_signals) return;
+    if(!AnythingSelected || selectedSeqType != SEQ_TYPE_CONTROL) return;
+    ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*>(seqH(selectedSeq));
+    ctrlseq->controller_number = wControllerButton.get_value();
 }
 
 void SequencerWidget::OnAddToggled(){

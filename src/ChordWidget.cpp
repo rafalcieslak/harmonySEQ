@@ -222,6 +222,7 @@ void ChordWidget::OnTypeChanged(){
 }
 
 void ChordWidget::UpdateNotes(){
+    if(!AnythingSelected) return;
     we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = true;
     for (int x =0;x < 6; x++){
         note_buttons[x]->set_value(chord->GetNote(5-x));
@@ -310,6 +311,7 @@ void ChordWidget::OnUseBaseToggled(){
 }
 
 void ChordWidget::Update(){
+    if(!AnythingSelected) return;
     we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = true;
     combo_root.set_active(chord->GetRoot()); //tricky
     combo_note.set_active(chord->GetBaseNote());
@@ -372,5 +374,6 @@ void ChordWidget::SetExpandDetails(bool e){
 }
 
 void ChordWidget::UpdateSummary(){
+    if(!AnythingSelected) return;
     summary_label.set_text(chord->GetSummary());
 }
