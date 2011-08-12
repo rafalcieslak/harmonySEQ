@@ -59,14 +59,15 @@ MainWindow::MainWindow()
     m_refActionGroup->add(Gtk::Action::create("FileSaveAs", Gtk::Stock::SAVE_AS,_("Save as..."),_("Saves the current file with a different name.")), sigc::mem_fun(*this, &MainWindow::OnMenuSaveAsClicked));
     m_refActionGroup->add(Gtk::Action::create("FileQuit", Gtk::Stock::QUIT,_("Quit"),_("Quits harmonySEQ.")), sigc::mem_fun(*this, &MainWindow::OnMenuQuitClicked));
     m_refActionGroup->add(Gtk::Action::create("Preferences", Gtk::Stock::PREFERENCES,_("Preferences"),_("harmonySEQ configuration.")), sigc::mem_fun(*this, &MainWindow::OnPreferencesClicked));
-    m_refActionGroup->add(Gtk::Action::create("AddSeq", Gtk::Stock::ADD, _("Add"),_("Adds a new seqencer")), sigc::mem_fun(*this, &MainWindow::OnAddSeqClicked));
+    m_refActionGroup->add(Gtk::Action::create("AddNoteSeq", Gtk::Stock::ADD, _("Add note sequencer"),_("Adds a new note seqencer. Note sequencers store melodies and output them as MIDI notes.")), sigc::mem_fun(*this, &MainWindow::OnAddNoteSeqClicked));
+    m_refActionGroup->add(Gtk::Action::create("AddCtrlSeq", Gtk::Stock::ADD, _("Add control sequencer"),_("Adds a new control seqencer. Control sequencers store a graph of a particular setting, and output it as MIDI control messages.")), sigc::mem_fun(*this, &MainWindow::OnAddControlSeqClicked));
     m_refActionGroup->add(Gtk::Action::create("RemoveSeq", Gtk::Stock::REMOVE, _("Remove"),_("Removes selected sequencer")), sigc::mem_fun(*this, &MainWindow::OnRemoveClicked));
     m_refActionGroup->add(Gtk::Action::create("DuplicateSeq", Gtk::Stock::CONVERT, _("Duplicate"), _("Duplicates selected sequencer")), sigc::mem_fun(*this, &MainWindow::OnCloneClicked));
     m_refActionGroup->add(Gtk::Action::create("About", Gtk::Stock::ABOUT), sigc::mem_fun(*this, &MainWindow::OnAboutMenuClicked));
     m_refActionGroup->add(Gtk::ToggleAction::create("Metronome", _("Metronome"),_("Toggle metronome on/off")), sigc::mem_fun(*this, &MainWindow::OnMetronomeToggleClicked));
     m_refActionGroup->add(Gtk::Action::create("PlayPause", Gtk::Stock::MEDIA_PAUSE, _("Play/Pause"),_("Toggle play/pause")), sigc::mem_fun(*this, &MainWindow::OnPlayPauseClicked));
     m_refActionGroup->add(Gtk::ToggleAction::create("PassMidiEvents", _("Pass MIDI events"),_("States whether MIDI events are passed-through harmonySEQ.")), sigc::mem_fun(*this, &MainWindow::OnPassToggleClicked));
-    m_refActionGroup->add(Gtk::ToggleAction::create("PlayOnEdit", _("Play on edit"),_("If on, harmonySEQ will play a brief preview of note, when it's added, or changed manually in chord..")), sigc::mem_fun(*this, &MainWindow::OnPlayOnEditClicked));
+    m_refActionGroup->add(Gtk::ToggleAction::create("PlayOnEdit", _("Play on edit"),_("If on, harmonySEQ will play a brief preview of note, when it's added, or changed manually in chord.")), sigc::mem_fun(*this, &MainWindow::OnPlayOnEditClicked));
     m_refActionGroup->add(Gtk::Action::create("seq/PlayOnce", Gtk::Stock::MEDIA_NEXT, _("Play once"), _("Plays the sequence once.")), sigc::mem_fun(*this, &MainWindow::OnPopupPlayOnce));
     m_refActionGroup->add(Gtk::Action::create("seq/Remove", Gtk::Stock::REMOVE, _("Remove"), _("Removes the sequencer.")), sigc::mem_fun(*this, &MainWindow::OnPopupRemove));
     m_refActionGroup->add(Gtk::Action::create("seq/Duplicate", Gtk::Stock::CONVERT, _("Duplicate"), _("Duplicates the sequencer")), sigc::mem_fun(*this, &MainWindow::OnPopupDuplicate));
@@ -106,7 +107,8 @@ MainWindow::MainWindow()
             "   <toolitem action='FileSave'/>"
             "   <toolitem action='FileSaveAs'/>"
             "   <separator/>"
-            "   <toolitem action='AddSeq'/>"
+            "   <toolitem action='AddNoteSeq'/>"
+            "   <toolitem action='AddCtrlSeq'/>"
             "   <toolitem name='RemoveTool' action='RemoveSeq'/>"
             "   <toolitem name='DuplicateTool' action='DuplicateSeq'/>"
             "   <separator expand='true'/>"
@@ -521,10 +523,20 @@ void MainWindow::OnRemoveClicked(){
     Files::SetFileModified(1);
 }
 
-void MainWindow::OnAddSeqClicked(){
+void MainWindow::OnAddNoteSeqClicked(){
 
     seq_list_drag_in_progress = 0; //important
-    Gtk::TreeModel::Row row = spawn_note_sequencer();
+    Gtk::TreeModel::Row row = spawn_sequencer(SEQ_TYPE_NOTE);
+    
+    wTreeView.get_selection()->select(row);
+
+    Files::SetFileModified(1);
+}
+
+void MainWindow::OnAddControlSeqClicked(){
+
+    seq_list_drag_in_progress = 0; //important
+    Gtk::TreeModel::Row row = spawn_sequencer(SEQ_TYPE_CONTROL);
     
     wTreeView.get_selection()->select(row);
 

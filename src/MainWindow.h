@@ -87,7 +87,8 @@ private:
     void OnTreeModelRowInserted(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter);
     void OnTreeModelRowDeleted(const Gtk::TreeModel::Path& path);
 
-    void OnAddSeqClicked();
+    void OnAddNoteSeqClicked();
+    void OnAddControlSeqClicked();
     void OnRemoveClicked();
     void OnCloneClicked();
     void OnPlayPauseClicked();

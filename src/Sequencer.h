@@ -27,18 +27,21 @@
 #include "AtomContainer.h"
 using namespace std;
 
-/**Spawns a new sequencer*/
+enum SeqType_t{
+    SEQ_TYPE_NOTE,
+    SEQ_TYPE_CONTROL
+};
+
+Gtk::TreeModel::Row spawn_sequencer(SeqType_t type);
+/**Spawns a new note sequencer*/
 Gtk::TreeModel::Row spawn_note_sequencer();
+/**Spawns a new control sequencer*/
+Gtk::TreeModel::Row spawn_control_sequencer();
 /**Spawns a new sequencer, identical to the one specified as arg*/
 Gtk::TreeModel::Row clone_sequencer(int orig);
 /**Clears the list of sequencers, removing every sequencer*/
 void ClearSequencers();
 
-enum SeqType_t{
-    SEQ_TYPE_NOTE,
-    SEQ_TYPE_CONTROL
-};
-    
 class Sequencer {
 public:
 

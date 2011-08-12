@@ -24,10 +24,23 @@
 #include "AtomContainer.h"
 #include "NoteAtom.h"
 #include "NoteSequencer.h"
+#include "ControlSequencer.h"
 extern debug *dbg;
 
 extern MainWindow* mainwindow;
 extern vector<Sequencer *> seqVector;
+
+Gtk::TreeModel::Row spawn_sequencer(SeqType_t type){
+    switch(type){
+        case SEQ_TYPE_CONTROL:
+            return spawn_control_sequencer();
+            break;
+        case SEQ_TYPE_NOTE:
+            return spawn_note_sequencer();
+            break;
+    }
+    
+}
 
 
 Gtk::TreeModel::Row spawn_note_sequencer(){
@@ -38,6 +51,21 @@ Gtk::TreeModel::Row spawn_note_sequencer(){
     seqHandle h = RequestNewSeqHandle(n);
     sprintf(temp,_("seq %d"),h);
     Sequencer *new_seq = new NoteSequencer(temp);
+    seqVector.push_back(new_seq);
+    new_seq->MyHandle = h;
+
+    //add to main window
+    return mainwindow->AddSequencerRow(n);
+}
+
+Gtk::TreeModel::Row spawn_control_sequencer(){
+    int n = seqVector.size();
+
+    //init and push to vector
+    char temp[20];
+    seqHandle h = RequestNewSeqHandle(n);
+    sprintf(temp,_("seq %d"),h);
+    Sequencer *new_seq = new ControlSequencer(temp);
     seqVector.push_back(new_seq);
     new_seq->MyHandle = h;
 
