@@ -37,21 +37,18 @@ SequencerWidget::SequencerWidget()
     ignore_signals = 0;
 
     wMainVbox.pack_start(wUpBox,Gtk::PACK_SHRINK);
-    //wMainVbox.pack_start(wHSep,Gtk::PACK_SHRINK);
-    wHSep.set_size_request(0,3);
     wMainVbox.pack_start(wDownTable,Gtk::PACK_SHRINK);
-    wUpBox.pack_start(wUpperHBox1,Gtk::PACK_SHRINK);
-    wUpBox.pack_start(wVSep,Gtk::PACK_SHRINK);
-    wVSep.set_size_request(10,0);
-    //wUpBox.pack_start(wUpperHBox2,Gtk::PACK_SHRINK);
-    //wDownBox.pack_start(wBoxOfChord,Gtk::PACK_SHRINK);
-    //wDownBox.pack_start(wNotebookAndPatternOpsHBox);
-    wDownTable.resize(3,2);
-    wDownTable.attach(wShowChordButton,0,1,0,2,Gtk::FILL);
-    wDownTable.attach(wUpperHBox2,1,2,0,1);
-    wDownTable.attach(wHSep,1,2,1,2);
-    wDownTable.attach(wBoxOfChord,0,1,2,3,Gtk::SHRINK);
-    wDownTable.attach(wNotebookAndPatternOpsHBox,1,2,2,3);
+    
+    wDownTable.resize(4,4);
+    wDownTable.attach(wUpperHBox1,0,2,0,1);
+    wDownTable.attach(wShowChordButton,0,1,1,3,Gtk::FILL);
+    wDownTable.attach(wUpperHBox2,1,2,1,2);
+    wDownTable.attach(wRightBox,3,4,0,2,Gtk::SHRINK);
+    wDownTable.attach(wRightBoxSep,2,3,0,2,Gtk::SHRINK);
+    wDownTable.attach(wHSep,1,4,2,3);
+    wDownTable.attach(wBoxOfChord,0,1,3,4,Gtk::SHRINK);
+    wDownTable.attach(wNotebookAndPatternOpsHBox,1,4,3,4);
+    wRightBoxSep.set_size_request(4,0);
     
     wNotebookAndPatternOpsHBox.pack_start(wNotebookVbox/*,Gtk::PACK_EXPAND_WIDGET*/);
     wNotebookAndPatternOpsHBox.pack_start(wNotebook,Gtk::PACK_SHRINK);
@@ -73,17 +70,21 @@ SequencerWidget::SequencerWidget()
     wUpperHBox1.pack_start(wOnOfColour,Gtk::PACK_SHRINK);
     wOnOfColour.add(wMuteToggle);
     wUpperHBox1.pack_start(wPlayOnceButton,Gtk::PACK_SHRINK);
+    wUpperHBox1.pack_start(wChannelSep,Gtk::PACK_SHRINK);
     wUpperHBox1.pack_start(wChannelLabel,Gtk::PACK_SHRINK);
     wUpperHBox1.pack_start(wChannelButton,Gtk::PACK_SHRINK);
     wChannelButton.set_width_chars(2);
+    wChannelSep.set_size_request(8,0);
 
-    wUpperHBox1.pack_start(wResolutionsLabel,Gtk::PACK_SHRINK);
-    wUpperHBox1.pack_start(wResolutions,Gtk::PACK_SHRINK);
-    wUpperHBox1.pack_start(wLengthsLabel,Gtk::PACK_SHRINK);
-    wUpperHBox1.pack_start(wLengthNumerator,Gtk::PACK_SHRINK);
-    wUpperHBox1.pack_start(wLengthDivision,Gtk::PACK_SHRINK);
-    wUpperHBox1.pack_start(wLengthDenominator,Gtk::PACK_SHRINK);
-    wUpperHBox1.pack_start(wLengthResult,Gtk::PACK_SHRINK);
+    wRightBox.pack_start(wRightBox1,Gtk::PACK_SHRINK);
+    wRightBox.pack_start(wRightBox2,Gtk::PACK_SHRINK);
+    wRightBox1.pack_start(wResolutionsLabel,Gtk::PACK_SHRINK);
+    wRightBox1.pack_start(wResolutions,Gtk::PACK_SHRINK);
+    wRightBox2.pack_start(wLengthsLabel,Gtk::PACK_SHRINK);
+    wRightBox2.pack_start(wLengthNumerator,Gtk::PACK_SHRINK);
+    wRightBox2.pack_start(wLengthDivision,Gtk::PACK_SHRINK);
+    wRightBox2.pack_start(wLengthDenominator,Gtk::PACK_SHRINK);
+    wRightBox2.pack_start(wLengthResult,Gtk::PACK_SHRINK);
     
     //wUpperHBox2.pack_start(wShowChordButton,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wAddToggle,Gtk::PACK_SHRINK);
@@ -213,11 +214,11 @@ void SequencerWidget::SelectSeq(seqHandle h){
     AnythingSelected = 1;
     selectedSeq = h;
     selectedSeqType = seqH(h)->GetType();
+    LeaveAddMode();
     if(selectedSeqType == SEQ_TYPE_NOTE){
         NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seqH(h));
         chordwidget.Select(&noteseq->chord);
     }
-    LeaveAddMode();
     UpdateEverything();
     Diodes_AllOff();
 }
@@ -232,21 +233,44 @@ void SequencerWidget::SelectNothing(){
 void SequencerWidget::UpdateEverything(){
     *dbg << "SeqencerWidget - Updating everything\n";
     if (AnythingSelected){
-        UpdateShowChord();
-        UpdateChannel();
-        UpdateOnOff(); //will also update colour
-        UpdateName();
-        InitNotebook();
-        UpdateRelLenBoxes();
-        UpdateActivePattern();
-        UpdateActivePatternRange();
-        UpdateChord();
+        
+        HideAndShowWidgetsDependingOnSeqType();
+        
+        if(selectedSeqType == SEQ_TYPE_NOTE){
+                UpdateShowChord();
+                UpdateChannel();
+                UpdateOnOff(); //will also update colour
+                UpdateName();
+                InitNotebook();
+                UpdateRelLenBoxes();
+                UpdateActivePattern();
+                UpdateActivePatternRange();
+                UpdateChord();
+        }else if(selectedSeqType == SEQ_TYPE_CONTROL){
+                UpdateChannel();
+                UpdateOnOff(); //will also update colour
+                UpdateName();
+                InitNotebook();
+                UpdateRelLenBoxes();
+                UpdateActivePattern();
+                UpdateActivePatternRange();
+        }
     }else{
 
     }
-    
-    
 }
+
+void SequencerWidget::HideAndShowWidgetsDependingOnSeqType(){
+    if(!AnythingSelected) return;
+    if(selectedSeqType == SEQ_TYPE_NOTE){
+        wShowChordButton.show();
+    }else if(selectedSeqType == SEQ_TYPE_CONTROL){
+        chordwidget.UnSelect();
+        chordwidget.SetExpandDetails(0);
+        wShowChordButton.hide();
+    }
+}
+
 void SequencerWidget::UpdateOnOff(){
     if (AnythingSelected == 0) return;
     Sequencer* seq = seqH(selectedSeq);
@@ -355,8 +379,8 @@ void SequencerWidget::UpdatePatternWidget(int pattern){
     //if called without parameter...:
     if (pattern == -1) pattern = wNotebook.get_current_page();
     Sequencer* seq = seqH(selectedSeq);
-    *dbg<<"Assigining pattern no. " << pattern << ENDL;
-    pattern_widget.AssignPattern(&seq->patterns[pattern]);
+    *dbg<<"Assigining pattern no. " << pattern << ", type: " << ((selectedSeqType == SEQ_TYPE_NOTE)?"Note":"Control") << ENDL;
+    pattern_widget.AssignPattern(&seq->patterns[pattern],selectedSeqType);
     pattern_widget.SetInternalHeight(chordwidget.get_height());
 }
 

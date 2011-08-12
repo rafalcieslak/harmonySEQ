@@ -69,8 +69,7 @@ void PatternWidget::ZoomOut(){
 }
 
 void PatternWidget::EnterAddMode(){
-    selection.clear();
-    on_selection_changed.emit(0);
+    ClearSelection();
     add_mode = 1;
 }
 void PatternWidget::LeaveAddMode(){
@@ -81,15 +80,15 @@ bool PatternWidget::GetAddMode(){
     return add_mode;
 }
 
-void PatternWidget::AssignPattern(AtomContainer* cont){
+void PatternWidget::AssignPattern(AtomContainer* cont, SeqType_t type){
     *dbg << "assigning pattern \n";
     container = cont;
-    selection.clear();
-    on_selection_changed.emit(0);
-    Redraw();
+    seq_type = type;
+    ClearSelection();
 }
 
 void PatternWidget::ClearSelection(){
+    //Note that clearing selection must not delete the pointers - notes are still kept in aproprieate AtomContainer
     selection.clear();
     on_selection_changed.emit(0);
     Redraw();

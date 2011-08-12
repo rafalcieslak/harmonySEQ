@@ -22,15 +22,18 @@
 
 ControlSequencer::ControlSequencer()
                                                                 : Sequencer(){
+    controller_number = 1;
 }
 
 ControlSequencer::ControlSequencer(Glib::ustring _name0)
                                                                 : Sequencer(_name0){
+    controller_number = 1;
     
 }
 
 ControlSequencer::ControlSequencer(const ControlSequencer& orig)
                                                                 : Sequencer(orig){
+    controller_number = orig.controller_number;
 }
 
 

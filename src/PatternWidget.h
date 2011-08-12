@@ -22,6 +22,7 @@
 #include "gtkmm.h"
 #include <set>
 #include "AtomContainer.h"
+#include "Sequencer.h"
 
 /**PatternWidget is basically a GUI for NoteContainer, that uses DrawingArea to display a piano-roll interface.*/
 class PatternWidget : public Gtk::DrawingArea {
@@ -32,7 +33,7 @@ public:
     
     void Redraw();
     
-    void AssignPattern(AtomContainer* cont);
+    void AssignPattern(AtomContainer* cont, SeqType_t type);
     
     void ZoomIn();
     void ZoomOut();
@@ -96,7 +97,9 @@ private:
     void DeleteNth(int n);
     int internal_height;
     double vert_size; //used to controll zooming
+    
     AtomContainer* container;
+    SeqType_t seq_type;
     
     void InitDrag();
     void ProcessDrag(double x, double y,bool shift_key=false);

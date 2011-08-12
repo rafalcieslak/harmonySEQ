@@ -90,6 +90,8 @@ private:
     void DetachLines();
     */
     void UpdatePatternWidget(int pattern=-1);
+    /**This comment is absolutelly unnecessary, the function name speaks by itself.*/
+    void HideAndShowWidgetsDependingOnSeqType();
 
     enum OnOffColour{
         NONE,
@@ -143,11 +145,15 @@ private:
     Gtk::HBox wPtOpsHBox1;
     Gtk::HBox wPtOpsHBox2;
     Gtk::VBox wBoxOfChord;
+    Gtk::VBox wRightBox;
+    Gtk::HBox wRightBox1;
+    Gtk::HBox wRightBox2;
     Gtk::HBox wClearPatternHBox;
     Gtk::EventBox wOnOfColour;
 
     Gtk::HSeparator wHSep;
-    Gtk::VSeparator wVSep;
+    Gtk::VSeparator wRightBoxSep;
+    Gtk::VSeparator wChannelSep;
 
     Gtk::Notebook wNotebook;
     Gtk::VBox wNotebookVbox;

@@ -31,6 +31,8 @@ public:
     virtual Sequencer* Clone(); //virtual copy constructor
     
     virtual SeqType_t GetType();
+    
+    int controller_number;
 private:
 
 };

@@ -40,7 +40,7 @@ MainWindow::MainWindow()
     set_border_width(0);
     //set_resizable(0);
     set_default_size(950,600);
-    set_size_request(600,450); //minimum size
+    set_size_request(900,450); //minimum size
     //set_resizable(0);
     UpdateTitle();
 

@@ -36,10 +36,10 @@ Gtk::TreeModel::Row spawn_sequencer(SeqType_t type){
             return spawn_control_sequencer();
             break;
         case SEQ_TYPE_NOTE:
+        default:
             return spawn_note_sequencer();
             break;
     }
-    
 }
 
 
