@@ -50,6 +50,7 @@
       <itemPath>src/Chord.cpp</itemPath>
       <itemPath>src/ChordWidget.cpp</itemPath>
       <itemPath>src/Configuration.cpp</itemPath>
+      <itemPath>../Programy/harmonySEQ/trunk/src/ControlSequencer.cpp</itemPath>
       <itemPath>src/ControllerAtom.cpp</itemPath>
       <itemPath>src/Event.cpp</itemPath>
       <itemPath>src/EventGUI.cpp</itemPath>
@@ -84,6 +85,7 @@
       <itemPath>Makefile.am</itemPath>
       <itemPath>src/Makefile.am</itemPath>
     </logicalFolder>
+    <itemPath>../Programy/harmonySEQ/trunk/src/ControlSequencer.h</itemPath>
   </logicalFolder>
   <sourceRootList>
     <Elem>src</Elem>

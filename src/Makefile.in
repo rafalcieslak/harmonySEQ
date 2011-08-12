@@ -70,7 +70,8 @@ am_harmonySEQ_OBJECTS = harmonySEQ-main.$(OBJEXT) \
 	harmonySEQ-ControllerAtom.$(OBJEXT) \
 	harmonySEQ-AtomContainer.$(OBJEXT) \
 	harmonySEQ-PatternWidget.$(OBJEXT) \
-	harmonySEQ-NoteSequencer.$(OBJEXT)
+	harmonySEQ-NoteSequencer.$(OBJEXT) \
+	harmonySEQ-ControlSequencer.$(OBJEXT)
 harmonySEQ_OBJECTS = $(am_harmonySEQ_OBJECTS)
 am__DEPENDENCIES_1 =
 @DISABLEOSC_FALSE@harmonySEQ_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -241,7 +242,8 @@ harmonySEQ_SOURCES = main.cpp\
 						ControllerAtom.cpp \
 						AtomContainer.cpp \
 						PatternWidget.cpp \
-						NoteSequencer.cpp
+						NoteSequencer.cpp \
+						ControlSequencer.cpp
 
 harmonySEQ_CPPFLAGS = $(GTKMM_CFLAGS) $(ADD_DEF) -Wall -g -O3
 @DISABLEOSC_FALSE@harmonySEQ_LDADD = $(GTKMM_LIBS) -lgthread-2.0 -lasound -llo
@@ -355,6 +357,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-Chord.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-ChordWidget.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-Configuration.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-ControlSequencer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-ControllerAtom.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-Event.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-EventGUI.Po@am__quote@
@@ -753,6 +756,20 @@ harmonySEQ-NoteSequencer.obj: NoteSequencer.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-NoteSequencer.obj `if test -f 'NoteSequencer.cpp'; then $(CYGPATH_W) 'NoteSequencer.cpp'; else $(CYGPATH_W) '$(srcdir)/NoteSequencer.cpp'; fi`
 
+harmonySEQ-ControlSequencer.o: ControlSequencer.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-ControlSequencer.o -MD -MP -MF $(DEPDIR)/harmonySEQ-ControlSequencer.Tpo -c -o harmonySEQ-ControlSequencer.o `test -f 'ControlSequencer.cpp' || echo '$(srcdir)/'`ControlSequencer.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-ControlSequencer.Tpo $(DEPDIR)/harmonySEQ-ControlSequencer.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ControlSequencer.cpp' object='harmonySEQ-ControlSequencer.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-ControlSequencer.o `test -f 'ControlSequencer.cpp' || echo '$(srcdir)/'`ControlSequencer.cpp
+
+harmonySEQ-ControlSequencer.obj: ControlSequencer.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-ControlSequencer.obj -MD -MP -MF $(DEPDIR)/harmonySEQ-ControlSequencer.Tpo -c -o harmonySEQ-ControlSequencer.obj `if test -f 'ControlSequencer.cpp'; then $(CYGPATH_W) 'ControlSequencer.cpp'; else $(CYGPATH_W) '$(srcdir)/ControlSequencer.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-ControlSequencer.Tpo $(DEPDIR)/harmonySEQ-ControlSequencer.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ControlSequencer.cpp' object='harmonySEQ-ControlSequencer.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-ControlSequencer.obj `if test -f 'ControlSequencer.cpp'; then $(CYGPATH_W) 'ControlSequencer.cpp'; else $(CYGPATH_W) '$(srcdir)/ControlSequencer.cpp'; fi`
+
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
 	unique=`for i in $$list; do \
@@ -951,7 +968,7 @@ uninstall-am: uninstall-binPROGRAMS
 	mostlyclean-compile mostlyclean-generic pdf pdf-am ps ps-am \
 	tags uninstall uninstall-am uninstall-binPROGRAMS
 
-						MainWindow.h MidiDriver.h Sequencer.h messages.h Files.h global.h Event.h EventGUI.h Action.h ActionGUI.h TreeModels.h Chord.h ChordWidget.h Configuration.h SettingsWindow.h seqHandle.h SequencerWidget.h EventsWidget.h OSC.h Atom.h NoteAtom.h ControllerAtom.h AtomContainer.h AtomContainer.h PatternWidget.h NoteSequencer.h\
+						MainWindow.h MidiDriver.h Sequencer.h messages.h Files.h global.h Event.h EventGUI.h Action.h ActionGUI.h TreeModels.h Chord.h ChordWidget.h Configuration.h SettingsWindow.h seqHandle.h SequencerWidget.h EventsWidget.h OSC.h Atom.h NoteAtom.h ControllerAtom.h AtomContainer.h AtomContainer.h PatternWidget.h NoteSequencer.h ControlSequencer.cpp\
 						gettext.h
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

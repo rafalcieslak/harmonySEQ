@@ -46,6 +46,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/Sequencer.o \
 	${OBJECTDIR}/src/SequencerWidget.o \
 	${OBJECTDIR}/src/Atom.o \
+	${OBJECTDIR}/_ext/1045285602/ControlSequencer.o \
 	${OBJECTDIR}/src/Configuration.o \
 	${OBJECTDIR}/src/messages.o \
 	${OBJECTDIR}/_ext/1045285602/SettingsWindow.o \
@@ -145,6 +146,11 @@ ${OBJECTDIR}/src/Atom.o: src/Atom.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Atom.o src/Atom.cpp
+
+${OBJECTDIR}/_ext/1045285602/ControlSequencer.o: ../Programy/harmonySEQ/trunk/src/ControlSequencer.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1045285602
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1045285602/ControlSequencer.o ../Programy/harmonySEQ/trunk/src/ControlSequencer.cpp
 
 ${OBJECTDIR}/src/Configuration.o: src/Configuration.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
