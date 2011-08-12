@@ -204,7 +204,6 @@ SequencerWidget::SequencerWidget()
 SequencerWidget::~SequencerWidget(){
     do_not_react_on_page_changes = 1;
     for(int x = 0; x < (int) notebook_pages.size();x++) delete notebook_pages[x]; //TODO: check if they need to be removed from notebook first.
-    for (int x = 0; x < (int) note_separators.size();x++) delete note_separators[x];
     delete wViewport;
 }
 

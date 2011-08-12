@@ -156,7 +156,6 @@ private:
     Gtk::Viewport* wViewport; //must be a pointer, as constructor needs agruments
     Gtk::HScrollbar wPatternScroll;
     Gtk::VScrollbar wPatternScroll2;
-    std::vector<Gtk::VSeparator*> note_separators;
     Gtk::SpinButton wChannelButton;
     Gtk::SpinButton wVelocityButton;
     Gtk::SpinButton wActivePattern;

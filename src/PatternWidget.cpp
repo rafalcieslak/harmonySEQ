@@ -25,6 +25,8 @@
 #include "Sequencer.h"
 #include "Event.h"
 
+int resolution_hints[33] = {1,1,2,3,2,5,3,7,4,3,5,11,3,13,7,5,4,17,6,19,5,7,11,23,6,5,13,9,7,29,5,31,4};
+
 
 PatternWidget::PatternWidget(){
     internal_height=50; //random guess. will be reset soon anyway by the SequencerWidget, but better protect from 0-like values.
@@ -697,16 +699,22 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
   }
   
   //vertical grid
-  ct.set_line_width(1);
-  ct.set_source_rgb(0.3,0.3,0.2);
-  for(int x = 0; x <= resolution; x++){
-        if (x!=resolution){
-                ct.move_to((int)((double)x*(double)width/resolution) + 0.5,0);
-                ct.line_to((int)((double)x*(double)width/resolution) + 0.5,internal_height);
-        }else{
-                ct.move_to((int)((double)x*(double)width/resolution) - 0.5,0);
-                ct.line_to((int)((double)x*(double)width/resolution) - 0.5,internal_height); //the last one must be in drawing area, so let's put it a 1 px before
-        }  
+  int hints = resolution_hints[resolution];
+  for(int x = 0; x <= resolution; x++) {
+        if (x % hints == 0) {
+            ct.set_line_width(1.5);
+            ct.set_source_rgb(0.0, 0.5, 0.0);//hint colour
+        } else {
+            ct.set_line_width(1.0);
+            ct.set_source_rgb(0.5, 0.5, 0.4);//normal grid colour
+        }
+        if (x != resolution) {
+            ct.move_to((int) ((double) x * (double) width / resolution) + 0.5, 0);
+            ct.line_to((int) ((double) x * (double) width / resolution) + 0.5, internal_height);
+        } else {
+            ct.move_to((int) ((double) x * (double) width / resolution) - 0.5, 0);
+            ct.line_to((int) ((double) x * (double) width / resolution) - 0.5, internal_height); //the last one must be in drawing area, so let's put it a 1 px before
+        }
         ct.stroke();
   }
   
