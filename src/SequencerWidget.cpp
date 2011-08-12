@@ -187,14 +187,14 @@ SequencerWidget::SequencerWidget()
     wResolutions.set_increments(1.0,4.0);
     wResolutions.set_width_chars(2);
     wResolutions.set_tooltip_markup(_("Selects the <b>resolution</b> of this sequencer. It defines the grid density in this sequencer's patterns."));
-    wResolutions.signal_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnResolutionChanged));
+    wResolutions.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnResolutionChanged));
 
 
     wLengthsLabel.set_text(_("Length:"));
     
-    wLengthNumerator.set_tooltip_markup(_("Selects the <b>length</b> of this sequencer. It defines <i>how many bars</i> the sequence in this sequencer will last. In case it's smaller then 1, the sequence will be repeated few times in each bar.\n\nThis it the length's fraction numerator."));
-    wLengthDenominator.set_tooltip_markup(_("Selects the <b>length</b> of this sequencer. It defines <i>how many bars</i> the sequence in this sequencer will last. In case it's smaller then 1, the sequence will be repeated few times in each bar.\n\nThis it the length's fraction denominator."));
-    wLengthResult.set_tooltip_markup(_("Selects the <b>length</b> of this sequencer. It defines <i>how many bars</i> the sequence in this sequencer will last. In case it's smaller then 1, the sequence will be repeated few times in each bar."));
+    wLengthNumerator.set_tooltip_markup(_("Selects the <b>length</b> of this sequencer. It defines <i>how many bars</i> the sequence in this sequencer will last. In case it's smaller then 1, the sequence may be repeated few times in each bar.\n\nThis it the length's fraction numerator."));
+    wLengthDenominator.set_tooltip_markup(_("Selects the <b>length</b> of this sequencer. It defines <i>how many bars</i> the sequence in this sequencer will last. In case it's smaller then 1, the sequence may be repeated few times in each bar.\n\nThis it the length's fraction denominator."));
+    wLengthResult.set_tooltip_markup(_("Selects the <b>length</b> of this sequencer. It defines <i>how many bars</i> the sequence in this sequencer will last. In case it's smaller then 1, the sequence may be repeated few times in each bar."));
     wLengthNumerator.set_increments(1.0,1.0);
     wLengthDenominator.set_increments(1.0,1.0);
     wLengthNumerator.set_width_chars(2);
@@ -202,8 +202,8 @@ SequencerWidget::SequencerWidget()
     wLengthNumerator.set_range(1.0,16.0);
     wLengthDenominator.set_range(1.0,16.0);
     wLengthDivision.set_text(" / ");
-    wLengthNumerator.signal_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnLengthChanged));
-    wLengthDenominator.signal_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnLengthChanged));
+    wLengthNumerator.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnLengthChanged));
+    wLengthDenominator.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnLengthChanged));
     
     wViewport->signal_scroll_event().connect(sigc::mem_fun(*this,&SequencerWidget::OnPatternMouseScroll));
 
