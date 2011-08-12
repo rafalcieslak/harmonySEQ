@@ -24,7 +24,7 @@
 #include "MidiDriver.h"
 #include "messages.h"
 #include "MainWindow.h"
-#include "Sequencer.h"
+#include "NoteSequencer.h"
 #include "Event.h"
 #include "Configuration.h"
 #include "SettingsWindow.h"
@@ -420,13 +420,22 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
             
             *dbg << "sm = " << start_marker << ", em = " << end_marker << ", s = " << s << ", e = " << e << ENDL;
             
+            //We know which atoms to play, so lets play them.
             if(e != -1 && s != -1 && e>=s){
-              *dbg << "-> playing from " << s << " to " << e <<  ENDL;
-              for(int V = s; V<=e;V++){
-                note = dynamic_cast<NoteAtom*>((*pattern)[V%size]);
-                int pitch = seq->GetNoteOfChord(note->pitch);
-                ScheduleNote(seq->GetChannel()-1,local_tick + (V/size)*sequence_time + note->time*TICKS_PER_NOTE*seq->GetLength(),pitch,note->velocity,note->length*TICKS_PER_NOTE*seq->GetLength());
-              }
+                  *dbg << "-> playing from " << s << " to " << e <<  ENDL;
+                  for(int V = s; V<=e;V++){
+                        note = dynamic_cast<NoteAtom*>((*pattern)[V%size]);
+                        //Determine whether to output notes or control messages
+                        if(seq->GetType() == SEQ_TYPE_NOTE){
+                                NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seq);
+                                int pitch = noteseq->GetNoteOfChord(note->pitch);
+                                ScheduleNote(seq->GetChannel()-1,local_tick + (V/size)*sequence_time + note->time*TICKS_PER_NOTE*seq->GetLength(),pitch,note->velocity,note->length*TICKS_PER_NOTE*seq->GetLength());
+                        }else if(seq->GetType() == SEQ_TYPE_CONTROL){
+                                *dbg << "outputting control messages\n";
+                        }else{
+                                *err << "Sequencer is neither note nor control type. Don't bother reporting this to harmonySEQ developers. This error message will never display, so if you see it, it means you must have broken something intentionally.\n";
+                        }
+                  }
             }
             double play_from_here_marker = Wrap(end_marker);
             //rounding to ensure sync...

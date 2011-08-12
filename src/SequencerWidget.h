@@ -76,6 +76,7 @@ public:
     
     bool AnythingSelected;
     seqHandle selectedSeq;
+    SeqType_t selectedSeqType;
 
     /**Lights aproprieate diode, where colour is 0 when normal, or 1 when alternate*/
     void Diode(int n, int colour);

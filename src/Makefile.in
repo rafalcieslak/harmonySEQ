@@ -69,7 +69,8 @@ am_harmonySEQ_OBJECTS = harmonySEQ-main.$(OBJEXT) \
 	harmonySEQ-Atom.$(OBJEXT) harmonySEQ-NoteAtom.$(OBJEXT) \
 	harmonySEQ-ControllerAtom.$(OBJEXT) \
 	harmonySEQ-AtomContainer.$(OBJEXT) \
-	harmonySEQ-PatternWidget.$(OBJEXT)
+	harmonySEQ-PatternWidget.$(OBJEXT) \
+	harmonySEQ-NoteSequencer.$(OBJEXT)
 harmonySEQ_OBJECTS = $(am_harmonySEQ_OBJECTS)
 am__DEPENDENCIES_1 =
 @DISABLEOSC_FALSE@harmonySEQ_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -85,10 +86,6 @@ CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 CXXLD = $(CXX)
 CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
 	-o $@
-COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-CCLD = $(CC)
-LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(harmonySEQ_SOURCES)
 DIST_SOURCES = $(harmonySEQ_SOURCES)
 ETAGS = etags
@@ -244,8 +241,7 @@ harmonySEQ_SOURCES = main.cpp\
 						ControllerAtom.cpp \
 						AtomContainer.cpp \
 						PatternWidget.cpp \
-						MainWindow.h MidiDriver.h Sequencer.h messages.h Files.h global.h Event.h EventGUI.h Action.h ActionGUI.h TreeModels.h Chord.h ChordWidget.h Configuration.h SettingsWindow.h seqHandle.h SequencerWidget.h EventsWidget.h OSC.h Atom.h NoteAtom.h ControllerAtom.h AtomContainer.h AtomContainer.h PatternWidget.h\
-						gettext.h
+						NoteSequencer.cpp
 
 harmonySEQ_CPPFLAGS = $(GTKMM_CFLAGS) $(ADD_DEF) -Wall -g -O3
 @DISABLEOSC_FALSE@harmonySEQ_LDADD = $(GTKMM_LIBS) -lgthread-2.0 -lasound -llo
@@ -367,6 +363,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-MainWindow.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-MidiDriver.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-NoteAtom.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-NoteSequencer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-OSC.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-PatternWidget.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-Sequencer.Po@am__quote@
@@ -742,6 +739,20 @@ harmonySEQ-PatternWidget.obj: PatternWidget.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-PatternWidget.obj `if test -f 'PatternWidget.cpp'; then $(CYGPATH_W) 'PatternWidget.cpp'; else $(CYGPATH_W) '$(srcdir)/PatternWidget.cpp'; fi`
 
+harmonySEQ-NoteSequencer.o: NoteSequencer.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-NoteSequencer.o -MD -MP -MF $(DEPDIR)/harmonySEQ-NoteSequencer.Tpo -c -o harmonySEQ-NoteSequencer.o `test -f 'NoteSequencer.cpp' || echo '$(srcdir)/'`NoteSequencer.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-NoteSequencer.Tpo $(DEPDIR)/harmonySEQ-NoteSequencer.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='NoteSequencer.cpp' object='harmonySEQ-NoteSequencer.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-NoteSequencer.o `test -f 'NoteSequencer.cpp' || echo '$(srcdir)/'`NoteSequencer.cpp
+
+harmonySEQ-NoteSequencer.obj: NoteSequencer.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-NoteSequencer.obj -MD -MP -MF $(DEPDIR)/harmonySEQ-NoteSequencer.Tpo -c -o harmonySEQ-NoteSequencer.obj `if test -f 'NoteSequencer.cpp'; then $(CYGPATH_W) 'NoteSequencer.cpp'; else $(CYGPATH_W) '$(srcdir)/NoteSequencer.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-NoteSequencer.Tpo $(DEPDIR)/harmonySEQ-NoteSequencer.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='NoteSequencer.cpp' object='harmonySEQ-NoteSequencer.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-NoteSequencer.obj `if test -f 'NoteSequencer.cpp'; then $(CYGPATH_W) 'NoteSequencer.cpp'; else $(CYGPATH_W) '$(srcdir)/NoteSequencer.cpp'; fi`
+
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
 	unique=`for i in $$list; do \
@@ -940,6 +951,8 @@ uninstall-am: uninstall-binPROGRAMS
 	mostlyclean-compile mostlyclean-generic pdf pdf-am ps ps-am \
 	tags uninstall uninstall-am uninstall-binPROGRAMS
 
+						MainWindow.h MidiDriver.h Sequencer.h messages.h Files.h global.h Event.h EventGUI.h Action.h ActionGUI.h TreeModels.h Chord.h ChordWidget.h Configuration.h SettingsWindow.h seqHandle.h SequencerWidget.h EventsWidget.h OSC.h Atom.h NoteAtom.h ControllerAtom.h AtomContainer.h AtomContainer.h PatternWidget.h NoteSequencer.h\
+						gettext.h
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010 Rafał Cieślak
+    Copyright (C) 2010, 2011 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -28,20 +28,26 @@
 using namespace std;
 
 /**Spawns a new sequencer*/
-Gtk::TreeModel::Row spawn_sequencer();
+Gtk::TreeModel::Row spawn_note_sequencer();
 /**Spawns a new sequencer, identical to the one specified as arg*/
 Gtk::TreeModel::Row clone_sequencer(int orig);
 /**Clears the list of sequencers, removing every sequencer*/
 void ClearSequencers();
 
+enum SeqType_t{
+    SEQ_TYPE_NOTE,
+    SEQ_TYPE_CONTROL
+};
+    
 class Sequencer {
 public:
 
     /**Sequencer constructor*/
     Sequencer();
     Sequencer(Glib::ustring _name0);
-    Sequencer(const Sequencer* orig);
+    Sequencer(const Sequencer& orig);
     virtual ~Sequencer();
+    virtual Sequencer* Clone() = 0; //virtual copy constructor
 
     /**List of  patterns.
      *    Each pattern is an AtomContainer, which basically
@@ -50,13 +56,13 @@ public:
 
     int AddPattern();
     bool RemovePattern(int x);
-    /**The main chord*/
-   Chord chord;
+    
+    virtual SeqType_t GetType() = 0;
     
     /**Fills in everything with default values*/
-    void Init();
+    virtual void Init();
 
-    /**Stores the resolution of sequence. Note it should be used only to store in file, the actual resolution is no more used - that's graphical.*/
+    /**Stores the resolution of sequence. Note it should be used only to store in file, the actual resolution is no more used - that's graphical only.*/
     int resolution;
 
     /**Used to change resolution of this sequencer*/
@@ -74,10 +80,6 @@ public:
     int GetActivePatternNumber();
     
     AtomContainer* GetActivePattern();
-    
-    /**Returns a one note of chord of this sequencer
-     *  @parram n note number*/
-    int GetNoteOfChord(int n);
 
     /**Sets the sequencer on/off*/
     void SetOn(bool m);
@@ -97,9 +99,6 @@ public:
     /**Returns channel*/
     int GetChannel();
 
-    /**Changes the pattern that is played by this sequencer*/
-    void ChangeActivePattern(int new_one);
-
     int GetPlayOncePhase();
     void SetPlayOncePhase(int p);
 
@@ -114,8 +113,6 @@ public:
 
     /**Remembers the handle to this sequencer.*/
     seqHandle MyHandle;
-
-    bool expand_chord;
     
 protected:
 

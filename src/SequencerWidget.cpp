@@ -25,6 +25,7 @@
 #include "MidiDriver.h"
 #include "global.h"
 #include "MainWindow.h"
+#include "NoteSequencer.h"
 
 SequencerWidget::SequencerWidget()
                 : wImageAdd(Gtk::Stock::ADD,Gtk::ICON_SIZE_BUTTON), wImageRemove(Gtk::Stock::REMOVE,Gtk::ICON_SIZE_BUTTON)
@@ -211,7 +212,11 @@ void SequencerWidget::SelectSeq(seqHandle h){
     *dbg << "SeqencerWidget - selected " << h << "\n";
     AnythingSelected = 1;
     selectedSeq = h;
-    chordwidget.Select(&seqH(h)->chord);
+    selectedSeqType = seqH(h)->GetType();
+    if(selectedSeqType == SEQ_TYPE_NOTE){
+        NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seqH(h));
+        chordwidget.Select(&noteseq->chord);
+    }
     LeaveAddMode();
     UpdateEverything();
     Diodes_AllOff();
@@ -274,12 +279,12 @@ void SequencerWidget::UpdateChord(){
 }
 
 void SequencerWidget::UpdateShowChord(){
-    if (AnythingSelected == 0) return;
-    Sequencer* seq = seqH(selectedSeq);
+    if (AnythingSelected == 0 || selectedSeqType != SEQ_TYPE_NOTE) return;
+    NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seqH(selectedSeq));
     ignore_signals = 1;
-    wShowChordButton.set_active(seq->expand_chord);
+    wShowChordButton.set_active(noteseq->expand_chord);
     ignore_signals = 0;
-    chordwidget.SetExpandDetails(seq->expand_chord);
+    chordwidget.SetExpandDetails(noteseq->expand_chord);
 }
 
 void SequencerWidget::UpdateRelLenBoxes(){
@@ -528,7 +533,6 @@ void SequencerWidget::OnRemovePatternClicked(){
     wNotebook.remove(*notebook_pages[n]);
     delete notebook_pages[n];
     notebook_pages.erase(notebook_pages.begin()+n);
-    *err<<"!!!Erasing pattern\n";
     seq->patterns.erase(seq->patterns.begin()+n);
     do_not_react_on_page_changes = 0;
     if (seq->GetActivePatternNumber() == n ) { seq->SetActivePatternNumber(0);wActivePattern.set_value(0.0);}
@@ -621,10 +625,10 @@ void SequencerWidget::OnDeleteClicked(){
 
 void SequencerWidget::OnShowChordButtonClicked(){
     if(ignore_signals) return;
-    if(!AnythingSelected) return;
-    Sequencer* seq = seqH(selectedSeq);
+    if(!AnythingSelected || selectedSeqType != SEQ_TYPE_NOTE) return;
+    NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seqH(selectedSeq));
     bool show = wShowChordButton.get_active();
-    seq->expand_chord = show;
+    noteseq->expand_chord = show;
     chordwidget.SetExpandDetails(show);
 }
 

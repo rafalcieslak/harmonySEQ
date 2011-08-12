@@ -21,7 +21,7 @@
 #include "messages.h"
 #include "global.h"
 #include "MidiDriver.h"
-#include "Sequencer.h"
+#include "NoteSequencer.h"
 #include "Files.h"
 #include "Event.h"
 #include "TreeModels.h"
@@ -390,24 +390,31 @@ Gtk::TreeModel::Row MainWindow::AddSequencerRow(int x)
     *dbg << "wooho! sequener " << x << " was just added, and we have to add it now to a new row in the model!" << ENDL;
     Gtk::TreeModel::iterator iter = TreeModel_sequencers->append();
     Gtk::TreeModel::Row row = *(iter);
-    row[m_columns_sequencers.col_handle] = seqV(x)->MyHandle;
-    row[m_columns_sequencers.col_name] = seqVector[x]->GetName();
-    row[m_columns_sequencers.col_muted] = seqVector[x]->GetOn();
-    row[m_columns_sequencers.col_channel] = seqVector[x]->GetChannel();
-    row[m_columns_sequencers.col_pattern] = seqVector[x]->GetActivePatternNumber();
-    row[m_columns_sequencers.col_res] = seqVector[x]->resolution;
-    row[m_columns_sequencers.col_len] = seqVector[x]->GetLength();
-    row[m_columns_sequencers.col_chord] = seqVector[x]->chord.GetName();
-    if(seqVector[x]->GetOn()){
+    Sequencer* seq = seqV(x);
+    row[m_columns_sequencers.col_handle] = seq->MyHandle;
+    row[m_columns_sequencers.col_name] = seq->GetName();
+    row[m_columns_sequencers.col_muted] = seq->GetOn();
+    row[m_columns_sequencers.col_channel] = seq->GetChannel();
+    row[m_columns_sequencers.col_pattern] = seq->GetActivePatternNumber();
+    row[m_columns_sequencers.col_res] = seq->resolution;
+    row[m_columns_sequencers.col_len] = seq->GetLength();
+    if(seq->GetType() == SEQ_TYPE_NOTE){
+        NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seq);
+        row[m_columns_sequencers.col_chord] = noteseq->chord.GetName();
+    } else {
+        row[m_columns_sequencers.col_chord] = " --- ";
+    }
+    
+    if(seq->GetOn()){
         row[m_columns_sequencers.col_colour] = "green1";
-    }else if (seqVector[x]->GetPlayOncePhase() == 2 || seqVector[x]->GetPlayOncePhase() == 3){
+    }else if (seq->GetPlayOncePhase() == 2 || seq->GetPlayOncePhase() == 3){
         row[m_columns_sequencers.col_colour] = "yellow1";
-    }else if(seqVector[x]->GetPlayOncePhase()== 1){
+    }else if(seq->GetPlayOncePhase()== 1){
         row[m_columns_sequencers.col_colour] = "gold";
     }else{
         row[m_columns_sequencers.col_colour] = "white";
     }
-    seqVector[x]->my_row = row;
+    seq->my_row = row;
     return row;
 }
 
@@ -421,27 +428,35 @@ void MainWindow::InitTreeData(){
     for (unsigned int x = 0; x < seqVector.size(); x++) {
         if (!seqV(x)) continue; //seems it was removed
         Gtk::TreeModel::iterator iter = TreeModel_sequencers->append();
+        register Sequencer* seq = seqV(x);
         row = *(iter);
-        row[m_columns_sequencers.col_handle] = seqV(x)->MyHandle;
-        row[m_columns_sequencers.col_muted] = seqV(x)->GetOn();
-        row[m_columns_sequencers.col_name] = seqV(x)->GetName();
-        row[m_columns_sequencers.col_channel] = seqV(x)->GetChannel();
-        row[m_columns_sequencers.col_res] = seqV(x)->resolution;
-        row[m_columns_sequencers.col_pattern] = seqV(x)->GetActivePatternNumber();
-        row[m_columns_sequencers.col_len] = seqV(x)->GetLength();
-        row[m_columns_sequencers.col_chord] = seqV(x)->chord.GetName();
+        row[m_columns_sequencers.col_handle] = seq->MyHandle;
+        row[m_columns_sequencers.col_muted] = seq->GetOn();
+        row[m_columns_sequencers.col_name] = seq->GetName();
+        row[m_columns_sequencers.col_channel] = seq->GetChannel();
+        row[m_columns_sequencers.col_res] = seq->resolution;
+        row[m_columns_sequencers.col_pattern] = seq->GetActivePatternNumber();
+        row[m_columns_sequencers.col_len] = seq->GetLength();
+        
+        if(seq->GetType() == SEQ_TYPE_NOTE){
+            NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seq);
+            row[m_columns_sequencers.col_chord] = noteseq->chord.GetName();
+        } else {
+            row[m_columns_sequencers.col_chord] = " --- ";
+        }
+        
+        if(seq->GetOn()){
+            row[m_columns_sequencers.col_colour] = "green1";
+        }else if (seq->GetPlayOncePhase() == 2 || seq->GetPlayOncePhase() == 3){
+            row[m_columns_sequencers.col_colour] = "yellow1";
+        }else if(seq->GetPlayOncePhase()== 1){
+            row[m_columns_sequencers.col_colour] = "gold";
+        }else{
+            row[m_columns_sequencers.col_colour] = "white";
+        }
+        
         seqV(x)->my_row = row;
-    if(seqV(x)->GetOn()){
-        row[m_columns_sequencers.col_colour] = "green1";
-    }else if (seqV(x)->GetPlayOncePhase() == 2 || seqV(x)->GetPlayOncePhase() == 3){
-        row[m_columns_sequencers.col_colour] = "yellow1";
-    }else if(seqV(x)->GetPlayOncePhase()== 1){
-        row[m_columns_sequencers.col_colour] = "gold";
-    }else{
-        row[m_columns_sequencers.col_colour] = "white";
-    }
         rowcount++;
-
     }
 
 }
@@ -457,7 +472,7 @@ void MainWindow::RefreshRow(Gtk::TreeRow row){
     //*dbg << "Refreshing ROW, the handle ";
     seqHandle h = row[m_columns_sequencers.col_handle];
     //*dbg << h << ENDL;
-    Sequencer* seq = seqH(h);
+    register Sequencer* seq = seqH(h);
     
     row[m_columns_sequencers.col_muted] = seq->GetOn();
     row[m_columns_sequencers.col_name] = seq->GetName();
@@ -465,7 +480,14 @@ void MainWindow::RefreshRow(Gtk::TreeRow row){
     row[m_columns_sequencers.col_res] = seq->resolution;
     row[m_columns_sequencers.col_pattern] = seq->GetActivePatternNumber();
     row[m_columns_sequencers.col_len] = seq->GetLength();
-    row[m_columns_sequencers.col_chord] = seq->chord.GetName();
+    
+    if(seq->GetType() == SEQ_TYPE_NOTE){
+        NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seq);
+        row[m_columns_sequencers.col_chord] = noteseq->chord.GetName();
+    } else {
+        row[m_columns_sequencers.col_chord] = " --- ";
+    }
+    
     if(seq->GetOn()){
         row[m_columns_sequencers.col_colour] = "green1";
     }else if (seq->GetPlayOncePhase() == 2 || seq->GetPlayOncePhase() == 3){
@@ -502,7 +524,7 @@ void MainWindow::OnRemoveClicked(){
 void MainWindow::OnAddSeqClicked(){
 
     seq_list_drag_in_progress = 0; //important
-    Gtk::TreeModel::Row row = spawn_sequencer();
+    Gtk::TreeModel::Row row = spawn_note_sequencer();
     
     wTreeView.get_selection()->select(row);
 

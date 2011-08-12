@@ -18,7 +18,7 @@
 */
 
 #include "Action.h"
-#include "Sequencer.h"
+#include "NoteSequencer.h"
 #include "MainWindow.h"
 #include "messages.h"
 #include "MidiDriver.h"
@@ -50,6 +50,7 @@ void Action::Trigger(int data){
     mainwindow->eventsWidget.ColorizeAction(row_in_event_widget);
 #endif
 
+    NoteSequencer* noteseq; //may be needed, declaring before switch
     //Reactions depend on action type.
     switch (type){
         case SEQ_ON_OFF_TOGGLE:
@@ -76,14 +77,16 @@ void Action::Trigger(int data){
             break;
 
         case SEQ_CHANGE_ONE_NOTE:
-            if (seqVector.size()==0 || !seqH(args[1])) break;
-            seqH(args[1])->chord.SetNote(args[2]-1, args[3]);
+            if (seqVector.size()==0 || !seqH(args[1] || seqH(args[1])->GetType() != SEQ_TYPE_NOTE)) break;
+            noteseq = dynamic_cast<NoteSequencer*>(seqH(args[1]));
+            noteseq->chord.SetNote(args[2]-1, args[3]);
             Files::SetFileModified(1);
             break;
 
         case SEQ_CHANGE_CHORD:
-            if (seqVector.size()==0 || !seqH(args[1])) break;
-            seqH(args[1])->chord.Set(chord,!args[3]);
+            if (seqVector.size()==0 || !seqH(args[1]  || seqH(args[1])->GetType() != SEQ_TYPE_NOTE)) break;
+            noteseq = dynamic_cast<NoteSequencer*>(seqH(args[1]));
+            noteseq->chord.Set(chord,!args[3]);
             mainwindow->RefreshRow(seqH(args[1])->my_row);
             if(mainwindow->seqWidget.selectedSeq == args[1]) mainwindow->seqWidget.UpdateChord();;
             Files::SetFileModified(1);
@@ -122,14 +125,15 @@ void Action::Trigger(int data){
             break;
         case SEQ_CHANGE_PATTERN:
             if (seqVector.size()==0 || !seqH(args[1])) break;
-            seqH(args[1])->ChangeActivePattern(args[2]);
+            seqH(args[1])->SetActivePatternNumber(args[2]);
             mainwindow->RefreshRow(seqH(args[1])->my_row);
             if(mainwindow->seqWidget.selectedSeq == args[1]) mainwindow->seqWidget.UpdateActivePattern()
             ;
             break;
         case SEQ_TRANSPOSE_OCTAVE:
-            if (seqVector.size()==0 || !seqH(args[1])) break;
-            seqH(args[1])->chord.SetBaseOctave(seqH(args[1])->chord.GetBaseOctave()+args[2]);
+            if (seqVector.size()==0 || !seqH(args[1]  || seqH(args[1])->GetType() != SEQ_TYPE_NOTE)) break;
+            noteseq = dynamic_cast<NoteSequencer*>(seqH(args[1]));
+            noteseq->chord.SetBaseOctave(noteseq->chord.GetBaseOctave()+args[2]);
             mainwindow->RefreshRow(seqH(args[1])->my_row);
             if(mainwindow->seqWidget.selectedSeq == args[1]) mainwindow->seqWidget.UpdateChord();;
             Files::SetFileModified(1);

@@ -23,20 +23,21 @@
 #include "seqHandle.h"
 #include "AtomContainer.h"
 #include "NoteAtom.h"
+#include "NoteSequencer.h"
 extern debug *dbg;
 
 extern MainWindow* mainwindow;
 extern vector<Sequencer *> seqVector;
 
 
-Gtk::TreeModel::Row spawn_sequencer(){
+Gtk::TreeModel::Row spawn_note_sequencer(){
     int n = seqVector.size();
 
     //init and push to vector
     char temp[20];
     seqHandle h = RequestNewSeqHandle(n);
     sprintf(temp,_("seq %d"),h);
-    Sequencer *new_seq = new Sequencer(temp);
+    Sequencer *new_seq = new NoteSequencer(temp);
     seqVector.push_back(new_seq);
     new_seq->MyHandle = h;
 
@@ -47,11 +48,12 @@ Gtk::TreeModel::Row spawn_sequencer(){
 Gtk::TreeModel::Row clone_sequencer(int orig){
     int n = seqVector.size();
     
-    Sequencer *new_seq = new Sequencer(seqVector[orig]);
+    Sequencer *new_seq = seqVector[orig]->Clone();
     new_seq->SetOn(0);
-    seqVector.push_back(new_seq);
     seqHandle h = RequestNewSeqHandle(n);
     new_seq->MyHandle = h;
+    seqVector.push_back(new_seq);
+    
     return mainwindow->AddSequencerRow(n);
 
 }
@@ -69,7 +71,6 @@ Sequencer::Sequencer()
 {
     name = SEQUENCER_DEFAULT_NAME;
     resolution = SEQUENCE_DEFAULT_SIZE; //AddPattern() must know the resolution
-    AddPattern();
     Init();
 }
 
@@ -78,23 +79,20 @@ Sequencer::Sequencer(Glib::ustring _name)
 {
     name = _name;
     resolution = SEQUENCE_DEFAULT_SIZE; //AddPattern() must know the resolution
-    AddPattern();
     Init();
 }
 
-Sequencer::Sequencer(const Sequencer *orig) {
-    name = orig->name;
-    on = orig->on;
-    chord = orig->chord;
-    resolution = orig->resolution;
-    patterns = orig->patterns;
-    active_pattern = orig->active_pattern;
-    channel = orig->channel;
-    length_numerator = orig->length_numerator;
-    length_denominator = orig->length_denominator;
-    play_from_here_marker = orig->play_from_here_marker;
+Sequencer::Sequencer(const Sequencer& orig) {
+    name = orig.name;
+    on = orig.on;
+    resolution = orig.resolution;
+    patterns = orig.patterns;
+    active_pattern = orig.active_pattern;
+    channel = orig.channel;
+    length_numerator = orig.length_numerator;
+    length_denominator = orig.length_denominator;
+    play_from_here_marker = orig.play_from_here_marker;
     play_once_phase = 0;
-    expand_chord = orig->expand_chord;
 }
 
 Sequencer::~Sequencer() {
@@ -109,13 +107,8 @@ void Sequencer::Init(){
     length_denominator = 1;
     play_from_here_marker = 0.0;
     play_once_phase = 0;
-    expand_chord = 1;
     resolution = SEQUENCE_DEFAULT_SIZE;
-    chord.SetType(Chord::CHORD_TYPE_TRIAD);
-    chord.SetRoot(0);
-    chord.SetTriadMode(Chord::CHORD_TRIAD_MODE_MAJOR);
-    chord.SetBaseOctave(0);
-    chord.SetInversion(0);
+    AddPattern();
 }
 
 void Sequencer::SetResolution(int res){
@@ -140,7 +133,7 @@ int Sequencer::GetLengthDenominator(){
 }
 
 void Sequencer::SetActivePatternNumber(int a){
-    active_pattern  = a;
+    active_pattern = a%(patterns.size());
 }
 
 int Sequencer::GetActivePatternNumber(){
@@ -151,7 +144,6 @@ AtomContainer* Sequencer::GetActivePattern(){
     return &patterns[active_pattern];
 }
 
-int Sequencer::GetNoteOfChord(int n){return chord.GetNotePlusBasenote(n);}
 void Sequencer::SetOn(bool m){on = m;play_once_phase=0;}
 bool Sequencer::GetOn(){return on;}
 void Sequencer::SetChannel(int ch){channel = ch;}
@@ -171,8 +163,8 @@ int Sequencer::GetPlayOncePhase(){
 
 
 int Sequencer::AddPattern(){
-    AtomContainer notecont(this);
-    patterns.push_back(notecont);
+    AtomContainer atomcont(this);
+    patterns.push_back(atomcont);
     *dbg<< "Added pattern " << patterns.size() << ".\n";
     return patterns.size()-1;
 }
@@ -184,10 +176,6 @@ bool Sequencer::RemovePattern(int x){
 
     *dbg<< "Removed pattern " << x << ".\n";
     return 0;
-}
-
-void Sequencer::ChangeActivePattern(int new_one){
-    active_pattern = new_one%(patterns.size());
 }
 
 void Sequencer::ClearPattern(int p){

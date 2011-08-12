@@ -19,6 +19,7 @@
       <itemPath>src/MainWindow.h</itemPath>
       <itemPath>src/MidiDriver.h</itemPath>
       <itemPath>src/NoteAtom.h</itemPath>
+      <itemPath>../Programy/harmonySEQ/trunk/src/NoteSequencer.h</itemPath>
       <itemPath>../Programy/harmonySEQ/trunk/src/OSC.h</itemPath>
       <itemPath>src/PatternWidget.h</itemPath>
       <itemPath>src/Sequencer.h</itemPath>
@@ -58,6 +59,7 @@
       <itemPath>src/Makefile.am</itemPath>
       <itemPath>src/MidiDriver.cpp</itemPath>
       <itemPath>src/NoteAtom.cpp</itemPath>
+      <itemPath>../Programy/harmonySEQ/trunk/src/NoteSequencer.cpp</itemPath>
       <itemPath>../Programy/harmonySEQ/trunk/src/OSC.cpp</itemPath>
       <itemPath>src/PatternWidget.cpp</itemPath>
       <itemPath>src/Sequencer.cpp</itemPath>

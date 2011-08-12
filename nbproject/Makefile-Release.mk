@@ -58,6 +58,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/MidiDriver.o \
 	${OBJECTDIR}/src/Files.o \
 	${OBJECTDIR}/src/Event.o \
+	${OBJECTDIR}/_ext/1045285602/NoteSequencer.o \
 	${OBJECTDIR}/src/global.o
 
 
@@ -204,6 +205,11 @@ ${OBJECTDIR}/src/Event.o: src/Event.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/Event.o src/Event.cpp
+
+${OBJECTDIR}/_ext/1045285602/NoteSequencer.o: ../Programy/harmonySEQ/trunk/src/NoteSequencer.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1045285602
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1045285602/NoteSequencer.o ../Programy/harmonySEQ/trunk/src/NoteSequencer.cpp
 
 ${OBJECTDIR}/src/global.o: src/global.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
