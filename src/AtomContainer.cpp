@@ -36,8 +36,8 @@ AtomContainer::AtomContainer(Sequencer* _owner){
 AtomContainer::AtomContainer(const AtomContainer& orig){
     owner = orig.owner;
     for(int x = 0; x < (int)orig.AtmVec.size(); x++){
-        Atom atm = *orig.AtmVec[x];
-        Atom* newatm = atm.Clone();
+        Atom* atm = orig.AtmVec[x];
+        Atom* newatm = atm->Clone();
         AtmVec.push_back(newatm);
     }
 }

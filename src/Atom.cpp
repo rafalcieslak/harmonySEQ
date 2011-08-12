@@ -20,6 +20,8 @@
 #include <stdlib.h>
 
 #include "Atom.h"
+#include "messages.h"
+extern error *err;
 
 bool AtomComparison(Atom * a1, Atom * a2)
 {
@@ -51,7 +53,9 @@ Atom::Atom(const Atom&  orig){
 
 Atom::~Atom(){
 }
-
+/*
 Atom* Atom::Clone(){
+    *err << "Cloning atom as a base class. This should never happen! Please report this bug to harmonySEQ developers.\n";
     return new Atom(*this);
 }
+ */

@@ -28,7 +28,7 @@ public:
     NoteAtom(const NoteAtom& orig);
     virtual ~NoteAtom();
     
-    virtual NoteAtom* Clone();
+    NoteAtom* Clone();
     
     /**Currently - 0 to 5*/
     int pitch;

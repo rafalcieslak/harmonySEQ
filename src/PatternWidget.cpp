@@ -647,6 +647,7 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
   for (int x = container->GetSize()-1; x >= 0; x--){ //iterating backwards, to draw shades below notes
       Atom* atm = (*container)[x];
       NoteAtom* note = dynamic_cast<NoteAtom*>(atm);
+      if(note == NULL) {*err << "While drawing pattern: note = null. This should never happen! Please report this bug to harmonySEQ developers.\n"; continue;}
       double y1 = (5-note->pitch)*internal_height/6;
       double h = internal_height/6;
       double x1 = note->time*width;

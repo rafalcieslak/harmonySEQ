@@ -36,7 +36,7 @@ public:
     virtual ~Atom();
     
     /**Returns a pointer to a new identical atom*/
-    virtual Atom* Clone();
+    virtual Atom* Clone() = 0;
     
     /**Value from 0 to 1, representing relative location (in time) in parent container*/
     double time;
