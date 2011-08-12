@@ -583,14 +583,15 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
 
 bool PatternWidget::on_key_press_event(GdkEventKey* event){
     switch(event->keyval){
-        case GDK_KEY_BackSpace:
-        case GDK_KEY_Delete:
-        case GDK_KEY_KP_Delete:
+        //Note I can't use GDK_KEY_xyz macros, for they are unsupported in older versions of GTK, and harmonySEQ would fail to compile f.e. on Ubuntu Lucid Lynx.
+        case 0xff08: //backspace
+        case 0xffff: //delete
+        case 0xff9f: //keypad delete
             DeleteSelected();
            if(add_mode){ add_mode = 0; on_add_mode_changed.emit();}
             return true;
             break;
-        case GDK_KEY_Up:
+        case 0xff52: //up
             if(event->state & (1 << 0)) //shift key down
                 IncreaseSelectionVelocity();
             else
@@ -599,7 +600,7 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
            if(add_mode){ add_mode = 0; on_add_mode_changed.emit();}
             return true;
             break;
-        case GDK_KEY_Down:
+        case 0xff54: //down
             if(event->state & (1 << 0)) //shift key down
                 DecraseSelecionVelocity();
             else
@@ -608,13 +609,13 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
            if(add_mode){ add_mode = 0; on_add_mode_changed.emit();}
             return true;
             break;
-        case GDK_KEY_Right:
+        case 0xff53: //right
             MoveSelectionRight();
             
            if(add_mode){ add_mode = 0; on_add_mode_changed.emit();}
             return true;
             break;
-        case GDK_KEY_Left:
+        case 0xff51: //left
             MoveSelectionLeft();
             
            if(add_mode){ add_mode = 0; on_add_mode_changed.emit();}
