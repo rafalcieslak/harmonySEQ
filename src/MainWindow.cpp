@@ -28,6 +28,7 @@
 #include "config.h"
 #include "SettingsWindow.h"
 #include "Configuration.h"
+#include "ControlSequencer.h"
 
 bool CtrlKeyDown;
 bool ShiftKeyDown;
@@ -232,7 +233,7 @@ MainWindow::MainWindow()
         col_count = wTreeView.append_column(_("Pattern"), m_columns_sequencers.col_pattern);
         col_count = wTreeView.append_column(_("Resolution"), m_columns_sequencers.col_res);
         col_count = wTreeView.append_column_numeric(_("Length"), m_columns_sequencers.col_len,"%g");
-        col_count = wTreeView.append_column(_("Chord"), m_columns_sequencers.col_chord);
+        col_count = wTreeView.append_column(_("Chord (notes) / Ctrl. No."), m_columns_sequencers.col_chord);
 
 
         Gtk::TreeView::Column* pColumn;
@@ -400,11 +401,15 @@ Gtk::TreeModel::Row MainWindow::AddSequencerRow(int x)
     row[m_columns_sequencers.col_pattern] = seq->GetActivePatternNumber();
     row[m_columns_sequencers.col_res] = seq->resolution;
     row[m_columns_sequencers.col_len] = seq->GetLength();
+
     if(seq->GetType() == SEQ_TYPE_NOTE){
         NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seq);
         row[m_columns_sequencers.col_chord] = noteseq->chord.GetName();
-    } else {
-        row[m_columns_sequencers.col_chord] = " --- ";
+    } else if (seq->GetType() == SEQ_TYPE_CONTROL){
+        ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*>(seq);
+        char temp[20];
+        sprintf(temp,_("Ctrl %d"),ctrlseq->controller_number);
+        row[m_columns_sequencers.col_chord] = temp;
     }
     
     if(seq->GetOn()){
@@ -443,8 +448,11 @@ void MainWindow::InitTreeData(){
         if(seq->GetType() == SEQ_TYPE_NOTE){
             NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seq);
             row[m_columns_sequencers.col_chord] = noteseq->chord.GetName();
-        } else {
-            row[m_columns_sequencers.col_chord] = " --- ";
+        } else if (seq->GetType() == SEQ_TYPE_CONTROL){
+            ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*>(seq);
+            char temp[20];
+            sprintf(temp,_("Ctrl %d"),ctrlseq->controller_number);
+            row[m_columns_sequencers.col_chord] = temp;
         }
         
         if(seq->GetOn()){
@@ -486,8 +494,11 @@ void MainWindow::RefreshRow(Gtk::TreeRow row){
     if(seq->GetType() == SEQ_TYPE_NOTE){
         NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seq);
         row[m_columns_sequencers.col_chord] = noteseq->chord.GetName();
-    } else {
-        row[m_columns_sequencers.col_chord] = " --- ";
+    } else if (seq->GetType() == SEQ_TYPE_CONTROL){
+        ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*>(seq);
+        char temp[20];
+        sprintf(temp,_("Ctrl %d"),ctrlseq->controller_number);
+        row[m_columns_sequencers.col_chord] = temp;
     }
     
     if(seq->GetOn()){
@@ -869,7 +880,7 @@ void MainWindow::UpdateVisibleColumns(){
         pColumn->set_visible(Config::VisibleColumns::Length);
         col_iter++;
         pColumn = wTreeView.get_column(col_iter); //Chord
-        pColumn->set_visible(Config::VisibleColumns::Chord);
+        pColumn->set_visible(Config::VisibleColumns::ChordAndCtrlNo);
 }
 
 void MainWindow::OnMetronomeToggleClicked(){

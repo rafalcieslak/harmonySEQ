@@ -75,7 +75,7 @@ SettingsWindow::SettingsWindow(){
     colums_pattern.set_label(_("Patern"));
     colums_resolution.set_label(_("Resolution"));
     colums_length.set_label(_("Length"));
-    colums_chord.set_label(_("Chord"));
+    colums_chord.set_label(_("Chord (notes) / Ctrl. No."));
 
     //these are fake checkbuttons, for it is impossible to hide the name or the on/off switch
     colums_name.set_active(1);
@@ -173,7 +173,7 @@ void SettingsWindow::LoadDataFromConfig(){
     colums_pattern.set_active(Config::VisibleColumns::Pattern);
     colums_resolution.set_active(Config::VisibleColumns::Resolution);
     colums_length.set_active(Config::VisibleColumns::Length);
-    colums_chord.set_active(Config::VisibleColumns::Chord);
+    colums_chord.set_active(Config::VisibleColumns::ChordAndCtrlNo);
     play_on_edit.set_active(Config::Interaction::PlayOnEdit);
     osc_port.set_value(Config::OSC::Port);
 
@@ -190,7 +190,7 @@ void SettingsWindow::StoreDataToConfig(){
     Config::VisibleColumns::Pattern = colums_pattern.get_active();
     Config::VisibleColumns::Resolution = colums_resolution.get_active();
     Config::VisibleColumns::Length = colums_length.get_active();
-    Config::VisibleColumns::Chord  = colums_chord.get_active();
+    Config::VisibleColumns::ChordAndCtrlNo  = colums_chord.get_active();
     Config::Interaction::PlayOnEdit = play_on_edit.get_active();
     Config::OSC::Port = osc_port.get_value();
     mainwindow->UpdatePlayOnEditToggle();

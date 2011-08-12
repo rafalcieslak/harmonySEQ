@@ -36,7 +36,7 @@ namespace Config{
         extern bool Pattern;
         extern bool Resolution;
         extern bool Length;
-        extern bool Chord;
+        extern bool ChordAndCtrlNo;
     }
     namespace Interaction{
         extern bool PlayOnEdit;

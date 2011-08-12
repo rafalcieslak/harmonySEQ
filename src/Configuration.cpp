@@ -45,7 +45,7 @@ namespace Config{
         bool Pattern;
         bool Resolution;
         bool Length;
-        bool Chord;
+        bool ChordAndCtrlNo;
     }
     namespace Interaction{
         bool PlayOnEdit;
@@ -66,7 +66,7 @@ namespace Config{
         VisibleColumns::Pattern = 1;
         VisibleColumns::Resolution = 1;
         VisibleColumns::Length = 1;
-        VisibleColumns::Chord = 1;
+        VisibleColumns::ChordAndCtrlNo = 1;
         Interaction::PlayOnEdit = 1;
         OSC::Port = 7773;
     }
@@ -102,7 +102,7 @@ namespace Config{
             if(kf.has_key("Visible columns","Pattern")) VisibleColumns::Pattern = kf.get_boolean("Visible columns","Pattern");
             if(kf.has_key("Visible columns","Resolution")) VisibleColumns::Resolution = kf.get_boolean("Visible columns","Resolution");
             if(kf.has_key("Visible columns","Length")) VisibleColumns::Length = kf.get_boolean("Visible columns","Length");
-            if(kf.has_key("Visible columns","Chord")) VisibleColumns::Chord = kf.get_boolean("Visible columns","Chord");
+            if(kf.has_key("Visible columns","Chord")) VisibleColumns::ChordAndCtrlNo = kf.get_boolean("Visible columns","Chord");
         }
         if(kf.has_group("Interaction")){
             if(kf.has_key("Interaction","PlayOnEdit")) Interaction::PlayOnEdit = kf.get_boolean("Interaction","PlayOnEdit");
@@ -146,7 +146,7 @@ namespace Config{
         kf.set_boolean("Visible columns","Pattern",VisibleColumns::Pattern);
         kf.set_boolean("Visible columns","Resolution",VisibleColumns::Resolution);
         kf.set_boolean("Visible columns","Length",VisibleColumns::Length);
-        kf.set_boolean("Visible columns","Chord",VisibleColumns::Chord);
+        kf.set_boolean("Visible columns","Chord",VisibleColumns::ChordAndCtrlNo);
         kf.set_boolean("Interaction","PlayOnEdit",Interaction::PlayOnEdit);
         kf.set_integer("OSC","Port",OSC::Port);
 

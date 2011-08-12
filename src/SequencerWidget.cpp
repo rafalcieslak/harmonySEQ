@@ -159,7 +159,7 @@ SequencerWidget::SequencerWidget()
     wClearPattern.set_label(_("Clear pattern"));
     wClearPattern.set_tooltip_markup(_("Clears all notes of this pattern."));
     ///TRANSLATORS: The space befor this string is to force a tiny space between widgets, please keep it in translations.
-    wControllerLabel.set_text(_(" Controller no."));
+    wControllerLabel.set_text(_(" Controller No."));
     wControllerButton.set_tooltip_markup(_("The <b>MIDI controller number</b> this sequencer outputs data on.\n\nFor example, synthesizers supporting GM standard should interpret data from controller 7 as volume setting."));
 
     wVelocityButton.set_range(0,127);
@@ -655,6 +655,7 @@ void SequencerWidget::OnControllerChanged(){
     if(!AnythingSelected || selectedSeqType != SEQ_TYPE_CONTROL) return;
     ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*>(seqH(selectedSeq));
     ctrlseq->controller_number = wControllerButton.get_value();
+    mainwindow->RefreshRow(ctrlseq->my_row);
 }
 
 void SequencerWidget::OnAddToggled(){
