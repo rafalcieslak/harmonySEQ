@@ -322,6 +322,7 @@ void PatternWidget::InitDrag(){
         drag_in_progress = 1;
         drag_beggining_line = line;
         drag_beggining_time = time;
+        drag_beggining_value = value;
         drag_note_dragged = note_found;
         drag_time_offset_to_dragged_note = drag_beggining_time - note_found->time;
         //Store note offsets...
@@ -343,6 +344,7 @@ void PatternWidget::InitDrag(){
         drag_in_progress = 1;
         drag_beggining_line = line;
         drag_beggining_time = time;
+        drag_beggining_value = value;
         drag_temporary_selection.clear();
     }
 }
@@ -354,10 +356,11 @@ void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
     //count position
     int line = 6 - y / (internal_height / 6);
     double time = (double) x / (double) width;
+    int value = 127 - y *(double)127.0/ (internal_height);
     
     if (drag_mode == DRAG_MODE_MOVE_SELECTION) {
         
-        NoteAtom* dragged_note = dynamic_cast<NoteAtom*>(drag_note_dragged);
+        Atom* dragged_note = dynamic_cast<Atom*>(drag_note_dragged);
         double temp_time = time + dragged_note->drag_offset_time;
         temp_time = temp_time - (int) temp_time; //wrap to 0.0 - 0.9999...
         double snapped_time = temp_time;
@@ -370,47 +373,81 @@ void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
 
         std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
         std::set<Atom *, AtomComparingClass> resulting_selection;
-        for (; it != selection.end(); it++) {
-            NoteAtom* note = dynamic_cast<NoteAtom*> (*it);
-            int temp_pitch = line + note->drag_offset_line;
-            temp_time = time + note->drag_offset_time + snap_offset;
-            temp_pitch = temp_pitch % 6; //wrap to 0-5;
-            temp_time = temp_time - (int) temp_time; //wrap to 0.0 - 0.9999...
-            if (temp_pitch < 0) temp_pitch += 6;
-            if (temp_time < 0) temp_time += 1.0;
-            note->pitch = temp_pitch;
-            note->time = temp_time;
-            resulting_selection.insert(note);
-            //*dbg << " " << note->pitch << " " << note->time <<ENDL;
+        if(seq_type == SEQ_TYPE_NOTE){
+                        for (; it != selection.end(); it++) {
+                            NoteAtom* note = dynamic_cast<NoteAtom*> (*it);
+                            int temp_pitch = line + note->drag_offset_line;
+                            temp_time = time + note->drag_offset_time + snap_offset;
+                            temp_pitch = temp_pitch % 6; //wrap to 0-5;
+                            temp_time = temp_time - (int) temp_time; //wrap to 0.0 - 0.9999...
+                            if (temp_pitch < 0) temp_pitch += 6;
+                            if (temp_time < 0) temp_time += 1.0;
+                            note->pitch = temp_pitch;
+                            note->time = temp_time;
+                            resulting_selection.insert(note);
+                            //*dbg << " " << note->pitch << " " << note->time <<ENDL;
+                        }
+        }else if (seq_type == SEQ_TYPE_CONTROL){
+                        for (; it != selection.end(); it++) {
+                            ControllerAtom* ctrl = dynamic_cast<ControllerAtom*> (*it);
+                            int temp_value = value + ctrl->drag_offset_value;
+                            temp_time = time + ctrl->drag_offset_time + snap_offset;
+                            if(temp_value > 127) temp_value = 127;
+                            else if(temp_value < 0) temp_value = 0;
+                            temp_time = temp_time - (int) temp_time; //wrap to 0.0 - 0.9999...
+                            if (temp_time < 0) temp_time += 1.0;
+                            ctrl->value = temp_value;
+                            ctrl->time = temp_time;
+                            resulting_selection.insert(ctrl);
+                            //*dbg << " " << note->pitch << " " << note->time <<ENDL;
+                        }
         }
+        //important!
         selection = resulting_selection;
+        container->Sort();
+        
     } else if (drag_mode == DRAG_MODE_SELECT_AREA) {
         drag_current_x = x;
         drag_current_y = y;
         drag_current_line = line;
         drag_current_time = time;
+        drag_current_value = value;
 
         //Determining drag selection.
         drag_temporary_selection.clear();
+        int sel_value_min = min(drag_current_value,drag_beggining_value);
+        int sel_value_max = max(drag_current_value,drag_beggining_value);
         int sel_pith_min = min(drag_current_line, drag_beggining_line);
         int sel_pith_max = max(drag_current_line, drag_beggining_line);
         double sel_time_min = min(drag_current_time, drag_beggining_time);
         double sel_time_max = max(drag_current_time, drag_beggining_time);
         int size = container->GetSize();
-        for (int x = 0; x < size; x++) {
-            NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[x]);
-            //check if pitch is in bounds...
-            if (note->pitch <= sel_pith_max && note->pitch >= sel_pith_min) {
-                //*dbg << " note " << x << " pith ("<<note->pitch <<")  in bounds.\n";
-                //check time...
-                double start = note->time;
-                double end = note->time + note->length;
-                if ((start <= sel_time_max && start >= sel_time_min) || (end <= sel_time_max && end >= sel_time_min) || (start <= sel_time_min && end >= sel_time_max)) {
-                    //is inside!
-                    drag_temporary_selection.insert(note);
-                }
-            }
-        }//check next note.
+        if (seq_type == SEQ_TYPE_NOTE) {
+                        for (int x = 0; x < size; x++) {
+                            Atom* atm = (*container)[x];
+                            NoteAtom* note = dynamic_cast<NoteAtom*> (atm);
+                            //check if pitch is in bounds...
+                            if (note->pitch <= sel_pith_max && note->pitch >= sel_pith_min) {
+                                //*dbg << " note " << x << " pith ("<<note->pitch <<")  in bounds.\n";
+                                //check time...
+                                double start = note->time;
+                                double end = note->time + note->length;
+                                if ((start <= sel_time_max && start >= sel_time_min) || (end <= sel_time_max && end >= sel_time_min) || (start <= sel_time_min && end >= sel_time_max)) {
+                                    //is inside!
+                                    drag_temporary_selection.insert(note);
+                                }
+                            }
+                        }//check next note.
+        }else if(seq_type == SEQ_TYPE_CONTROL) {
+                    for (int x = 0; x < size; x++) {
+                        Atom* atm = (*container)[x];
+                        ControllerAtom* ctrl = dynamic_cast<ControllerAtom*> (atm);
+                        //check if pitch is in bounds...
+                        if (ctrl->value <= sel_value_max && ctrl->value >= sel_value_min && ctrl->time >= sel_time_min && ctrl->time <= sel_time_max) {
+                            drag_temporary_selection.insert(ctrl);
+                        }
+                    }//check next note.
+        }
 
     } else if (drag_mode == DRAG_MODE_RESIZE && seq_type == SEQ_TYPE_NOTE) { //resizing do not exist within control sequencers
         
@@ -718,6 +755,58 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
   int size = container->GetSize();
   //The +0.5 that often appears below in coordinates it to prevent cairo from antyaliasing lines.
   
+  
+  //horizontal grid
+  if(seq_type == SEQ_TYPE_NOTE){
+      ct.set_line_width(1);
+      ct.set_source_rgb(0.0,0.0,0.0);
+      for(int x = 0; x <= 6; x++){
+            ct.move_to(0,x*internal_height/6+0.5);
+            ct.line_to(width,x*internal_height/6+0.5);
+            ct.stroke();
+      }     
+  }else if(seq_type == SEQ_TYPE_CONTROL){
+      ct.set_line_width(1);
+      for(int x = 0; x <= 4; x++){
+          
+              if(x == 2)
+                  ct.set_line_width(2.0);
+              else
+                  ct.set_line_width(1.0); 
+              
+              if(x == 2)
+                  ct.set_source_rgb(7.0,0.0,0.0);
+              else
+                  ct.set_source_rgb(0.0,0.0,0.0);
+              
+              ct.move_to(0,x*internal_height/4+0.5);
+              ct.line_to(width,x*internal_height/4+0.5);
+              ct.stroke();
+      }     
+  }
+  
+  //vertical grid
+  int hints = resolution_hints[resolution];
+  for(int x = 0; x <= resolution; x++) {
+        if (x % hints == 0) {
+            ct.set_line_width(1.5);
+            ct.set_source_rgb(0.0, 0.5, 0.0);//hint colour
+        } else {
+            ct.set_line_width(1.0);
+            ct.set_source_rgb(0.5, 0.5, 0.4);//normal grid colour
+        }
+        if (x != resolution) {
+            ct.move_to((int) ((double) x * (double) width / resolution) + 0.5, 0);
+            ct.line_to((int) ((double) x * (double) width / resolution) + 0.5, internal_height);
+        } else {
+            ct.move_to((int) ((double) x * (double) width / resolution) - 0.5, 0);
+            ct.line_to((int) ((double) x * (double) width / resolution) - 0.5, internal_height); //the last one must be in drawing area, so let's put it a 1 px before
+        }
+        ct.stroke();
+  }
+  
+  
+  
   //notes
   if(seq_type == SEQ_TYPE_NOTE){
                         for (int x = size-1; x >= 0; x--){ //iterating backwards, to draw shades below notes
@@ -788,8 +877,9 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
                               
                               if(ctrl == NULL) {*err << _("While drawing pattern: ctrl = null. This should never happen! Please report this bug to harmonySEQ developers.\n"); continue;}
                               
-                              double y = (double)internal_height*((127.0-ctrl->value)/(127.0));
-                              double x = ctrl->time*width ;
+                              //these are ints intentionally - to avoid unnecesary cairo anti-aliasing we round everything to 1.0 and add 0.5
+                              int y = (double)internal_height*((127.0-ctrl->value)/(127.0));
+                              int x = ctrl->time*width ;
                               //Check if note is in selection.
                               bool selected = false;
                               if(selection.find(ctrl) != selection.end()) selected = true;
@@ -798,9 +888,9 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
                               
                               //until slopes are implementes, assume every atom is flat
                               //draw line to next point
-                              ct.set_line_width(2.0);
+                              ct.set_line_width(3.0);
                               if(n == -1 || n == size-1)
-                                  ct.set_source_rgb(0.8,0.8,0.8);
+                                  ct.set_source_rgb(0.65,0.65,0.65);
                               else
                                 ct.set_source_rgb(0.2,0.2,0.2);
                               ct.move_to(x-(n==-1)*width+0.5,y+0.5);
@@ -819,56 +909,6 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
                               ct.stroke();
                         }
       }
-  
-  
-  //horizontal grid
-  if(seq_type == SEQ_TYPE_NOTE){
-      ct.set_line_width(1);
-      ct.set_source_rgb(0.0,0.0,0.0);
-      for(int x = 0; x <= 6; x++){
-            ct.move_to(0,x*internal_height/6+0.5);
-            ct.line_to(width,x*internal_height/6+0.5);
-            ct.stroke();
-      }     
-  }else if(seq_type == SEQ_TYPE_CONTROL){
-      ct.set_line_width(1);
-      for(int x = 0; x <= 4; x++){
-          
-              if(x == 2 || x == 0 || x == 4)
-                  ct.set_line_width(2);
-              else
-                  ct.set_line_width(1); 
-              
-              if(x == 2)
-                  ct.set_source_rgb(7.0,0.0,0.0);
-              else
-                  ct.set_source_rgb(0.0,0.0,0.0);
-              
-              ct.move_to(0,x*internal_height/4+0.5);
-              ct.line_to(width,x*internal_height/4+0.5);
-              ct.stroke();
-      }     
-  }
-  
-  //vertical grid
-  int hints = resolution_hints[resolution];
-  for(int x = 0; x <= resolution; x++) {
-        if (x % hints == 0) {
-            ct.set_line_width(1.5);
-            ct.set_source_rgb(0.0, 0.5, 0.0);//hint colour
-        } else {
-            ct.set_line_width(1.0);
-            ct.set_source_rgb(0.5, 0.5, 0.4);//normal grid colour
-        }
-        if (x != resolution) {
-            ct.move_to((int) ((double) x * (double) width / resolution) + 0.5, 0);
-            ct.line_to((int) ((double) x * (double) width / resolution) + 0.5, internal_height);
-        } else {
-            ct.move_to((int) ((double) x * (double) width / resolution) - 0.5, 0);
-            ct.line_to((int) ((double) x * (double) width / resolution) - 0.5, internal_height); //the last one must be in drawing area, so let's put it a 1 px before
-        }
-        ct.stroke();
-  }
   
   //drag_selection rectangle
   if(drag_in_progress && drag_mode==DRAG_MODE_SELECT_AREA){

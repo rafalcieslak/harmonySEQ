@@ -82,6 +82,7 @@ private:
     int drag_current_x, drag_current_y;
     int drag_current_line;
     double drag_current_time;
+    int drag_current_value;
     bool drag_in_progress;
     int drag_mode;
     Atom* drag_note_dragged;
