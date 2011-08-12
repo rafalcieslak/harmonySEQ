@@ -45,12 +45,12 @@ public:
     int ID;
     
     /**Used when dragging, to store relative position to drag beggining.*/
-    double drag_offset_line,drag_offset_time;
+    double drag_offset_line,drag_offset_time, drag_offset_value;
     
     /**This is here just to force compiler to make Atom a base abstract class*/
    // virtual int bac() = 0;
 private:
-    static int counter;
+    static long int counter;
 
 };
 

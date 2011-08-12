@@ -77,6 +77,7 @@ private:
     std::set<Atom *,AtomComparingClass> drag_temporary_selection;
     int drag_beggining_x, drag_beggining_y;
     int drag_beggining_line;
+    int drag_beggining_value;
     double drag_beggining_time;
     int drag_current_x, drag_current_y;
     int drag_current_line;
@@ -96,7 +97,7 @@ private:
     double SnapDown(double t);
     void DeleteNth(int n);
     int internal_height;
-    double vert_size; //used to controll zooming
+    double horiz_size; //used to controll zooming
     
     AtomContainer* container;
     SeqType_t seq_type;

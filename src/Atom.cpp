@@ -37,23 +37,32 @@ bool AtomComparingClass::operator ()(Atom* lhs, Atom* rhs) const{
 }
 
 
-int Atom::counter = 0;
+long int Atom::counter = 0;
 
 Atom::Atom(double _time){
     time = _time;
+    drag_offset_line = 0;
+    drag_offset_time = 0;
+    drag_offset_value = 0;
     ID = counter;
     counter++;
 }
 
 Atom::Atom(const Atom&  orig){
     time = orig.time;
+    drag_offset_line = 0;
+    drag_offset_time = 0;
+    drag_offset_value = 0;
     ID = counter;
     counter++;
 }
 
 Atom::~Atom(){
+    
 }
-/*
+
+
+/* NOTE: do not implement this, this is pure virtual
 Atom* Atom::Clone(){
     *err << "Cloning atom as a base class. This should never happen! Please report this bug to harmonySEQ developers.\n";
     return new Atom(*this);
