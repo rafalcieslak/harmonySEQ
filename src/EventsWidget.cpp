@@ -119,7 +119,7 @@ void EventsWidget::ColorizeEvent(Gtk::TreeRowReference rowref){
     }
 
     row[m_columns.col_colour] = "royal blue";
-    Glib::signal_timeout().connect(sigc::bind(sigc::mem_fun(*this,&EventsWidget::UncolorizeEvent),rowref),EVENTS_FLASH_TIMEOUT);
+    Glib::signal_timeout().connect(sigc::bind(sigc::mem_fun(*this,&EventsWidget::UncolorizeEvent),rowref),EVENTS_FLASH_TIMEOUT,Glib::PRIORITY_DEFAULT_IDLE);
 }
 
 bool EventsWidget::UncolorizeEvent(Gtk::TreeRowReference rowref){
@@ -137,7 +137,7 @@ void EventsWidget::ColorizeAction(Gtk::TreeRowReference rowref){
     }
 
     row[m_columns.col_colour] = "light blue";
-    Glib::signal_timeout().connect(sigc::bind(sigc::mem_fun(*this,&EventsWidget::UncolorizeAction),rowref),EVENTS_FLASH_TIMEOUT);
+    Glib::signal_timeout().connect(sigc::bind(sigc::mem_fun(*this,&EventsWidget::UncolorizeAction),rowref),EVENTS_FLASH_TIMEOUT,Glib::PRIORITY_DEFAULT_IDLE);
 }
 
 bool EventsWidget::UncolorizeAction(Gtk::TreeRowReference rowref){

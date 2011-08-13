@@ -568,7 +568,7 @@ void MainWindow::OnCloneClicked(){
 
 void MainWindow::FlashTempoStart(){
     tempo_button.modify_base(Gtk::STATE_NORMAL,Gdk::Color("red"));
-    Glib::signal_timeout().connect(mem_fun(*this,&MainWindow::FlashTempoEnd),FLASH_INTERVAL);
+    Glib::signal_timeout().connect(mem_fun(*this,&MainWindow::FlashTempoEnd),FLASH_INTERVAL,Glib::PRIORITY_DEFAULT_IDLE);
 }
 
 bool MainWindow::FlashTempoEnd(){
