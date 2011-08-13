@@ -451,7 +451,7 @@ void SequencerWidget::OnVelocityChanged(){
     if(ignore_signals) return;
     if(!AnythingSelected) return;
     
-    pattern_widget.SetVelocity(wVelocityButton.get_value());
+    pattern_widget.SetSelectionVelocity(wVelocityButton.get_value());
     
     LeaveAddMode();
     Files::SetFileModified(1);
@@ -640,7 +640,7 @@ void SequencerWidget::OnSelectionChanged(int n){
             wVelocityButton.set_sensitive(0);
         }else{
             wVelocityButton.set_sensitive(1);
-            wVelocityButton.set_value(pattern_widget.Velocity());
+            wVelocityButton.set_value(pattern_widget.GetSelectionVelocity());
         }
     }
     ignore_signals = 0;

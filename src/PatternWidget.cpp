@@ -123,7 +123,7 @@ bool PatternWidget::GetSnap(){
     return snap;
 }
 
-void PatternWidget::SetVelocity(int v){
+void PatternWidget::SetSelectionVelocity(int v){
     std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
     for (; it != selection.end(); it++) {
         NoteAtom* note = dynamic_cast<NoteAtom*>(*it);
@@ -132,7 +132,7 @@ void PatternWidget::SetVelocity(int v){
     Redraw();
 }
 
-int PatternWidget::Velocity(){
+int PatternWidget::GetSelectionVelocity(){
     int sum = 0;
     std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
     for (; it != selection.end(); it++) {
