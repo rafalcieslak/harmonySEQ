@@ -26,7 +26,7 @@ enum SlopeType{
     SLOPE_TYPE_FLAT,
     SLOPE_TYPE_LINEAR,
             //maybe once there will be more to choose from?
-    SLOPE_TYPE_UNKNOWN = 256 //used if the sequencer widget should show neither of above
+    SLOPE_TYPE_NONE = 256 //used when the sequencer widget should display it's own setting
 };
 
 class ControllerAtom : public Atom {

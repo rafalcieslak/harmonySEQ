@@ -23,6 +23,7 @@
 #include <set>
 #include "AtomContainer.h"
 #include "Sequencer.h"
+#include "ControllerAtom.h"
 
 /**PatternWidget is basically a GUI for NoteContainer, that uses DrawingArea to display a piano-roll interface.*/
 class PatternWidget : public Gtk::DrawingArea {
@@ -54,11 +55,16 @@ public:
     int GetSelectionValue();
     void SetSelectionValue(int v);
     
+    void SetSlopeType(SlopeType s);
+    SlopeType GetSlopeType();
+    
     /**Emitted when selection is changed. Provides an argument that is equal to number of notes in selection.*/
     sigc::signal<void,int> on_selection_changed;
     
     /**Emmited when patter changed add_mode and parent widget needs to update button*/
     sigc::signal<void> on_add_mode_changed;
+    
+    sigc::signal<void> on_slope_type_needs_additional_refreshing;
     
 protected:
     //Override default signal handler:
@@ -72,7 +78,10 @@ protected:
    
    virtual bool on_key_press_event(GdkEventKey* event);
 private:
+    
+    
     bool add_mode;
+    SlopeType add_slope_type;
     
     std::set<Atom *,AtomComparingClass> selection;
     
@@ -95,6 +104,8 @@ private:
         DRAG_MODE_SELECT_AREA,
         DRAG_MODE_RESIZE
     };
+    
+    SlopeType GetSelectionSlopeType();
     
     void UpdateSizeRequest();
     double Snap(double t);

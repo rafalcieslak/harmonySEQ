@@ -37,6 +37,7 @@ PatternWidget::PatternWidget(){
     horiz_size = 450.0; //adjust for better default size
     snap = true;
     add_mode = 0;
+    add_slope_type = SLOPE_TYPE_LINEAR;
     add_events(Gdk::BUTTON_PRESS_MASK);
     add_events(Gdk::BUTTON_RELEASE_MASK);
     add_events(Gdk::BUTTON1_MOTION_MASK);
@@ -167,6 +168,44 @@ int PatternWidget::GetSelectionValue(){
     }    
     if(selection.size()==0) return 0;
     return sum/(selection.size());
+}
+
+SlopeType PatternWidget::GetSelectionSlopeType(){
+    if(seq_type != SEQ_TYPE_CONTROL) return SLOPE_TYPE_NONE;
+    SlopeType s = SLOPE_TYPE_NONE;
+    std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
+    for (; it != selection.end(); it++) {
+        ControllerAtom* ctrl = dynamic_cast<ControllerAtom*> (*it);
+        if(s == SLOPE_TYPE_NONE) s = ctrl->slope_type;
+        else if (s != ctrl->slope_type){ s = SLOPE_TYPE_NONE; break;}
+    }    
+    return s;
+}
+
+void PatternWidget::SetSlopeType(SlopeType s){
+    if(seq_type != SEQ_TYPE_CONTROL) return;
+    if(s == SLOPE_TYPE_NONE) return; //does not apply
+    if(add_mode){
+        selection.clear();
+        add_slope_type = s;
+    }else if(selection.empty()){
+        add_slope_type = s;
+    }else{
+        std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
+        for (; it != selection.end(); it++) {
+            ControllerAtom* ctrl = dynamic_cast<ControllerAtom*>(*it);
+            ctrl->slope_type = s;
+        }    
+        Redraw();
+    }
+}
+
+SlopeType PatternWidget::GetSlopeType(){
+    if(seq_type != SEQ_TYPE_CONTROL) return SLOPE_TYPE_NONE;
+    if(!selection.empty())
+        return GetSelectionSlopeType();
+    else
+        return add_slope_type;
 }
 
 void PatternWidget::MoveSelectionUp(){
@@ -652,6 +691,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                                 temp_time = Snap(temp_time); //fair snapping for control atoms!
                             }
                             ControllerAtom* ctrl = new ControllerAtom(temp_time,value);
+                            ctrl->slope_type = add_slope_type;
                             container->Add(ctrl);
                             drag_in_progress = 1;
                             drag_mode=DRAG_MODE_MOVE_SELECTION;
@@ -696,6 +736,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                                 temp_time = Snap(temp_time); //fair snapping for controllers!
                             }
                             ControllerAtom* ctrl = new ControllerAtom(temp_time,value);
+                            ctrl->slope_type = add_slope_type;
                             container->Add(ctrl);
                             drag_in_progress = 1;
                             drag_mode=DRAG_MODE_MOVE_SELECTION;
@@ -981,7 +1022,7 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
                               //draw atom
                               ct.set_line_width(1.0);
                               if(ctrl->slope_type == SLOPE_TYPE_FLAT)
-                                  ct.rectangle(x-3.5,y-3.5,7.0,7.0);
+                                  ct.rectangle(x-4.5,y-4.5,11.0,11.0);
                               else if(ctrl->slope_type == SLOPE_TYPE_LINEAR)
                                   ct.arc(x+0.5,y+0.5,7.0,0,2*M_PI);
                               if(selected) ct.set_source_rgb(0.8,0.0,0.0);

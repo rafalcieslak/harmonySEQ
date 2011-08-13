@@ -134,8 +134,10 @@ private:
     /**Called when pattern's selection was changed and we need to display new velocity*/
     void OnSelectionChanged(int n);
     void LeaveAddMode();
+    void OnSlopeFlatToggled();
+    void OnSlopeLinearToggled();
+    void UpdateSlopeType();
     
-
     PatternWidget pattern_widget;
     
     Gtk::VBox wMainVbox;
@@ -204,6 +206,9 @@ private:
     Gtk::ToggleButton wShowChordButton;
     Gtk::Label wShowChordLabel;
 
+    Gtk::ToggleButton wCtrlSlopeFlat;
+    Gtk::ToggleButton wCtrlSlopeLinear;
+    
     Gtk::Image wImageAdd;
     Gtk::Image wImageRemove;
 

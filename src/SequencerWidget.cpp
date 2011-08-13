@@ -27,6 +27,7 @@
 #include "MainWindow.h"
 #include "NoteSequencer.h"
 #include "ControlSequencer.h"
+#include "ControllerAtom.h"
 
 SequencerWidget::SequencerWidget()
                 : wImageAdd(Gtk::Stock::ADD,Gtk::ICON_SIZE_BUTTON), wImageRemove(Gtk::Stock::REMOVE,Gtk::ICON_SIZE_BUTTON)
@@ -63,6 +64,7 @@ SequencerWidget::SequencerWidget()
     
     pattern_widget.on_selection_changed.connect(sigc::mem_fun(*this,&SequencerWidget::OnSelectionChanged));
     pattern_widget.on_add_mode_changed.connect(sigc::mem_fun(*this,&SequencerWidget::UpdateAddMode));
+    pattern_widget.on_slope_type_needs_additional_refreshing.connect(sigc::mem_fun(*this,&SequencerWidget::UpdateSlopeType));
     
     wUpperHBox1.pack_start(wNameLabel,Gtk::PACK_SHRINK);
     wUpperHBox1.pack_start(wNameEntry,Gtk::PACK_SHRINK);
@@ -91,6 +93,8 @@ SequencerWidget::SequencerWidget()
     //wUpperHBox2.pack_start(wShowChordButton,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wAddToggle,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wDelete,Gtk::PACK_SHRINK);
+    wUpperHBox2.pack_start(wCtrlSlopeFlat,Gtk::PACK_SHRINK);
+    wUpperHBox2.pack_start(wCtrlSlopeLinear,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wVelocityLabel,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wVelocityButton,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wValueLabel,Gtk::PACK_SHRINK);
@@ -201,6 +205,13 @@ SequencerWidget::SequencerWidget()
     wMuteToggle.set_tooltip_markup(_("Turns this sequencer <b>on/off</b>."));
     wMuteToggle.signal_clicked().connect(mem_fun(*this,&SequencerWidget::OnToggleMuteToggled));
 
+    //todo: add icons & tooltips
+    wCtrlSlopeFlat.set_label("F");
+    wCtrlSlopeLinear.set_label("L");
+    wCtrlSlopeFlat.signal_toggled().connect(sigc::mem_fun(*this,&SequencerWidget::OnSlopeFlatToggled));
+    wCtrlSlopeLinear.signal_toggled().connect(sigc::mem_fun(*this,&SequencerWidget::OnSlopeLinearToggled));
+    //my_slope_mode_for_adding = SLOPE_TYPE_LINEAR;
+    
     //lengths selector
     wResolutionsLabel.set_text(_("Resolution:"));
     wResolutions.set_range(1.0,32.0);
@@ -285,6 +296,7 @@ void SequencerWidget::UpdateEverything(){
                 UpdateActivePattern();
                 UpdateActivePatternRange();
                 UpdateController();
+                UpdateSlopeType();
         }
     }else{
 
@@ -493,6 +505,60 @@ void SequencerWidget::OnValueChanged(){
     Files::SetFileModified(1);
 }
 
+void SequencerWidget::OnSlopeFlatToggled(){
+    if(ignore_signals) return;
+    if(!AnythingSelected) return;
+    bool f = wCtrlSlopeFlat.get_active();
+    //bool l = wCtrlSlopeLinear.get_active();
+    if(f){
+        ignore_signals = 1;
+        wCtrlSlopeLinear.set_active(0);
+        ignore_signals = 0;
+        pattern_widget.SetSlopeType(SLOPE_TYPE_FLAT);
+    }else{
+        ignore_signals = 1;
+        wCtrlSlopeFlat.set_active(0);
+        ignore_signals = 0;
+    }
+    
+    Files::SetFileModified(1);
+}
+
+void SequencerWidget::OnSlopeLinearToggled(){
+    if(ignore_signals) return;
+    if(!AnythingSelected) return;
+    //bool f = wCtrlSlopeFlat.get_active();
+    bool l = wCtrlSlopeLinear.get_active();
+    if(l){
+        ignore_signals = 1;
+        wCtrlSlopeFlat.set_active(0);
+        ignore_signals = 0;
+        pattern_widget.SetSlopeType(SLOPE_TYPE_LINEAR);
+    }else{
+        ignore_signals = 1;
+        wCtrlSlopeLinear.set_active(0);
+        ignore_signals = 0;
+    }
+    
+    Files::SetFileModified(1);
+}
+
+void SequencerWidget::UpdateSlopeType(){
+    ignore_signals = 1;
+    SlopeType s = pattern_widget.GetSlopeType();
+    if(s == SLOPE_TYPE_NONE){
+        wCtrlSlopeFlat.set_active(0);
+        wCtrlSlopeLinear.set_active(0);
+    }else if(s == SLOPE_TYPE_FLAT){
+        wCtrlSlopeFlat.set_active(1);
+        wCtrlSlopeLinear.set_active(0);
+    }else if(s == SLOPE_TYPE_LINEAR){
+        wCtrlSlopeFlat.set_active(0);
+        wCtrlSlopeLinear.set_active(1);
+    }
+    ignore_signals = 0;
+}
+
 void SequencerWidget::OnChordWidgetChanged(){
     //The chord updates the seq on it's own.
     //Just refresh the row.
@@ -687,6 +753,7 @@ void SequencerWidget::OnSelectionChanged(int n){
             wValueButton.set_sensitive(1);
             wValueButton.set_value(pattern_widget.GetSelectionValue());
         }
+        UpdateSlopeType();
     }
     ignore_signals = 0;
 }
