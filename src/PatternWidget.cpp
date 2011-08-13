@@ -743,6 +743,7 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
   bool PatternWidget::on_expose_event(GdkEventExpose* event){
    cairo_t * c_t = gdk_cairo_create(event->window);
    Cairo::Context ct(c_t);
+   
    //Cairo::RefPtr<Cairo::Context> cr(&ct);
     
    Gtk::Allocation allocation = get_allocation();
@@ -822,6 +823,7 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
                               y1++; // This is because the very first 1px line is the upper border.
                               //Check if note is in selection.
                               bool selected = false;
+                              //TODO: searching should be faster! Might be better to mark an atom's flag stating whether the note is in selection?
                               if(selection.find(note) != selection.end()) selected = true;
                               //check if in temp. selection
                               if(drag_temporary_selection.find(note) != drag_temporary_selection.end()) selected = true;
@@ -920,6 +922,8 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
       ct.stroke();
       
   }
+  
+  cairo_destroy(c_t); //free safely
   
   return true;
       
