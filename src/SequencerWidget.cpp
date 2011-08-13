@@ -314,6 +314,8 @@ void SequencerWidget::HideAndShowWidgetsDependingOnSeqType(){
         wValueLabel.hide();
         wControllerButton.hide();
         wControllerLabel.hide();
+        wCtrlSlopeFlat.hide();
+        wCtrlSlopeLinear.hide();
     }else if(selectedSeqType == SEQ_TYPE_CONTROL){
         chordwidget.UnSelect();
         chordwidget.SetExpandDetails(0);
@@ -325,6 +327,8 @@ void SequencerWidget::HideAndShowWidgetsDependingOnSeqType(){
         wValueLabel.show();
         wControllerButton.show();
         wControllerLabel.show();
+        wCtrlSlopeFlat.show();
+        wCtrlSlopeLinear.show();
     }
 }
 
