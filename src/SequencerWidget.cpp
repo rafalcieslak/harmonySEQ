@@ -114,12 +114,24 @@ SequencerWidget::SequencerWidget()
     wSnapToggle.set_active(1); //As this is default value
     wSnapToggle.signal_toggled().connect(sigc::mem_fun(*this,&SequencerWidget::OnSnapClicked));
 
-    wBoxOfChord.pack_start(chordwidget,Gtk::PACK_SHRINK);
+    wBoxOfChord.pack_start(wChordNotebook,Gtk::PACK_SHRINK);
     wBoxOfChord.pack_start(wVirtualSpaceLabel,Gtk::PACK_EXPAND_WIDGET,1); //extra alligments space - 1 stands for the notebook's border witdth
     wVirtualSpaceLabel.set_text(" ");
+    wChordNotebook.append_page(chordwidget);
+    wChordNotebook.append_page(wCtrlHBox);
+    wChordNotebook.set_show_tabs(0);
+    wChordNotebook.set_show_border(0);
     chordwidget.on_changed.connect(sigc::mem_fun(*this,&SequencerWidget::OnChordWidgetChanged));
     chordwidget.on_note_changed.connect(sigc::mem_fun(*this,&SequencerWidget::OnChordWidgetNoteChanged));
 
+    wCtrlHBox.pack_end(wCtrlScale,Gtk::PACK_SHRINK);
+    wCtrlScale.pack_start(wCtrl127,Gtk::PACK_SHRINK);
+    wCtrlScale.pack_start(wCtrl64,Gtk::PACK_EXPAND_WIDGET);
+    wCtrlScale.pack_start(wCtrl0,Gtk::PACK_SHRINK);
+    wCtrl127.set_label("127");
+    wCtrl64.set_label("64");
+    wCtrl0.set_label("0");
+    
     wNotebook.set_tab_pos(Gtk::POS_RIGHT);
     wNotebook.set_show_border(0);
     wNotebook.set_scrollable(1);
@@ -283,6 +295,7 @@ void SequencerWidget::HideAndShowWidgetsDependingOnSeqType(){
     if(!AnythingSelected) return;
     if(selectedSeqType == SEQ_TYPE_NOTE){
         wShowChordButton.show();
+        wChordNotebook.set_current_page(0); //chordwidget
         wVelocityButton.show();
         wVelocityLabel.show();
         wValueButton.hide();
@@ -292,6 +305,7 @@ void SequencerWidget::HideAndShowWidgetsDependingOnSeqType(){
     }else if(selectedSeqType == SEQ_TYPE_CONTROL){
         chordwidget.UnSelect();
         chordwidget.SetExpandDetails(0);
+        wChordNotebook.set_current_page(1); //wCtrlHBox
         wShowChordButton.hide();
         wVelocityLabel.hide();
         wVelocityButton.hide();

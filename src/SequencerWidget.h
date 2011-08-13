@@ -148,6 +148,12 @@ private:
     Gtk::HBox wPtOpsHBox1;
     Gtk::HBox wPtOpsHBox2;
     Gtk::VBox wBoxOfChord;
+    Gtk::Notebook wChordNotebook;
+    Gtk::HBox wCtrlHBox;
+    Gtk::VBox wCtrlScale;
+    Gtk::Label wCtrl127;
+    Gtk::Label wCtrl64;
+    Gtk::Label wCtrl0;
     Gtk::VBox wRightBox;
     Gtk::HBox wRightBox1;
     Gtk::HBox wRightBox2;
