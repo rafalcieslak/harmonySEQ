@@ -24,12 +24,14 @@ ControllerAtom::ControllerAtom(double _time, int _value)
                                 :  Atom(_time)
 {
     value = _value;
+    slope_type = SLOPE_TYPE_LINEAR;
 }
 
 ControllerAtom::ControllerAtom(const ControllerAtom& orig)
                                 : Atom(orig.time)
 {
     value = orig.value;
+    slope_type = orig.slope_type;
 }
 
 ControllerAtom::~ControllerAtom(){

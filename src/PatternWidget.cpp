@@ -63,12 +63,14 @@ void PatternWidget::UpdateSizeRequest(){
 }
 
 void PatternWidget::ZoomIn(){
-    horiz_size = horiz_size/1.2;
+    horiz_size = horiz_size*1.2;
+    if(horiz_size > 4800.0)  horiz_size = 4800.0;
     UpdateSizeRequest();
 }
 
 void PatternWidget::ZoomOut(){
-    horiz_size = horiz_size*1.2;
+    horiz_size = horiz_size/1.2;
+    if(horiz_size < 150.0)  horiz_size = 150.0;
     UpdateSizeRequest();
 }
 
@@ -461,7 +463,8 @@ void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
                             temp_time = time + ctrl->drag_offset_time + snap_offset;
                             if(temp_value > 127) temp_value = 127;
                             else if(temp_value < 0) temp_value = 0;
-                            temp_time = temp_time - (int) temp_time; //wrap to 0.0 - 0.9999...
+                            if(temp_time != 1.0) //leave a possibility to put control atoms at 1.0, may be useful if one wants to add an immidiate slope at bar's start
+                                temp_time = temp_time - (int) temp_time; //wrap to 0.0 - 0.9999...
                             if (temp_time < 0) temp_time += 1.0;
                             ctrl->value = temp_value;
                             ctrl->time = temp_time;
@@ -472,7 +475,8 @@ void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
         //important!
         selection = resulting_selection;
         container->Sort();
-        
+        //additionally:
+        if(seq_type == SEQ_TYPE_CONTROL) on_selection_changed.emit(selection.size()); //this will update the value spinbutton
     } else if (drag_mode == DRAG_MODE_SELECT_AREA) {
         drag_current_x = x;
         drag_current_y = y;
@@ -957,7 +961,6 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
                               //check if in temp. selection
                               if(drag_temporary_selection.find(ctrl) != drag_temporary_selection.end()) selected = true;
                               
-                              //until slopes are implementes, assume every atom is flat
                               //draw line to next point
                               ct.set_line_width(3.0);
                               if(n == -1 || n == size-1)
@@ -965,13 +968,22 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
                               else
                                 ct.set_source_rgb(0.2,0.2,0.2);
                               ct.move_to(x-(n==-1)*width+0.5,y+0.5);
-                              ct.line_to(nextctrl->time*width+(n==size-1)*width+0.5, y+0.5);
+                              if(ctrl->slope_type == SLOPE_TYPE_FLAT)
+                                  ct.line_to(nextctrl->time*width+(n==size-1)*width+0.5, y+0.5);
+                              else if(ctrl->slope_type == SLOPE_TYPE_LINEAR){
+                                  int next_y =  (double)internal_height*((127.0-nextctrl->value)/(127.0));
+                                  ct.line_to(nextctrl->time*width+(n==size-1)*width+0.5, next_y+0.5);
+                              }
                               ct.stroke();
                               
                               if(n == -1) continue; //no need to draw -1th atom
+                              
                               //draw atom
                               ct.set_line_width(1.0);
-                              ct.arc(x+0.5,y+0.5,7.0,0,2*M_PI);
+                              if(ctrl->slope_type == SLOPE_TYPE_FLAT)
+                                  ct.rectangle(x-3.5,y-3.5,7.0,7.0);
+                              else if(ctrl->slope_type == SLOPE_TYPE_LINEAR)
+                                  ct.arc(x+0.5,y+0.5,7.0,0,2*M_PI);
                               if(selected) ct.set_source_rgb(0.8,0.0,0.0);
                               else ct.set_source_rgb(0.,0.0,0.8);
                               ct.fill_preserve();

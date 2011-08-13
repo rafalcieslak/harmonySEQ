@@ -22,6 +22,13 @@
 
 #include "Atom.h"
 
+enum SlopeType{
+    SLOPE_TYPE_FLAT,
+    SLOPE_TYPE_LINEAR,
+            //maybe once there will be more to choose from?
+    SLOPE_TYPE_UNKNOWN = 256 //used if the sequencer widget should show neither of above
+};
+
 class ControllerAtom : public Atom {
 public:
     ControllerAtom(double _time, int _value);
@@ -33,6 +40,7 @@ public:
     /**From 0 to 127*/
     int value;
     
+    SlopeType slope_type;
 private:
 
 };
