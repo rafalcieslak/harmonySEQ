@@ -124,6 +124,7 @@ bool PatternWidget::GetSnap(){
 }
 
 void PatternWidget::SetSelectionVelocity(int v){
+    if(seq_type != SEQ_TYPE_NOTE) return;
     std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
     for (; it != selection.end(); it++) {
         NoteAtom* note = dynamic_cast<NoteAtom*>(*it);
@@ -133,6 +134,7 @@ void PatternWidget::SetSelectionVelocity(int v){
 }
 
 int PatternWidget::GetSelectionVelocity(){
+    if(seq_type != SEQ_TYPE_NOTE) return -1;
     int sum = 0;
     std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
     for (; it != selection.end(); it++) {
@@ -143,7 +145,30 @@ int PatternWidget::GetSelectionVelocity(){
     return sum/(selection.size());
 }
 
+void PatternWidget::SetSelectionValue(int v){
+    if(seq_type != SEQ_TYPE_CONTROL) return;
+    std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
+    for (; it != selection.end(); it++) {
+        ControllerAtom* ctrl = dynamic_cast<ControllerAtom*>(*it);
+        ctrl->value = v;
+    }    
+    Redraw();
+}
+
+int PatternWidget::GetSelectionValue(){
+    if(seq_type != SEQ_TYPE_CONTROL) return -1;
+    int sum = 0;
+    std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
+    for (; it != selection.end(); it++) {
+        ControllerAtom* ctrl = dynamic_cast<ControllerAtom*> (*it);
+        sum += ctrl->value;
+    }    
+    if(selection.size()==0) return 0;
+    return sum/(selection.size());
+}
+
 void PatternWidget::MoveSelectionUp(){
+    if(seq_type == SEQ_TYPE_NOTE){
         std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
         std::set<Atom *, AtomComparingClass> resulting_selection;
         for (; it != selection.end(); it++) {
@@ -152,21 +177,27 @@ void PatternWidget::MoveSelectionUp(){
             resulting_selection.insert(note);
         }
         selection = resulting_selection;
-        container->Sort();
+        //container->Sort(); //no need to sort, when pitch or value was changed
         Redraw();
+    }else if (seq_type == SEQ_TYPE_CONTROL)
+        IncreaseSelectionValue(8);
 }
 
 void PatternWidget::MoveSelectionDown(){
+    if(seq_type == SEQ_TYPE_NOTE){
         std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
         std::set<Atom *, AtomComparingClass> resulting_selection;
         for (; it != selection.end(); it++) {
             NoteAtom* note = dynamic_cast<NoteAtom*> (*it);
             note->pitch = (note->pitch-1)%6;
+            if(note->pitch < 0) note->pitch += 6;
             resulting_selection.insert(note);
         }
         selection = resulting_selection;
-        container->Sort();
+        //container->Sort(); //no need to sort, when pitch or value was changed
         Redraw();
+    }else if (seq_type == SEQ_TYPE_CONTROL)
+        DecreaseSelectionValue(8);
 }
 
 
@@ -174,11 +205,11 @@ void PatternWidget::MoveSelectionRight(){
         std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
         std::set<Atom *, AtomComparingClass> resulting_selection;
         for (; it != selection.end(); it++) {
-            NoteAtom* note = dynamic_cast<NoteAtom*> (*it);
-            note->time = (note->time+1.0/(double)container->owner->resolution);
-            if(note->time >= 1.0) note->time -= 1.0;
-            if(note->time < 0.0) note->time += 1.0;
-            resulting_selection.insert(note);
+            Atom* atm = (*it);
+            atm->time = (atm->time+1.0/(double)container->owner->resolution);
+            if(atm->time >= 1.0) atm->time -= 1.0;
+            if(atm->time < 0.0) atm->time += 1.0;
+            resulting_selection.insert(atm);
         }
         selection = resulting_selection;
         container->Sort();
@@ -189,46 +220,82 @@ void PatternWidget::MoveSelectionLeft(){
         std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
         std::set<Atom *, AtomComparingClass> resulting_selection;
         for (; it != selection.end(); it++) {
-            NoteAtom* note = dynamic_cast<NoteAtom*> (*it);
-            note->time = (note->time-1.0/(double)container->owner->resolution);
-            if(note->time >= 1.0) note->time -= 1.0;
-            if(note->time < 0.0) note->time += 1.0;
-            resulting_selection.insert(note);
+            Atom* atm = (*it);
+            atm->time = (atm->time-1.0/(double)container->owner->resolution);
+            if(atm->time >= 1.0) atm->time -= 1.0;
+            if(atm->time < 0.0) atm->time += 1.0;
+            resulting_selection.insert(atm);
         }
         selection = resulting_selection;
         container->Sort();
         Redraw();
 }
 
-void PatternWidget::IncreaseSelectionVelocity(){
+void PatternWidget::IncreaseSelectionVelocity(int amount){
+        if(seq_type != SEQ_TYPE_NOTE) return;
         std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
         std::set<Atom *, AtomComparingClass> resulting_selection;
         for (; it != selection.end(); it++) {
             NoteAtom* note = dynamic_cast<NoteAtom*> (*it);
-            note->velocity = (note->velocity+10);
+            note->velocity = (note->velocity+amount);
             if(note->velocity > 127) note->velocity = 127;
             if(note->velocity < 0) note->velocity = 0;
             resulting_selection.insert(note);
         }
         selection = resulting_selection;
-        container->Sort();
+        //container->Sort(); //no need to sort, when velocity was changed
         on_selection_changed.emit(selection.size());//this will update the velocity spinbutton
         Redraw();
 }
 
-void PatternWidget::DecraseSelecionVelocity(){
+void PatternWidget::DecreaseSelectionVelocity(int amount){
+        if(seq_type != SEQ_TYPE_NOTE) return;
         std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
         std::set<Atom *, AtomComparingClass> resulting_selection;
         for (; it != selection.end(); it++) {
             NoteAtom* note = dynamic_cast<NoteAtom*> (*it);
-            note->velocity = (note->velocity-10);
+            note->velocity = (note->velocity-amount);
             if(note->velocity > 127) note->velocity = 127;
             if(note->velocity < 0) note->velocity = 0;
             resulting_selection.insert(note);
         }
         selection = resulting_selection;
-        container->Sort();
+        //container->Sort(); //no need to sort, when velocity was changed
         on_selection_changed.emit(selection.size());//this will update the velocity spinbutton
+        Redraw();
+}
+
+void PatternWidget::IncreaseSelectionValue(int amount){
+        if(seq_type != SEQ_TYPE_CONTROL) return;
+        std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
+        std::set<Atom *, AtomComparingClass> resulting_selection;
+        for (; it != selection.end(); it++) {
+            ControllerAtom* ctrl = dynamic_cast<ControllerAtom*> (*it);
+            ctrl->value = (ctrl->value+amount);
+            if(ctrl->value > 127) ctrl->value = 127;
+            if(ctrl->value < 0) ctrl->value = 0;
+            resulting_selection.insert(ctrl);
+        }
+        selection = resulting_selection;
+        //container->Sort(); //no need to sort, when value was changed
+        on_selection_changed.emit(selection.size());//this will update the value spinbutton
+        Redraw();
+}
+
+void PatternWidget::DecreaseSelectionValue(int amount){
+        if(seq_type != SEQ_TYPE_CONTROL) return;
+        std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
+        std::set<Atom *, AtomComparingClass> resulting_selection;
+        for (; it != selection.end(); it++) {
+            ControllerAtom* ctrl = dynamic_cast<ControllerAtom*> (*it);
+            ctrl->value = (ctrl->value-amount);
+            if(ctrl->value > 127) ctrl->value = 127;
+            if(ctrl->value < 0) ctrl->value = 0;
+            resulting_selection.insert(ctrl);
+        }
+        selection = resulting_selection;
+        //container->Sort(); //no need to sort, when value was changed
+        on_selection_changed.emit(selection.size());//this will update the value spinbutton
         Redraw();
 }
 
@@ -703,18 +770,20 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
             return true;
             break;
         case 0xff52: //up
-            if(event->state & (1 << 0)) //shift key down
-                IncreaseSelectionVelocity();
-            else
+            if(event->state & (1 << 0)){ //shift key down
+                if (seq_type == SEQ_TYPE_NOTE) IncreaseSelectionVelocity(10);
+                else if (seq_type == SEQ_TYPE_CONTROL) IncreaseSelectionValue(8);
+            }else
                 MoveSelectionUp();
             
            if(add_mode){ add_mode = 0; on_add_mode_changed.emit();}
             return true;
             break;
         case 0xff54: //down
-            if(event->state & (1 << 0)) //shift key down
-                DecraseSelecionVelocity();
-            else
+            if(event->state & (1 << 0)){ //shift key down
+                if (seq_type == SEQ_TYPE_NOTE) DecreaseSelectionVelocity(10);
+                else if (seq_type == SEQ_TYPE_CONTROL) DecreaseSelectionValue(8);
+            }else
                 MoveSelectionDown();
             
            if(add_mode){ add_mode = 0; on_add_mode_changed.emit();}

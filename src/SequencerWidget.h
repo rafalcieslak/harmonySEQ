@@ -112,6 +112,7 @@ private:
     void OnChordWidgetNoteChanged(int n, int p);
     void OnChannelChanged();
     void OnVelocityChanged();
+    void OnValueChanged();
     void OnToggleMuteToggled();
     void OnResolutionChanged();
     void OnLengthChanged();
@@ -167,10 +168,12 @@ private:
     Gtk::VScrollbar wPatternScroll2;
     Gtk::SpinButton wChannelButton;
     Gtk::SpinButton wVelocityButton;
+    Gtk::SpinButton wValueButton;
     Gtk::SpinButton wActivePattern;
     Gtk::Button wSetAsActivePatternButton;
     Gtk::Label wChannelLabel;
     Gtk::Label wVelocityLabel;
+    Gtk::Label wValueLabel;
     Gtk::Label wActivePanelLabel;
     Gtk::Label wPatternLabel;
     Gtk::Label wNameLabel;

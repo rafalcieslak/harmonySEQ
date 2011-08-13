@@ -49,14 +49,17 @@ public:
     void SetSnap(bool s);
     bool GetSnap();
     
+    int GetSelectionVelocity();
     void SetSelectionVelocity(int v);
+    int GetSelectionValue();
+    void SetSelectionValue(int v);
+    
     /**Emitted when selection is changed. Provides an argument that is equal to number of notes in selection.*/
     sigc::signal<void,int> on_selection_changed;
     
     /**Emmited when patter changed add_mode and parent widget needs to update button*/
     sigc::signal<void> on_add_mode_changed;
     
-    int GetSelectionVelocity();
 protected:
     //Override default signal handler:
    virtual bool on_expose_event(GdkEventExpose* event);
@@ -110,8 +113,10 @@ private:
     void MoveSelectionDown();
     void MoveSelectionLeft();
     void MoveSelectionRight();
-    void IncreaseSelectionVelocity();
-    void DecraseSelecionVelocity();
+    void IncreaseSelectionVelocity(int amount);
+    void DecreaseSelectionVelocity(int amount);
+    void IncreaseSelectionValue(int amount);
+    void DecreaseSelectionValue(int amount);
     
 };
 

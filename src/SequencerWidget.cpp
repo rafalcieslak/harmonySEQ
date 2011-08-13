@@ -93,6 +93,8 @@ SequencerWidget::SequencerWidget()
     wUpperHBox2.pack_start(wDelete,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wVelocityLabel,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wVelocityButton,Gtk::PACK_SHRINK);
+    wUpperHBox2.pack_start(wValueLabel,Gtk::PACK_SHRINK);
+    wUpperHBox2.pack_start(wValueButton,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wSnapToggle,Gtk::PACK_SHRINK);
     
     wShowChordButton.add(wShowChordLabel);
@@ -144,6 +146,7 @@ SequencerWidget::SequencerWidget()
 
     wChannelLabel.set_text(_("MIDI channel:"));
     wVelocityLabel.set_text(_("Velocity:"));
+    wValueLabel.set_text(_("Value:"));
     wActivePanelLabel.set_text(_("Active pattern:"));
     wSetAsActivePatternButton.set_label(_("Set as active pattern"));
     wSetAsActivePatternButton.set_tooltip_markup(_("Sets the chosen pattern to be the <b>active</b> one, which means the one that  will be played back."));
@@ -163,17 +166,22 @@ SequencerWidget::SequencerWidget()
     wControllerButton.set_tooltip_markup(_("The <b>MIDI controller number</b> this sequencer outputs data on.\n\nFor example, synthesizers supporting GM standard should interpret data from controller 7 as volume setting."));
 
     wVelocityButton.set_range(0,127);
+    wValueButton.set_range(0,127);
     wChannelButton.set_range(1,16);
     wControllerButton.set_range(0.0,127.0);
     wVelocityButton.set_increments(1,16);
+    wValueButton.set_increments(1,16);
     wChannelButton.set_increments(1,1);
     wControllerButton.set_increments(1.0,16.0);
-    wVelocityButton.set_tooltip_markup(_("Sets the <b>velocity</b> of the notes played by this sequencer.\nUsually higher velocities result in louder sounds."));
+    wVelocityButton.set_tooltip_markup(_("Sets the <b>velocity</b> of selected note(s).\nUsually higher velocities result in louder sounds."));
+    wValueButton.set_tooltip_markup(_("Sets the <b>value</b> of selected point(s)."));
     wChannelButton.set_tooltip_markup(_("Selects the <b>MIDI channel</b> this sequencer will output notes to. "));
     wChannelButton.set_width_chars(2);
     wVelocityButton.set_width_chars(3);
+    wValueButton.set_width_chars(3);
     wControllerButton.set_width_chars(3);
     wVelocityButton.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnVelocityChanged));
+    wValueButton.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnValueChanged));
     wChannelButton.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnChannelChanged));
     wControllerButton.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnControllerChanged));
     wActivePattern.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnActivePatternChanged));
@@ -277,6 +285,8 @@ void SequencerWidget::HideAndShowWidgetsDependingOnSeqType(){
         wShowChordButton.show();
         wVelocityButton.show();
         wVelocityLabel.show();
+        wValueButton.hide();
+        wValueLabel.hide();
         wControllerButton.hide();
         wControllerLabel.hide();
     }else if(selectedSeqType == SEQ_TYPE_CONTROL){
@@ -285,6 +295,8 @@ void SequencerWidget::HideAndShowWidgetsDependingOnSeqType(){
         wShowChordButton.hide();
         wVelocityLabel.hide();
         wVelocityButton.hide();
+        wValueButton.show();
+        wValueLabel.show();
         wControllerButton.show();
         wControllerLabel.show();
     }
@@ -456,6 +468,17 @@ void SequencerWidget::OnVelocityChanged(){
     LeaveAddMode();
     Files::SetFileModified(1);
 }
+
+void SequencerWidget::OnValueChanged(){
+    if(ignore_signals) return;
+    if(!AnythingSelected) return;
+    
+    pattern_widget.SetSelectionValue(wValueButton.get_value());
+    
+    LeaveAddMode();
+    Files::SetFileModified(1);
+}
+
 void SequencerWidget::OnChordWidgetChanged(){
     //The chord updates the seq on it's own.
     //Just refresh the row.
@@ -641,6 +664,14 @@ void SequencerWidget::OnSelectionChanged(int n){
         }else{
             wVelocityButton.set_sensitive(1);
             wVelocityButton.set_value(pattern_widget.GetSelectionVelocity());
+        }
+    }else if(selectedSeqType == SEQ_TYPE_CONTROL){
+        if(n == 0){
+            //empty selection
+            wValueButton.set_sensitive(0);
+        }else{
+            wValueButton.set_sensitive(1);
+            wValueButton.set_value(pattern_widget.GetSelectionValue());
         }
     }
     ignore_signals = 0;
