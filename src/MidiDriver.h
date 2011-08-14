@@ -69,6 +69,8 @@ public:
     void SendNoteEvent(int channel, int pitch, int velocity, int duration);
 
     void ScheduleNote(int channel, int tick_time, int pitch, int velocity, int length);
+    void ScheduleCtrlEventSingle(int channel, int tick_time, int ctrl_no, int value);
+    void ScheduleCtrlEventLinearSlope(int channel, int ctrl_no, int start_tick_time, int start_value, int end_tick_time, int end_value);
     
     /**Sets tempo*/
     void SetTempo(double bpm);

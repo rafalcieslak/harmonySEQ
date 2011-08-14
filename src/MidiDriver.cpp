@@ -25,6 +25,7 @@
 #include "messages.h"
 #include "MainWindow.h"
 #include "NoteSequencer.h"
+#include "ControlSequencer.h"
 #include "Event.h"
 #include "Configuration.h"
 #include "SettingsWindow.h"
@@ -167,7 +168,33 @@ void MidiDriver::ScheduleNote(int channel, int tick_time, int pitch, int velocit
         //Output the event (but it stays at the queue.)
         snd_seq_event_output_direct(seq_handle, &ev);
 }
+
+void MidiDriver::ScheduleCtrlEventSingle(int channel, int tick_time, int ctrl_no, int value){
+    //*err << "time = " << tick_time << ", v = " << value << ENDL;
+    snd_seq_event_t ev;
+    snd_seq_ev_clear(&ev);
+
+    snd_seq_ev_set_controller(&ev, channel, ctrl_no, value);
+    snd_seq_ev_schedule_tick(&ev, queueid, 0, tick_time);
+    snd_seq_ev_set_source(&ev, output_port);
+    snd_seq_ev_set_subs(&ev);
+
+    snd_seq_event_output_direct(seq_handle, &ev);
+}
     
+void MidiDriver::ScheduleCtrlEventLinearSlope(int channel, int ctrl_no, int start_tick_time, int start_value, int end_tick_time, int end_value){
+    //*err << "s = " << start_value << ", e = " << end_value << ENDL;
+    int steps = end_value - start_value;
+    int time = end_tick_time - start_tick_time;
+    int abs_steps = (steps>0)?steps:-steps;
+    int sign = (steps>0)?1:-1;
+    if(steps != 0)
+        for(int x = 0; x <= abs_steps; x++){
+                ScheduleCtrlEventSingle(channel,start_tick_time+sign*x*time/steps,ctrl_no,start_value+sign*x);
+        }
+    else
+                ScheduleCtrlEventSingle(channel,start_tick_time,ctrl_no,start_value);
+}
 
 void MidiDriver::PassEvent(snd_seq_event_t* ev){
     *dbg << "passing an event...";
@@ -388,8 +415,9 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
             AtomContainer* pattern = seq->GetActivePattern();
             //Number of notes in one sequence
             int size = pattern->GetSize();
-            //The note.
+            //The note and ctrlatom.
             NoteAtom* note;
+            ControllerAtom* ctrl, *next_ctrl;
             
             double start_marker = seq->play_from_here_marker;
             double end_marker = seq->play_from_here_marker+(1.0/seq->GetLength());
@@ -408,10 +436,10 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                     X++;
                     if(seq->GetPlayOncePhase() == 2 && X == size) {seq->SetPlayOncePhase(3); break;}
                     //*err << "at note " << X << ", X/size = " << X/size << ENDL; 
-                    note = dynamic_cast<NoteAtom*>((*pattern)[X%size]);
-                    if(note->time + (X/size)*1.0 >= start_marker && s == -1) s = X ;
-                    if(note->time + (X/size)*1.0 < end_marker) e = X;
-                    if(note->time + (X/size)*1.0 >= end_marker) break;
+                    Atom* atm = ((*pattern)[X%size]);
+                    if(atm->time + (X/size)*1.0 >= start_marker && s == -1) s = X ;
+                    if(atm->time + (X/size)*1.0 < end_marker) e = X;
+                    if(atm->time + (X/size)*1.0 >= end_marker) break;
                 }
             }else{
                 //if empty thing was played once...
@@ -422,20 +450,50 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
             
             //We know which atoms to play, so lets play them.
             if(e != -1 && s != -1 && e>=s){
-                  *dbg << "-> playing from " << s << " to " << e <<  ENDL;
-                  for(int V = s; V<=e;V++){
-                        note = dynamic_cast<NoteAtom*>((*pattern)[V%size]);
-                        //Determine whether to output notes or control messages
-                        if(seq->GetType() == SEQ_TYPE_NOTE){
-                                NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seq);
-                                int pitch = noteseq->GetNoteOfChord(note->pitch);
-                                ScheduleNote(seq->GetChannel()-1,local_tick + (V/size)*sequence_time + note->time*TICKS_PER_NOTE*seq->GetLength(),pitch,note->velocity,note->length*TICKS_PER_NOTE*seq->GetLength());
-                        }else if(seq->GetType() == SEQ_TYPE_CONTROL){
-                                *dbg << "outputting control messages\n";
-                        }else{
-                                *err << "Sequencer is neither note nor control type. Don't bother reporting this to harmonySEQ developers. This error message will never display, so if you see it, it means you must have broken something intentionally.\n";
-                        }
-                  }
+                      *dbg << "-> playing from " << s << " to " << e <<  ENDL;
+                      //Determine whether to output notes or control messages
+                      if(seq->GetType() == SEQ_TYPE_NOTE){
+                          
+                                  for(int V = s; V<=e;V++){
+                                        note = dynamic_cast<NoteAtom*>((*pattern)[V%size]);
+                                        NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seq);
+                                        int pitch = noteseq->GetNoteOfChord(note->pitch);
+                                        ScheduleNote(seq->GetChannel()-1,local_tick + (V/size)*sequence_time + note->time*TICKS_PER_NOTE*seq->GetLength(),pitch,note->velocity,note->length*TICKS_PER_NOTE*seq->GetLength());
+                                  }
+                                  
+                      }else if(seq->GetType() == SEQ_TYPE_CONTROL){
+                          
+                                  for(int V = s; V<=e;V++){
+                                        ctrl = dynamic_cast<ControllerAtom*>((*pattern)[V%size]);
+                                        ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*>(seq);
+                                        if(ctrl->slope_type == SLOPE_TYPE_FLAT){
+                                            ScheduleCtrlEventSingle(seq->GetChannel()-1, local_tick + (V/size)*sequence_time + ctrl->time*TICKS_PER_NOTE*seq->GetLength(),ctrlseq->controller_number,ctrl->value);
+                                        }else if(ctrl->slope_type == SLOPE_TYPE_LINEAR){
+                                            
+                                            
+                                            //TODO very important! output slopes ONLY to next bar!
+                                            
+                                            
+                                            next_ctrl = dynamic_cast<ControllerAtom*>((*pattern)[(V+1)%size]);
+                                            double nextctrl_time = next_ctrl->time;
+                                            if(V==size-1) nextctrl_time += 1.0; //if this is a last note in pattern, make sure to schedule it's slope later!
+                                            ScheduleCtrlEventLinearSlope(
+                                                                         seq->GetChannel()-1,
+                                                                         ctrlseq->controller_number,
+                                                                         local_tick + (V/size)*sequence_time + ctrl->time*TICKS_PER_NOTE*seq->GetLength(),
+                                                                         ctrl->value,
+                                                                         local_tick + (V/size)*sequence_time + nextctrl_time*TICKS_PER_NOTE*seq->GetLength(),
+                                                                         next_ctrl->value
+                                            );
+                                            
+                                        }else{
+                                            //something wrong.
+                                        }
+                                  }
+                              
+                      }else{
+                              *err << "Sequencer is neither note nor control type. Don't bother reporting this to harmonySEQ developers. This error message will never display, so if you see it, it means you must have broken something intentionally.\n";
+                     }
             }
             double play_from_here_marker = Wrap(end_marker);
             //rounding to ensure sync...
