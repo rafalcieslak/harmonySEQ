@@ -29,7 +29,6 @@
 #include "Sequencer.h"
 #include "Event.h"
 #include "EventGUI.h"
-#include "Action.h"
 #include "Files.h"
 #include "TreeModels.h"
 #include "Configuration.h"

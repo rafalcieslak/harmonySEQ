@@ -20,6 +20,7 @@
 
 #include "EventsWidget.h"
 #include "Event.h"
+#include "Action.h"
 #include "global.h"
 #include "messages.h"
 #include "Files.h"

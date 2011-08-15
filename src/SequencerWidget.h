@@ -20,7 +20,6 @@
 #define	SEQUENCERWIDGET_H
 #include <gtkmm.h>
 #include "seqHandle.h"
-#include "Sequencer.h"
 #include "ChordWidget.h"
 #include "PatternWidget.h"
 class Sequencer;

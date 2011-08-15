@@ -20,6 +20,7 @@
 #ifndef NOTESEQUENCER_H
 #define	NOTESEQUENCER_H
 #include "Sequencer.h"
+#include "Chord.h"
 #include <glibmm/ustring.h>
 
 class NoteSequencer : public Sequencer {

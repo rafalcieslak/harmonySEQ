@@ -18,6 +18,7 @@
 */
 
 #include "ChordWidget.h"
+#include "Chord.h"
 #include "TreeModels.h"
 #include "messages.h"
 

@@ -22,7 +22,6 @@
 #define	SEQUENCER_H
 #include "global.h"
 #include <gtkmm.h>
-#include "Chord.h"
 #include "seqHandle.h"
 #include "AtomContainer.h"
 using namespace std;

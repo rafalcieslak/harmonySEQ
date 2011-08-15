@@ -23,6 +23,7 @@
 #include "messages.h"
 #include "MidiDriver.h"
 #include "Files.h"
+#include "ActionGUI.h"
 
 Action::Action(ActionTypes t, int a1, int a2){
     args.resize(ACTION_ARGS_NUM);

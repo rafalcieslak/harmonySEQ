@@ -18,6 +18,9 @@
 */
 
 #include "Event.h"
+#include "EventGUI.h"
+#include "Action.h"
+#include "Chord.h"
 #include "messages.h"
 #include "MainWindow.h"
 

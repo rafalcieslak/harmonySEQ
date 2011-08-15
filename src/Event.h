@@ -20,8 +20,10 @@
 #ifndef EVENT_H
 #define	EVENT_H
 #include "global.h"
-#include "EventGUI.h"
-#include "Action.h"
+#include "gtkmm.h"
+
+class Action;
+class EventGUI;
 class Event;
 
 extern bool event_capturing_mode;

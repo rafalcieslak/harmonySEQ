@@ -21,6 +21,7 @@
 #include "TreeModels.h"
 #undef I_DO_NOT_WANT_EXTERNS_FROM_TREE_MODELS
 #include "Event.h"
+#include "Action.h"
 #include "messages.h"
 
 ModelColumns_SEQUENCERS m_columns_sequencers;

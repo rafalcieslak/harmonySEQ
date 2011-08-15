@@ -21,7 +21,10 @@
 #define	ACTION_H
 
 #include "global.h"
-#include "ActionGUI.h"
+#include "gtkmm.h"
+#include "Chord.h"
+
+class ActionGUI;
 
 /**Number of arguments each action has*/
 #define ACTION_ARGS_NUM 20
