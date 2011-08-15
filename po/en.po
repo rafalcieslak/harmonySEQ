@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ASCII\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-08-02 04:52+0000\n"
-"X-Generator: Launchpad (build 13552)\n"
+"X-Launchpad-Export-Date: 2011-08-15 04:43+0000\n"
+"X-Generator: Launchpad (build 13674)\n"
 "Language: en\n"
 
 #: src/main.cpp:286
@@ -1201,76 +1201,3 @@ msgstr "Error - cannot colorize triggered event: row is empty.\n"
 #: src/EventsWidget.cpp:135
 msgid "Error - cannot colorize triggered action: row is empty.\n"
 msgstr ""
-
-#~ msgid ", name is: "
-#~ msgstr ", name is: "
-
-#~ msgid "Apply main note"
-#~ msgstr "Apply main note"
-
-#~ msgid "MN"
-#~ msgstr "MN"
-
-#~ msgid "Main Note:"
-#~ msgstr "Main Note:"
-
-#~ msgid "Mute"
-#~ msgstr "Mute"
-
-#~ msgid "Muted"
-#~ msgstr "Muted"
-
-#~ msgid "activated row "
-#~ msgstr "activated row "
-
-#, c-format
-#~ msgid ""
-#~ "harmonySEQ, version %s\n"
-#~ "\n"
-#~ "usage: harmonySEQ [-hdvp]\n"
-#~ "\n"
-#~ "    -p --ports n     sets ports number to n\n"
-#~ "    -d --debug       enters debug mode, prints lots of debug messeges\n"
-#~ "    -h --help        prints this help messase and exits\n"
-#~ "    -v --version     prints the program version\n"
-#~ msgstr ""
-#~ "harmonySEQ, version %s\n"
-#~ "\n"
-#~ "usage: harmonySEQ [-hdvp]\n"
-#~ "\n"
-#~ "    -p --ports n     sets ports number to n\n"
-#~ "    -d --debug       enters debug mode, prints lots of debug messeges\n"
-#~ "    -h --help        prints this help messase and exits\n"
-#~ "    -v --version     prints the program version\n"
-
-#~ msgid "sequencer"
-#~ msgstr "sequencer"
-
-#~ msgid "setting ports number to "
-#~ msgstr "setting ports number to "
-
-#, c-format
-#~ msgid ""
-#~ "       --pass-midi   passes the midi events through the program by default\n"
-#~ msgstr ""
-#~ "       --pass-midi   passes the midi events through the program by default\n"
-
-#~ msgid "Chan"
-#~ msgstr "Chan"
-
-#~ msgid "Clone"
-#~ msgstr "Clone"
-
-#, c-format
-#~ msgid "ERROR - error while trying to read %s\n"
-#~ msgstr "ERROR - error while trying to read %s\n"
-
-#~ msgid "Len"
-#~ msgstr "Len"
-
-#~ msgid "Res"
-#~ msgstr "Res"
-
-#, c-format
-#~ msgid "When note %d on channel %d is moved..."
-#~ msgstr "When note %d on channel %d is moved..."
