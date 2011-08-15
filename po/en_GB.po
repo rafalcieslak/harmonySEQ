@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-08-02 04:52+0000\n"
-"X-Generator: Launchpad (build 13552)\n"
+"X-Launchpad-Export-Date: 2011-08-15 04:44+0000\n"
+"X-Generator: Launchpad (build 13674)\n"
 "Language: en_GB\n"
 
 #: src/main.cpp:286
@@ -337,7 +337,6 @@ msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Jan Fuchsmann https://launchpad.net/~jan-spreemusik\n"
-"  Marqin https://launchpad.net/~marqin\n"
 "  Rafal Cieslak https://launchpad.net/~rafalcieslak256"
 
 #: src/MainWindow.cpp:668
@@ -1300,70 +1299,3 @@ msgstr "Error - cannot colourize triggered event: row is empty.\n"
 #: src/EventsWidget.cpp:135
 msgid "Error - cannot colorize triggered action: row is empty.\n"
 msgstr "Error - cannot colourize triggered action: row is empty.\n"
-
-#~ msgid "Apply main note"
-#~ msgstr "Apply main note"
-
-#~ msgid ", name is: "
-#~ msgstr ", name is: "
-
-#~ msgid "Clone"
-#~ msgstr "Clone"
-
-#, c-format
-#~ msgid ""
-#~ "       --pass-midi   passes the midi events through the program by default\n"
-#~ msgstr ""
-#~ "       --pass-midi   passes the midi events through the program by default\n"
-
-#~ msgid "Chan"
-#~ msgstr "Chan"
-
-#, c-format
-#~ msgid "ERROR - error while trying to read %s\n"
-#~ msgstr "ERROR - error while trying to read %s\n"
-
-#~ msgid "MN"
-#~ msgstr "MN"
-
-#~ msgid "Main Note:"
-#~ msgstr "Main Note:"
-
-#~ msgid "Len"
-#~ msgstr "Len"
-
-#~ msgid "Res"
-#~ msgstr "Res"
-
-#, c-format
-#~ msgid "When note %d on channel %d is moved..."
-#~ msgstr "When note %d on channel %d is moved..."
-
-#, c-format
-#~ msgid ""
-#~ "harmonySEQ, version %s\n"
-#~ "\n"
-#~ "usage: harmonySEQ [-hdvp]\n"
-#~ "\n"
-#~ "    -p --ports n     sets ports number to n\n"
-#~ "    -d --debug       enters debug mode, prints lots of debug messeges\n"
-#~ "    -h --help        prints this help messase and exits\n"
-#~ "    -v --version     prints the program version\n"
-#~ msgstr ""
-#~ "harmonySEQ, version %s\n"
-#~ "\n"
-#~ "usage: harmonySEQ [-hdvp]\n"
-#~ "\n"
-#~ "    -p --ports n     sets ports number to n\n"
-#~ "    -d --debug       enters debug mode, prints lots of debug messeges\n"
-#~ "    -h --help        prints this help messase and exits\n"
-#~ "    -v --version     prints the program version\n"
-
-#~ msgid "activated row "
-#~ msgstr "activated row "
-
-#~ msgid "sequencer"
-#~ msgstr "sequencer"
-
-#~ msgid "The file had unsaved changes."
-#~ msgstr "The file has unsaved changes."
