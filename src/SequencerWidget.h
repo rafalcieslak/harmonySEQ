@@ -165,6 +165,8 @@ private:
     Gtk::HSeparator wHSep;
     Gtk::VSeparator wRightBoxSep;
     Gtk::VSeparator wChannelSep;
+    Gtk::VSeparator wVelSep;
+    Gtk::VSeparator wSlopeSelectorSep;
 
     Gtk::Notebook wNotebook;
     Gtk::VBox wNotebookVbox;

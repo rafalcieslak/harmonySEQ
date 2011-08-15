@@ -93,13 +93,17 @@ SequencerWidget::SequencerWidget()
     //wUpperHBox2.pack_start(wShowChordButton,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wAddToggle,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wDelete,Gtk::PACK_SHRINK);
+    wUpperHBox2.pack_start(wSlopeSelectorSep,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wCtrlSlopeFlat,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wCtrlSlopeLinear,Gtk::PACK_SHRINK);
+    wUpperHBox2.pack_start(wVelSep,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wVelocityLabel,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wVelocityButton,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wValueLabel,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wValueButton,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wSnapToggle,Gtk::PACK_SHRINK);
+    wVelSep.set_size_request(8,0);
+    wSlopeSelectorSep.set_size_request(8,0);
     
     wShowChordButton.add(wShowChordLabel);
     wShowChordLabel.set_markup(_("<b>Chord</b>"));
@@ -314,6 +318,7 @@ void SequencerWidget::HideAndShowWidgetsDependingOnSeqType(){
         wValueLabel.hide();
         wControllerButton.hide();
         wControllerLabel.hide();
+        wSlopeSelectorSep.hide();
         wCtrlSlopeFlat.hide();
         wCtrlSlopeLinear.hide();
     }else if(selectedSeqType == SEQ_TYPE_CONTROL){
@@ -327,6 +332,7 @@ void SequencerWidget::HideAndShowWidgetsDependingOnSeqType(){
         wValueLabel.show();
         wControllerButton.show();
         wControllerLabel.show();
+        wSlopeSelectorSep.show();
         wCtrlSlopeFlat.show();
         wCtrlSlopeLinear.show();
     }
