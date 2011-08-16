@@ -60,8 +60,8 @@ MainWindow::MainWindow()
     m_refActionGroup->add(Gtk::Action::create("FileSaveAs", Gtk::Stock::SAVE_AS,_("Save as..."),_("Saves the current file with a different name.")), sigc::mem_fun(*this, &MainWindow::OnMenuSaveAsClicked));
     m_refActionGroup->add(Gtk::Action::create("FileQuit", Gtk::Stock::QUIT,_("Quit"),_("Quits harmonySEQ.")), sigc::mem_fun(*this, &MainWindow::OnMenuQuitClicked));
     m_refActionGroup->add(Gtk::Action::create("Preferences", Gtk::Stock::PREFERENCES,_("Preferences"),_("harmonySEQ configuration.")), sigc::mem_fun(*this, &MainWindow::OnPreferencesClicked));
-    m_refActionGroup->add(Gtk::Action::create("AddNoteSeq", Gtk::Stock::ADD, _("Add note sequencer"),_("Adds a new note seqencer. Note sequencers store melodies and output them as MIDI notes.")), sigc::mem_fun(*this, &MainWindow::OnAddNoteSeqClicked));
-    m_refActionGroup->add(Gtk::Action::create("AddCtrlSeq", Gtk::Stock::ADD, _("Add control sequencer"),_("Adds a new control seqencer. Control sequencers store a graph of a particular setting, and output it as MIDI control messages.")), sigc::mem_fun(*this, &MainWindow::OnAddControlSeqClicked));
+    m_refActionGroup->add(Gtk::Action::create("AddNoteSeq", _("Add note sequencer"),_("Adds a new note seqencer. Note sequencers store melodies and output them as MIDI notes.")), sigc::mem_fun(*this, &MainWindow::OnAddNoteSeqClicked));
+    m_refActionGroup->add(Gtk::Action::create("AddCtrlSeq", _("Add control sequencer"),_("Adds a new control seqencer. Control sequencers store a graph of a particular setting, and output it as MIDI control messages.")), sigc::mem_fun(*this, &MainWindow::OnAddControlSeqClicked));
     m_refActionGroup->add(Gtk::Action::create("RemoveSeq", Gtk::Stock::REMOVE, _("Remove"),_("Removes selected sequencer")), sigc::mem_fun(*this, &MainWindow::OnRemoveClicked));
     m_refActionGroup->add(Gtk::Action::create("DuplicateSeq", Gtk::Stock::CONVERT, _("Duplicate"), _("Duplicates selected sequencer")), sigc::mem_fun(*this, &MainWindow::OnCloneClicked));
     m_refActionGroup->add(Gtk::Action::create("About", Gtk::Stock::ABOUT), sigc::mem_fun(*this, &MainWindow::OnAboutMenuClicked));
@@ -162,6 +162,10 @@ MainWindow::MainWindow()
     Gtk::Widget* pMetronome = m_refUIManager->get_widget("/ToolBar/Metronome");
     Gtk::ToggleToolButton& MetronomeTool = dynamic_cast<Gtk::ToggleToolButton&> (*pMetronome);
     MetronomeTool.set_active(metronome);
+    Gtk::Widget* pAddCtrl = m_refUIManager->get_widget("/ToolBar/AddCtrlSeq");
+    Gtk::ToolButton& AddCtrlTool = dynamic_cast<Gtk::ToolButton&> (*pAddCtrl);
+    Gtk::Widget* pAddNote = m_refUIManager->get_widget("/ToolBar/AddNoteSeq");
+    Gtk::ToolButton& AddNoteTool = dynamic_cast<Gtk::ToolButton&> (*pAddNote);
     Gtk::Widget* pTempo = m_refUIManager->get_widget("/ToolBar/Tempo");
     Gtk::ToolItem& TempoTool = dynamic_cast<Gtk::ToolItem&> (*pTempo);
     Gtk::Widget* pTempoLabelTool = m_refUIManager->get_widget("/ToolBar/TempoLabel");
@@ -284,7 +288,11 @@ MainWindow::MainWindow()
     if (harmonySEQ_logo_48) set_icon(harmonySEQ_logo_48);
     if (metronome_icon_24){
         metronometool_icon.set(metronome_icon_24);
+        add_ctrl_seq_icon.set(icon_add_ctrl_seq);
+        add_note_seq_icon.set(icon_add_note_seq);
         MetronomeTool.set_icon_widget(metronometool_icon);
+        AddCtrlTool.set_icon_widget(add_ctrl_seq_icon);
+        AddNoteTool.set_icon_widget(add_note_seq_icon);
     }
 
     show_all_children(1);

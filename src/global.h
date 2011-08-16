@@ -130,6 +130,8 @@ extern std::vector<Event *> Events;
 extern std::map<int,Glib::ustring> notemap;
 extern Glib::RefPtr< Gdk::Pixbuf > harmonySEQ_logo_48;
 extern Glib::RefPtr< Gdk::Pixbuf > metronome_icon_24;
+extern Glib::RefPtr< Gdk::Pixbuf > icon_add_note_seq;
+extern Glib::RefPtr< Gdk::Pixbuf > icon_add_ctrl_seq;
 #endif
 /**Ask user a YES-NO question.*/
 bool Ask(Glib::ustring message, Glib::ustring secondary_message = "");

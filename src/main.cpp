@@ -53,6 +53,8 @@ std::map<int, Glib::ustring> notemap;         //map used for note_number -> note
 
 Glib::RefPtr< Gdk::Pixbuf > harmonySEQ_logo_48;
 Glib::RefPtr< Gdk::Pixbuf > metronome_icon_24;
+Glib::RefPtr< Gdk::Pixbuf > icon_add_note_seq;
+Glib::RefPtr< Gdk::Pixbuf > icon_add_ctrl_seq;
 
 int debugging = 0, help = 0, version = 0; //flags set by getopt, depending on command-line parameters
 
@@ -200,24 +202,32 @@ void LoadIcons(){
         *dbg << "harmonySEQ icon found at: /usr/share/icons/hicolor/48x48/apps/harmonyseq.png" << ENDL;
         harmonySEQ_logo_48 = Gdk::Pixbuf::create_from_file("/usr/share/icons/hicolor/48x48/apps/harmonyseq.png");
         metronome_icon_24 = Gdk::Pixbuf::create_from_file("/usr/share/harmonyseq/icons/hicolor/24x24/actions/metronome.png");
+        icon_add_ctrl_seq = Gdk::Pixbuf::create_from_file("/usr/share/harmonyseq/icons/hicolor/scalable/actions/add_ctrl_seq.svg");
+        icon_add_note_seq = Gdk::Pixbuf::create_from_file("/usr/share/harmonyseq/icons/hicolor/scalable/actions/add_note_seq.svg");
     } else
     if (Files::fexists("/usr/local/share/icons/hicolor/48x48/apps/harmonyseq.png")){
         //seems we are installed defaultly in /usr/share/local
         *dbg << "harmonySEQ icon found at: /usr/local/share/icons/hicolor/48x48/apps/harmonyseq.png" << ENDL;
         harmonySEQ_logo_48 = Gdk::Pixbuf::create_from_file("/usr/local/share/icons/hicolor/48x48/apps/harmonyseq.png");
         metronome_icon_24 = Gdk::Pixbuf::create_from_file("/usr/local/share/harmonyseq/icons/hicolor/24x24/actions/metronome.png");
+        icon_add_ctrl_seq = Gdk::Pixbuf::create_from_file("/usr/local/share/harmonyseq/icons/hicolor/scalable/actions/add_ctrl_seq.svg");
+        icon_add_note_seq = Gdk::Pixbuf::create_from_file("/usr/local/share/harmonyseq/icons/hicolor/scalable/actions/add_note_seq.svg");
     } else
     if (Files::fexists("pixmaps/48x48/apps/harmonyseq.png")){
         //seems we are not installed, and run from main source directory
         *dbg << "harmonySEQ icon found at: pixmaps/48x48/apps/harmonyseq.png" << ENDL;
         harmonySEQ_logo_48 = Gdk::Pixbuf::create_from_file("pixmaps/48x48/apps/harmonyseq.png");
         metronome_icon_24 = Gdk::Pixbuf::create_from_file("pixmaps/24x24/metronome.png");
+        icon_add_ctrl_seq = Gdk::Pixbuf::create_from_file("pixmaps/scalable/add_ctrl_seq.svg");
+        icon_add_note_seq = Gdk::Pixbuf::create_from_file("pixmaps/scalable/add_note_seq.svg");
     } else
    if (Files::fexists("../pixmaps/48x48/apps/harmonyseq.png")) {
         //seems we are not installed, and run from src/ directory
         *dbg << "harmonySEQ icon found at: ../pixmaps/48x48/apps/harmonyseq.png" << ENDL;
         harmonySEQ_logo_48 = Gdk::Pixbuf::create_from_file("../pixmaps/48x48/apps/harmonyseq.png");
         metronome_icon_24 = Gdk::Pixbuf::create_from_file("../pixmaps/24x24/metronome.png");
+        icon_add_ctrl_seq = Gdk::Pixbuf::create_from_file("../pixmaps/scalable/add_ctrl_seq.svg");
+        icon_add_note_seq = Gdk::Pixbuf::create_from_file("../pixmaps/scalable/add_note_seq.svg");
     } else{
        //icons not found.
         *err << ("Failed to find harmonySEQ icon files.\n");

@@ -134,6 +134,8 @@ private:
 
     Gtk::Label wTempoLabel;
     Gtk::Image metronometool_icon;
+    Gtk::Image add_ctrl_seq_icon;
+    Gtk::Image add_note_seq_icon;
 };
 
 
