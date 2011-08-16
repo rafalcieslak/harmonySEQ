@@ -212,6 +212,8 @@ private:
     
     Gtk::Image wImageAdd;
     Gtk::Image wImageRemove;
+    Gtk::Image wImageSlopeLinear;
+    Gtk::Image wImageSlopeFlat;
 
     class ModelColumns2 : public Gtk::TreeModel::ColumnRecord {
     public:

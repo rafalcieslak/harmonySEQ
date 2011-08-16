@@ -29,6 +29,9 @@
 #include "ControlSequencer.h"
 #include "ControllerAtom.h"
 
+extern Glib::RefPtr< Gdk::Pixbuf > icon_slope_linear;
+extern Glib::RefPtr< Gdk::Pixbuf > icon_slope_flat;
+
 SequencerWidget::SequencerWidget()
                 : wImageAdd(Gtk::Stock::ADD,Gtk::ICON_SIZE_BUTTON), wImageRemove(Gtk::Stock::REMOVE,Gtk::ICON_SIZE_BUTTON)
 {
@@ -242,6 +245,17 @@ SequencerWidget::SequencerWidget()
     
     wViewport->signal_scroll_event().connect(sigc::mem_fun(*this,&SequencerWidget::OnPatternMouseScroll));
 
+    if(icon_slope_flat){
+        wImageSlopeFlat.set(icon_slope_flat);
+        wImageSlopeLinear.set(icon_slope_linear);
+        wCtrlSlopeFlat.set_image(wImageSlopeFlat);
+        wCtrlSlopeLinear.set_image(wImageSlopeLinear);
+        wCtrlSlopeFlat.set_label("");
+        wCtrlSlopeLinear.set_label("");
+        wImageSlopeFlat.show();
+        wImageSlopeLinear.show();
+    }
+    
     add(wMainVbox);
     
     show_all_children(1);
