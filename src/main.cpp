@@ -204,8 +204,8 @@ void LoadIcons(){
         *dbg << "harmonySEQ icon found at: /usr/share/icons/hicolor/48x48/apps/harmonyseq.png" << ENDL;
         harmonySEQ_logo_48 = Gdk::Pixbuf::create_from_file("/usr/share/icons/hicolor/48x48/apps/harmonyseq.png");
         metronome_icon_24 = Gdk::Pixbuf::create_from_file("/usr/share/harmonyseq/icons/hicolor/24x24/actions/metronome.png");
-        icon_add_ctrl_seq = Gdk::Pixbuf::create_from_file("/usr/share/harmonyseq/icons/hicolor/scalable/actions/add_ctrl_seq.svg");
-        icon_add_note_seq = Gdk::Pixbuf::create_from_file("/usr/share/harmonyseq/icons/hicolor/scalable/actions/add_note_seq.svg");
+        icon_add_ctrl_seq = Gdk::Pixbuf::create_from_file("/usr/share/harmonyseq/icons/hicolor/24x24/actions/add_ctrl_seq.png");
+        icon_add_note_seq = Gdk::Pixbuf::create_from_file("/usr/share/harmonyseq/icons/hicolor/24x24/actions/add_note_seq.png");
         icon_slope_flat = Gdk::Pixbuf::create_from_file("/usr/share/harmonyseq/icons/hicolor/scalable/actions/slope_flat.svg");
         icon_slope_linear = Gdk::Pixbuf::create_from_file("/usr/share/harmonyseq/icons/hicolor/scalable/actions/slope_linear.svg");
     } else
@@ -214,8 +214,8 @@ void LoadIcons(){
         *dbg << "harmonySEQ icon found at: /usr/local/share/icons/hicolor/48x48/apps/harmonyseq.png" << ENDL;
         harmonySEQ_logo_48 = Gdk::Pixbuf::create_from_file("/usr/local/share/icons/hicolor/48x48/apps/harmonyseq.png");
         metronome_icon_24 = Gdk::Pixbuf::create_from_file("/usr/local/share/harmonyseq/icons/hicolor/24x24/actions/metronome.png");
-        icon_add_ctrl_seq = Gdk::Pixbuf::create_from_file("/usr/local/share/harmonyseq/icons/hicolor/scalable/actions/add_ctrl_seq.svg");
-        icon_add_note_seq = Gdk::Pixbuf::create_from_file("/usr/local/share/harmonyseq/icons/hicolor/scalable/actions/add_note_seq.svg");
+        icon_add_ctrl_seq = Gdk::Pixbuf::create_from_file("/usr/local/share/harmonyseq/icons/hicolor/24x24/actions/add_ctrl_seq.png");
+        icon_add_note_seq = Gdk::Pixbuf::create_from_file("/usr/local/share/harmonyseq/icons/hicolor/24x24/actions/add_note_seq.png");
         icon_slope_flat = Gdk::Pixbuf::create_from_file("/usr/local/share/harmonyseq/icons/hicolor/scalable/actions/slope_flat.svg");
         icon_slope_linear = Gdk::Pixbuf::create_from_file("/usr/local/share/harmonyseq/icons/hicolor/scalable/actions/slope_linear.svg");
     } else
@@ -224,8 +224,8 @@ void LoadIcons(){
         *dbg << "harmonySEQ icon found at: pixmaps/48x48/apps/harmonyseq.png" << ENDL;
         harmonySEQ_logo_48 = Gdk::Pixbuf::create_from_file("pixmaps/48x48/apps/harmonyseq.png");
         metronome_icon_24 = Gdk::Pixbuf::create_from_file("pixmaps/24x24/metronome.png");
-        icon_add_ctrl_seq = Gdk::Pixbuf::create_from_file("pixmaps/scalable/add_ctrl_seq.svg");
-        icon_add_note_seq = Gdk::Pixbuf::create_from_file("pixmaps/scalable/add_note_seq.svg");
+        icon_add_ctrl_seq = Gdk::Pixbuf::create_from_file("pixmaps/24x24/add_ctrl_seq.png");
+        icon_add_note_seq = Gdk::Pixbuf::create_from_file("pixmaps/24x24/add_note_seq.png");
         icon_slope_flat = Gdk::Pixbuf::create_from_file("pixmaps/scalable/slope_flat.svg",24,24);
         icon_slope_linear = Gdk::Pixbuf::create_from_file("pixmaps/scalable/slope_linear.svg",24,24);
     } else
@@ -234,8 +234,8 @@ void LoadIcons(){
         *dbg << "harmonySEQ icon found at: ../pixmaps/48x48/apps/harmonyseq.png" << ENDL;
         harmonySEQ_logo_48 = Gdk::Pixbuf::create_from_file("../pixmaps/48x48/apps/harmonyseq.png");
         metronome_icon_24 = Gdk::Pixbuf::create_from_file("../pixmaps/24x24/metronome.png");
-        icon_add_ctrl_seq = Gdk::Pixbuf::create_from_file("../pixmaps/scalable/add_ctrl_seq.svg");
-        icon_add_note_seq = Gdk::Pixbuf::create_from_file("../pixmaps/scalable/add_note_seq.svg");
+        icon_add_ctrl_seq = Gdk::Pixbuf::create_from_file("../pixmaps/24x24/add_ctrl_seq.png");
+        icon_add_note_seq = Gdk::Pixbuf::create_from_file("../pixmaps/24x24/add_note_seq.png");
         icon_slope_flat = Gdk::Pixbuf::create_from_file("../pixmaps/scalable/slope_flat.svg");
         icon_slope_linear = Gdk::Pixbuf::create_from_file("../pixmaps/scalable/slope_linear.svg");
     } else{
