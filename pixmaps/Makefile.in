@@ -74,15 +74,18 @@ am__base_list = \
   sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
 am__installdirs = "$(DESTDIR)$(harmonyseqicons24dir)" \
 	"$(DESTDIR)$(harmonyseqicons32dir)" \
-	"$(DESTDIR)$(harmonyseqicons48dir)" "$(DESTDIR)$(icons192dir)" \
-	"$(DESTDIR)$(icons192mdir)" "$(DESTDIR)$(icons32dir)" \
-	"$(DESTDIR)$(icons32mdir)" "$(DESTDIR)$(icons48dir)" \
-	"$(DESTDIR)$(icons48mdir)" "$(DESTDIR)$(iconsscalabledir)" \
+	"$(DESTDIR)$(harmonyseqicons48dir)" \
+	"$(DESTDIR)$(harmonyseqiconsscalabledir)" \
+	"$(DESTDIR)$(icons192dir)" "$(DESTDIR)$(icons192mdir)" \
+	"$(DESTDIR)$(icons32dir)" "$(DESTDIR)$(icons32mdir)" \
+	"$(DESTDIR)$(icons48dir)" "$(DESTDIR)$(icons48mdir)" \
+	"$(DESTDIR)$(iconsscalabledir)" \
 	"$(DESTDIR)$(iconsscalablemdir)"
 DATA = $(harmonyseqicons24_DATA) $(harmonyseqicons32_DATA) \
-	$(harmonyseqicons48_DATA) $(icons192_DATA) $(icons192m_DATA) \
-	$(icons32_DATA) $(icons32m_DATA) $(icons48_DATA) \
-	$(icons48m_DATA) $(iconsscalable_DATA) $(iconsscalablem_DATA)
+	$(harmonyseqicons48_DATA) $(harmonyseqiconsscalable_DATA) \
+	$(icons192_DATA) $(icons192m_DATA) $(icons32_DATA) \
+	$(icons32m_DATA) $(icons48_DATA) $(icons48m_DATA) \
+	$(iconsscalable_DATA) $(iconsscalablem_DATA)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 ALLOCA = @ALLOCA@
@@ -222,13 +225,15 @@ iconsscalabledir = $(datadir)/icons/hicolor/scalable/apps/
 iconsscalable_DATA = scalable/apps/harmonyseq.svg
 iconsscalablemdir = $(datadir)/icons/gnome/scalable/mimetypes/
 iconsscalablem_DATA = scalable/mimetypes/text-x-harmonyseq.svg
+harmonyseqiconsscalabledir = $(datadir)/harmonyseq/icons/hicolor/scalable/actions/
+harmonyseqiconsscalable_DATA = scalable/add_ctrl_seq.svg scalable/add_note_seq.svg scalable/metronome.svg
 harmonyseqicons48dir = $(datadir)/harmonyseq/icons/hicolor/48x48/actions/
-harmonyseqicons48_DATA = 48x48/metronome.png
+harmonyseqicons48_DATA = 48x48/metronome.png 48x48/add_ctrl_seq.png 48x48/add_note_seq.png 
 harmonyseqicons32dir = $(datadir)/harmonyseq/icons/hicolor/32x32/actions/
-harmonyseqicons32_DATA = 32x32/metronome.png
+harmonyseqicons32_DATA = 32x32/metronome.png 32x32/add_ctrl_seq.png 32x32/add_note_seq.png
 harmonyseqicons24dir = $(datadir)/harmonyseq/icons/hicolor/24x24/actions/
-harmonyseqicons24_DATA = 24x24/metronome.png
-EXTRA_DIST = 32x32/apps/harmonyseq.png 48x48/apps/harmonyseq.png 192x192/apps/harmonyseq.png scalable/apps/harmonyseq.svg 32x32/mimetypes/text-x-harmonyseq.png 48x48/mimetypes/gnome-mime-text-x-harmonyseq.png 192x192/mimetypes/text-x-harmonyseq.png scalable/mimetypes/text-x-harmonyseq.svg icon1.svg metronome.svg 48x48/metronome.png 32x32/metronome.png 24x24/metronome.png
+harmonyseqicons24_DATA = 24x24/metronome.png 24x24/add_ctrl_seq.png 24x24/add_note_seq.png
+EXTRA_DIST = 32x32/apps/harmonyseq.png 48x48/apps/harmonyseq.png 192x192/apps/harmonyseq.png scalable/apps/harmonyseq.svg 32x32/mimetypes/text-x-harmonyseq.png 48x48/mimetypes/gnome-mime-text-x-harmonyseq.png 192x192/mimetypes/text-x-harmonyseq.png scalable/mimetypes/text-x-harmonyseq.svg icon1.svg metronome.svg 48x48/metronome.png 32x32/metronome.png 24x24/metronome.png 48x48/add_ctrl_seq.png 48x48/add_note_seq.png 32x32/add_ctrl_seq.png 32x32/add_note_seq.png 24x24/add_ctrl_seq.png 24x24/add_note_seq.png scalable/add_ctrl_seq.svg scalable/add_note_seq.svg scalable/metronome.svg
 all: all-am
 
 .SUFFIXES:
@@ -322,6 +327,26 @@ uninstall-harmonyseqicons48DATA:
 	test -n "$$files" || exit 0; \
 	echo " ( cd '$(DESTDIR)$(harmonyseqicons48dir)' && rm -f" $$files ")"; \
 	cd "$(DESTDIR)$(harmonyseqicons48dir)" && rm -f $$files
+install-harmonyseqiconsscalableDATA: $(harmonyseqiconsscalable_DATA)
+	@$(NORMAL_INSTALL)
+	test -z "$(harmonyseqiconsscalabledir)" || $(MKDIR_P) "$(DESTDIR)$(harmonyseqiconsscalabledir)"
+	@list='$(harmonyseqiconsscalable_DATA)'; test -n "$(harmonyseqiconsscalabledir)" || list=; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(harmonyseqiconsscalabledir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(harmonyseqiconsscalabledir)" || exit $$?; \
+	done
+
+uninstall-harmonyseqiconsscalableDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(harmonyseqiconsscalable_DATA)'; test -n "$(harmonyseqiconsscalabledir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	test -n "$$files" || exit 0; \
+	echo " ( cd '$(DESTDIR)$(harmonyseqiconsscalabledir)' && rm -f" $$files ")"; \
+	cd "$(DESTDIR)$(harmonyseqiconsscalabledir)" && rm -f $$files
 install-icons192DATA: $(icons192_DATA)
 	@$(NORMAL_INSTALL)
 	test -z "$(icons192dir)" || $(MKDIR_P) "$(DESTDIR)$(icons192dir)"
@@ -523,7 +548,7 @@ check-am: all-am
 check: check-am
 all-am: Makefile $(DATA)
 installdirs:
-	for dir in "$(DESTDIR)$(harmonyseqicons24dir)" "$(DESTDIR)$(harmonyseqicons32dir)" "$(DESTDIR)$(harmonyseqicons48dir)" "$(DESTDIR)$(icons192dir)" "$(DESTDIR)$(icons192mdir)" "$(DESTDIR)$(icons32dir)" "$(DESTDIR)$(icons32mdir)" "$(DESTDIR)$(icons48dir)" "$(DESTDIR)$(icons48mdir)" "$(DESTDIR)$(iconsscalabledir)" "$(DESTDIR)$(iconsscalablemdir)"; do \
+	for dir in "$(DESTDIR)$(harmonyseqicons24dir)" "$(DESTDIR)$(harmonyseqicons32dir)" "$(DESTDIR)$(harmonyseqicons48dir)" "$(DESTDIR)$(harmonyseqiconsscalabledir)" "$(DESTDIR)$(icons192dir)" "$(DESTDIR)$(icons192mdir)" "$(DESTDIR)$(icons32dir)" "$(DESTDIR)$(icons32mdir)" "$(DESTDIR)$(icons48dir)" "$(DESTDIR)$(icons48mdir)" "$(DESTDIR)$(iconsscalabledir)" "$(DESTDIR)$(iconsscalablemdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -573,8 +598,9 @@ info-am:
 
 install-data-am: install-harmonyseqicons24DATA \
 	install-harmonyseqicons32DATA install-harmonyseqicons48DATA \
-	install-icons192DATA install-icons192mDATA install-icons32DATA \
-	install-icons32mDATA install-icons48DATA install-icons48mDATA \
+	install-harmonyseqiconsscalableDATA install-icons192DATA \
+	install-icons192mDATA install-icons32DATA install-icons32mDATA \
+	install-icons48DATA install-icons48mDATA \
 	install-iconsscalableDATA install-iconsscalablemDATA
 	@$(NORMAL_INSTALL)
 	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
@@ -622,7 +648,8 @@ ps-am:
 
 uninstall-am: uninstall-harmonyseqicons24DATA \
 	uninstall-harmonyseqicons32DATA \
-	uninstall-harmonyseqicons48DATA uninstall-icons192DATA \
+	uninstall-harmonyseqicons48DATA \
+	uninstall-harmonyseqiconsscalableDATA uninstall-icons192DATA \
 	uninstall-icons192mDATA uninstall-icons32DATA \
 	uninstall-icons32mDATA uninstall-icons48DATA \
 	uninstall-icons48mDATA uninstall-iconsscalableDATA \
@@ -637,18 +664,19 @@ uninstall-am: uninstall-harmonyseqicons24DATA \
 	install-data-hook install-dvi install-dvi-am install-exec \
 	install-exec-am install-harmonyseqicons24DATA \
 	install-harmonyseqicons32DATA install-harmonyseqicons48DATA \
-	install-html install-html-am install-icons192DATA \
-	install-icons192mDATA install-icons32DATA install-icons32mDATA \
-	install-icons48DATA install-icons48mDATA \
-	install-iconsscalableDATA install-iconsscalablemDATA \
-	install-info install-info-am install-man install-pdf \
-	install-pdf-am install-ps install-ps-am install-strip \
-	installcheck installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-generic pdf \
-	pdf-am ps ps-am uninstall uninstall-am \
-	uninstall-harmonyseqicons24DATA \
+	install-harmonyseqiconsscalableDATA install-html \
+	install-html-am install-icons192DATA install-icons192mDATA \
+	install-icons32DATA install-icons32mDATA install-icons48DATA \
+	install-icons48mDATA install-iconsscalableDATA \
+	install-iconsscalablemDATA install-info install-info-am \
+	install-man install-pdf install-pdf-am install-ps \
+	install-ps-am install-strip installcheck installcheck-am \
+	installdirs maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-generic pdf pdf-am ps ps-am uninstall \
+	uninstall-am uninstall-harmonyseqicons24DATA \
 	uninstall-harmonyseqicons32DATA \
-	uninstall-harmonyseqicons48DATA uninstall-hook \
+	uninstall-harmonyseqicons48DATA \
+	uninstall-harmonyseqiconsscalableDATA uninstall-hook \
 	uninstall-icons192DATA uninstall-icons192mDATA \
 	uninstall-icons32DATA uninstall-icons32mDATA \
 	uninstall-icons48DATA uninstall-icons48mDATA \
