@@ -215,6 +215,11 @@ SequencerWidget::SequencerWidget()
     //todo: add icons & tooltips
     wCtrlSlopeFlat.set_label("F");
     wCtrlSlopeLinear.set_label("L");
+    wCtrlSlopeFlat.set_mode(0);
+    wCtrlSlopeLinear.set_mode(0);
+    Gtk::RadioButton::Group group = wCtrlSlopeFlat.get_group();
+    wCtrlSlopeLinear.set_group(group);
+    wCtrlSlopeNone.set_group(group);
     wCtrlSlopeFlat.signal_toggled().connect(sigc::mem_fun(*this,&SequencerWidget::OnSlopeFlatToggled));
     wCtrlSlopeLinear.signal_toggled().connect(sigc::mem_fun(*this,&SequencerWidget::OnSlopeLinearToggled));
     //my_slope_mode_for_adding = SLOPE_TYPE_LINEAR;
@@ -534,14 +539,9 @@ void SequencerWidget::OnSlopeFlatToggled(){
     bool f = wCtrlSlopeFlat.get_active();
     //bool l = wCtrlSlopeLinear.get_active();
     if(f){
-        ignore_signals = 1;
-        wCtrlSlopeLinear.set_active(0);
-        ignore_signals = 0;
         pattern_widget.SetSlopeType(SLOPE_TYPE_FLAT);
     }else{
-        ignore_signals = 1;
-        wCtrlSlopeFlat.set_active(0);
-        ignore_signals = 0;
+        wCtrlSlopeLinear.set_active(1);
     }
     
     Files::SetFileModified(1);
@@ -553,14 +553,9 @@ void SequencerWidget::OnSlopeLinearToggled(){
     //bool f = wCtrlSlopeFlat.get_active();
     bool l = wCtrlSlopeLinear.get_active();
     if(l){
-        ignore_signals = 1;
-        wCtrlSlopeFlat.set_active(0);
-        ignore_signals = 0;
         pattern_widget.SetSlopeType(SLOPE_TYPE_LINEAR);
     }else{
-        ignore_signals = 1;
-        wCtrlSlopeLinear.set_active(0);
-        ignore_signals = 0;
+        wCtrlSlopeFlat.set_active(1);
     }
     
     Files::SetFileModified(1);
@@ -570,13 +565,10 @@ void SequencerWidget::UpdateSlopeType(){
     ignore_signals = 1;
     SlopeType s = pattern_widget.GetSlopeType();
     if(s == SLOPE_TYPE_NONE){
-        wCtrlSlopeFlat.set_active(0);
-        wCtrlSlopeLinear.set_active(0);
+        wCtrlSlopeNone.set_active(1);
     }else if(s == SLOPE_TYPE_FLAT){
         wCtrlSlopeFlat.set_active(1);
-        wCtrlSlopeLinear.set_active(0);
     }else if(s == SLOPE_TYPE_LINEAR){
-        wCtrlSlopeFlat.set_active(0);
         wCtrlSlopeLinear.set_active(1);
     }
     ignore_signals = 0;

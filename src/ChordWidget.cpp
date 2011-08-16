@@ -314,7 +314,6 @@ void ChordWidget::OnUseBaseToggled(){
 void ChordWidget::Update(){
     if(!AnythingSelected) return;
     we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = true;
-    UpdateWhatToShowAndWhatIsSensitive();
     combo_root.set_active(chord->GetRoot()); //tricky
     combo_note.set_active(chord->GetBaseNote());
     combo_guitar_mode.set_active(chord->GetGuitarMode());
@@ -324,6 +323,7 @@ void ChordWidget::Update(){
     inversion.set_value(chord->GetInversion());
     use_base.set_active(chord->GetBaseUse());
     combo_type.set_active(chord->GetType());
+    UpdateWhatToShowAndWhatIsSensitive();
     UpdateNotes();
     UpdateSummary();
     we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = false;

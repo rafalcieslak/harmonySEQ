@@ -207,8 +207,10 @@ private:
     Gtk::ToggleButton wShowChordButton;
     Gtk::Label wShowChordLabel;
 
-    Gtk::ToggleButton wCtrlSlopeFlat;
-    Gtk::ToggleButton wCtrlSlopeLinear;
+    Gtk::RadioButton wCtrlSlopeFlat;
+    Gtk::RadioButton wCtrlSlopeLinear;
+    //not displayed, but used to choose none of the other two
+    Gtk::RadioButton wCtrlSlopeNone;
     
     Gtk::Image wImageAdd;
     Gtk::Image wImageRemove;
