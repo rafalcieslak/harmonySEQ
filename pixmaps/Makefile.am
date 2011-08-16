@@ -26,8 +26,10 @@ harmonyseqicons32dir = $(datadir)/harmonyseq/icons/hicolor/32x32/actions/
 harmonyseqicons32_DATA = 32x32/metronome.png 32x32/add_ctrl_seq.png 32x32/add_note_seq.png
 harmonyseqicons24dir = $(datadir)/harmonyseq/icons/hicolor/24x24/actions/
 harmonyseqicons24_DATA = 24x24/metronome.png 24x24/add_ctrl_seq.png 24x24/add_note_seq.png
+harmonyseqicons16dir = $(datadir)/harmonyseq/icons/hicolor/16x16/actions/
+harmonyseqicons16_DATA = 16x16/slope_linear.png 16x16/slope_flat.png
 
-EXTRA_DIST = 32x32/apps/harmonyseq.png 48x48/apps/harmonyseq.png 192x192/apps/harmonyseq.png scalable/apps/harmonyseq.svg 32x32/mimetypes/text-x-harmonyseq.png 48x48/mimetypes/gnome-mime-text-x-harmonyseq.png 192x192/mimetypes/text-x-harmonyseq.png scalable/mimetypes/text-x-harmonyseq.svg icon1.svg metronome.svg 48x48/metronome.png 32x32/metronome.png 24x24/metronome.png 48x48/add_ctrl_seq.png 48x48/add_note_seq.png 32x32/add_ctrl_seq.png 32x32/add_note_seq.png 24x24/add_ctrl_seq.png 24x24/add_note_seq.png scalable/add_ctrl_seq.svg scalable/add_note_seq.svg scalable/metronome.svg scalable/slope_linear.svg scalable/slope_flat.svg scalable/add_ctrl_seq_small.svg scalable/add_note_seq_small.svg
+EXTRA_DIST = 32x32/apps/harmonyseq.png 48x48/apps/harmonyseq.png 192x192/apps/harmonyseq.png scalable/apps/harmonyseq.svg 32x32/mimetypes/text-x-harmonyseq.png 48x48/mimetypes/gnome-mime-text-x-harmonyseq.png 192x192/mimetypes/text-x-harmonyseq.png scalable/mimetypes/text-x-harmonyseq.svg icon1.svg metronome.svg 48x48/metronome.png 32x32/metronome.png 24x24/metronome.png 48x48/add_ctrl_seq.png 48x48/add_note_seq.png 32x32/add_ctrl_seq.png 32x32/add_note_seq.png 24x24/add_ctrl_seq.png 24x24/add_note_seq.png scalable/add_ctrl_seq.svg scalable/add_note_seq.svg scalable/metronome.svg scalable/slope_linear.svg scalable/slope_flat.svg scalable/add_ctrl_seq_small.svg scalable/add_note_seq_small.svg 16x16/slope_linear.png 16x16/slope_flat.png
 
 
 install-data-hook:

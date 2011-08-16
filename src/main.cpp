@@ -206,8 +206,8 @@ void LoadIcons(){
         metronome_icon_24 = Gdk::Pixbuf::create_from_file("/usr/share/harmonyseq/icons/hicolor/24x24/actions/metronome.png");
         icon_add_ctrl_seq = Gdk::Pixbuf::create_from_file("/usr/share/harmonyseq/icons/hicolor/24x24/actions/add_ctrl_seq.png");
         icon_add_note_seq = Gdk::Pixbuf::create_from_file("/usr/share/harmonyseq/icons/hicolor/24x24/actions/add_note_seq.png");
-        icon_slope_flat = Gdk::Pixbuf::create_from_file("/usr/share/harmonyseq/icons/hicolor/scalable/actions/slope_flat.svg");
-        icon_slope_linear = Gdk::Pixbuf::create_from_file("/usr/share/harmonyseq/icons/hicolor/scalable/actions/slope_linear.svg");
+        icon_slope_flat = Gdk::Pixbuf::create_from_file("/usr/share/harmonyseq/icons/hicolor/16x16/actions/slope_flat.png");
+        icon_slope_linear = Gdk::Pixbuf::create_from_file("/usr/share/harmonyseq/icons/hicolor/16x16/actions/slope_linear.png");
     } else
     if (Files::fexists("/usr/local/share/icons/hicolor/48x48/apps/harmonyseq.png")){
         //seems we are installed defaultly in /usr/share/local
@@ -216,8 +216,8 @@ void LoadIcons(){
         metronome_icon_24 = Gdk::Pixbuf::create_from_file("/usr/local/share/harmonyseq/icons/hicolor/24x24/actions/metronome.png");
         icon_add_ctrl_seq = Gdk::Pixbuf::create_from_file("/usr/local/share/harmonyseq/icons/hicolor/24x24/actions/add_ctrl_seq.png");
         icon_add_note_seq = Gdk::Pixbuf::create_from_file("/usr/local/share/harmonyseq/icons/hicolor/24x24/actions/add_note_seq.png");
-        icon_slope_flat = Gdk::Pixbuf::create_from_file("/usr/local/share/harmonyseq/icons/hicolor/scalable/actions/slope_flat.svg");
-        icon_slope_linear = Gdk::Pixbuf::create_from_file("/usr/local/share/harmonyseq/icons/hicolor/scalable/actions/slope_linear.svg");
+        icon_slope_flat = Gdk::Pixbuf::create_from_file("/usr/local/share/harmonyseq/icons/hicolor/16x16/actions/slope_flat.png");
+        icon_slope_linear = Gdk::Pixbuf::create_from_file("/usr/local/share/harmonyseq/icons/hicolor/16x16/actions/slope_linear.png");
     } else
     if (Files::fexists("pixmaps/48x48/apps/harmonyseq.png")){
         //seems we are not installed, and run from main source directory
@@ -226,8 +226,8 @@ void LoadIcons(){
         metronome_icon_24 = Gdk::Pixbuf::create_from_file("pixmaps/24x24/metronome.png");
         icon_add_ctrl_seq = Gdk::Pixbuf::create_from_file("pixmaps/24x24/add_ctrl_seq.png");
         icon_add_note_seq = Gdk::Pixbuf::create_from_file("pixmaps/24x24/add_note_seq.png");
-        icon_slope_flat = Gdk::Pixbuf::create_from_file("pixmaps/scalable/slope_flat.svg",24,24);
-        icon_slope_linear = Gdk::Pixbuf::create_from_file("pixmaps/scalable/slope_linear.svg",24,24);
+        icon_slope_flat = Gdk::Pixbuf::create_from_file("pixmaps/16x16/slope_flat.png");
+        icon_slope_linear = Gdk::Pixbuf::create_from_file("pixmaps/16x16/slope_linear.png");
     } else
    if (Files::fexists("../pixmaps/48x48/apps/harmonyseq.png")) {
         //seems we are not installed, and run from src/ directory
@@ -236,8 +236,8 @@ void LoadIcons(){
         metronome_icon_24 = Gdk::Pixbuf::create_from_file("../pixmaps/24x24/metronome.png");
         icon_add_ctrl_seq = Gdk::Pixbuf::create_from_file("../pixmaps/24x24/add_ctrl_seq.png");
         icon_add_note_seq = Gdk::Pixbuf::create_from_file("../pixmaps/24x24/add_note_seq.png");
-        icon_slope_flat = Gdk::Pixbuf::create_from_file("../pixmaps/scalable/slope_flat.svg");
-        icon_slope_linear = Gdk::Pixbuf::create_from_file("../pixmaps/scalable/slope_linear.svg");
+        icon_slope_flat = Gdk::Pixbuf::create_from_file("../pixmaps/16x16/slope_flat.png");
+        icon_slope_linear = Gdk::Pixbuf::create_from_file("../pixmaps/16x16/slope_linear.png");
     } else{
        //icons not found.
         *err << ("Failed to find harmonySEQ icon files.\n");
