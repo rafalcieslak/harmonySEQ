@@ -297,14 +297,13 @@ void SequencerWidget::UpdateEverything(){
         
         if(selectedSeqType == SEQ_TYPE_NOTE){
                 UpdateShowChord();
+                UpdateChord();
                 UpdateChannel();
                 UpdateOnOff(); //will also update colour
                 UpdateName();
-                InitNotebook();
                 UpdateRelLenBoxes();
+                InitNotebook();
                 UpdateActivePattern();
-                UpdateActivePatternRange();
-                UpdateChord();
         }else if(selectedSeqType == SEQ_TYPE_CONTROL){
                 UpdateChannel();
                 UpdateOnOff(); //will also update colour
@@ -312,7 +311,6 @@ void SequencerWidget::UpdateEverything(){
                 InitNotebook();
                 UpdateRelLenBoxes();
                 UpdateActivePattern();
-                UpdateActivePatternRange();
                 UpdateController();
                 UpdateSlopeType();
         }
@@ -324,10 +322,7 @@ void SequencerWidget::UpdateEverything(){
 void SequencerWidget::HideAndShowWidgetsDependingOnSeqType(){
     if(!AnythingSelected) return;
     if(selectedSeqType == SEQ_TYPE_NOTE){
-        wShowChordButton.show();
         wChordNotebook.set_current_page(0); //chordwidget
-        wVelocityButton.show();
-        wVelocityLabel.show();
         wValueButton.hide();
         wValueLabel.hide();
         wControllerButton.hide();
@@ -335,9 +330,12 @@ void SequencerWidget::HideAndShowWidgetsDependingOnSeqType(){
         wSlopeSelectorSep.hide();
         wCtrlSlopeFlat.hide();
         wCtrlSlopeLinear.hide();
+        wVelocityButton.show();
+        wVelocityLabel.show();
+        wShowChordButton.show();
     }else if(selectedSeqType == SEQ_TYPE_CONTROL){
-        chordwidget.UnSelect();
         chordwidget.SetExpandDetails(0);
+        chordwidget.UnSelect();
         wChordNotebook.set_current_page(1); //wCtrlHBox
         wShowChordButton.hide();
         wVelocityLabel.hide();
@@ -379,8 +377,9 @@ void SequencerWidget::UpdateActivePattern(){
 void SequencerWidget::UpdateChord(){
     if (AnythingSelected == 0) return;
 
+    ignore_signals = 1;
     chordwidget.Update();
-
+    ignore_signals = 0;
 }
 
 void SequencerWidget::UpdateShowChord(){
@@ -586,6 +585,7 @@ void SequencerWidget::UpdateSlopeType(){
 void SequencerWidget::OnChordWidgetChanged(){
     //The chord updates the seq on it's own.
     //Just refresh the row.
+    if(ignore_signals) return;
     if(!AnythingSelected) return;
     Sequencer* seq = seqH(selectedSeq);
     LeaveAddMode();
@@ -676,6 +676,7 @@ void SequencerWidget::OnSetAsActivePatternClicked(){
     LeaveAddMode();
 }
 void SequencerWidget::OnNotebookPageChanged(GtkNotebookPage* page, guint page_num){
+    if(ignore_signals) return;
     if(do_not_react_on_page_changes) return;
     *dbg << "page changed!\n";
     UpdatePatternWidget();
@@ -760,6 +761,7 @@ void SequencerWidget::OnPlayOnceButtonClicked(){
 }
 
 void SequencerWidget::OnSelectionChanged(int n){
+    if(ignore_signals) return;
     ignore_signals = 1;
     if(selectedSeqType == SEQ_TYPE_NOTE){
         if(n == 0){
