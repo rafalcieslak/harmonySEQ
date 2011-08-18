@@ -33,7 +33,9 @@ public:
     virtual ~PatternWidget();
     void SetInternalHeight(int h);
     
-    void Redraw();
+    void RedrawAtoms();
+    void RedrawGrid();
+    bool RedrawEverything();
     
     void AssignPattern(AtomContainer* cont, SeqType_t type);
     
@@ -80,6 +82,22 @@ protected:
    virtual bool on_key_press_event(GdkEventKey* event);
 private:
     
+    void Redraw();
+    bool TimeLockAtomsCompleted();
+    bool TimeLockGridCompleted();
+    Cairo::RefPtr<Cairo::ImageSurface> cr_buffer_surface;
+    Cairo::RefPtr<Cairo::Context> cr_buffer_context;
+    Cairo::RefPtr<Cairo::ImageSurface> cr_atoms_surface;
+    Cairo::RefPtr<Cairo::Context> cr_atoms_context;
+    Cairo::RefPtr<Cairo::ImageSurface> cr_grid_surface;
+    Cairo::RefPtr<Cairo::Context> cr_grid_context;
+    bool atoms_lock;
+    bool grid_lock;
+    bool man_i_wanted_to_redraw_atoms_but_it_was_locked_could_you_please_do_it_later_for_me;
+    bool man_i_wanted_to_redraw_grid_but_it_was_locked_could_you_please_do_it_later_for_me;
+    
+    int last_drawn_width;
+    int last_drawn_height;
     
     bool add_mode;
     SlopeType add_slope_type;

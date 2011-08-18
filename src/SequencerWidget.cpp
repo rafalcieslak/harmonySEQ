@@ -319,6 +319,7 @@ void SequencerWidget::UpdateEverything(){
                 UpdateController();
                 UpdateSlopeType();
         }
+        //Glib::signal_timeout().connect(mem_fun(pattern_widget,&PatternWidget::RedrawEverything),50);
     }else{
 
     }
@@ -611,7 +612,7 @@ void SequencerWidget::OnResolutionChanged(){
 
 
     seq->SetResolution(wResolutions.get_value());
-    pattern_widget.Redraw();
+    pattern_widget.RedrawGrid();
 
     LeaveAddMode();
     mainwindow->RefreshRow(seq->my_row);
