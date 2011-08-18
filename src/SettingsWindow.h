@@ -96,6 +96,14 @@ private:
         Gtk::HSeparator osc_sep;
         Gtk::Label osc_description;
         Gtk::HBox osc_description_hbox;
+        
+        Gtk::HSeparator sepFPS;
+        Gtk::VBox boxFPS;
+        Gtk::HBox boxFPSlabel;
+        Gtk::HBox boxFPSbutton_label;
+        Gtk::SpinButton FPSbutton;
+        Gtk::Label FPSbutton_label;
+        Gtk::Label FPSlabel;
 
 };
 

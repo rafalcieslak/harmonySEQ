@@ -45,15 +45,31 @@ SettingsWindow::SettingsWindow(){
     page_midi.set_border_width(5);
     page_OSC.set_border_width(5);
 
+    page_main.pack_start(play_on_edit_vbox);
+    
     play_on_edit_vbox.pack_start(play_on_edit_label_hbox);
     play_on_edit_label_hbox.pack_start(play_on_edit_label,Gtk::PACK_SHRINK);
     play_on_edit_vbox.pack_start(play_on_edit,Gtk::PACK_SHRINK);
-    play_on_edit_label.set_markup(_("<b>Play on edit:</b>"));
+    play_on_edit_label.set_markup(_("<b>Play on edit</b>"));
     play_on_edit.set_label(_("Play briefly a note when it's added, \nor changed manually in a chord."));
     
-    // <editor-fold defaultstate="collapsed" desc="visible colums">
-    page_main.pack_start(play_on_edit_vbox);
+    page_main.pack_start(sepFPS);
+    page_main.pack_start(boxFPS);
+    boxFPS.pack_start(boxFPSlabel);
+    boxFPS.pack_start(boxFPSbutton_label);
+    boxFPSlabel.pack_start(FPSlabel,Gtk::PACK_SHRINK);
+    boxFPSbutton_label.pack_start(FPSbutton_label,Gtk::PACK_SHRINK);
+    boxFPSbutton_label.pack_start(FPSbutton,Gtk::PACK_SHRINK);
+    FPSlabel.set_markup(_("<b>Pattern display quality</b>"));
+    FPSbutton_label.set_text(_("Max. FPS: "));
+    FPSbutton.set_range(1.0,200.0);
+    FPSbutton.set_increments(1.0,10.0);
+    FPSbutton.set_tooltip_markup(_("The <b>maximum</b> FPS value used when smooth animation is needed, for example when dragging notes. Note this is the maximum value, it is usually much much lower, as the pattern is redrawn only when nessesary.\n\nHigh values may cause higher CPU usage when dragging notes, moving graph points etc., but result in much smoothier animations."));
+    FPSbutton_label.set_tooltip_markup(_("The <b>maximum</b> FPS value used when smooth animation is needed, for example when dragging notes. Note this is the maximum value, it is usually much much lower, as the pattern is redrawn only when nessesary.\n\nHigh values may cause higher CPU usage when dragging notes, moving graph points etc., but result in much smoothier animations."));
+    
     page_main.pack_start(sep1);
+    
+    // <editor-fold defaultstate="collapsed" desc="visible colums">
     page_main.pack_start(columns_label_hbox);
     page_main.pack_start(colums_vbox);
 
@@ -175,6 +191,7 @@ void SettingsWindow::LoadDataFromConfig(){
     colums_length.set_active(Config::VisibleColumns::Length);
     colums_chord.set_active(Config::VisibleColumns::ChordAndCtrlNo);
     play_on_edit.set_active(Config::Interaction::PlayOnEdit);
+    FPSbutton.set_value(1000/Config::Interaction::PatternRefreshMS);
     osc_port.set_value(Config::OSC::Port);
 
 }
@@ -192,6 +209,7 @@ void SettingsWindow::StoreDataToConfig(){
     Config::VisibleColumns::Length = colums_length.get_active();
     Config::VisibleColumns::ChordAndCtrlNo  = colums_chord.get_active();
     Config::Interaction::PlayOnEdit = play_on_edit.get_active();
+    Config::Interaction::PatternRefreshMS = 1000/FPSbutton.get_value();
     Config::OSC::Port = osc_port.get_value();
     mainwindow->UpdatePlayOnEditToggle();
 }

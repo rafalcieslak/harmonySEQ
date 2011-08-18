@@ -40,6 +40,7 @@ namespace Config{
     }
     namespace Interaction{
         extern bool PlayOnEdit;
+        extern int PatternRefreshMS;
     }
     namespace OSC{
         extern int Port;

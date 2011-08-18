@@ -27,6 +27,7 @@
 #include "Sequencer.h"
 #include "Event.h"
 #include "ControllerAtom.h"
+#include "Configuration.h"
 
 int resolution_hints[33] = {1,1,2,3,2,5,3,7,4,3,5,11,3,13,7,5,4,17,6,19,5,7,11,23,6,5,13,9,7,29,5,31,4};
 
@@ -979,7 +980,7 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
     
     grid_lock = 1;
     man_i_wanted_to_redraw_grid_but_it_was_locked_could_you_please_do_it_later_for_me = 0;
-    Glib::signal_timeout().connect(sigc::mem_fun(*this,&PatternWidget::TimeLockGridCompleted),50);
+    Glib::signal_timeout().connect(sigc::mem_fun(*this,&PatternWidget::TimeLockGridCompleted),Config::Interaction::PatternRefreshMS);
     
     Redraw();
   }
@@ -1122,7 +1123,7 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
     
     atoms_lock = 1;
     man_i_wanted_to_redraw_atoms_but_it_was_locked_could_you_please_do_it_later_for_me = 0;
-    Glib::signal_timeout().connect(sigc::mem_fun(*this,&PatternWidget::TimeLockAtomsCompleted),50);
+    Glib::signal_timeout().connect(sigc::mem_fun(*this,&PatternWidget::TimeLockAtomsCompleted),Config::Interaction::PatternRefreshMS);
 
     Redraw();
       

@@ -49,6 +49,7 @@ namespace Config{
     }
     namespace Interaction{
         bool PlayOnEdit;
+        int PatternRefreshMS;
     }
     namespace OSC{
         int Port;
@@ -68,6 +69,7 @@ namespace Config{
         VisibleColumns::Length = 1;
         VisibleColumns::ChordAndCtrlNo = 1;
         Interaction::PlayOnEdit = 1;
+        Interaction::PatternRefreshMS = 40;
         OSC::Port = 7773;
     }
 
@@ -106,6 +108,7 @@ namespace Config{
         }
         if(kf.has_group("Interaction")){
             if(kf.has_key("Interaction","PlayOnEdit")) Interaction::PlayOnEdit = kf.get_boolean("Interaction","PlayOnEdit");
+            if(kf.has_key("Interaction","PatternRefreshMS")) Interaction::PatternRefreshMS = kf.get_integer("Interaction","PatternRefreshMS");
         }
         if(kf.has_group("OSC")){
             if(kf.has_key("OSC","Port")) OSC::Port = kf.get_integer("OSC","Port");
@@ -148,6 +151,7 @@ namespace Config{
         kf.set_boolean("Visible columns","Length",VisibleColumns::Length);
         kf.set_boolean("Visible columns","Chord",VisibleColumns::ChordAndCtrlNo);
         kf.set_boolean("Interaction","PlayOnEdit",Interaction::PlayOnEdit);
+        kf.set_integer("Interaction","PatternRefreshMS",Interaction::PatternRefreshMS);
         kf.set_integer("OSC","Port",OSC::Port);
 
         output_file <<  kf.to_data().c_str();
