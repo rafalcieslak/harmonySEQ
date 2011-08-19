@@ -296,6 +296,10 @@ MainWindow::MainWindow()
     }
 
     show_all_children(1);
+    
+    //This is the cure for any Gtk warnings one may experience.
+    realize();
+    //Magic, isn't it?
 }
 
 MainWindow::~MainWindow()

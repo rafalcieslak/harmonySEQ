@@ -361,7 +361,7 @@ int main(int argc, char** argv) {
     //Trying to open file...
     if (file_from_cli) TryToOpenFileFromCommandLine();
     //else InitDefaultData();
-
+    
     //Putting some values into GUI
     mainwindow->tempo_button.set_value(tempo);
 

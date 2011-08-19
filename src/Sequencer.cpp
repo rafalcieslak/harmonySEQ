@@ -161,7 +161,10 @@ int Sequencer::GetLengthDenominator(){
 }
 
 void Sequencer::SetActivePatternNumber(int a){
-    active_pattern = a%(patterns.size());
+    if(patterns.size() != 0)
+        active_pattern = a%(patterns.size());
+    else
+        active_pattern = 0;
 }
 
 int Sequencer::GetActivePatternNumber(){

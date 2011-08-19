@@ -110,7 +110,7 @@ void LoadFileDialog(){
     }
 
     //Some things that must be done to update the GUI fully.
-    mainwindow->InitTreeData();
+    //mainwindow->InitTreeData();
     mainwindow->tempo_button.set_value(tempo);
     mainwindow->UpdateEventWidget();
 
@@ -429,6 +429,7 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
                         //And get the pattern from file
                         std::vector<double> pattern = kfp->get_double_list(temp, temp2);
 
+                        if(pattern.size()%4 != 0){*err << "ERROR - pattern size in file %4 != 0  - aborting opening"; return 1;}
                         //Simple algorithm, just copying data from the pattern from file to the pattern in the sequencer
                         for (unsigned int w = 0; w < pattern .size(); w+=4) {
                             NoteAtom *note = new NoteAtom;
@@ -463,6 +464,8 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
 
         ManuallySetSeqHandleCounter(maximal_handle + 1);
 
+        //This must be done here, for events display seq's from the same tree.
+        mainwindow->InitTreeData();
         //Done loading sequencers.
 
         //Now, proceed to events.
@@ -478,10 +481,8 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
 
         //Get rid of any events.
         ClearEvents();
-
         //For each event in file...
         for (int x = 0; x < seqNum; x++) {
-
             sprintf(temp, "Event %d", x);
             //If there is no key related to this number of event, this means this event was removed.
             if (!kfp->has_group(temp)) {
@@ -520,10 +521,8 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
                     vector<int> vec = kfp->get_integer_list(temp, temp2);
                     Events[x]->actions[a]->chord.SetFromVector(vec);
                 }
-                //Update the chord GUI.
-                Events[x]->actions[a]->GUIUpdateChordwidget();
             }//next action.
-
+            
             //Update this event's GUI, using newly loaded data.
             Events[x]->UpdateGUI();
 
@@ -537,8 +536,77 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
         return 0;
 }
 
-bool ConvertFile_0_15_to_0_16(Glib::KeyFile* kf){
+bool ConvertFile_0_15_to_0_16(Glib::KeyFile* kfp){
     //done.
+    double tempo = kfp->get_double("System","tempo");
+    tempo /= 4;
+    kfp->remove_key("System","tempo");
+    kfp->set_double("System","tempo",tempo);
+    
+    
+    char temp[2000];
+    char temp2[200];
+    char temp3[200];
+    int n = kfp->get_integer("System","sequencers_number");
+    for(int x = 0; x < n; x++){
+        sprintf(temp,"Seq %d",x);
+        kfp->set_boolean(temp,"expand_chord",1);
+        kfp->set_integer(temp,"seq_type",SEQ_TYPE_NOTE);
+        double length = kfp->get_double(temp,"length");
+        kfp->remove_key(temp,"length");
+        if(length == 0.125){
+                kfp->set_integer(temp,"length_numerator",1);
+                kfp->set_integer(temp,"length_denominator",8);
+        }else if(length == 0.25){
+                kfp->set_integer(temp,"length_numerator",1);
+                kfp->set_integer(temp,"length_denominator",4);
+        }else if(length == 0.5){
+                kfp->set_integer(temp,"length_numerator",1);
+                kfp->set_integer(temp,"length_denominator",2);
+        }else if(length == 1.0){
+                kfp->set_integer(temp,"length_numerator",1);
+                kfp->set_integer(temp,"length_denominator",1);
+        }else if(length == 2.0){
+                kfp->set_integer(temp,"length_numerator",2);
+                kfp->set_integer(temp,"length_denominator",1);
+        }else if(length == 4.0){
+                kfp->set_integer(temp,"length_numerator",4);
+                kfp->set_integer(temp,"length_denominator",1);
+        }else if(length == 8.0){
+                kfp->set_integer(temp,"length_numerator",8);
+                kfp->set_integer(temp,"length_denominator",1);
+        }else{
+                kfp->set_integer(temp,"length_numerator",1);
+                kfp->set_integer(temp,"length_denominator",1);
+        }
+        int seq_n = kfp->get_integer(temp,"sequences_num");
+        kfp->remove_key(temp,"sequences_num");
+        kfp->set_integer(temp,"patterns_num",seq_n);
+        kfp->set_integer(temp,"active_pattern",0);
+        int res = kfp->get_integer(temp,"resolution");
+        double note_len = 1.0/res;
+        int vel = kfp->get_integer(temp,"volume");
+        kfp->remove_key(temp,"volume");
+        for(int w = 0; w < seq_n; w++){
+            sprintf(temp2,"sequence_%d",w);
+            sprintf(temp3,"pattern_%d",w);
+            std::vector<int> A = kfp->get_integer_list(temp,temp2);
+            kfp->remove_key(temp,temp2);
+            std::vector<double> B;
+            for (int t = 0; t<res;t++){
+                for(int y = 0; y<6;y++){
+                    if(A[t*6+y]){
+                        B.push_back(t*note_len);
+                        B.push_back(y);
+                        B.push_back(vel);
+                        B.push_back(note_len);
+                    }
+                }
+            }
+            kfp->set_double_list(temp,temp3,B);
+        }
+        
+    }
     return 0;
 }
 
