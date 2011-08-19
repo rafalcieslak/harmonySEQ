@@ -63,14 +63,10 @@
 
 //the resolution of diode blink information
 #define DIODES_RES 128
-//the following may not work with gettext. careful!
+
 #define SEQUENCER_DEFAULT_NAME _("sequencer")
 
-#define RESOLUTIONS_NUM 13
-#define RESOLUTIONS {1,2,3,4,5,7,8,9,12,14,16,32,64}
-#define LENGTHS_NUM 7
-#define LENGTHS {(double)1.0/3,0.25,0.5,1.0,2.0,4.0,(double)2.0/3.0}
-
+/*
 #define FILE_GROUP_SYSTEM "System"
 #define FILE_KEY_SYSTEM_TEMPO "tempo"
 #define FILE_KEY_SYSTEM_MAINNOTE "mainnote"
@@ -101,7 +97,7 @@
 #define FILE_GROUP_TEMPLATE_EVENT_ACTION_TYPE "Action_%d_type"
 #define FILE_GROUP_TEMPLATE_EVENT_ACTION_ARGS "Action_%d_args"
 #define FILE_GROUP_TEMPLATE_EVENT_ACTION_CHORD "Action_%d_chord"
-
+**/
 
 
 #ifndef I_DO_NOT_WANT_EXTERNS_FROM_GLOBAL_H

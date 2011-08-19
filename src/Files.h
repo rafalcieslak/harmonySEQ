@@ -38,9 +38,9 @@ namespace Files{
     void LoadFileDialog();
     /**Loads a file, but without showing the dialog (so the filename must be passed as an argument)*/
     bool LoadFile(Glib::ustring file);
-    /**Caled from LoadFile, if the file is older than 0.15*/
-    bool LoadFilePre015(Glib::KeyFile* kf);
-    bool LoadFile015(Glib::KeyFile *kf);
+    
+    bool LoadFileCurrent(Glib::KeyFile* kf);
+    bool ConvertFile_0_15_to_0_16(Glib::KeyFile* kf);
 }
 
 
