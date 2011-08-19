@@ -53,6 +53,8 @@ bool SetFileModified(bool modified){
 }
 
 void SaveToFile(Glib::ustring filename){
+    
+    //This routine should always save using current format.
 
     //The keyfile intepreter.
     Glib::KeyFile kf;
@@ -349,8 +351,8 @@ bool LoadFile(Glib::ustring file){
 
 }
 
-//===============FILE LOADING ROUTINES GO HERE====================
-
+/** THE FOLLOWING IS KEPT ONLY FOR HISTORIC PURPOSES
+ * 
 bool LoadFile015(Glib::KeyFile* kfp){
 
     int seqNum;
@@ -377,7 +379,7 @@ bool LoadFile015(Glib::KeyFile* kfp){
                 *err << temp;
                 return 1;
         }
-        /*THIS HAS TO BE REWRITTEN
+
         //If we got here, this means this sequencer was NOT removed. So: let's create it.
         seqVector.push_back(new Sequencer());
 
@@ -430,7 +432,7 @@ bool LoadFile015(Glib::KeyFile* kfp){
             std::vector<int> vec =   kfp->get_integer_list(temp,FILE_KEY_SEQ_CHORD);
             seqVector[x]->chord.SetFromVector(vec);
         }
-         * **/
+         * *
         //Now proceed to the...
     }  //...next sequencer.
 
@@ -547,7 +549,6 @@ bool LoadFilePre015(Glib::KeyFile* kfp){
             seqVector.push_back(NULL);
             continue;
         }
-        /*THIS HAS TO BE REWRITTEN
         //If we got here, this means this sequencer was NOT removed. So: let's create it.
         seqVector.push_back(new Sequencer());
         //calculate shift...
@@ -646,7 +647,7 @@ bool LoadFilePre015(Glib::KeyFile* kfp){
         }
 
         //Now proceed to the...
-         * **/
+         * *
     }  //...next sequencer.
 
     //Done loading sequencers.
@@ -735,3 +736,4 @@ bool LoadFilePre015(Glib::KeyFile* kfp){
 
 
 }//namespace files
+*/
