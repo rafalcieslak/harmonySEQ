@@ -4,9 +4,10 @@ harmonyseq 0.16 "ranpiollo"
 	- Added support for custom lengths and resolutions (this allows to play melodies in any time signature).
 	- Velocity is now applied to all notes separately.
 	- German translation thanks to Jan Fuchsman.
+	- New system for opening files, which allows to automatically convert older files.
 	- Added possibility to hide chord's detailed settings.
 	- Added some new chords.
-	- Some bug fixes.
+	- Significant bug fixes (including much more efficient output routines, which result in MUCH less lag during playback).
 
 harmonyseq 0.15 "arising"
 	- Reorganized sequencer window, significantly improving the way a pattern is presented.
