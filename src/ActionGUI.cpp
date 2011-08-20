@@ -25,6 +25,7 @@
 #include "Sequencer.h"
 #include "Configuration.h"
 #include "MainWindow.h"
+#include "global.h"
 
 ActionGUI::ActionGUI(Action *prt)
 {
@@ -394,7 +395,7 @@ void ActionGUI::InitType(){
             pattern_button.set_value(0.0);
             break;
         case Action::TEMPO_SET:
-            tempo_button.set_value(120.0);
+            tempo_button.set_value(DEFAULT_TEMPO);
             break;
         case Action::SEQ_PLAY_ONCE:
             AllSeqs_combo.set_active(0);
