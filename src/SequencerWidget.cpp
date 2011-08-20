@@ -226,7 +226,7 @@ SequencerWidget::SequencerWidget()
     
     //lengths selector
     wResolutionsLabel.set_text(_("Resolution:"));
-    wResolutions.set_range(1.0,32.0);
+    wResolutions.set_range(1.0,64.0);
     wResolutions.set_increments(1.0,4.0);
     wResolutions.set_width_chars(2);
     wResolutions.set_tooltip_markup(_("Selects the <b>resolution</b> of this sequencer. It defines the grid density in this sequencer's patterns."));
@@ -240,10 +240,10 @@ SequencerWidget::SequencerWidget()
     wLengthResult.set_tooltip_markup(_("Selects the <b>length</b> of this sequencer. It defines <i>how many bars</i> the sequence in this sequencer will last. In case it's smaller then 1, the sequence may be repeated few times in each bar."));
     wLengthNumerator.set_increments(1.0,1.0);
     wLengthDenominator.set_increments(1.0,1.0);
-    wLengthNumerator.set_width_chars(2);
-    wLengthDenominator.set_width_chars(2);
-    wLengthNumerator.set_range(1.0,16.0);
-    wLengthDenominator.set_range(1.0,16.0);
+    wLengthNumerator.set_width_chars(3);
+    wLengthDenominator.set_width_chars(3);
+    wLengthNumerator.set_range(1.0,128.0);
+    wLengthDenominator.set_range(1.0,128.0);
     wLengthDivision.set_text(" / ");
     wLengthNumerator.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnLengthChanged));
     wLengthDenominator.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnLengthChanged));

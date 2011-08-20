@@ -29,7 +29,8 @@
 #include "ControllerAtom.h"
 #include "Configuration.h"
 
-int resolution_hints[33] = {1,1,2,3,2,5,3,7,4,3,5,11,3,13,7,5,4,17,6,19,5,7,11,23,6,5,13,9,7,29,5,31,4};
+int resolution_hints[65] = {1,1,2,3,2,5,3,7,4,3,5,11,3,13,7,5,4,17,6,19,5,7,11,23,6,5,13,9,7,29,5,31,4,
+                                                               11,17,5,6,37,19,39,10,41,6,43,11,7,23,47,6,49,5,51,13,53,27,11,7,57,29,59,6,61,31,63,8};
 
 //constants used for selecting ctrl atoms
 const double ctrl_Vsurrounding = 8.0;
