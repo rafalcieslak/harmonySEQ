@@ -34,6 +34,8 @@ public:
 
     void UpdateChordwidget();
 
+    /**Should be called when one adds or removes a sequencer*/
+    void OnSequencerListChanged();
     /**An action this GUI is associated with, it is used for two-way communication between Action and ActionGUI*/
     Action *parent;
 
@@ -42,7 +44,9 @@ private:
     bool we_are_copying_data_from_parent_action_so_do_not_handle_signals;
 
     void OnShow();
-
+    void OnHide();
+    bool shown;
+    void SetupTreeModels();
     /**Hides and shows lines appropieate to the parent action type.*/
     void ChangeVisibleLines();
 
@@ -51,11 +55,12 @@ private:
 
     void OnOKClicked();
     void OnTypeChanged();
-    void OnSeqChanged();
+    void OnAllSeqComboChanged();
+    void OnNoteSeqComboChanged();
     void OnTempoChanged();
     void OnVelocityChanged();
     void SetTypeCombo(int type);
-    void SetSeqCombo(int seq);
+    void SetSeqCombos(int handle);
     void OnNoteNrChanged();
     void OnNoteSeqChanged();
     void OnOnOffToggleChanged();
@@ -96,7 +101,8 @@ private:
     Gtk::RadioButton play_TOGGLE;
 
     Gtk::ComboBox Types_combo;
-    Gtk::ComboBox Seqs_combo;
+    Gtk::ComboBox AllSeqs_combo;
+    Gtk::ComboBox NoteSeqs_combo;
     Gtk::SpinButton tempo_button;
     Gtk::SpinButton notenr_button;
     Gtk::SpinButton chordseq_button;
@@ -110,6 +116,18 @@ private:
 
     ChordWidget chordwidget;
 
+    class ModelColumns_Seqs : public Gtk::TreeModel::ColumnRecord {
+    public:
+        ModelColumns_Seqs() {
+            add(handle); add(name);
+        }
+        Gtk::TreeModelColumn<int> handle;
+        Gtk::TreeModelColumn<Glib::ustring> name;
+    };
+    ModelColumns_Seqs m_col_seqs;
+
+    Glib::RefPtr<Gtk::ListStore> m_ref_treemodel_allseqs;
+    Glib::RefPtr<Gtk::ListStore> m_ref_treemodel_noteseqs;
 };
 
 #endif	/* ACTIONGUI_H */

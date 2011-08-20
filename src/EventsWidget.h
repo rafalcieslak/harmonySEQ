@@ -33,6 +33,8 @@ public:
     void UpdateAll();
     /**Refreshes one, particular row*/
     void UpdateRow(Gtk::TreeRowReference rowref);
+    /**Asks all visible action-guis to refresh the seq combos*/
+    void SeqListChanged();
     /**Used to set colors for rows*/
     void ColorizeEvent(Gtk::TreeRowReference rowref);
     bool UncolorizeEvent(Gtk::TreeRowReference rowref);
@@ -52,7 +54,7 @@ public:
     void OnSelectionChanged();
     void OnRowChosen(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column);
     void OnRowCollapsed(const Gtk::TreeModel::iterator& iter, const Gtk::TreeModel::Path& path);
-
+    
     enum RowType{
         EVENT,
         ACTION

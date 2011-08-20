@@ -111,6 +111,17 @@ void EventsWidget::UpdateAll(){
     InitTreeData();
 }
 
+void EventsWidget::SeqListChanged(){
+    
+    for (unsigned int x = 0; x < Events.size(); x++) {
+        if (!Events[x]) continue; //seems it was removed
+        for (unsigned int c = 0; c < Events[x]->actions.size();c++){
+            if(!Events[x]->actions[c]) continue;
+            Events[x]->actions[c]->GUISequencerListChanged();
+        }
+    }
+}
+
 void EventsWidget::ColorizeEvent(Gtk::TreeRowReference rowref){
     Gtk::TreeModel::Row row = *(m_refTreeModel->get_iter(rowref.get_path()));
 

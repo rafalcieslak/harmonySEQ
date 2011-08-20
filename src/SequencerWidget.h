@@ -215,19 +215,7 @@ private:
     Gtk::Image wImageAdd;
     Gtk::Image wImageRemove;
     Gtk::Image wImageSlopeLinear;
-    Gtk::Image wImageSlopeFlat;
-
-    class ModelColumns2 : public Gtk::TreeModel::ColumnRecord {
-    public:
-        ModelColumns2() {
-            add(len); add(text);
-        }
-        Gtk::TreeModelColumn<double> len;
-        Gtk::TreeModelColumn<Glib::ustring> text;
-    };
-    ModelColumns2 m_Columns_len;
-
-    Glib::RefPtr<Gtk::ListStore> m_refTreeModel_len;
+    Gtk::Image wImageSlopeFlat;\
 
 };
 

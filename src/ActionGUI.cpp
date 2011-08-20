@@ -90,7 +90,8 @@ ActionGUI::ActionGUI(Action *prt)
     play_TOGGLE.signal_clicked().connect(mem_fun(*this,&ActionGUI::OnPlayOnOffToggleClicked));
 
     line_type.pack_start(Types_combo,Gtk::PACK_SHRINK);
-    line_seq.pack_start(Seqs_combo,Gtk::PACK_SHRINK);
+    line_seq.pack_start(AllSeqs_combo,Gtk::PACK_SHRINK);
+    line_seq.pack_start(NoteSeqs_combo,Gtk::PACK_SHRINK);
     line_pattern.pack_start(pattern_button,Gtk::PACK_SHRINK);
     line_tempo.pack_start(tempo_button,Gtk::PACK_SHRINK);
     line_chord.pack_start(chordwidget);
@@ -140,11 +141,19 @@ ActionGUI::ActionGUI(Action *prt)
     Types_combo.pack_start(m_columns_action_types.label);
     SetTypeCombo(parent->type); //Setting the typecombo BEFORE connecting the signal is ESSENTIAL, since otherwise when the type in Types_combo is changed (by setting it to parent->type), it emits a signal
     Types_combo.signal_changed().connect(mem_fun(*this,&ActionGUI::OnTypeChanged));
-    Seqs_combo.set_model(TreeModel_sequencers);
-    Seqs_combo.pack_start(m_columns_sequencers.col_name);
-    Seqs_combo.signal_changed().connect(mem_fun(*this,&ActionGUI::OnSeqChanged));
+    
+    m_ref_treemodel_allseqs = Gtk::ListStore::create(m_col_seqs);
+    m_ref_treemodel_noteseqs = Gtk::ListStore::create(m_col_seqs);
+    
+    AllSeqs_combo.set_model(m_ref_treemodel_allseqs);
+    AllSeqs_combo.pack_start(m_col_seqs.name);
+    AllSeqs_combo.signal_changed().connect(mem_fun(*this,&ActionGUI::OnAllSeqComboChanged));
+    NoteSeqs_combo.set_model(m_ref_treemodel_noteseqs);
+    NoteSeqs_combo.pack_start(m_col_seqs.name);
+    NoteSeqs_combo.signal_changed().connect(mem_fun(*this,&ActionGUI::OnNoteSeqComboChanged));
 
     signal_show().connect(mem_fun(*this,&ActionGUI::OnShow));
+    signal_hide().connect(mem_fun(*this,&ActionGUI::OnHide));
 
     //Setting the label's text, to parent action's name.
     label_preview.set_text(parent->GetLabel());
@@ -157,6 +166,7 @@ ActionGUI::ActionGUI(Action *prt)
 
     chordwidget.SetExpandDetails(1);
     //And hide the window at first.
+    shown = 0;
     hide();
 
 }
@@ -173,8 +183,22 @@ void ActionGUI::OnOKClicked(){
 }
 
 void ActionGUI::OnShow(){
+    shown = 1;
     set_transient_for(*mainwindow);
+    SetupTreeModels(); //important that this has to be done befor UpdateValues, otherwise the SetSeqCombos methou wouldn't be able to select the sequencer
     UpdateValues();
+}
+
+void ActionGUI::OnHide(){
+    shown = 0;
+}
+
+void ActionGUI::OnSequencerListChanged(){
+    if (shown){
+        *err << "doing it!\n";
+        SetupTreeModels();
+        SetSeqCombos(parent->args[1]);
+    }
 }
 
 void ActionGUI::UpdateChordwidget(){
@@ -200,7 +224,7 @@ void ActionGUI::UpdateValues(){
         case Action::SYNC:
             break;
         case Action::SEQ_ON_OFF_TOGGLE:
-            SetSeqCombo(parent->args[1]);
+            SetSeqCombos(parent->args[1]);
             switch (parent->args[2]){
                 case 0:
                     on_off_toggle_OFF.set_active(1);
@@ -214,7 +238,7 @@ void ActionGUI::UpdateValues(){
             }
             break;
         case Action::SEQ_CHANGE_PATTERN:
-            SetSeqCombo(parent->args[1]);
+            SetSeqCombos(parent->args[1]);
             pattern_button.set_value(parent->args[2]);
             break;
             break;
@@ -222,17 +246,17 @@ void ActionGUI::UpdateValues(){
             tempo_button.set_value(parent->args[1]);
             break;
         case Action::SEQ_CHANGE_ONE_NOTE:
-            SetSeqCombo(parent->args[1]);
+            SetSeqCombos(parent->args[1]);
             notenr_button.set_value(parent->args[2]);
             chordseq_button.set_value(parent->args[3]);
             break;
         case Action::SEQ_CHANGE_CHORD:
-            SetSeqCombo(parent->args[1]);
+            SetSeqCombos(parent->args[1]);
             chordwidget.Update();
             chordwidget.UpdateApplyOctave(parent->args[3]);
             break;
         case Action::SEQ_PLAY_ONCE:
-            SetSeqCombo(parent->args[1]);
+            SetSeqCombos(parent->args[1]);
             break;
         case Action::PLAY_PAUSE:
             switch(parent->args[1]){
@@ -247,7 +271,7 @@ void ActionGUI::UpdateValues(){
                     break;
             }
         case Action::SEQ_TRANSPOSE_OCTAVE:
-            SetSeqCombo(parent->args[1]);
+            SetSeqCombos(parent->args[1]);
             octave_spinbutton.set_value(parent->args[2]);
             break;
         case Action::TOGGLE_PASS_MIDI:
@@ -268,6 +292,8 @@ void ActionGUI::ChangeVisibleLines(){
 
     //Hide all, and show required ones.
     line_seq.hide();
+    AllSeqs_combo.hide();
+    NoteSeqs_combo.hide();
     line_tempo.hide();
     line_set_one_note.hide();
     line_chord.hide();
@@ -282,21 +308,26 @@ void ActionGUI::ChangeVisibleLines(){
             break;
         case Action::SEQ_ON_OFF_TOGGLE:
             line_seq.show();
+            AllSeqs_combo.show();
             line_on_off_toggle.show();
             break;
         case Action::SEQ_PLAY_ONCE:
             line_seq.show();
+            AllSeqs_combo.show();
             break;
         case Action::SEQ_CHANGE_PATTERN:
             line_seq.show();
+            AllSeqs_combo.show();
             line_pattern.show();
             break;
         case Action::SEQ_CHANGE_ONE_NOTE:
             line_seq.show();
+            NoteSeqs_combo.show();
             line_set_one_note.show();
             break;
         case Action::SEQ_CHANGE_CHORD:
             line_seq.show();
+            NoteSeqs_combo.show();
             line_chord.show();
             break;
         case Action::TEMPO_SET:
@@ -307,6 +338,7 @@ void ActionGUI::ChangeVisibleLines(){
             break;
         case Action::SEQ_TRANSPOSE_OCTAVE:
             line_seq.show();
+            NoteSeqs_combo.show();
             line_octave.show();
             break;
         case Action::TOGGLE_PASS_MIDI:
@@ -339,33 +371,33 @@ void ActionGUI::InitType(){
         case Action::SYNC:
             break;
         case Action::SEQ_ON_OFF_TOGGLE:
-            Seqs_combo.set_active(0);
-            parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_handle];
+            AllSeqs_combo.set_active(0);
+            parent->args[1] = (*(AllSeqs_combo.get_active()))[m_col_seqs.handle];
             on_off_toggle_TOGGLE.set_active(1); //it does not triggler signal_clicked, so we have to set the mode mannually!
             parent->args[2]=2;
             break;
         case Action::SEQ_CHANGE_ONE_NOTE:
-            Seqs_combo.set_active(0);
-            parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_handle];
+            NoteSeqs_combo.set_active(0);
+            parent->args[1] = (*(NoteSeqs_combo.get_active()))[m_col_seqs.handle];
             notenr_button.set_value(1.0);
             chordseq_button.set_value(0.0);
             break;
         case Action::SEQ_CHANGE_CHORD:
-            Seqs_combo.set_active(0);
-            parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_handle];
+           NoteSeqs_combo.set_active(0);
+            parent->args[1] = (*(NoteSeqs_combo.get_active()))[m_col_seqs.handle];
             parent->args[3] = 0;
             chordwidget.Update();
             break;
         case Action::SEQ_CHANGE_PATTERN:
-            Seqs_combo.set_active(0);
-            parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_handle];
+            AllSeqs_combo.set_active(0);
+            parent->args[1] = (*(AllSeqs_combo.get_active()))[m_col_seqs.handle];
             pattern_button.set_value(0.0);
             break;
         case Action::TEMPO_SET:
             tempo_button.set_value(120.0);
             break;
         case Action::SEQ_PLAY_ONCE:
-            Seqs_combo.set_active(0);
+            AllSeqs_combo.set_active(0);
             break;
         case Action::PLAY_PAUSE:
             play_TOGGLE.set_active(1); //it does not triggler signal_clicked, so we have to set the mode mannually!
@@ -374,7 +406,7 @@ void ActionGUI::InitType(){
         case Action::TOGGLE_PASS_MIDI:
             break;
         case Action::SEQ_TRANSPOSE_OCTAVE:
-            Seqs_combo.set_active(0);
+            NoteSeqs_combo.set_active(0);
             octave_spinbutton.set_value(1.0);
             break;
         default:
@@ -396,11 +428,26 @@ void ActionGUI::OnTempoChanged(){
     Files::SetFileModified(1);
 }
 
-void ActionGUI::OnSeqChanged(){
-    if(!Seqs_combo.get_active()) return; //empty selection
-    if(parent->type == Action::SEQ_ON_OFF_TOGGLE ||  parent->type == Action::SEQ_CHANGE_ONE_NOTE || parent->type == Action::SEQ_CHANGE_CHORD || parent->type == Action::SEQ_PLAY_ONCE||parent->type == Action::SEQ_CHANGE_PATTERN||parent->type == Action::SEQ_TRANSPOSE_OCTAVE){
-            parent->args[1] = (*(Seqs_combo.get_active()))[m_columns_sequencers.col_handle];
-    }else *err << _("Error: sequencer has changed, while action is not sequencer-type.") << ENDL;
+void ActionGUI::OnAllSeqComboChanged(){
+    if(we_are_copying_data_from_parent_action_so_do_not_handle_signals) return;
+    if(!AllSeqs_combo.get_active()) return; //empty selection
+    if(parent->type == Action::SEQ_ON_OFF_TOGGLE  || parent->type == Action::SEQ_PLAY_ONCE||parent->type == Action::SEQ_CHANGE_PATTERN||parent->type == Action::SEQ_TRANSPOSE_OCTAVE){
+            parent->args[1] = (*(AllSeqs_combo.get_active()))[m_col_seqs.handle];
+    }else *err << "Error: all-sequencer has changed, while action is not all-sequencer-type." << ENDL;
+
+    label_preview.set_text(parent->GetLabel());
+    mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
+
+    Files::SetFileModified(1);
+    
+}
+
+void ActionGUI::OnNoteSeqComboChanged(){
+    if(we_are_copying_data_from_parent_action_so_do_not_handle_signals) return;
+    if(!NoteSeqs_combo.get_active()) return; //empty selection
+    if(parent->type == Action::SEQ_CHANGE_ONE_NOTE || parent->type == Action::SEQ_CHANGE_CHORD||parent->type == Action::SEQ_TRANSPOSE_OCTAVE){
+            parent->args[1] = (*(NoteSeqs_combo.get_active()))[m_col_seqs.handle];
+    }else *err << "Error: note-sequencer has changed, while action is not note-sequencer-type." << ENDL;
 
     label_preview.set_text(parent->GetLabel());
     mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
@@ -502,6 +549,24 @@ void ActionGUI::OnApplyOctaveToogled(bool apply){
 
 //====^^Add new action gui callbacks above ^^==
 //======================================
+void ActionGUI::SetupTreeModels(){
+    m_ref_treemodel_allseqs->clear();
+    m_ref_treemodel_noteseqs->clear();
+    Sequencer* seq;
+    Gtk::TreeModel::Row row;
+    for(int x = 0; x < (int)seqVector.size(); x++){
+        seq = seqV(x);
+        if(seq->GetType() == SEQ_TYPE_NOTE){
+            row = *(m_ref_treemodel_noteseqs->append());
+            row[m_col_seqs.handle] = seq->MyHandle;
+            row[m_col_seqs.name] = seq->GetName();
+        }
+        row = *(m_ref_treemodel_allseqs->append());
+        row[m_col_seqs.handle] = seq->MyHandle;
+        row[m_col_seqs.name] = seq->GetName();
+    }
+}
+
 void ActionGUI::SetTypeCombo(int type){
     Gtk::TreeModel::iterator iter = TreeModel_ActionTypes->get_iter("0");
     for (;iter;iter++){
@@ -514,14 +579,21 @@ void ActionGUI::SetTypeCombo(int type){
 
 }
 
-void ActionGUI::SetSeqCombo(int seq){
-    Gtk::TreeModel::iterator iter = TreeModel_sequencers->get_iter("0");
+void ActionGUI::SetSeqCombos(int seq){
+    we_are_copying_data_from_parent_action_so_do_not_handle_signals = 1;
+    Gtk::TreeModel::iterator iter = m_ref_treemodel_allseqs->get_iter("0");
     for (;iter;iter++){
-        if ((*iter)[m_columns_sequencers.col_handle]==seq){
-            Seqs_combo.set_active(iter);
+        if ((*iter)[m_col_seqs.handle]==seq){
+            AllSeqs_combo.set_active(iter);
             break;
         }
-
     }
-
+    iter = m_ref_treemodel_noteseqs->get_iter("0");
+    for (; iter; iter++) {
+        if ((*iter)[m_col_seqs.handle] == seq) {
+            NoteSeqs_combo.set_active(iter);
+            break;
+        }
+    }
+    we_are_copying_data_from_parent_action_so_do_not_handle_signals = 0;
 }

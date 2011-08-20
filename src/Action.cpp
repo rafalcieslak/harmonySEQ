@@ -24,6 +24,7 @@
 #include "MidiDriver.h"
 #include "Files.h"
 #include "ActionGUI.h"
+#include "Event.h"
 
 Action::Action(ActionTypes t, int a1, int a2){
     args.resize(ACTION_ARGS_NUM);
@@ -78,18 +79,18 @@ void Action::Trigger(int data){
             break;
 
         case SEQ_CHANGE_ONE_NOTE:
-            if (seqVector.size()==0 || !seqH(args[1] || seqH(args[1])->GetType() != SEQ_TYPE_NOTE)) break;
+            if (seqVector.size()==0 || !seqH(args[1]) || seqH(args[1])->GetType() != SEQ_TYPE_NOTE) break;
             noteseq = dynamic_cast<NoteSequencer*>(seqH(args[1]));
             noteseq->chord.SetNote(args[2]-1, args[3]);
             Files::SetFileModified(1);
             break;
 
         case SEQ_CHANGE_CHORD:
-            if (seqVector.size()==0 || !seqH(args[1]  || seqH(args[1])->GetType() != SEQ_TYPE_NOTE)) break;
+            if (seqVector.size()==0 || !seqH(args[1])  || seqH(args[1])->GetType() != SEQ_TYPE_NOTE) break;
             noteseq = dynamic_cast<NoteSequencer*>(seqH(args[1]));
             noteseq->chord.Set(chord,!args[3]);
             mainwindow->RefreshRow(seqH(args[1])->my_row);
-            if(mainwindow->seqWidget.selectedSeq == args[1]) mainwindow->seqWidget.UpdateChord();;
+            if(mainwindow->seqWidget.selectedSeq == args[1]) mainwindow->seqWidget.UpdateChord();
             Files::SetFileModified(1);
              break;
         case SEQ_PLAY_ONCE:
@@ -132,7 +133,7 @@ void Action::Trigger(int data){
             ;
             break;
         case SEQ_TRANSPOSE_OCTAVE:
-            if (seqVector.size()==0 || !seqH(args[1]  || seqH(args[1])->GetType() != SEQ_TYPE_NOTE)) break;
+            if (seqVector.size()==0 || !seqH(args[1])  || seqH(args[1])->GetType() != SEQ_TYPE_NOTE) break;
             noteseq = dynamic_cast<NoteSequencer*>(seqH(args[1]));
             noteseq->chord.SetBaseOctave(noteseq->chord.GetBaseOctave()+args[2]);
             mainwindow->RefreshRow(seqH(args[1])->my_row);
@@ -233,4 +234,8 @@ void Action::GUIShowWindow(){
 
 void Action::GUIUpdateChordwidget(){
     gui_window->UpdateChordwidget();
+}
+
+void Action::GUISequencerListChanged(){
+    gui_window->OnSequencerListChanged();
 }

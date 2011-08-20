@@ -492,7 +492,6 @@ void MainWindow::RefreshRow(Gtk::TreeRowReference rowref){
 
 void MainWindow::RefreshRow(Gtk::TreeRow row){
     if(!row) return;
-    
     //*dbg << "Refreshing ROW, the handle ";
     seqHandle h = row[m_columns_sequencers.col_handle];
     //*dbg << h << ENDL;
@@ -544,6 +543,7 @@ void MainWindow::OnRemoveClicked(){
     UpdateSeqHandlesAfterDeleting(id);
 
     eventsWidget.UpdateAll();
+    eventsWidget.SeqListChanged();
 
     Files::SetFileModified(1);
 }
@@ -555,6 +555,8 @@ void MainWindow::OnAddNoteSeqClicked(){
     
     wTreeView.get_selection()->select(row);
 
+    eventsWidget.SeqListChanged();
+    
     Files::SetFileModified(1);
 }
 
@@ -564,6 +566,8 @@ void MainWindow::OnAddControlSeqClicked(){
     Gtk::TreeModel::Row row = spawn_sequencer(SEQ_TYPE_CONTROL);
     
     wTreeView.get_selection()->select(row);
+    
+    eventsWidget.SeqListChanged();
 
     Files::SetFileModified(1);
 }

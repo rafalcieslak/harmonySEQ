@@ -92,6 +92,9 @@ public:
     /**Refreshes chordwidget*/
     void GUIUpdateChordwidget();
     
+    /**Called when sequencer list changed, will update treemodels*/
+    void GUISequencerListChanged();
+    
 private:
 
     /**The related GUI window.*/
