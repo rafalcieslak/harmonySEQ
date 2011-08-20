@@ -31,6 +31,7 @@ enum SeqType_t{
     SEQ_TYPE_CONTROL
 };
 
+/**Spawns a new sequencer of given type.*/
 Gtk::TreeModel::Row spawn_sequencer(SeqType_t type);
 /**Spawns a new note sequencer*/
 Gtk::TreeModel::Row spawn_note_sequencer();
@@ -41,6 +42,7 @@ Gtk::TreeModel::Row clone_sequencer(int orig);
 /**Clears the list of sequencers, removing every sequencer*/
 void ClearSequencers();
 
+/**Base, pure-virtual class for sequencers.*/
 class Sequencer {
 public:
 
@@ -49,16 +51,20 @@ public:
     Sequencer(Glib::ustring _name0);
     Sequencer(const Sequencer& orig);
     virtual ~Sequencer();
-    virtual Sequencer* Clone() = 0; //virtual copy constructor
+    /**Virtual copy constructor.*/
+    virtual Sequencer* Clone() = 0;
 
     /**List of  patterns.
      *    Each pattern is an AtomContainer, which basically
      *    is a list of notes */
     vector<AtomContainer> patterns;
 
+    /**Appends a new pattern.*/
     int AddPattern();
+    /**Removes selected pattern.*/
     bool RemovePattern(int x);
     
+    /**Returns sequencer's type*/
     virtual SeqType_t GetType() = 0;
     
     /**Fills in everything with default values*/

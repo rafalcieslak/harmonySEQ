@@ -284,7 +284,7 @@ void SequencerWidget::SelectSeq(seqHandle h){
         chordwidget.Select(&noteseq->chord);
     }
     UpdateEverything();
-    Diodes_AllOff();
+    //Diodes_AllOff();
 }
 
 void SequencerWidget::SelectNothing(){
@@ -865,9 +865,10 @@ bool SequencerWidget::OnPatternMouseScroll(GdkEventScroll* e){
     return true;
 }
 
+/*
 void SequencerWidget::Diode(int n, int c){
     if(!AnythingSelected) return;
-    /*
+    
     //double x = (double)n/(double)DIODES_RES;
     int res = seqH(selectedSeq)->resolution;
     if (res == 0) return;
@@ -882,15 +883,16 @@ void SequencerWidget::Diode(int n, int c){
             pattern_lines[curr]->LightOn();
         else
             pattern_lines[curr]->LightOnAlternate();
-    }*/
+    }
 }
 
 void SequencerWidget::Diodes_AllOff(){
     if(!AnythingSelected) return;
     //double x = (double)n/(double)DIODES_RES;
-    /*
-    for (int x = 0; x < pattern_lines.size(); x++) if (pattern_lines[x]) pattern_lines[x]->LightOff();**/
-}
+    
+    for (int x = 0; x < pattern_lines.size(); x++) if (pattern_lines[x]) pattern_lines[x]->LightOff();*
+}*/
+
 //====================PATTERNLINE=========================
 /* Depracated.
 PatternLine::PatternLine(){

@@ -22,16 +22,19 @@
 #ifndef CONTROLSEQUENCER_H
 #define	CONTROLSEQUENCER_H
 
+/**A control sequencer, outputting MIDI control events*/
 class ControlSequencer : public Sequencer{
 public:
     ControlSequencer();
     ControlSequencer(Glib::ustring _name0);
     ControlSequencer(const ControlSequencer& orig);
     virtual ~ControlSequencer();
-    virtual Sequencer* Clone(); //virtual copy constructor
+    /**Virtual copy constructor.*/
+    virtual Sequencer* Clone();
     
     virtual SeqType_t GetType();
     
+    /**Stores the controller number (ie. 11 -> expression)*/
     int controller_number;
 private:
 

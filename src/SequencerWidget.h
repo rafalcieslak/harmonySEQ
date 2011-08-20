@@ -50,6 +50,8 @@ private:
     bool diode_on;
 };
 #endif
+
+/**Displays given sequencer's properties, and allows to edit them.*/
 class SequencerWidget : public Gtk::VBox{
 public:
     SequencerWidget();
@@ -68,6 +70,7 @@ public:
     void UpdateAddMode();
     void UpdateController();
 
+    /**Used to select sequencer that has to be displayed by the SequencerWidget*/
     void SelectSeq(seqHandle h);
     void SelectNothing();
 
@@ -77,12 +80,6 @@ public:
     bool AnythingSelected;
     seqHandle selectedSeq;
     SeqType_t selectedSeqType;
-
-    /**Lights aproprieate diode, where colour is 0 when normal, or 1 when alternate*/
-    void Diode(int n, int colour);
-
-    /**Turns all diodes off*/
-    void Diodes_AllOff();
 
 private:
     /*

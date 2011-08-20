@@ -103,7 +103,9 @@ public:
    /**Generates a summarized name for the chord, like "Triad, a-moll, i:1, o:2"*/
     Glib::ustring GetSummary(bool do_not_use_octave=0);
 
+    /**Recalcs Base to Note and Octave*/
     void BaseToOctaveAndNote();
+    /**Recalcs Note and Octave to Base*/
     void NoteAndOctaveToBase();
 private:
 

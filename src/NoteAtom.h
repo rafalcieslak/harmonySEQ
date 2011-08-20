@@ -28,6 +28,7 @@ public:
     NoteAtom(const NoteAtom& orig);
     virtual ~NoteAtom();
     
+    /**Creates a copy. Used as virtual copy constructor.*/
     NoteAtom* Clone();
     
     /**Currently - 0 to 5*/

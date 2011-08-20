@@ -26,7 +26,7 @@ enum SlopeType{
     SLOPE_TYPE_FLAT,
     SLOPE_TYPE_LINEAR,
             //maybe once there will be more to choose from?
-    SLOPE_TYPE_NONE = 256 //used when the sequencer widget should display it's own setting
+    SLOPE_TYPE_NONE = 255 //used when the sequencer widget should display it's own setting
 };
 
 class ControllerAtom : public Atom {
@@ -35,6 +35,7 @@ public:
     ControllerAtom(const ControllerAtom& orig);
     virtual ~ControllerAtom();
     
+    /**Creates a copy. Used as virtual constructor.*/
     virtual ControllerAtom* Clone();
     
     /**From 0 to 127*/

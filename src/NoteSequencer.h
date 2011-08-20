@@ -23,19 +23,23 @@
 #include "Chord.h"
 #include <glibmm/ustring.h>
 
+/**A class representing a MIDI note sequencer.*/
 class NoteSequencer : public Sequencer {
 public:
     NoteSequencer();
     NoteSequencer(Glib::ustring _name0);
     NoteSequencer(const NoteSequencer& orig);
     virtual ~NoteSequencer();
-    virtual Sequencer* Clone(); //virtual copy constructor
+    /**Virtual copy constructor.*/
+    virtual Sequencer* Clone(); 
     
+    /**Returns SEQ_TYPE_NOTE*/
     virtual SeqType_t GetType();
     
     /**The main chord*/
    Chord chord;
    
+   /**Whether to show detailed chord settings in GUI, or hide them. This is stored here, in order to save this data to file.*/
     bool expand_chord;
     
     /**Returns a one note of chord of this sequencer

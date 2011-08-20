@@ -245,7 +245,7 @@ void MidiDriver::PauseQueueImmediately(){
     //Choose an icon/label for the toggle in the main window
     mainwindow->UpdatePlayPauseTool();
     //All diodes off...
-    mainwindow->seqWidget.Diodes_AllOff();
+    //mainwindow->seqWidget.Diodes_AllOff();
 }
 
 void MidiDriver::PauseOnNextBar(){
@@ -266,7 +266,7 @@ void MidiDriver::Sync(){
     //Indicate graphically a starting bar
     mainwindow->FlashTempoStart();
     //All diodes off...
-    mainwindow->seqWidget.Diodes_AllOff();
+    //mainwindow->seqWidget.Diodes_AllOff();
 }
 
 snd_seq_tick_time_t MidiDriver::GetTick() {
@@ -715,7 +715,7 @@ void MidiDriver::ProcessInput(){
         //If we are in passing_midi mode, do pass the event (Well,  unless it's the ECHO, which MUST be caught).
         if(passing_midi&&ev->type!=SND_SEQ_EVENT_ECHO&&ev->type!=SND_SEQ_EVENT_USR0) {PassEvent(ev);continue;}
 
-        int i, c;
+        //int i, c;
         //Switch, according to the type.
         switch (ev->type){
             case SND_SEQ_EVENT_NOTEON:
@@ -760,15 +760,15 @@ void MidiDriver::ProcessInput(){
                 snd_seq_event_output_direct(seq_handle,ev);
                 break;
             case SND_SEQ_EVENT_USR0:
-                i = ev->data.raw32.d[0];
-                c = ev->data.raw32.d[2];
+                //i = ev->data.raw32.d[0];
+                //c = ev->data.raw32.d[2];
                 gdk_threads_enter(); //to interact with gui thread we MUST lock it's thread
 
                     if(mainwindow->seqWidget.selectedSeq == (int)ev->data.raw32.d[1]){ //comparing sequencer handles
-                        if (i != -1)
-                            mainwindow->seqWidget.Diode(i,c);
-                        else
-                            mainwindow->seqWidget.Diodes_AllOff();
+                        //if (i != -1)
+                            //mainwindow->seqWidget.Diode(i,c);
+                        //else
+                            //mainwindow->seqWidget.Diodes_AllOff();
                     }
                     
                 gdk_threads_leave(); //freeing lock

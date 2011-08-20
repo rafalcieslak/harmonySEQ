@@ -24,8 +24,11 @@
 #include "global.h"
 
 namespace Files{
+    /**States whether the file was modified or not*/
     extern bool file_modified;
+    /**Current file name*/
     extern Glib::ustring file_name;
+    /**Current file directory*/
     extern Glib::ustring file_dir;
 
     /**Checks if a file exists.*/
@@ -36,10 +39,13 @@ namespace Files{
     void SaveToFile(Glib::ustring filename);
     /**Shows a file load dialog*/
     void LoadFileDialog();
-    /**Loads a file, but without showing the dialog (so the filename must be passed as an argument)*/
+    /**Loads a file, but without showing the dialog (so the filename must be passed as an argument).
+        * Also, it converts it before opening, if it's an old file. */
     bool LoadFile(Glib::ustring file);
     
+    /**Loads a file, assuming it's in current format*/
     bool LoadFileCurrent(Glib::KeyFile* kf);
+    /**Converts file format from 0.15 to 0.16*/
     bool ConvertFile_0_15_to_0_16(Glib::KeyFile* kf);
 }
 

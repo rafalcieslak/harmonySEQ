@@ -26,39 +26,60 @@
 
 class AtomContainer;
 
-/**PatternWidget is basically a GUI for NoteContainer, that uses DrawingArea to display a piano-roll interface.*/
+/**PatternWidget is basically a GUI for AtomContainer, that uses a DrawingArea to display a piano-roll interface.*/
 class PatternWidget : public Gtk::DrawingArea {
 public:
     PatternWidget();
     virtual ~PatternWidget();
     void SetInternalHeight(int h);
     
+    /**Redraws all atoms. Call when any of them was moved/added/removed/etc.*/
     void RedrawAtoms();
+    /**Redraws grid. Call when resolution was changed.*/
     void RedrawGrid();
+    /**Redraws both grid and atoms*/
     bool RedrawEverything();
     
+    /**Assigns a pattern to draw.
+     * @parram cont Adress of an AtomContainer that has to be drawn in this Pattern Widget. Note that PatternWidget <b>WILL</b> write data to it, basing on user input!
+     * @parram type Sequencer type (note/control)*/
     void AssignPattern(AtomContainer* cont, SeqType_t type);
     
+    /**Resizes this PatternWidget to zoom-in*/
     void ZoomIn();
+    /**Resizes this PatternWidget to zoom-out*/
     void ZoomOut();
     
+    /**Starts adding atoms with LMB*/
     void EnterAddMode();
+    /**Stops adding notes with LMB*/
     void LeaveAddMode();
+    /**Returns whether AddMode is on*/
     bool GetAddMode();
     
+    /**Removes selected notes from container.*/
     void DeleteSelected();
     
+    /**Selects nothing.*/
     void ClearSelection();
     
+    /**Turns snap-to-grid on/off.*/
     void SetSnap(bool s);
+    /**Tells whether snap-to-grid is on.*/
     bool GetSnap();
     
+    /*Calculates average velocity of selection.*/
     int GetSelectionVelocity();
+    /*Sets all selected notes velocity to v.*/
     void SetSelectionVelocity(int v);
+    /*Calcucates average value of selection.*/
     int GetSelectionValue();
+    /*Sets all selectes notes value to v.*/
     void SetSelectionValue(int v);
     
+    /**Sets this ControllerAtom's slope-type to s.*/
     void SetSlopeType(SlopeType s);
+    /**Returns selected ControllerAtom's slope-type. If there are different, returns SLOPE_TYPE_NONE*/
     SlopeType GetSlopeType();
     
     /**Emitted when selection is changed. Provides an argument that is equal to number of notes in selection.*/

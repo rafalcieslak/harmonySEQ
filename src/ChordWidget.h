@@ -35,6 +35,7 @@ public:
     /**Refreshes the GUI using data from parent chord*/
     void Update();
     
+    /**Whether to show an option setting 'apply octave'*/
     void ShowApplyOctave(bool show);
     void UpdateApplyOctave(bool apply);
 
