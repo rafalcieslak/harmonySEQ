@@ -26,6 +26,7 @@
 #include "seqHandle.h"
 #include "SequencerWidget.h"
 #include "EventsWidget.h"
+
 class MainWindow: public Gtk::Window{
 
 

@@ -30,6 +30,13 @@
 #include "Configuration.h"
 #include "ControlSequencer.h"
 
+#define TREEVIEW_COLOR_ON "green1"
+#define TREEVIEW_COLOR_OFF "white"
+#define TREEVIEW_COLOR_PRE_P1 "gold"
+#define TREEVIEW_COLOR_P1 "yellow1"
+#define TREEVIEW_COLOR_T_NOTE "lightblue"
+#define TREEVIEW_COLOR_T_CTRL "lightgray"
+
 bool CtrlKeyDown;
 bool ShiftKeyDown;
 
@@ -225,11 +232,13 @@ MainWindow::MainWindow()
         
         int col_count = wTreeView.append_column_editable(_("Name"), m_columns_sequencers.col_name);
         Gtk::CellRenderer* cell = wTreeView.get_column_cell_renderer(col_count - 1);
+        Gtk::TreeViewColumn * column = wTreeView.get_column(col_count-1);
+        column->add_attribute(cell->property_cell_background(),m_columns_sequencers.col_name_color);
         Gtk::CellRendererText& txt = dynamic_cast<Gtk::CellRendererText&> (*cell);
         txt.signal_edited().connect(mem_fun(*this, &MainWindow::OnNameEdited));
 
         col_count = wTreeView.append_column_editable(_("On"), m_columns_sequencers.col_muted);
-        Gtk::TreeViewColumn * column = wTreeView.get_column(col_count-1);
+        column = wTreeView.get_column(col_count-1);
         cell = wTreeView.get_column_cell_renderer(col_count - 1);
         column->add_attribute(cell->property_cell_background(),m_columns_sequencers.col_colour);
         Gtk::CellRendererToggle& tgl = dynamic_cast<Gtk::CellRendererToggle&> (*cell);
@@ -419,21 +428,23 @@ Gtk::TreeModel::Row MainWindow::AddSequencerRow(int x)
     if(seq->GetType() == SEQ_TYPE_NOTE){
         NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seq);
         row[m_columns_sequencers.col_chord] = noteseq->chord.GetName();
+        row[m_columns_sequencers.col_name_color] = TREEVIEW_COLOR_T_NOTE;
     } else if (seq->GetType() == SEQ_TYPE_CONTROL){
         ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*>(seq);
         char temp[20];
         sprintf(temp,_("Ctrl %d"),ctrlseq->controller_number);
         row[m_columns_sequencers.col_chord] = temp;
+        row[m_columns_sequencers.col_name_color] = TREEVIEW_COLOR_T_CTRL;
     }
     
     if(seq->GetOn()){
-        row[m_columns_sequencers.col_colour] = "green1";
+        row[m_columns_sequencers.col_colour] = TREEVIEW_COLOR_ON;
     }else if (seq->GetPlayOncePhase() == 2 || seq->GetPlayOncePhase() == 3){
-        row[m_columns_sequencers.col_colour] = "yellow1";
+        row[m_columns_sequencers.col_colour] = TREEVIEW_COLOR_P1;
     }else if(seq->GetPlayOncePhase()== 1){
-        row[m_columns_sequencers.col_colour] = "gold";
+        row[m_columns_sequencers.col_colour] = TREEVIEW_COLOR_PRE_P1;
     }else{
-        row[m_columns_sequencers.col_colour] = "white";
+        row[m_columns_sequencers.col_colour] = TREEVIEW_COLOR_OFF;
     }
     seq->my_row = row;
     return row;
@@ -462,21 +473,23 @@ void MainWindow::InitTreeData(){
         if(seq->GetType() == SEQ_TYPE_NOTE){
             NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seq);
             row[m_columns_sequencers.col_chord] = noteseq->chord.GetName();
+            row[m_columns_sequencers.col_name_color] = TREEVIEW_COLOR_T_NOTE;
         } else if (seq->GetType() == SEQ_TYPE_CONTROL){
             ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*>(seq);
             char temp[20];
             sprintf(temp,_("Ctrl %d"),ctrlseq->controller_number);
             row[m_columns_sequencers.col_chord] = temp;
+            row[m_columns_sequencers.col_name_color] = TREEVIEW_COLOR_T_CTRL;
         }
         
         if(seq->GetOn()){
-            row[m_columns_sequencers.col_colour] = "green1";
+            row[m_columns_sequencers.col_colour] = TREEVIEW_COLOR_ON;
         }else if (seq->GetPlayOncePhase() == 2 || seq->GetPlayOncePhase() == 3){
-            row[m_columns_sequencers.col_colour] = "yellow1";
+            row[m_columns_sequencers.col_colour] = TREEVIEW_COLOR_P1;
         }else if(seq->GetPlayOncePhase()== 1){
-            row[m_columns_sequencers.col_colour] = "gold";
+            row[m_columns_sequencers.col_colour] = TREEVIEW_COLOR_PRE_P1;
         }else{
-            row[m_columns_sequencers.col_colour] = "white";
+            row[m_columns_sequencers.col_colour] = TREEVIEW_COLOR_OFF;
         }
         
         seqV(x)->my_row = row;
@@ -507,21 +520,23 @@ void MainWindow::RefreshRow(Gtk::TreeRow row){
     if(seq->GetType() == SEQ_TYPE_NOTE){
         NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seq);
         row[m_columns_sequencers.col_chord] = noteseq->chord.GetName();
+        row[m_columns_sequencers.col_name_color] = TREEVIEW_COLOR_T_NOTE;
     } else if (seq->GetType() == SEQ_TYPE_CONTROL){
         ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*>(seq);
         char temp[20];
         sprintf(temp,_("Ctrl %d"),ctrlseq->controller_number);
         row[m_columns_sequencers.col_chord] = temp;
+        row[m_columns_sequencers.col_name_color] = TREEVIEW_COLOR_T_CTRL;
     }
     
     if(seq->GetOn()){
-        row[m_columns_sequencers.col_colour] = "green1";
+        row[m_columns_sequencers.col_colour] = TREEVIEW_COLOR_ON;
     }else if (seq->GetPlayOncePhase() == 2 || seq->GetPlayOncePhase() == 3){
-        row[m_columns_sequencers.col_colour] = "yellow1";
+        row[m_columns_sequencers.col_colour] = TREEVIEW_COLOR_P1;
     }else if(seq->GetPlayOncePhase()== 1){
-        row[m_columns_sequencers.col_colour] = "gold";
+        row[m_columns_sequencers.col_colour] = TREEVIEW_COLOR_PRE_P1;
     }else{
-        row[m_columns_sequencers.col_colour] = "white";
+        row[m_columns_sequencers.col_colour] =TREEVIEW_COLOR_OFF;
     }
 }
 
