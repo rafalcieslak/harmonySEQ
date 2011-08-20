@@ -23,12 +23,13 @@
 ControlSequencer::ControlSequencer()
                                                                 : Sequencer(){
     controller_number = 1;
+    resolution = 32;
 }
 
 ControlSequencer::ControlSequencer(Glib::ustring _name0)
                                                                 : Sequencer(_name0){
     controller_number = 1;
-    
+    resolution = 32;
 }
 
 ControlSequencer::ControlSequencer(const ControlSequencer& orig)
