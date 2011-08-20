@@ -48,11 +48,11 @@ PatternWidget::PatternWidget(){
     add_events(Gdk::BUTTON3_MOTION_MASK);
     add_events(Gdk::KEY_PRESS_MASK);
     set_can_focus(1);//required to receive key_presses
-    cr_buffer_surface = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32,4800,400);
+    cr_buffer_surface = Cairo::ImageSurface::create(Cairo::FORMAT_RGB24,2400,300);
     cr_buffer_context = Cairo::Context::create(cr_buffer_surface); 
-    cr_atoms_surface = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32,4800,400);
+    cr_atoms_surface = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32,2400,300);
     cr_atoms_context = Cairo::Context::create(cr_atoms_surface); 
-    cr_grid_surface = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32,4800,400);
+    cr_grid_surface = Cairo::ImageSurface::create(Cairo::FORMAT_RGB24,2400,300);
     cr_grid_context = Cairo::Context::create(cr_grid_surface); 
     grid_lock = 0;
     atoms_lock = 0;
@@ -72,12 +72,12 @@ void PatternWidget::SetInternalHeight(int h){
 
 void PatternWidget::UpdateSizeRequest(){
     //*dbg << "sizerequest " << vert_size << " " << internal_height+20 << ENDL;
-    set_size_request(horiz_size,internal_height+20);
+    set_size_request(horiz_size,internal_height);
 }
 
 void PatternWidget::ZoomIn(){
     horiz_size = horiz_size*1.2;
-    if(horiz_size > 4800.0)  horiz_size = 4800.0;
+    if(horiz_size > 2400.0)  horiz_size = 2400.0;
     UpdateSizeRequest();
 }
 
@@ -880,7 +880,8 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
    Cairo::Context ct(c_t);
    
    ct.set_source(cr_buffer_surface,0,0);
-   ct.paint();
+   ct.rectangle(0.0,0.0,width,internal_height);
+   ct.fill();
    
    cairo_destroy(c_t);
   
@@ -922,8 +923,8 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
     
       //clearing...
       cr_grid_context->save();
-      cr_grid_context->set_source_rgba(0,0,0,0);
-      cr_grid_context->set_operator(Cairo::OPERATOR_SOURCE);
+      cr_grid_context->set_source_rgb(1.0,1.0,1.0);
+      //cr_grid_context->set_operator(Cairo::OPERATOR_SOURCE);
       cr_grid_context->paint();
       cr_grid_context->restore();
 
@@ -935,8 +936,9 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
         cr_grid_context->set_line_width(1);
         cr_grid_context->set_source_rgb(0.0, 0.0, 0.0);
         for (int x = 0; x <= 6; x++) {
-            cr_grid_context->move_to(0, x * internal_height / 6 + 0.5);
-            cr_grid_context->line_to(width, x * internal_height / 6 + 0.5);
+            //the ' - (x==6)' does the trick, so that the last line is drawn not outside the widget.
+            cr_grid_context->move_to(0, x * internal_height / 6 + 0.5 - (x==6));
+            cr_grid_context->line_to(width, x * internal_height / 6 + 0.5 - (x==6));
             cr_grid_context->stroke();
         }
     } else if (seq_type == SEQ_TYPE_CONTROL) {
@@ -953,8 +955,9 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
             else
                 cr_grid_context->set_source_rgb(0.0, 0.0, 0.0);
 
-            cr_grid_context->move_to(0, x * internal_height / 4 + 0.5);
-            cr_grid_context->line_to(width, x * internal_height / 4 + 0.5);
+            //the ' - (x==4)' does the trick, so that the last line is drawn not outside the widget.
+            cr_grid_context->move_to(0, x * internal_height / 4 + 0.5 - (x==4));
+            cr_grid_context->line_to(width, x * internal_height / 4 + 0.5 - (x==4));
             cr_grid_context->stroke();
         }
     }
@@ -1137,16 +1140,27 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
   }
   
   void PatternWidget::Redraw(){
-    //clearing the buffer surface
-    cr_buffer_context->set_source_rgb(1.0,1.0,1.0);
-    cr_buffer_context->paint();
+      //Glib::Timer T;
+    //long unsigned int t;
+      //T.reset(); T.start();
     
+    Gtk::Allocation allocation = get_allocation();
+    const double width = allocation.get_width();
+    
+    //T.elapsed(t);
+    //*err << " 1- " <<  (int)t << ENDL;
     cr_buffer_context->set_source(cr_grid_surface,0,0);
-    cr_buffer_context->paint();
+    cr_buffer_context->rectangle(0.0,0.0,width,internal_height);
+    cr_buffer_context->fill();
     
+    //T.elapsed(t);
+    //*err << " 2 -" <<  (int)t << ENDL;
     cr_buffer_context->set_source(cr_atoms_surface,0,0);
-    cr_buffer_context->paint();
+    cr_buffer_context->rectangle(0.0,0.0,width,internal_height);
+    cr_buffer_context->fill();
 
+    //T.elapsed(t);
+    //*err << " 3 -" <<  (int)t << ENDL;
       //drag_selection rectangle
   if(drag_in_progress && drag_mode==DRAG_MODE_SELECT_AREA){
       cr_buffer_context->set_line_width(2);
@@ -1157,6 +1171,9 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
       cr_buffer_context->stroke();
       
   }
+    //T.elapsed(t);
+    //*err << (int)t << ENDL;
     
+   // T.stop();
     queue_draw();
 }
