@@ -1,7 +1,7 @@
 (More details can be found on harmonySEQ's homepage: http://harmonyseq.wordpress.com)
 
-To run harmonySEQ you need to have {gtkmm,glibmm,alsa,liblo} run-time libriries installed on your system.
-To compile it, you will also need the developement headers of above programs.
+To run harmonySEQ you need to have {gtkmm-2.4,glibmm-2.4,alsa,liblo} run-time libriries installed on your system (though you can disable OSC support and liblo dependency by passing --disable-osc to configure script).
+To compile it, you will also need the developement headers of above libraries.
 
 To compile:
 	./configure
