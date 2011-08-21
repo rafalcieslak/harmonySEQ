@@ -155,6 +155,8 @@ void MidiDriver::SendNoteEvent(int channel, int pitch, int velocity, int duratio
 }
 
 void MidiDriver::ScheduleNote(int channel, int tick_time, int pitch, int velocity, int length){
+    Glib::Timer T;
+    unsigned long int t;
         snd_seq_event_t ev;
         //Create a new event (clear it)...
         snd_seq_ev_clear(&ev);
@@ -167,10 +169,12 @@ void MidiDriver::ScheduleNote(int channel, int tick_time, int pitch, int velocit
         snd_seq_ev_set_subs(&ev);
         //Output the event (but it stays at the queue.)
         snd_seq_event_output_direct(seq_handle, &ev);
+    T.elapsed(t);if(t>1000) *err << "sending note took more than 1ms (" <<(int) t << " us)." << ENDL;
 }
 
 void MidiDriver::ScheduleCtrlEventSingle(int channel, int tick_time, int ctrl_no, int value){
-    //*err << "time = " << tick_time << ", v = " << value << ENDL;
+    Glib::Timer T;
+    unsigned long int t;
     snd_seq_event_t ev;
     snd_seq_ev_clear(&ev);
 
@@ -180,6 +184,7 @@ void MidiDriver::ScheduleCtrlEventSingle(int channel, int tick_time, int ctrl_no
     snd_seq_ev_set_subs(&ev);
 
     snd_seq_event_output_direct(seq_handle, &ev);
+    T.elapsed(t);if(t>1000) *err << "sending ctrl took more than 1ms (" << (int)t << " us)." << ENDL;
 }
     
 void MidiDriver::ScheduleCtrlEventLinearSlope(int channel, int ctrl_no, int start_tick_time, int start_value, int end_tick_time, int end_value){
@@ -212,7 +217,7 @@ void MidiDriver::InitQueue(){
     //Asks ALSA for a new queue and get a handle to it (queueid).
     queueid = snd_seq_alloc_named_queue(seq_handle,"harmonySEQ queue");
     //Set maximum number of event on the queue to 8192 - should be enough.
-    snd_seq_set_client_pool_output(seq_handle,8192);
+    snd_seq_set_client_pool_output(seq_handle,16384);//8192);
     //Clear the ticks counter.
     tick = 0;
 }
@@ -360,6 +365,10 @@ double Wrap(double x){
 }
 
 void MidiDriver::UpdateQueue(bool do_not_lock_threads){
+    
+    Glib::Timer T;
+    unsigned long int t;
+    
     if(!do_not_lock_threads) gdk_threads_enter(); //for safety. any calls to GUI will be thread-protected
     snd_seq_event_t ev;
     Sequencer* seq;
@@ -446,6 +455,10 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                 if(seq->GetPlayOncePhase() == 2) seq->SetPlayOncePhase(3);
             }
             
+            
+    T.elapsed(t);
+    //*err <<"beforeplay :" << (int)t << ENDL;
+            
             *dbg << "sm = " << start_marker << ", em = " << end_marker << ", s = " << s << ", e = " << e << ENDL;
             
             //We know which atoms to play, so lets play them.
@@ -454,18 +467,20 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                       //Determine whether to output notes or control messages
                       if(seq->GetType() == SEQ_TYPE_NOTE){
                           
+                                 NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seq);
+                                 
                                   for(int V = s; V<=e;V++){
                                         note = dynamic_cast<NoteAtom*>((*pattern)[V%size]);
-                                        NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seq);
                                         int pitch = noteseq->GetNoteOfChord(note->pitch);
                                         ScheduleNote(seq->GetChannel()-1,local_tick + (V/size)*sequence_time + note->time*TICKS_PER_NOTE*seq->GetLength(),pitch,note->velocity,note->length*TICKS_PER_NOTE*seq->GetLength());
                                   }
                                   
                       }else if(seq->GetType() == SEQ_TYPE_CONTROL){
                           
+                                 ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*>(seq);
+                          
                                   for(int V = s; V<=e;V++){
-                                        ctrl = dynamic_cast<ControllerAtom*>((*pattern)[V%size]);
-                                        ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*>(seq);
+                                        ctrl = dynamic_cast<ControllerAtom*> ((*pattern)[V % size]);
                                         if(ctrl->slope_type == SLOPE_TYPE_FLAT){
                                             ScheduleCtrlEventSingle(seq->GetChannel()-1, local_tick + (V/size)*sequence_time + ctrl->time*TICKS_PER_NOTE*seq->GetLength(),ctrlseq->controller_number,ctrl->value);
                                         }else if(ctrl->slope_type == SLOPE_TYPE_LINEAR){
@@ -701,6 +716,9 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
 
     if(!do_not_lock_threads)  gdk_threads_leave(); //see note on this functions beggining.
 
+    //T.elapsed(t);
+    //*err <<"end :" << (int)t << ENDL;
+    
 }
 
 
