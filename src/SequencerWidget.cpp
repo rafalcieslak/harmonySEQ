@@ -242,8 +242,8 @@ SequencerWidget::SequencerWidget()
     wLengthDenominator.set_increments(1.0,1.0);
     wLengthNumerator.set_width_chars(3);
     wLengthDenominator.set_width_chars(3);
-    wLengthNumerator.set_range(1.0,128.0);
-    wLengthDenominator.set_range(1.0,128.0);
+    wLengthNumerator.set_range(1.0,64.0);
+    wLengthDenominator.set_range(1.0,64.0);
     wLengthDivision.set_text(" / ");
     wLengthNumerator.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnLengthChanged));
     wLengthDenominator.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnLengthChanged));
