@@ -740,6 +740,7 @@ void SequencerWidget::OnNameEdited(){
     seq->SetName(wNameEntry.get_text());
     LeaveAddMode();
     mainwindow->RefreshRow(seq->my_row);
+    mainwindow->eventsWidget.SeqListChanged();
     Files::SetFileModified(1);
 
 }

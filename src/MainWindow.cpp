@@ -407,6 +407,8 @@ MainWindow::OnNameEdited(const Glib::ustring& path, const Glib::ustring& newtext
 
     if(seqWidget.selectedSeq == h) seqWidget.UpdateName();
 
+    eventsWidget.SeqListChanged();
+    
     UpdateEventWidget();
     Files::SetFileModified(1);
 }
