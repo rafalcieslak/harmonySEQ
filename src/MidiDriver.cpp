@@ -92,7 +92,8 @@ void MidiDriver::Open(){
     
     //Set client name
     snd_seq_set_client_name(seq_handle,"harmonySEQ");
-
+    snd_seq_set_output_buffer_size(seq_handle,131072);
+    
     //Try to create the port we use for MIDI output
     output_port = snd_seq_create_simple_port(seq_handle,"harmonySEQ output",SND_SEQ_PORT_CAP_READ|SND_SEQ_PORT_CAP_SUBS_READ,SND_SEQ_PORT_TYPE_APPLICATION);
 
@@ -155,8 +156,8 @@ void MidiDriver::SendNoteEvent(int channel, int pitch, int velocity, int duratio
 }
 
 void MidiDriver::ScheduleNote(int channel, int tick_time, int pitch, int velocity, int length){
-    Glib::Timer T;
-    unsigned long int t;
+    //Glib::Timer T;
+    //unsigned long int t;
         snd_seq_event_t ev;
         //Create a new event (clear it)...
         snd_seq_ev_clear(&ev);
@@ -168,13 +169,13 @@ void MidiDriver::ScheduleNote(int channel, int tick_time, int pitch, int velocit
         snd_seq_ev_set_source(&ev, output_port);
         snd_seq_ev_set_subs(&ev);
         //Output the event (but it stays at the queue.)
-        snd_seq_event_output_direct(seq_handle, &ev);
-    T.elapsed(t);if(t>1000) *err << "sending note took more than 1ms (" <<(int) t << " us)." << ENDL;
+        snd_seq_event_output(seq_handle, &ev);
+   // T.elapsed(t);if(t>1000) *err << "Warning: sending note took more than 1ms (" <<(int) t << " us)." << ENDL;
 }
 
 void MidiDriver::ScheduleCtrlEventSingle(int channel, int tick_time, int ctrl_no, int value){
-    Glib::Timer T;
-    unsigned long int t;
+    //Glib::Timer T;
+    //unsigned long int t;
     snd_seq_event_t ev;
     snd_seq_ev_clear(&ev);
 
@@ -183,8 +184,8 @@ void MidiDriver::ScheduleCtrlEventSingle(int channel, int tick_time, int ctrl_no
     snd_seq_ev_set_source(&ev, output_port);
     snd_seq_ev_set_subs(&ev);
 
-    snd_seq_event_output_direct(seq_handle, &ev);
-    T.elapsed(t);if(t>1000) *err << "sending ctrl took more than 1ms (" << (int)t << " us)." << ENDL;
+    snd_seq_event_output(seq_handle, &ev);
+    //T.elapsed(t);if(t>1000) *err << "Warning ctrl event took more than 1ms (" << (int)t << " us)." << ENDL;
 }
     
 void MidiDriver::ScheduleCtrlEventLinearSlope(int channel, int ctrl_no, int start_tick_time, int start_value, int end_tick_time, int end_value){
@@ -714,10 +715,16 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
     snd_seq_ev_set_dest(&ev,snd_seq_client_id(seq_handle),input_port); //here INPUT_PORT is used, so the event will be send just to harmonySEQ itself.
     snd_seq_event_output_direct(seq_handle,&ev);
 
-    if(!do_not_lock_threads)  gdk_threads_leave(); //see note on this functions beggining.
-
     //T.elapsed(t);
     //*err <<"end :" << (int)t << ENDL;
+    
+    if(!do_not_lock_threads)  gdk_threads_leave(); //see note on this functions beggining.
+
+    /**Note, that if there is A LOT of notes on the queue, the following call will take some time. However, it does not use CPU, and we have already unlocked gtk threads, so it can be safely called.*/
+    snd_seq_drain_output(seq_handle);
+    
+    //T.elapsed(t);
+    //*err <<"end + drain :" << (int)t << ENDL;
     
 }
 
