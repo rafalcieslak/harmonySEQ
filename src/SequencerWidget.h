@@ -134,6 +134,8 @@ private:
     void OnSlopeLinearToggled();
     void UpdateSlopeType();
     
+    void ColorizeModeButtons();
+    
     PatternWidget pattern_widget;
     
     Gtk::VBox wMainVbox;

@@ -791,7 +791,11 @@ void SequencerWidget::OnControllerChanged(){
 }
 
 void SequencerWidget::OnAddToggled(){
+    
+    ColorizeModeButtons(); //Change color independently from whether we ignore signals or not - the color has to change even if we are updating values etc.
+    
     if(ignore_signals) return;
+    
     if(wAddToggle.get_active()){
         pattern_widget.EnterAddMode();
     }else{
@@ -864,6 +868,18 @@ bool SequencerWidget::OnPatternMouseScroll(GdkEventScroll* e){
         }
     }
     return true;
+}
+
+void SequencerWidget::ColorizeModeButtons(){
+    if(wAddToggle.get_active()){
+        wAddToggle.modify_bg(Gtk::STATE_ACTIVE,Gdk::Color("DarkOliveGreen1"));
+        wAddToggle.modify_bg(Gtk::STATE_PRELIGHT,Gdk::Color("DarkOliveGreen2"));
+        wAddToggle.modify_text(Gtk::STATE_ACTIVE,Gdk::Color("black"));
+        wAddToggle.modify_text(Gtk::STATE_PRELIGHT,Gdk::Color("black"));
+    }else{
+        wAddToggle.unset_bg(Gtk::STATE_ACTIVE);
+        wAddToggle.unset_bg(Gtk::STATE_PRELIGHT);
+    }
 }
 
 /*
