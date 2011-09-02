@@ -35,6 +35,7 @@ namespace Files{
     bool fexists(const char *filename);
     /**Sets file_modified flag, and refreshes the mainwindow title*/
     bool SetFileModified(bool modified);
+    void FileModified();
     /**Saves a file. Does not show any dialog, does not check for overwriting. Just saves.*/
     void SaveToFile(Glib::ustring filename);
     /**Shows a file load dialog*/

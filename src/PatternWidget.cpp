@@ -28,6 +28,7 @@
 #include "Event.h"
 #include "ControllerAtom.h"
 #include "Configuration.h"
+#include "Files.h"
 
 int resolution_hints[65] = {1,1,2,3,2,5,3,7,4,3,5,11,3,13,7,5,4,17,6,19,5,7,11,23,6,5,13,9,7,29,5,31,4,
                                                                11,17,5,6,37,19,39,10,41,6,43,11,7,23,47,6,49,5,51,13,53,27,11,7,57,29,59,6,61,31,63,8};
@@ -127,6 +128,7 @@ void PatternWidget::DeleteSelected(){
     container->RemoveList(&selection);
     for(std::set<Atom*, AtomComparingClass>::iterator it = selection.begin(); it != selection.end(); it++) delete *it;
     selection.clear();
+    Files::FileModified();
     on_selection_changed.emit(0);
     RedrawAtoms();
 }
@@ -146,6 +148,7 @@ void PatternWidget::SetSelectionVelocity(int v){
         NoteAtom* note = dynamic_cast<NoteAtom*>(*it);
         note->velocity = v;
     }    
+    Files::FileModified();
     RedrawAtoms();
 }
 
@@ -168,6 +171,7 @@ void PatternWidget::SetSelectionValue(int v){
         ControllerAtom* ctrl = dynamic_cast<ControllerAtom*>(*it);
         ctrl->value = v;
     }    
+    Files::FileModified();
     RedrawAtoms();
 }
 
@@ -208,7 +212,8 @@ void PatternWidget::SetSlopeType(SlopeType s){
         for (; it != selection.end(); it++) {
             ControllerAtom* ctrl = dynamic_cast<ControllerAtom*>(*it);
             ctrl->slope_type = s;
-        }    
+        }
+        Files::FileModified();
         RedrawAtoms();
     }
 }
@@ -232,6 +237,7 @@ void PatternWidget::MoveSelectionUp(){
         }
         selection = resulting_selection;
         //container->Sort(); //no need to sort, when pitch or value was changed
+        Files::FileModified();
         RedrawAtoms();
     }else if (seq_type == SEQ_TYPE_CONTROL)
         IncreaseSelectionValue(8);
@@ -249,6 +255,7 @@ void PatternWidget::MoveSelectionDown(){
         }
         selection = resulting_selection;
         //container->Sort(); //no need to sort, when pitch or value was changed
+        Files::FileModified();
         RedrawAtoms();
     }else if (seq_type == SEQ_TYPE_CONTROL)
         DecreaseSelectionValue(8);
@@ -266,6 +273,7 @@ void PatternWidget::MoveSelectionRight(){
         }
         selection = resulting_selection;
         container->Sort();
+        Files::FileModified();
         RedrawAtoms();
 }
 
@@ -281,6 +289,7 @@ void PatternWidget::MoveSelectionLeft(){
         }
         selection = resulting_selection;
         container->Sort();
+        Files::FileModified();
         RedrawAtoms();
 }
 
@@ -297,6 +306,7 @@ void PatternWidget::IncreaseSelectionVelocity(int amount){
         }
         selection = resulting_selection;
         //container->Sort(); //no need to sort, when velocity was changed
+        Files::FileModified();
         on_selection_changed.emit(selection.size());//this will update the velocity spinbutton
         RedrawAtoms();
 }
@@ -314,6 +324,7 @@ void PatternWidget::DecreaseSelectionVelocity(int amount){
         }
         selection = resulting_selection;
         //container->Sort(); //no need to sort, when velocity was changed
+        Files::FileModified();
         on_selection_changed.emit(selection.size());//this will update the velocity spinbutton
         RedrawAtoms();
 }
@@ -331,6 +342,7 @@ void PatternWidget::IncreaseSelectionValue(int amount){
         }
         selection = resulting_selection;
         //container->Sort(); //no need to sort, when value was changed
+        Files::FileModified();
         on_selection_changed.emit(selection.size());//this will update the value spinbutton
         RedrawAtoms();
 }
@@ -348,6 +360,7 @@ void PatternWidget::DecreaseSelectionValue(int amount){
         }
         selection = resulting_selection;
         //container->Sort(); //no need to sort, when value was changed
+        Files::FileModified();
         on_selection_changed.emit(selection.size());//this will update the value spinbutton
         RedrawAtoms();
 }
@@ -526,6 +539,7 @@ void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
         //important!
         selection = resulting_selection;
         container->Sort();
+        Files::FileModified(); //Mark file as modified
         //additionally:
         if(seq_type == SEQ_TYPE_CONTROL) on_selection_changed.emit(selection.size()); //this will update the value spinbutton
     } else if (drag_mode == DRAG_MODE_SELECT_AREA) {
@@ -593,6 +607,7 @@ void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
             else if(temp_length > note_max_len) temp_length = note_max_len;
             note->length = temp_length;
         }
+        Files::FileModified(); //Mark file as modified
     }
     RedrawAtoms();
 }
@@ -688,6 +703,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                             }
                             double len = (double)1.0/container->owner->resolution;    
                             NoteAtom* note = new NoteAtom(temp_time,len,line);
+                            if (event->state & (1 << 2)) note->velocity = 0; // If ctrl key was hold, add a quiet note
                             container->Add(note);
                             drag_in_progress=1;
                             drag_mode=DRAG_MODE_RESIZE;
@@ -713,6 +729,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                             selection.insert(ctrl);
                             on_selection_changed.emit(selection.size());
                 }
+                Files::FileModified();//Mark file as modified
             }
 
             RedrawAtoms();
@@ -733,6 +750,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                             }
                             double len = (double) 1.0 / container->owner->resolution;
                             NoteAtom* note = new NoteAtom(temp_time, len, line);
+                            if(event->state & (1 << 2)) note->velocity = 0; // If ctrl key was hold, add a quiet note
                             container->Add(note);
                             drag_in_progress = 1;
                             drag_mode = DRAG_MODE_RESIZE;
@@ -759,6 +777,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                             on_selection_changed.emit(selection.size());
             
             }
+            Files::FileModified(); //Mark file as modified
             RedrawAtoms();
         //}
     }

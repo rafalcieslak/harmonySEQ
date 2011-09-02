@@ -30,7 +30,6 @@
 #include "ControlSequencer.h"
 #include "NoteAtom.h"
 #include "ControllerAtom.h"
-#include "src/ControllerAtom.h"
 
 namespace Files {
 
@@ -55,6 +54,13 @@ bool SetFileModified(bool modified){
         file_modified = modified;
 
     return file_modified;
+}
+
+void FileModified(){
+    if (!file_modified){
+        file_modified = 1;
+        mainwindow->UpdateTitle();
+    }
 }
 
 void LoadFileDialog(){
@@ -445,12 +451,12 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
 
                         if(pattern.size()%4 != 0){*err << "ERROR - pattern size in file %4 != 0  - aborting opening"; return 1;}
                         //Simple algorithm, just copying data from the pattern from file to the pattern in the sequencer
-                        for (unsigned int w = 0; w < pattern .size(); w+=4) {
+                        for (unsigned int w = 0; w < pattern .size(); w+=3) {
                             NoteAtom *note = new NoteAtom;
                             note->time = pattern[w];
-                            note->pitch = pattern[w+1];
-                            note->velocity = pattern[w+2];
-                            note->length = pattern[w+3];
+                            note->pitch = pattern[w + 1];
+                            note->velocity = pattern[w + 2];
+                            note->length = pattern[w + 3];
                             seq->patterns[s].Add(note);
                         }
 
@@ -462,7 +468,36 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
                         noteseq->chord.SetFromVector(vec);
                     }
             
-            }else if (seq_type == SEQ_TYPE_CONTROL){
+            }else if (seq_type == SEQ_TYPE_CONTROL) {
+                
+                ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*> (seq);
+
+                ctrlseq->controller_number = kfp->get_integer(temp, "controller");
+
+                //For each pattern we load...
+                for (int s = 0; s < n; s++) {
+                    //First add an empty pattern.
+                    seq->AddPattern();
+                    //Prepare the value name...
+                    sprintf(temp2, "pattern_%d", s);
+                    //And get the pattern from file
+                    std::vector<double> pattern = kfp->get_double_list(temp, temp2);
+
+                    if (pattern.size() % 3 != 0) {
+                        *err << "ERROR - pattern size in file %3 != 0  - aborting opening";
+                        return 1;
+                    }
+                    //Simple algorithm, just copying data from the pattern from file to the pattern in the sequencer
+                    for (unsigned int w = 0; w < pattern .size(); w += 3) {
+                            ControllerAtom *ctrl = new ControllerAtom;
+                            ctrl->time = pattern[w];
+                            ctrl->value = pattern[w+1];
+                            if(pattern[w+2] == SLOPE_TYPE_FLAT) ctrl->slope_type = SLOPE_TYPE_FLAT;
+                            else if(pattern[w+2] == SLOPE_TYPE_LINEAR) ctrl->slope_type = SLOPE_TYPE_LINEAR;
+                            seq->patterns[s].Add(ctrl);
+                    }
+
+                }//next pattern
                 
             }
             

@@ -31,7 +31,7 @@ enum SlopeType{
 
 class ControllerAtom : public Atom {
 public:
-    ControllerAtom(double _time, int _value);
+    ControllerAtom(double _time = 0, int _value = 64);
     ControllerAtom(const ControllerAtom& orig);
     virtual ~ControllerAtom();
     
