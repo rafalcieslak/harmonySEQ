@@ -68,6 +68,7 @@ public:
     void UpdateOnOffColour();
     void UpdateShowChord();
     void UpdateAddMode();
+    void UpdateDeleteMode();
     void UpdateController();
 
     /**Used to select sequencer that has to be displayed by the SequencerWidget*/
@@ -124,7 +125,7 @@ private:
     bool OnPatternMouseScroll(GdkEventScroll * e);
     void OnSnapClicked();
     void OnAddToggled();
-    void OnDeleteClicked();
+    void OnDeleteToggled();
     void OnShowChordButtonClicked();
     void OnControllerChanged();
     /**Called when pattern's selection was changed and we need to display new velocity*/
@@ -196,7 +197,7 @@ private:
     Gtk::CheckButton wMuteToggle;
     Gtk::CheckButton wSnapToggle;
     Gtk::ToggleButton wAddToggle;
-    Gtk::Button wDelete;
+    Gtk::ToggleButton wDeleteToggle;
     Gtk::SpinButton wResolutions;
     Gtk::SpinButton wLengthNumerator;
     Gtk::Label wLengthDivision;

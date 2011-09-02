@@ -56,6 +56,14 @@ public:
     void LeaveAddMode();
     /**Returns whether AddMode is on*/
     bool GetAddMode();
+    /**Starts removing atoms with LMB*/
+    void EnterDeleteMode();
+    /**Stops removing notes with LMB*/
+    void LeaveDeleteMode();
+    /**Returns whether DeleteMode is on*/
+    bool GetDeleteMode();
+    
+    
     
     /**Removes selected notes from container.*/
     void DeleteSelected();
@@ -77,6 +85,9 @@ public:
     /*Sets all selectes notes value to v.*/
     void SetSelectionValue(int v);
     
+    /**Returns the number of selected notes*/
+    int GetSelectionSize();
+    
     /**Sets this ControllerAtom's slope-type to s.*/
     void SetSlopeType(SlopeType s);
     /**Returns selected ControllerAtom's slope-type. If there are different, returns SLOPE_TYPE_NONE*/
@@ -87,6 +98,8 @@ public:
     
     /**Emmited when patter changed add_mode and parent widget needs to update button*/
     sigc::signal<void> on_add_mode_changed;
+    /**Emmited when patter changed delete_mode  and parent widget needs to update button*/
+    sigc::signal<void> on_delete_mode_changed;
     
     sigc::signal<void> on_slope_type_needs_additional_refreshing;
     
@@ -121,6 +134,7 @@ private:
     int last_drawn_height;
     
     bool add_mode;
+    bool delete_mode;
     SlopeType add_slope_type;
     
     std::set<Atom *,AtomComparingClass> selection;

@@ -71,6 +71,17 @@ void AtomContainer::Remove(int n){
     //No need to sort. Removing does not change order.
 }
 
+void AtomContainer::Remove(Atom* a){
+    for (int n = 0; n < (int)AtmVec.size(); n++){
+        if(a == AtmVec[n]){
+                delete AtmVec[n];
+                AtmVec.erase(AtmVec.begin()+n);
+                break;
+        }
+    }
+    //No need to sort. Removing does not change order.
+}
+
 void AtomContainer::RemoveList(std::set<Atom*,AtomComparingClass>* V){
     std::vector<Atom*> result(1000);
     std::set<Atom*, AtomComparingClass> atoms = *V;

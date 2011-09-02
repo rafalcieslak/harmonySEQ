@@ -40,6 +40,7 @@ public:
     
     /**Removes an atom from container*/
     void Remove(int n);
+    void Remove(Atom* a);
     void RemoveList(std::set<Atom*,AtomComparingClass>* V);
     
     /**Gets n-th atom*/

@@ -67,6 +67,7 @@ SequencerWidget::SequencerWidget()
     
     pattern_widget.on_selection_changed.connect(sigc::mem_fun(*this,&SequencerWidget::OnSelectionChanged));
     pattern_widget.on_add_mode_changed.connect(sigc::mem_fun(*this,&SequencerWidget::UpdateAddMode));
+    pattern_widget.on_delete_mode_changed.connect(sigc::mem_fun(*this,&SequencerWidget::UpdateDeleteMode));
     pattern_widget.on_slope_type_needs_additional_refreshing.connect(sigc::mem_fun(*this,&SequencerWidget::UpdateSlopeType));
     
     wUpperHBox1.pack_start(wNameLabel,Gtk::PACK_SHRINK);
@@ -95,7 +96,7 @@ SequencerWidget::SequencerWidget()
     
     //wUpperHBox2.pack_start(wShowChordButton,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wAddToggle,Gtk::PACK_SHRINK);
-    wUpperHBox2.pack_start(wDelete,Gtk::PACK_SHRINK);
+    wUpperHBox2.pack_start(wDeleteToggle,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wSlopeSelectorSep,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wCtrlSlopeFlat,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wCtrlSlopeLinear,Gtk::PACK_SHRINK);
@@ -117,10 +118,10 @@ SequencerWidget::SequencerWidget()
     wImageAdd.show();
     wAddToggle.show_all();
     wAddToggle.signal_toggled().connect(sigc::mem_fun(*this,&SequencerWidget::OnAddToggled));
-    wDelete.set_label(_("Delete"));
-    wDelete.set_image(wImageRemove);
+    wDeleteToggle.set_label(_("Delete"));
+    wDeleteToggle.set_image(wImageRemove);
     wImageRemove.show();
-    wDelete.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWidget::OnDeleteClicked));
+    wDeleteToggle.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWidget::OnDeleteToggled));
     wSnapToggle.set_label(_("Snap to grid"));
     wSnapToggle.set_active(1); //As this is default value
     wSnapToggle.signal_toggled().connect(sigc::mem_fun(*this,&SequencerWidget::OnSnapClicked));
@@ -791,16 +792,33 @@ void SequencerWidget::OnControllerChanged(){
 }
 
 void SequencerWidget::OnAddToggled(){
-    
-    ColorizeModeButtons(); //Change color independently from whether we ignore signals or not - the color has to change even if we are updating values etc.
-    
     if(ignore_signals) return;
-    
     if(wAddToggle.get_active()){
         pattern_widget.EnterAddMode();
+        wDeleteToggle.set_active(0);
     }else{
         pattern_widget.LeaveAddMode();
         pattern_widget.ClearSelection();
+    }
+    ColorizeModeButtons();
+}
+
+void SequencerWidget::OnDeleteToggled(){
+    if(ignore_signals) return;
+    
+    if(pattern_widget.GetSelectionSize() != 0){
+        pattern_widget.DeleteSelected();
+        ignore_signals = 1; wDeleteToggle.set_active(0); ignore_signals = 0;
+        realize();
+    }else {
+        if (wDeleteToggle.get_active()) {
+            pattern_widget.EnterDeleteMode();
+            wAddToggle.set_active(0);
+        } else {
+            pattern_widget.LeaveDeleteMode();
+            pattern_widget.ClearSelection();
+        }
+        ColorizeModeButtons();
     }
 }
 
@@ -814,10 +832,13 @@ void SequencerWidget::UpdateAddMode(){
     ignore_signals = 1;
     wAddToggle.set_active(pattern_widget.GetAddMode());
     ignore_signals = 0;
+    ColorizeModeButtons();
 }
-
-void SequencerWidget::OnDeleteClicked(){
-    pattern_widget.DeleteSelected();
+void SequencerWidget::UpdateDeleteMode(){
+    ignore_signals = 1;
+    wDeleteToggle.set_active(pattern_widget.GetDeleteMode());
+    ignore_signals = 0;
+    ColorizeModeButtons();
 }
 
 void SequencerWidget::OnShowChordButtonClicked(){
@@ -874,11 +895,16 @@ void SequencerWidget::ColorizeModeButtons(){
     if(wAddToggle.get_active()){
         wAddToggle.modify_bg(Gtk::STATE_ACTIVE,Gdk::Color("DarkOliveGreen1"));
         wAddToggle.modify_bg(Gtk::STATE_PRELIGHT,Gdk::Color("DarkOliveGreen2"));
-        wAddToggle.modify_text(Gtk::STATE_ACTIVE,Gdk::Color("black"));
-        wAddToggle.modify_text(Gtk::STATE_PRELIGHT,Gdk::Color("black"));
     }else{
         wAddToggle.unset_bg(Gtk::STATE_ACTIVE);
         wAddToggle.unset_bg(Gtk::STATE_PRELIGHT);
+    }
+    if (wDeleteToggle.get_active()) {
+        wDeleteToggle.modify_bg(Gtk::STATE_ACTIVE, Gdk::Color("sienna1"));
+        wDeleteToggle.modify_bg(Gtk::STATE_PRELIGHT, Gdk::Color("sienna2"));
+    } else {
+        wDeleteToggle.unset_bg(Gtk::STATE_ACTIVE);
+        wDeleteToggle.unset_bg(Gtk::STATE_PRELIGHT);
     }
 }
 

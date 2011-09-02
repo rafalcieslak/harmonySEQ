@@ -42,6 +42,7 @@ PatternWidget::PatternWidget(){
     horiz_size = 450.0; //adjust for better default size
     snap = true;
     add_mode = 0;
+    delete_mode = 0;
     add_slope_type = SLOPE_TYPE_LINEAR;
     add_events(Gdk::BUTTON_PRESS_MASK);
     add_events(Gdk::BUTTON_RELEASE_MASK);
@@ -91,6 +92,7 @@ void PatternWidget::ZoomOut(){
 void PatternWidget::EnterAddMode(){
     ClearSelection();
     add_mode = 1;
+    delete_mode = 0;
 }
 void PatternWidget::LeaveAddMode(){
     add_mode = 0;
@@ -99,6 +101,24 @@ void PatternWidget::LeaveAddMode(){
 bool PatternWidget::GetAddMode(){
     return add_mode;
 }
+
+void PatternWidget::EnterDeleteMode(){
+    ClearSelection();
+    add_mode = 0;
+    delete_mode = 1;
+}
+void PatternWidget::LeaveDeleteMode(){
+    delete_mode = 0;
+}
+
+bool PatternWidget::GetDeleteMode(){
+    return delete_mode;
+}
+
+int PatternWidget::GetSelectionSize(){
+    return selection.size();
+}
+
 
 void PatternWidget::AssignPattern(AtomContainer* cont, SeqType_t type){
     *dbg << "assigning pattern \n";
@@ -630,7 +650,6 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
     {
         drag_beggining_x = event->x;
         drag_beggining_y = event->y;
-        if(event->y <= internal_height){
             if(!add_mode){
                         Atom* found = NULL;
                         int size = container->GetSize();
@@ -653,47 +672,59 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                                                 }
                                            }
                         }
-                        if(found == NULL){
-                            //clicked empty space, clear selection.
-                            if (event->state & (1 << 0) || event->state & (1 << 2)) {//shift or ctrl key was pressed...
-                                //Do nothing, do not clear selection.
-                            } else {
-                                //Empty space with no shift... clear selection.
-                                selection.clear();
-                                on_selection_changed.emit(selection.size());
-                            }
-                        }else{
-                            //clicked a note.
-                            if (event->state & (1 << 2)) {//ctrl key was pressed...
-                                //we'll add the note to selection, unless it's already selected, then we de-select it.
-                                std::set<Atom*>::iterator it= selection.find(found);
-                                 if(it != selection.end()) {
-                                     //it's already selected, then:
-                                     //REMOVING NOTE FROM SELECTION
-                                     selection.erase(it);
-                                     
-                                     on_selection_changed.emit(selection.size());
-                                 }else{
-                                     //it was not selected, select it.
-                                     //ADDING NOTE TO SELECTION
-                                     selection.insert(found);
+                        switch(delete_mode){
+                            //==============
+                            case false:
+                            if(found == NULL){
+                                //clicked empty space, clear selection.
+                                if (event->state & (1 << 0) || event->state & (1 << 2)) {//shift or ctrl key was pressed...
+                                    //Do nothing, do not clear selection.
+                                } else {
+                                    //Empty space with no shift... clear selection.
+                                    selection.clear();
+                                    on_selection_changed.emit(selection.size());
+                                }
+                            }else{
+                                //clicked a note.
+                                if (event->state & (1 << 2)) {//ctrl key was pressed...
+                                    //we'll add the note to selection, unless it's already selected, then we de-select it.
+                                    std::set<Atom*>::iterator it= selection.find(found);
+                                     if(it != selection.end()) {
+                                         //it's already selected, then:
+                                         //REMOVING NOTE FROM SELECTION
+                                         selection.erase(it);
 
-                                     on_selection_changed.emit(selection.size());
-                                 }
-                            } else {//shift key was not pressed
-                                std::set<Atom *, AtomComparingClass>::iterator it= selection.find(found);
-                                 if(it != selection.end()) 
-                                     //it's already selected, then:
-                                     ;
-                                 else{
-                                     //it was not selected
-                                     //SELECTING A NEW NOTE
-                                     selection.clear();
-                                     selection.insert(found);
-                                     
-                                     on_selection_changed.emit(selection.size());
-                                 }
+                                         on_selection_changed.emit(selection.size());
+                                     }else{
+                                         //it was not selected, select it.
+                                         //ADDING NOTE TO SELECTION
+                                         selection.insert(found);
+
+                                         on_selection_changed.emit(selection.size());
+                                     }
+                                } else {//shift key was not pressed
+                                    std::set<Atom *, AtomComparingClass>::iterator it= selection.find(found);
+                                     if(it != selection.end()) 
+                                         //it's already selected, then:
+                                         ;
+                                     else{
+                                         //it was not selected
+                                         //SELECTING A NEW NOTE
+                                         selection.clear();
+                                         selection.insert(found);
+
+                                         on_selection_changed.emit(selection.size());
+                                     }
+                                }
                             }
+                            break;
+                            //==============
+                            case true: //delete mode on!
+                                if(found != NULL){
+                                    container->Remove(found);
+                                }
+                            break;
+                            //==============
                         }
             }else{ //ADD MODE ON
                 double temp_time = time;
@@ -733,53 +764,55 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
             }
 
             RedrawAtoms();
-        } //(event->y <= internal_height)
         
         
     }else if(event->button == 3){ //RMB
         if(add_mode){
             add_mode = 0;
-            drag_in_progress = 0;
             on_add_mode_changed.emit();
-        }//else{
-            on_add_mode_changed.emit();
-            double temp_time = time;
-            if(seq_type == SEQ_TYPE_NOTE){
-                            if (snap && !(event->state & (1 << 0))) {
-                                temp_time = SnapDown(temp_time);
-                            }
-                            double len = (double) 1.0 / container->owner->resolution;
-                            NoteAtom* note = new NoteAtom(temp_time, len, line);
-                            if(event->state & (1 << 2)) note->velocity = 0; // If ctrl key was hold, add a quiet note
-                            container->Add(note);
-                            drag_in_progress = 1;
-                            drag_mode = DRAG_MODE_RESIZE;
-                            drag_beggining_line = line;
-                            drag_beggining_time = time;
-                            drag_note_dragged = note;
-                            selection.clear();
-                            selection.insert(note);
-                            on_selection_changed.emit(selection.size());
-            }else if (seq_type == SEQ_TYPE_CONTROL){
-                            if (snap && !(event->state & (1 << 0))) {
-                                temp_time = Snap(temp_time); //fair snapping for controllers!
-                            }
-                            ControllerAtom* ctrl = new ControllerAtom(temp_time,value);
-                            ctrl->slope_type = add_slope_type;
-                            container->Add(ctrl);
-                            drag_in_progress = 1;
-                            drag_mode=DRAG_MODE_MOVE_SELECTION;
-                            drag_beggining_value = value;
-                            drag_beggining_time = time;
-                            drag_note_dragged = ctrl;
-                            selection.clear();
-                            selection.insert(ctrl);
-                            on_selection_changed.emit(selection.size());
-            
-            }
-            Files::FileModified(); //Mark file as modified
-            RedrawAtoms();
-        //}
+        }else if(delete_mode){
+            delete_mode = 0;
+            on_delete_mode_changed.emit();
+        }
+        drag_in_progress = 0;
+        
+        double temp_time = time;
+        if(seq_type == SEQ_TYPE_NOTE){
+                        if (snap && !(event->state & (1 << 0))) {
+                            temp_time = SnapDown(temp_time);
+                        }
+                        double len = (double) 1.0 / container->owner->resolution;
+                        NoteAtom* note = new NoteAtom(temp_time, len, line);
+                        if(event->state & (1 << 2)) note->velocity = 0; // If ctrl key was hold, add a quiet note
+                        container->Add(note);
+                        drag_in_progress = 1;
+                        drag_mode = DRAG_MODE_RESIZE;
+                        drag_beggining_line = line;
+                        drag_beggining_time = time;
+                        drag_note_dragged = note;
+                        selection.clear();
+                        selection.insert(note);
+                        on_selection_changed.emit(selection.size());
+        }else if (seq_type == SEQ_TYPE_CONTROL){
+                        if (snap && !(event->state & (1 << 0))) {
+                            temp_time = Snap(temp_time); //fair snapping for controllers!
+                        }
+                        ControllerAtom* ctrl = new ControllerAtom(temp_time,value);
+                        ctrl->slope_type = add_slope_type;
+                        container->Add(ctrl);
+                        drag_in_progress = 1;
+                        drag_mode=DRAG_MODE_MOVE_SELECTION;
+                        drag_beggining_value = value;
+                        drag_beggining_time = time;
+                        drag_note_dragged = ctrl;
+                        selection.clear();
+                        selection.insert(ctrl);
+                        on_selection_changed.emit(selection.size());
+
+        }
+        Files::FileModified(); //Mark file as modified
+        RedrawAtoms();
+        
     }
     return false;
 }
@@ -822,6 +855,7 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
                 //if moved some distance, mark drag as in progress. 
                 //if we use SHIFT to precise moving, do not apply this distance, and mark as drag regardless of it.
                 const int distance = 3;
+                if(!delete_mode)
                 if (event->x > drag_beggining_x + distance || event->y > drag_beggining_y + distance || event->x < drag_beggining_x - distance || event->y < drag_beggining_y - distance) {
                     InitDrag();
                     ProcessDrag(event->x, event->y, (event->state & (1 << 0)));
