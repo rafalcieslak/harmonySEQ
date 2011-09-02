@@ -171,6 +171,7 @@ void MidiDriver::ScheduleNote(int channel, int tick_time, int pitch, int velocit
         //Output the event (but it stays at the queue.)
         snd_seq_event_output(seq_handle, &ev);
    // T.elapsed(t);if(t>1000) *err << "Warning: sending note took more than 1ms (" <<(int) t << " us)." << ENDL;
+        snd_seq_free_event(&ev);
 }
 
 void MidiDriver::ScheduleCtrlEventSingle(int channel, int tick_time, int ctrl_no, int value){
@@ -186,6 +187,7 @@ void MidiDriver::ScheduleCtrlEventSingle(int channel, int tick_time, int ctrl_no
 
     snd_seq_event_output(seq_handle, &ev);
     //T.elapsed(t);if(t>1000) *err << "Warning ctrl event took more than 1ms (" << (int)t << " us)." << ENDL;
+    snd_seq_free_event(&ev);
 }
     
 void MidiDriver::ScheduleCtrlEventLinearSlope(int channel, int ctrl_no, int start_tick_time, int start_value, int end_tick_time, int end_value){

@@ -30,6 +30,7 @@
 #include "ControlSequencer.h"
 #include "NoteAtom.h"
 #include "ControllerAtom.h"
+#include "src/ControllerAtom.h"
 
 namespace Files {
 
@@ -295,10 +296,8 @@ void SaveToFile(Glib::ustring filename){
                 kf.set_boolean(temp,"expand_chord",noteseq->expand_chord);
                 //For each pattern in this sequencer...
                 for (int s = 0; s < (int)seq->patterns.size(); s++) {
-                    //Prepatre the value name for this pattern, according to FILE_KEY_SEQ_PATTERN_TEMPLATE.
                     sprintf(temp2, "pattern_%d", s);
                     int notes = seq->patterns[s].GetSize();
-                    //Convert sequencer notes of this pattern, which is a 2-dimentional array, into one dimentional vector
                     vector<double> S(notes * 4);
                     for (int r = 0; r < notes; r++) {
                         NoteAtom* note = dynamic_cast<NoteAtom*>(seq->patterns[s][r]);
@@ -309,11 +308,26 @@ void SaveToFile(Glib::ustring filename){
                     }
                     //And store this vector in the keyfile as a list.
                     kf.set_double_list(temp, temp2, S);
-                    //Finally, store the chord as a list of parameters.
-                    kf.set_integer_list(temp,"chord",noteseq->chord.SaveToVector());
                 }
+                //Finally, store the chord as a list of parameters.
+                kf.set_integer_list(temp,"chord",noteseq->chord.SaveToVector());
         }else if(seq_type == SEQ_TYPE_CONTROL){
-            
+                ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*> (seq);
+                kf.set_integer(temp,"controller",ctrlseq->controller_number);
+                //For each pattern in this sequencer...
+                for (int s = 0; s < (int) seq->patterns.size(); s++) {
+                    sprintf(temp2, "pattern_%d", s);
+                    int notes = seq->patterns[s].GetSize();
+                    vector<double> S(notes * 3);
+                    for (int r = 0; r < notes; r++) {
+                        ControllerAtom* ctrl = dynamic_cast<ControllerAtom*> (seq->patterns[s][r]);
+                        S[3 * r] = ctrl->time;
+                        S[3 * r + 1] = (double) ctrl->value;
+                        S[3 * r + 2] = (double) ctrl->slope_type;
+                    }
+                    //And store this vector in the keyfile as a list.
+                    kf.set_double_list(temp, temp2, S);
+                }
         }
         
     }
