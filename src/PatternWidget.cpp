@@ -410,7 +410,7 @@ void PatternWidget::InitDrag(){
     for (int x = 0; x < size; x++) {
         if(seq_type == SEQ_TYPE_NOTE){
                 NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[x]);
-                if (note->pitch == line && note->time + note->length - ending_size < time && time < note->time + note->length + ending_size) {
+                if (note->pitch == line && note->time + note->length - ending_size < time && time < note->time + note->length ) {
                     note_ending_found = note;
                     break;
                 }
