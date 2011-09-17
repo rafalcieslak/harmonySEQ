@@ -743,8 +743,8 @@ void MainWindow::OnAboutMenuClicked(){
     authors.push_back("   Henia Netzel");
     authors.push_back("");
     authors.push_back(_("Testers:"));
-    authors.push_back("   Nel Pogorzelska");
     authors.push_back("   Louigi Verona <http://www.louigiverona.ru>");
+    authors.push_back("   Nel Pogorzelska");
     aboutbox.set_authors(authors);
     //TRANSLATORS: The list of translators to be placed in about-box
     aboutbox.set_translator_credits(_("translator-credits"));
