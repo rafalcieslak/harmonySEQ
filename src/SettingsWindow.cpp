@@ -21,6 +21,7 @@
 #include "Configuration.h"
 
 SettingsWindow::SettingsWindow(){
+    hide();
     set_title(_("Settings"));
     set_border_width(5);
     set_resizable(0);
@@ -159,7 +160,6 @@ SettingsWindow::SettingsWindow(){
     osc_description_hbox.pack_start(osc_description,Gtk::PACK_SHRINK);
     osc_description.set_markup(_("\n<span size='small'><b>harmonySEQ supports following OSC messages:</b>\n<i>/harmonyseq/pause</i> and <i>/harmonyseq/play</i>\n<i>/harmonyseq/tempo [float]</i>\n<i>/harmonyseq/sync</i> (for synchronizing)\n<i>/karmonyseq/kill</i> (to quit immidiatelly)\n<i>/harmonyseq/event [int]</i> (to trigger events with\nthe given tag).</span>"));
     
-    signal_show().connect(mem_fun(*this,&SettingsWindow::OnShowed));
 
     ok_button.signal_clicked().connect(mem_fun(*this,&SettingsWindow::OnOKClicked));
     cancel_button.signal_clicked().connect(mem_fun(*this,&SettingsWindow::OnCancelClicked));
@@ -167,6 +167,8 @@ SettingsWindow::SettingsWindow(){
 
     show_all();
     hide();
+    
+    signal_show().connect(mem_fun(*this,&SettingsWindow::OnShowed));
 }
 
 SettingsWindow::~SettingsWindow(){
