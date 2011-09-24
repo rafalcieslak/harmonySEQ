@@ -7,28 +7,28 @@ msgid ""
 msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
-"POT-Creation-Date: 2011-06-27 22:32+0200\n"
+"POT-Creation-Date: 2011-09-24 12:47+0200\n"
 "PO-Revision-Date: 2011-07-14 18:24+0000\n"
 "Last-Translator: Jan Fuchsmann <jan@spreemusik.de>\n"
 "Language-Team: German <de@li.org>\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2011-09-18 05:04+0000\n"
 "X-Generator: Launchpad (build 13955)\n"
-"Language: de\n"
 
-#: src/main.cpp:286
+#: src/main.cpp:305
 #, c-format
 msgid "unknown option '%c'\n"
 msgstr "unbekannte Option '%c'\n"
 
-#: src/main.cpp:289
+#: src/main.cpp:308
 #, c-format
 msgid "unrecognized option '%s'\n"
 msgstr "unerkannte Option '%s'\n"
 
-#: src/main.cpp:373
+#: src/main.cpp:392
 #, c-format
 msgid ""
 "harmonySEQ, version %s\n"
@@ -51,161 +51,176 @@ msgstr ""
 "   -h --help zeigt diese HIlfe an\n"
 "   -v --version zeigt die Programmversion\n"
 
-#: src/MainWindow.cpp:44 src/ActionGUI.cpp:129
+#: src/MainWindow.cpp:55 src/ActionGUI.cpp:125
 msgid "Tempo:"
 msgstr "Tempo"
 
-#: src/MainWindow.cpp:50
+#: src/MainWindow.cpp:61
 msgid "File"
 msgstr "Datei"
 
-#: src/MainWindow.cpp:51
+#: src/MainWindow.cpp:62
 msgid "Help"
 msgstr "Hilfe"
 
-#: src/MainWindow.cpp:52
+#: src/MainWindow.cpp:63
 msgid "Tools"
 msgstr "Werkzeuge"
 
-#: src/MainWindow.cpp:53
+#: src/MainWindow.cpp:64
 msgid "New"
 msgstr "Neu"
 
-#: src/MainWindow.cpp:53
+#: src/MainWindow.cpp:64
 msgid "Creates a new file."
 msgstr "Erstellt eine neue Datei"
 
-#: src/MainWindow.cpp:54
+#: src/MainWindow.cpp:65
 msgid "Open"
 msgstr "Öffnen"
 
-#: src/MainWindow.cpp:54
+#: src/MainWindow.cpp:65
 msgid "Opens a file."
 msgstr "Öffnet eine Datei"
 
-#: src/MainWindow.cpp:55
+#: src/MainWindow.cpp:66
 msgid "Save"
 msgstr "Speichern"
 
-#: src/MainWindow.cpp:55
+#: src/MainWindow.cpp:66
 msgid "Saves the current file."
 msgstr "Speichert die aktuelle Datei."
 
-#: src/MainWindow.cpp:56
+#: src/MainWindow.cpp:67
 msgid "Save as..."
 msgstr "Speichern unter…"
 
-#: src/MainWindow.cpp:56
+#: src/MainWindow.cpp:67
 msgid "Saves the current file with a different name."
 msgstr "Speichert die aktuelle Datei unter einem anderen Namen."
 
-#: src/MainWindow.cpp:57
+#: src/MainWindow.cpp:68
 msgid "Quit"
 msgstr "Beenden"
 
-#: src/MainWindow.cpp:57
+#: src/MainWindow.cpp:68
 msgid "Quits harmonySEQ."
 msgstr "Beendet hamonySEQ."
 
-#: src/MainWindow.cpp:58
+#: src/MainWindow.cpp:69
 msgid "Preferences"
 msgstr "Einstellungen"
 
-#: src/MainWindow.cpp:58
+#: src/MainWindow.cpp:69
 msgid "harmonySEQ configuration."
 msgstr "hamonySEQ Konfiguration."
 
-#: src/MainWindow.cpp:59 src/SequencerWidget.cpp:119
-msgid "Add"
-msgstr "Hinzufügen"
-
-#: src/MainWindow.cpp:59
-msgid "Adds a new seqencer"
+#: src/MainWindow.cpp:70
+#, fuzzy
+msgid "Add note sequencer"
 msgstr "Fügt einen neuen Sequenzer hinzu"
 
-#: src/MainWindow.cpp:60 src/MainWindow.cpp:68 src/SequencerWidget.cpp:121
-#: src/EventsWidget.cpp:40
+#: src/MainWindow.cpp:70
+msgid ""
+"Adds a new note seqencer. Note sequencers store melodies and output them as "
+"MIDI notes."
+msgstr ""
+
+#: src/MainWindow.cpp:71
+#, fuzzy
+msgid "Add control sequencer"
+msgstr "Fügt einen neuen Sequenzer hinzu"
+
+#: src/MainWindow.cpp:71
+msgid ""
+"Adds a new control seqencer. Control sequencers store a graph of a "
+"particular setting, and output it as MIDI control messages."
+msgstr ""
+
+#: src/MainWindow.cpp:72 src/MainWindow.cpp:80 src/SequencerWidget.cpp:183
+#: src/EventsWidget.cpp:41
 msgid "Remove"
 msgstr "Entfernen"
 
-#: src/MainWindow.cpp:60
+#: src/MainWindow.cpp:72
 msgid "Removes selected sequencer"
 msgstr "Entfernt den ausgewählten Sequenzer"
 
-#: src/MainWindow.cpp:61 src/MainWindow.cpp:69
+#: src/MainWindow.cpp:73 src/MainWindow.cpp:81
 msgid "Duplicate"
 msgstr "Duplizieren"
 
-#: src/MainWindow.cpp:61
+#: src/MainWindow.cpp:73
 msgid "Duplicates selected sequencer"
 msgstr "Dupliziert den ausgewählten Sequenzer"
 
-#: src/MainWindow.cpp:63
+#: src/MainWindow.cpp:75
 msgid "Metronome"
 msgstr "Metronom"
 
-#: src/MainWindow.cpp:63
+#: src/MainWindow.cpp:75
 msgid "Toggle metronome on/off"
 msgstr "Schaltet das Metronom an/aus"
 
-#: src/MainWindow.cpp:64
+#: src/MainWindow.cpp:76
 msgid "Play/Pause"
 msgstr "Abspielen/Pause"
 
-#: src/MainWindow.cpp:64
+#: src/MainWindow.cpp:76
 msgid "Toggle play/pause"
 msgstr "Pause ein/aus"
 
-#: src/MainWindow.cpp:65
+#: src/MainWindow.cpp:77
 msgid "Pass MIDI events"
 msgstr "MIDI Ereignisse weiterleiten"
 
-#: src/MainWindow.cpp:65
+#: src/MainWindow.cpp:77
 msgid "States whether MIDI events are passed-through harmonySEQ."
 msgstr ""
 "Gibt an ob ankommende MIDI Ereignisse von harmonySEQ weitergeleitet werden."
 
-#: src/MainWindow.cpp:66
+#: src/MainWindow.cpp:78
 msgid "Play on edit"
 msgstr "Abspielen bei Bearbeitung"
 
-#: src/MainWindow.cpp:66
+#: src/MainWindow.cpp:78
+#, fuzzy
 msgid ""
 "If on, harmonySEQ will play a brief preview of note, when it's added, or "
-"changed manually in chord.."
+"changed manually in chord."
 msgstr ""
 "Wenn aktiviert spielt hamonySEQ eine kurze Vorschau der Note, wenn diese "
 "eingefügt oder in einem Akkord manuell geändert wird."
 
-#: src/MainWindow.cpp:67 src/SequencerWidget.cpp:124
+#: src/MainWindow.cpp:79 src/SequencerWidget.cpp:186
 msgid "Play once"
 msgstr "Einmal abspielen"
 
-#: src/MainWindow.cpp:67
+#: src/MainWindow.cpp:79
 msgid "Plays the sequence once."
 msgstr "Spielt die Sequenz einmal ab."
 
-#: src/MainWindow.cpp:68
+#: src/MainWindow.cpp:80
 msgid "Removes the sequencer."
 msgstr "Entfernt den Sequenzer."
 
-#: src/MainWindow.cpp:69
+#: src/MainWindow.cpp:81
 msgid "Duplicates the sequencer"
 msgstr "Dupliziert den Sequenzer"
 
-#: src/MainWindow.cpp:127 src/MainWindow.cpp:133
+#: src/MainWindow.cpp:140 src/MainWindow.cpp:146
 msgid "ERROR - error while building menus: "
 msgstr "FEHLER - Fehler beim Erstellen der Menüs: "
 
-#: src/MainWindow.cpp:171
+#: src/MainWindow.cpp:189
 msgid "Sequencer properties"
 msgstr "Sequenzer Eigenschaften"
 
-#: src/MainWindow.cpp:179
+#: src/MainWindow.cpp:197
 msgid "(No sequencer selected)"
 msgstr "(Kein Sequenzer ausgewählt)"
 
-#: src/MainWindow.cpp:180
+#: src/MainWindow.cpp:198
 msgid ""
 "<b>There is no sequencer selected</b>, so it's properties cannot be "
 "displayed.\n"
@@ -217,7 +232,7 @@ msgstr ""
 "\n"
 "Wählen Sie einen aus der Liste, oder fügen Sie einen neuen hinzu."
 
-#: src/MainWindow.cpp:190
+#: src/MainWindow.cpp:208
 msgid ""
 "Sets the <b>tempo</b> applied to all sequencers.\n"
 "It also blinks when a bar starts."
@@ -225,72 +240,73 @@ msgstr ""
 "Setzt das <b>Tempo</b> für alle Sequenzer.\n"
 "Blinkt beim Start des Taktes."
 
-#: src/MainWindow.cpp:211
+#: src/MainWindow.cpp:231
 msgid "Handle"
 msgstr "Identifikator"
 
-#: src/MainWindow.cpp:213 src/SettingsWindow.cpp:73
+#: src/MainWindow.cpp:233 src/SettingsWindow.cpp:89
 msgid "Name"
 msgstr "Name"
 
-#: src/MainWindow.cpp:218 src/ActionGUI.cpp:135
+#: src/MainWindow.cpp:240 src/ActionGUI.cpp:130
 msgid "On"
 msgstr "An"
 
-#: src/MainWindow.cpp:225 src/SettingsWindow.cpp:74 src/SettingsWindow.cpp:75
+#: src/MainWindow.cpp:247 src/SettingsWindow.cpp:90 src/SettingsWindow.cpp:91
 msgid "Channel"
 msgstr "Kanal"
 
-#: src/MainWindow.cpp:226
+#: src/MainWindow.cpp:248
 msgid "Pattern"
 msgstr "Pattern"
 
-#: src/MainWindow.cpp:227 src/SettingsWindow.cpp:77
+#: src/MainWindow.cpp:249 src/SettingsWindow.cpp:93
 msgid "Resolution"
 msgstr "Auflösung"
 
-#: src/MainWindow.cpp:228 src/SettingsWindow.cpp:78
+#: src/MainWindow.cpp:250 src/SettingsWindow.cpp:94
 msgid "Length"
 msgstr "Länge"
 
-#: src/MainWindow.cpp:229 src/SettingsWindow.cpp:79
-msgid "Velocity"
-msgstr "Anschlagstärke"
+#: src/MainWindow.cpp:251 src/SettingsWindow.cpp:95
+msgid "Chord (notes) / Ctrl. No."
+msgstr ""
 
-#: src/MainWindow.cpp:230 src/SettingsWindow.cpp:80
-msgid "Chord"
-msgstr "Akkord"
-
-#: src/MainWindow.cpp:296 src/MainWindow.cpp:298
+#: src/MainWindow.cpp:326 src/MainWindow.cpp:328
 msgid "Untitled"
 msgstr "Unbenannt"
 
-#: src/MainWindow.cpp:313 src/MainWindow.cpp:658 src/MainWindow.cpp:668
-#: src/MainWindow.cpp:692
+#: src/MainWindow.cpp:343 src/MainWindow.cpp:758 src/MainWindow.cpp:768
+#: src/MainWindow.cpp:792
 msgid "The file has unsaved changes."
 msgstr "Die Datei hat ungespeicherte Änderungen."
 
-#: src/MainWindow.cpp:313 src/MainWindow.cpp:658
+#: src/MainWindow.cpp:343 src/MainWindow.cpp:758
 msgid "Are sure you want to quit?"
 msgstr "Sind Sie sicher, dass Sie beenden möchten?"
 
-#: src/MainWindow.cpp:602 src/Action.cpp:194 src/ActionGUI.cpp:138
+#: src/MainWindow.cpp:437 src/MainWindow.cpp:482 src/MainWindow.cpp:529
+#, c-format
+msgid "Ctrl %d"
+msgstr ""
+
+#: src/MainWindow.cpp:697 src/Action.cpp:189 src/ActionGUI.cpp:133
 #, c-format
 msgid "Play"
 msgstr "Abspielen"
 
-#: src/MainWindow.cpp:606 src/Action.cpp:191 src/ActionGUI.cpp:137
+#: src/MainWindow.cpp:701 src/Action.cpp:186 src/ActionGUI.cpp:132
 #, c-format
 msgid "Pause"
 msgstr "Pause"
 
-#: src/MainWindow.cpp:632
+#: src/MainWindow.cpp:727
 msgid ""
 "A MIDI sequencing application helpful for music composers and live artists."
 msgstr "Ein MIDI Sequenzer Programm für Komponisten und Livekünstler."
 
 #. TRANSLATORS:The GNU GPL v.3
-#: src/MainWindow.cpp:634
+#: src/MainWindow.cpp:729
 msgid ""
 "HarmonySEQ is free software: you can redistribute it and/or modify\n"
 "it under the terms of the GNU General Public License as published by\n"
@@ -318,21 +334,25 @@ msgstr ""
 "You should have received a copy of the GNU General Public License\n"
 "along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>."
 
-#: src/MainWindow.cpp:638
+#: src/MainWindow.cpp:733
 msgid "harmonySEQ website"
 msgstr "harmonySEQ Website"
 
 #. TRANSLATORS:First caption in authors list
-#: src/MainWindow.cpp:641
+#: src/MainWindow.cpp:736
 msgid "Main author:"
 msgstr "Hauptautor:"
 
-#: src/MainWindow.cpp:644
+#: src/MainWindow.cpp:739
 msgid "Consultants:"
 msgstr "Berater:"
 
+#: src/MainWindow.cpp:745
+msgid "Testers:"
+msgstr ""
+
 #. TRANSLATORS: The list of translators to be placed in about-box
-#: src/MainWindow.cpp:650
+#: src/MainWindow.cpp:750
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
@@ -340,73 +360,68 @@ msgstr ""
 "  Marqin https://launchpad.net/~marqin\n"
 "  Rafal Cieslak https://launchpad.net/~rafalcieslak256"
 
-#: src/MainWindow.cpp:668
+#: src/MainWindow.cpp:768
 msgid "Are sure you want to loose them?"
 msgstr "Möchten Sie sie wirklich verwerfen?"
 
-#: src/MainWindow.cpp:692
+#: src/MainWindow.cpp:792
 msgid "Are sure you want to loose them and open another file?"
 msgstr "Wollen Sie sie wirklich verwerfen, und eine andere Datei öffnen?"
 
-#: src/MainWindow.cpp:713
+#: src/MainWindow.cpp:813
 msgid "Choose a file to save..."
 msgstr "Wählen Sie eine Datei zum Speichern..."
 
-#: src/MainWindow.cpp:744
+#: src/MainWindow.cpp:844
 #, c-format
 msgid "File '%s'  already exist."
 msgstr "Datei '%s' existiert bereits."
 
-#: src/MainWindow.cpp:745
+#: src/MainWindow.cpp:845
 msgid "Do you want to overwrite this file?"
 msgstr "Möchten Sie diese Datei überschreiben?"
 
-#: src/MidiDriver.cpp:87
+#: src/MidiDriver.cpp:89
 msgid "Failed to open ALSA sequencer.\n"
 msgstr "Konnte ALSA Sequenzer nicht öffen.\n"
 
-#: src/MidiDriver.cpp:99
+#: src/MidiDriver.cpp:102
 msgid "Failed to create output port.\n"
 msgstr "Konnte Ausgang nicht erstellen.\n"
 
-#: src/MidiDriver.cpp:108
+#: src/MidiDriver.cpp:111
 msgid "Failed to create input port.\n"
 msgstr "Konnte Eingang nicht erstellen.\n"
 
-#: src/MidiDriver.cpp:114
+#: src/MidiDriver.cpp:117
 msgid "Alsa midi driver init successfull.\n"
 msgstr "Alsa MIDI Treiber erfolgreich initialisiert.\n"
 
-#: src/Sequencer.cpp:42
+#: src/Sequencer.cpp:52 src/Sequencer.cpp:67
 #, c-format
 msgid "seq %d"
 msgstr "seq %d"
 
-#: src/messages.cpp:25
+#: src/messages.cpp:30
 #, c-format
 msgid "Debug mode started.\n"
 msgstr "Debugmodus gestartet.\n"
 
-#: src/Files.cpp:72
-#, c-format
-msgid "ERROR - error while opening file %s to write.\n"
-msgstr "FEHLER - Fehler beim Schreiben der Datei %s\n"
-
-#: src/Files.cpp:176
+#: src/Files.cpp:68
 msgid "Choose a file to open..."
 msgstr "Datei zum Öffnen wählen..."
 
-#: src/Files.cpp:249
+#: src/Files.cpp:140
 #, c-format
 msgid "ERROR - error while trying to read file '%s'\n"
 msgstr "FEHLER - Fehler beim Lesen der Datei '%s'\n"
 
-#: src/Files.cpp:256
+#: src/Files.cpp:147
 #, c-format
 msgid "ERROR - error while trying to read file '%s': "
 msgstr "FEHLER - Fehler beim Lesen der Datei '%s': "
 
-#: src/Files.cpp:274
+#: src/Files.cpp:169
 #, c-format
 msgid ""
 "This file was created by harmonySEQ in a newer version (%d.%d.%d). This "
@@ -424,88 +439,100 @@ msgstr ""
 "Absturz des Programms führen kann. Möchten Sie trotzdem diese Datei öffnen, "
 "wählen Sie JA."
 
-#: src/Files.cpp:275 src/Files.cpp:284
+#: src/Files.cpp:170
 msgid "Do you want to open this file?"
 msgstr "Möchten Sie diese Datei öffnen?"
 
-#: src/Files.cpp:283
+#: src/Files.cpp:179
 #, c-format
-msgid ""
-"This file was created by harmonySEQ in an older version (%d.%d.%d). This "
-"means it may miss some data that is required to be in file by the version "
-"you are using (%d.%d.%d). It is recommended not to open such file, since it "
-"is very likely it may produce strange errors, or may event crash the program "
-"unexpectedly. However, in some cases one may want to open such file anyway, "
-"for example if it is sure it will open without trouble. Select YES to do so."
+msgid "This file was created by older harmonySEQ version (%d.%d)"
 msgstr ""
-"Diese Datei wurde in einer älteren Version (%d.%d.%d) von harmonySEQ "
-"erstellt. Dies bedeutet, dass möglicherweise Daten fehlen, die von der "
-"Version die Sie benutzen (%d.%d.%d) benötigt werden. Es wird empfohlen diese "
-"Datei nicht zu öffnen, da es zu unerwarteten Fehlern und zum Absturz des "
-"Programms führen kann. Möchten Sie trotzdem diese Datei öffnen, wählen Sie "
-"JA."
 
-#: src/Files.cpp:306
+#: src/Files.cpp:180
+#, c-format
+msgid "This file contains data in format, which is too old."
+msgstr ""
+
+#: src/Files.cpp:182
+msgid "harmonySEQ will convert this file automatically. This may take a while."
+msgstr ""
+
+#: src/Files.cpp:185
+msgid ""
+"Sorry, but harmonySEQ cannot convert this file to current format.\n"
+"This applies only to files from harmonySEQ older than 0.15.\n"
+"\n"
+"If you really need to open this file, try downloading harmonySEQ 0.15, and "
+"using it to convert this file to 0.15 format, which will make it openable "
+"with this harmonySEQ version."
+msgstr ""
+
+#: src/Files.cpp:197
 #, c-format
 msgid "ERROR - error while reading file '%s'\n"
 msgstr "FEHLER - Fehler beim Lesen der Datei '%s'\n"
 
-#: src/Files.cpp:331
+#: src/Files.cpp:221
 #, c-format
 msgid "ERROR - Glib::KeyFile error while processing file '%s': "
 msgstr "FEHLER - Glib::KeyFile Fehler beim Verarbeiten der Datei '%s': "
 
-#: src/Files.cpp:339
+#: src/Files.cpp:229
 #, c-format
 msgid "ERROR - unknown error while processing file '%s': "
 msgstr "FEHLER - unbekannter Fehler beim Verarbeiten der Datei '%s': "
 
-#: src/Files.cpp:375
+#: src/Files.cpp:260
+#, c-format
+msgid "ERROR - error while opening file %s to write.\n"
+msgstr "FEHLER - Fehler beim Schreiben der Datei %s\n"
+
+#: src/Files.cpp:409
 #, c-format
 msgid "ERROR - Missing sequencer %d in file\n"
 msgstr "FEHLER - Fehlender Sequenzer %d in Datei\n"
 
-#: src/Event.cpp:55
+#: src/Event.cpp:58
 #, c-format
 msgid "When note %d on any channel gets on..."
 msgstr "Wenn Note %d auf irgendeinem Kanal an geht..."
 
-#: src/Event.cpp:56
+#: src/Event.cpp:59
 #, c-format
 msgid "When note %d on channel %d gets on..."
 msgstr "Wenn Note %d auf Kanal %d an geht..."
 
-#: src/Event.cpp:59
+#: src/Event.cpp:62
 #, c-format
 msgid "When key %s is pressed..."
 msgstr "Wenn Taste %s gedrückt wird..."
 
-#: src/Event.cpp:63
+#: src/Event.cpp:66
 #, c-format
 msgid "This is an empty event, that will never be triggered."
 msgstr "Dies ist ein leeres Ereignis, das nie Ausgelöst wird."
 
-#: src/Event.cpp:67
+#: src/Event.cpp:70
 #, c-format
 msgid "When controller %d on any channel is moved..."
 msgstr "Wenn Controller %d auf irgendeinem Kanal bewegt wird..."
 
-#: src/Event.cpp:68
+#: src/Event.cpp:71
 #, c-format
 msgid "When controller %d on channel %d is moved..."
 msgstr "Wenn Controller %d auf Kanal %d bewegt wird..."
 
-#: src/Event.cpp:72
+#: src/Event.cpp:75
 #, c-format
 msgid "When OSC message '/harmonyseq/event i %d' is got..."
 msgstr "Wenn OSC Nachricht '/harmonyseq/event i %d' empfangen wird..."
 
-#: src/Event.cpp:76
+#: src/Event.cpp:79
 #, c-format
 msgid "Unknown event."
 msgstr "Unbekanntes Ereignis."
 
-#: src/Event.cpp:142
+#: src/Event.cpp:145
 msgid "Error - empty event would be triggered.\n"
 msgstr "Fehler - Leeres Ereignis würde ausgelöst werden.\n"
 
@@ -526,15 +553,15 @@ msgid ""
 "<span size='small'><b>harmonySEQ was compiled without OSC support!</b>\n"
 "This means this event cannot be triggered.</span>"
 msgstr ""
-"<span size='small'><b>harmonySEQ wurde ohne OSC Unterstützung "
-"kompiliert!</b>\n"
+"<span size='small'><b>harmonySEQ wurde ohne OSC Unterstützung kompiliert!</"
+"b>\n"
 "Das bedeutet, dass dieses Ereignis nicht ausgelöst werden kann.</span>"
 
-#: src/EventGUI.cpp:88 src/ActionGUI.cpp:127
+#: src/EventGUI.cpp:88 src/ActionGUI.cpp:123
 msgid "Type:"
 msgstr "Typ:"
 
-#: src/EventGUI.cpp:89 src/SettingsWindow.cpp:103
+#: src/EventGUI.cpp:89 src/SettingsWindow.cpp:118
 msgid "Channel:"
 msgstr "Kanal:"
 
@@ -546,7 +573,7 @@ msgstr "Controller:"
 msgid "Key:"
 msgstr "Taste:"
 
-#: src/EventGUI.cpp:92 src/SettingsWindow.cpp:101
+#: src/EventGUI.cpp:92 src/SettingsWindow.cpp:116
 msgid "Note:"
 msgstr "Note:"
 
@@ -568,10 +595,10 @@ msgstr ""
 "Zeichnet das nächste Ereignis auf, und setzt Typ und Parameter passend zu "
 "dem ausgelösten Ereignis.\n"
 "<i>Beispiel: Drücken Sie diesen Knopf, und dann die Taste X auf der "
-"Tastatur. Das Ereignis wird automatisch auf Typ: Tastatur, Taste: X "
-"gesetzt.</i>"
+"Tastatur. Das Ereignis wird automatisch auf Typ: Tastatur, Taste: X gesetzt."
+"</i>"
 
-#: src/EventGUI.cpp:108 src/ActionGUI.cpp:140 src/SettingsWindow.cpp:36
+#: src/EventGUI.cpp:108 src/ActionGUI.cpp:135 src/SettingsWindow.cpp:37
 msgid "OK"
 msgstr "OK"
 
@@ -601,397 +628,470 @@ msgstr "Fehler: Port wurde geändert, aber Ereignis ist nicht vom Typ OSC."
 msgid "(Waiting for an event...)"
 msgstr "(Warte auf ein Ereignis...)"
 
-#: src/Action.cpp:147
+#: src/Action.cpp:145
 msgid "WARNING: Unknown action triggered.\n"
 msgstr "WARNUNG: Unbekannte Aktion ausgelöst.\n"
 
-#: src/Action.cpp:158
+#: src/Action.cpp:156
 #, c-format
 msgid "Switch sequencer '%s' OFF"
 msgstr "Schalte Sequenzer '%s' AUS"
 
-#: src/Action.cpp:161
+#: src/Action.cpp:159
 #, c-format
 msgid "Switch sequencer '%s' ON"
 msgstr "Schalte Sequenzer '%s' EIN"
 
-#: src/Action.cpp:164
+#: src/Action.cpp:162
 #, c-format
 msgid "Toggle sequencer '%s'"
 msgstr "Sequenzer '%s' umschalten"
 
-#: src/Action.cpp:170
+#: src/Action.cpp:168
 #, c-format
 msgid "Set tempo to %d BPM"
 msgstr "Setze Tempo auf %d BPM"
 
-#: src/Action.cpp:174
-#, c-format
-msgid "Set velocity of sequencer '%s' to %d"
-msgstr "Setze Anschlagstärke von Sequenzer '%s' auf %d"
-
-#: src/Action.cpp:177
+#: src/Action.cpp:172
 #, c-format
 msgid "Set note %d of sequencer '%s' to %d"
 msgstr "Setze Note %d von Sequenzer '%s' auf %d"
 
-#: src/Action.cpp:180
+#: src/Action.cpp:175
 #, c-format
 msgid "Set chord of sequencer '%s' to %s"
 msgstr "Setze Akkord von Sequenzer '%s' auf %s"
 
-#: src/Action.cpp:183
+#: src/Action.cpp:178
 #, c-format
 msgid "Play sequence in '%s' once"
 msgstr "Spiele Sequenz in '%s' einmal"
 
-#: src/Action.cpp:186 src/TreeModels.cpp:101
+#: src/Action.cpp:181 src/TreeModels.cpp:99
 #, c-format
 msgid "Toggle passing MIDI events"
 msgstr "MIDI Weiterleitung an/aus schalten"
 
-#: src/Action.cpp:197
+#: src/Action.cpp:192
 #, c-format
 msgid "Toggle pause/play"
 msgstr "Aspielen/Pause umschalten"
 
-#: src/Action.cpp:202 src/TreeModels.cpp:98
+#: src/Action.cpp:197 src/TreeModels.cpp:96
 #, c-format
 msgid "Synchronize"
 msgstr "Synchronisieren"
 
-#: src/Action.cpp:205
+#: src/Action.cpp:200
 #, c-format
 msgid "Set active pattern of sequencer '%s' to %d"
 msgstr "Aktives Pattern von Sequenzer '%s' auf %d setzen"
 
-#: src/Action.cpp:209
+#: src/Action.cpp:204
 #, c-format
 msgid "Decrease sequencer '%s' chord's  octave by %d"
 msgstr "Verringere Oktave des Akkords von Sequenzer '%s' um %d"
 
-#: src/Action.cpp:211
+#: src/Action.cpp:206
 #, c-format
 msgid "Increase sequencer '%s's chord's octave by %d"
 msgstr "Erhöhe Oktave des Akkords von Sequenzer '%s' um %d"
 
-#: src/Action.cpp:215
+#: src/Action.cpp:210
 #, c-format
 msgid "(empty action)"
 msgstr "(leere Aktion)"
 
-#: src/Action.cpp:218
+#: src/Action.cpp:213
 #, c-format
 msgid "(unknown action)"
 msgstr "(unbekannte Aktion)"
 
-#: src/Action.cpp:227
+#: src/Action.cpp:222
 #, c-format
 msgid "(unexisting, the handle was: %d)"
 msgstr "(existiert nicht, Identifikator war: %d)"
 
-#: src/Action.cpp:229
+#: src/Action.cpp:224
 #, c-format
 msgid "(unexisting)"
 msgstr "(existiert nicht)"
 
-#: src/Action.cpp:231
+#: src/Action.cpp:226
 #, c-format
 msgid "%s"
 msgstr "%s"
 
-#: src/ActionGUI.cpp:41
+#: src/ActionGUI.cpp:42
 msgid "Action"
 msgstr "Aktion"
 
-#: src/ActionGUI.cpp:128
+#: src/ActionGUI.cpp:124
 msgid "Sequencer:"
 msgstr "Sequenzer:"
 
-#: src/ActionGUI.cpp:130
-msgid "Volume:"
-msgstr "Lautstärke:"
-
-#: src/ActionGUI.cpp:131
+#: src/ActionGUI.cpp:126
 msgid "Set note "
 msgstr "Setze Note "
 
-#: src/ActionGUI.cpp:132
+#: src/ActionGUI.cpp:127
 msgid " to: "
 msgstr " zu: "
 
-#: src/ActionGUI.cpp:133
+#: src/ActionGUI.cpp:128
 msgid "Pattern number: "
 msgstr "Pattern Nummer: "
 
-#: src/ActionGUI.cpp:134
+#: src/ActionGUI.cpp:129
 msgid "Off"
 msgstr "Aus"
 
-#: src/ActionGUI.cpp:136 src/ActionGUI.cpp:139
+#: src/ActionGUI.cpp:131 src/ActionGUI.cpp:134
 msgid "Toggle"
 msgstr "Umschalten"
 
-#: src/ActionGUI.cpp:141
+#: src/ActionGUI.cpp:136
 msgid "Transpose by "
 msgstr "Transponiere um "
 
-#: src/ActionGUI.cpp:142
+#: src/ActionGUI.cpp:137
 msgid " octave(s)."
 msgstr " Oktave(n)."
 
-#: src/ActionGUI.cpp:411
+#: src/ActionGUI.cpp:424
 msgid "Error: tempo has changed, while action is not tempo-type."
 msgstr "Fehler: Tempo wurde geändert, aber Aktion ist nicht vom Typ Tempo."
 
-#: src/ActionGUI.cpp:423
-msgid "Error: sequencer has changed, while action is not sequencer-type."
-msgstr ""
-"Fehler: Sequenzer wurde geändert, aber Aktion ist nicht vom Typ Sequenzer."
-
-#: src/ActionGUI.cpp:436
-msgid "Error: velocity has changed, while action is not velocity-type."
-msgstr ""
-"Fehler: Anschlagstärke wurde geändert, aber Aktion ist nicht vom Typ "
-"Anschlagstärke."
-
-#: src/ActionGUI.cpp:447
-msgid ""
-"Error: note to set has changed, while action is not set-seq-note-type."
+#: src/ActionGUI.cpp:463
+msgid "Error: note to set has changed, while action is not set-seq-note-type."
 msgstr ""
 "Fehler: Zu setzende Note wurde geändert, aber Aktion ist nicht vom Typ Setz-"
 "Seq-Note."
 
-#: src/ActionGUI.cpp:458
-msgid ""
-"Error: note number has changed, while action is not set-seq-note-type."
+#: src/ActionGUI.cpp:474
+msgid "Error: note number has changed, while action is not set-seq-note-type."
 msgstr ""
 "Fehler: Notennummer wurde geändert, aber Aktion ist nicht von Typ Setz-Seq-"
 "Note."
 
-#: src/ActionGUI.cpp:471
+#: src/ActionGUI.cpp:487
 msgid ""
 "Error: on-off-toggle has changed, while action is not on-off-toggle-type."
 msgstr ""
-"Fehler: An/Aus-Umschalten wurde geändert, aber Aktion ist nicht vom Typ "
-"An/Aus-Umschalten."
+"Fehler: An/Aus-Umschalten wurde geändert, aber Aktion ist nicht vom Typ An/"
+"Aus-Umschalten."
 
-#: src/ActionGUI.cpp:484
+#: src/ActionGUI.cpp:500
 msgid ""
 "Error: play-pause-toggle has changed, while action is not play-pause-type."
 msgstr ""
 "Fehler: Abspielen/Pause-Umschalten wurde geändert, aber Aktion ist nicht vom "
 "Typ Abspielen/Pause."
 
-#: src/ActionGUI.cpp:504
+#: src/ActionGUI.cpp:520
 msgid ""
 "Error: octave has changed, while action is not transpose-by-octave type."
 msgstr ""
 "Fehler: Oktave wurde geändert, aber Aktion ist nicht vom Typ Transponiere-um-"
 "Oktave"
 
-#: src/ActionGUI.cpp:515
+#: src/ActionGUI.cpp:531
 msgid "Error: pattern has changed, while action is not pattern-type."
-msgstr ""
-"Fehler: Pattern wurde geändert, aber Aktion ist nicht vom Typ Pattern."
+msgstr "Fehler: Pattern wurde geändert, aber Aktion ist nicht vom Typ Pattern."
 
-#: src/ActionGUI.cpp:527
-msgid ""
-"Error: apply octave has changed, while action is not change-chord-type."
+#: src/ActionGUI.cpp:543
+msgid "Error: apply octave has changed, while action is not change-chord-type."
 msgstr ""
 "Fehler: Oktave Anwenden wurde geändert, aber Aktion ist nicht vom Typ Akkord-"
 "Ändern."
 
-#: src/TreeModels.cpp:48 src/TreeModels.cpp:68
+#: src/TreeModels.cpp:49 src/TreeModels.cpp:69
 msgid "Empty"
 msgstr "Leer."
 
-#: src/TreeModels.cpp:51
+#: src/TreeModels.cpp:52
 msgid "Keyboard"
 msgstr "Tastatur"
 
-#: src/TreeModels.cpp:54
+#: src/TreeModels.cpp:55
 msgid "MIDI Note"
 msgstr "MIDI Note"
 
-#: src/TreeModels.cpp:57
+#: src/TreeModels.cpp:58
 msgid "MIDI Controller"
 msgstr "MIDI Controller"
 
-#: src/TreeModels.cpp:60 src/SettingsWindow.cpp:42
+#: src/TreeModels.cpp:61 src/SettingsWindow.cpp:43
 msgid "OSC"
 msgstr "OSC"
 
-#: src/TreeModels.cpp:71
+#: src/TreeModels.cpp:72
 msgid "Sequencer/Switch On-Off"
 msgstr "Sequenzer/An-Aus Schalten"
 
-#: src/TreeModels.cpp:74
+#: src/TreeModels.cpp:75
 msgid "Sequencer/Play once"
 msgstr "Sequenzer/Einmal Abspielen"
 
-#: src/TreeModels.cpp:77
-msgid "Sequencer/Set velocity"
-msgstr "Sequenzer/Anschlagstärke Setzen"
-
-#: src/TreeModels.cpp:80
+#: src/TreeModels.cpp:78
 msgid "Sequencer/Set one note"
 msgstr "Sequenzer/Eine Note Setzen"
 
-#: src/TreeModels.cpp:83
+#: src/TreeModels.cpp:81
 msgid "Sequencer/Set chord"
 msgstr "Sequenzer/Akkord setzen"
 
-#: src/TreeModels.cpp:86
+#: src/TreeModels.cpp:84
 msgid "Sequencer/Change chord's octave"
 msgstr "Sequenzer/Oktave des Akkords ändern"
 
-#: src/TreeModels.cpp:89
+#: src/TreeModels.cpp:87
 msgid "Sequencer/Set active pattern"
 msgstr "Sequenzer/Setze aktives Pattern"
 
-#: src/TreeModels.cpp:92
+#: src/TreeModels.cpp:90
 msgid "Set tempo"
 msgstr "Tempo setzen"
 
-#: src/TreeModels.cpp:95
+#: src/TreeModels.cpp:93
 msgid "Play/pause"
 msgstr "Abspielen / Pause"
 
-#: src/TreeModels.cpp:121
+#: src/TreeModels.cpp:119
 msgid "All"
 msgstr "Alle"
 
-#: src/TreeModels.cpp:179 src/TreeModels.cpp:196
+#: src/TreeModels.cpp:177
 msgid "Major"
 msgstr "Dur"
 
-#: src/TreeModels.cpp:182 src/TreeModels.cpp:199
+#: src/TreeModels.cpp:180
 msgid "Minor"
 msgstr "Moll"
 
-#: src/TreeModels.cpp:185
+#: src/TreeModels.cpp:183
 msgid "Augmented"
 msgstr "Übermäßig"
 
-#: src/TreeModels.cpp:188
+#: src/TreeModels.cpp:186
 msgid "Diminished"
 msgstr "Vermindert"
 
-#: src/TreeModels.cpp:207
+#: src/TreeModels.cpp:194
+msgid "maj"
+msgstr ""
+
+#: src/TreeModels.cpp:197
+msgid "m"
+msgstr ""
+
+#: src/TreeModels.cpp:200
+msgid "maj7"
+msgstr ""
+
+#: src/TreeModels.cpp:203
+msgid "m7"
+msgstr ""
+
+#: src/TreeModels.cpp:211 src/Chord.cpp:382
+#, c-format
 msgid "Custom"
 msgstr "Benutzerdefiniert"
 
-#: src/TreeModels.cpp:210
+#: src/TreeModels.cpp:214
 msgid "Triad"
 msgstr "Dreiklang"
 
-#: src/TreeModels.cpp:213
+#: src/TreeModels.cpp:217
 msgid "Guitar"
 msgstr "Gitarre"
 
-#: src/Chord.cpp:272
+#: src/Chord.cpp:308
 #, c-format
 msgid "octave: %d"
 msgstr "Oktave: %d"
 
-#: src/Chord.cpp:277
+#: src/Chord.cpp:313
 #, c-format
 msgid "Custom: %d, %d, %d, %d, %d, %d (base: %d)"
 msgstr "Benutzerdefiniert: %d, %d, %d, %d, %d, %d (Basis: %d)"
 
-#: src/Chord.cpp:279
+#: src/Chord.cpp:315
 #, c-format
 msgid "Custom: %d, %d, %d, %d, %d, %d"
 msgstr "Benutzerdefiniert: %d, %d, %d, %d, %d, %d"
 
-#: src/Chord.cpp:283
-#, c-format
-msgid "Guitar: %s major"
+#: src/Chord.cpp:319
+#, fuzzy, c-format
+msgid "Guitar: %s maj"
 msgstr "Gitarre: %s Dur"
 
-#: src/Chord.cpp:285
-#, c-format
-msgid "Guitar: %s minor"
-msgstr "Gitarre: %s Moll"
+#: src/Chord.cpp:321
+#, fuzzy, c-format
+msgid "Guitar: %s m"
+msgstr "Gitarre: %s Dur"
 
-#: src/Chord.cpp:295
+#: src/Chord.cpp:323
+#, fuzzy, c-format
+msgid "Guitar: %s maj7"
+msgstr "Gitarre: %s Dur"
+
+#: src/Chord.cpp:325
+#, fuzzy, c-format
+msgid "Guitar: %s m7"
+msgstr "Gitarre: %s Dur"
+
+#: src/Chord.cpp:335
 #, c-format
 msgid "Triad: %s major"
 msgstr "Dreiklang: %s Dur"
 
-#: src/Chord.cpp:297
+#: src/Chord.cpp:337
 #, c-format
 msgid "Triad: %s major, inversion: %d"
 msgstr "Dreiklang: %s Dur, Umkehrung: %d"
 
-#: src/Chord.cpp:301
+#: src/Chord.cpp:341
 #, c-format
 msgid "Triad: %s minor"
 msgstr "Dreiklang: %s Moll"
 
-#: src/Chord.cpp:303
+#: src/Chord.cpp:343
 #, c-format
 msgid "Triad: %s minor, inversion: %d"
 msgstr "Dreiklang: %s Moll, Umkehrung: %d"
 
-#: src/Chord.cpp:307
+#: src/Chord.cpp:347
 #, c-format
 msgid "Triad: %s augmented"
 msgstr "Dreiklang: %s übermäßig"
 
-#: src/Chord.cpp:309
+#: src/Chord.cpp:349
 #, c-format
 msgid "Triad: %s augmented, inversion: %d"
 msgstr "Dreiklang: %s übermäßig, Umkehrung: %d"
 
-#: src/Chord.cpp:313
+#: src/Chord.cpp:353
 #, c-format
 msgid "Triad: %s diminisched"
 msgstr "Dreiklang: %s vermindert"
 
-#: src/Chord.cpp:315
+#: src/Chord.cpp:355
 #, c-format
 msgid "Triad: %s diminisched, inversion: %d"
 msgstr "Dreiklang: %s vermindert, Umkehrung: %d"
 
-#: src/ChordWidget.cpp:46
+#: src/Chord.cpp:375
+#, c-format
+msgid "o:%d"
+msgstr ""
+
+#: src/Chord.cpp:380
+#, c-format
+msgid "Custom, base %d"
+msgstr ""
+
+#: src/Chord.cpp:386
+#, fuzzy, c-format
+msgid "Guitar %s maj"
+msgstr "Gitarre: %s Dur"
+
+#: src/Chord.cpp:388
+#, fuzzy, c-format
+msgid "Guitar %s m"
+msgstr "Gitarre: %s Dur"
+
+#: src/Chord.cpp:390
+#, fuzzy, c-format
+msgid "Guitar %s maj7"
+msgstr "Gitarre: %s Dur"
+
+#: src/Chord.cpp:392
+#, fuzzy, c-format
+msgid "Guitar %s m7"
+msgstr "Gitarre: %s Dur"
+
+#: src/Chord.cpp:402
+#, fuzzy, c-format
+msgid "Triad %s maj"
+msgstr "Dreiklang: %s Dur"
+
+#: src/Chord.cpp:404
+#, fuzzy, c-format
+msgid "Triad %s maj, i:%d"
+msgstr "Dreiklang: %s Dur, Umkehrung: %d"
+
+#: src/Chord.cpp:408
+#, fuzzy, c-format
+msgid "Triad %s min"
+msgstr "Dreiklang: %s Moll"
+
+#: src/Chord.cpp:410
+#, fuzzy, c-format
+msgid "Triad %s min, i:%d"
+msgstr "Dreiklang: %s Moll, Umkehrung: %d"
+
+#: src/Chord.cpp:414
+#, fuzzy, c-format
+msgid "Triad %s aug"
+msgstr "Dreiklang: %s übermäßig"
+
+#: src/Chord.cpp:416
+#, fuzzy, c-format
+msgid "Triad %s aug, i:%d"
+msgstr "Dreiklang: %s übermäßig"
+
+#: src/Chord.cpp:420
+#, fuzzy, c-format
+msgid "Triad %s dim"
+msgstr "Dreiklang: %s Dur"
+
+#: src/Chord.cpp:422
+#, fuzzy, c-format
+msgid "Triad %s dim, i:%d"
+msgstr "Dreiklang: %s vermindert"
+
+#: src/ChordWidget.cpp:38
+msgid "Chord summary"
+msgstr ""
+
+#: src/ChordWidget.cpp:52 src/SequencerWidget.cpp:113
 msgid "<b>Chord</b>"
 msgstr "<b>Akkord</b>"
 
-#: src/ChordWidget.cpp:47
+#: src/ChordWidget.cpp:53
 msgid "Inversion: "
 msgstr "Umkehrung: "
 
-#: src/ChordWidget.cpp:48
+#: src/ChordWidget.cpp:54
 msgid "Type: "
 msgstr "Typ: "
 
-#: src/ChordWidget.cpp:65
+#: src/ChordWidget.cpp:71
 msgid "Sets <b>type</b> of this chord."
 msgstr "Setzt den <b>Typ</b> dieses Akkords."
 
-#: src/ChordWidget.cpp:66 src/ChordWidget.cpp:67
+#: src/ChordWidget.cpp:72 src/ChordWidget.cpp:73
 msgid "Sets <b>mode</b> of this chord."
 msgstr "Setzt den <b>Modus</b> dieses Akkords."
 
-#: src/ChordWidget.cpp:68
+#: src/ChordWidget.cpp:74
 msgid "Sets <b>root</b> of this chord."
 msgstr "Setzt den <b>Grundton</b> dieses Akkords."
 
-#: src/ChordWidget.cpp:74
+#: src/ChordWidget.cpp:80
 msgid "Octave:"
 msgstr "Oktave:"
 
-#: src/ChordWidget.cpp:80
+#: src/ChordWidget.cpp:86
 msgid "Sets the <b>inversion</b> of the triad."
 msgstr "Setzt die <b>Umkehrung</b> des Dreiklangs."
 
-#: src/ChordWidget.cpp:83
+#: src/ChordWidget.cpp:89
 msgid "Base:"
 msgstr "Basis:"
 
-#: src/ChordWidget.cpp:85
+#: src/ChordWidget.cpp:91
 msgid ""
 "Sets whether this chord uses the base note.\n"
 " - If on, chord notes are set relatively to the base note.\n"
@@ -1001,11 +1101,11 @@ msgstr ""
 " - wenn An, werden Akkordnoten relativ zum Grundton gesetzt.\n"
 " - wenn Aus, wird der Grundton ignoriert."
 
-#: src/ChordWidget.cpp:86
+#: src/ChordWidget.cpp:92
 msgid "\tNote:"
 msgstr "\tNote:"
 
-#: src/ChordWidget.cpp:93
+#: src/ChordWidget.cpp:99
 msgid ""
 "The <b>base note</b> for this chord. If it uses the base, which is "
 "determined by the switch on the left-hand side, all notes of this chord are "
@@ -1015,11 +1115,11 @@ msgstr ""
 "den Schalter links bestimmt wird, werden alle Noten dieses Akkords relativ "
 "zum Grundton angegeben."
 
-#: src/ChordWidget.cpp:95
+#: src/ChordWidget.cpp:101
 msgid "Do not change chord's octave"
 msgstr "Die Oktave des Akkords nicht verändern"
 
-#: src/ChordWidget.cpp:96
+#: src/ChordWidget.cpp:102
 msgid "If checked, the octave will not be applied to the chord."
 msgstr "Wenn aktiviert, wird die Oktave nicht auf den Akkord angewandt."
 
@@ -1032,31 +1132,32 @@ msgstr ""
 "FEHLER - Fehler beim Speichern der Konfigurationsdatei %s.\n"
 "(errno = %d)"
 
-#: src/SettingsWindow.cpp:24
+#: src/SettingsWindow.cpp:25
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: src/SettingsWindow.cpp:35
+#: src/SettingsWindow.cpp:36
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: src/SettingsWindow.cpp:37
+#: src/SettingsWindow.cpp:38
 msgid "Restore"
 msgstr "Wiederherstellen"
 
-#: src/SettingsWindow.cpp:40
+#: src/SettingsWindow.cpp:41
 msgid "General"
 msgstr "Allgemein"
 
-#: src/SettingsWindow.cpp:41
+#: src/SettingsWindow.cpp:42
 msgid "MIDI"
 msgstr "MIDI"
 
-#: src/SettingsWindow.cpp:51
-msgid "<b>Play on edit:</b>"
+#: src/SettingsWindow.cpp:54
+#, fuzzy
+msgid "<b>Play on edit</b>"
 msgstr "<b>Abspielen bei Bearbeitung:</b>"
 
-#: src/SettingsWindow.cpp:52
+#: src/SettingsWindow.cpp:55
 msgid ""
 "Play briefly a note when it's added, \n"
 "or changed manually in a chord."
@@ -1064,55 +1165,73 @@ msgstr ""
 "Eine Note kurz anspielen, wenn sie hinzugefügt wird, \n"
 "oder in einem Akkord manuell geändert."
 
-#: src/SettingsWindow.cpp:62
+#: src/SettingsWindow.cpp:64
+msgid "<b>Pattern display quality</b>"
+msgstr ""
+
+#: src/SettingsWindow.cpp:65
+msgid "Max. FPS: "
+msgstr ""
+
+#: src/SettingsWindow.cpp:68 src/SettingsWindow.cpp:69
+msgid ""
+"The <b>maximum</b> FPS value used when smooth animation is needed, for "
+"example when dragging notes. Note this is the maximum value, it is usually "
+"much much lower, as the pattern is redrawn only when nessesary.\n"
+"\n"
+"High values may cause higher CPU usage when dragging notes, moving graph "
+"points etc., but result in much smoothier animations."
+msgstr ""
+
+#: src/SettingsWindow.cpp:79
 msgid "<b>Visible colums:</b>"
 msgstr "<b>Sichtbare Spalten:</b>"
 
-#: src/SettingsWindow.cpp:76
+#: src/SettingsWindow.cpp:92
 msgid "Patern"
 msgstr "Pattern"
 
-#: src/SettingsWindow.cpp:96
+#: src/SettingsWindow.cpp:111
 msgid "<b>Metronome:</b>"
 msgstr "<b>Metronom:</b>"
 
-#: src/SettingsWindow.cpp:97
+#: src/SettingsWindow.cpp:112
 msgid "Bar:"
 msgstr "Takt:"
 
-#: src/SettingsWindow.cpp:98
+#: src/SettingsWindow.cpp:113
 msgid "1/4 bar:"
 msgstr "1/4 Takt:"
 
-#: src/SettingsWindow.cpp:99
+#: src/SettingsWindow.cpp:114
 msgid "Mark here, and the metronome will also tick on every 1/4 of each bar."
 msgstr "Wenn aktiviert schlägt das Metronom auch auf jedem 1/4 des Takts."
 
-#: src/SettingsWindow.cpp:102 src/SequencerWidget.cpp:113
+#: src/SettingsWindow.cpp:117 src/SequencerWidget.cpp:174
 msgid "Velocity:"
 msgstr "Anschlagstärke:"
 
-#: src/SettingsWindow.cpp:118
+#: src/SettingsWindow.cpp:133
 msgid "The channel the metronome will output it's ticks to."
 msgstr "Der Kanal auf dem das Metronom seine Schläge ausgibt."
 
-#: src/SettingsWindow.cpp:122 src/SettingsWindow.cpp:128
+#: src/SettingsWindow.cpp:137 src/SettingsWindow.cpp:143
 msgid "The metronome's MIDI note pitch"
 msgstr "Die MIDI Note des Metronoms"
 
-#: src/SettingsWindow.cpp:125 src/SettingsWindow.cpp:131
+#: src/SettingsWindow.cpp:140 src/SettingsWindow.cpp:146
 msgid "The metronome's MIDI note velocity'"
 msgstr "Die MIDI Anschlagstärke des Metronoms"
 
-#: src/SettingsWindow.cpp:140
+#: src/SettingsWindow.cpp:155
 msgid "OSC port: "
 msgstr "OSC Port: "
 
-#: src/SettingsWindow.cpp:143
+#: src/SettingsWindow.cpp:158
 msgid "The port OSC server will listen at."
 msgstr "Der Port auf den der OSC Server reagiert."
 
-#: src/SettingsWindow.cpp:144
+#: src/SettingsWindow.cpp:159
 msgid ""
 "<span size='small'>Changing this setting needs restarting\n"
 "harmonySEQ to take effect.</span>"
@@ -1120,7 +1239,7 @@ msgstr ""
 "<span size='small'>harmonySEQ muss neu gestartet werden,\n"
 "damit diese Änderung wirksam wird.</span>"
 
-#: src/SettingsWindow.cpp:146
+#: src/SettingsWindow.cpp:161
 msgid ""
 "\n"
 "<span size='small'><b>harmonySEQ supports following OSC messages:</b>\n"
@@ -1132,8 +1251,8 @@ msgid ""
 "the given tag).</span>"
 msgstr ""
 "\n"
-"<span size='small'><b>harmonySEQ unterstützt die folgenden OSC "
-"Nachrichten:</b>\n"
+"<span size='small'><b>harmonySEQ unterstützt die folgenden OSC Nachrichten:</"
+"b>\n"
 "<i>/harmonyseq/pause</i> und <i>/harmonyseq/play</i>\n"
 "<i>/harmonyseq/tempo [float]</i>\n"
 "<i>/harmonyseq/sync</i> (zur Synchronisierung)\n"
@@ -1141,27 +1260,47 @@ msgstr ""
 "<i>/harmonyseq/event [int]</i> (um Ereignisse mit \n"
 "dem gegebenen Tag auszulösen).</span>"
 
-#: src/SettingsWindow.cpp:227
+#: src/SettingsWindow.cpp:243
 msgid "Restoring default configuration"
 msgstr "Einstellungen werden zurückgesetzt."
 
-#: src/SettingsWindow.cpp:227
+#: src/SettingsWindow.cpp:243
 msgid "Are you sure you want to loose all your settings?"
 msgstr "Sind Sie sicher, dass Sie alle Einstellungen verwerfen wollen?"
 
-#: src/SequencerWidget.cpp:112
+#: src/SequencerWidget.cpp:114
+msgid "Shows/hides the chord's detailed settings."
+msgstr ""
+
+#: src/SequencerWidget.cpp:116 src/SequencerWidget.cpp:181
+msgid "Add"
+msgstr "Hinzufügen"
+
+#: src/SequencerWidget.cpp:121
+msgid "Delete"
+msgstr ""
+
+#: src/SequencerWidget.cpp:125
+msgid "Snap to grid"
+msgstr ""
+
+#: src/SequencerWidget.cpp:173
 msgid "MIDI channel:"
 msgstr "MIDI Kanal:"
 
-#: src/SequencerWidget.cpp:114
+#: src/SequencerWidget.cpp:175
+msgid "Value:"
+msgstr ""
+
+#: src/SequencerWidget.cpp:176
 msgid "Active pattern:"
 msgstr "Aktives Pattern:"
 
-#: src/SequencerWidget.cpp:115
+#: src/SequencerWidget.cpp:177
 msgid "Set as active pattern"
 msgstr "Als aktives Pattern setzen"
 
-#: src/SequencerWidget.cpp:116
+#: src/SequencerWidget.cpp:178
 msgid ""
 "Sets the chosen pattern to be the <b>active</b> one, which means the one "
 "that  will be played back."
@@ -1169,7 +1308,7 @@ msgstr ""
 "Setzt das gewählte Pattern als <b>aktives</b>, was bedeutet dass es das "
 "abzuspielende ist."
 
-#: src/SequencerWidget.cpp:117
+#: src/SequencerWidget.cpp:179
 msgid ""
 "Selects which patter is <b>active</b>.\n"
 "Active pattern is the one that is played back. It's marked on a list with an "
@@ -1185,132 +1324,233 @@ msgstr ""
 "<i>Auf diese Weise können alle Patterns bearbeitet werden, während nur das "
 "ausgewählte (aktive) abgespielt wird. </i>"
 
-#: src/SequencerWidget.cpp:118
+#: src/SequencerWidget.cpp:180
 msgid "Pattern:"
 msgstr "Pattern:"
 
-#: src/SequencerWidget.cpp:120
+#: src/SequencerWidget.cpp:182
 msgid "Adds a new pattern to this sequencer."
 msgstr "Fügt dem Sequenzer ein neues Pattern hinzu."
 
-#: src/SequencerWidget.cpp:122
+#: src/SequencerWidget.cpp:184
 msgid "Removes this pattern."
 msgstr "Entfernt dieses Pattern."
 
-#: src/SequencerWidget.cpp:123
+#: src/SequencerWidget.cpp:185
 msgid "Name:"
 msgstr "Name:"
 
-#: src/SequencerWidget.cpp:125
+#: src/SequencerWidget.cpp:187
 msgid "Plays sequence in this sequencer <b>once</b>."
 msgstr "Spielt die Sequenz in diesem Sequenzer <b>einmal</b>ab."
 
-#: src/SequencerWidget.cpp:126
+#: src/SequencerWidget.cpp:188
 msgid "Clear pattern"
 msgstr "Pattern leeren"
 
-#: src/SequencerWidget.cpp:127
+#: src/SequencerWidget.cpp:189
 msgid "Clears all notes of this pattern."
 msgstr "Entfernt alle Noten aus diesem Pattern."
 
-#: src/SequencerWidget.cpp:134
+#: src/SequencerWidget.cpp:190
+msgid "Clone"
+msgstr ""
+
+#: src/SequencerWidget.cpp:191
+msgid "Clones this pattern, creating a new one."
+msgstr ""
+
+#: src/SequencerWidget.cpp:193
+#, fuzzy
+msgid " Controller No."
+msgstr "Controller:"
+
+#: src/SequencerWidget.cpp:194
 msgid ""
-"Sets the <b>velocity</b> of the notes played by this sequencer.\n"
+"The <b>MIDI controller number</b> this sequencer outputs data on.\n"
+"\n"
+"For example, synthesizers supporting GM standard should interpret data from "
+"controller 7 as volume setting."
+msgstr ""
+
+#: src/SequencerWidget.cpp:204
+#, fuzzy
+msgid ""
+"Sets the <b>velocity</b> of selected note(s).\n"
 "Usually higher velocities result in louder sounds."
 msgstr ""
 "Setzt die <b>Anschlagstärke</b> der Noten dieses Sequenzers.\n"
 "Normalerweise führen hörere Anschlagstärken zu lauteren Klängen."
 
-#: src/SequencerWidget.cpp:135
+#: src/SequencerWidget.cpp:205
+#, fuzzy
+msgid "Sets the <b>value</b> of selected point(s)."
+msgstr "Setzt die <b>Umkehrung</b> des Dreiklangs."
+
+#: src/SequencerWidget.cpp:206
 msgid "Selects the <b>MIDI channel</b> this sequencer will output notes to. "
 msgstr "Wählt den <b>MIDI Kanal</b> auf dem dieser Sequenzer Noten ausgibt. "
 
-#: src/SequencerWidget.cpp:139
+#: src/SequencerWidget.cpp:216
 msgid "ON/OFF"
 msgstr "AN/AUS"
 
-#: src/SequencerWidget.cpp:140
+#: src/SequencerWidget.cpp:217
 msgid "Turns this sequencer <b>on/off</b>."
 msgstr "Schaltet diesen Sequenzer <b>an/aus</b>."
 
-#: src/SequencerWidget.cpp:144
+#: src/SequencerWidget.cpp:233
 msgid "Resolution:"
 msgstr "Auflösung:"
 
-#: src/SequencerWidget.cpp:153
+#: src/SequencerWidget.cpp:237
 msgid ""
-"Selects the <b>resolution</b> of this sequencer. It defines how many "
-"<i>notes per one sequence</i> the sequencer has.\n"
-"If the length is set to one, than the resolution will determine how many "
-"notes will be played in one bar."
+"Selects the <b>resolution</b> of this sequencer. It defines the grid density "
+"in this sequencer's patterns."
 msgstr ""
-"Wählt die <b>Auflösung</b> dieses Sequenzers. Es bestimmt wie viele <i>Noten "
-"pro Sequenz</i> der Sequenzer hat.\n"
-"Wenn die Länge auf Eins gesetzt ist, bestimmt die Auflösung wie viele Noten "
-"pro Takt gespielt werden."
 
-#: src/SequencerWidget.cpp:158
+#: src/SequencerWidget.cpp:241
 msgid "Length:"
 msgstr "Länge:"
 
-#: src/SequencerWidget.cpp:170
+#: src/SequencerWidget.cpp:243
+#, fuzzy
 msgid ""
 "Selects the <b>length</b> of this sequencer. It defines <i>how many bars</i> "
 "the sequence in this sequencer will last. In case it's smaller then 1, the "
-"sequence will be repeated few times in each bar."
+"sequence may be repeated few times in each bar.\n"
+"\n"
+"This it the length's fraction numerator."
 msgstr ""
-"Wählt die <b>Länge</b> dieses Sequenzers. Sie bestimmt <i>wie viele "
-"Takte</i> die Sequenz in diesem Sequenzer dauert. Bei Werten kleiner als 1 "
-"wird die Sequenz mehrfach pro Takt wiederholt."
+"Wählt die <b>Länge</b> dieses Sequenzers. Sie bestimmt <i>wie viele Takte</"
+"i> die Sequenz in diesem Sequenzer dauert. Bei Werten kleiner als 1 wird die "
+"Sequenz mehrfach pro Takt wiederholt."
 
-#: src/SequencerWidget.cpp:318
+#: src/SequencerWidget.cpp:244
+#, fuzzy
+msgid ""
+"Selects the <b>length</b> of this sequencer. It defines <i>how many bars</i> "
+"the sequence in this sequencer will last. In case it's smaller then 1, the "
+"sequence may be repeated few times in each bar.\n"
+"\n"
+"This it the length's fraction denominator."
+msgstr ""
+"Wählt die <b>Länge</b> dieses Sequenzers. Sie bestimmt <i>wie viele Takte</"
+"i> die Sequenz in diesem Sequenzer dauert. Bei Werten kleiner als 1 wird die "
+"Sequenz mehrfach pro Takt wiederholt."
+
+#: src/SequencerWidget.cpp:245
+#, fuzzy
+msgid ""
+"Selects the <b>length</b> of this sequencer. It defines <i>how many bars</i> "
+"the sequence in this sequencer will last. In case it's smaller then 1, the "
+"sequence may be repeated few times in each bar."
+msgstr ""
+"Wählt die <b>Länge</b> dieses Sequenzers. Sie bestimmt <i>wie viele Takte</"
+"i> die Sequenz in diesem Sequenzer dauert. Bei Werten kleiner als 1 wird die "
+"Sequenz mehrfach pro Takt wiederholt."
+
+#: src/SequencerWidget.cpp:440
 msgid ""
 "ERROR - Cannot init SequencerWidget's notebook - no sequencer selected.\n"
 msgstr ""
 "FEHLER - SequencerWidgets Notebook konnte nicht initialisiert werden - kein "
 "Sequenzer ausgewählt.\n"
 
-#: src/SequencerWidget.cpp:339 src/SequencerWidget.cpp:542
+#: src/SequencerWidget.cpp:461 src/SequencerWidget.cpp:694
 #, c-format
 msgid "%d"
 msgstr "%d"
 
-#: src/SequencerWidget.cpp:414
-msgid "Clicked a pattern checkbox that should be hidden! \n"
-msgstr ""
-"Ein Pattern-Kontrollkästchen wurde angeklickt, das versteckt sein sollte! \n"
-
-#: src/SequencerWidget.cpp:515
+#: src/SequencerWidget.cpp:664
 #, c-format
 msgid " %d"
 msgstr " %d"
 
-#: src/SequencerWidget.cpp:518
+#: src/SequencerWidget.cpp:667
 #, c-format
 msgid "%d*"
 msgstr "%d*"
 
-#: src/EventsWidget.cpp:38
+#: src/EventsWidget.cpp:39
 msgid "Add Event"
 msgstr "Ereignis hinzufügen"
 
-#: src/EventsWidget.cpp:44
+#: src/EventsWidget.cpp:45
 msgid "Add Action"
 msgstr "Aktion hinzufügen"
 
-#: src/EventsWidget.cpp:50
+#: src/EventsWidget.cpp:51
 msgid "ID"
 msgstr "ID"
 
-#: src/EventsWidget.cpp:54
+#: src/EventsWidget.cpp:55
 msgid "Events"
 msgstr "Ereignisse"
 
-#: src/EventsWidget.cpp:117
+#: src/EventsWidget.cpp:129
 msgid "Error - cannot colorize triggered event: row is empty.\n"
-msgstr ""
-"Fehler - kann ausgelöstes Ereignis nicht einfärben: Reihe ist leer.\n"
+msgstr "Fehler - kann ausgelöstes Ereignis nicht einfärben: Reihe ist leer.\n"
 
-#: src/EventsWidget.cpp:135
+#: src/EventsWidget.cpp:147
 msgid "Error - cannot colorize triggered action: row is empty.\n"
 msgstr "Fehler - kann ausgelöste Aktion nicht einfärben: Reihe ist leer.\n"
+
+#~ msgid "Velocity"
+#~ msgstr "Anschlagstärke"
+
+#~ msgid "Chord"
+#~ msgstr "Akkord"
+
+#~ msgid ""
+#~ "This file was created by harmonySEQ in an older version (%d.%d.%d). This "
+#~ "means it may miss some data that is required to be in file by the version "
+#~ "you are using (%d.%d.%d). It is recommended not to open such file, since "
+#~ "it is very likely it may produce strange errors, or may event crash the "
+#~ "program unexpectedly. However, in some cases one may want to open such "
+#~ "file anyway, for example if it is sure it will open without trouble. "
+#~ "Select YES to do so."
+#~ msgstr ""
+#~ "Diese Datei wurde in einer älteren Version (%d.%d.%d) von harmonySEQ "
+#~ "erstellt. Dies bedeutet, dass möglicherweise Daten fehlen, die von der "
+#~ "Version die Sie benutzen (%d.%d.%d) benötigt werden. Es wird empfohlen "
+#~ "diese Datei nicht zu öffnen, da es zu unerwarteten Fehlern und zum "
+#~ "Absturz des Programms führen kann. Möchten Sie trotzdem diese Datei "
+#~ "öffnen, wählen Sie JA."
+
+#~ msgid "Set velocity of sequencer '%s' to %d"
+#~ msgstr "Setze Anschlagstärke von Sequenzer '%s' auf %d"
+
+#~ msgid "Volume:"
+#~ msgstr "Lautstärke:"
+
+#~ msgid "Error: sequencer has changed, while action is not sequencer-type."
+#~ msgstr ""
+#~ "Fehler: Sequenzer wurde geändert, aber Aktion ist nicht vom Typ Sequenzer."
+
+#~ msgid "Error: velocity has changed, while action is not velocity-type."
+#~ msgstr ""
+#~ "Fehler: Anschlagstärke wurde geändert, aber Aktion ist nicht vom Typ "
+#~ "Anschlagstärke."
+
+#~ msgid "Sequencer/Set velocity"
+#~ msgstr "Sequenzer/Anschlagstärke Setzen"
+
+#~ msgid "Guitar: %s minor"
+#~ msgstr "Gitarre: %s Moll"
+
+#~ msgid ""
+#~ "Selects the <b>resolution</b> of this sequencer. It defines how many "
+#~ "<i>notes per one sequence</i> the sequencer has.\n"
+#~ "If the length is set to one, than the resolution will determine how many "
+#~ "notes will be played in one bar."
+#~ msgstr ""
+#~ "Wählt die <b>Auflösung</b> dieses Sequenzers. Es bestimmt wie viele "
+#~ "<i>Noten pro Sequenz</i> der Sequenzer hat.\n"
+#~ "Wenn die Länge auf Eins gesetzt ist, bestimmt die Auflösung wie viele "
+#~ "Noten pro Takt gespielt werden."
+
+#~ msgid "Clicked a pattern checkbox that should be hidden! \n"
+#~ msgstr ""
+#~ "Ein Pattern-Kontrollkästchen wurde angeklickt, das versteckt sein "
+#~ "sollte! \n"
