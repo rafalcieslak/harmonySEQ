@@ -451,7 +451,7 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
 
                         if(pattern.size()%4 != 0){*err << "ERROR - pattern size in file %4 != 0  - aborting opening"; return 1;}
                         //Simple algorithm, just copying data from the pattern from file to the pattern in the sequencer
-                        for (unsigned int w = 0; w < pattern .size(); w+=3) {
+                        for (unsigned int w = 0; w < pattern .size(); w+=4) {
                             NoteAtom *note = new NoteAtom;
                             note->time = pattern[w];
                             note->pitch = pattern[w + 1];

@@ -251,7 +251,7 @@ bool TryToOpenFileFromCommandLine(){
     bool x = Files::LoadFile(file);
     gdk_threads_leave();
     if (!x){
-        return 0;
+        return 0; 
     }
     else return 1;
 }
