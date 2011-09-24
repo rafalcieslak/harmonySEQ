@@ -117,6 +117,7 @@ private:
     void OnSetAsActivePatternClicked();
     void OnNotebookPageChanged(GtkNotebookPage* page, guint page_num);
     void OnAddPatternClicked();
+    void OnClonePatternClicked();
     void OnRemovePatternClicked();
     void SetRemoveButtonSensitivity();
     void OnNameEdited();
@@ -194,6 +195,7 @@ private:
     Gtk::Button wPlayOnceButton;
     Gtk::Button wRemovePattern;
     Gtk::Button wClearPattern;
+    Gtk::Button wClonePattern;
     Gtk::CheckButton wMuteToggle;
     Gtk::CheckButton wSnapToggle;
     Gtk::ToggleButton wAddToggle;

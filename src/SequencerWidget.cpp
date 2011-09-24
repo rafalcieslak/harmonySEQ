@@ -157,11 +157,13 @@ SequencerWidget::SequencerWidget()
     wPtOpsHBox1.pack_start(wActivePanelLabel,Gtk::PACK_SHRINK);
     wPtOpsHBox1.pack_start(wActivePattern,Gtk::PACK_SHRINK);
     wPtOpsHBox2.pack_start(wAddPatternButton,Gtk::PACK_SHRINK);
+    wPtOpsHBox2.pack_start(wClonePattern,Gtk::PACK_SHRINK);
     wPtOpsHBox2.pack_start(wRemovePattern,Gtk::PACK_SHRINK);
 
     wClearPatternHBox.pack_start(wClearPattern,Gtk::PACK_SHRINK);
 
     wClearPattern.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWidget::OnClearPatternClicked));
+    wClonePattern.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWidget::OnClonePatternClicked));
     wSetAsActivePatternButton.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWidget::OnSetAsActivePatternClicked));
     wAddPatternButton.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWidget::OnAddPatternClicked));
     wRemovePattern.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWidget::OnRemovePatternClicked));
@@ -185,6 +187,8 @@ SequencerWidget::SequencerWidget()
     wPlayOnceButton.set_tooltip_markup(_("Plays sequence in this sequencer <b>once</b>."));
     wClearPattern.set_label(_("Clear pattern"));
     wClearPattern.set_tooltip_markup(_("Clears all notes of this pattern."));
+    wClonePattern.set_label(_("Clone"));
+    wClonePattern.set_tooltip_markup(_("Clones this pattern, creating a new one."));
     ///TRANSLATORS: The space befor this string is to force a tiny space between widgets, please keep it in translations.
     wControllerLabel.set_text(_(" Controller No."));
     wControllerButton.set_tooltip_markup(_("The <b>MIDI controller number</b> this sequencer outputs data on.\n\nFor example, synthesizers supporting GM standard should interpret data from controller 7 as volume setting."));
@@ -724,6 +728,19 @@ void SequencerWidget::OnClearPatternClicked(){
     seqH(selectedSeq)->ClearPattern(wNotebook.get_current_page());
     UpdatePatternWidget();
     LeaveAddMode();
+}
+
+void SequencerWidget::OnClonePatternClicked(){
+    if(!AnythingSelected) return;
+    AtomContainer pattern = seqH(selectedSeq)->patterns[wNotebook.get_current_page()];
+    int n = seqH(selectedSeq)->AddPattern();
+    AtomContainer* newpattern = &seqH(selectedSeq)->patterns[n];
+    *newpattern = pattern;
+    InitNotebook();
+    wNotebook.set_current_page(n);
+    UpdateActivePatternRange();
+    Files::SetFileModified(1);
+    
 }
 
 void SequencerWidget::SetRemoveButtonSensitivity(){
