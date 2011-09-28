@@ -673,6 +673,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
         }
     }
     if(button_pressed == NONE){
+        last_clicked_note = found;
         if(event->button == 1 || event->button == 2){
             if(!(event->state & (1 << 0) || event->button == 2)){
                 button_pressed = LMB;
@@ -687,13 +688,59 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                 }else{
                     //LMB on empty space
                     //'create a new note'
+                    double temp_time = time;
+                    if (seq_type == SEQ_TYPE_NOTE) {
+                        if (snap) {
+                            temp_time = SnapDown(temp_time);
+                        }
+                        double len = (double) 1.0 / container->owner->resolution;
+                        NoteAtom* note = new NoteAtom(temp_time, len, line);
+                        if (event->state & (1 << 2)) note->velocity = 0; // If ctrl key was hold, add a quiet note
+                        container->Add(note);
+                        drag_in_progress = 1;
+                        drag_mode = DRAG_MODE_RESIZE;
+                        drag_beggining_line = line;
+                        drag_beggining_time = time;
+                        drag_note_dragged = note;
+                        selection.clear();
+                        selection.insert(note);
+                        on_selection_changed.emit(selection.size());
+                    } else if (seq_type == SEQ_TYPE_CONTROL) {
+                        if (snap) {
+                            temp_time = Snap(temp_time); //fair snapping for control atoms!
+                        }
+                        ControllerAtom* ctrl = new ControllerAtom(temp_time, value);
+                        ctrl->slope_type = add_slope_type;
+                        container->Add(ctrl);
+                        drag_in_progress = 1;
+                        drag_mode = DRAG_MODE_MOVE_SELECTION;
+                        drag_beggining_value = value;
+                        drag_beggining_time = time;
+                        drag_note_dragged = ctrl;
+                        selection.clear();
+                        selection.insert(ctrl);
+                        on_selection_changed.emit(selection.size());
+                    }
+                    Files::FileModified(); //Mark file as modified
+                    RedrawAtoms();
                 }
             }else{
                 if (event->button == 1) button_pressed = LMBs;
                 else if (event->button == 2) button_pressed = MMB;
+                *err << "LMB+S\n";
                 if(found != NULL){
                     //LMB + S  /  MMB on note
                     //'select the clicked note, or unselect it, if it was alreasy selected (need to remember the note is it was just selected in order to not unselect it on button_release event)'
+                    if(selection.find(found) != selection.end()){
+                        //note was selected, will unselect on button_release
+                        note_that_was_just_added_to_selection = NULL;
+                    }else{
+                        //wasn't selected, select it
+                        selection.insert(found);
+                        note_that_was_just_added_to_selection = found;
+                        on_selection_changed.emit(selection.size());
+                        RedrawAtoms();
+                    }
                 }else{
                     //LMB + S  / MMB on empty space
                     //'-'
@@ -707,10 +754,18 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                 //'delete the clicked note'
                 *err << "removing!\n";
                 container->Remove(found);
+                std::set<Atom*,AtomComparingClass>::iterator it = selection.find(found);
+                if (it != selection.end()){
+                    selection.erase(it);
+                    on_selection_changed.emit(selection.size());
+                }
                 RedrawAtoms();
             } else {
                 //RMB on empty space
                 //'clear selection'
+                selection.clear();
+                on_selection_changed.emit(selection.size());
+                RedrawAtoms();
             }
             
         }
@@ -899,6 +954,16 @@ bool PatternWidget::on_button_release_event(GdkEventButton* event){
             button_pressed = NONE;
         }else if((button_pressed == LMBs && event->button == 1) || (button_pressed == MMB && event->button == 2)){
             button_pressed = NONE;
+            if(last_clicked_note != NULL){
+                std::set<Atom*,AtomComparingClass>::iterator it = selection.find(last_clicked_note);
+                if (it != selection.end()){
+                    //was selected, unselecting
+                    selection.erase(it);
+                    if (note_that_was_just_added_to_selection != NULL) selection.insert(note_that_was_just_added_to_selection);
+                    on_selection_changed.emit(selection.size());
+                    RedrawAtoms();
+                }
+            }
         }
     }
     
