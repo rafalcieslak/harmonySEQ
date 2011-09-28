@@ -62,6 +62,8 @@ PatternWidget::PatternWidget(){
     man_i_wanted_to_redraw_grid_but_it_was_locked_could_you_please_do_it_later_for_me = 0;
     last_drawn_height = 0;
     last_drawn_width = 0;
+    
+    button_pressed = NONE;
 }
 
 PatternWidget::~PatternWidget(){
@@ -410,6 +412,7 @@ double PatternWidget::SnapDown(double t){
 }
 
 void PatternWidget::InitDrag(){
+    /*
     Gtk::Allocation allocation = get_allocation();
     const int width = allocation.get_width();
     //const int height = allocation.get_height();
@@ -500,9 +503,11 @@ void PatternWidget::InitDrag(){
         drag_beggining_value = value;
         drag_temporary_selection.clear();
     }
+     */
 }
 
 void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
+    /*
     Gtk::Allocation allocation = get_allocation();
     const int width = allocation.get_width();
     //const int height = allocation.get_height();
@@ -522,7 +527,7 @@ void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
         }
         //Remembers how much was the dragged note moved due to snapping feature, so that we can move other notes by the same distance.
         double snap_offset = snapped_time - temp_time;
-        //*dbg << snap_offset << ENDL;
+        // *dbg << snap_offset << ENDL;
 
         std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
         std::set<Atom *, AtomComparingClass> resulting_selection;
@@ -538,7 +543,7 @@ void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
                             note->pitch = temp_pitch;
                             note->time = temp_time;
                             resulting_selection.insert(note);
-                            //*dbg << " " << note->pitch << " " << note->time <<ENDL;
+                            // *dbg << " " << note->pitch << " " << note->time <<ENDL;
                         }
         }else if (seq_type == SEQ_TYPE_CONTROL){
                         for (; it != selection.end(); it++) {
@@ -553,7 +558,7 @@ void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
                             ctrl->value = temp_value;
                             ctrl->time = temp_time;
                             resulting_selection.insert(ctrl);
-                            //*dbg << " " << note->pitch << " " << note->time <<ENDL;
+                            // *dbg << " " << note->pitch << " " << note->time <<ENDL;
                         }
         }
         //important!
@@ -584,7 +589,7 @@ void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
                             NoteAtom* note = dynamic_cast<NoteAtom*> (atm);
                             //check if pitch is in bounds...
                             if (note->pitch <= sel_pith_max && note->pitch >= sel_pith_min) {
-                                //*dbg << " note " << x << " pith ("<<note->pitch <<")  in bounds.\n";
+                                // *dbg << " note " << x << " pith ("<<note->pitch <<")  in bounds.\n";
                                 //check time...
                                 double start = note->time;
                                 double end = note->time + note->length;
@@ -630,10 +635,10 @@ void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
         Files::FileModified(); //Mark file as modified
     }
     RedrawAtoms();
+     */
 }
 
 bool PatternWidget::on_button_press_event(GdkEventButton* event){
-    
     grab_focus();//required to receive key_presses
     
     Gtk::Allocation allocation = get_allocation();
@@ -642,9 +647,76 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
     int line = 6 - event->y / (internal_height / 6);
     double time = (double) event->x / (double) width;
     int value = 127 - event->y *(double)127.0/ (internal_height);
-    
     double timeS  = ((double) event->x -(double)crtl_Tsurrounding)/ (double) width;
     double timeE  = ((double) event->x +(double)crtl_Tsurrounding)/ (double) width;
+    
+    //Checking whether clicked place was note or an empty space.
+    Atom* found = NULL;
+    int size = container->GetSize();
+    if (seq_type == SEQ_TYPE_NOTE) {
+        //Looking for notes...
+        for (int x = 0; x < size; x++) {
+            NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[x]);
+            if (note->pitch == line && note->time < time && time < note->time + note->length) {
+                found = note;
+                break;
+            }
+        }
+    } else if (seq_type == SEQ_TYPE_CONTROL) {
+        //Looking for control atoms...
+        for (int x = 0; x < size; x++) {
+            ControllerAtom* ctrl = dynamic_cast<ControllerAtom*> ((*container)[x]);
+            if (ctrl->value + ctrl_Vsurrounding > value && ctrl->value - ctrl_Vsurrounding < value && ctrl->time < timeE && ctrl->time > timeS) {
+                found = ctrl;
+                break;
+            }
+        }
+    }
+    if(button_pressed == NONE){
+        if(event->button == 1 || event->button == 2){
+            if(!(event->state & (1 << 0) || event->button == 2)){
+                button_pressed = LMB;
+                if(found != NULL){
+                    //LMB on note
+                    //'clear selection and select only the clicked note (immidiatelly)'
+                *err << "selecting!\n";
+                    selection.clear();
+                    selection.insert(found);
+                    on_selection_changed.emit(selection.size());
+                    RedrawAtoms();
+                }else{
+                    //LMB on empty space
+                    //'create a new note'
+                }
+            }else{
+                if (event->button == 1) button_pressed = LMBs;
+                else if (event->button == 2) button_pressed = MMB;
+                if(found != NULL){
+                    //LMB + S  /  MMB on note
+                    //'select the clicked note, or unselect it, if it was alreasy selected (need to remember the note is it was just selected in order to not unselect it on button_release event)'
+                }else{
+                    //LMB + S  / MMB on empty space
+                    //'-'
+                }
+            }
+
+        } else if (event->button == 3) {
+            button_pressed = RMB;
+            if (found != NULL) {
+                //RMB on note
+                //'delete the clicked note'
+                *err << "removing!\n";
+                container->Remove(found);
+                RedrawAtoms();
+            } else {
+                //RMB on empty space
+                //'clear selection'
+            }
+            
+        }
+    }//buttons_pressed = NONE
+    /*
+    
     
     if(event->button == 1) //LMB
     {
@@ -814,10 +886,28 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
         RedrawAtoms();
         
     }
+     */
     return false;
 }
 
 bool PatternWidget::on_button_release_event(GdkEventButton* event){
+    
+    if(button_pressed == NONE) return false;
+    
+    if (event->button == 1 || event->button == 2){
+        if (button_pressed == LMB && event->button == 1){
+            button_pressed = NONE;
+        }else if((button_pressed == LMBs && event->button == 1) || (button_pressed == MMB && event->button == 2)){
+            button_pressed = NONE;
+        }
+    }
+    
+    else if(button_pressed == RMB && event->button == 3){
+
+        button_pressed = NONE;
+    }
+    
+    /*
     if(event->button == 1){
         if(!drag_in_progress){
             
@@ -840,6 +930,7 @@ bool PatternWidget::on_button_release_event(GdkEventButton* event){
     }else if(event->button == 3){
         if(drag_in_progress) drag_in_progress = 0;
     }
+    */
     return false;
 }
 
@@ -850,6 +941,7 @@ bool PatternWidget::on_leave_notify_event(GdkEventCrossing* event){
 }
 
 bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
+    /*
         if(!drag_in_progress){//there is no drag in progress, maybe we need to initiate one?
             if (event->state & (1 << 8)) { //LMB down 
                 //if moved some distance, mark drag as in progress. 
@@ -865,6 +957,7 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
             ProcessDrag(event->x,event->y,(event->state & (1 << 0)));
         }
         
+     */
     return false;
 }
 

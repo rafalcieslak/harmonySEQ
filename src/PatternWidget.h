@@ -159,6 +159,15 @@ private:
         DRAG_MODE_RESIZE
     };
     
+    enum ButtonPressed{
+        NONE,
+        LMB,
+        LMBs,
+        MMB,
+        RMB
+    };
+    ButtonPressed button_pressed;
+    
     SlopeType GetSelectionSlopeType();
     
     void UpdateSizeRequest();
