@@ -17,6 +17,8 @@ AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_CPP
 
+CXXFLAGS="-g -O0"
+
 osc_enabled=true
 
 # One might want to disable OSC supprort...

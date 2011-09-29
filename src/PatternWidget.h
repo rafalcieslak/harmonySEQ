@@ -159,7 +159,8 @@ private:
     enum DragModes{
         DRAG_MODE_MOVE_SELECTION,
         DRAG_MODE_SELECT_AREA,
-        DRAG_MODE_RESIZE
+        DRAG_MODE_RESIZE,
+        DRAG_MODE_CHANGE_VELOCITY
     };
     
     enum ButtonPressed{
