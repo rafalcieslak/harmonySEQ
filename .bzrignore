@@ -17,3 +17,4 @@ autoscan.log
 config.log
 .deps
 examples/Makefile
+autom4te.cache
