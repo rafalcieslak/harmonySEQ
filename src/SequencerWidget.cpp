@@ -33,7 +33,6 @@ extern Glib::RefPtr< Gdk::Pixbuf > icon_slope_linear;
 extern Glib::RefPtr< Gdk::Pixbuf > icon_slope_flat;
 
 SequencerWidget::SequencerWidget()
-                : wImageAdd(Gtk::Stock::ADD,Gtk::ICON_SIZE_BUTTON), wImageRemove(Gtk::Stock::REMOVE,Gtk::ICON_SIZE_BUTTON)
 {
     *dbg << "constructing new SEQUENCERWIDGET\n";
 
@@ -66,8 +65,6 @@ SequencerWidget::SequencerWidget()
     wPatternWidgetBox.pack_start(pattern_widget,Gtk::PACK_SHRINK);
     
     pattern_widget.on_selection_changed.connect(sigc::mem_fun(*this,&SequencerWidget::OnSelectionChanged));
-    pattern_widget.on_add_mode_changed.connect(sigc::mem_fun(*this,&SequencerWidget::UpdateAddMode));
-    pattern_widget.on_delete_mode_changed.connect(sigc::mem_fun(*this,&SequencerWidget::UpdateDeleteMode));
     pattern_widget.on_slope_type_needs_additional_refreshing.connect(sigc::mem_fun(*this,&SequencerWidget::UpdateSlopeType));
     
     wUpperHBox1.pack_start(wNameLabel,Gtk::PACK_SHRINK);
@@ -95,8 +92,6 @@ SequencerWidget::SequencerWidget()
     wRightBox2.pack_start(wLengthResult,Gtk::PACK_SHRINK);
     
     //wUpperHBox2.pack_start(wShowChordButton,Gtk::PACK_SHRINK);
-    wUpperHBox2.pack_start(wAddToggle,Gtk::PACK_SHRINK);
-    wUpperHBox2.pack_start(wDeleteToggle,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wSlopeSelectorSep,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wCtrlSlopeFlat,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wCtrlSlopeLinear,Gtk::PACK_SHRINK);
@@ -113,15 +108,7 @@ SequencerWidget::SequencerWidget()
     wShowChordLabel.set_markup(_("<b>Chord</b>"));
     wShowChordButton.set_tooltip_markup(_("Shows/hides the chord's detailed settings."));
     wShowChordButton.signal_toggled().connect(sigc::mem_fun(*this,&SequencerWidget::OnShowChordButtonClicked));
-    wAddToggle.set_label(_("Add"));
-    wAddToggle.set_image(wImageAdd);
-    wImageAdd.show();
-    wAddToggle.show_all();
-    wAddToggle.signal_toggled().connect(sigc::mem_fun(*this,&SequencerWidget::OnAddToggled));
-    wDeleteToggle.set_label(_("Delete"));
-    wDeleteToggle.set_image(wImageRemove);
-    wImageRemove.show();
-    wDeleteToggle.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWidget::OnDeleteToggled));
+    
     wSnapToggle.set_label(_("Snap to grid"));
     wSnapToggle.set_active(1); //As this is default value
     wSnapToggle.signal_toggled().connect(sigc::mem_fun(*this,&SequencerWidget::OnSnapClicked));
@@ -283,7 +270,6 @@ void SequencerWidget::SelectSeq(seqHandle h){
     AnythingSelected = 1;
     selectedSeq = h;
     selectedSeqType = seqH(h)->GetType();
-    LeaveAddMode();
     if(selectedSeqType == SEQ_TYPE_NOTE){
         NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seqH(h));
         chordwidget.Select(&noteseq->chord);
@@ -295,7 +281,6 @@ void SequencerWidget::SelectSeq(seqHandle h){
 void SequencerWidget::SelectNothing(){
     AnythingSelected = 0;
     chordwidget.UnSelect();
-    LeaveAddMode();
     UpdateEverything();
 }
 
@@ -514,7 +499,6 @@ void SequencerWidget::OnChannelChanged(){
     Sequencer* seq = seqH(selectedSeq);
     
     seq->SetChannel( wChannelButton.get_value());
-    LeaveAddMode();
     mainwindow->RefreshRow(seq->my_row);
     Files::SetFileModified(1);
 }
@@ -525,7 +509,6 @@ void SequencerWidget::OnVelocityChanged(){
     
     pattern_widget.SetSelectionVelocity(wVelocityButton.get_value());
     
-    LeaveAddMode();
     Files::SetFileModified(1);
 }
 
@@ -535,7 +518,6 @@ void SequencerWidget::OnValueChanged(){
     
     pattern_widget.SetSelectionValue(wValueButton.get_value());
     
-    LeaveAddMode();
     Files::SetFileModified(1);
 }
 
@@ -586,7 +568,6 @@ void SequencerWidget::OnChordWidgetChanged(){
     if(ignore_signals) return;
     if(!AnythingSelected) return;
     Sequencer* seq = seqH(selectedSeq);
-    LeaveAddMode();
     mainwindow->RefreshRow(seq->my_row);
 }
 void SequencerWidget::OnChordWidgetNoteChanged(int n, int p){
@@ -603,7 +584,6 @@ void SequencerWidget::OnToggleMuteToggled(){
 
     seq->SetOn(wMuteToggle.get_active());
     seq->SetPlayOncePhase(0);
-    LeaveAddMode();
     mainwindow->RefreshRow(seq->my_row);
     UpdateOnOffColour();
 
@@ -619,7 +599,6 @@ void SequencerWidget::OnResolutionChanged(){
     seq->SetResolution(wResolutions.get_value());
     pattern_widget.RedrawGrid();
 
-    LeaveAddMode();
     mainwindow->RefreshRow(seq->my_row);
     Files::SetFileModified(1);
 }
@@ -634,7 +613,6 @@ void SequencerWidget::OnLengthChanged(){
     wLengthResult.set_text(temp);
     seq->play_from_here_marker = 0.0; //important, to avoid shifts
 
-    LeaveAddMode();
     mainwindow->RefreshRow(seq->my_row);
     Files::SetFileModified(1);
 }
@@ -650,7 +628,6 @@ void SequencerWidget::OnActivePatternChanged(){
 
     seq->SetActivePatternNumber(activepattern); //store in parent
 
-    LeaveAddMode();
     mainwindow->RefreshRow(seq->my_row);
     Files::SetFileModified(1);
 }
@@ -671,14 +648,12 @@ void SequencerWidget::UpdateAsterisk(int from, int to){
 void SequencerWidget::OnSetAsActivePatternClicked(){
     int current = wNotebook.get_current_page();
     wActivePattern.set_value((double)current);    
-    LeaveAddMode();
 }
 void SequencerWidget::OnNotebookPageChanged(GtkNotebookPage* page, guint page_num){
     if(ignore_signals) return;
     if(do_not_react_on_page_changes) return;
     *dbg << "page changed!\n";
     UpdatePatternWidget();
-    LeaveAddMode();
 }
 void SequencerWidget::OnAddPatternClicked(){
     if(!AnythingSelected) return;
@@ -697,7 +672,6 @@ void SequencerWidget::OnAddPatternClicked(){
     //In case you wonder why the patternbox is NOT updated: read the comment above.
     UpdateActivePatternRange();
     SetRemoveButtonSensitivity();
-    LeaveAddMode();
     Files::SetFileModified(1);
 }
 void SequencerWidget::OnRemovePatternClicked(){
@@ -718,7 +692,6 @@ void SequencerWidget::OnRemovePatternClicked(){
     wNotebook.set_current_page(n);
     UpdateActivePatternRange();
     SetRemoveButtonSensitivity();
-    LeaveAddMode();
     mainwindow->RefreshRow(seq->my_row);
     Files::SetFileModified(1);
 }
@@ -727,7 +700,6 @@ void SequencerWidget::OnClearPatternClicked(){
     if(!AnythingSelected) return;
     seqH(selectedSeq)->ClearPattern(wNotebook.get_current_page());
     UpdatePatternWidget();
-    LeaveAddMode();
 }
 
 void SequencerWidget::OnClonePatternClicked(){
@@ -756,7 +728,6 @@ void SequencerWidget::OnNameEdited(){
     Sequencer* seq = seqH(selectedSeq);
     
     seq->SetName(wNameEntry.get_text());
-    LeaveAddMode();
     mainwindow->RefreshRow(seq->my_row);
     mainwindow->eventsWidget.SeqListChanged();
     Files::SetFileModified(1);
@@ -767,7 +738,6 @@ void SequencerWidget::OnPlayOnceButtonClicked(){
     Sequencer* seq = seqH(selectedSeq);
 
     seq->SetPlayOncePhase(1);
-    LeaveAddMode();
     mainwindow->RefreshRow(seq->my_row);
     UpdateOnOffColour();
 }
@@ -806,56 +776,6 @@ void SequencerWidget::OnControllerChanged(){
     ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*>(seqH(selectedSeq));
     ctrlseq->controller_number = wControllerButton.get_value();
     mainwindow->RefreshRow(ctrlseq->my_row);
-}
-
-void SequencerWidget::OnAddToggled(){
-    if(ignore_signals) return;
-    if(wAddToggle.get_active()){
-        pattern_widget.EnterAddMode();
-        wDeleteToggle.set_active(0);
-    }else{
-        pattern_widget.LeaveAddMode();
-        pattern_widget.ClearSelection();
-    }
-    ColorizeModeButtons();
-}
-
-void SequencerWidget::OnDeleteToggled(){
-    if(ignore_signals) return;
-    
-    if(pattern_widget.GetSelectionSize() != 0){
-        pattern_widget.DeleteSelected();
-        ignore_signals = 1; wDeleteToggle.set_active(0); ignore_signals = 0;
-        realize();
-    }else {
-        if (wDeleteToggle.get_active()) {
-            pattern_widget.EnterDeleteMode();
-            wAddToggle.set_active(0);
-        } else {
-            pattern_widget.LeaveDeleteMode();
-            pattern_widget.ClearSelection();
-        }
-        ColorizeModeButtons();
-    }
-}
-
-void SequencerWidget::LeaveAddMode(){
-    if(wAddToggle.get_active()){
-        wAddToggle.set_active(0); //the signal handler should do the trick
-    }
-}
-
-void SequencerWidget::UpdateAddMode(){
-    ignore_signals = 1;
-    wAddToggle.set_active(pattern_widget.GetAddMode());
-    ignore_signals = 0;
-    ColorizeModeButtons();
-}
-void SequencerWidget::UpdateDeleteMode(){
-    ignore_signals = 1;
-    wDeleteToggle.set_active(pattern_widget.GetDeleteMode());
-    ignore_signals = 0;
-    ColorizeModeButtons();
 }
 
 void SequencerWidget::OnShowChordButtonClicked(){
@@ -906,23 +826,6 @@ bool SequencerWidget::OnPatternMouseScroll(GdkEventScroll* e){
         }
     }
     return true;
-}
-
-void SequencerWidget::ColorizeModeButtons(){
-    if(wAddToggle.get_active()){
-        wAddToggle.modify_bg(Gtk::STATE_ACTIVE,Gdk::Color("DarkOliveGreen1"));
-        wAddToggle.modify_bg(Gtk::STATE_PRELIGHT,Gdk::Color("DarkOliveGreen2"));
-    }else{
-        wAddToggle.unset_bg(Gtk::STATE_ACTIVE);
-        wAddToggle.unset_bg(Gtk::STATE_PRELIGHT);
-    }
-    if (wDeleteToggle.get_active()) {
-        wDeleteToggle.modify_bg(Gtk::STATE_ACTIVE, Gdk::Color("sienna1"));
-        wDeleteToggle.modify_bg(Gtk::STATE_PRELIGHT, Gdk::Color("sienna2"));
-    } else {
-        wDeleteToggle.unset_bg(Gtk::STATE_ACTIVE);
-        wDeleteToggle.unset_bg(Gtk::STATE_PRELIGHT);
-    }
 }
 
 /*

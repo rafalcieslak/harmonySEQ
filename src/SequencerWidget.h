@@ -67,8 +67,6 @@ public:
     void UpdateAsterisk(int from, int to);
     void UpdateOnOffColour();
     void UpdateShowChord();
-    void UpdateAddMode();
-    void UpdateDeleteMode();
     void UpdateController();
 
     /**Used to select sequencer that has to be displayed by the SequencerWidget*/
@@ -125,18 +123,14 @@ private:
     void OnClearPatternClicked();
     bool OnPatternMouseScroll(GdkEventScroll * e);
     void OnSnapClicked();
-    void OnAddToggled();
-    void OnDeleteToggled();
     void OnShowChordButtonClicked();
     void OnControllerChanged();
     /**Called when pattern's selection was changed and we need to display new velocity*/
     void OnSelectionChanged(int n);
-    void LeaveAddMode();
     void OnSlopeFlatToggled();
     void OnSlopeLinearToggled();
     void UpdateSlopeType();
     
-    void ColorizeModeButtons();
     
     PatternWidget pattern_widget;
     
@@ -198,8 +192,6 @@ private:
     Gtk::Button wClonePattern;
     Gtk::CheckButton wMuteToggle;
     Gtk::CheckButton wSnapToggle;
-    Gtk::ToggleButton wAddToggle;
-    Gtk::ToggleButton wDeleteToggle;
     Gtk::SpinButton wResolutions;
     Gtk::SpinButton wLengthNumerator;
     Gtk::Label wLengthDivision;
@@ -214,8 +206,6 @@ private:
     //not displayed, but used to choose none of the other two
     Gtk::RadioButton wCtrlSlopeNone;
     
-    Gtk::Image wImageAdd;
-    Gtk::Image wImageRemove;
     Gtk::Image wImageSlopeLinear;
     Gtk::Image wImageSlopeFlat;\
 

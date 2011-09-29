@@ -50,20 +50,6 @@ public:
     /**Resizes this PatternWidget to zoom-out*/
     void ZoomOut();
     
-    /**Starts adding atoms with LMB*/
-    void EnterAddMode();
-    /**Stops adding notes with LMB*/
-    void LeaveAddMode();
-    /**Returns whether AddMode is on*/
-    bool GetAddMode();
-    /**Starts removing atoms with LMB*/
-    void EnterDeleteMode();
-    /**Stops removing notes with LMB*/
-    void LeaveDeleteMode();
-    /**Returns whether DeleteMode is on*/
-    bool GetDeleteMode();
-    
-    
     
     /**Removes selected notes from container.*/
     void DeleteSelected();
@@ -95,11 +81,6 @@ public:
     
     /**Emitted when selection is changed. Provides an argument that is equal to number of notes in selection.*/
     sigc::signal<void,int> on_selection_changed;
-    
-    /**Emmited when patter changed add_mode and parent widget needs to update button*/
-    sigc::signal<void> on_add_mode_changed;
-    /**Emmited when patter changed delete_mode  and parent widget needs to update button*/
-    sigc::signal<void> on_delete_mode_changed;
     
     sigc::signal<void> on_slope_type_needs_additional_refreshing;
     
@@ -133,8 +114,6 @@ private:
     int last_drawn_width;
     int last_drawn_height;
     
-    bool add_mode;
-    bool delete_mode;
     SlopeType add_slope_type;
     
     std::set<Atom *,AtomComparingClass> selection;

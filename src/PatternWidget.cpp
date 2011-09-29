@@ -43,8 +43,6 @@ PatternWidget::PatternWidget(){
     internal_height=50; //random guess. will be reset soon anyway by the SequencerWidget, but better protect from 0-like values.
     horiz_size = 450.0; //adjust for better default size
     snap = true;
-    add_mode = 0;
-    delete_mode = 0;
     add_slope_type = SLOPE_TYPE_LINEAR;
     add_events(Gdk::BUTTON_PRESS_MASK);
     add_events(Gdk::BUTTON_RELEASE_MASK);
@@ -94,32 +92,6 @@ void PatternWidget::ZoomOut(){
     horiz_size = horiz_size/1.2;
     if(horiz_size < 150.0)  horiz_size = 150.0;
     UpdateSizeRequest();
-}
-
-void PatternWidget::EnterAddMode(){
-    ClearSelection();
-    add_mode = 1;
-    delete_mode = 0;
-}
-void PatternWidget::LeaveAddMode(){
-    add_mode = 0;
-}
-
-bool PatternWidget::GetAddMode(){
-    return add_mode;
-}
-
-void PatternWidget::EnterDeleteMode(){
-    ClearSelection();
-    add_mode = 0;
-    delete_mode = 1;
-}
-void PatternWidget::LeaveDeleteMode(){
-    delete_mode = 0;
-}
-
-bool PatternWidget::GetDeleteMode(){
-    return delete_mode;
 }
 
 int PatternWidget::GetSelectionSize(){
@@ -229,10 +201,7 @@ SlopeType PatternWidget::GetSelectionSlopeType(){
 void PatternWidget::SetSlopeType(SlopeType s){
     if(seq_type != SEQ_TYPE_CONTROL) return;
     if(s == SLOPE_TYPE_NONE) return; //does not apply
-    if(add_mode){
-        selection.clear();
-        add_slope_type = s;
-    }else if(selection.empty()){
+    if(selection.empty()){
         add_slope_type = s;
     }else{
         std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
@@ -512,61 +481,6 @@ void PatternWidget::InitDrag(){
         drag_temporary_selection.clear();
         
     }
-    /*
-    //and checking if it's in a selection
-    std::set<Atom *, AtomComparingClass>::iterator it;
-    if (note_found != NULL) it = selection.find(note_found);
-    else it = selection.end(); //pretend the search failed
-    
-    if(note_ending_found != NULL){
-        if(seq_type == SEQ_TYPE_NOTE){
-            //user tries to resize the note
-            drag_mode = DRAG_MODE_RESIZE;
-            drag_in_progress = 1;
-            drag_beggining_line = line;
-            drag_beggining_time = time;
-            drag_note_dragged = note_ending_found;
-            //Store note offsets...
-            std::set<Atom*>::iterator it = selection.begin();
-            for (; it != selection.end(); it++) {
-                NoteAtom* note = dynamic_cast<NoteAtom*>(*it);
-                note->drag_beggining_length = note->length;
-            }
-        }else{
-            //note ending was found and seq_type is not note? strange... this won't happen ;-)
-        }
-    }else if (it != selection.end()) {// so it is in selection...
-        //beggining drag. 
-        drag_mode = DRAG_MODE_MOVE_SELECTION;
-        drag_in_progress = 1;
-        drag_beggining_line = line;
-        drag_beggining_time = time;
-        drag_beggining_value = value;
-        drag_note_dragged = note_found;
-        drag_time_offset_to_dragged_note = drag_beggining_time - note_found->time;
-        //Store note offsets...
-        std::set<Atom*>::iterator it2 = selection.begin();
-        for (; it2 != selection.end(); it2++) {
-            Atom* atm = *it2;
-            atm->drag_offset_time = atm->time - time;
-            if(seq_type == SEQ_TYPE_NOTE){
-                NoteAtom* note = dynamic_cast<NoteAtom*> (atm);
-                note->drag_offset_line = note->pitch - line;
-            }else if(seq_type == SEQ_TYPE_CONTROL){
-                ControllerAtom* ctrl = dynamic_cast<ControllerAtom*> (atm);
-                ctrl->drag_offset_value = ctrl->value - value;
-            }
-        }
-    } else {
-        //drag begun in place where was no selection
-        drag_mode = DRAG_MODE_SELECT_AREA;
-        drag_in_progress = 1;
-        drag_beggining_line = line;
-        drag_beggining_time = time;
-        drag_beggining_value = value;
-        drag_temporary_selection.clear();
-    }
-     */
 }
 
 void PatternWidget::ProcessDrag(double x, double y){
@@ -702,128 +616,7 @@ void PatternWidget::ProcessDrag(double x, double y){
     }
     
     RedrawAtoms();
-    /*
-    
-    if (drag_mode == DRAG_MODE_MOVE_SELECTION) {
-        
-        Atom* dragged_note = dynamic_cast<Atom*>(drag_note_dragged);
-        double temp_time = time + dragged_note->drag_offset_time;
-        temp_time = temp_time - (int) temp_time; //wrap to 0.0 - 0.9999...
-        double snapped_time = temp_time;
-        if (snap && !(shift_key)) { //if snap & not shift key...
-            snapped_time = Snap(temp_time);
-        }
-        //Remembers how much was the dragged note moved due to snapping feature, so that we can move other notes by the same distance.
-        double snap_offset = snapped_time - temp_time;
-        // *dbg << snap_offset << ENDL;
 
-        std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
-        std::set<Atom *, AtomComparingClass> resulting_selection;
-        if(seq_type == SEQ_TYPE_NOTE){
-                        for (; it != selection.end(); it++) {
-                            NoteAtom* note = dynamic_cast<NoteAtom*> (*it);
-                            int temp_pitch = line + note->drag_offset_line;
-                            temp_time = time + note->drag_offset_time + snap_offset;
-                            temp_pitch = temp_pitch % 6; //wrap to 0-5;
-                            temp_time = temp_time - (int) temp_time; //wrap to 0.0 - 0.9999...
-                            if (temp_pitch < 0) temp_pitch += 6;
-                            if (temp_time < 0) temp_time += 1.0;
-                            note->pitch = temp_pitch;
-                            note->time = temp_time;
-                            resulting_selection.insert(note);
-                            // *dbg << " " << note->pitch << " " << note->time <<ENDL;
-                        }
-        }else if (seq_type == SEQ_TYPE_CONTROL){
-                        for (; it != selection.end(); it++) {
-                            ControllerAtom* ctrl = dynamic_cast<ControllerAtom*> (*it);
-                            int temp_value = value + ctrl->drag_offset_value;
-                            temp_time = time + ctrl->drag_offset_time + snap_offset;
-                            if(temp_value > 127) temp_value = 127;
-                            else if(temp_value < 0) temp_value = 0;
-                            if(temp_time != 1.0) //leave a possibility to put control atoms at 1.0, may be useful if one wants to add an immidiate slope at bar's start
-                                temp_time = temp_time - (int) temp_time; //wrap to 0.0 - 0.9999...
-                            if (temp_time < 0) temp_time += 1.0;
-                            ctrl->value = temp_value;
-                            ctrl->time = temp_time;
-                            resulting_selection.insert(ctrl);
-                            // *dbg << " " << note->pitch << " " << note->time <<ENDL;
-                        }
-        }
-        //important!
-        selection = resulting_selection;
-        container->Sort();
-        Files::FileModified(); //Mark file as modified
-        //additionally:
-        if(seq_type == SEQ_TYPE_CONTROL) on_selection_changed.emit(selection.size()); //this will update the value spinbutton
-    } else if (drag_mode == DRAG_MODE_SELECT_AREA) {
-        drag_current_x = x;
-        drag_current_y = y;
-        drag_current_line = line;
-        drag_current_time = time;
-        drag_current_value = value;
-
-        //Determining drag selection.
-        drag_temporary_selection.clear();
-        int sel_value_min = min(drag_current_value,drag_beggining_value);
-        int sel_value_max = max(drag_current_value,drag_beggining_value);
-        int sel_pith_min = min(drag_current_line, drag_beggining_line);
-        int sel_pith_max = max(drag_current_line, drag_beggining_line);
-        double sel_time_min = min(drag_current_time, drag_beggining_time);
-        double sel_time_max = max(drag_current_time, drag_beggining_time);
-        int size = container->GetSize();
-        if (seq_type == SEQ_TYPE_NOTE) {
-                        for (int x = 0; x < size; x++) {
-                            Atom* atm = (*container)[x];
-                            NoteAtom* note = dynamic_cast<NoteAtom*> (atm);
-                            //check if pitch is in bounds...
-                            if (note->pitch <= sel_pith_max && note->pitch >= sel_pith_min) {
-                                // *dbg << " note " << x << " pith ("<<note->pitch <<")  in bounds.\n";
-                                //check time...
-                                double start = note->time;
-                                double end = note->time + note->length;
-                                if ((start <= sel_time_max && start >= sel_time_min) || (end <= sel_time_max && end >= sel_time_min) || (start <= sel_time_min && end >= sel_time_max)) {
-                                    //is inside!
-                                    drag_temporary_selection.insert(note);
-                                }
-                            }
-                        }//check next note.
-        }else if(seq_type == SEQ_TYPE_CONTROL) {
-                    for (int x = 0; x < size; x++) {
-                        Atom* atm = (*container)[x];
-                        ControllerAtom* ctrl = dynamic_cast<ControllerAtom*> (atm);
-                        //check if pitch is in bounds...
-                        if (ctrl->value <= sel_value_max && ctrl->value >= sel_value_min && ctrl->time >= sel_time_min && ctrl->time <= sel_time_max) {
-                            drag_temporary_selection.insert(ctrl);
-                        }
-                    }//check next note.
-        }
-
-    } else if (drag_mode == DRAG_MODE_RESIZE && seq_type == SEQ_TYPE_NOTE) { //resizing do not exist within control sequencers
-        
-        NoteAtom* dragged_note = dynamic_cast<NoteAtom*>(drag_note_dragged);
-        if (snap && !(shift_key)) { //if snap & not shift key...
-            time = Snap(time);
-        }
-        double added_length = time-dragged_note->time-dragged_note->drag_beggining_length;
-
-        double note_min_len = 0.01;
-        if (snap && !(shift_key)) { //if snap & not shift key...
-            note_min_len = (double)1.0/container->owner->resolution;
-        }
-        double note_max_len = 1.0;
-        
-        std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
-        for (; it != selection.end(); it++) {
-            NoteAtom* note = dynamic_cast<NoteAtom*> (*it);
-            double temp_length = note->drag_beggining_length+added_length;
-            if(temp_length < note_min_len) temp_length = note_min_len;
-            else if(temp_length > note_max_len) temp_length = note_max_len;
-            note->length = temp_length;
-        }
-        Files::FileModified(); //Mark file as modified
-    }
-    RedrawAtoms();
-     */
 }
 
 bool PatternWidget::on_button_press_event(GdkEventButton* event){
@@ -969,177 +762,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
             }
             
         }
-    }//buttons_pressed = NONE
-    /*
-    
-    
-    if(event->button == 1) //LMB
-    {
-            if(!add_mode){
-                        Atom* found = NULL;
-                        int size = container->GetSize();
-                        if(seq_type == SEQ_TYPE_NOTE){
-                                             //Looking for notes...
-                                            for(int x = 0; x <size;x++){
-                                                NoteAtom* note = dynamic_cast<NoteAtom*>((*container)[x]);
-                                                if(note->pitch == line &&note->time < time && time < note->time+note->length){
-                                                    found = note;
-                                                    break;
-                                                }
-                                            }
-                        }else if(seq_type == SEQ_TYPE_CONTROL){
-                                              //Looking for control atoms...
-                                            for(int x = 0; x <size;x++){
-                                                ControllerAtom* ctrl = dynamic_cast<ControllerAtom*>((*container)[x]);
-                                                if(ctrl->value  + ctrl_Vsurrounding > value && ctrl->value  - ctrl_Vsurrounding < value &&  ctrl->time < timeE && ctrl->time > timeS ){
-                                                    found = ctrl;
-                                                    break;
-                                                }
-                                           }
-                        }
-                        switch(delete_mode){
-                            //==============
-                            case false:
-                            if(found == NULL){
-                                //clicked empty space, clear selection.
-                                if (event->state & (1 << 0) || event->state & (1 << 2)) {//shift or ctrl key was pressed...
-                                    //Do nothing, do not clear selection.
-                                } else {
-                                    //Empty space with no shift... clear selection.
-                                    selection.clear();
-                                    on_selection_changed.emit(selection.size());
-                                }
-                            }else{
-                                //clicked a note.
-                                if (event->state & (1 << 2)) {//ctrl key was pressed...
-                                    //we'll add the note to selection, unless it's already selected, then we de-select it.
-                                    std::set<Atom*>::iterator it= selection.find(found);
-                                     if(it != selection.end()) {
-                                         //it's already selected, then:
-                                         //REMOVING NOTE FROM SELECTION
-                                         selection.erase(it);
-
-                                         on_selection_changed.emit(selection.size());
-                                     }else{
-                                         //it was not selected, select it.
-                                         //ADDING NOTE TO SELECTION
-                                         selection.insert(found);
-
-                                         on_selection_changed.emit(selection.size());
-                                     }
-                                } else {//shift key was not pressed
-                                    std::set<Atom *, AtomComparingClass>::iterator it= selection.find(found);
-                                     if(it != selection.end()) 
-                                         //it's already selected, then:
-                                         ;
-                                     else{
-                                         //it was not selected
-                                         //SELECTING A NEW NOTE
-                                         selection.clear();
-                                         selection.insert(found);
-
-                                         on_selection_changed.emit(selection.size());
-                                     }
-                                }
-                            }
-                            break;
-                            //==============
-                            case true: //delete mode on!
-                                if(found != NULL){
-                                    container->Remove(found);
-                                }
-                            break;
-                            //==============
-                        }
-            }else{ //ADD MODE ON
-                double temp_time = time;
-                if(seq_type == SEQ_TYPE_NOTE){
-                            if (snap && !(event->state & (1 << 0))) {
-                                temp_time = SnapDown(temp_time);
-                            }
-                            double len = (double)1.0/container->owner->resolution;    
-                            NoteAtom* note = new NoteAtom(temp_time,len,line);
-                            if (event->state & (1 << 2)) note->velocity = 0; // If ctrl key was hold, add a quiet note
-                            container->Add(note);
-                            drag_in_progress=1;
-                            drag_mode=DRAG_MODE_RESIZE;
-                            drag_beggining_line = line;
-                            drag_beggining_time = time;
-                            drag_note_dragged = note;
-                            selection.clear();
-                            selection.insert(note);
-                            on_selection_changed.emit(selection.size());
-                }else if (seq_type == SEQ_TYPE_CONTROL){
-                            if (snap && !(event->state & (1 << 0))) {
-                                temp_time = Snap(temp_time); //fair snapping for control atoms!
-                            }
-                            ControllerAtom* ctrl = new ControllerAtom(temp_time,value);
-                            ctrl->slope_type = add_slope_type;
-                            container->Add(ctrl);
-                            drag_in_progress = 1;
-                            drag_mode=DRAG_MODE_MOVE_SELECTION;
-                            drag_beggining_value = value;
-                            drag_beggining_time = time;
-                            drag_note_dragged = ctrl;
-                            selection.clear();
-                            selection.insert(ctrl);
-                            on_selection_changed.emit(selection.size());
-                }
-                Files::FileModified();//Mark file as modified
-            }
-
-            RedrawAtoms();
-        
-        
-    }else if(event->button == 3){ //RMB
-        if(add_mode){
-            add_mode = 0;
-            on_add_mode_changed.emit();
-        }else if(delete_mode){
-            delete_mode = 0;
-            on_delete_mode_changed.emit();
-        }
-        drag_in_progress = 0;
-        
-        double temp_time = time;
-        if(seq_type == SEQ_TYPE_NOTE){
-                        if (snap && !(event->state & (1 << 0))) {
-                            temp_time = SnapDown(temp_time);
-                        }
-                        double len = (double) 1.0 / container->owner->resolution;
-                        NoteAtom* note = new NoteAtom(temp_time, len, line);
-                        if(event->state & (1 << 2)) note->velocity = 0; // If ctrl key was hold, add a quiet note
-                        container->Add(note);
-                        drag_in_progress = 1;
-                        drag_mode = DRAG_MODE_RESIZE;
-                        drag_beggining_line = line;
-                        drag_beggining_time = time;
-                        drag_note_dragged = note;
-                        selection.clear();
-                        selection.insert(note);
-                        on_selection_changed.emit(selection.size());
-        }else if (seq_type == SEQ_TYPE_CONTROL){
-                        if (snap && !(event->state & (1 << 0))) {
-                            temp_time = Snap(temp_time); //fair snapping for controllers!
-                        }
-                        ControllerAtom* ctrl = new ControllerAtom(temp_time,value);
-                        ctrl->slope_type = add_slope_type;
-                        container->Add(ctrl);
-                        drag_in_progress = 1;
-                        drag_mode=DRAG_MODE_MOVE_SELECTION;
-                        drag_beggining_value = value;
-                        drag_beggining_time = time;
-                        drag_note_dragged = ctrl;
-                        selection.clear();
-                        selection.insert(ctrl);
-                        on_selection_changed.emit(selection.size());
-
-        }
-        Files::FileModified(); //Mark file as modified
-        RedrawAtoms();
-        
     }
-     */
     return false;
 }
 
@@ -1231,7 +854,6 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
         case 0xffff: //delete
         case 0xff9f: //keypad delete
             DeleteSelected();
-           if(add_mode){ add_mode = 0; on_add_mode_changed.emit();}
             return true;
             break;
         case 0xff52: //up
@@ -1241,7 +863,6 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
             }else
                 MoveSelectionUp();
             
-           if(add_mode){ add_mode = 0; on_add_mode_changed.emit();}
             return true;
             break;
         case 0xff54: //down
@@ -1251,19 +872,16 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
             }else
                 MoveSelectionDown();
             
-           if(add_mode){ add_mode = 0; on_add_mode_changed.emit();}
             return true;
             break;
         case 0xff53: //right
             MoveSelectionRight();
             
-           if(add_mode){ add_mode = 0; on_add_mode_changed.emit();}
             return true;
             break;
         case 0xff51: //left
             MoveSelectionLeft();
             
-           if(add_mode){ add_mode = 0; on_add_mode_changed.emit();}
             return true;
             break;
         default:
