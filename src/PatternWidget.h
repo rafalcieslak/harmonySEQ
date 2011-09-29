@@ -155,6 +155,7 @@ private:
     double drag_time_offset_to_dragged_note;
     Atom* note_that_was_just_added_to_selection;
     Atom* last_clicked_note;
+    bool cancel_unselecting;
     enum DragModes{
         DRAG_MODE_MOVE_SELECTION,
         DRAG_MODE_SELECT_AREA,

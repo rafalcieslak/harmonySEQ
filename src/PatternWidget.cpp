@@ -679,12 +679,18 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                 button_pressed = LMB;
                 if(found != NULL){
                     //LMB on note
-                    //'clear selection and select only the clicked note (immidiatelly)'
-                *err << "selecting!\n";
-                    selection.clear();
-                    selection.insert(found);
-                    on_selection_changed.emit(selection.size());
-                    RedrawAtoms();
+                    //'clear selection and select only the clicked note'
+                    std::set<Atom*,AtomComparingClass>::iterator it = selection.find(found);
+                    if (it != selection.end()){
+                        //this note was already selected: no not unselect it
+                        
+                    }else{
+                        //this note wasn't selected, select only it
+                        selection.clear();
+                        selection.insert(found);
+                        on_selection_changed.emit(selection.size());
+                        RedrawAtoms();
+                    }
                 }else{
                     //LMB on empty space
                     //'create a new note'
@@ -727,7 +733,6 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
             }else{
                 if (event->button == 1) button_pressed = LMBs;
                 else if (event->button == 2) button_pressed = MMB;
-                *err << "LMB+S\n";
                 if(found != NULL){
                     //LMB + S  /  MMB on note
                     //'select the clicked note, or unselect it, if it was alreasy selected (need to remember the note is it was just selected in order to not unselect it on button_release event)'
@@ -741,6 +746,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                         on_selection_changed.emit(selection.size());
                         RedrawAtoms();
                     }
+                    cancel_unselecting = 0;
                 }else{
                     //LMB + S  / MMB on empty space
                     //'-'
@@ -752,7 +758,6 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
             if (found != NULL) {
                 //RMB on note
                 //'delete the clicked note'
-                *err << "removing!\n";
                 container->Remove(found);
                 std::set<Atom*,AtomComparingClass>::iterator it = selection.find(found);
                 if (it != selection.end()){
@@ -950,13 +955,13 @@ bool PatternWidget::on_button_release_event(GdkEventButton* event){
     if(button_pressed == NONE) return false;
     
     if (event->button == 1 || event->button == 2){
-        if (button_pressed == LMB && event->button == 1){
+        if ((button_pressed == LMB) && event->button == 1){
             button_pressed = NONE;
         }else if((button_pressed == LMBs && event->button == 1) || (button_pressed == MMB && event->button == 2)){
             button_pressed = NONE;
             if(last_clicked_note != NULL){
                 std::set<Atom*,AtomComparingClass>::iterator it = selection.find(last_clicked_note);
-                if (it != selection.end()){
+                if (it != selection.end()&&!cancel_unselecting){
                     //was selected, unselecting
                     selection.erase(it);
                     if (note_that_was_just_added_to_selection != NULL) selection.insert(note_that_was_just_added_to_selection);
