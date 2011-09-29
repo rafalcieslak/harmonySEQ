@@ -155,6 +155,7 @@ private:
     double drag_time_offset_to_dragged_note;
     Atom* note_that_was_just_added_to_selection;
     Atom* last_clicked_note;
+    Atom* select_only_this_atom_on_LMB_release;
     bool cancel_unselecting;
     enum DragModes{
         DRAG_MODE_MOVE_SELECTION,
@@ -185,7 +186,7 @@ private:
     SeqType_t seq_type;
     
     void InitDrag();
-    void ProcessDrag(double x, double y,bool shift_key=false);
+    void ProcessDrag(double x, double y);
     
     void MoveSelectionUp();
     void MoveSelectionDown();

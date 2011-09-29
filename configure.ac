@@ -18,7 +18,7 @@ AC_PROG_CC
 AC_PROG_CPP
 
 CXXFLAGS="-O3"
-#CXXFLAGS="-g -O0"
+CXXFLAGS="-g -O0"
 
 osc_enabled=true
 

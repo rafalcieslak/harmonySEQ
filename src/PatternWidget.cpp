@@ -68,6 +68,7 @@ PatternWidget::PatternWidget(){
     
     button_pressed = NONE;
     drag_in_progress = 0;
+    select_only_this_atom_on_LMB_release = NULL;
 }
 
 PatternWidget::~PatternWidget(){
@@ -431,24 +432,61 @@ void PatternWidget::InitDrag(){
     if(button_pressed == LMB){
         
         drag_in_progress = 1;
+        select_only_this_atom_on_LMB_release = NULL;
+        
         if(drag_note_dragged != NULL){
             //check what we're dragging!
             if(seq_type == SEQ_TYPE_CONTROL){
                 drag_mode = DRAG_MODE_MOVE_SELECTION;
-                
+                drag_beggining_line = line;
+                drag_beggining_time = time;
+                drag_beggining_value = value;
+                drag_note_dragged = drag_note_dragged;
+                drag_time_offset_to_dragged_note = drag_beggining_time - drag_note_dragged->time;
+                //Store note offsets...
+                std::set<Atom*>::iterator it2 = selection.begin();
+                for (; it2 != selection.end(); it2++) {
+                    Atom* atm = *it2;
+                    atm->drag_offset_time = atm->time - time;
+                    ControllerAtom* ctrl = dynamic_cast<ControllerAtom*> (atm);
+                    ctrl->drag_offset_value = ctrl->value - value;
+                }
             }else if(seq_type == SEQ_TYPE_NOTE){
                 NoteAtom* note = dynamic_cast<NoteAtom*> (drag_note_dragged);
                 double note_start_x = note->time*width;
                 double note_end_x = (note->time+note->length)*width;
-                double wl = note->pitch-0.5-line_d;
+                double wl = note->pitch+0.5-line_d;
                 if(wl>0 && 2.0*wl*handle_size >= note_end_x - drag_beggining_x){ 
+                    //dragging handle
                     drag_mode = DRAG_MODE_RESIZE;
-                    
+                    drag_beggining_line = line;
+                    drag_beggining_time = time;
+                    //Store note offsets...
+                    std::set<Atom*>::iterator it = selection.begin();
+                    for (; it != selection.end(); it++) {
+                        NoteAtom* note = dynamic_cast<NoteAtom*> (*it);
+                        note->drag_beggining_length = note->length;
+                    }
                 }else if(drag_beggining_x < note_start_x + 10.0){
+                    //dragging bar
                     drag_mode = DRAG_MODE_CHANGE_VELOCITY;
                     
                 }else{
+                    //dragging body
                     drag_mode = DRAG_MODE_MOVE_SELECTION;
+                    drag_beggining_line = line;
+                    drag_beggining_time = time;
+                    drag_beggining_value = value;
+                    drag_note_dragged = drag_note_dragged;
+                    drag_time_offset_to_dragged_note = drag_beggining_time - drag_note_dragged->time;
+                    //Store note offsets...
+                    std::set<Atom*>::iterator it2 = selection.begin();
+                    for (; it2 != selection.end(); it2++) {
+                        Atom* atm = *it2;
+                        atm->drag_offset_time = atm->time - time;
+                        NoteAtom* note = dynamic_cast<NoteAtom*> (atm);
+                        note->drag_offset_line = note->pitch - line;
+                    }
                     
                 }
             }
@@ -531,7 +569,7 @@ void PatternWidget::InitDrag(){
      */
 }
 
-void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
+void PatternWidget::ProcessDrag(double x, double y){
     
     Gtk::Allocation allocation = get_allocation();
     const int width = allocation.get_width();
@@ -543,7 +581,56 @@ void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
     int value = 127 - y *(double)127.0/ (internal_height);
     
     if (drag_mode == DRAG_MODE_MOVE_SELECTION) {
-        
+
+        Atom* dragged_note = dynamic_cast<Atom*> (drag_note_dragged);
+        double temp_time = time + dragged_note->drag_offset_time;
+        temp_time = temp_time - (int) temp_time; //wrap to 0.0 - 0.9999...
+        double snapped_time = temp_time;
+        if (snap) { //if snap & not shift key...
+            snapped_time = Snap(temp_time);
+        }
+        //Remembers how much was the dragged note moved due to snapping feature, so that we can move other notes by the same distance.
+        double snap_offset = snapped_time - temp_time;
+        // *dbg << snap_offset << ENDL;
+
+        std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
+        std::set<Atom *, AtomComparingClass> resulting_selection;
+        if (seq_type == SEQ_TYPE_NOTE) {
+            for (; it != selection.end(); it++) {
+                NoteAtom* note = dynamic_cast<NoteAtom*> (*it);
+                int temp_pitch = line + note->drag_offset_line;
+                temp_time = time + note->drag_offset_time + snap_offset;
+                temp_pitch = temp_pitch % 6; //wrap to 0-5;
+                temp_time = temp_time - (int) temp_time; //wrap to 0.0 - 0.9999...
+                if (temp_pitch < 0) temp_pitch += 6;
+                if (temp_time < 0) temp_time += 1.0;
+                note->pitch = temp_pitch;
+                note->time = temp_time;
+                resulting_selection.insert(note);
+                // *dbg << " " << note->pitch << " " << note->time <<ENDL;
+            }
+        } else if (seq_type == SEQ_TYPE_CONTROL) {
+            for (; it != selection.end(); it++) {
+                ControllerAtom* ctrl = dynamic_cast<ControllerAtom*> (*it);
+                int temp_value = value + ctrl->drag_offset_value;
+                temp_time = time + ctrl->drag_offset_time + snap_offset;
+                if (temp_value > 127) temp_value = 127;
+                else if (temp_value < 0) temp_value = 0;
+                if (temp_time != 1.0) //leave a possibility to put control atoms at 1.0, may be useful if one wants to add an immidiate slope at bar's start
+                    temp_time = temp_time - (int) temp_time; //wrap to 0.0 - 0.9999...
+                if (temp_time < 0) temp_time += 1.0;
+                ctrl->value = temp_value;
+                ctrl->time = temp_time;
+                resulting_selection.insert(ctrl);
+                // *dbg << " " << note->pitch << " " << note->time <<ENDL;
+            }
+        }
+        //important!
+        selection = resulting_selection;
+        container->Sort();
+        Files::FileModified(); //Mark file as modified
+        //additionally:
+        if (seq_type == SEQ_TYPE_CONTROL) on_selection_changed.emit(selection.size()); //this will update the value spinbutton
         
     } else if (drag_mode == DRAG_MODE_SELECT_AREA) {
         drag_current_x = x;
@@ -591,6 +678,27 @@ void PatternWidget::ProcessDrag(double x, double y,bool shift_key){
         
     } else if (drag_mode == DRAG_MODE_RESIZE && seq_type == SEQ_TYPE_NOTE) { //resizing do not exist within control sequencers
 
+        NoteAtom* dragged_note = dynamic_cast<NoteAtom*> (drag_note_dragged);
+        if (snap) { //if snap
+            time = Snap(time);
+        }
+        double added_length = time - dragged_note->time - dragged_note->drag_beggining_length;
+
+        double note_min_len = 0.01;
+        if (snap) { //if snap
+            note_min_len = (double) 1.0 / container->owner->resolution;
+        }
+        double note_max_len = 1.0;
+
+        std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
+        for (; it != selection.end(); it++) {
+            NoteAtom* note = dynamic_cast<NoteAtom*> (*it);
+            double temp_length = note->drag_beggining_length + added_length;
+            if (temp_length < note_min_len) temp_length = note_min_len;
+            else if (temp_length > note_max_len) temp_length = note_max_len;
+            note->length = temp_length;
+        }
+        Files::FileModified(); //Mark file as modified
     }
     
     RedrawAtoms();
@@ -757,6 +865,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
     }
     
     drag_note_dragged = found;
+    select_only_this_atom_on_LMB_release = NULL;
     
     if(button_pressed == NONE){
         last_clicked_note = found;
@@ -768,10 +877,10 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                     //'clear selection and select only the clicked note'
                     std::set<Atom*,AtomComparingClass>::iterator it = selection.find(found);
                     if (it != selection.end()){
-                        //this note was already selected: do not unselect it
-                        
+                        //this note was already selected: do not unselect it yet
+                        select_only_this_atom_on_LMB_release = found;
                     }else{
-                        //this note wasn't selected, select only it
+                        //this note wasn't selected, select only it (immidiatelly)
                         selection.clear();
                         selection.insert(found);
                         on_selection_changed.emit(selection.size());
@@ -1055,6 +1164,11 @@ bool PatternWidget::on_button_release_event(GdkEventButton* event){
         if ((button_pressed == LMB) && event->button == 1){
             //LMB ended
             button_pressed = NONE;
+            if(select_only_this_atom_on_LMB_release != NULL){
+                selection.clear();
+                selection.insert(select_only_this_atom_on_LMB_release);
+                on_selection_changed.emit(selection.size());
+            }
             
         }else if((button_pressed == LMBs && event->button == 1) || (button_pressed == MMB && event->button == 2)){
             //LMBs/MMB ended
@@ -1084,30 +1198,6 @@ bool PatternWidget::on_button_release_event(GdkEventButton* event){
 
     RedrawAtoms();
     
-    /*
-    if(event->button == 1){
-        if(!drag_in_progress){
-            
-        }else{
-            drag_in_progress = 0;
-            if(drag_mode == DRAG_MODE_SELECT_AREA){
-                //Finished selection by dragging.
-                std::set<Atom *, AtomComparingClass>::iterator it = drag_temporary_selection.begin();
-                for(;it!=drag_temporary_selection.end();it++){
-                    selection.insert(*it);
-                }
-                drag_temporary_selection.clear();
-                
-                on_selection_changed.emit(selection.size());
-                RedrawAtoms();
-            }else if (drag_mode == DRAG_MODE_MOVE_SELECTION) {
-                container->Sort();
-            }
-        }
-    }else if(event->button == 3){
-        if(drag_in_progress) drag_in_progress = 0;
-    }
-    */
     return false;
 }
 
@@ -1124,11 +1214,11 @@ bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
             const int distance = 3;
             if (event->x > drag_beggining_x + distance || event->y > drag_beggining_y + distance || event->x < drag_beggining_x - distance || event->y < drag_beggining_y - distance) {
                 InitDrag();
-                ProcessDrag(event->x, event->y, (event->state & (1 << 0)));
+                ProcessDrag(event->x, event->y);
             }
         }
     }else{ //drag in process
-        ProcessDrag(event->x,event->y,(event->state & (1 << 0)));
+        ProcessDrag(event->x,event->y);
     }
 
     return false;
@@ -1363,17 +1453,7 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
                               else cr_atoms_context->set_source_rgb(0.0,0.0,0.4);
                               cr_atoms_context->stroke();
                                   
-                              if(note->time + note->length > 1.0){
-                                  //draw shade
-                                  x1 -= width;
-                                 cr_atoms_context->rectangle(x1+1.5,y1+1.5,w-3,h-3);
-                                 cr_atoms_context->set_source_rgba(0.8,0.8,0.8,af/0.75);
-                                 cr_atoms_context->fill_preserve();
-                                 cr_atoms_context->set_source_rgb(0.7,0.7,0.7);
-                                 cr_atoms_context->stroke();
-                              }
-
-                              cr_atoms_context->save();
+                              //cr_atoms_context->save();
                               {
                                   cr_atoms_context->rectangle(x1+1.5,y1+1.5,w-3,h-3);
                                   cr_atoms_context->clip();
@@ -1394,9 +1474,20 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
                                   if(selected) cr_atoms_context->set_source_rgb(0.4,0.0,0.0);
                                   else cr_atoms_context->set_source_rgb(0.0,0.0,0.4);
                                   cr_atoms_context->fill();
+                                  
+                                  cr_atoms_context->reset_clip();
                               }  
-                              cr_atoms_context->restore();
-                              
+                              //cr_atoms_context->restore();
+
+                             if (note->time + note->length > 1.0) {
+                                 //draw shade
+                                 x1 -= width;
+                                 cr_atoms_context->rectangle(x1 + 1.5, y1 + 1.5, w - 3, h - 3);
+                                 cr_atoms_context->set_source_rgba(0.8, 0.8, 0.8, af*0.75); 
+                                 cr_atoms_context->fill_preserve();
+                                 cr_atoms_context->set_source_rgb(0.7, 0.7, 0.7);
+                                 cr_atoms_context->stroke(); 
+                             }
                         }
       }else if (seq_type == SEQ_TYPE_CONTROL){
                         if(size!=0) //if there are no atoms, draw nothing
