@@ -724,10 +724,10 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
     
     if(!do_not_lock_threads)  gdk_threads_leave(); //see note on this functions beggining.
 
-    *dbg << "will drain now...\n";
+    *dbg << "harmonySEQ will now try to drain ALSA midi output. If it hangs right after outputting this message, this means ALSA has done something wrong.\n";
     /**Note, that if there is A LOT of notes on the queue, the following call will take some time. However, it does not use CPU, and we have already unlocked gtk threads, so it can be safely called.*/
     snd_seq_drain_output(seq_handle);
-    *dbg << "done.\n";
+    *dbg << "Output succesfully drained.\n";
     //T.elapsed(t);
     //*err <<"end + drain :" << (int)t << ENDL;
     
