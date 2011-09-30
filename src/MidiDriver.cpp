@@ -92,7 +92,7 @@ void MidiDriver::Open(){
     
     //Set client name
     snd_seq_set_client_name(seq_handle,"harmonySEQ");
-    snd_seq_set_output_buffer_size(seq_handle,131072);
+    snd_seq_set_output_buffer_size(seq_handle,(1<<22));
     
     //Try to create the port we use for MIDI output
     output_port = snd_seq_create_simple_port(seq_handle,"harmonySEQ output",SND_SEQ_PORT_CAP_READ|SND_SEQ_PORT_CAP_SUBS_READ,SND_SEQ_PORT_TYPE_APPLICATION);
@@ -220,7 +220,7 @@ void MidiDriver::InitQueue(){
     //Asks ALSA for a new queue and get a handle to it (queueid).
     queueid = snd_seq_alloc_named_queue(seq_handle,"harmonySEQ queue");
     //Set maximum number of event on the queue to 8192 - should be enough.
-    snd_seq_set_client_pool_output(seq_handle,16384);//8192);
+    snd_seq_set_client_pool_output(seq_handle,65536);//8192);
     //Clear the ticks counter.
     tick = 0;
 }
