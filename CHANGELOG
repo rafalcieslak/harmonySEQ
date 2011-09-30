@@ -1,9 +1,11 @@
 harmonyseq 0.16 "ranpiollo"
-	- Implemented a piano-roll interface for sequencers.
+	- Implemented an advanced piano-roll interface for sequencers.
 	- Added a new type of sequencer - control sequencers, that are used to output MIDI event messages.
 	- Added support for custom lengths and resolutions (this allows to play melodies in any time signature).
+	- Added chart-like display for control sequencers, which makes it easy to edit their output.
 	- Velocity is now applied to all notes separately.
-	- German translation thanks to Jan Fuchsman.
+	- German translation, thanks to Jan Fuchsman.
+	- Basic Japanese translation, by Nel Pogorzelska.
 	- New system for opening files, which allows to automatically convert older files.
 	- Added possibility to hide chord's detailed settings.
 	- Added some new chords.
