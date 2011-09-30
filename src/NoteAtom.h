@@ -42,6 +42,9 @@ public:
     
     /**Used to store/remember this note's length at drag's beggining*/
     double drag_beggining_length;
+    
+    /**Used to store&remember note's velocity at drag's beggining*/
+    int drag_beggining_velocity;
 private:
 
 };

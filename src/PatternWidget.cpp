@@ -439,6 +439,12 @@ void PatternWidget::InitDrag(){
                     //dragging bar
                     drag_mode = DRAG_MODE_CHANGE_VELOCITY;
                     
+                    //Store velocities
+                    std::set<Atom*>::iterator it = selection.begin();
+                    for (; it != selection.end(); it++) {
+                        NoteAtom* note = dynamic_cast<NoteAtom*> (*it);
+                        note->drag_beggining_velocity = note->velocity;
+                    }
                 }else{
                     //dragging body
                     drag_mode = DRAG_MODE_MOVE_SELECTION;
@@ -610,6 +616,18 @@ void PatternWidget::ProcessDrag(double x, double y){
             if (temp_length < note_min_len) temp_length = note_min_len;
             else if (temp_length > note_max_len) temp_length = note_max_len;
             note->length = temp_length;
+        }
+        Files::FileModified(); //Mark file as modified
+    } else if (drag_mode == DRAG_MODE_CHANGE_VELOCITY && seq_type == SEQ_TYPE_NOTE) { //velocity change do not exist within control sequencers
+        double vel_added = (drag_beggining_y - y);
+        
+        std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
+        for (; it != selection.end(); it++) {
+            NoteAtom* note = dynamic_cast<NoteAtom*> (*it);
+            int temp_vel = note->drag_beggining_velocity + vel_added;
+            if (temp_vel < 0) temp_vel = 0;
+            else if (temp_vel > 127) temp_vel = 127;
+            note->velocity = temp_vel;
         }
         Files::FileModified(); //Mark file as modified
     }
@@ -810,9 +828,11 @@ bool PatternWidget::on_button_release_event(GdkEventButton* event){
     else if(button_pressed == RMB && event->button == 3){
         //RMB ended
         button_pressed = NONE;
-        if(drag_in_progress == 1) DeleteSelected();
-        selection.clear();
-        on_selection_changed.emit(selection.size());
+        if(drag_in_progress == 1){
+                DeleteSelected();
+                selection.clear();
+                on_selection_changed.emit(selection.size());
+        }
     }
     
     //Reset drag flag.
