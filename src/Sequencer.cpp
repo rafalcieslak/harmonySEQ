@@ -81,7 +81,6 @@ Gtk::TreeModel::Row clone_sequencer(int orig){
     seqHandle h = RequestNewSeqHandle(n);
     new_seq->MyHandle = h;
     seqVector.push_back(new_seq);
-    
     return mainwindow->AddSequencerRow(n);
 
 }
@@ -121,6 +120,8 @@ Sequencer::Sequencer(const Sequencer& orig) {
     length_denominator = orig.length_denominator;
     play_from_here_marker = orig.play_from_here_marker;
     play_once_phase = 0;
+    //resetting pattern's owner:
+    for(unsigned int x = 0; x < patterns.size();x++) patterns[x].SetOwner(this);
 }
 
 Sequencer::~Sequencer() {
