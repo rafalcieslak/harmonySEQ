@@ -240,8 +240,9 @@ SequencerWidget::SequencerWidget()
     wLengthNumerator.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnLengthChanged));
     wLengthDenominator.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnLengthChanged));
     
-    wViewport->signal_scroll_event().connect(sigc::mem_fun(*this,&SequencerWidget::OnPatternMouseScroll));
-
+    pattern_widget.on_scroll_left.connect(mem_fun(*this,&SequencerWidget::OnPatternWidgetScrollLeft));
+    pattern_widget.on_scroll_right.connect(mem_fun(*this,&SequencerWidget::OnPatternWidgetScrollRight));
+    
     if(icon_slope_flat){
         wImageSlopeFlat.set(icon_slope_flat);
         wImageSlopeLinear.set(icon_slope_linear);
@@ -804,28 +805,23 @@ void SequencerWidget::SetOnOffColour(OnOffColour c){
     }
 }
 
-bool SequencerWidget::OnPatternMouseScroll(GdkEventScroll* e){
-    if(!(e->state & (1<<2))){//ctrl key was not pressed...
-        if(e->direction == GDK_SCROLL_DOWN){
-            double inc  = wViewport->get_hadjustment()->get_step_increment();
-             wViewport->get_hadjustment()->set_value(-inc + wViewport->get_hadjustment()->get_value());
-        }else if (e->direction == GDK_SCROLL_UP){
-            double inc  = wViewport->get_hadjustment()->get_step_increment();
-            if(!(wViewport->get_hadjustment()->get_value() + wViewport->get_hadjustment()->get_page_size() + inc > wViewport->get_hadjustment()->get_upper() ))
-                wViewport->get_hadjustment()->set_value(inc + wViewport->get_hadjustment()->get_value());
-            else
-                //too high value, trimming to desired
-                wViewport->get_hadjustment()->set_value( wViewport->get_hadjustment()->get_upper() -  wViewport->get_hadjustment()->get_page_size());
-        }
-        if ( wViewport->get_hadjustment()->get_value() >  wViewport->get_hadjustment()->get_upper() -  wViewport->get_hadjustment()->get_page_size())  wViewport->get_hadjustment()->set_value( wViewport->get_hadjustment()->get_upper() -  wViewport->get_hadjustment()->get_page_size());
-    }else{ //Ctrl key pressed, we'll zoom in/out
-        if(e->direction == GDK_SCROLL_UP){
-            pattern_widget.ZoomIn();
-        }else if (e->direction == GDK_SCROLL_DOWN){
-            pattern_widget.ZoomOut();
-        }
-    }
-    return true;
+void SequencerWidget::OnPatternWidgetScrollLeft(){
+    double inc = wViewport->get_hadjustment()->get_step_increment();
+    wViewport->get_hadjustment()->set_value(-inc + wViewport->get_hadjustment()->get_value());
+    if (wViewport->get_hadjustment()->get_value() > wViewport->get_hadjustment()->get_upper() - wViewport->get_hadjustment()->get_page_size()) wViewport->get_hadjustment()->set_value(wViewport->get_hadjustment()->get_upper() - wViewport->get_hadjustment()->get_page_size());
+
+}
+
+void SequencerWidget::OnPatternWidgetScrollRight(){
+    double inc = wViewport->get_hadjustment()->get_step_increment();
+    if (!(wViewport->get_hadjustment()->get_value() + wViewport->get_hadjustment()->get_page_size() + inc > wViewport->get_hadjustment()->get_upper()))
+        wViewport->get_hadjustment()->set_value(inc + wViewport->get_hadjustment()->get_value());
+    else
+        //too high value, trimming to desired
+        wViewport->get_hadjustment()->set_value(wViewport->get_hadjustment()->get_upper() - wViewport->get_hadjustment()->get_page_size());
+    
+    if (wViewport->get_hadjustment()->get_value() > wViewport->get_hadjustment()->get_upper() - wViewport->get_hadjustment()->get_page_size()) wViewport->get_hadjustment()->set_value(wViewport->get_hadjustment()->get_upper() - wViewport->get_hadjustment()->get_page_size());
+
 }
 
 /*

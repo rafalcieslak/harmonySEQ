@@ -84,6 +84,9 @@ public:
     
     sigc::signal<void> on_slope_type_needs_additional_refreshing;
     
+    sigc::signal<void> on_scroll_left;
+    sigc::signal<void> on_scroll_right;
+    
 protected:
     //Override default signal handler:
    virtual bool on_expose_event(GdkEventExpose* event);
@@ -95,6 +98,8 @@ protected:
    virtual bool on_leave_notify_event(GdkEventCrossing* event);
    
    virtual bool on_key_press_event(GdkEventKey* event);
+   
+   virtual bool on_scroll_event(GdkEventScroll* event);
 private:
     
     void Redraw();

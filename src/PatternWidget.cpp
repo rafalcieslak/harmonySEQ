@@ -45,6 +45,7 @@ PatternWidget::PatternWidget(){
     snap = true;
     add_slope_type = SLOPE_TYPE_LINEAR;
     add_events(Gdk::BUTTON_PRESS_MASK);
+    add_events(Gdk::SCROLL_MASK);
     add_events(Gdk::BUTTON_RELEASE_MASK);
     add_events(Gdk::BUTTON1_MOTION_MASK);
     add_events(Gdk::BUTTON2_MOTION_MASK);
@@ -395,8 +396,6 @@ void PatternWidget::InitDrag(){
     int line = line_d;
     double time = (double) drag_beggining_x / (double) width;
     int value = 127 - drag_beggining_y *(double)127.0/ (internal_height);
-    double timeS  = ((double) drag_beggining_x -(double)crtl_Tsurrounding)/ (double) width;
-    double timeE  = ((double) drag_beggining_x +(double)crtl_Tsurrounding)/ (double) width;
     
     if(button_pressed == LMB){
         
@@ -761,7 +760,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                 RedrawAtoms();
             }
             
-        }
+        } 
     }
     return false;
 }
@@ -889,6 +888,69 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
             return false;
             break;
     }
+    return false;
+}
+
+bool PatternWidget::on_scroll_event(GdkEventScroll* e){
+
+    Gtk::Allocation allocation = get_allocation();
+    const int width = allocation.get_width();
+    //const int height = allocation.get_height();
+    int line = 6 - e->y / (internal_height / 6);
+    double time = (double) e->x / (double) width;
+    
+    //Checking whether scrolled place was note or an empty space.
+    Atom* found = NULL;
+    int size = container->GetSize();
+    if (seq_type == SEQ_TYPE_NOTE) {
+        //Looking for notes...
+        for (int x = 0; x < size; x++) {
+            NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[x]);
+            if (note->pitch == line && note->time < time && time < note->time + note->length) {
+                found = note;
+                break;
+            }
+        }
+    } // don'/t look for ctrl atoms, if that's a ctrl seq we'll never adjust velocity.
+    
+    if (e->state & (1 << 2)) //if ctrl key is pressed...
+    {
+                if(e->direction == GDK_SCROLL_UP){
+                    ZoomIn();
+                }else if (e->direction == GDK_SCROLL_DOWN){
+                    ZoomOut();
+                }
+    }else{ //ctrl key not pressed            
+        if (found != NULL) {//scrolled a note
+            NoteAtom* note = dynamic_cast<NoteAtom*> (found);
+            if (e->direction == GDK_SCROLL_DOWN) {
+                if (selection.empty() || selection.find(found) == selection.end()) {
+                    note->velocity -= 8;
+                    if (note->velocity < 0) note->velocity = 0;
+                    on_selection_changed.emit(selection.size());
+                } else {
+                    DecreaseSelectionVelocity(8);
+                }
+                RedrawAtoms();
+            } else if (e->direction == GDK_SCROLL_UP) {
+                if (selection.empty()|| selection.find(found) == selection.end()) {
+                    note->velocity += 8;
+                    if (note->velocity > 127) note->velocity = 127;
+                    on_selection_changed.emit(selection.size());
+                } else {
+                    IncreaseSelectionVelocity(8);
+                }
+                RedrawAtoms();
+            }
+        } else { //empty space scrolled, we'll scroll view
+            if (e->direction == GDK_SCROLL_UP) {
+                on_scroll_left.emit();
+            } else if (e->direction == GDK_SCROLL_DOWN) {
+                on_scroll_right.emit();
+            }
+        }
+    }
+    
     return false;
 }
 

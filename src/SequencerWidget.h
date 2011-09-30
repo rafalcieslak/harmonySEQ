@@ -121,7 +121,8 @@ private:
     void OnNameEdited();
     void OnPlayOnceButtonClicked();
     void OnClearPatternClicked();
-    bool OnPatternMouseScroll(GdkEventScroll * e);
+    void OnPatternWidgetScrollLeft();
+    void OnPatternWidgetScrollRight();
     void OnSnapClicked();
     void OnShowChordButtonClicked();
     void OnControllerChanged();
