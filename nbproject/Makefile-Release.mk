@@ -40,9 +40,9 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/main.o \
 	${OBJECTDIR}/_ext/1045285602/OSC.o \
 	${OBJECTDIR}/src/EventGUI.o \
-	${OBJECTDIR}/src/NoteAtom.o \
 	${OBJECTDIR}/src/Chord.o \
 	${OBJECTDIR}/src/ActionGUI.o \
+	${OBJECTDIR}/src/NoteAtom.o \
 	${OBJECTDIR}/src/Sequencer.o \
 	${OBJECTDIR}/src/SequencerWidget.o \
 	${OBJECTDIR}/src/Atom.o \
@@ -118,11 +118,6 @@ ${OBJECTDIR}/src/EventGUI.o: src/EventGUI.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/EventGUI.o src/EventGUI.cpp
 
-${OBJECTDIR}/src/NoteAtom.o: src/NoteAtom.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/NoteAtom.o src/NoteAtom.cpp
-
 ${OBJECTDIR}/src/Chord.o: src/Chord.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
@@ -132,6 +127,11 @@ ${OBJECTDIR}/src/ActionGUI.o: src/ActionGUI.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/ActionGUI.o src/ActionGUI.cpp
+
+${OBJECTDIR}/src/NoteAtom.o: src/NoteAtom.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.cc) -O3 -s -I. -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/NoteAtom.o src/NoteAtom.cpp
 
 ${OBJECTDIR}/src/Sequencer.o: src/Sequencer.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

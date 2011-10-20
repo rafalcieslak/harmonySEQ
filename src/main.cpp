@@ -19,7 +19,7 @@
 
 #include <gtkmm.h>
 #include <getopt.h>
-
+#include "main.h"
 #define I_DO_NOT_WANT_EXTERNS_FROM_GLOBAL_H
 #include "global.h"
 #undef I_DO_NOT_WANT_EXTERNS_FROM_GLOBAL_H
@@ -45,6 +45,7 @@ error* err;     //see above
 MidiDriver* midi;
 MainWindow* mainwindow;
 SettingsWindow* settingswindow;
+    threadb* Th;
 int passing_midi; //states whether all midi events are passed through, or not.
 Glib::ustring file;
 std::map<Glib::ustring, int> keymap_stoi; //map used for keyname -> id conversion
@@ -74,26 +75,6 @@ static struct option long_options[]={
     {0,0,0,0}
 
 };
-
-// <editor-fold defaultstate="collapsed" desc="thread classes">
-
-/** Thread-related magic.*/
-class threadb : public sigc::trackable {
-public:
-    threadb();
-    ~threadb();
-    Glib::Mutex mutex_;
-    sigc::signal<void> some_signal;
-    void th1();
-    void th2();
-    bool locked;
-};
-
-threadb::threadb() {
-}
-
-threadb::~threadb() {
-}// </editor-fold>
 
 /**Prepares both keymaps*/
 void InitKeyMap()
@@ -139,6 +120,12 @@ void InitNoteMap(){
     notemap[10] = "A#";
     notemap[11] = "H";
     
+}
+
+threadb::threadb() {
+}
+
+threadb::~threadb() {
 }
 
 /**The function that is run, when thread 1 starts.
@@ -372,11 +359,12 @@ int main(int argc, char** argv) {
     //At the beggining, file is not modified.
     Files::SetFileModified(0);
 
-    //Starting an instance of the threads class...
-    threadb Th;
+    //Start thread class...
+    Th = new threadb;
+    
     //And creating both threads.
-    Glib::Thread::create(sigc::mem_fun(Th, &threadb::th1), 0,true,1,Glib::THREAD_PRIORITY_URGENT);
-    Glib::Thread::create(sigc::mem_fun(Th, &threadb::th2),0, true,1,Glib::THREAD_PRIORITY_LOW);
+    Glib::Thread::create(sigc::mem_fun(*Th, &threadb::th1), 0,true,1,Glib::THREAD_PRIORITY_URGENT);
+    Glib::Thread::create(sigc::mem_fun(*Th, &threadb::th2),0, true,1,Glib::THREAD_PRIORITY_LOW);
 
     //Wait for signal to exit the program
     while (running == 1)

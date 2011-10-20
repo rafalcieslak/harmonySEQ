@@ -29,7 +29,9 @@
 #include "ControllerAtom.h"
 #include "Configuration.h"
 #include "Files.h"
+#include "main.h"
 
+extern threadb* Th;
 int resolution_hints[65] = {1,1,2,3,2,5,3,7,4,3,5,11,3,13,7,5,4,17,6,19,5,7,11,23,6,5,13,9,7,29,5,31,4,
                                                                11,17,5,6,37,19,39,10,41,6,43,11,7,23,47,6,49,5,51,13,53,27,11,7,57,29,59,6,61,31,63,8};
 
@@ -57,7 +59,7 @@ PatternWidget::PatternWidget(){
     cr_atoms_surface = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32,2400,300);
     cr_atoms_context = Cairo::Context::create(cr_atoms_surface); 
     cr_grid_surface = Cairo::ImageSurface::create(Cairo::FORMAT_RGB24,2400,300);
-    cr_grid_context = Cairo::Context::create(cr_grid_surface);  
+    cr_grid_context = Cairo::Context::create(cr_grid_surface);
     cr_diodes_surface = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32,2400,300);
     cr_diodes_context = Cairo::Context::create(cr_diodes_surface);
     grid_lock = 0;
@@ -75,6 +77,7 @@ PatternWidget::PatternWidget(){
 }
 
 PatternWidget::~PatternWidget(){
+    AllDiodesOff(); //to free diode's memory space
 }
 
 void PatternWidget::SetInternalHeight(int h){
@@ -983,13 +986,24 @@ bool PatternWidget::on_scroll_event(GdkEventScroll* e){
 void PatternWidget::AllDiodesOff(){
     for(std::list<DiodeMidiEvent*>::iterator it = active_diodes.begin();it != active_diodes.end();it++) delete *it;
     active_diodes.clear();
+    RedrawDiodes();
 }
 
-void PatternWidget::LightUpDiode(DiodeMidiEvent diodev){
+DiodeMidiEvent* PatternWidget::LightUpDiode(DiodeMidiEvent diodev){
     //*err << diodev.time << ", " << diodev.value << ", " << diodev.color << ENDL;
-    active_diodes.push_back(new DiodeMidiEvent(diodev));
+    DiodeMidiEvent* diode_ptr = new DiodeMidiEvent(diodev);
+    active_diodes.push_back(diode_ptr);
+    Glib::signal_timeout().connect(sigc::bind<DiodeMidiEvent *>(sigc::mem_fun(*this, &PatternWidget::DimDiode), diode_ptr), 250);
+    RedrawDiodes();
+    return diode_ptr;
 }
 
+bool PatternWidget::DimDiode(DiodeMidiEvent* diode_ptr){
+    active_diodes.remove(diode_ptr);
+    delete diode_ptr;
+    RedrawDiodes();
+    return false; //do not repeat timeout
+}
 //=======================DRAWING==============
 
 bool PatternWidget::on_expose_event(GdkEventExpose* event){
@@ -1049,21 +1063,54 @@ void PatternWidget::RedrawDiodes(){
         man_i_wanted_to_redraw_diodes_but_it_was_locked_could_you_please_do_it_later_for_me = 1;
         return; //do not draw too ofter!
     }
-
+    
+    Th->mutex_.lock();
+    
+    Gtk::Allocation allocation = get_allocation();
+    const double width = allocation.get_width();
+    
     //clearing...
     cr_diodes_context->save();
     cr_diodes_context->set_source_rgba(0.0, 0.0, 0.0, 0.0);
     cr_diodes_context->set_operator(Cairo::OPERATOR_SOURCE);
     cr_diodes_context->paint();
     cr_diodes_context->restore();
+    
+    cr_diodes_context->set_line_cap(Cairo::LINE_CAP_ROUND);
+    cr_diodes_context->set_line_width(4.0);
+    
+    for(std::list<DiodeMidiEvent*>::iterator it = active_diodes.begin();it != active_diodes.end(); it++){
+        if (*it == NULL) continue; //removed?
+        DiodeMidiEvent diodev = *(*(it));
+        if(diodev.type == DIODE_TYPE_NOTE){
+            if(seq_type != SEQ_TYPE_NOTE) continue; //just to ensure safety
+            
+            if(diodev.color == 1) cr_diodes_context->set_source_rgb(1.0,1.0,0.0);
+            else cr_diodes_context->set_source_rgb(0.0,0.9,0.0);
 
-
-
+            //calculate some coordinates
+            double y1 = (5 - diodev.value) * internal_height / 6;
+            double h = internal_height / 6;
+            double x1 = diodev.time*width;
+            y1++; // This is because the very first 1px line is the upper border.
+            
+            cr_diodes_context->move_to(x1+2,y1+2);
+            cr_diodes_context->line_to(x1+2,y1+h-2);
+            cr_diodes_context->stroke();
+            
+        }else if (diodev.type == DIODE_TYPE_CTRL){
+            if(seq_type != SEQ_TYPE_CONTROL) continue; //just to ensure safety
+            
+        }
+    }
+    
     diodes_lock = 1;
     man_i_wanted_to_redraw_diodes_but_it_was_locked_could_you_please_do_it_later_for_me = 0;
     Glib::signal_timeout().connect(sigc::mem_fun(*this, &PatternWidget::TimeLockDiodesCompleted), Config::Interaction::PatternRefreshMS);
 
     Redraw();
+    
+    Th->mutex_.unlock();
 }
   
   void PatternWidget::RedrawGrid(){
@@ -1327,17 +1374,23 @@ void PatternWidget::RedrawDiodes(){
     Gtk::Allocation allocation = get_allocation();
     const double width = allocation.get_width();
     
+    cr_buffer_context->save();
     cr_buffer_context->set_source(cr_grid_surface,0,0);
     cr_buffer_context->rectangle(0.0,0.0,width,internal_height);
     cr_buffer_context->fill();
+    cr_buffer_context->restore();
     
+    cr_buffer_context->save();
     cr_buffer_context->set_source(cr_atoms_surface,0,0);
     cr_buffer_context->rectangle(0.0,0.0,width,internal_height);
     cr_buffer_context->fill();
-
+    cr_buffer_context->restore();
+    
+    cr_buffer_context->save();
     cr_buffer_context->set_source(cr_diodes_surface,0,0);
     cr_buffer_context->rectangle(0.0,0.0,width,internal_height);
     cr_buffer_context->fill();
+    cr_buffer_context->restore();
     
   if(drag_in_progress && drag_mode==DRAG_MODE_SELECT_AREA){
       cr_buffer_context->set_line_width(2);

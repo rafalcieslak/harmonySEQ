@@ -84,7 +84,8 @@ public:
     SlopeType GetSlopeType();
     
     void AllDiodesOff();
-    void LightUpDiode(DiodeMidiEvent diodev);
+    DiodeMidiEvent* LightUpDiode(DiodeMidiEvent diodev);
+    bool DimDiode(DiodeMidiEvent* diode_ptr);
     
     std::list<DiodeMidiEvent *> active_diodes;
     
@@ -123,6 +124,14 @@ private:
     Cairo::RefPtr<Cairo::Context> cr_grid_context;
     Cairo::RefPtr<Cairo::ImageSurface> cr_diodes_surface;
     Cairo::RefPtr<Cairo::Context> cr_diodes_context;
+    /*Cairo::ImageSurface* cr_buffer_surface;
+    Cairo::Context *cr_buffer_context;
+    Cairo::ImageSurface* cr_atoms_surface;
+    Cairo::Context *cr_atoms_context;
+    Cairo::ImageSurface* cr_grid_surface;
+    Cairo::Context *cr_grid_context;
+    Cairo::ImageSurface* cr_diodes_surface;
+    Cairo::Context *cr_diodes_context;*/
     bool atoms_lock;
     bool grid_lock;
     bool diodes_lock;

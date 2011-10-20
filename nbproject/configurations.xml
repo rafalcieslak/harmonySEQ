@@ -30,6 +30,7 @@
       <itemPath>src/config.h</itemPath>
       <itemPath>src/gettext.h</itemPath>
       <itemPath>src/global.h</itemPath>
+      <itemPath>../Programy/harmonySEQ/trunk/src/main.h</itemPath>
       <itemPath>src/messages.h</itemPath>
       <itemPath>../Programy/harmonySEQ/trunk/src/seqHandle.h</itemPath>
     </logicalFolder>
