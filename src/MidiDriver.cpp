@@ -298,7 +298,7 @@ void MidiDriver::Sync(){
     //Indicate graphically a starting bar
     mainwindow->FlashTempoStart();
     //All diodes off...
-    //mainwindow->seqWidget.Diodes_AllOff();
+    mainwindow->seqWidget.DeacivateAllDiodes();
 }
 
 snd_seq_tick_time_t MidiDriver::GetTick() {
@@ -612,6 +612,8 @@ void MidiDriver::ProcessInput(){
     
     snd_seq_event_t * ev;
     int h, id;
+    std::map<int,DiodeMidiEvent>::iterator it;
+    DiodeMidiEvent diodev(DIODE_TYPE_NOTE,0,0,0);
     
         //Do while there is anything in the input
         do {
@@ -667,14 +669,21 @@ void MidiDriver::ProcessInput(){
             case SND_SEQ_EVENT_USR0:
                 h = ev->data.raw32.d[0];
                 id = ev->data.raw32.d[1];
-                *err << h << ", " << id << ENDL;
-                gdk_threads_enter(); //to interact with gui thread we MUST lock it's thread
-                    
-                gdk_threads_leave(); //freeing lock
+                if (mainwindow->seqWidget.selectedSeq == h){
+                    it = diode_events.find(id);
+                    diodev = (*it).second;
+                    if (it == diode_events.end()) break; //in case such event was not registered, avoid crashes
+                    if (diodev.type == DIODE_TYPE_NOTE && mainwindow->seqWidget.selectedSeqType == SEQ_TYPE_CONTROL) break; //mismatched type
+                    if (diodev.type == DIODE_TYPE_CTRL && mainwindow->seqWidget.selectedSeqType == SEQ_TYPE_NOTE) break;    //mismatched type
+                    gdk_threads_enter(); //to interact with gui thread we MUST lock it's thread
+                        mainwindow->seqWidget.ActivateDiode(diodev);
+                    gdk_threads_leave(); //freeing lock
+                    diode_events.erase(it);
+                }
                 break;
             default:
                 //Some unmatched event.
-                *dbg << "unknown:(\n";
+                *err << "unknown event recieved:(\n";
                 break;
 
         }

@@ -57,11 +57,15 @@ PatternWidget::PatternWidget(){
     cr_atoms_surface = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32,2400,300);
     cr_atoms_context = Cairo::Context::create(cr_atoms_surface); 
     cr_grid_surface = Cairo::ImageSurface::create(Cairo::FORMAT_RGB24,2400,300);
-    cr_grid_context = Cairo::Context::create(cr_grid_surface); 
+    cr_grid_context = Cairo::Context::create(cr_grid_surface);  
+    cr_diodes_surface = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32,2400,300);
+    cr_diodes_context = Cairo::Context::create(cr_diodes_surface);
     grid_lock = 0;
     atoms_lock = 0;
+    diodes_lock = 0;
     man_i_wanted_to_redraw_atoms_but_it_was_locked_could_you_please_do_it_later_for_me = 0;
     man_i_wanted_to_redraw_grid_but_it_was_locked_could_you_please_do_it_later_for_me = 0;
+    man_i_wanted_to_redraw_diodes_but_it_was_locked_could_you_please_do_it_later_for_me = 0;
     last_drawn_height = 0;
     last_drawn_width = 0;
     
@@ -974,7 +978,21 @@ bool PatternWidget::on_scroll_event(GdkEventScroll* e){
     return false;
 }
 
-  bool PatternWidget::on_expose_event(GdkEventExpose* event){
+//======================DIODES===============
+
+void PatternWidget::AllDiodesOff(){
+    for(std::list<DiodeMidiEvent*>::iterator it = active_diodes.begin();it != active_diodes.end();it++) delete *it;
+    active_diodes.clear();
+}
+
+void PatternWidget::LightUpDiode(DiodeMidiEvent diodev){
+    //*err << diodev.time << ", " << diodev.value << ", " << diodev.color << ENDL;
+    active_diodes.push_back(new DiodeMidiEvent(diodev));
+}
+
+//=======================DRAWING==============
+
+bool PatternWidget::on_expose_event(GdkEventExpose* event){
     Gtk::Allocation allocation = get_allocation();
     const double width = allocation.get_width();
     const int height = allocation.get_height();
@@ -997,22 +1015,56 @@ bool PatternWidget::on_scroll_event(GdkEventScroll* e){
   return true;
       
   }
-  
-  bool PatternWidget::TimeLockAtomsCompleted(){
-      atoms_lock =0;
-      if(man_i_wanted_to_redraw_atoms_but_it_was_locked_could_you_please_do_it_later_for_me)
-          RedrawAtoms();
-      man_i_wanted_to_redraw_atoms_but_it_was_locked_could_you_please_do_it_later_for_me = 0;
-      return false; //do not repeat the timeout
-  }
-  
-  bool PatternWidget::TimeLockGridCompleted(){
-      grid_lock = 0;
-      if(man_i_wanted_to_redraw_grid_but_it_was_locked_could_you_please_do_it_later_for_me)
-          RedrawGrid();
-      man_i_wanted_to_redraw_grid_but_it_was_locked_could_you_please_do_it_later_for_me = 0;
-      return false; //do not repeat the timeout
-  }
+
+
+bool PatternWidget::TimeLockDiodesCompleted(){
+    diodes_lock = 0;
+    if (man_i_wanted_to_redraw_diodes_but_it_was_locked_could_you_please_do_it_later_for_me)
+        RedrawDiodes();
+    man_i_wanted_to_redraw_diodes_but_it_was_locked_could_you_please_do_it_later_for_me = 0;
+    return false; //do not repeat the timeout
+}
+
+
+bool PatternWidget::TimeLockAtomsCompleted(){
+    atoms_lock = 0;
+    if (man_i_wanted_to_redraw_atoms_but_it_was_locked_could_you_please_do_it_later_for_me)
+        RedrawAtoms();
+    man_i_wanted_to_redraw_atoms_but_it_was_locked_could_you_please_do_it_later_for_me = 0;
+    return false; //do not repeat the timeout
+}
+
+
+bool PatternWidget::TimeLockGridCompleted(){
+    grid_lock = 0;
+    if (man_i_wanted_to_redraw_grid_but_it_was_locked_could_you_please_do_it_later_for_me)
+        RedrawGrid();
+    man_i_wanted_to_redraw_grid_but_it_was_locked_could_you_please_do_it_later_for_me = 0;
+    return false; //do not repeat the timeout
+}
+
+
+void PatternWidget::RedrawDiodes(){
+    if (diodes_lock) {
+        man_i_wanted_to_redraw_diodes_but_it_was_locked_could_you_please_do_it_later_for_me = 1;
+        return; //do not draw too ofter!
+    }
+
+    //clearing...
+    cr_diodes_context->save();
+    cr_diodes_context->set_source_rgba(0.0, 0.0, 0.0, 0.0);
+    cr_diodes_context->set_operator(Cairo::OPERATOR_SOURCE);
+    cr_diodes_context->paint();
+    cr_diodes_context->restore();
+
+
+
+    diodes_lock = 1;
+    man_i_wanted_to_redraw_diodes_but_it_was_locked_could_you_please_do_it_later_for_me = 0;
+    Glib::signal_timeout().connect(sigc::mem_fun(*this, &PatternWidget::TimeLockDiodesCompleted), Config::Interaction::PatternRefreshMS);
+
+    Redraw();
+}
   
   void PatternWidget::RedrawGrid(){
       
@@ -1263,6 +1315,7 @@ bool PatternWidget::on_scroll_event(GdkEventScroll* e){
   bool PatternWidget::RedrawEverything(){
       RedrawAtoms();
       RedrawGrid();
+      RedrawDiodes();
       return false;
   }
   
@@ -1274,21 +1327,18 @@ bool PatternWidget::on_scroll_event(GdkEventScroll* e){
     Gtk::Allocation allocation = get_allocation();
     const double width = allocation.get_width();
     
-    //T.elapsed(t);
-    //*err << " 1- " <<  (int)t << ENDL;
     cr_buffer_context->set_source(cr_grid_surface,0,0);
     cr_buffer_context->rectangle(0.0,0.0,width,internal_height);
     cr_buffer_context->fill();
     
-    //T.elapsed(t);
-    //*err << " 2 -" <<  (int)t << ENDL;
     cr_buffer_context->set_source(cr_atoms_surface,0,0);
     cr_buffer_context->rectangle(0.0,0.0,width,internal_height);
     cr_buffer_context->fill();
 
-    //T.elapsed(t);
-    //*err << " 3 -" <<  (int)t << ENDL;
-      //drag_selection rectangle
+    cr_buffer_context->set_source(cr_diodes_surface,0,0);
+    cr_buffer_context->rectangle(0.0,0.0,width,internal_height);
+    cr_buffer_context->fill();
+    
   if(drag_in_progress && drag_mode==DRAG_MODE_SELECT_AREA){
       cr_buffer_context->set_line_width(2);
       cr_buffer_context->rectangle(drag_beggining_x,drag_beggining_y,drag_current_x-drag_beggining_x,drag_current_y-drag_beggining_y);

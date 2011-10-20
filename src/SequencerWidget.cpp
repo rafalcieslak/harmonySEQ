@@ -176,7 +176,7 @@ SequencerWidget::SequencerWidget()
     wClearPattern.set_tooltip_markup(_("Clears all notes of this pattern."));
     wClonePattern.set_label(_("Clone"));
     wClonePattern.set_tooltip_markup(_("Clones this pattern, creating a new one."));
-    ///TRANSLATORS: The space befor this string is to force a tiny space between widgets, please keep it in translations.
+    /* TRANSLATORS: The space befor this string is to force a tiny space between widgets, please keep it in translations.*/
     wControllerLabel.set_text(_(" Controller No."));
     wControllerButton.set_tooltip_markup(_("The <b>MIDI controller number</b> this sequencer outputs data on.\n\nFor example, synthesizers supporting GM standard should interpret data from controller 7 as volume setting."));
 
@@ -276,7 +276,7 @@ void SequencerWidget::SelectSeq(seqHandle h){
         chordwidget.Select(&noteseq->chord);
     }
     UpdateEverything();
-    //Diodes_AllOff();
+    DeacivateAllDiodes();
 }
 
 void SequencerWidget::SelectNothing(){
@@ -822,6 +822,14 @@ void SequencerWidget::OnPatternWidgetScrollRight(){
     
     if (wViewport->get_hadjustment()->get_value() > wViewport->get_hadjustment()->get_upper() - wViewport->get_hadjustment()->get_page_size()) wViewport->get_hadjustment()->set_value(wViewport->get_hadjustment()->get_upper() - wViewport->get_hadjustment()->get_page_size());
 
+}
+
+void SequencerWidget::DeacivateAllDiodes(){
+    pattern_widget.AllDiodesOff();
+}
+
+void SequencerWidget::ActivateDiode(DiodeMidiEvent diodev){
+    pattern_widget.LightUpDiode(diodev);
 }
 
 /*

@@ -34,7 +34,7 @@ ChordWidget::ChordWidget(){
 
     MainBox.pack_start(summary_label);
     summary_label.set_angle(90.0);
-    ///TRANSLATORS: This is default message shown when chord details are hidden. It is likely it will be never displayed, but is left there just in case of problems with displaying chordwidgets assigned to no chord.
+    /* TRANSLATORS: This is default message shown when chord details are hidden. It is likely it will be never displayed, but is left there just in case of problems with displaying chordwidgets assigned to no chord.*/
     summary_label.set_text(_("Chord summary"));
     summary_label.hide();
     MainBox.pack_start(LeftHBox);

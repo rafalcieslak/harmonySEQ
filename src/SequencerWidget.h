@@ -22,6 +22,7 @@
 #include "seqHandle.h"
 #include "ChordWidget.h"
 #include "PatternWidget.h"
+#include "DiodeMidiEvent.h"
 class Sequencer;
 #ifdef YES_I_HOMEHOW_NEED_TO_ACCESS_DEPRACATED_CONTENTS
 class PatternLine : public Gtk::VBox{
@@ -75,6 +76,9 @@ public:
 
     /**Inits the notebook*/
     void InitNotebook();
+    
+    void ActivateDiode(DiodeMidiEvent diodev);
+    void DeacivateAllDiodes();
     
     bool AnythingSelected;
     seqHandle selectedSeq;
@@ -131,7 +135,6 @@ private:
     void OnSlopeFlatToggled();
     void OnSlopeLinearToggled();
     void UpdateSlopeType();
-    
     
     PatternWidget pattern_widget;
     

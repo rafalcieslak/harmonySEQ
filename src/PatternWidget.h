@@ -21,8 +21,10 @@
 #define	PATTERNWIDGET_H
 #include "gtkmm.h"
 #include <set>
+#include <list>
 #include "Sequencer.h"
 #include "ControllerAtom.h"
+#include "DiodeMidiEvent.h"
 
 class AtomContainer;
 
@@ -37,6 +39,8 @@ public:
     void RedrawAtoms();
     /**Redraws grid. Call when resolution was changed.*/
     void RedrawGrid();
+    /**Redraws diodes. Calles automatically on LightUpDiode and AllDiodesOff.*/
+    void RedrawDiodes();
     /**Redraws both grid and atoms*/
     bool RedrawEverything();
     
@@ -79,6 +83,11 @@ public:
     /**Returns selected ControllerAtom's slope-type. If there are different, returns SLOPE_TYPE_NONE*/
     SlopeType GetSlopeType();
     
+    void AllDiodesOff();
+    void LightUpDiode(DiodeMidiEvent diodev);
+    
+    std::list<DiodeMidiEvent *> active_diodes;
+    
     /**Emitted when selection is changed. Provides an argument that is equal to number of notes in selection.*/
     sigc::signal<void,int> on_selection_changed;
     
@@ -105,16 +114,21 @@ private:
     void Redraw();
     bool TimeLockAtomsCompleted();
     bool TimeLockGridCompleted();
+    bool TimeLockDiodesCompleted();
     Cairo::RefPtr<Cairo::ImageSurface> cr_buffer_surface;
     Cairo::RefPtr<Cairo::Context> cr_buffer_context;
     Cairo::RefPtr<Cairo::ImageSurface> cr_atoms_surface;
     Cairo::RefPtr<Cairo::Context> cr_atoms_context;
     Cairo::RefPtr<Cairo::ImageSurface> cr_grid_surface;
     Cairo::RefPtr<Cairo::Context> cr_grid_context;
+    Cairo::RefPtr<Cairo::ImageSurface> cr_diodes_surface;
+    Cairo::RefPtr<Cairo::Context> cr_diodes_context;
     bool atoms_lock;
     bool grid_lock;
+    bool diodes_lock;
     bool man_i_wanted_to_redraw_atoms_but_it_was_locked_could_you_please_do_it_later_for_me;
     bool man_i_wanted_to_redraw_grid_but_it_was_locked_could_you_please_do_it_later_for_me;
+    bool man_i_wanted_to_redraw_diodes_but_it_was_locked_could_you_please_do_it_later_for_me;
     
     int last_drawn_width;
     int last_drawn_height;
