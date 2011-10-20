@@ -11,7 +11,9 @@
       <itemPath>src/Chord.h</itemPath>
       <itemPath>src/ChordWidget.h</itemPath>
       <itemPath>src/Configuration.h</itemPath>
+      <itemPath>../Programy/harmonySEQ/trunk/src/ControlSequencer.h</itemPath>
       <itemPath>src/ControllerAtom.h</itemPath>
+      <itemPath>../Programy/harmonySEQ/trunk/src/DiodeMidiEvent.h</itemPath>
       <itemPath>src/Event.h</itemPath>
       <itemPath>src/EventGUI.h</itemPath>
       <itemPath>../Programy/harmonySEQ/trunk/src/EventsWidget.h</itemPath>
@@ -52,6 +54,7 @@
       <itemPath>src/Configuration.cpp</itemPath>
       <itemPath>../Programy/harmonySEQ/trunk/src/ControlSequencer.cpp</itemPath>
       <itemPath>src/ControllerAtom.cpp</itemPath>
+      <itemPath>../Programy/harmonySEQ/trunk/src/DiodeMidiEvent.cpp</itemPath>
       <itemPath>src/Event.cpp</itemPath>
       <itemPath>src/EventGUI.cpp</itemPath>
       <itemPath>../Programy/harmonySEQ/trunk/src/EventsWidget.cpp</itemPath>
@@ -85,7 +88,6 @@
       <itemPath>Makefile.am</itemPath>
       <itemPath>src/Makefile.am</itemPath>
     </logicalFolder>
-    <itemPath>../Programy/harmonySEQ/trunk/src/ControlSequencer.h</itemPath>
   </logicalFolder>
   <sourceRootList>
     <Elem>src</Elem>

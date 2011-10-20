@@ -31,6 +31,7 @@
 #include "SettingsWindow.h"
 #include "SequencerWidget.h"
 #include "NoteAtom.h"
+
 extern int running;
 
 MidiDriver::MidiDriver() {
@@ -43,6 +44,8 @@ MidiDriver::MidiDriver() {
     InitQueue();
     //Finally, we'll set the tempo to it's current value.
     SetTempo(tempo);
+    
+    diode_event_id_next = 0;
 }
 
 MidiDriver::~MidiDriver() {
@@ -204,6 +207,27 @@ void MidiDriver::ScheduleCtrlEventLinearSlope(int channel, int ctrl_no, int star
                 ScheduleCtrlEventSingle(channel,start_tick_time,ctrl_no,start_value);
 }
 
+void MidiDriver::ScheduleDiodeEvent(DiodeType type, seqHandle handle, int tick_time, double time, int value, int color, int max_res){
+    DiodeMidiEvent diodeev(type,time,value,color,max_res);
+    diode_events.insert(std::make_pair<int,DiodeMidiEvent>(diode_event_id_next,diodeev));
+    
+    snd_seq_event_t ev;
+    
+    snd_seq_ev_clear(&ev);
+    ev.type = SND_SEQ_EVENT_USR0; //Diode ON
+    ev.data.raw32.d[0] = handle; //seq handle
+    ev.data.raw32.d[1] = diode_event_id_next; //diode id
+    ev.data.raw32.d[2] = 0;//unused
+    snd_seq_ev_schedule_tick(&ev, queueid, 0, tick_time);
+    snd_seq_ev_set_dest(&ev, snd_seq_client_id(seq_handle), input_port); //here INPUT_PORT is used, so the event will be send just to harmonySEQ itself.
+    snd_seq_event_output_direct(seq_handle, &ev);
+    snd_seq_ev_clear(&ev);
+
+    snd_seq_free_event(&ev);
+    
+    diode_event_id_next++;
+}
+
 void MidiDriver::PassEvent(snd_seq_event_t* ev){
     *dbg << "passing an event...";
     //Direct the event to output port, to it's all subsctibers
@@ -324,6 +348,9 @@ void MidiDriver::ClearQueue(bool remove_noteoffs){
         else snd_seq_remove_events_set_condition(re,SND_SEQ_REMOVE_OUTPUT|SND_SEQ_REMOVE_IGNORE_OFF);
     snd_seq_remove_events(seq_handle,re);
     snd_seq_remove_events_free(re);
+    
+    //also, clear the map.
+    diode_events.clear();
 }
 
 void MidiDriver::DeleteQueue(){
@@ -408,18 +435,16 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
         if (seq->GetOn() || seq->GetPlayOncePhase() == 2){
 
             //Selecting diode color according to mode
-            //int diode_colour;
-            //if (seq->GetPlayOncePhase() == 2) diode_colour = 1;
-            //else diode_colour = 0;
+            int diode_colour;
+            if (seq->GetPlayOncePhase() == 2) diode_colour = 1;
+            else diode_colour = 0;
             
             
             //The time (in ticks)  how long one sequence repetition will last. Note it can be larger than TICKS_PER_NOTE and that's OK.
             double sequence_time = TICKS_PER_NOTE*seq->GetLength();
             //Local tick is the tick at which this sequence repetition had began. Occasionally it may be lower than tick, for
             //example in case this repetition has already been played in 1/3.
-                //*err <<"starting. marker = " << seq->play_from_here_marker << ", tick = " << tick <<", local_tick = ";
             double local_tick = tick-seq->play_from_here_marker*TICKS_PER_NOTE*seq->GetLength();
-                //*err << local_tick << ENDL; 
             //Shortcut to the pattern we'll play.
             AtomContainer* pattern = seq->GetActivePattern();
             //Number of notes in one sequence
@@ -466,8 +491,11 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                                         note = dynamic_cast<NoteAtom*>((*pattern)[V%size]);
                                         int pitch = noteseq->GetNoteOfChord(note->pitch);
                                         ScheduleNote(seq->GetChannel()-1,local_tick + (V/size)*sequence_time + note->time*TICKS_PER_NOTE*seq->GetLength(),pitch,note->velocity,note->length*TICKS_PER_NOTE*seq->GetLength());
-                                  }
-                                  
+                                        
+                                        //each note shall have correspoinding diode event.
+                                        ScheduleDiodeEvent(DIODE_TYPE_NOTE, seq->MyHandle, local_tick + (V / size) * sequence_time + note->time * TICKS_PER_NOTE * seq->GetLength(), note->time, note->pitch, diode_colour);
+                        
+                                  } 
                       }else if(seq->GetType() == SEQ_TYPE_CONTROL){
                           
                                  ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*>(seq);
@@ -583,7 +611,8 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
 void MidiDriver::ProcessInput(){
     
     snd_seq_event_t * ev;
-
+    int h, id;
+    
         //Do while there is anything in the input
         do {
         //Obtain the event from input
@@ -636,16 +665,10 @@ void MidiDriver::ProcessInput(){
                 snd_seq_event_output_direct(seq_handle,ev);
                 break;
             case SND_SEQ_EVENT_USR0:
-                //i = ev->data.raw32.d[0];
-                //c = ev->data.raw32.d[2];
+                h = ev->data.raw32.d[0];
+                id = ev->data.raw32.d[1];
+                *err << h << ", " << id << ENDL;
                 gdk_threads_enter(); //to interact with gui thread we MUST lock it's thread
-
-                    if(mainwindow->seqWidget.selectedSeq == (int)ev->data.raw32.d[1]){ //comparing sequencer handles
-                        //if (i != -1)
-                            //mainwindow->seqWidget.Diode(i,c);
-                        //else
-                            //mainwindow->seqWidget.Diodes_AllOff();
-                    }
                     
                 gdk_threads_leave(); //freeing lock
                 break;

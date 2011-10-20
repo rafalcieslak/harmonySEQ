@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010, 2011 Rafał Cieślak
+    Copyright (C) 2011 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -20,10 +20,33 @@
 #include "DiodeMidiEvent.h"
 
 
-DiodeMidiEvent::DiodeMidiEvent(){
+DiodeMidiEvent::DiodeMidiEvent(DiodeType type_, double time_, int value_, int color_, int max_res_){
+    type = type_;
+    time = time_;
+    value = value_;
+    max_res = max_res_;
+    color = color_;
 }
 
+DiodeMidiEvent::DiodeMidiEvent(const DiodeMidiEvent& orig){
+    type = orig.type;
+    time = orig.time;
+    value = orig.value;
+    max_res = orig.max_res;
+    color = orig.color;
+}
 
 DiodeMidiEvent::~DiodeMidiEvent(){
 }
 
+DiodeMidiEvent & DiodeMidiEvent::operator =(const DiodeMidiEvent& other){
+    if(this != &other){
+        type = other.type;
+        time = other.time;
+        value = other.value;
+        max_res = other.max_res;
+        color = other.color;
+        
+    }
+    return *this;
+}

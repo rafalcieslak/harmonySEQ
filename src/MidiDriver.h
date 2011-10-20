@@ -22,6 +22,8 @@
 #ifndef MIDIDRIVER_H
 #define	MIDIDRIVER_H
 #include "global.h"
+#include "DiodeMidiEvent.h"
+#include "seqHandle.h"
 
 class MidiDriver {
 public:
@@ -75,6 +77,8 @@ public:
     /**Schedules a set of MIDI controller events on the output queue, so that to emulate a linear slope.*/
     void ScheduleCtrlEventLinearSlope(int channel, int ctrl_no, int start_tick_time, int start_value, int end_tick_time, int end_value);
     
+    void ScheduleDiodeEvent(DiodeType type, seqHandle handle, int tick_time, double time, int value, int color, int max_res = 0);
+    
     /**Sets tempo*/
     void SetTempo(double bpm);
 
@@ -90,6 +94,7 @@ public:
 
 
 private:
+
     /**ALSA MIDI sequencer's handle*/
     snd_seq_t* seq_handle;
 
@@ -121,6 +126,9 @@ private:
     void InitQueue();
 
 
+    int diode_event_id_next;
+    /**Diode data is kept here*/
+    std::map<int, DiodeMidiEvent> diode_events;
 
     
     /**Returns queue's current tick*/

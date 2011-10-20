@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010, 2011 Rafał Cieślak
+    Copyright (C) 2011 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -20,10 +20,28 @@
 #ifndef DIODEMIDIEVENT_H
 #define	DIODEMIDIEVENT_H
 
+enum DiodeType{
+    DIODE_TYPE_NOTE,
+    DIODE_TYPE_CTRL,
+    DIODE_TYPE_GRID
+};
+
 class DiodeMidiEvent {
 public:
-    DiodeMidiEvent();
+    DiodeMidiEvent(DiodeType type_, double time_, int value_, int color_, int max_res_ = 0);
+    DiodeMidiEvent(const DiodeMidiEvent &orig);
     virtual ~DiodeMidiEvent();
+    
+    DiodeMidiEvent & operator= (const DiodeMidiEvent & other);
+    
+    DiodeType type;
+    double time;
+    /**0-127 for crtls, 0-5 for notes, 0-res grid*/
+    int value;
+    /**Used for grid diodes to indicate maximum resolution. PatternWidget would use that to calculate distance between grid diodes.*/
+    int max_res;
+    /** 0 - green, 1 - yellow*/
+    int color;
 private:
 
 };
