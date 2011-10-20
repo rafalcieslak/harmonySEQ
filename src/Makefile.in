@@ -71,7 +71,8 @@ am_harmonySEQ_OBJECTS = harmonySEQ-main.$(OBJEXT) \
 	harmonySEQ-AtomContainer.$(OBJEXT) \
 	harmonySEQ-PatternWidget.$(OBJEXT) \
 	harmonySEQ-NoteSequencer.$(OBJEXT) \
-	harmonySEQ-ControlSequencer.$(OBJEXT)
+	harmonySEQ-ControlSequencer.$(OBJEXT) \
+	harmonySEQ-DiodeMidiEvent.$(OBJEXT)
 harmonySEQ_OBJECTS = $(am_harmonySEQ_OBJECTS)
 am__DEPENDENCIES_1 =
 @DISABLEOSC_FALSE@harmonySEQ_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -87,6 +88,10 @@ CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 CXXLD = $(CXX)
 CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
 	-o $@
+COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+CCLD = $(CC)
+LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(harmonySEQ_SOURCES)
 DIST_SOURCES = $(harmonySEQ_SOURCES)
 ETAGS = etags
@@ -243,7 +248,10 @@ harmonySEQ_SOURCES = main.cpp\
 						AtomContainer.cpp \
 						PatternWidget.cpp \
 						NoteSequencer.cpp \
-						ControlSequencer.cpp
+						ControlSequencer.cpp \
+						DiodeMidiEvent.cpp \
+						MainWindow.h MidiDriver.h Sequencer.h messages.h Files.h global.h Event.h EventGUI.h Action.h ActionGUI.h TreeModels.h Chord.h ChordWidget.h Configuration.h SettingsWindow.h seqHandle.h SequencerWidget.h EventsWidget.h OSC.h Atom.h NoteAtom.h ControllerAtom.h AtomContainer.h AtomContainer.h PatternWidget.h NoteSequencer.h ControlSequencer.h DiodeMidiEvent.h \
+						gettext.h
 
 harmonySEQ_CPPFLAGS = $(GTKMM_CFLAGS) $(ADD_DEF) -Wall -g -O3
 @DISABLEOSC_FALSE@harmonySEQ_LDADD = $(GTKMM_LIBS) -lgthread-2.0 -lasound -llo
@@ -265,9 +273,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign src/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign src/Makefile
+	  $(AUTOMAKE) --gnu src/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -359,6 +367,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-Configuration.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-ControlSequencer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-ControllerAtom.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-DiodeMidiEvent.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-Event.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-EventGUI.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/harmonySEQ-EventsWidget.Po@am__quote@
@@ -770,6 +779,20 @@ harmonySEQ-ControlSequencer.obj: ControlSequencer.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-ControlSequencer.obj `if test -f 'ControlSequencer.cpp'; then $(CYGPATH_W) 'ControlSequencer.cpp'; else $(CYGPATH_W) '$(srcdir)/ControlSequencer.cpp'; fi`
 
+harmonySEQ-DiodeMidiEvent.o: DiodeMidiEvent.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-DiodeMidiEvent.o -MD -MP -MF $(DEPDIR)/harmonySEQ-DiodeMidiEvent.Tpo -c -o harmonySEQ-DiodeMidiEvent.o `test -f 'DiodeMidiEvent.cpp' || echo '$(srcdir)/'`DiodeMidiEvent.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-DiodeMidiEvent.Tpo $(DEPDIR)/harmonySEQ-DiodeMidiEvent.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='DiodeMidiEvent.cpp' object='harmonySEQ-DiodeMidiEvent.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-DiodeMidiEvent.o `test -f 'DiodeMidiEvent.cpp' || echo '$(srcdir)/'`DiodeMidiEvent.cpp
+
+harmonySEQ-DiodeMidiEvent.obj: DiodeMidiEvent.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT harmonySEQ-DiodeMidiEvent.obj -MD -MP -MF $(DEPDIR)/harmonySEQ-DiodeMidiEvent.Tpo -c -o harmonySEQ-DiodeMidiEvent.obj `if test -f 'DiodeMidiEvent.cpp'; then $(CYGPATH_W) 'DiodeMidiEvent.cpp'; else $(CYGPATH_W) '$(srcdir)/DiodeMidiEvent.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/harmonySEQ-DiodeMidiEvent.Tpo $(DEPDIR)/harmonySEQ-DiodeMidiEvent.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='DiodeMidiEvent.cpp' object='harmonySEQ-DiodeMidiEvent.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(harmonySEQ_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o harmonySEQ-DiodeMidiEvent.obj `if test -f 'DiodeMidiEvent.cpp'; then $(CYGPATH_W) 'DiodeMidiEvent.cpp'; else $(CYGPATH_W) '$(srcdir)/DiodeMidiEvent.cpp'; fi`
+
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
 	unique=`for i in $$list; do \
@@ -968,8 +991,6 @@ uninstall-am: uninstall-binPROGRAMS
 	mostlyclean-compile mostlyclean-generic pdf pdf-am ps ps-am \
 	tags uninstall uninstall-am uninstall-binPROGRAMS
 
-						MainWindow.h MidiDriver.h Sequencer.h messages.h Files.h global.h Event.h EventGUI.h Action.h ActionGUI.h TreeModels.h Chord.h ChordWidget.h Configuration.h SettingsWindow.h seqHandle.h SequencerWidget.h EventsWidget.h OSC.h Atom.h NoteAtom.h ControllerAtom.h AtomContainer.h AtomContainer.h PatternWidget.h NoteSequencer.h ControlSequencer.cpp\
-						gettext.h
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

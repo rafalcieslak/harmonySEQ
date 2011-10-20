@@ -369,9 +369,6 @@ double Wrap(double x){
 
 void MidiDriver::UpdateQueue(bool do_not_lock_threads){
     
-    Glib::Timer T;
-    unsigned long int t;
-    
     if(!do_not_lock_threads) gdk_threads_enter(); //for safety. any calls to GUI will be thread-protected
     snd_seq_event_t ev;
     Sequencer* seq;
@@ -458,15 +455,8 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                 if(seq->GetPlayOncePhase() == 2) seq->SetPlayOncePhase(3);
             }
             
-            
-    T.elapsed(t);
-    //*err <<"beforeplay :" << (int)t << ENDL;
-            
-            *dbg << "sm = " << start_marker << ", em = " << end_marker << ", s = " << s << ", e = " << e << ENDL;
-            
             //We know which atoms to play, so lets play them.
             if(e != -1 && s != -1 && e>=s){
-                      *dbg << "-> playing from " << s << " to " << e <<  ENDL;
                       //Determine whether to output notes or control messages
                       if(seq->GetType() == SEQ_TYPE_NOTE){
                           
@@ -535,7 +525,6 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
     if (metronome){
         for (int x =0; x < 4;x++){
             if (x == 0){
-                    *dbg<<"bar"<<ENDL;
                     //Create a new event (clear it)...
                     snd_seq_ev_clear(&ev);
                     //Fill it with note data
@@ -548,7 +537,6 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                     //Output the event (but it stays at the queue.)
                     snd_seq_event_output_direct(seq_handle, &ev);
              } else if (Config::Metronome::Hit2){
-                    *dbg<<"-"<<ENDL;
                     //Create a new event (clear it)...
                     snd_seq_ev_clear(&ev);
                     //Fill it with note data
