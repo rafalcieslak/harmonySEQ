@@ -525,11 +525,15 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                                         }else{
                                             //something wrong.
                                         }
+                                        
+                                        //each note shall have correspoinding diode event.
+                                        ScheduleDiodeEvent(DIODE_TYPE_CTRL, seq->MyHandle, local_tick + (V / size) * sequence_time + ctrl->time * TICKS_PER_NOTE * seq->GetLength(), ctrl->time, ctrl->value, diode_colour);
+                        
                                   }
                               
                       }else{
                               *err << "Sequencer is neither note nor control type. Don't bother reporting this to harmonySEQ developers. This error message will never display, so if you see it, it means you must have broken something intentionally.\n";
-                     }
+                      }
             }
             double play_from_here_marker = Wrap(end_marker);
             //rounding to ensure sync...

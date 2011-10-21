@@ -87,7 +87,7 @@ public:
     DiodeMidiEvent* LightUpDiode(DiodeMidiEvent diodev);
     bool DimDiode(DiodeMidiEvent* diode_ptr);
     
-    std::list<DiodeMidiEvent *> active_diodes;
+    std::set<DiodeMidiEvent *> active_diodes;
     
     /**Emitted when selection is changed. Provides an argument that is equal to number of notes in selection.*/
     sigc::signal<void,int> on_selection_changed;

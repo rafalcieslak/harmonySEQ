@@ -542,7 +542,7 @@ void PatternWidget::ProcessDrag(double x, double y){
                 temp_time = time + ctrl->drag_offset_time + snap_offset;
                 if (temp_value > 127) temp_value = 127;
                 else if (temp_value < 0) temp_value = 0;
-                if (temp_time != 1.0) //leave a possibility to put control atoms at 1.0, may be useful if one wants to add an immidiate slope at bar's start
+                //if (temp_time != 1.0) //leave a possibility to put control atoms at 1.0, may be useful if one wants to add an immidiate slope at bar's start //no, that sucks
                     temp_time = temp_time - (int) temp_time; //wrap to 0.0 - 0.9999...
                 if (temp_time < 0) temp_time += 1.0;
                 ctrl->value = temp_value;
@@ -727,6 +727,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                         if (snap) {
                             temp_time = Snap(temp_time); //fair snapping for control atoms!
                         }
+                        if(temp_time == 1.0) temp_time = 0.0;
                         ControllerAtom* ctrl = new ControllerAtom(temp_time, value);
                         ctrl->slope_type = add_slope_type;
                         container->Add(ctrl);
@@ -984,7 +985,7 @@ bool PatternWidget::on_scroll_event(GdkEventScroll* e){
 //======================DIODES===============
 
 void PatternWidget::AllDiodesOff(){
-    for(std::list<DiodeMidiEvent*>::iterator it = active_diodes.begin();it != active_diodes.end();it++) delete *it;
+    for(std::set<DiodeMidiEvent*>::iterator it = active_diodes.begin();it != active_diodes.end();it++) delete *it;
     active_diodes.clear();
     RedrawDiodes();
 }
@@ -992,16 +993,20 @@ void PatternWidget::AllDiodesOff(){
 DiodeMidiEvent* PatternWidget::LightUpDiode(DiodeMidiEvent diodev){
     //*err << diodev.time << ", " << diodev.value << ", " << diodev.color << ENDL;
     DiodeMidiEvent* diode_ptr = new DiodeMidiEvent(diodev);
-    active_diodes.push_back(diode_ptr);
+    active_diodes.insert(diode_ptr);
     Glib::signal_timeout().connect(sigc::bind<DiodeMidiEvent *>(sigc::mem_fun(*this, &PatternWidget::DimDiode), diode_ptr), 250);
     RedrawDiodes();
     return diode_ptr;
 }
 
 bool PatternWidget::DimDiode(DiodeMidiEvent* diode_ptr){
-    active_diodes.remove(diode_ptr);
-    delete diode_ptr;
-    RedrawDiodes();
+    if(diode_ptr == NULL) return false;
+    std::set<DiodeMidiEvent*>::iterator it = active_diodes.find(diode_ptr);
+    if(it != active_diodes.end()){
+        active_diodes.erase(it);
+        delete diode_ptr;
+        RedrawDiodes();
+    }
     return false; //do not repeat timeout
 }
 //=======================DRAWING==============
@@ -1079,7 +1084,7 @@ void PatternWidget::RedrawDiodes(){
     cr_diodes_context->set_line_cap(Cairo::LINE_CAP_ROUND);
     cr_diodes_context->set_line_width(4.0);
     
-    for(std::list<DiodeMidiEvent*>::iterator it = active_diodes.begin();it != active_diodes.end(); it++){
+    for(std::set<DiodeMidiEvent*>::iterator it = active_diodes.begin();it != active_diodes.end(); it++){
         if (*it == NULL) continue; //removed?
         DiodeMidiEvent diodev = *(*(it));
         if(diodev.type == DIODE_TYPE_NOTE){
@@ -1101,6 +1106,15 @@ void PatternWidget::RedrawDiodes(){
         }else if (diodev.type == DIODE_TYPE_CTRL){
             if(seq_type != SEQ_TYPE_CONTROL) continue; //just to ensure safety
             
+            if(diodev.color == 1) cr_diodes_context->set_source_rgb(1.0,1.0,0.0);
+            else cr_diodes_context->set_source_rgb(0.0,0.9,0.0);
+            
+            //calculate some coordinates
+            double y = (double) internal_height * ((127 - diodev.value) / (127.0));
+            double x = diodev.time*width;
+            
+            cr_diodes_context->arc(x+0.5,y+0.5,3.0,0,2*M_PI);
+            cr_diodes_context->fill();
         }
     }
     
