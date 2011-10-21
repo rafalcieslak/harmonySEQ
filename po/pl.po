@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
 "POT-Creation-Date: 2011-09-24 12:47+0200\n"
-"PO-Revision-Date: 2011-08-15 05:28+0000\n"
+"PO-Revision-Date: 2011-10-20 14:54+0000\n"
 "Last-Translator: Rafal Cieslak <rafalcieslak256@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-08 05:31+0000\n"
-"X-Generator: Launchpad (build 14110)\n"
+"X-Launchpad-Export-Date: 2011-10-21 05:03+0000\n"
+"X-Generator: Launchpad (build 14165)\n"
 "Language: pl\n"
 
 #: src/main.cpp:305
@@ -117,23 +117,28 @@ msgstr "Konfiguracja harmonySEQ."
 
 #: src/MainWindow.cpp:70
 msgid "Add note sequencer"
-msgstr ""
+msgstr "Dodaj sekwencer nutowy."
 
 #: src/MainWindow.cpp:70
 msgid ""
 "Adds a new note seqencer. Note sequencers store melodies and output them as "
 "MIDI notes."
 msgstr ""
+"Dodaje nowy sekwencer nutowy. Sekwencery nutowe służą do zapisania melodii i "
+"odtwarzania jej jako nuty MIDI."
 
 #: src/MainWindow.cpp:71
 msgid "Add control sequencer"
-msgstr ""
+msgstr "Dodaj sekwencer sterujący"
 
 #: src/MainWindow.cpp:71
 msgid ""
 "Adds a new control seqencer. Control sequencers store a graph of a "
 "particular setting, and output it as MIDI control messages."
 msgstr ""
+"Dodaje nowy sekwencer sterujący. Sekwencery sterujące służą reprezentacji "
+"wykresu przebiegu pewnego ustawienia, i odtwarzaniu go jako zdarzenia "
+"kontrolerów MIDI."
 
 #: src/MainWindow.cpp:72 src/MainWindow.cpp:80 src/SequencerWidget.cpp:183
 #: src/EventsWidget.cpp:41
@@ -185,6 +190,8 @@ msgid ""
 "If on, harmonySEQ will play a brief preview of note, when it's added, or "
 "changed manually in chord."
 msgstr ""
+"Jeżeli włączone, harmonySEQ będzie odtwarzać podgląd nuty, gdy jest dodana, "
+"lub ręcznie zmieniona w akordzie."
 
 #: src/MainWindow.cpp:79 src/SequencerWidget.cpp:186
 msgid "Play once"
@@ -264,7 +271,7 @@ msgstr "Długość"
 
 #: src/MainWindow.cpp:251 src/SettingsWindow.cpp:95
 msgid "Chord (notes) / Ctrl. No."
-msgstr ""
+msgstr "Akord (nuty) / Nr. Kontr."
 
 #: src/MainWindow.cpp:326 src/MainWindow.cpp:328
 msgid "Untitled"
@@ -282,7 +289,7 @@ msgstr "Czy na pewno chcesz zakończyć pracę programu?"
 #: src/MainWindow.cpp:437 src/MainWindow.cpp:482 src/MainWindow.cpp:529
 #, c-format
 msgid "Ctrl %d"
-msgstr ""
+msgstr "Kontroler %d"
 
 #: src/MainWindow.cpp:697 src/Action.cpp:189 src/ActionGUI.cpp:133
 #, c-format
@@ -345,7 +352,7 @@ msgstr "Konsultacja:"
 
 #: src/MainWindow.cpp:745
 msgid "Testers:"
-msgstr ""
+msgstr "Testerzy:"
 
 #. TRANSLATORS: The list of translators to be placed in about-box
 #: src/MainWindow.cpp:750
@@ -441,17 +448,18 @@ msgstr "Czy chcesz otworzyć ten plik?"
 #: src/Files.cpp:179
 #, c-format
 msgid "This file was created by older harmonySEQ version (%d.%d)"
-msgstr ""
+msgstr "Ten plik został utworzony przez starszą wersję harmonySEQ (%d.%d)"
 
 #: src/Files.cpp:180
 #, c-format
 msgid "This file contains data in format, which is too old."
-msgstr ""
+msgstr "Ten plik zawiera dane w za starym formacie."
 
 #: src/Files.cpp:182
 msgid ""
 "harmonySEQ will convert this file automatically. This may take a while."
 msgstr ""
+"harmonySEQ automatycznie skonwertuje ten plik. Może to zająć pewien czas."
 
 #: src/Files.cpp:185
 msgid ""
@@ -462,6 +470,13 @@ msgid ""
 "using it to convert this file to 0.15 format, which will make it openable "
 "with this harmonySEQ version."
 msgstr ""
+"Niestety, harmonySEQ nie jest wstanie skonwertować tego pliku do bieżącego "
+"formatu.\n"
+"Tak jest tylko w przypadku plików starszych od harmonySEQ 0.15.\n"
+"\n"
+"Jeżeli bardzo zależy Ci na otwarciu tego pliku, zainstaluj harmonySEQ w "
+"wersji 0.15, i użyj go by skonwertować ten plik do wersji 0.15, a ta "
+"zostanie już poprawnie otwarta przez harmonySEQ w wersji, której używasz."
 
 #: src/Files.cpp:197
 #, c-format
@@ -882,19 +897,19 @@ msgstr "Zmniejszony"
 
 #: src/TreeModels.cpp:194
 msgid "maj"
-msgstr ""
+msgstr "dur"
 
 #: src/TreeModels.cpp:197
 msgid "m"
-msgstr ""
+msgstr "d"
 
 #: src/TreeModels.cpp:200
 msgid "maj7"
-msgstr ""
+msgstr "dur7"
 
 #: src/TreeModels.cpp:203
 msgid "m7"
-msgstr ""
+msgstr "d7"
 
 #: src/TreeModels.cpp:211 src/Chord.cpp:382
 #, c-format
@@ -927,22 +942,22 @@ msgstr "Własny: %d, %d, %d, %d, %d, %d"
 #: src/Chord.cpp:319
 #, c-format
 msgid "Guitar: %s maj"
-msgstr ""
+msgstr "Gitara: %s-dur"
 
 #: src/Chord.cpp:321
 #, c-format
 msgid "Guitar: %s m"
-msgstr ""
+msgstr "Gitara: %s-moll"
 
 #: src/Chord.cpp:323
 #, c-format
 msgid "Guitar: %s maj7"
-msgstr ""
+msgstr "Gitara: %s-dur7"
 
 #: src/Chord.cpp:325
 #, c-format
 msgid "Guitar: %s m7"
-msgstr ""
+msgstr "Gitara: %s-m7"
 
 #: src/Chord.cpp:335
 #, c-format
@@ -987,76 +1002,76 @@ msgstr "Trójdźwięk: %s zmniejszony, przewrót: %d"
 #: src/Chord.cpp:375
 #, c-format
 msgid "o:%d"
-msgstr ""
+msgstr "o:%d"
 
 #: src/Chord.cpp:380
 #, c-format
 msgid "Custom, base %d"
-msgstr ""
+msgstr "Własny, baza %d"
 
 #: src/Chord.cpp:386
 #, c-format
 msgid "Guitar %s maj"
-msgstr ""
+msgstr "Gitara %s-dur"
 
 #: src/Chord.cpp:388
 #, c-format
 msgid "Guitar %s m"
-msgstr ""
+msgstr "Gitara %s-moll"
 
 #: src/Chord.cpp:390
 #, c-format
 msgid "Guitar %s maj7"
-msgstr ""
+msgstr "Gitara %s-dur7"
 
 #: src/Chord.cpp:392
 #, c-format
 msgid "Guitar %s m7"
-msgstr ""
+msgstr "Gitara %s-moll7"
 
 #: src/Chord.cpp:402
 #, c-format
 msgid "Triad %s maj"
-msgstr ""
+msgstr "Trójdzw. %s-dur"
 
 #: src/Chord.cpp:404
 #, c-format
 msgid "Triad %s maj, i:%d"
-msgstr ""
+msgstr "Trójdzw. %s-dur, i:%d"
 
 #: src/Chord.cpp:408
 #, c-format
 msgid "Triad %s min"
-msgstr ""
+msgstr "Trójdzw. %s-moll"
 
 #: src/Chord.cpp:410
 #, c-format
 msgid "Triad %s min, i:%d"
-msgstr ""
+msgstr "Trójdzw. %s-moll, i:%d"
 
 #: src/Chord.cpp:414
 #, c-format
 msgid "Triad %s aug"
-msgstr ""
+msgstr "Trójdzw. %s zw."
 
 #: src/Chord.cpp:416
 #, c-format
 msgid "Triad %s aug, i:%d"
-msgstr ""
+msgstr "Trójdzw. %s zw., i:%d"
 
 #: src/Chord.cpp:420
 #, c-format
 msgid "Triad %s dim"
-msgstr ""
+msgstr "Trójdzw. %s zm."
 
 #: src/Chord.cpp:422
 #, c-format
 msgid "Triad %s dim, i:%d"
-msgstr ""
+msgstr "Trójdzw. %s zm., i:%d"
 
 #: src/ChordWidget.cpp:38
 msgid "Chord summary"
-msgstr ""
+msgstr "Dane akordu"
 
 #: src/ChordWidget.cpp:52 src/SequencerWidget.cpp:113
 msgid "<b>Chord</b>"
@@ -1158,7 +1173,7 @@ msgstr "MIDI"
 
 #: src/SettingsWindow.cpp:54
 msgid "<b>Play on edit</b>"
-msgstr ""
+msgstr "<b>Podgląd przy edycji</b>"
 
 #: src/SettingsWindow.cpp:55
 msgid ""
@@ -1170,11 +1185,11 @@ msgstr ""
 
 #: src/SettingsWindow.cpp:64
 msgid "<b>Pattern display quality</b>"
-msgstr ""
+msgstr "<b>Jakość wyświetlania wzoru</b>"
 
 #: src/SettingsWindow.cpp:65
 msgid "Max. FPS: "
-msgstr ""
+msgstr "Max. FPS: "
 
 #: src/SettingsWindow.cpp:68 src/SettingsWindow.cpp:69
 msgid ""
@@ -1185,6 +1200,13 @@ msgid ""
 "High values may cause higher CPU usage when dragging notes, moving graph "
 "points etc., but result in much smoothier animations."
 msgstr ""
+"<b>Maksymalna</b> ilość klatek na sekundę (FPS) używana, gdy konieczna jest "
+"płynna animacja, np przy przesuwaniu nut. Zazwyczaj faktyczna ilość jest "
+"dużo mniejsza od maksymalnej, ponieważ wzór przerysowywany jest tylko "
+"okazyjnie.\n"
+"\n"
+"Wysokie wartości mogą zwiększyć użycie procesora przy przesuwaniu nut, "
+"punktów wykresu itd., ale zwiększą też płynność animacji."
 
 #: src/SettingsWindow.cpp:79
 msgid "<b>Visible colums:</b>"
@@ -1272,7 +1294,7 @@ msgstr "Jesteś pewien, że chcesz utracić wszystkie swoje ustawienia?"
 
 #: src/SequencerWidget.cpp:114
 msgid "Shows/hides the chord's detailed settings."
-msgstr ""
+msgstr "Pokazuje/Ukrywa szczegółowe ustawienia akordu."
 
 #: src/SequencerWidget.cpp:116 src/SequencerWidget.cpp:181
 msgid "Add"
@@ -1280,11 +1302,11 @@ msgstr "Dodaj"
 
 #: src/SequencerWidget.cpp:121
 msgid "Delete"
-msgstr ""
+msgstr "Usuń"
 
 #: src/SequencerWidget.cpp:125
 msgid "Snap to grid"
-msgstr ""
+msgstr "Przyciągaj do siatki"
 
 #: src/SequencerWidget.cpp:173
 msgid "MIDI channel:"
@@ -1292,7 +1314,7 @@ msgstr "Kanał MIDI"
 
 #: src/SequencerWidget.cpp:175
 msgid "Value:"
-msgstr ""
+msgstr "Wartość:"
 
 #: src/SequencerWidget.cpp:176
 msgid "Active pattern:"
@@ -1356,15 +1378,15 @@ msgstr "Usuwa wszystkie nuty z tego wzoru."
 
 #: src/SequencerWidget.cpp:190
 msgid "Clone"
-msgstr ""
+msgstr "Powiel"
 
 #: src/SequencerWidget.cpp:191
 msgid "Clones this pattern, creating a new one."
-msgstr ""
+msgstr "Duplikuje ten patern, tworząc nowy, identyczny."
 
 #: src/SequencerWidget.cpp:193
 msgid " Controller No."
-msgstr ""
+msgstr " Nr kontrolera"
 
 #: src/SequencerWidget.cpp:194
 msgid ""
@@ -1373,16 +1395,22 @@ msgid ""
 "For example, synthesizers supporting GM standard should interpret data from "
 "controller 7 as volume setting."
 msgstr ""
+"Numer <b>kontrolera MIDI</b>, na którym pracuje ten sekwencer.\n"
+"\n"
+"Na przykład, większość syntezatorów obsługujących standard GM powinna "
+"interpretować dane z kontrolera 7 jako ustawienie glośności."
 
 #: src/SequencerWidget.cpp:204
 msgid ""
 "Sets the <b>velocity</b> of selected note(s).\n"
 "Usually higher velocities result in louder sounds."
 msgstr ""
+"Ustawia <b>prędkość</b> wybranej nuty/nut.\n"
+"Zazwyczaj większe prędkości wywołują głośniejszy dźwięk."
 
 #: src/SequencerWidget.cpp:205
 msgid "Sets the <b>value</b> of selected point(s)."
-msgstr ""
+msgstr "Ustawia <b>wartość</b> wybranego punktu/punktów."
 
 #: src/SequencerWidget.cpp:206
 msgid "Selects the <b>MIDI channel</b> this sequencer will output notes to. "
@@ -1406,6 +1434,8 @@ msgid ""
 "Selects the <b>resolution</b> of this sequencer. It defines the grid density "
 "in this sequencer's patterns."
 msgstr ""
+"Wybiera <b>rozdzielczość</b> tego sekwencera. Określa ona gęstość siatki we "
+"wzorach sekwencera."
 
 #: src/SequencerWidget.cpp:241
 msgid "Length:"
@@ -1419,6 +1449,12 @@ msgid ""
 "\n"
 "This it the length's fraction numerator."
 msgstr ""
+"Wybiera <b>długość</b> tego sekwencera. Długość określa <b>przez ile "
+"taktów</b> sekwencja w tym sekwencerze będzie trwać. W wypadku gdy jest "
+"mniejsza niż jeden, sekwencja może być powtórzona kilkakrotnie w czasie "
+"jednego taktu.\n"
+"\n"
+"To jest licznik ułamka długości."
 
 #: src/SequencerWidget.cpp:244
 msgid ""
@@ -1428,6 +1464,12 @@ msgid ""
 "\n"
 "This it the length's fraction denominator."
 msgstr ""
+"Wybiera <b>długość</b> tego sekwencera. Długość określa <b>przez ile "
+"taktów</b> sekwencja w tym sekwencerze będzie trwać. W wypadku gdy jest "
+"mniejsza niż jeden, sekwencja może być powtórzona kilkakrotnie w czasie "
+"jednego taktu.\n"
+"\n"
+"To jest mianownik ułamka długości."
 
 #: src/SequencerWidget.cpp:245
 msgid ""
@@ -1435,6 +1477,10 @@ msgid ""
 "the sequence in this sequencer will last. In case it's smaller then 1, the "
 "sequence may be repeated few times in each bar."
 msgstr ""
+"Wybiera <b>długość</b> tego sekwencera. Długość określa <b>przez ile "
+"taktów</b> sekwencja w tym sekwencerze będzie trwać. W wypadku gdy jest "
+"mniejsza niż jeden, sekwencja może być powtórzona kilkakrotnie w czasie "
+"jednego taktu."
 
 #: src/SequencerWidget.cpp:440
 msgid ""
