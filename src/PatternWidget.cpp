@@ -1110,7 +1110,7 @@ void PatternWidget::RedrawDiodes(){
             else cr_diodes_context->set_source_rgb(0.0,0.9,0.0);
             
             //calculate some coordinates
-            double y = (double) internal_height * ((127 - diodev.value) / (127.0));
+            int y = (double) internal_height * ((127 - diodev.value) / (127.0));
             double x = diodev.time*width;
             
             cr_diodes_context->arc(x+0.5,y+0.5,3.0,0,2*M_PI);
