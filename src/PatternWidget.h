@@ -40,7 +40,7 @@ public:
     /**Redraws grid. Call when resolution was changed.*/
     void RedrawGrid();
     /**Redraws diodes. Calles automatically on LightUpDiode and AllDiodesOff.*/
-    void RedrawDiodes();
+    void RedrawAllDiodes();
     /**Redraws both grid and atoms*/
     bool RedrawEverything();
     
@@ -86,6 +86,9 @@ public:
     void AllDiodesOff();
     DiodeMidiEvent* LightUpDiode(DiodeMidiEvent diodev);
     bool DimDiode(DiodeMidiEvent* diode_ptr);
+    /**If on=false, this will clear the area of that diode. Call just before deletion.
+     * If on=true, this will simply draw the given diode. */
+    void RedrawDiode(bool on, DiodeMidiEvent* diode);
     
     std::set<DiodeMidiEvent *> active_diodes;
     
@@ -134,7 +137,7 @@ private:
     Cairo::Context *cr_diodes_context;*/
     bool atoms_lock;
     bool grid_lock;
-    bool diodes_lock;
+    bool all_diodes_lock;
     bool man_i_wanted_to_redraw_atoms_but_it_was_locked_could_you_please_do_it_later_for_me;
     bool man_i_wanted_to_redraw_grid_but_it_was_locked_could_you_please_do_it_later_for_me;
     bool man_i_wanted_to_redraw_diodes_but_it_was_locked_could_you_please_do_it_later_for_me;

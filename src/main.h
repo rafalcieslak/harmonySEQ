@@ -25,7 +25,8 @@ class threadb : public sigc::trackable {
 public:
     threadb();
     ~threadb();
-    Glib::Mutex mutex_;
+    Glib::Mutex mutex_redraw_all_diodes;
+    Glib::Mutex mutex_redraw_diode;
     sigc::signal<void> some_signal;
     void th1();
     void th2();

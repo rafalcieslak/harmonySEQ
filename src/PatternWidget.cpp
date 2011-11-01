@@ -64,7 +64,7 @@ PatternWidget::PatternWidget(){
     cr_diodes_context = Cairo::Context::create(cr_diodes_surface);
     grid_lock = 0;
     atoms_lock = 0;
-    diodes_lock = 0;
+    all_diodes_lock = 0;
     man_i_wanted_to_redraw_atoms_but_it_was_locked_could_you_please_do_it_later_for_me = 0;
     man_i_wanted_to_redraw_grid_but_it_was_locked_could_you_please_do_it_later_for_me = 0;
     man_i_wanted_to_redraw_diodes_but_it_was_locked_could_you_please_do_it_later_for_me = 0;
@@ -987,7 +987,7 @@ bool PatternWidget::on_scroll_event(GdkEventScroll* e){
 void PatternWidget::AllDiodesOff(){
     for(std::set<DiodeMidiEvent*>::iterator it = active_diodes.begin();it != active_diodes.end();it++) delete *it;
     active_diodes.clear();
-    RedrawDiodes();
+    RedrawAllDiodes();
 }
 
 DiodeMidiEvent* PatternWidget::LightUpDiode(DiodeMidiEvent diodev){
@@ -995,7 +995,7 @@ DiodeMidiEvent* PatternWidget::LightUpDiode(DiodeMidiEvent diodev){
     DiodeMidiEvent* diode_ptr = new DiodeMidiEvent(diodev);
     active_diodes.insert(diode_ptr);
     Glib::signal_timeout().connect(sigc::bind<DiodeMidiEvent *>(sigc::mem_fun(*this, &PatternWidget::DimDiode), diode_ptr), 250);
-    RedrawDiodes();
+    RedrawDiode(1,diode_ptr);
     return diode_ptr;
 }
 
@@ -1005,7 +1005,7 @@ bool PatternWidget::DimDiode(DiodeMidiEvent* diode_ptr){
     if(it != active_diodes.end()){
         active_diodes.erase(it);
         delete diode_ptr;
-        RedrawDiodes();
+        RedrawDiode(0,diode_ptr);
     }
     return false; //do not repeat timeout
 }
@@ -1052,9 +1052,9 @@ bool PatternWidget::on_expose_event(GdkEventExpose* event){
 
 
 bool PatternWidget::TimeLockDiodesCompleted(){
-    diodes_lock = 0;
+    all_diodes_lock = 0;
     if (man_i_wanted_to_redraw_diodes_but_it_was_locked_could_you_please_do_it_later_for_me)
-        RedrawDiodes();
+        RedrawAllDiodes();
     man_i_wanted_to_redraw_diodes_but_it_was_locked_could_you_please_do_it_later_for_me = 0;
     return false; //do not repeat the timeout
 }
@@ -1077,17 +1077,71 @@ bool PatternWidget::TimeLockGridCompleted(){
     return false; //do not repeat the timeout
 }
 
+void PatternWidget::RedrawDiode(bool on, DiodeMidiEvent* diodev){
+    
+    Th->mutex_redraw_diode.lock();
+    
+    Gtk::Allocation allocation = get_allocation();
+    const double width = allocation.get_width();
+    
+    cr_diodes_context->save();
+    
+    cr_diodes_context->set_line_cap(Cairo::LINE_CAP_SQUARE);
+    cr_diodes_context->set_line_width(4.0);
+    
+    int x,y,h;
+    
+    //determine coords
+    if(diodev->type == DIODE_TYPE_NOTE){
+        if (seq_type != SEQ_TYPE_NOTE) return; //just to ensure safety
 
-void PatternWidget::RedrawDiodes(){
-    if (diodes_lock) {
+        //calculate some coordinates
+        y = (5 - diodev->value) * internal_height / 6;
+        h = internal_height / 6;
+        x = diodev->time*width;
+
+    } else if (diodev->type == DIODE_TYPE_CTRL) {
+        if (seq_type != SEQ_TYPE_CONTROL) return; //just to ensure safety
+
+        //calculate some coordinates
+        y = (double) internal_height * ((127 - diodev->value) / (127.0));
+        x = diodev->time*width;
+    }
+    
+    //check state
+    if(on){
+        if (diodev->color == 1) cr_diodes_context->set_source_rgb(1.0, 1.0, 0.0);
+        else cr_diodes_context->set_source_rgb(0.0, 0.9, 0.0);
+    }else{
+        cr_diodes_context->set_source_rgba(0.0,0.0,0.0,0.0);
+        cr_diodes_context->set_operator(Cairo::OPERATOR_SOURCE);
+    }
+    
+    //perform cairo geometry drawing
+    if(diodev->type == DIODE_TYPE_NOTE){
+        cr_diodes_context->move_to(x + 2, y + 2);
+        cr_diodes_context->line_to(x + 2, y + h - 2 + 1);
+        cr_diodes_context->stroke();
+        Redraw(x,y,4,h);
+    } else if (diodev->type == DIODE_TYPE_CTRL) {
+        cr_diodes_context->arc(x + 0.5, y + 0.5, 3.0, 0, 2 * M_PI);
+        cr_diodes_context->fill();
+        Redraw(x-4,y-4,8,8);
+    }
+    
+    cr_diodes_context->restore();
+    
+    Th->mutex_redraw_diode.unlock();
+}
+
+
+void PatternWidget::RedrawAllDiodes(){
+    if (all_diodes_lock) {
         man_i_wanted_to_redraw_diodes_but_it_was_locked_could_you_please_do_it_later_for_me = 1;
         return; //do not draw too ofter!
     }
     
-    Th->mutex_.lock();
-    
-    Gtk::Allocation allocation = get_allocation();
-    const double width = allocation.get_width();
+    Th->mutex_redraw_all_diodes.lock();
     
     //clearing...
     cr_diodes_context->save();
@@ -1096,50 +1150,19 @@ void PatternWidget::RedrawDiodes(){
     cr_diodes_context->paint();
     cr_diodes_context->restore();
     
-    cr_diodes_context->set_line_cap(Cairo::LINE_CAP_SQUARE);
-    cr_diodes_context->set_line_width(4.0);
-    
     for(std::set<DiodeMidiEvent*>::iterator it = active_diodes.begin();it != active_diodes.end(); it++){
         if (*it == NULL) continue; //removed?
-        DiodeMidiEvent diodev = *(*(it));
-        if(diodev.type == DIODE_TYPE_NOTE){
-            if(seq_type != SEQ_TYPE_NOTE) continue; //just to ensure safety
-            
-            if(diodev.color == 1) cr_diodes_context->set_source_rgb(1.0,1.0,0.0);
-            else cr_diodes_context->set_source_rgb(0.0,0.9,0.0);
-
-            //calculate some coordinates
-            int y1 = (5 - diodev.value) * internal_height / 6;
-            int h = internal_height / 6;
-            int x1 = diodev.time*width;
-            //y1++; // This is because the very first 1px line is the upper border.
-            
-            cr_diodes_context->move_to(x1+2,y1+2);
-            cr_diodes_context->line_to(x1+2,y1+h-2+1);
-            cr_diodes_context->stroke();
-            
-        }else if (diodev.type == DIODE_TYPE_CTRL){
-            if(seq_type != SEQ_TYPE_CONTROL) continue; //just to ensure safety
-            
-            if(diodev.color == 1) cr_diodes_context->set_source_rgb(1.0,1.0,0.0);
-            else cr_diodes_context->set_source_rgb(0.0,0.9,0.0);
-            
-            //calculate some coordinates
-            int y = (double) internal_height * ((127 - diodev.value) / (127.0));
-            int x = diodev.time*width;
-            
-            cr_diodes_context->arc(x+0.5,y+0.5,3.0,0,2*M_PI);
-            cr_diodes_context->fill();
-        }
+        DiodeMidiEvent* diodev = *(it);
+        RedrawDiode(1,diodev);
     }
     
-    diodes_lock = 1;
+    all_diodes_lock = 1;
     man_i_wanted_to_redraw_diodes_but_it_was_locked_could_you_please_do_it_later_for_me = 0;
     Glib::signal_timeout().connect(sigc::mem_fun(*this, &PatternWidget::TimeLockDiodesCompleted), Config::Interaction::PatternRefreshMS);
 
     Redraw();
     
-    Th->mutex_.unlock();
+    Th->mutex_redraw_all_diodes.unlock();
 }
   
   void PatternWidget::RedrawGrid(){
@@ -1272,7 +1295,7 @@ void PatternWidget::RedrawDiodes(){
                               //draw note
                               cr_atoms_context->set_line_width(3.0);
                               cr_atoms_context->set_line_join(Cairo::LINE_JOIN_ROUND);
-                              cr_atoms_context->rectangle((int)x1+1.5,(int)y1+1.5,(int)w-3,(int)h-3);
+                              cr_atoms_context->rectangle(x1+1.5,y1+1.5,w-3,h-3);
                               double af = (double)note->velocity/127; //may be changed to 128, this will not affect the graphics visibly, but may work slightly faster.
                               if(selected) cr_atoms_context->set_source_rgba(0.8,0.0,0.0,af);
                               else cr_atoms_context->set_source_rgba(0.,0.0,0.8,af);
@@ -1391,7 +1414,7 @@ void PatternWidget::RedrawDiodes(){
   bool PatternWidget::RedrawEverything(){
       RedrawAtoms();
       RedrawGrid();
-      RedrawDiodes();
+      RedrawAllDiodes();
       return false;
   }
   
@@ -1402,8 +1425,8 @@ void PatternWidget::RedrawDiodes(){
     
     Gtk::Allocation allocation = get_allocation();
     const double my_width = allocation.get_width();
-    if (width = -1) width = my_width;
-    if (height = -1) height = internal_height;
+    if (width == -1) width = my_width;
+    if (height == -1) height = internal_height;
     
     cr_buffer_context->save();
     cr_buffer_context->set_source(cr_grid_surface,0,0);
