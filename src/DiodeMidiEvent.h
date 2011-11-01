@@ -19,6 +19,7 @@
 
 #ifndef DIODEMIDIEVENT_H
 #define	DIODEMIDIEVENT_H
+#include <sys/time.h>
 
 enum DiodeType{
     DIODE_TYPE_NOTE,
@@ -42,6 +43,8 @@ public:
     int max_res;
     /** 0 - green, 1 - yellow*/
     int color;
+    
+    timeval starttime;
 private:
 
 };

@@ -29,6 +29,7 @@
 #include "SettingsWindow.h"
 #include "Configuration.h"
 #include "ControlSequencer.h"
+#include "main.h"
 
 #define TREEVIEW_COLOR_ON "green1"
 #define TREEVIEW_COLOR_OFF "white"
@@ -39,6 +40,8 @@
 
 bool CtrlKeyDown;
 bool ShiftKeyDown;
+
+extern threadb* Th;
 
 Gtk::TreeModel::iterator row_inserted_by_drag;
 bool seq_list_drag_in_progress;
@@ -602,8 +605,10 @@ void MainWindow::OnCloneClicked(){
 }
 
 void MainWindow::FlashTempoStart(){
+    Th->mutex_flash_tempo.lock();
     tempo_button.modify_base(Gtk::STATE_NORMAL,Gdk::Color("red"));
     Glib::signal_timeout().connect(mem_fun(*this,&MainWindow::FlashTempoEnd),FLASH_INTERVAL,Glib::PRIORITY_DEFAULT_IDLE);
+    Th->mutex_flash_tempo.unlock();
 }
 
 bool MainWindow::FlashTempoEnd(){

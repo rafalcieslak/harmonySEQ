@@ -89,6 +89,7 @@ public:
     /**If on=false, this will clear the area of that diode. Call just before deletion.
      * If on=true, this will simply draw the given diode. */
     void RedrawDiode(bool on, DiodeMidiEvent* diode);
+    bool DrawDiodesTimeout();
     
     std::set<DiodeMidiEvent *> active_diodes;
     

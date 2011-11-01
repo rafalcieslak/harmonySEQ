@@ -30,6 +30,10 @@
 #include "Configuration.h"
 #include "Files.h"
 #include "main.h"
+#include <sys/time.h> //for gettimeofday
+
+//depends on tempo. Fraction of tempo period.
+#define DIODE_FADEOUT_TIME 500
 
 extern threadb* Th;
 int resolution_hints[65] = {1,1,2,3,2,5,3,7,4,3,5,11,3,13,7,5,4,17,6,19,5,7,11,23,6,5,13,9,7,29,5,31,4,
@@ -42,6 +46,7 @@ const double crtl_Tsurrounding = 8.0;
 const double handle_size = 15.0;
 
 PatternWidget::PatternWidget(){
+    container = NULL; //zeruj zmienne ;)
     internal_height=50; //random guess. will be reset soon anyway by the SequencerWidget, but better protect from 0-like values.
     horiz_size = 450.0; //adjust for better default size
     snap = true;
@@ -74,6 +79,8 @@ PatternWidget::PatternWidget(){
     button_pressed = NONE;
     drag_in_progress = 0;
     select_only_this_atom_on_LMB_release = NULL;
+    
+    Glib::signal_timeout().connect(sigc::mem_fun(*this,&PatternWidget::DrawDiodesTimeout),DIODE_FADEOUT_TIME/8);
 }
 
 PatternWidget::~PatternWidget(){
@@ -993,8 +1000,12 @@ void PatternWidget::AllDiodesOff(){
 DiodeMidiEvent* PatternWidget::LightUpDiode(DiodeMidiEvent diodev){
     //*err << diodev.time << ", " << diodev.value << ", " << diodev.color << ENDL;
     DiodeMidiEvent* diode_ptr = new DiodeMidiEvent(diodev);
+    gettimeofday(&diode_ptr->starttime,NULL);
     active_diodes.insert(diode_ptr);
-    Glib::signal_timeout().connect(sigc::bind<DiodeMidiEvent *>(sigc::mem_fun(*this, &PatternWidget::DimDiode), diode_ptr), 250);
+    double l = 1.0;
+    if (container != NULL && container->owner != NULL && container->owner->GetLength() < 1.0)
+        l = container->owner->GetLength();
+    Glib::signal_timeout().connect(sigc::bind<DiodeMidiEvent *>(sigc::mem_fun(*this, &PatternWidget::DimDiode), diode_ptr),DIODE_FADEOUT_TIME * l);
     RedrawDiode(1,diode_ptr);
     return diode_ptr;
 }
@@ -1009,9 +1020,29 @@ bool PatternWidget::DimDiode(DiodeMidiEvent* diode_ptr){
     }
     return false; //do not repeat timeout
 }
+
+bool PatternWidget::DrawDiodesTimeout(){
+    
+    for (std::set<DiodeMidiEvent*>::iterator it = active_diodes.begin(); it != active_diodes.end(); it++) {
+        if (*it == NULL) continue; //removed?
+        DiodeMidiEvent* diodev = *(it);
+        RedrawDiode(0, diodev);
+        RedrawDiode(1, diodev);
+    }
+    double l = 1.0;
+    if (container != NULL)
+        if (container->owner != NULL)
+            if (container->owner->GetLength() < 1.0)
+                l = container->owner->GetLength();
+    Glib::signal_timeout().connect(sigc::mem_fun(*this,&PatternWidget::DrawDiodesTimeout),DIODE_FADEOUT_TIME * l /8);
+    return false; // DO NOT REPEAT TIMEOUT
+}
 //=======================DRAWING==============
 
 bool PatternWidget::on_expose_event(GdkEventExpose* event){
+    
+    Th->mutex_drawing.lock();
+    
     Gtk::Allocation allocation = get_allocation();
     const double width = allocation.get_width();
     const int height = allocation.get_height();
@@ -1046,6 +1077,8 @@ bool PatternWidget::on_expose_event(GdkEventExpose* event){
    
    cairo_destroy(c_t);
   
+   Th->mutex_drawing.unlock();
+   
   return true;
       
   }
@@ -1110,8 +1143,16 @@ void PatternWidget::RedrawDiode(bool on, DiodeMidiEvent* diodev){
     
     //check state
     if(on){
-        if (diodev->color == 1) cr_diodes_context->set_source_rgb(1.0, 1.0, 0.0);
-        else cr_diodes_context->set_source_rgb(0.0, 0.9, 0.0);
+        timeval curr,res;
+        gettimeofday(&curr, NULL);
+        timersub(&curr,&diodev->starttime,&res);
+        long long int msec = res.tv_sec*1000+res.tv_usec/1000;
+        double l = 1.0;
+        if (container != NULL && container->owner != NULL && container->owner->GetLength() < 1.0)
+            l = container->owner->GetLength();
+        double alpha = 1.0 - (double)msec/(DIODE_FADEOUT_TIME * l);
+        if (diodev->color == 1) cr_diodes_context->set_source_rgba(1.0, 1.0, 0.0, alpha);
+        else cr_diodes_context->set_source_rgba(0.0, 0.9, 0.0, alpha);
     }else{
         cr_diodes_context->set_source_rgba(0.0,0.0,0.0,0.0);
         cr_diodes_context->set_operator(Cairo::OPERATOR_SOURCE);
@@ -1122,14 +1163,15 @@ void PatternWidget::RedrawDiode(bool on, DiodeMidiEvent* diodev){
         cr_diodes_context->move_to(x + 2, y + 2);
         cr_diodes_context->line_to(x + 2, y + h - 2 + 1);
         cr_diodes_context->stroke();
+        cr_diodes_context->restore();
         Redraw(x,y,4,h);
     } else if (diodev->type == DIODE_TYPE_CTRL) {
-        cr_diodes_context->arc(x + 0.5, y + 0.5, 3.0, 0, 2 * M_PI);
+        cr_diodes_context->arc(x + 0.5, y + 0.5, 6.5-(on*0.5), 0, 2 * M_PI); //the on*0.5 is here to make the cleared area bit smaller, to clear the anti-aliasing effects
         cr_diodes_context->fill();
-        Redraw(x-4,y-4,8,8);
+        cr_diodes_context->restore();
+        Redraw(x-7,y-7,14,14);
     }
     
-    cr_diodes_context->restore();
     
     Th->mutex_redraw_diode.unlock();
 }
@@ -1422,11 +1464,12 @@ void PatternWidget::RedrawAllDiodes(){
       //Glib::Timer T;
     //long unsigned int t;
       //T.reset(); T.start();
-    
+      Th->mutex_redrawarea.lock();
+      
     Gtk::Allocation allocation = get_allocation();
     const double my_width = allocation.get_width();
     if (width == -1) width = my_width;
-    if (height == -1) height = internal_height;
+    if (height == -1) height = allocation.get_height();
     
     cr_buffer_context->save();
     cr_buffer_context->set_source(cr_grid_surface,0,0);
@@ -1448,17 +1491,19 @@ void PatternWidget::RedrawAllDiodes(){
     
     //TODO: optimize following to use only the redrawn area
   if(drag_in_progress && drag_mode==DRAG_MODE_SELECT_AREA){
+      cr_buffer_context->save();
       cr_buffer_context->set_line_width(2);
       cr_buffer_context->rectangle(drag_beggining_x,drag_beggining_y,drag_current_x-drag_beggining_x,drag_current_y-drag_beggining_y);
       cr_buffer_context->set_source_rgba(0.9,0.4,0.3,0.2);
       cr_buffer_context->fill_preserve();
       cr_buffer_context->set_source_rgb(0.9,0.4,0.3);
       cr_buffer_context->stroke();
-      
+      cr_buffer_context->restore();
   }
     //T.elapsed(t);
     //*err << (int)t << ENDL;
     
+      Th->mutex_redrawarea.unlock();
    // T.stop();
     queue_draw_area(x,y,width,height);
 }
