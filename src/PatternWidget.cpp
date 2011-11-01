@@ -1022,12 +1022,27 @@ bool PatternWidget::on_expose_event(GdkEventExpose* event){
     if(last_drawn_height != height || last_drawn_width != width) RedrawEverything();  
     last_drawn_height = height; last_drawn_width = width;
     
-   cairo_t * c_t = gdk_cairo_create(event->window);
-   Cairo::Context ct(c_t);
-   
-   ct.set_source(cr_buffer_surface,0,0);
-   ct.rectangle(0.0,0.0,width,internal_height);
-   ct.fill();
+    cairo_t * c_t = gdk_cairo_create(event->window);
+    Cairo::Context ct(c_t);
+
+    ct.set_source(cr_buffer_surface,0,0);
+
+    //repainting only needed rectangles
+    GdkRectangle *rects;
+    int n_rects;
+    int i;
+    gdk_region_get_rectangles(event->region, &rects, &n_rects);
+
+    for (i = 0; i < n_rects; i++) {
+        /* Repaint rectangle: (rects[i].x, rects[i].y),
+         *                    (rects[i].width, rects[i].height)
+         */
+
+        ct.rectangle(rects[i].x, rects[i].y, rects[i].width, rects[i].height);
+        ct.fill();
+    }
+
+    g_free(rects);
    
    cairo_destroy(c_t);
   
@@ -1081,7 +1096,7 @@ void PatternWidget::RedrawDiodes(){
     cr_diodes_context->paint();
     cr_diodes_context->restore();
     
-    cr_diodes_context->set_line_cap(Cairo::LINE_CAP_ROUND);
+    cr_diodes_context->set_line_cap(Cairo::LINE_CAP_SQUARE);
     cr_diodes_context->set_line_width(4.0);
     
     for(std::set<DiodeMidiEvent*>::iterator it = active_diodes.begin();it != active_diodes.end(); it++){
@@ -1094,13 +1109,13 @@ void PatternWidget::RedrawDiodes(){
             else cr_diodes_context->set_source_rgb(0.0,0.9,0.0);
 
             //calculate some coordinates
-            double y1 = (5 - diodev.value) * internal_height / 6;
-            double h = internal_height / 6;
-            double x1 = diodev.time*width;
-            y1++; // This is because the very first 1px line is the upper border.
+            int y1 = (5 - diodev.value) * internal_height / 6;
+            int h = internal_height / 6;
+            int x1 = diodev.time*width;
+            //y1++; // This is because the very first 1px line is the upper border.
             
             cr_diodes_context->move_to(x1+2,y1+2);
-            cr_diodes_context->line_to(x1+2,y1+h-2);
+            cr_diodes_context->line_to(x1+2,y1+h-2+1);
             cr_diodes_context->stroke();
             
         }else if (diodev.type == DIODE_TYPE_CTRL){
@@ -1111,7 +1126,7 @@ void PatternWidget::RedrawDiodes(){
             
             //calculate some coordinates
             int y = (double) internal_height * ((127 - diodev.value) / (127.0));
-            double x = diodev.time*width;
+            int x = diodev.time*width;
             
             cr_diodes_context->arc(x+0.5,y+0.5,3.0,0,2*M_PI);
             cr_diodes_context->fill();
@@ -1257,7 +1272,7 @@ void PatternWidget::RedrawDiodes(){
                               //draw note
                               cr_atoms_context->set_line_width(3.0);
                               cr_atoms_context->set_line_join(Cairo::LINE_JOIN_ROUND);
-                              cr_atoms_context->rectangle(x1+1.5,y1+1.5,w-3,h-3);
+                              cr_atoms_context->rectangle((int)x1+1.5,(int)y1+1.5,(int)w-3,(int)h-3);
                               double af = (double)note->velocity/127; //may be changed to 128, this will not affect the graphics visibly, but may work slightly faster.
                               if(selected) cr_atoms_context->set_source_rgba(0.8,0.0,0.0,af);
                               else cr_atoms_context->set_source_rgba(0.,0.0,0.8,af);
@@ -1380,32 +1395,35 @@ void PatternWidget::RedrawDiodes(){
       return false;
   }
   
-  void PatternWidget::Redraw(){
+  void PatternWidget::Redraw(int x, int y, int width, int height){
       //Glib::Timer T;
     //long unsigned int t;
       //T.reset(); T.start();
     
     Gtk::Allocation allocation = get_allocation();
-    const double width = allocation.get_width();
+    const double my_width = allocation.get_width();
+    if (width = -1) width = my_width;
+    if (height = -1) height = internal_height;
     
     cr_buffer_context->save();
     cr_buffer_context->set_source(cr_grid_surface,0,0);
-    cr_buffer_context->rectangle(0.0,0.0,width,internal_height);
+    cr_buffer_context->rectangle(x,y,width,height);
     cr_buffer_context->fill();
     cr_buffer_context->restore();
     
     cr_buffer_context->save();
     cr_buffer_context->set_source(cr_atoms_surface,0,0);
-    cr_buffer_context->rectangle(0.0,0.0,width,internal_height);
+    cr_buffer_context->rectangle(x,y,width,height);
     cr_buffer_context->fill();
     cr_buffer_context->restore();
     
     cr_buffer_context->save();
     cr_buffer_context->set_source(cr_diodes_surface,0,0);
-    cr_buffer_context->rectangle(0.0,0.0,width,internal_height);
+    cr_buffer_context->rectangle(x,y,width,height);
     cr_buffer_context->fill();
     cr_buffer_context->restore();
     
+    //TODO: optimize following to use only the redrawn area
   if(drag_in_progress && drag_mode==DRAG_MODE_SELECT_AREA){
       cr_buffer_context->set_line_width(2);
       cr_buffer_context->rectangle(drag_beggining_x,drag_beggining_y,drag_current_x-drag_beggining_x,drag_current_y-drag_beggining_y);
@@ -1419,5 +1437,5 @@ void PatternWidget::RedrawDiodes(){
     //*err << (int)t << ENDL;
     
    // T.stop();
-    queue_draw();
+    queue_draw_area(x,y,width,height);
 }

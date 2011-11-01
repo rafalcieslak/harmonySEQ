@@ -112,7 +112,7 @@ protected:
    virtual bool on_scroll_event(GdkEventScroll* event);
 private:
     
-    void Redraw();
+    void Redraw(int x = 0, int y = 0, int width = -1, int height = -1);
     bool TimeLockAtomsCompleted();
     bool TimeLockGridCompleted();
     bool TimeLockDiodesCompleted();
