@@ -91,6 +91,7 @@ public:
     void RedrawDiode(bool on, DiodeMidiEvent* diode);
     bool DrawDiodesTimeout();
     
+    Glib::Mutex active_diodes_mtx;
     std::set<DiodeMidiEvent *> active_diodes;
     
     /**Emitted when selection is changed. Provides an argument that is equal to number of notes in selection.*/

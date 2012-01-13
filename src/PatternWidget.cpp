@@ -992,8 +992,10 @@ bool PatternWidget::on_scroll_event(GdkEventScroll* e){
 //======================DIODES===============
 
 void PatternWidget::AllDiodesOff(){
+    active_diodes_mtx.lock();
     for(std::set<DiodeMidiEvent*>::iterator it = active_diodes.begin();it != active_diodes.end();it++) delete *it;
     active_diodes.clear();
+    active_diodes_mtx.unlock();
     RedrawAllDiodes();
 }
 
@@ -1001,10 +1003,12 @@ DiodeMidiEvent* PatternWidget::LightUpDiode(DiodeMidiEvent diodev){
     //*err << diodev.time << ", " << diodev.value << ", " << diodev.color << ENDL;
     DiodeMidiEvent* diode_ptr = new DiodeMidiEvent(diodev);
     gettimeofday(&diode_ptr->starttime,NULL);
+    active_diodes_mtx.lock();
     active_diodes.insert(diode_ptr);
     double l = 1.0;
     if (container != NULL && container->owner != NULL && container->owner->GetLength() < 1.0)
         l = container->owner->GetLength();
+    active_diodes_mtx.unlock();
     Glib::signal_timeout().connect(sigc::bind<DiodeMidiEvent *>(sigc::mem_fun(*this, &PatternWidget::DimDiode), diode_ptr),DIODE_FADEOUT_TIME * l);
     RedrawDiode(1,diode_ptr);
     return diode_ptr;
@@ -1012,23 +1016,29 @@ DiodeMidiEvent* PatternWidget::LightUpDiode(DiodeMidiEvent diodev){
 
 bool PatternWidget::DimDiode(DiodeMidiEvent* diode_ptr){
     if(diode_ptr == NULL) return false;
+    active_diodes_mtx.lock();
     std::set<DiodeMidiEvent*>::iterator it = active_diodes.find(diode_ptr);
     if(it != active_diodes.end()){
         active_diodes.erase(it);
         delete diode_ptr;
+        active_diodes_mtx.unlock();
         RedrawDiode(0,diode_ptr);
+    }else{
+        active_diodes_mtx.unlock();
     }
     return false; //do not repeat timeout
 }
 
 bool PatternWidget::DrawDiodesTimeout(){
     
+    active_diodes_mtx.lock();
     for (std::set<DiodeMidiEvent*>::iterator it = active_diodes.begin(); it != active_diodes.end(); it++) {
         if (*it == NULL) continue; //removed?
         DiodeMidiEvent* diodev = *(it);
         RedrawDiode(0, diodev);
         RedrawDiode(1, diodev);
     }
+    active_diodes_mtx.unlock();
     double l = 1.0;
     if (container != NULL)
         if (container->owner != NULL)
@@ -1192,11 +1202,13 @@ void PatternWidget::RedrawAllDiodes(){
     cr_diodes_context->paint();
     cr_diodes_context->restore();
     
+    active_diodes_mtx.lock();
     for(std::set<DiodeMidiEvent*>::iterator it = active_diodes.begin();it != active_diodes.end(); it++){
         if (*it == NULL) continue; //removed?
         DiodeMidiEvent* diodev = *(it);
         RedrawDiode(1,diodev);
     }
+    active_diodes_mtx.unlock();
     
     all_diodes_lock = 1;
     man_i_wanted_to_redraw_diodes_but_it_was_locked_could_you_please_do_it_later_for_me = 0;

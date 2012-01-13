@@ -707,7 +707,7 @@ void MidiDriver::ProcessInput(){
 
 
 
-    / * The midi driver for Windows shall go
+    /* The midi driver for Windows shall go
         *
         *    H
         *    E
