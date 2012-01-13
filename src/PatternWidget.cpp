@@ -1005,45 +1005,59 @@ DiodeMidiEvent* PatternWidget::LightUpDiode(DiodeMidiEvent diodev){
     gettimeofday(&diode_ptr->starttime,NULL);
     active_diodes_mtx.lock();
     active_diodes.insert(diode_ptr);
-    double l = 1.0;
-    if (container != NULL && container->owner != NULL && container->owner->GetLength() < 1.0)
-        l = container->owner->GetLength();
     active_diodes_mtx.unlock();
-    Glib::signal_timeout().connect(sigc::bind<DiodeMidiEvent *>(sigc::mem_fun(*this, &PatternWidget::DimDiode), diode_ptr),DIODE_FADEOUT_TIME * l);
+    //double l = 1.0;
+    //if (container != NULL && container->owner != NULL && container->owner->GetLength() < 1.0)
+    //    l = container->owner->GetLength();
+    //Glib::signal_timeout().connect(sigc::bind<DiodeMidiEvent *>(sigc::mem_fun(*this, &PatternWidget::DimDiode), diode_ptr),DIODE_FADEOUT_TIME * l);
     RedrawDiode(1,diode_ptr);
     return diode_ptr;
 }
 
 bool PatternWidget::DimDiode(DiodeMidiEvent* diode_ptr){
     if(diode_ptr == NULL) return false;
-    active_diodes_mtx.lock();
     std::set<DiodeMidiEvent*>::iterator it = active_diodes.find(diode_ptr);
     if(it != active_diodes.end()){
         active_diodes.erase(it);
         delete diode_ptr;
-        active_diodes_mtx.unlock();
         RedrawDiode(0,diode_ptr);
-    }else{
-        active_diodes_mtx.unlock();
     }
     return false; //do not repeat timeout
 }
 
 bool PatternWidget::DrawDiodesTimeout(){
     
-    active_diodes_mtx.lock();
-    for (std::set<DiodeMidiEvent*>::iterator it = active_diodes.begin(); it != active_diodes.end(); it++) {
-        if (*it == NULL) continue; //removed?
-        DiodeMidiEvent* diodev = *(it);
-        RedrawDiode(0, diodev);
-        RedrawDiode(1, diodev);
-    }
-    active_diodes_mtx.unlock();
     double l = 1.0;
     if (container != NULL)
         if (container->owner != NULL)
             if (container->owner->GetLength() < 1.0)
                 l = container->owner->GetLength();
+        
+    active_diodes_mtx.lock();
+    std::vector<DiodeMidiEvent*> diodes_to_delete;
+    for (std::set<DiodeMidiEvent*>::iterator it = active_diodes.begin(); it != active_diodes.end(); it++) {
+        if (*it == NULL) continue; //removed?
+        DiodeMidiEvent* diodev = *(it);
+        timeval curr,res;
+        gettimeofday(&curr, NULL);
+        timersub(&curr,&diodev->starttime,&res);
+        long long int msec = res.tv_sec*1000+res.tv_usec/1000;
+        if(msec >= DIODE_FADEOUT_TIME*l){
+            diodes_to_delete.push_back(diodev);
+            RedrawDiode(0, diodev);
+        }
+        RedrawDiode(0, diodev);
+        RedrawDiode(1, diodev);
+    }
+    for(unsigned int x = 0; x < diodes_to_delete.size(); x++){
+        DiodeMidiEvent* diode_ptr = diodes_to_delete[x];
+        std::set<DiodeMidiEvent*>::iterator it = active_diodes.find(diode_ptr);
+        RedrawDiode(0, diode_ptr);
+        active_diodes.erase(it);
+        delete diode_ptr;
+    }
+    active_diodes_mtx.unlock();
+
     Glib::signal_timeout().connect(sigc::mem_fun(*this,&PatternWidget::DrawDiodesTimeout),DIODE_FADEOUT_TIME * l /8);
     return false; // DO NOT REPEAT TIMEOUT
 }
@@ -1142,7 +1156,7 @@ void PatternWidget::RedrawDiode(bool on, DiodeMidiEvent* diodev){
         y = (5 - diodev->value) * internal_height / 6;
         h = internal_height / 6;
         x = diodev->time*width;
-
+ 
     } else if (diodev->type == DIODE_TYPE_CTRL) {
         if (seq_type != SEQ_TYPE_CONTROL) return; //just to ensure safety
 
@@ -1515,7 +1529,8 @@ void PatternWidget::RedrawAllDiodes(){
     //T.elapsed(t);
     //*err << (int)t << ENDL;
     
-      Th->mutex_redrawarea.unlock();
    // T.stop();
     queue_draw_area(x,y,width,height);
+   
+    Th->mutex_redrawarea.unlock();
 }
