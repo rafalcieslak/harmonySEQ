@@ -110,6 +110,7 @@ SequencerWidget::SequencerWidget()
     wShowChordButton.signal_toggled().connect(sigc::mem_fun(*this,&SequencerWidget::OnShowChordButtonClicked));
     
     wSnapToggle.set_label(_("Snap to grid"));
+    wSnapToggle.set_tooltip_markup(_("If on, notes will be snapped to the visible grid.\nGrid density changes with sequence resolution."));
     wSnapToggle.set_active(1); //As this is default value
     wSnapToggle.signal_toggled().connect(sigc::mem_fun(*this,&SequencerWidget::OnSnapClicked));
 
@@ -249,7 +250,9 @@ SequencerWidget::SequencerWidget()
         wCtrlSlopeFlat.set_image(wImageSlopeFlat);
         wCtrlSlopeLinear.set_image(wImageSlopeLinear);
         wCtrlSlopeFlat.set_label("");
+        wCtrlSlopeFlat.set_tooltip_markup(_("Changes selected points mode to <b>flat</b>\nharmonySEQ will output a single MIDI Control Event on such points."));
         wCtrlSlopeLinear.set_label("");
+        wCtrlSlopeLinear.set_tooltip_markup(_("Changes selected points mode to <b>linear</b>\nIt allows to create linear slopes, for smooth parameter changes."));
         wImageSlopeFlat.show();
         wImageSlopeLinear.show();
     }
@@ -572,8 +575,8 @@ void SequencerWidget::OnChordWidgetChanged(){
     mainwindow->RefreshRow(seq->my_row);
 }
 void SequencerWidget::OnChordWidgetNoteChanged(int n, int p){
-    if(!AnythingSelected) return;
-    Sequencer* seq = seqH(selectedSeq);
+    //if(!AnythingSelected) return;
+    //Sequencer* seq = seqH(selectedSeq);
 }
 
 void SequencerWidget::OnToggleMuteToggled(){

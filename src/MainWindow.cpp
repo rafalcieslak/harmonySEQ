@@ -207,7 +207,7 @@ MainWindow::MainWindow()
     TempoLabelTool.add(wTempoLabel);
     TempoLabelTool.set_homogeneous(0);
     tempo_button.set_range(2.0, 1000.0);
-    tempo_button.set_tooltip_markup(_("Sets the <b>tempo</b> applied to all sequencers.\nIt also blinks when a bar starts."));
+    tempo_button.set_tooltip_markup(_("Sets the <b>tempo</b> applied to all sequencers."));
     tempo_button.set_increments(0.01, 5.0);
     tempo_button.set_digits(2);
     tempo_button.set_width_chars(5);
