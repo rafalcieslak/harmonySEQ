@@ -45,7 +45,7 @@ EventsWidget::EventsWidget(){
     remove_button.signal_clicked().connect(sigc::mem_fun(*this,&EventsWidget::OnRemoveClicked));
     add_action_button.set_sensitive(0);
     add_action_button.set_label(_("Add Action"));
-    add_action_button.set_tooltip_markup(_("Adds a new <b>action</b> assigned to selected event.\n\nActions define what harmonySEQ should do on corresponding event - for example it can toggle on of the sequencers, or change it's chord."));
+    add_action_button.set_tooltip_markup(_("Adds a new <b>action</b> assigned to selected event.\n\nActions define what harmonySEQ should do on corresponding event - for example it can toggle one of the sequencers, or change it's chord."));
     add_action_button.signal_clicked().connect(sigc::mem_fun(*this,&EventsWidget::OnAddActionClicked));
 
     m_refTreeModel = Gtk::TreeStore::create(m_columns);
