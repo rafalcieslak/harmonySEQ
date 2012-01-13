@@ -53,10 +53,10 @@ private:
     Gtk::VBox page_midi;
     Gtk::VBox page_OSC;
 
-        Gtk::VBox play_on_edit_vbox;
-        Gtk::CheckButton play_on_edit;
-        Gtk::HBox play_on_edit_label_hbox;
-        Gtk::Label play_on_edit_label;
+        Gtk::VBox disable_diodes_vbox;
+        Gtk::CheckButton disable_diodes;
+        Gtk::HBox disable_diodes_label_hbox;
+        Gtk::Label disable_diodes_label;
 
         Gtk::HBox columns_label_hbox;
         Gtk::Label colums_label;

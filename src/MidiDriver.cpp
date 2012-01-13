@@ -33,6 +33,7 @@
 #include "NoteAtom.h"
 
 extern int running;
+extern bool diodes_disabled;
 
 MidiDriver::MidiDriver() {
     working = false; //at the beggining the driver is not active, it isn't working
@@ -208,6 +209,7 @@ void MidiDriver::ScheduleCtrlEventLinearSlope(int channel, int ctrl_no, int star
 }
 
 void MidiDriver::ScheduleDiodeEvent(DiodeType type, seqHandle handle, int tick_time, double time, int value, int color, int max_res){
+    if(diodes_disabled) return;
     DiodeMidiEvent diodeev(type,time,value,color,max_res);
     diode_events.insert(std::make_pair<int,DiodeMidiEvent>(diode_event_id_next,diodeev));
     

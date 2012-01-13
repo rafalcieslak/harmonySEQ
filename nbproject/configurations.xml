@@ -70,6 +70,7 @@
       <itemPath>src/Sequencer.cpp</itemPath>
       <itemPath>src/SequencerWidget.cpp</itemPath>
       <itemPath>../Programy/harmonySEQ/trunk/src/SettingsWindow.cpp</itemPath>
+      <itemPath>../Programy/harmonySEQ/trunk/src/SettingsWindow.h</itemPath>
       <itemPath>src/TreeModels.cpp</itemPath>
       <itemPath>src/global.cpp</itemPath>
       <itemPath>src/main.cpp</itemPath>

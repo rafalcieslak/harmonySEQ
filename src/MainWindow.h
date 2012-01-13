@@ -68,7 +68,6 @@ public:
     Gtk::SpinButton tempo_button;
 
     void UpdatePassMidiToggle();
-    void UpdatePlayOnEditToggle();
 
     //int GetSelectedSequencerID();
     Gtk::TreeModel::iterator GetSelectedSequencerIter();
@@ -95,7 +94,6 @@ private:
     void OnPlayPauseClicked();
     void OnSelectionChanged();
     void OnPassToggleClicked();
-    void OnPlayOnEditClicked();
     bool OnKeyPress(GdkEventKey* event);
     bool OnKeyRelease(GdkEventKey* event);
 

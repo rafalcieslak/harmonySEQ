@@ -574,8 +574,6 @@ void SequencerWidget::OnChordWidgetChanged(){
 void SequencerWidget::OnChordWidgetNoteChanged(int n, int p){
     if(!AnythingSelected) return;
     Sequencer* seq = seqH(selectedSeq);
-    if(Config::Interaction::PlayOnEdit)
-        midi->SendNoteEvent(seq->GetChannel(),p,100,PLAY_ON_EDIT_MS);
 }
 
 void SequencerWidget::OnToggleMuteToggled(){

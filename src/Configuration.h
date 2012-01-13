@@ -41,6 +41,7 @@ namespace Config{
     namespace Interaction{
         extern bool PlayOnEdit;
         extern int PatternRefreshMS;
+        extern bool DisableDiodes;
     }
     namespace OSC{
         extern int Port;

@@ -80,7 +80,7 @@ PatternWidget::PatternWidget(){
     drag_in_progress = 0;
     select_only_this_atom_on_LMB_release = NULL;
     
-    Glib::signal_timeout().connect(sigc::mem_fun(*this,&PatternWidget::DrawDiodesTimeout),DIODE_FADEOUT_TIME/8);
+    if(!Config::Interaction::DisableDiodes) Glib::signal_timeout().connect(sigc::mem_fun(*this,&PatternWidget::DrawDiodesTimeout),DIODE_FADEOUT_TIME/8);
 }
 
 PatternWidget::~PatternWidget(){

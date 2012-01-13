@@ -46,13 +46,14 @@ SettingsWindow::SettingsWindow(){
     page_midi.set_border_width(5);
     page_OSC.set_border_width(5);
 
-    page_main.pack_start(play_on_edit_vbox);
+    page_main.pack_start(disable_diodes_vbox);
     
-    play_on_edit_vbox.pack_start(play_on_edit_label_hbox);
-    play_on_edit_label_hbox.pack_start(play_on_edit_label,Gtk::PACK_SHRINK);
-    play_on_edit_vbox.pack_start(play_on_edit,Gtk::PACK_SHRINK);
-    play_on_edit_label.set_markup(_("<b>Play on edit</b>"));
-    play_on_edit.set_label(_("Play briefly a note when it's added, \nor changed manually in a chord."));
+    disable_diodes_vbox.pack_start(disable_diodes_label_hbox);
+    disable_diodes_label_hbox.pack_start(disable_diodes_label,Gtk::PACK_SHRINK);
+    disable_diodes_vbox.pack_start(disable_diodes,Gtk::PACK_SHRINK);
+    disable_diodes_label.set_markup(_("<b>Disable diodes</b>"));
+    disable_diodes.set_label(_("Disable all animated diodes"));
+    disable_diodes.set_tooltip_markup(_("Disables animated diodes, which may improve performance.\n<b>Requires restart to take effect.</b>"));
     
     page_main.pack_start(sepFPS);
     page_main.pack_start(boxFPS);
@@ -192,7 +193,7 @@ void SettingsWindow::LoadDataFromConfig(){
     colums_resolution.set_active(Config::VisibleColumns::Resolution);
     colums_length.set_active(Config::VisibleColumns::Length);
     colums_chord.set_active(Config::VisibleColumns::ChordAndCtrlNo);
-    play_on_edit.set_active(Config::Interaction::PlayOnEdit);
+    disable_diodes.set_active(Config::Interaction::DisableDiodes);
     FPSbutton.set_value(1000/Config::Interaction::PatternRefreshMS);
     osc_port.set_value(Config::OSC::Port);
 
@@ -210,10 +211,9 @@ void SettingsWindow::StoreDataToConfig(){
     Config::VisibleColumns::Resolution = colums_resolution.get_active();
     Config::VisibleColumns::Length = colums_length.get_active();
     Config::VisibleColumns::ChordAndCtrlNo  = colums_chord.get_active();
-    Config::Interaction::PlayOnEdit = play_on_edit.get_active();
+    Config::Interaction::DisableDiodes = disable_diodes.get_active();
     Config::Interaction::PatternRefreshMS = 1000/FPSbutton.get_value();
     Config::OSC::Port = osc_port.get_value();
-    mainwindow->UpdatePlayOnEditToggle();
 }
 
 void SettingsWindow::OnCancelClicked(){

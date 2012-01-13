@@ -62,6 +62,7 @@ Glib::RefPtr< Gdk::Pixbuf > icon_slope_flat;
 int debugging = 0, help = 0, version = 0; //flags set by getopt, depending on command-line parameters
 
 bool metronome;
+bool diodes_disabled;
 
 void print_help(); //forward declaration of few functions
 void end_program();
@@ -332,6 +333,8 @@ int main(int argc, char** argv) {
     gdk_threads_enter();
     LoadConfig();
     Config::SaveToFile();
+    if(Config::Interaction::DisableDiodes) diodes_disabled = 1;
+    else diodes_disabled = 0;
     gdk_threads_leave();
 
     //...GUI...

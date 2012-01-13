@@ -209,8 +209,6 @@ void ActionGUI::UpdateChordwidget(){
 void ActionGUI::OnChordWidgetNoteChanged(int n, int p){
     if(parent->type != Action::SEQ_CHANGE_CHORD) return;
     Sequencer* seq = seqH(parent->args[1]);
-    if(Config::Interaction::PlayOnEdit)
-    midi->SendNoteEvent(seq->GetChannel(),p,100,PLAY_ON_EDIT_MS);
 
 }
 
