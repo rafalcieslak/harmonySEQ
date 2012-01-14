@@ -11,12 +11,12 @@ msgstr ""
 "PO-Revision-Date: 2011-09-27 05:45+0000\n"
 "Last-Translator: Rafal Cieslak <rafalcieslak256@gmail.com>\n"
 "Language-Team: Japanese <ja@li.org>\n"
-"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-11-02 05:07+0000\n"
-"X-Generator: Launchpad (build 14214)\n"
+"X-Launchpad-Export-Date: 2012-01-14 05:43+0000\n"
+"X-Generator: Launchpad (build 14664)\n"
+"Language: ja\n"
 
 #: src/main.cpp:293
 #, c-format
@@ -202,8 +202,7 @@ msgid ""
 "\n"
 "Select one from the list above, or add a new one."
 msgstr ""
-"シーケンサーが選択されていないので、そのプロパティを表示するこはできませ"
-"ん。\n"
+"シーケンサーが選択されていないので、そのプロパティを表示するこはできません。\n"
 "\n"
 "上記のリストからシーケンサーを選択、または新規追加。"
 
@@ -405,7 +404,8 @@ msgid "This file contains data in format, which is too old."
 msgstr ""
 
 #: src/Files.cpp:182
-msgid "harmonySEQ will convert this file automatically. This may take a while."
+msgid ""
+"harmonySEQ will convert this file automatically. This may take a while."
 msgstr ""
 
 #: src/Files.cpp:185
@@ -703,11 +703,13 @@ msgid "Error: tempo has changed, while action is not tempo-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:461
-msgid "Error: note to set has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note to set has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:472
-msgid "Error: note number has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note number has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:485
@@ -730,7 +732,8 @@ msgid "Error: pattern has changed, while action is not pattern-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:541
-msgid "Error: apply octave has changed, while action is not change-chord-type."
+msgid ""
+"Error: apply octave has changed, while action is not change-chord-type."
 msgstr ""
 
 #: src/TreeModels.cpp:49 src/TreeModels.cpp:69
@@ -1384,9 +1387,8 @@ msgid ""
 msgstr ""
 
 #: src/EventsWidget.cpp:43
-#, fuzzy
 msgid "Removes selected action or event."
-msgstr "選定したシーケンサーを削除する"
+msgstr ""
 
 #: src/EventsWidget.cpp:47
 msgid "Add Action"

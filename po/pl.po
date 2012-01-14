@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
 "POT-Creation-Date: 2012-01-13 20:55+0100\n"
-"PO-Revision-Date: 2011-10-20 14:54+0000\n"
+"PO-Revision-Date: 2012-01-13 19:55+0000\n"
 "Last-Translator: Rafal Cieslak <rafalcieslak256@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
-"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-11-02 05:07+0000\n"
-"X-Generator: Launchpad (build 14214)\n"
+"X-Launchpad-Export-Date: 2012-01-14 05:43+0000\n"
+"X-Generator: Launchpad (build 14664)\n"
+"Language: pl\n"
 
 #: src/main.cpp:293
 #, c-format
@@ -222,11 +222,8 @@ msgstr ""
 "Wybierz sekwencer z listy powyżej, lub dodaj nowy."
 
 #: src/MainWindow.cpp:210
-#, fuzzy
 msgid "Sets the <b>tempo</b> applied to all sequencers."
-msgstr ""
-"Ustawia <b>tempo</b> stosowane do wszystkich sekwencerów.\n"
-"Do tego miga, gdy zaczyna są kolejny takt."
+msgstr "Ustawia <b>tempo</b> stosowane dla wszystkich sekwencerów."
 
 #: src/MainWindow.cpp:233
 msgid "Handle"
@@ -321,8 +318,8 @@ msgstr ""
 "zapoznania się ze szczegółami.\n"
 "\n"
 "Powinieneś otrzymać kopię GNU Powszechnej Licencji Publicznej wraz z\n"
-"harmonySEQ. Jeżeli nie otrzymałeś jej, zobacz na <http://www.gnu.org/"
-"licenses/>."
+"harmonySEQ. Jeżeli nie otrzymałeś jej, zobacz na "
+"<http://www.gnu.org/licenses/>."
 
 #: src/MainWindow.cpp:726
 msgid "harmonySEQ website"
@@ -443,7 +440,8 @@ msgid "This file contains data in format, which is too old."
 msgstr "Ten plik zawiera dane w za starym formacie."
 
 #: src/Files.cpp:182
-msgid "harmonySEQ will convert this file automatically. This may take a while."
+msgid ""
+"harmonySEQ will convert this file automatically. This may take a while."
 msgstr ""
 "harmonySEQ automatycznie skonwertuje ten plik. Może to zająć pewien czas."
 
@@ -550,8 +548,8 @@ msgid ""
 "<span size='small'><b>harmonySEQ was compiled without OSC support!</b>\n"
 "This means this event cannot be triggered.</span>"
 msgstr ""
-"<span size='small'><b>harmonySEQ jest skompilowany z wyłączoną obsługą OSC!</"
-"b>\n"
+"<span size='small'><b>harmonySEQ jest skompilowany z wyłączoną obsługą "
+"OSC!</b>\n"
 "To znaczy że tego zdarzenia nie da się wywołać.</span>"
 
 #: src/EventGUI.cpp:88 src/ActionGUI.cpp:123
@@ -622,7 +620,8 @@ msgstr ""
 
 #: src/EventGUI.cpp:253
 msgid "Error: porthas changed, while event is not OSC-type."
-msgstr "Błąd: port został zmieniony, podczas gdy zdarzenie nie jest typu OSC."
+msgstr ""
+"Błąd: port został zmieniony, podczas gdy zdarzenie nie jest typu OSC."
 
 #: src/EventGUI.cpp:329
 msgid "(Waiting for an event...)"
@@ -760,16 +759,19 @@ msgstr " oktaw."
 
 #: src/ActionGUI.cpp:422
 msgid "Error: tempo has changed, while action is not tempo-type."
-msgstr "Błąd: tempo zostało zmienione, podczas gdy akcja nie jest typu tempo."
+msgstr ""
+"Błąd: tempo zostało zmienione, podczas gdy akcja nie jest typu tempo."
 
 #: src/ActionGUI.cpp:461
-msgid "Error: note to set has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note to set has changed, while action is not set-seq-note-type."
 msgstr ""
 "Błąd: nuta do ustawienia została zmieniona, podczas gdy akcja nie jest typu "
 "zmień-nutę-sekwencera."
 
 #: src/ActionGUI.cpp:472
-msgid "Error: note number has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note number has changed, while action is not set-seq-note-type."
 msgstr ""
 "Błąd: numer nuty do ustawienia został zmieniony, podczas gdy akcja nie jest "
 "typu zmień-nutę-sekwencera."
@@ -800,7 +802,8 @@ msgstr ""
 "Błąd: wzór został zmieniony, podczas gdy akcja nie jest typu zmiany wzoru."
 
 #: src/ActionGUI.cpp:541
-msgid "Error: apply octave has changed, while action is not change-chord-type."
+msgid ""
+"Error: apply octave has changed, while action is not change-chord-type."
 msgstr ""
 "Błąd: stosowanie oktawy zmienione, gdy akcja nie jest typu zmiany akordu."
 
@@ -1121,7 +1124,8 @@ msgstr "Nie zmieniaj oktawy akordu"
 
 #: src/ChordWidget.cpp:102
 msgid "If checked, the octave will not be applied to the chord."
-msgstr "Jeżeli zaznaczone, oktawa akordu nie będzie zmianiana przez tę akcję."
+msgstr ""
+"Jeżeli zaznaczone, oktawa akordu nie będzie zmianiana przez tę akcję."
 
 #: src/Configuration.cpp:136
 #, c-format
@@ -1153,19 +1157,20 @@ msgid "MIDI"
 msgstr "MIDI"
 
 #: src/SettingsWindow.cpp:54
-#, fuzzy
 msgid "<b>Disable diodes</b>"
-msgstr "<b>Widoczne kolumny:</b>"
+msgstr "<b>Wyłącz diody</b>"
 
 #: src/SettingsWindow.cpp:55
 msgid "Disable all animated diodes"
-msgstr ""
+msgstr "Wyłącz wzsystkie animowane diody"
 
 #: src/SettingsWindow.cpp:56
 msgid ""
 "Disables animated diodes, which may improve performance.\n"
 "<b>Requires restart to take effect.</b>"
 msgstr ""
+"Wyłącza animowane diody, przez co może nieznacznie poprawić wydajność\n"
+"<b>Ta zmiana wymaga restartu harmonySEQ.</b>"
 
 #: src/SettingsWindow.cpp:65
 msgid "<b>Pattern display quality</b>"
@@ -1289,6 +1294,8 @@ msgid ""
 "If on, notes will be snapped to the visible grid.\n"
 "Grid density changes with sequence resolution."
 msgstr ""
+"Jeśli włączone, nuty będą przyciągane do widocznej siatki.\n"
+"Gęstość siatki jest określona rozdzielczością sekwencji."
 
 #: src/SequencerWidget.cpp:161
 msgid "MIDI channel:"
@@ -1401,7 +1408,8 @@ msgstr "Ustawia <b>wartość</b> wybranego punktu/punktów."
 
 #: src/SequencerWidget.cpp:194
 msgid "Selects the <b>MIDI channel</b> this sequencer will output notes to. "
-msgstr "Wybiera <b>kanał MIDI</b> do którego odtwarzać będzie ten sekwencer. "
+msgstr ""
+"Wybiera <b>kanał MIDI</b> do którego odtwarzać będzie ten sekwencer. "
 
 #: src/SequencerWidget.cpp:204
 msgid "ON/OFF"
@@ -1435,9 +1443,10 @@ msgid ""
 "\n"
 "This it the length's fraction numerator."
 msgstr ""
-"Wybiera <b>długość</b> tego sekwencera. Długość określa <b>przez ile taktów</"
-"b> sekwencja w tym sekwencerze będzie trwać. W wypadku gdy jest mniejsza niż "
-"jeden, sekwencja może być powtórzona kilkakrotnie w czasie jednego taktu.\n"
+"Wybiera <b>długość</b> tego sekwencera. Długość określa <b>przez ile "
+"taktów</b> sekwencja w tym sekwencerze będzie trwać. W wypadku gdy jest "
+"mniejsza niż jeden, sekwencja może być powtórzona kilkakrotnie w czasie "
+"jednego taktu.\n"
 "\n"
 "To jest licznik ułamka długości."
 
@@ -1449,9 +1458,10 @@ msgid ""
 "\n"
 "This it the length's fraction denominator."
 msgstr ""
-"Wybiera <b>długość</b> tego sekwencera. Długość określa <b>przez ile taktów</"
-"b> sekwencja w tym sekwencerze będzie trwać. W wypadku gdy jest mniejsza niż "
-"jeden, sekwencja może być powtórzona kilkakrotnie w czasie jednego taktu.\n"
+"Wybiera <b>długość</b> tego sekwencera. Długość określa <b>przez ile "
+"taktów</b> sekwencja w tym sekwencerze będzie trwać. W wypadku gdy jest "
+"mniejsza niż jeden, sekwencja może być powtórzona kilkakrotnie w czasie "
+"jednego taktu.\n"
 "\n"
 "To jest mianownik ułamka długości."
 
@@ -1461,21 +1471,26 @@ msgid ""
 "the sequence in this sequencer will last. In case it's smaller then 1, the "
 "sequence may be repeated few times in each bar."
 msgstr ""
-"Wybiera <b>długość</b> tego sekwencera. Długość określa <b>przez ile taktów</"
-"b> sekwencja w tym sekwencerze będzie trwać. W wypadku gdy jest mniejsza niż "
-"jeden, sekwencja może być powtórzona kilkakrotnie w czasie jednego taktu."
+"Wybiera <b>długość</b> tego sekwencera. Długość określa <b>przez ile "
+"taktów</b> sekwencja w tym sekwencerze będzie trwać. W wypadku gdy jest "
+"mniejsza niż jeden, sekwencja może być powtórzona kilkakrotnie w czasie "
+"jednego taktu."
 
 #: src/SequencerWidget.cpp:253
 msgid ""
 "Changes selected points mode to <b>flat</b>\n"
 "harmonySEQ will output a single MIDI Control Event on such points."
 msgstr ""
+"Zmienia tryb zaznaczonych na <b>płaski</b>\n"
+"harmonySEQ wyda na nich pojedyncze zdarzenie sterujące MIDI."
 
 #: src/SequencerWidget.cpp:255
 msgid ""
 "Changes selected points mode to <b>linear</b>\n"
 "It allows to create linear slopes, for smooth parameter changes."
 msgstr ""
+"Zmienia tryb zaznaczonych na <b>liniowy</b>\n"
+"Pozwala tworzyć liniowe zbocza, by płynnie zmieniać parametry syntezatorów."
 
 #: src/SequencerWidget.cpp:429
 msgid ""
@@ -1510,11 +1525,15 @@ msgid ""
 "Events define on what should harmonySEQ react - examples include keypresses "
 "on computer's keyboard or MIDI input from an external controller."
 msgstr ""
+"Dodaje nowe <b>zdarzenie</b>.\n"
+"\n"
+"Zdarzenia określają na co harmonySEQ powinien reagować - mogą to być na "
+"przykład naciśnięcia klawisza na klawiaturze komputera lub określony sygnał "
+"z zewnętrznego urządzenia sterującego MIDI."
 
 #: src/EventsWidget.cpp:43
-#, fuzzy
 msgid "Removes selected action or event."
-msgstr "Usuwa wybrany sekwencer"
+msgstr "Usuwa zaznaczoną akcje lub zdarzenie."
 
 #: src/EventsWidget.cpp:47
 msgid "Add Action"
@@ -1544,26 +1563,3 @@ msgstr ""
 #: src/EventsWidget.cpp:150
 msgid "Error - cannot colorize triggered action: row is empty.\n"
 msgstr "Błąd - nie można pokolorować wywołanej akcji: wiersz jest pusty.\n"
-
-#~ msgid "Play on edit"
-#~ msgstr "Podgląd przy edycji"
-
-#~ msgid ""
-#~ "If on, harmonySEQ will play a brief preview of note, when it's added, or "
-#~ "changed manually in chord."
-#~ msgstr ""
-#~ "Jeżeli włączone, harmonySEQ będzie odtwarzać podgląd nuty, gdy jest "
-#~ "dodana, lub ręcznie zmieniona w akordzie."
-
-#~ msgid "<b>Play on edit</b>"
-#~ msgstr "<b>Podgląd przy edycji</b>"
-
-#~ msgid ""
-#~ "Play briefly a note when it's added, \n"
-#~ "or changed manually in a chord."
-#~ msgstr ""
-#~ "Podgląd - odtwórz krótko nutę po jej \n"
-#~ "dodaniu, lub ręcznym ustawieniu w akordzie."
-
-#~ msgid "Delete"
-#~ msgstr "Usuń"
