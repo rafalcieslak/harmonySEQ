@@ -53,7 +53,7 @@ public:
     void SetOwner(Sequencer* owner);
     
     /**The sequencer this container belongs to, if known.*/
-    Sequencer* owner;
+    volatile Sequencer* owner;
     
     /**Finds if there is and if is then where, note with given ID. Complexity linear.*/
     int FindID(int ID);

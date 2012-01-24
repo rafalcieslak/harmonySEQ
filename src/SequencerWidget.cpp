@@ -468,7 +468,7 @@ void SequencerWidget::UpdatePatternWidget(int pattern){
     if (pattern == -1) pattern = wNotebook.get_current_page();
     Sequencer* seq = seqH(selectedSeq);
     *dbg<<"Assigining pattern no. " << pattern << ", type: " << ((selectedSeqType == SEQ_TYPE_NOTE)?"Note":"Control") << ENDL;
-    pattern_widget.AssignPattern(&seq->patterns[pattern],selectedSeqType);
+    pattern_widget.AssignPattern(&(seq->patterns[pattern]),selectedSeqType);
     pattern_widget.SetInternalHeight(chordwidget.get_height());
 }
 

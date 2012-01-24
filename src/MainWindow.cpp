@@ -604,16 +604,16 @@ void MainWindow::OnCloneClicked(){
 }
 
 void MainWindow::FlashTempoStart(){
-    Th->mutex_flash_tempo.lock();
+    //Th->mutex_flash_tempo.lock();
     //tempo_button.modify_base(Gtk::STATE_NORMAL,Gdk::Color("red"));
     //Glib::signal_timeout().connect(mem_fun(*this,&MainWindow::FlashTempoEnd),FLASH_INTERVAL,Glib::PRIORITY_DEFAULT_IDLE);
-    Th->mutex_flash_tempo.unlock();
+    //Th->mutex_flash_tempo.unlock();
 }
 
 bool MainWindow::FlashTempoEnd(){
-    Th->mutex_flash_tempo.lock();
-    tempo_button.unset_base(Gtk::STATE_NORMAL);
-    Th->mutex_flash_tempo.unlock();
+    //Th->mutex_flash_tempo.lock();
+    //tempo_button.unset_base(Gtk::STATE_NORMAL);
+    //Th->mutex_flash_tempo.unlock();
     return false; //do not repeat the timeout
 }
 

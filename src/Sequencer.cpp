@@ -125,6 +125,11 @@ Sequencer::Sequencer(const Sequencer& orig) {
 }
 
 Sequencer::~Sequencer() {
+  *dbg << "Sequencer deleted...\n";
+  for(unsigned int x = 0; x < patterns.size(); x++){
+    *dbg << "Clearing the owner attribute of pattern " << x << "\n";
+    patterns[x].owner = NULL; //Hello kids, daddy's dead!
+  }
 }
 
 void Sequencer::Init(){
@@ -149,7 +154,8 @@ void Sequencer::SetLength(int numerator, int denominator){
     length_denominator = denominator;
 }
 
-double Sequencer::GetLength(){
+double Sequencer::GetLength() volatile{
+    if (length_denominator == 0) return 1.0;
     return (double)length_numerator/(double)length_denominator;
 }
 

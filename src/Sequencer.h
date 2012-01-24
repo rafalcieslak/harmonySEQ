@@ -80,7 +80,7 @@ public:
     void SetLength(int numerator, int denominator);
 
     /**Returns seq's length*/
-    double GetLength();
+    double GetLength() volatile;
     int GetLengthNumerator();
     int GetLengthDenominator();
     

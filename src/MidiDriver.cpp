@@ -175,7 +175,6 @@ void MidiDriver::ScheduleNote(int channel, int tick_time, int pitch, int velocit
         //Output the event (but it stays at the queue.)
         snd_seq_event_output(seq_handle, &ev);
    // T.elapsed(t);if(t>1000) *err << "Warning: sending note took more than 1ms (" <<(int) t << " us)." << ENDL;
-        snd_seq_free_event(&ev);
 }
 
 void MidiDriver::ScheduleCtrlEventSingle(int channel, int tick_time, int ctrl_no, int value){
@@ -191,7 +190,6 @@ void MidiDriver::ScheduleCtrlEventSingle(int channel, int tick_time, int ctrl_no
 
     snd_seq_event_output(seq_handle, &ev);
     //T.elapsed(t);if(t>1000) *err << "Warning ctrl event took more than 1ms (" << (int)t << " us)." << ENDL;
-    snd_seq_free_event(&ev);
 }
     
 void MidiDriver::ScheduleCtrlEventLinearSlope(int channel, int ctrl_no, int start_tick_time, int start_value, int end_tick_time, int end_value){
@@ -214,7 +212,6 @@ void MidiDriver::ScheduleDiodeEvent(DiodeType type, seqHandle handle, int tick_t
     diode_events.insert(std::make_pair<int,DiodeMidiEvent>(diode_event_id_next,diodeev));
     
     snd_seq_event_t ev;
-    
     snd_seq_ev_clear(&ev);
     ev.type = SND_SEQ_EVENT_USR0; //Diode ON
     ev.data.raw32.d[0] = handle; //seq handle
@@ -222,10 +219,8 @@ void MidiDriver::ScheduleDiodeEvent(DiodeType type, seqHandle handle, int tick_t
     ev.data.raw32.d[2] = 0;//unused
     snd_seq_ev_schedule_tick(&ev, queueid, 0, tick_time);
     snd_seq_ev_set_dest(&ev, snd_seq_client_id(seq_handle), input_port); //here INPUT_PORT is used, so the event will be send just to harmonySEQ itself.
-    snd_seq_event_output_direct(seq_handle, &ev);
+    snd_seq_event_output(seq_handle, &ev);
     snd_seq_ev_clear(&ev);
-
-    snd_seq_free_event(&ev);
     
     diode_event_id_next++;
 }
@@ -298,7 +293,7 @@ void MidiDriver::Sync(){
     //Update the queue
     UpdateQueue(1);
     //Indicate graphically a starting bar
-    mainwindow->FlashTempoStart();
+    mainwindow->FlashTempoStart();;
     //All diodes off...
     mainwindow->seqWidget.DeacivateAllDiodes();
 }
@@ -353,6 +348,7 @@ void MidiDriver::ClearQueue(bool remove_noteoffs){
     
     //also, clear the map.
     diode_events.clear();
+    *dbg << "queue cleared.\n";
 }
 
 void MidiDriver::DeleteQueue(){
@@ -397,6 +393,8 @@ double Wrap(double x){
 }
 
 void MidiDriver::UpdateQueue(bool do_not_lock_threads){
+  
+    *dbg << "Updating queue!\n";
     
     if(!do_not_lock_threads) gdk_threads_enter(); //for safety. any calls to GUI will be thread-protected
     snd_seq_event_t ev;
@@ -404,6 +402,7 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
 
     //For each sequencer...
     for (unsigned int n = 0; n < seqVector.size(); n++){
+        *dbg << "seq " << n << "\n";
         if(seqVector[n] == NULL) continue; //seems this sequencer was removed, so proceed to next one.
 
         //Shortcut pointer to the sequencer we are currently dealing with.
@@ -482,8 +481,10 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                 if(seq->GetPlayOncePhase() == 2) seq->SetPlayOncePhase(3);
             }
             
+            
             //We know which atoms to play, so lets play them.
             if(e != -1 && s != -1 && e>=s){
+                      *dbg << "Flag N " << s << " " << e << "\n";
                       //Determine whether to output notes or control messages
                       if(seq->GetType() == SEQ_TYPE_NOTE){
                           
@@ -493,11 +494,12 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                                         note = dynamic_cast<NoteAtom*>((*pattern)[V%size]);
                                         int pitch = noteseq->GetNoteOfChord(note->pitch);
                                         ScheduleNote(seq->GetChannel()-1,local_tick + (V/size)*sequence_time + note->time*TICKS_PER_NOTE*seq->GetLength(),pitch,note->velocity,note->length*TICKS_PER_NOTE*seq->GetLength());
-                                        
+                                        ;
                                         //each note shall have correspoinding diode event.
                                         ScheduleDiodeEvent(DIODE_TYPE_NOTE, seq->MyHandle, local_tick + (V / size) * sequence_time + note->time * TICKS_PER_NOTE * seq->GetLength(), note->time, note->pitch, diode_colour);
                         
                                   } 
+                                 *dbg << "done.\n";
                       }else if(seq->GetType() == SEQ_TYPE_CONTROL){
                           
                                  ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*>(seq);
@@ -537,6 +539,7 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                               *err << "Sequencer is neither note nor control type. Don't bother reporting this to harmonySEQ developers. This error message will never display, so if you see it, it means you must have broken something intentionally.\n";
                       }
             }
+            
             double play_from_here_marker = Wrap(end_marker);
             //rounding to ensure sync...
             if(play_from_here_marker > -0.000000001 && play_from_here_marker < 0.000000001) play_from_here_marker = 0.0;
@@ -554,7 +557,8 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
 
         //And proceed to next sequencer.
     }
-
+    *dbg << "All seqs.\n";
+    
     //Also, playback the metronome notes.
     if (metronome){
         for (int x =0; x < 4;x++){
@@ -604,10 +608,10 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
     
     if(!do_not_lock_threads)  gdk_threads_leave(); //see note on this functions beggining.
 
-    //*dbg << "harmonySEQ will now try to drain ALSA midi output. If it hangs right after outputting this message, this means ALSA has done something wrong.\n";
+    *dbg << "harmonySEQ will now try to drain ALSA midi output. If it hangs right after outputting this message, this means ALSA has done something wrong.\n";
     /**Note, that if there is A LOT of notes on the queue, the following call will take some time. However, it does not use CPU, and we have already unlocked gtk threads, so it can be safely called.*/
     snd_seq_drain_output(seq_handle);
-    //*dbg << "Output succesfully drained.\n";
+    *dbg << "Output succesfully drained.\n";
     //T.elapsed(t);
     //*err <<"end + drain :" << (int)t << ENDL;
     
