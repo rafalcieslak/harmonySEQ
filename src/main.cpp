@@ -265,6 +265,8 @@ int main(int argc, char** argv) {
     tempo = DEFAULT_TEMPO;
     err = new error();  //error stream is never quiet! so we open it, not caring about what we got in arguments
 
+    //Start thread class...
+    Th = new threadb;
    
     //Now, parse the arguments.
     char c, temp[100];
@@ -361,9 +363,6 @@ int main(int argc, char** argv) {
 
     //At the beggining, file is not modified.
     Files::SetFileModified(0);
-
-    //Start thread class...
-    Th = new threadb;
     
     //And creating both threads.
     Glib::Thread::create(sigc::mem_fun(*Th, &threadb::th1), 0,true,1,Glib::THREAD_PRIORITY_URGENT);

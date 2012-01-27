@@ -405,7 +405,6 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
 
     //For each sequencer...
     for (unsigned int n = 0; n < seqVector.size(); n++){
-        *dbg << "seq " << n << "\n";
         if(seqVector[n] == NULL) continue; //seems this sequencer was removed, so proceed to next one.
 
         //Shortcut pointer to the sequencer we are currently dealing with.
@@ -487,7 +486,6 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
             
             //We know which atoms to play, so lets play them.
             if(e != -1 && s != -1 && e>=s){
-                      *dbg << "Flag N " << s << " " << e << "\n";
                       //Determine whether to output notes or control messages
                       if(seq->GetType() == SEQ_TYPE_NOTE){
                           
@@ -502,7 +500,6 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
                                         ScheduleDiodeEvent(DIODE_TYPE_NOTE, seq->MyHandle, local_tick + (V / size) * sequence_time + note->time * TICKS_PER_NOTE * seq->GetLength(), note->time, note->pitch, diode_colour);
                         
                                   } 
-                                 *dbg << "done.\n";
                       }else if(seq->GetType() == SEQ_TYPE_CONTROL){
                           
                                  ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*>(seq);
@@ -560,7 +557,6 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
 
         //And proceed to next sequencer.
     }
-    *dbg << "All seqs.\n";
     
     //Also, playback the metronome notes.
     if (metronome){
