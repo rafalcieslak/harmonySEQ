@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=harmonySEQ
 Name[pl]=harmonySEQ
-Comment=MIDI sequencer
+Comment=Live MIDI sequencer
 Comment[pl]=Sekwencer MIDI
 Exec=harmonySEQ %F
 Terminal=false
