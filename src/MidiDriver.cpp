@@ -98,6 +98,7 @@ void MidiDriver::Open(){
     snd_seq_set_client_name(seq_handle,"harmonySEQ");
     snd_seq_set_output_buffer_size(seq_handle,(1<<22));
     
+    
     //Try to create the port we use for MIDI output
     output_port = snd_seq_create_simple_port(seq_handle,"harmonySEQ output",SND_SEQ_PORT_CAP_READ|SND_SEQ_PORT_CAP_SUBS_READ,SND_SEQ_PORT_TYPE_APPLICATION);
 
@@ -116,6 +117,9 @@ void MidiDriver::Open(){
         return;
     }
 
+    //Increase pool size for greater kernel buffer
+    int x = snd_seq_set_client_pool_output(seq_handle,2000);
+
     //If we got so far, then it seems everything gone well and we have now working sequencer ports.
     working = true;
     *dbg << _("Alsa midi driver init successfull.\n");
@@ -132,8 +136,8 @@ void MidiDriver::SendNoteOnEventImmediatelly(int channel, int pitch, int velocit
     //Fill it with data...
     snd_seq_ev_set_noteon(&ev,channel-1,pitch,velocity);
     //And output immediatelly - do not push into the queue.
-    snd_seq_event_output(seq_handle,&ev);
-    snd_seq_drain_output(seq_handle);
+    snd_seq_event_output_direct(seq_handle,&ev);
+    //snd_seq_drain_output(seq_handle);
 
 }
 
@@ -149,8 +153,8 @@ void MidiDriver::SendNoteOffEventImmediatelly(int channel, int pitch){
     //Fill it with data...
     snd_seq_ev_set_noteoff(&ev,channel-1,pitch,0);
     //And output immediatelly - do not push into the queue.
-    snd_seq_event_output(seq_handle,&ev);
-    snd_seq_drain_output(seq_handle);
+    snd_seq_event_output_direct(seq_handle,&ev);
+    //snd_seq_drain_output(seq_handle);
 
 }
 
@@ -232,16 +236,15 @@ void MidiDriver::PassEvent(snd_seq_event_t* ev){
     snd_seq_ev_set_subs(ev);
     snd_seq_ev_set_direct(ev);
     //And output immidiatelly - do not push into the queue.
-    snd_seq_event_output(seq_handle,ev);
-    snd_seq_drain_output(seq_handle);
+    snd_seq_event_output_direct(seq_handle,ev);
+    //snd_seq_drain_output(seq_handle);
 
 }
 
 void MidiDriver::InitQueue(){
     //Asks ALSA for a new queue and get a handle to it (queueid).
     queueid = snd_seq_alloc_named_queue(seq_handle,"harmonySEQ queue");
-    //Set maximum number of event on the queue to 8192 - should be enough.
-    snd_seq_set_client_pool_output(seq_handle,65536);//8192);
+    
     //Clear the ticks counter.
     tick = 0;
 }
@@ -608,10 +611,8 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
     
     if(!do_not_lock_threads)  gdk_threads_leave(); //see note on this functions beggining.
 
-    *dbg << "harmonySEQ will now try to drain ALSA midi output. If it hangs right after outputting this message, this means ALSA has done something wrong.\n";
     /**Note, that if there is A LOT of notes on the queue, the following call will take some time. However, it does not use CPU, and we have already unlocked gtk threads, so it can be safely called.*/
     snd_seq_drain_output(seq_handle);
-    *dbg << "Output succesfully drained.\n";
     //T.elapsed(t);
     //*err <<"end + drain :" << (int)t << ENDL;
     

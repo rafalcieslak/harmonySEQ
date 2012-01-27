@@ -1028,10 +1028,10 @@ bool PatternWidget::DimDiode(DiodeMidiEvent* diode_ptr){
 bool PatternWidget::DrawDiodesTimeout(){
     
     double l = 1.0;
-    if (container != NULL)
-        if (container->owner != NULL)
-            if (container->owner->GetLength() < 1.0)
-                l = container->owner->GetLength();
+    //if (container != NULL)
+    //    if (container->owner != NULL)
+    //        if (container->owner->GetLength() < 1.0)
+    //            l = container->owner->GetLength();
         
     active_diodes_mtx.lock();
     std::vector<DiodeMidiEvent*> diodes_to_delete;
@@ -1172,8 +1172,8 @@ void PatternWidget::RedrawDiode(bool on, DiodeMidiEvent* diodev){
         timersub(&curr,&diodev->starttime,&res);
         long long int msec = res.tv_sec*1000+res.tv_usec/1000;
         double l = 1.0;
-        if (container != NULL && container->owner != NULL && container->owner->GetLength() < 1.0)
-            l = container->owner->GetLength();
+        //if (container != NULL && container->owner != NULL && container->owner->GetLength() < 1.0)
+        //    l = container->owner->GetLength();
         double alpha = 1.0 - (double)msec/(DIODE_FADEOUT_TIME * l);
         if (diodev->color == 1) cr_diodes_context->set_source_rgba(1.0, 1.0, 0.0, alpha);
         else cr_diodes_context->set_source_rgba(0.0, 0.9, 0.0, alpha);
