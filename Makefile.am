@@ -12,3 +12,6 @@ appsmenu_DATA = harmonyseq.desktop
 
 mimedir = $(datadir)/mime/packages
 mime_DATA = harmonyseq-mime.xml
+
+harmonyseq.desktop: harmonyseq.desktop.in
+	sed 's:@BINPATH@:$(DESTDIR)$(bindir):' harmonyseq.desktop.in > harmonyseq.desktop
