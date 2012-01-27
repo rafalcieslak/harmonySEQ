@@ -86,7 +86,7 @@ void MidiDriver::LoopWhileWaitingForInput(){
 
 void MidiDriver::Open(){
     //Try to open ALSA sequencer (and get a handle to it)
-    int e = snd_seq_open(&seq_handle,"default",SND_SEQ_OPEN_DUPLEX,0);
+    int e = snd_seq_open(&seq_handle,"default",SND_SEQ_OPEN_DUPLEX, SND_SEQ_NONBLOCK);
 
     //catch errors
     if (e < 0){
@@ -606,7 +606,8 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
     if(!do_not_lock_threads)  gdk_threads_leave(); //see note on this functions beggining.
 
     /**Note, that if there is A LOT of notes on the queue, the following call will take some time. However, it does not use CPU, and we have already unlocked gtk threads, so it can be safely called.*/
-    snd_seq_drain_output(seq_handle);
+    int res = snd_seq_drain_output(seq_handle);
+    if(res != 0) *err << "ERROR: ALSA sequencer interface returned an error code (" << res << ") on snd_seq_drain_output.\n";
     //T.elapsed(t);
     //*err <<"end + drain :" << (int)t << ENDL;
     
