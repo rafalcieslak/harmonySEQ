@@ -396,8 +396,6 @@ double Wrap(double x){
 }
 
 void MidiDriver::UpdateQueue(bool do_not_lock_threads){
-  
-    *dbg << "Updating queue!\n";
     
     if(!do_not_lock_threads) gdk_threads_enter(); //for safety. any calls to GUI will be thread-protected
     snd_seq_event_t ev;

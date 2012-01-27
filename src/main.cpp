@@ -34,6 +34,7 @@
 #include "Configuration.h"
 #include "SettingsWindow.h"
 #include "OSC.h"
+#include "config.h"
 //global objects
 vector<Sequencer *> seqVector;
 vector<Event *> Events;
@@ -185,7 +186,25 @@ void LoadConfig(){
 }
 
 void LoadIcons(){
-    
+    char path[1000];
+    sprintf(path,"%s/share/icons/hicolor/48x48/apps/harmonyseq.png",DATA_PATH);
+    if(Files::fexists(path)){
+    	//found in the prefix path from AutoConf
+        *dbg << "harmonySEQ icon found at: " << path << ENDL;
+    	sprintf(path,"%s/share/icons/hicolor/48x48/apps/harmonyseq.png",DATA_PATH);
+        harmonySEQ_logo_48 = Gdk::Pixbuf::create_from_file(path);
+    	sprintf(path,"%s/share/harmonyseq/icons/hicolor/24x24/actions/metronome.png",DATA_PATH);
+        metronome_icon_24 = Gdk::Pixbuf::create_from_file(path);
+    	sprintf(path,"%s/share/harmonyseq/icons/hicolor/24x24/actions/add_ctrl_seq.png",DATA_PATH);
+        icon_add_ctrl_seq = Gdk::Pixbuf::create_from_file(path);
+    	sprintf(path,"%s/share/harmonyseq/icons/hicolor/24x24/actions/add_note_seq.png",DATA_PATH);
+        icon_add_note_seq = Gdk::Pixbuf::create_from_file(path);
+    	sprintf(path,"%s/share/harmonyseq/icons/hicolor/16x16/actions/slope_flat.png",DATA_PATH);
+        icon_slope_flat = Gdk::Pixbuf::create_from_file(path);
+    	sprintf(path,"%s/share/harmonyseq/icons/hicolor/16x16/actions/slope_linear.png",DATA_PATH);
+        icon_slope_linear = Gdk::Pixbuf::create_from_file(path);
+    	
+    }else
     //Trying to find where are the icons located, by looking for harmonyseq.png.
     if (Files::fexists("/usr/share/icons/hicolor/48x48/apps/harmonyseq.png")){
         //seems we are installed defaultly in /usr/share
