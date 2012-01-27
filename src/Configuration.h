@@ -61,6 +61,12 @@ namespace Config{
     /**Returns the path to config directory, depending on the OS*/
     Glib::ustring GetConfigDirPath();
 
+    /**Returns the path to the old config file, depending on the OS*/
+    Glib::ustring GetOldConfigFilePath();
+    
+    /**Returns the path to the old config directory, depending on the OS*/
+    Glib::ustring GetOldConfigDirPath();
+
     /**Creates the config directory*/
     void MakeConfigDir();
 

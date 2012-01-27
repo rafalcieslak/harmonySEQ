@@ -22,6 +22,7 @@
 
 #include "Configuration.h"
 #include "messages.h"
+#include "Files.h"
 
 #ifdef __linux__
 #include <pwd.h>
@@ -79,7 +80,11 @@ namespace Config{
         *dbg << "loading config from file..." << ENDL;
         Glib::KeyFile kf;
 
-        Glib::ustring path = GetConfigFilePath();
+	Glib::ustring path;
+	if(Files::fexists(GetConfigFilePath().c_str()))
+            path = GetConfigFilePath();
+        else
+            path = GetOldConfigFilePath();
 
         //We'll try to open a file. No i/o streams needed here, KeyFile provides us with a useful method load_from_file, which does all the magic.
         try {
@@ -171,7 +176,7 @@ namespace Config{
         //Obtaining home directory path. This is PLATFORM-SPECYFIC!
 #ifdef __linux__
         struct passwd *pw = getpwuid(getuid());
-        sprintf(temp, "%s/.harmonySEQ/harmonySEQ.conf",pw->pw_dir);
+        sprintf(temp, "%s/.config/harmonyseq/harmonyseq.conf",pw->pw_dir);
         return temp;
 #endif
 
@@ -179,6 +184,31 @@ namespace Config{
 
 
     Glib::ustring GetConfigDirPath(){
+        char temp[200];
+
+        //Obtaining home directory path. This is PLATFORM-SPECYFIC!
+#ifdef __linux__
+        struct passwd *pw = getpwuid(getuid());
+        sprintf(temp, "%s/.config/harmonyseq", pw->pw_dir);
+        return temp;
+#endif
+
+    }
+    
+    Glib::ustring GetOldConfigFilePath(){
+        char temp[200];
+
+        //Obtaining home directory path. This is PLATFORM-SPECYFIC!
+#ifdef __linux__
+        struct passwd *pw = getpwuid(getuid());
+        sprintf(temp, "%s/.harmonySEQ/harmonySEQ.conf",pw->pw_dir);
+        return temp;
+#endif
+
+    }
+
+
+    Glib::ustring GetOldConfigDirPath(){
         char temp[200];
 
         //Obtaining home directory path. This is PLATFORM-SPECYFIC!
