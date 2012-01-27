@@ -82,6 +82,7 @@ void Action::Trigger(int data){
             if (seqVector.size()==0 || !seqH(args[1]) || seqH(args[1])->GetType() != SEQ_TYPE_NOTE) break;
             noteseq = dynamic_cast<NoteSequencer*>(seqH(args[1]));
             noteseq->chord.SetNote(args[2]-1, args[3]);
+            if(mainwindow->seqWidget.selectedSeq == args[1]) mainwindow->seqWidget.UpdateChord();
             Files::SetFileModified(1);
             break;
 

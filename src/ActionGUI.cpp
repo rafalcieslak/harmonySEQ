@@ -379,6 +379,7 @@ void ActionGUI::InitType(){
             NoteSeqs_combo.set_active(0);
             parent->args[1] = (*(NoteSeqs_combo.get_active()))[m_col_seqs.handle];
             notenr_button.set_value(1.0);
+            parent->args[2] = 1;
             chordseq_button.set_value(0.0);
             break;
         case Action::SEQ_CHANGE_CHORD:
