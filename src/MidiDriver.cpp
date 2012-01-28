@@ -400,7 +400,16 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
     if(!do_not_lock_threads) gdk_threads_enter(); //for safety. any calls to GUI will be thread-protected
     snd_seq_event_t ev;
     Sequencer* seq;
-
+    
+   //send ECHO event to harmonySEQ itself, so it will be notified when the bar finishes, and new notes must be put on the queue.
+   //sending the ECHO event takes place before all the notes, just in case the buffer is to small - to avoid dropping the echo event
+    snd_seq_ev_clear(&ev);
+    ev.type = SND_SEQ_EVENT_ECHO;
+    snd_seq_ev_schedule_tick(&ev,queueid,0,tick);
+    snd_seq_ev_set_dest(&ev,snd_seq_client_id(seq_handle),input_port); //here INPUT_PORT is used, so the event will be send just to harmonySEQ itself.
+    snd_seq_event_output_direct(seq_handle,&ev);
+    snd_seq_free_event(&ev);
+    
     //For each sequencer...
     for (unsigned int n = 0; n < seqVector.size(); n++){
         if(seqVector[n] == NULL) continue; //seems this sequencer was removed, so proceed to next one.
@@ -591,14 +600,6 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
 
     //Increment the tick counter (TICKS_PER_NOTE = TICKS_PER_BAR).
     tick+=TICKS_PER_NOTE;
-
-   //send ECHO event to harmonySEQ itself, so it will be notified when the bar finishes, and new notes must be put on the queue.
-    snd_seq_ev_clear(&ev);
-    ev.type = SND_SEQ_EVENT_ECHO;
-    snd_seq_ev_schedule_tick(&ev,queueid,0,tick);
-    snd_seq_ev_set_dest(&ev,snd_seq_client_id(seq_handle),input_port); //here INPUT_PORT is used, so the event will be send just to harmonySEQ itself.
-    snd_seq_event_output_direct(seq_handle,&ev);
-    snd_seq_free_event(&ev);
 
     //T.elapsed(t);
     //*err <<"end :" << (int)t << ENDL;
