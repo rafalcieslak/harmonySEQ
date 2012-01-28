@@ -101,6 +101,8 @@ SequencerWidget::SequencerWidget()
     wUpperHBox2.pack_start(wValueLabel,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wValueButton,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wSnapToggle,Gtk::PACK_SHRINK);
+    wUpperHBox2.pack_end(wZoomOut,Gtk::PACK_SHRINK);
+    wUpperHBox2.pack_end(wZoomIn,Gtk::PACK_SHRINK);
     wVelSep.set_size_request(8,0);
     wSlopeSelectorSep.set_size_request(8,0);
     
@@ -113,7 +115,30 @@ SequencerWidget::SequencerWidget()
     wSnapToggle.set_tooltip_markup(_("If on, notes will be snapped to the visible grid.\nGrid density changes with sequence resolution."));
     wSnapToggle.set_active(1); //As this is default value
     wSnapToggle.signal_toggled().connect(sigc::mem_fun(*this,&SequencerWidget::OnSnapClicked));
-
+    
+    wZoomInImg.set(Gtk::Stock::ZOOM_IN,Gtk::ICON_SIZE_MENU);
+    wZoomOutImg.set(Gtk::Stock::ZOOM_OUT,Gtk::ICON_SIZE_MENU);
+    wZoomIn.set_image(wZoomInImg);
+    wZoomOut.set_image(wZoomOutImg);
+    wZoomIn.set_relief(Gtk::RELIEF_NONE);
+    wZoomOut.set_relief(Gtk::RELIEF_NONE);
+    wZoomIn.set_border_width(0);
+    Glib::RefPtr<Gtk::RcStyle> style;
+    style = wZoomIn.get_modifier_style();
+    style->set_xthickness(0);
+    style->set_ythickness(0);
+    wZoomIn.modify_style(style);
+    wZoomOut.modify_style(style);
+    wZoomInImg.modify_style(style);
+    wZoomOutImg.modify_style(style);
+    wZoomOut.set_border_width(0);
+    wZoomIn.set_tooltip_markup(_("<b>Zoom in</b> (Ctrl+MouseScroll)"));
+    wZoomOut.set_tooltip_markup(_("<b>Zoom out</b> (Ctrl+MouseScroll)"));
+    wZoomIn.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWidget::OnZoomInClicked));
+    wZoomOut.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWidget::OnZoomOutClicked));
+    wZoomInImg.show();
+    wZoomOutImg.show();
+    
     wBoxOfChord.pack_start(wChordNotebook,Gtk::PACK_SHRINK);
     wBoxOfChord.pack_start(wVirtualSpaceLabel,Gtk::PACK_EXPAND_WIDGET,1); //extra alligments space - 1 stands for the notebook's border witdth
     wVirtualSpaceLabel.set_text(" ");
@@ -823,6 +848,13 @@ void SequencerWidget::OnPatternWidgetScrollRight(){
     
     if (wViewport->get_hadjustment()->get_value() > wViewport->get_hadjustment()->get_upper() - wViewport->get_hadjustment()->get_page_size()) wViewport->get_hadjustment()->set_value(wViewport->get_hadjustment()->get_upper() - wViewport->get_hadjustment()->get_page_size());
 
+}
+
+void SequencerWidget::OnZoomInClicked(){
+    pattern_widget.ZoomIn();
+}
+void SequencerWidget::OnZoomOutClicked(){
+    pattern_widget.ZoomOut();
 }
 
 void SequencerWidget::DeacivateAllDiodes(){

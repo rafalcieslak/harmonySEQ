@@ -135,6 +135,8 @@ private:
     void OnSlopeFlatToggled();
     void OnSlopeLinearToggled();
     void UpdateSlopeType();
+    void OnZoomInClicked();
+    void OnZoomOutClicked();
     
     PatternWidget pattern_widget;
     
@@ -178,6 +180,10 @@ private:
     Gtk::SpinButton wVelocityButton;
     Gtk::SpinButton wValueButton;
     Gtk::SpinButton wActivePattern;
+    Gtk::Button wZoomIn;
+    Gtk::Button wZoomOut;
+    Gtk::Image wZoomInImg;
+    Gtk::Image wZoomOutImg;
     Gtk::Button wSetAsActivePatternButton;
     Gtk::Label wChannelLabel;
     Gtk::Label wVelocityLabel;
