@@ -771,8 +771,11 @@ uninstall-am: uninstall-appsmenuDATA uninstall-mimeDATA
 	uninstall-mimeDATA
 
 
+.PHONY: harmonyseq.desktop
+
 harmonyseq.desktop: harmonyseq.desktop.in
-	sed 's:@BINPATH@:$(DESTDIR)$(bindir):' harmonyseq.desktop.in > harmonyseq.desktop
+	sed 's:@PREFIXPATH@:$(prefix):' harmonyseq.desktop.in > harmonyseq.desktop
+	chmod +x harmonyseq.desktop
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
