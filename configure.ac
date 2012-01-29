@@ -9,8 +9,7 @@ AM_INIT_AUTOMAKE([harmonySEQ], [0.16])
 AM_GNU_GETTEXT_VERSION([0.18.1])
 AM_GNU_GETTEXT([external])
 
-# we do not install into /usr/local, since desktop integration wouldn't work
-AC_PREFIX_DEFAULT(/usr)
+AC_PREFIX_DEFAULT(/usr/local)
 
 # Checks for programs.
 AC_PROG_CXX
