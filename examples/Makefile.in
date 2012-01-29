@@ -198,8 +198,8 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 exampledir = $(docdir)/examples
-example_DATA = shoreless_two_0.15.hseq README
-EXTRA_DIST = shoreless_two_0.15.hseq README
+example_DATA = trioles.h2song trioles.hseq trioles.xmz shoreless_two_0.15.hseq README
+EXTRA_DIST = trioles.h2song trioles.hseq trioles.xmz shoreless_two_0.15.hseq README
 all: all-am
 
 .SUFFIXES:

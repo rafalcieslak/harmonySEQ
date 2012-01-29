@@ -405,7 +405,7 @@ void MidiDriver::UpdateQueue(bool do_not_lock_threads){
    //sending the ECHO event takes place before all the notes, just in case the buffer is to small - to avoid dropping the echo event
     snd_seq_ev_clear(&ev);
     ev.type = SND_SEQ_EVENT_ECHO;
-    snd_seq_ev_schedule_tick(&ev,queueid,0,tick);
+    snd_seq_ev_schedule_tick(&ev,queueid,0,tick+TICKS_PER_NOTE);
     snd_seq_ev_set_dest(&ev,snd_seq_client_id(seq_handle),input_port); //here INPUT_PORT is used, so the event will be send just to harmonySEQ itself.
     snd_seq_event_output_direct(seq_handle,&ev);
     snd_seq_free_event(&ev);
