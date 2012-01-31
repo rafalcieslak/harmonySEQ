@@ -6,7 +6,7 @@ ACLOCAL_AMFLAGS = -I m4
 
 .PHONY: harmonyseq.desktop
 
-EXTRA_DIST = config.rpath CHANGELOG LICENSE harmonyseq.desktop harmonyseq-mime.xml README
+EXTRA_DIST = config.rpath CHANGELOG LICENSE harmonyseq.desktop.in harmonyseq-mime.xml README
 
 appsmenudir = $(datadir)/applications
 appsmenu_DATA = harmonyseq.desktop
