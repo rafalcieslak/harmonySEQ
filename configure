@@ -567,7 +567,7 @@ PACKAGE_URL=''
 
 ac_unique_file="src/Sequencer.h"
 gt_needs=
-ac_default_prefix=/usr
+ac_default_prefix=/usr/local
 # Factoring default headers for most tests.
 ac_includes_default="\
 #include <stdio.h>
@@ -6138,7 +6138,6 @@ $as_echo "#define HAVE_DCGETTEXT 1" >>confdefs.h
 
 
 
-# we do not install into /usr/local, since desktop integration wouldn't work
 
 
 # Checks for programs.

@@ -7239,9 +7239,6 @@
 <par_no id="0">
 <par name="par" value="76" />
 </par_no>
-<par_no id="1">
-<par name="par" value="127" />
-</par_no>
 <par_no id="2">
 <par name="par" value="31" />
 </par_no>
@@ -7256,6 +7253,9 @@
 </par_no>
 <par_no id="8">
 <par name="par" value="3" />
+</par_no>
+<par_no id="9">
+<par name="par" value="224" />
 </par_no>
 <par_no id="11">
 <par name="par" value="20" />
@@ -13705,7 +13705,7 @@
 <PART id="4">
 <par_bool name="enabled" value="yes" />
 <par name="volume" value="119" />
-<par name="panning" value="60" />
+<par name="panning" value="63" />
 <par name="min_key" value="0" />
 <par name="max_key" value="127" />
 <par name="key_shift" value="64" />
@@ -20870,9 +20870,6 @@
 <par_no id="0">
 <par name="par" value="64" />
 </par_no>
-<par_no id="1">
-<par name="par" value="127" />
-</par_no>
 <par_no id="2">
 <par name="par" value="34" />
 </par_no>
@@ -20887,9 +20884,6 @@
 </par_no>
 <par_no id="8">
 <par name="par" value="2" />
-</par_no>
-<par_no id="9">
-<par name="par" value="1" />
 </par_no>
 <par_no id="11">
 <par name="par" value="65" />
@@ -20932,7 +20926,7 @@
 </PART>
 <PART id="5">
 <par_bool name="enabled" value="yes" />
-<par name="volume" value="83" />
+<par name="volume" value="91" />
 <par name="panning" value="64" />
 <par name="min_key" value="0" />
 <par name="max_key" value="127" />
@@ -28141,7 +28135,7 @@
 <par name="preset" value="0" />
 <EFFECT_PARAMETERS>
 <par_no id="0">
-<par name="par" value="76" />
+<par name="par" value="82" />
 </par_no>
 <par_no id="1">
 <par name="par" value="64" />
@@ -28153,7 +28147,7 @@
 <par name="par" value="10" />
 </par_no>
 <par_no id="5">
-<par name="par" value="90" />
+<par name="par" value="127" />
 </par_no>
 <par_no id="6">
 <par name="par" value="48" />
@@ -28162,10 +28156,10 @@
 <par name="par" value="85" />
 </par_no>
 <par_no id="8">
-<par name="par" value="95" />
+<par name="par" value="89" />
 </par_no>
 <par_no id="9">
-<par name="par" value="119" />
+<par name="par" value="116" />
 </par_no>
 </EFFECT_PARAMETERS>
 </EFFECT>
@@ -28187,19 +28181,16 @@
 <par name="par" value="64" />
 </par_no>
 <par_no id="7">
-<par name="par" value="85" />
-</par_no>
-<par_no id="8">
-<par name="par" value="5" />
+<par name="par" value="88" />
 </par_no>
 <par_no id="9">
-<par name="par" value="84" />
+<par name="par" value="95" />
 </par_no>
 <par_no id="10">
 <par name="par" value="1" />
 </par_no>
 <par_no id="11">
-<par name="par" value="77" />
+<par name="par" value="73" />
 </par_no>
 </EFFECT_PARAMETERS>
 </EFFECT>
@@ -28238,7 +28229,7 @@
 </CONTROLLER>
 </PART>
 <PART id="6">
-<par_bool name="enabled" value="yes" />
+<par_bool name="enabled" value="no" />
 <par name="volume" value="119" />
 <par name="panning" value="64" />
 <par name="min_key" value="0" />

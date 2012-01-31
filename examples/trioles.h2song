@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <song>
- <version>0.9.5</version>
+ <version>0.9.6-svn-</version>
  <bpm>120</bpm>
- <volume>0.663158</volume>
+ <volume>0.410526</volume>
  <metronomeVolume>0.5</metronomeVolume>
  <name>Untitled Song</name>
  <author>Unknown</author>
  <notes>Empty song.</notes>
  <license>Unknown license</license>
  <loopEnabled>true</loopEnabled>
+ <patternModeMode>true</patternModeMode>
  <mode>pattern</mode>
  <humanize_time>0</humanize_time>
  <humanize_velocity>0.12</humanize_velocity>
@@ -16,7 +17,6 @@
  <instrumentList>
   <instrument>
    <id>0</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>Kick Reg 1a</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
@@ -50,24 +50,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>1</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>Kick Reg 1b</name>
    <volume>0.97</volume>
    <isMuted>false</isMuted>
@@ -101,24 +92,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>2</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>Kick Rock</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
@@ -152,24 +134,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>3</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>Snare Reg 1a</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
@@ -203,24 +176,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>4</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>Snare Reg 1b</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
@@ -254,24 +218,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>5</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>Snare Reg 1c</name>
    <volume>0.96</volume>
    <isMuted>false</isMuted>
@@ -305,24 +260,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>6</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>Snare Reg 1flam</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
@@ -356,24 +302,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>7</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>Snare Reg 1ghost</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
@@ -407,24 +344,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>8</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>Snare Rock</name>
    <volume>0.840517</volume>
    <isMuted>false</isMuted>
@@ -458,24 +386,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>9</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>Snare Rock ghost</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
@@ -509,24 +428,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>10</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>Rock Stick</name>
    <volume>0.581897</volume>
    <isMuted>false</isMuted>
@@ -560,24 +470,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>11</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>Tom Low</name>
    <volume>0.96</volume>
    <isMuted>false</isMuted>
@@ -611,24 +512,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>12</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>Tom Mid</name>
    <volume>0.568965</volume>
    <isMuted>false</isMuted>
@@ -662,24 +554,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>13</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>Tom Hi</name>
    <volume>0.96</volume>
    <isMuted>false</isMuted>
@@ -713,24 +596,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>14</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>Tom Low flam</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
@@ -764,24 +638,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>15</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>Tom Mid flam</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
@@ -815,24 +680,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>16</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>Tom Hi flam</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
@@ -866,24 +722,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>17</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>HH 1 closed a</name>
    <volume>0.77</volume>
    <isMuted>false</isMuted>
@@ -917,24 +764,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>18</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>HH 1 closed b</name>
    <volume>0.8</volume>
    <isMuted>false</isMuted>
@@ -968,24 +806,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>19</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>HH 1 open</name>
    <volume>0.85</volume>
    <isMuted>false</isMuted>
@@ -1019,24 +848,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>20</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>HH 2 closed a</name>
    <volume>0.87</volume>
    <isMuted>false</isMuted>
@@ -1070,24 +890,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>21</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>HH 2 closed b</name>
    <volume>0.918103</volume>
    <isMuted>false</isMuted>
@@ -1121,26 +932,17 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>22</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>HH 2 open</name>
-   <volume>0.75</volume>
+   <volume>0.413793</volume>
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
    <pan_R>1</pan_R>
@@ -1172,24 +974,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>23</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>Ride Cup</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
@@ -1223,26 +1016,17 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>24</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>Ride Side</name>
-   <volume>1.26724</volume>
+   <volume>0.659483</volume>
    <isMuted>false</isMuted>
    <pan_L>1</pan_L>
    <pan_R>1</pan_R>
@@ -1274,24 +1058,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>25</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>Crash 1</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
@@ -1325,24 +1100,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>26</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>Crash 2</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
@@ -1376,24 +1142,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>27</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>Crash 3</name>
    <volume>0.99569</volume>
    <isMuted>false</isMuted>
@@ -1427,24 +1184,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>28</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>CowBell</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
@@ -1478,24 +1226,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>29</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>Tamb 1</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
@@ -1529,24 +1268,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>30</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>Tamb 2</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
@@ -1580,24 +1310,15 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
   <instrument>
    <id>31</id>
-   <drumkit>UltraAcousticKit</drumkit>
    <name>Tamb 3</name>
    <volume>1</volume>
    <isMuted>false</isMuted>
@@ -1631,19 +1352,11 @@
     <userubber>0</userubber>
     <rubberdivider>1</rubberdivider>
     <rubberCsettings>4</rubberCsettings>
-    <rubberPitch>0</rubberPitch>
+    <rubberPitch>1</rubberPitch>
     <min>0</min>
     <max>1</max>
     <gain>1</gain>
     <pitch>0</pitch>
-    <volume>
-     <volume-position>-1</volume-position>
-     <volume-value>-1</volume-value>
-    </volume>
-    <pan>
-     <pan-position>-1</pan-position>
-     <pan-value>-1</pan-value>
-    </pan>
    </layer>
   </instrument>
  </instrumentList>
