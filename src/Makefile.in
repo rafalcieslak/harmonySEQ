@@ -253,10 +253,10 @@ harmonySEQ_SOURCES = main.cpp\
 						MainWindow.h MidiDriver.h Sequencer.h messages.h Files.h global.h Event.h EventGUI.h Action.h ActionGUI.h TreeModels.h Chord.h ChordWidget.h Configuration.h SettingsWindow.h seqHandle.h SequencerWidget.h EventsWidget.h OSC.h Atom.h NoteAtom.h ControllerAtom.h AtomContainer.h AtomContainer.h PatternWidget.h NoteSequencer.h ControlSequencer.h DiodeMidiEvent.h main.h\
 						gettext.h
 
-harmonySEQ_CPPFLAGS = $(GTKMM_CFLAGS) $(ADD_DEF) -Wall -g -O3
+harmonySEQ_CPPFLAGS = $(GTKMM_CFLAGS) $(ADD_DEF) -Wall -O3
 @DISABLEOSC_FALSE@harmonySEQ_LDADD = $(GTKMM_LIBS) -lgthread-2.0 -lasound -llo
 @DISABLEOSC_TRUE@harmonySEQ_LDADD = $(GTKMM_LIBS) -lgthread-2.0 -lasound
-harmonySEQ_LDFLAGS = -Wall -g -O3
+harmonySEQ_LDFLAGS = -Wall -O3
 ACLOCAL_AMFLAGS = -I m4
 LDADD = $(LIBINTL)
 all: config.h
