@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
 "POT-Creation-Date: 2012-01-28 15:49+0100\n"
-"PO-Revision-Date: 2012-01-13 19:55+0000\n"
+"PO-Revision-Date: 2012-01-28 19:12+0000\n"
 "Last-Translator: Rafal Cieslak <rafalcieslak256@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
-"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-01-14 05:43+0000\n"
-"X-Generator: Launchpad (build 14664)\n"
+"X-Launchpad-Export-Date: 2012-02-02 06:40+0000\n"
+"X-Generator: Launchpad (build 14738)\n"
+"Language: pl\n"
 
 #: src/main.cpp:314
 #, c-format
@@ -318,8 +318,8 @@ msgstr ""
 "zapoznania się ze szczegółami.\n"
 "\n"
 "Powinieneś otrzymać kopię GNU Powszechnej Licencji Publicznej wraz z\n"
-"harmonySEQ. Jeżeli nie otrzymałeś jej, zobacz na <http://www.gnu.org/"
-"licenses/>."
+"harmonySEQ. Jeżeli nie otrzymałeś jej, zobacz na "
+"<http://www.gnu.org/licenses/>."
 
 #: src/MainWindow.cpp:726
 msgid "harmonySEQ website"
@@ -440,7 +440,8 @@ msgid "This file contains data in format, which is too old."
 msgstr "Ten plik zawiera dane w za starym formacie."
 
 #: src/Files.cpp:182
-msgid "harmonySEQ will convert this file automatically. This may take a while."
+msgid ""
+"harmonySEQ will convert this file automatically. This may take a while."
 msgstr ""
 "harmonySEQ automatycznie skonwertuje ten plik. Może to zająć pewien czas."
 
@@ -547,8 +548,8 @@ msgid ""
 "<span size='small'><b>harmonySEQ was compiled without OSC support!</b>\n"
 "This means this event cannot be triggered.</span>"
 msgstr ""
-"<span size='small'><b>harmonySEQ jest skompilowany z wyłączoną obsługą OSC!</"
-"b>\n"
+"<span size='small'><b>harmonySEQ jest skompilowany z wyłączoną obsługą "
+"OSC!</b>\n"
 "To znaczy że tego zdarzenia nie da się wywołać.</span>"
 
 #: src/EventGUI.cpp:88 src/ActionGUI.cpp:123
@@ -619,7 +620,8 @@ msgstr ""
 
 #: src/EventGUI.cpp:253
 msgid "Error: porthas changed, while event is not OSC-type."
-msgstr "Błąd: port został zmieniony, podczas gdy zdarzenie nie jest typu OSC."
+msgstr ""
+"Błąd: port został zmieniony, podczas gdy zdarzenie nie jest typu OSC."
 
 #: src/EventGUI.cpp:329
 msgid "(Waiting for an event...)"
@@ -757,16 +759,19 @@ msgstr " oktaw."
 
 #: src/ActionGUI.cpp:423
 msgid "Error: tempo has changed, while action is not tempo-type."
-msgstr "Błąd: tempo zostało zmienione, podczas gdy akcja nie jest typu tempo."
+msgstr ""
+"Błąd: tempo zostało zmienione, podczas gdy akcja nie jest typu tempo."
 
 #: src/ActionGUI.cpp:462
-msgid "Error: note to set has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note to set has changed, while action is not set-seq-note-type."
 msgstr ""
 "Błąd: nuta do ustawienia została zmieniona, podczas gdy akcja nie jest typu "
 "zmień-nutę-sekwencera."
 
 #: src/ActionGUI.cpp:473
-msgid "Error: note number has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note number has changed, while action is not set-seq-note-type."
 msgstr ""
 "Błąd: numer nuty do ustawienia został zmieniony, podczas gdy akcja nie jest "
 "typu zmień-nutę-sekwencera."
@@ -797,7 +802,8 @@ msgstr ""
 "Błąd: wzór został zmieniony, podczas gdy akcja nie jest typu zmiany wzoru."
 
 #: src/ActionGUI.cpp:542
-msgid "Error: apply octave has changed, while action is not change-chord-type."
+msgid ""
+"Error: apply octave has changed, while action is not change-chord-type."
 msgstr ""
 "Błąd: stosowanie oktawy zmienione, gdy akcja nie jest typu zmiany akordu."
 
@@ -1118,7 +1124,8 @@ msgstr "Nie zmieniaj oktawy akordu"
 
 #: src/ChordWidget.cpp:102
 msgid "If checked, the octave will not be applied to the chord."
-msgstr "Jeżeli zaznaczone, oktawa akordu nie będzie zmianiana przez tę akcję."
+msgstr ""
+"Jeżeli zaznaczone, oktawa akordu nie będzie zmianiana przez tę akcję."
 
 #: src/Configuration.cpp:141
 #, c-format
@@ -1292,11 +1299,11 @@ msgstr ""
 
 #: src/SequencerWidget.cpp:135
 msgid "<b>Zoom in</b> (Ctrl+MouseScroll)"
-msgstr ""
+msgstr "<b>Powiększ</b> (Ctrl+PokrętłoMyszy)"
 
 #: src/SequencerWidget.cpp:136
 msgid "<b>Zoom out</b> (Ctrl+MouseScroll)"
-msgstr ""
+msgstr "<b>Pomniejsz</b> (Ctrl+PokrętłoMyszy)"
 
 #: src/SequencerWidget.cpp:186
 msgid "MIDI channel:"
@@ -1409,7 +1416,8 @@ msgstr "Ustawia <b>wartość</b> wybranego punktu/punktów."
 
 #: src/SequencerWidget.cpp:219
 msgid "Selects the <b>MIDI channel</b> this sequencer will output notes to. "
-msgstr "Wybiera <b>kanał MIDI</b> do którego odtwarzać będzie ten sekwencer. "
+msgstr ""
+"Wybiera <b>kanał MIDI</b> do którego odtwarzać będzie ten sekwencer. "
 
 #: src/SequencerWidget.cpp:229
 msgid "ON/OFF"
@@ -1443,9 +1451,10 @@ msgid ""
 "\n"
 "This it the length's fraction numerator."
 msgstr ""
-"Wybiera <b>długość</b> tego sekwencera. Długość określa <b>przez ile taktów</"
-"b> sekwencja w tym sekwencerze będzie trwać. W wypadku gdy jest mniejsza niż "
-"jeden, sekwencja może być powtórzona kilkakrotnie w czasie jednego taktu.\n"
+"Wybiera <b>długość</b> tego sekwencera. Długość określa <b>przez ile "
+"taktów</b> sekwencja w tym sekwencerze będzie trwać. W wypadku gdy jest "
+"mniejsza niż jeden, sekwencja może być powtórzona kilkakrotnie w czasie "
+"jednego taktu.\n"
 "\n"
 "To jest licznik ułamka długości."
 
@@ -1457,9 +1466,10 @@ msgid ""
 "\n"
 "This it the length's fraction denominator."
 msgstr ""
-"Wybiera <b>długość</b> tego sekwencera. Długość określa <b>przez ile taktów</"
-"b> sekwencja w tym sekwencerze będzie trwać. W wypadku gdy jest mniejsza niż "
-"jeden, sekwencja może być powtórzona kilkakrotnie w czasie jednego taktu.\n"
+"Wybiera <b>długość</b> tego sekwencera. Długość określa <b>przez ile "
+"taktów</b> sekwencja w tym sekwencerze będzie trwać. W wypadku gdy jest "
+"mniejsza niż jeden, sekwencja może być powtórzona kilkakrotnie w czasie "
+"jednego taktu.\n"
 "\n"
 "To jest mianownik ułamka długości."
 
@@ -1469,9 +1479,10 @@ msgid ""
 "the sequence in this sequencer will last. In case it's smaller then 1, the "
 "sequence may be repeated few times in each bar."
 msgstr ""
-"Wybiera <b>długość</b> tego sekwencera. Długość określa <b>przez ile taktów</"
-"b> sekwencja w tym sekwencerze będzie trwać. W wypadku gdy jest mniejsza niż "
-"jeden, sekwencja może być powtórzona kilkakrotnie w czasie jednego taktu."
+"Wybiera <b>długość</b> tego sekwencera. Długość określa <b>przez ile "
+"taktów</b> sekwencja w tym sekwencerze będzie trwać. W wypadku gdy jest "
+"mniejsza niż jeden, sekwencja może być powtórzona kilkakrotnie w czasie "
+"jednego taktu."
 
 #: src/SequencerWidget.cpp:278
 msgid ""
@@ -1543,6 +1554,11 @@ msgid ""
 "Actions define what harmonySEQ should do on corresponding event - for "
 "example it can toggle one of the sequencers, or change it's chord."
 msgstr ""
+"Dodaje nową <b>akcję</b> przypisaną do wybranego zdarzenia.\n"
+"\n"
+"Akcje definiują zachowanie harmonySEQ przy wywołaniu przyporządkowanego im "
+"zdarzenia - na przykład mogą włączyć jeden z sekwencerów, albo zmienić jego "
+"akord."
 
 #: src/EventsWidget.cpp:54
 msgid "ID"

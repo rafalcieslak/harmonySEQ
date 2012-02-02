@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
 "POT-Creation-Date: 2012-01-28 15:49+0100\n"
-"PO-Revision-Date: 2012-01-24 20:26+0000\n"
+"PO-Revision-Date: 2012-02-01 20:05+0000\n"
 "Last-Translator: Nel Pogorzelska <Unknown>\n"
 "Language-Team: Japanese <ja@li.org>\n"
-"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-01-28 05:12+0000\n"
-"X-Generator: Launchpad (build 14727)\n"
+"X-Launchpad-Export-Date: 2012-02-02 06:40+0000\n"
+"X-Generator: Launchpad (build 14738)\n"
+"Language: ja\n"
 
 #: src/main.cpp:314
 #, c-format
@@ -72,7 +72,7 @@ msgstr "開く(O)"
 
 #: src/MainWindow.cpp:68
 msgid "Opens a file."
-msgstr "ファイルを開く"
+msgstr "ファイルを開きます。"
 
 #: src/MainWindow.cpp:69
 msgid "Save"
@@ -80,15 +80,15 @@ msgstr "保存(S)"
 
 #: src/MainWindow.cpp:69
 msgid "Saves the current file."
-msgstr "現在のファイルを保存する"
+msgstr "現在のファイルを保存します。"
 
 #: src/MainWindow.cpp:70
 msgid "Save as..."
-msgstr "名前を付けて保存"
+msgstr "名前を付けて保存。。。"
 
 #: src/MainWindow.cpp:70
 msgid "Saves the current file with a different name."
-msgstr "別の名前で現在のファイルを保存する・"
+msgstr "別の名前で現在のファイルを保存します。"
 
 #: src/MainWindow.cpp:71
 msgid "Quit"
@@ -96,7 +96,7 @@ msgstr "終了(Q)"
 
 #: src/MainWindow.cpp:71
 msgid "Quits harmonySEQ."
-msgstr "harmonySEQを終了する"
+msgstr "harmonySEQを終了します。"
 
 #: src/MainWindow.cpp:72
 msgid "Preferences"
@@ -108,15 +108,13 @@ msgstr "harmonySEQのコンフィギュレーション"
 
 #: src/MainWindow.cpp:73
 msgid "Add note sequencer"
-msgstr "シートシーケンサーを追加"
+msgstr "音符シーケンサーを追加"
 
 #: src/MainWindow.cpp:73
 msgid ""
 "Adds a new note seqencer. Note sequencers store melodies and output them as "
 "MIDI notes."
-msgstr ""
-"新しいシートシーケンサーを追加する。シートシーケンサーはメロディーを保存して"
-"MIDIシートとして再生する。"
+msgstr "新しい音符シーケンサーを追加します。音符シーケンサーはメロディーを保存してMIDI音符として再生します。"
 
 #: src/MainWindow.cpp:74
 msgid "Add control sequencer"
@@ -135,7 +133,7 @@ msgstr "削除"
 
 #: src/MainWindow.cpp:75
 msgid "Removes selected sequencer"
-msgstr "選定したシーケンサーを削除する"
+msgstr "選定したシーケンサーを削除します。"
 
 #: src/MainWindow.cpp:76 src/MainWindow.cpp:84
 msgid "Duplicate"
@@ -143,7 +141,7 @@ msgstr "剥製"
 
 #: src/MainWindow.cpp:76
 msgid "Duplicates selected sequencer"
-msgstr "選定したシーケンサーを剥製する"
+msgstr "選定したシーケンサーを剥製します。"
 
 #: src/MainWindow.cpp:78
 msgid "Metronome"
@@ -151,7 +149,7 @@ msgstr "メトロノーム"
 
 #: src/MainWindow.cpp:78
 msgid "Toggle metronome on/off"
-msgstr "メトロノームをオン/オフを切り替える。"
+msgstr "メトロノームをオン/オフを切り替えます。"
 
 #: src/MainWindow.cpp:79
 msgid "Play/Pause"
@@ -159,15 +157,15 @@ msgstr "再生/休止"
 
 #: src/MainWindow.cpp:79
 msgid "Toggle play/pause"
-msgstr "再生/休止を切り替える。"
+msgstr "再生/休止を切り替えます。"
 
 #: src/MainWindow.cpp:80
 msgid "Pass MIDI events"
-msgstr "MIDIイベントを渡す"
+msgstr "MIDIイベントを渡します。"
 
 #: src/MainWindow.cpp:80
 msgid "States whether MIDI events are passed-through harmonySEQ."
-msgstr "MIDIイベントはharmonySEQで渡されているかどかと決定する。"
+msgstr "MIDIイベントはharmonySEQで渡されているかどかと決定します。"
 
 #: src/MainWindow.cpp:82 src/SequencerWidget.cpp:199
 msgid "Play once"
@@ -179,11 +177,11 @@ msgstr "遺著シーケンスを再生"
 
 #: src/MainWindow.cpp:83
 msgid "Removes the sequencer."
-msgstr "シーケンサーを削除する"
+msgstr "シーケンサーを削除します。"
 
 #: src/MainWindow.cpp:84
 msgid "Duplicates the sequencer"
-msgstr "シーケンサーを剥製する"
+msgstr "シーケンサーを剥製します。"
 
 #: src/MainWindow.cpp:142 src/MainWindow.cpp:148
 msgid "ERROR - error while building menus: "
@@ -195,7 +193,7 @@ msgstr "シーケンサーのプロパティ"
 
 #: src/MainWindow.cpp:199
 msgid "(No sequencer selected)"
-msgstr "選択されたシーケンサーはない"
+msgstr "（選択されたシーケンサーはない）"
 
 #: src/MainWindow.cpp:200
 msgid ""
@@ -204,14 +202,13 @@ msgid ""
 "\n"
 "Select one from the list above, or add a new one."
 msgstr ""
-"シーケンサーが選択されていないので、そのプロパティを表示するこはできませ"
-"ん。\n"
+"シーケンサーが選択されていないので、そのプロパティを表示するこはできません。\n"
 "\n"
 "上記のリストからシーケンサーを選択、または新規追加。"
 
 #: src/MainWindow.cpp:210
 msgid "Sets the <b>tempo</b> applied to all sequencers."
-msgstr ""
+msgstr "すべてのシーケンサー適用されたテンポを設定する。"
 
 #: src/MainWindow.cpp:233
 msgid "Handle"
@@ -243,7 +240,7 @@ msgstr "長さ"
 
 #: src/MainWindow.cpp:253 src/SettingsWindow.cpp:96
 msgid "Chord (notes) / Ctrl. No."
-msgstr ""
+msgstr "和音(音符）/コントローラの数"
 
 #: src/MainWindow.cpp:328 src/MainWindow.cpp:330
 msgid "Untitled"
@@ -252,7 +249,7 @@ msgstr "無題"
 #: src/MainWindow.cpp:345 src/MainWindow.cpp:750 src/MainWindow.cpp:760
 #: src/MainWindow.cpp:784
 msgid "The file has unsaved changes."
-msgstr ""
+msgstr "ファイルに保存されていない変更があります。"
 
 #: src/MainWindow.cpp:345 src/MainWindow.cpp:750
 msgid "Are sure you want to quit?"
@@ -261,7 +258,7 @@ msgstr "終了してもよろしいですか？"
 #: src/MainWindow.cpp:439 src/MainWindow.cpp:484 src/MainWindow.cpp:531
 #, c-format
 msgid "Ctrl %d"
-msgstr ""
+msgstr "コントローラ%d"
 
 #: src/MainWindow.cpp:690 src/Action.cpp:190 src/ActionGUI.cpp:133
 #, c-format
@@ -271,12 +268,12 @@ msgstr "再生"
 #: src/MainWindow.cpp:694 src/Action.cpp:187 src/ActionGUI.cpp:132
 #, c-format
 msgid "Pause"
-msgstr ""
+msgstr "休止"
 
 #: src/MainWindow.cpp:720
 msgid ""
 "A MIDI sequencing application helpful for music composers and live artists."
-msgstr ""
+msgstr "作曲家と演奏者のために設計されたMIDIシーケンサーです。"
 
 #. TRANSLATORS:The GNU GPL v.3
 #: src/MainWindow.cpp:722
@@ -302,15 +299,15 @@ msgstr "harmonySEQのウェブサイト"
 #. TRANSLATORS:First caption in authors list
 #: src/MainWindow.cpp:729
 msgid "Main author:"
-msgstr ""
+msgstr "主要作者："
 
 #: src/MainWindow.cpp:732
 msgid "Consultants:"
-msgstr ""
+msgstr "相談："
 
 #: src/MainWindow.cpp:737
 msgid "Testers:"
-msgstr ""
+msgstr "テスター："
 
 #. TRANSLATORS: The list of translators to be placed in about-box
 #: src/MainWindow.cpp:742
@@ -322,64 +319,64 @@ msgstr ""
 
 #: src/MainWindow.cpp:760
 msgid "Are sure you want to loose them?"
-msgstr ""
+msgstr "それらを失ってもよろしいですか？"
 
 #: src/MainWindow.cpp:784
 msgid "Are sure you want to loose them and open another file?"
-msgstr ""
+msgstr "それらを失って他のファイルを開くしてもよろしいでうか？"
 
 #: src/MainWindow.cpp:805
 msgid "Choose a file to save..."
-msgstr ""
+msgstr "保存するファイルを選んで。。。"
 
 #: src/MainWindow.cpp:836
 #, c-format
 msgid "File '%s'  already exist."
-msgstr ""
+msgstr "'%s'というファイルがすでにあります。"
 
 #: src/MainWindow.cpp:837
 msgid "Do you want to overwrite this file?"
-msgstr ""
+msgstr "このファイルを上書きしますか？"
 
 #: src/MidiDriver.cpp:93
 msgid "Failed to open ALSA sequencer.\n"
-msgstr ""
+msgstr "ALSAシーケンサーを開くにしっぱいしました。\n"
 
 #: src/MidiDriver.cpp:107
 msgid "Failed to create output port.\n"
-msgstr ""
+msgstr "出力ポートを開くにしっぱいしました。\n"
 
 #: src/MidiDriver.cpp:116
 msgid "Failed to create input port.\n"
-msgstr ""
+msgstr "入力ポートを開くにしっぱいしました。\n"
 
 #: src/MidiDriver.cpp:125
 msgid "Alsa midi driver init successfull.\n"
-msgstr ""
+msgstr "MIDIドライバの初めが成功しました。\n"
 
 #: src/Sequencer.cpp:52 src/Sequencer.cpp:67
 #, c-format
 msgid "seq %d"
-msgstr ""
+msgstr "seq %d"
 
 #: src/messages.cpp:30
 #, c-format
 msgid "Debug mode started.\n"
-msgstr ""
+msgstr "デバッグモードを開始しました。\n"
 
 #: src/Files.cpp:68
 msgid "Choose a file to open..."
-msgstr ""
+msgstr "開くファイルを選定します。。。"
 
 #: src/Files.cpp:140
 #, c-format
 msgid "ERROR - error while trying to read file '%s'\n"
-msgstr ""
+msgstr "ERRORー '%s'というファイルを開こうとしているときにエラー\n"
 
 #: src/Files.cpp:147
 #, c-format
 msgid "ERROR - error while trying to read file '%s': "
-msgstr ""
+msgstr "ERRORー '%s'というファイルを開こうとしているときにエラー "
 
 #: src/Files.cpp:169
 #, c-format
@@ -395,21 +392,22 @@ msgstr ""
 
 #: src/Files.cpp:170
 msgid "Do you want to open this file?"
-msgstr ""
+msgstr "このファイルを開いてもよろしいですか？"
 
 #: src/Files.cpp:179
 #, c-format
 msgid "This file was created by older harmonySEQ version (%d.%d)"
-msgstr ""
+msgstr "このファイルは古いharmonySEQのバージョンでさくせいされた　(%d.%d)"
 
 #: src/Files.cpp:180
 #, c-format
 msgid "This file contains data in format, which is too old."
-msgstr ""
+msgstr "このファイルに古い形式のデータがあります。"
 
 #: src/Files.cpp:182
-msgid "harmonySEQ will convert this file automatically. This may take a while."
-msgstr ""
+msgid ""
+"harmonySEQ will convert this file automatically. This may take a while."
+msgstr "harmonySEQがこのファイルを自動的に変換します。これには時間がかかることがあります。"
 
 #: src/Files.cpp:185
 msgid ""
@@ -424,7 +422,7 @@ msgstr ""
 #: src/Files.cpp:197
 #, c-format
 msgid "ERROR - error while reading file '%s'\n"
-msgstr ""
+msgstr "ERRORー'%s'というファイルの読み取り中エラー\n"
 
 #: src/Files.cpp:221
 #, c-format
@@ -434,32 +432,32 @@ msgstr ""
 #: src/Files.cpp:229
 #, c-format
 msgid "ERROR - unknown error while processing file '%s': "
-msgstr ""
+msgstr "ERRORー'%s'というファイルの加工中にエラー "
 
 #: src/Files.cpp:260
 #, c-format
 msgid "ERROR - error while opening file %s to write.\n"
-msgstr ""
+msgstr "ERRORー保存に'%s'というファイルの開こうとしているときにエラー\n"
 
 #: src/Files.cpp:409
 #, c-format
 msgid "ERROR - Missing sequencer %d in file\n"
-msgstr ""
+msgstr "ERRORー ファイルに紛失した%dシーケンサーがあります\n"
 
 #: src/Event.cpp:58
 #, c-format
 msgid "When note %d on any channel gets on..."
-msgstr ""
+msgstr "どれでもチャネルに%d音符が開始のときに。。。"
 
 #: src/Event.cpp:59
 #, c-format
 msgid "When note %d on channel %d gets on..."
-msgstr ""
+msgstr "%dチャネルに%d音符が開始のときに。。。"
 
 #: src/Event.cpp:62
 #, c-format
 msgid "When key %s is pressed..."
-msgstr ""
+msgstr "%sキーは押さえたいるときに。。。"
 
 #: src/Event.cpp:66
 #, c-format
@@ -469,12 +467,12 @@ msgstr ""
 #: src/Event.cpp:70
 #, c-format
 msgid "When controller %d on any channel is moved..."
-msgstr ""
+msgstr "%dコントロールは動かされたいるときに。。。"
 
 #: src/Event.cpp:71
 #, c-format
 msgid "When controller %d on channel %d is moved..."
-msgstr ""
+msgstr "%dチャネルで%d コントローラは動かされたいるときに。。。"
 
 #: src/Event.cpp:75
 #, c-format
@@ -484,7 +482,7 @@ msgstr ""
 #: src/Event.cpp:79
 #, c-format
 msgid "Unknown event."
-msgstr ""
+msgstr "未知のイベント"
 
 #: src/Event.cpp:145
 msgid "Error - empty event would be triggered.\n"
@@ -509,23 +507,23 @@ msgstr ""
 
 #: src/EventGUI.cpp:88 src/ActionGUI.cpp:123
 msgid "Type:"
-msgstr ""
+msgstr "タイプ:"
 
 #: src/EventGUI.cpp:89 src/SettingsWindow.cpp:119
 msgid "Channel:"
-msgstr "チャンネル:"
+msgstr "チャネル:"
 
 #: src/EventGUI.cpp:90
 msgid "Controller:"
-msgstr ""
+msgstr "コントローラ："
 
 #: src/EventGUI.cpp:91
 msgid "Key:"
-msgstr ""
+msgstr "キー:"
 
 #: src/EventGUI.cpp:92 src/SettingsWindow.cpp:117
 msgid "Note:"
-msgstr ""
+msgstr "音符"
 
 #: src/EventGUI.cpp:93
 msgid "OSC message tag:"
@@ -533,7 +531,7 @@ msgstr ""
 
 #: src/EventGUI.cpp:94
 msgid "Capture"
-msgstr ""
+msgstr "捕獲"
 
 #: src/EventGUI.cpp:95
 msgid ""
@@ -569,7 +567,7 @@ msgstr ""
 
 #: src/EventGUI.cpp:329
 msgid "(Waiting for an event...)"
-msgstr ""
+msgstr "(イベントをまっています。。。）"
 
 #: src/Action.cpp:146
 msgid "WARNING: Unknown action triggered.\n"
@@ -578,22 +576,22 @@ msgstr ""
 #: src/Action.cpp:157
 #, c-format
 msgid "Switch sequencer '%s' OFF"
-msgstr ""
+msgstr "'%s'シーケンサーをオフにします。"
 
 #: src/Action.cpp:160
 #, c-format
 msgid "Switch sequencer '%s' ON"
-msgstr ""
+msgstr "'%s'シーケンサーをオンにします。"
 
 #: src/Action.cpp:163
 #, c-format
 msgid "Toggle sequencer '%s'"
-msgstr ""
+msgstr "'%s'シーケンサーをオン/オフを切り替えます。"
 
 #: src/Action.cpp:169
 #, c-format
 msgid "Set tempo to %d BPM"
-msgstr ""
+msgstr "テンポを%dBPMにします。"
 
 #: src/Action.cpp:173
 #, c-format
@@ -603,27 +601,27 @@ msgstr ""
 #: src/Action.cpp:176
 #, c-format
 msgid "Set chord of sequencer '%s' to %s"
-msgstr ""
+msgstr "'%s'シーケンサーの和音を%sにします。"
 
 #: src/Action.cpp:179
 #, c-format
 msgid "Play sequence in '%s' once"
-msgstr ""
+msgstr "'%s' でシーケンサーを一度再生します。"
 
 #: src/Action.cpp:182 src/TreeModels.cpp:99
 #, c-format
 msgid "Toggle passing MIDI events"
-msgstr ""
+msgstr "MIDIイベントの渡すことをオン/オフを切り替えます。"
 
 #: src/Action.cpp:193
 #, c-format
 msgid "Toggle pause/play"
-msgstr ""
+msgstr "休止/再生を切り替えます。"
 
 #: src/Action.cpp:198 src/TreeModels.cpp:96
 #, c-format
 msgid "Synchronize"
-msgstr ""
+msgstr "同期"
 
 #: src/Action.cpp:201
 #, c-format
@@ -663,7 +661,7 @@ msgstr ""
 #: src/Action.cpp:227
 #, c-format
 msgid "%s"
-msgstr ""
+msgstr "%s"
 
 #: src/ActionGUI.cpp:42
 msgid "Action"
@@ -675,11 +673,11 @@ msgstr "シーケンサー:"
 
 #: src/ActionGUI.cpp:126
 msgid "Set note "
-msgstr ""
+msgstr "音符を設定 "
 
 #: src/ActionGUI.cpp:127
 msgid " to: "
-msgstr ""
+msgstr " にして "
 
 #: src/ActionGUI.cpp:128
 msgid "Pattern number: "
@@ -687,11 +685,11 @@ msgstr ""
 
 #: src/ActionGUI.cpp:129
 msgid "Off"
-msgstr ""
+msgstr "オフ"
 
 #: src/ActionGUI.cpp:131 src/ActionGUI.cpp:134
 msgid "Toggle"
-msgstr ""
+msgstr "切り替え"
 
 #: src/ActionGUI.cpp:136
 msgid "Transpose by "
@@ -706,11 +704,13 @@ msgid "Error: tempo has changed, while action is not tempo-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:462
-msgid "Error: note to set has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note to set has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:473
-msgid "Error: note number has changed, while action is not set-seq-note-type."
+msgid ""
+"Error: note number has changed, while action is not set-seq-note-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:486
@@ -733,7 +733,8 @@ msgid "Error: pattern has changed, while action is not pattern-type."
 msgstr ""
 
 #: src/ActionGUI.cpp:542
-msgid "Error: apply octave has changed, while action is not change-chord-type."
+msgid ""
+"Error: apply octave has changed, while action is not change-chord-type."
 msgstr ""
 
 #: src/TreeModels.cpp:49 src/TreeModels.cpp:69
@@ -746,31 +747,31 @@ msgstr "キーボード"
 
 #: src/TreeModels.cpp:55
 msgid "MIDI Note"
-msgstr ""
+msgstr "MIDI音符"
 
 #: src/TreeModels.cpp:58
 msgid "MIDI Controller"
-msgstr ""
+msgstr "MIDIコントローラ"
 
 #: src/TreeModels.cpp:61 src/SettingsWindow.cpp:43
 msgid "OSC"
-msgstr ""
+msgstr "OSC"
 
 #: src/TreeModels.cpp:72
 msgid "Sequencer/Switch On-Off"
-msgstr ""
+msgstr "シーケンサー/オンーオフ"
 
 #: src/TreeModels.cpp:75
 msgid "Sequencer/Play once"
-msgstr ""
+msgstr "シーケンサー/一度再生"
 
 #: src/TreeModels.cpp:78
 msgid "Sequencer/Set one note"
-msgstr ""
+msgstr "シーケンサー/一つ音符を設定"
 
 #: src/TreeModels.cpp:81
 msgid "Sequencer/Set chord"
-msgstr ""
+msgstr "シーケンサー/和音を設定"
 
 #: src/TreeModels.cpp:84
 msgid "Sequencer/Change chord's octave"
@@ -782,15 +783,15 @@ msgstr ""
 
 #: src/TreeModels.cpp:90
 msgid "Set tempo"
-msgstr ""
+msgstr "テンポを設定"
 
 #: src/TreeModels.cpp:93
 msgid "Play/pause"
-msgstr ""
+msgstr "再生/休止"
 
 #: src/TreeModels.cpp:119
 msgid "All"
-msgstr ""
+msgstr "全て"
 
 #: src/TreeModels.cpp:177
 msgid "Major"
@@ -915,7 +916,7 @@ msgstr ""
 #: src/Chord.cpp:375
 #, c-format
 msgid "o:%d"
-msgstr ""
+msgstr "o:%d"
 
 #: src/Chord.cpp:380
 #, c-format
@@ -989,7 +990,7 @@ msgstr ""
 
 #: src/ChordWidget.cpp:52 src/SequencerWidget.cpp:110
 msgid "<b>Chord</b>"
-msgstr ""
+msgstr "<b>和音</b>"
 
 #: src/ChordWidget.cpp:53
 msgid "Inversion: "
@@ -997,15 +998,15 @@ msgstr ""
 
 #: src/ChordWidget.cpp:54
 msgid "Type: "
-msgstr ""
+msgstr "タイプ： "
 
 #: src/ChordWidget.cpp:71
 msgid "Sets <b>type</b> of this chord."
-msgstr ""
+msgstr "この和音のタイプを設定します。"
 
 #: src/ChordWidget.cpp:72 src/ChordWidget.cpp:73
 msgid "Sets <b>mode</b> of this chord."
-msgstr ""
+msgstr "この和音のモードを設定します。"
 
 #: src/ChordWidget.cpp:74
 msgid "Sets <b>root</b> of this chord."
@@ -1032,7 +1033,7 @@ msgstr ""
 
 #: src/ChordWidget.cpp:92
 msgid "\tNote:"
-msgstr ""
+msgstr "\t音符："
 
 #: src/ChordWidget.cpp:99
 msgid ""
@@ -1074,7 +1075,7 @@ msgstr ""
 
 #: src/SettingsWindow.cpp:42
 msgid "MIDI"
-msgstr ""
+msgstr "MIDI"
 
 #: src/SettingsWindow.cpp:54
 msgid "<b>Disable diodes</b>"
@@ -1114,11 +1115,11 @@ msgstr ""
 
 #: src/SettingsWindow.cpp:93
 msgid "Patern"
-msgstr ""
+msgstr "パターン"
 
 #: src/SettingsWindow.cpp:112
 msgid "<b>Metronome:</b>"
-msgstr ""
+msgstr "メトロノーム："
 
 #: src/SettingsWindow.cpp:113
 msgid "Bar:"
@@ -1142,7 +1143,7 @@ msgstr ""
 
 #: src/SettingsWindow.cpp:138 src/SettingsWindow.cpp:144
 msgid "The metronome's MIDI note pitch"
-msgstr ""
+msgstr "メトロノームのMIDI音符"
 
 #: src/SettingsWindow.cpp:141 src/SettingsWindow.cpp:147
 msgid "The metronome's MIDI note velocity'"
@@ -1206,7 +1207,7 @@ msgstr ""
 
 #: src/SequencerWidget.cpp:186
 msgid "MIDI channel:"
-msgstr ""
+msgstr "MIDIチャネル"
 
 #: src/SequencerWidget.cpp:188
 msgid "Value:"
@@ -1238,7 +1239,7 @@ msgstr ""
 
 #: src/SequencerWidget.cpp:193
 msgid "Pattern:"
-msgstr ""
+msgstr "パターン:"
 
 #: src/SequencerWidget.cpp:194
 msgid "Add"
@@ -1246,11 +1247,11 @@ msgstr "加算"
 
 #: src/SequencerWidget.cpp:195
 msgid "Adds a new pattern to this sequencer."
-msgstr ""
+msgstr "このシーケンサーに新しいパターンを追加します。"
 
 #: src/SequencerWidget.cpp:197
 msgid "Removes this pattern."
-msgstr ""
+msgstr "このパターンを削除します。"
 
 #: src/SequencerWidget.cpp:198
 msgid "Name:"
@@ -1258,7 +1259,7 @@ msgstr "名前:"
 
 #: src/SequencerWidget.cpp:200
 msgid "Plays sequence in this sequencer <b>once</b>."
-msgstr ""
+msgstr "このシーケンサーでシーケンスを<b>一度</b>再生します。"
 
 #: src/SequencerWidget.cpp:201
 msgid "Clear pattern"
@@ -1279,7 +1280,7 @@ msgstr ""
 #. TRANSLATORS: The space befor this string is to force a tiny space between widgets, please keep it in translations.
 #: src/SequencerWidget.cpp:206
 msgid " Controller No."
-msgstr ""
+msgstr " コントロールの数"
 
 #: src/SequencerWidget.cpp:207
 msgid ""
@@ -1305,11 +1306,11 @@ msgstr ""
 
 #: src/SequencerWidget.cpp:229
 msgid "ON/OFF"
-msgstr ""
+msgstr "オン/オフ"
 
 #: src/SequencerWidget.cpp:230
 msgid "Turns this sequencer <b>on/off</b>."
-msgstr ""
+msgstr "このシーケンサーをオン/オフします。"
 
 #: src/SequencerWidget.cpp:246
 msgid "Resolution:"
@@ -1370,12 +1371,12 @@ msgstr ""
 #: src/SequencerWidget.cpp:475 src/SequencerWidget.cpp:696
 #, c-format
 msgid "%d"
-msgstr ""
+msgstr "%d"
 
 #: src/SequencerWidget.cpp:668
 #, c-format
 msgid " %d"
-msgstr ""
+msgstr " %d"
 
 #: src/SequencerWidget.cpp:671
 #, c-format
