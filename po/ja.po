@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: harmonyseq\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/harmonyseq\n"
 "POT-Creation-Date: 2012-01-28 15:49+0100\n"
-"PO-Revision-Date: 2012-02-01 20:05+0000\n"
-"Last-Translator: Nel Pogorzelska <Unknown>\n"
+"PO-Revision-Date: 2012-02-02 17:44+0000\n"
+"Last-Translator: Nel Pogorzelska <neriel@o2.pl>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-02 06:40+0000\n"
+"X-Launchpad-Export-Date: 2012-02-03 06:29+0000\n"
 "X-Generator: Launchpad (build 14738)\n"
 "Language: ja\n"
 
@@ -228,7 +228,7 @@ msgstr "チャンネル"
 
 #: src/MainWindow.cpp:250
 msgid "Pattern"
-msgstr "柄"
+msgstr "パターン"
 
 #: src/MainWindow.cpp:251 src/SettingsWindow.cpp:94
 msgid "Resolution"
@@ -665,7 +665,7 @@ msgstr "%s"
 
 #: src/ActionGUI.cpp:42
 msgid "Action"
-msgstr ""
+msgstr "アクション"
 
 #: src/ActionGUI.cpp:124
 msgid "Sequencer:"
@@ -681,7 +681,7 @@ msgstr " にして "
 
 #: src/ActionGUI.cpp:128
 msgid "Pattern number: "
-msgstr ""
+msgstr "パターンの数 "
 
 #: src/ActionGUI.cpp:129
 msgid "Off"
