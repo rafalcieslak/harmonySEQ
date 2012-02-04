@@ -1235,11 +1235,11 @@ msgstr ""
 
 #: src/SequencerWidget.cpp:135
 msgid "<b>Zoom in</b> (Ctrl+MouseScroll)"
-msgstr "<b>ズームイン</ b>（Ctrl +マウススクロール）"
+msgstr "<b>ズームイン</b>（Ctrl +マウススクロール）"
 
 #: src/SequencerWidget.cpp:136
 msgid "<b>Zoom out</b> (Ctrl+MouseScroll)"
-msgstr "<b>ズームアウト</ b>（Ctrl +マウススクロール）"
+msgstr "<b>ズームアウト</b>（Ctrl +マウススクロール）"
 
 #: src/SequencerWidget.cpp:186
 msgid "MIDI channel:"
