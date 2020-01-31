@@ -16,7 +16,7 @@ AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_CPP
 
-CXXFLAGS="-O3"
+CXXFLAGS="-O3 -Wno-deprecated-declarations"
 #CXXFLAGS="-g -O0"
 
 osc_enabled=true

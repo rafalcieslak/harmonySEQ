@@ -142,7 +142,7 @@ bool LoadFile(Glib::ustring file){
             Info(temp);
             return 1;
         }
-    }catch(Glib::Error e){
+    }catch(const Glib::Error& e){
         //Exception cought. So can even tell what's wrong (usually some filesystem-related problem, not a problem with it's contains).
         sprintf(temp, _("ERROR - error while trying to read file '%s': "), file.c_str());
         *err << temp;
@@ -216,7 +216,7 @@ bool LoadFile(Glib::ustring file){
         midi->Sync();
 
     //Only exception handles are left...
-    }catch(Glib::KeyFileError e){
+    }catch(const Glib::KeyFileError& e){
         //KeyFile error means some trouble with data in the file. Missing key, wrong format, wrong characters, all these goes here.
         sprintf(temp, _("ERROR - Glib::KeyFile error while processing file '%s': "), file.c_str());
         *err << temp;
@@ -224,7 +224,7 @@ bool LoadFile(Glib::ustring file){
         *err << ENDL;
         Info(temp,e.what());
         return 1;
-    }catch(Glib::Error e){
+    }catch(const Glib::Error& e){
         //Some other strange file-related errors are cought here.
         sprintf(temp, _("ERROR - unknown error while processing file '%s': "), file.c_str());
         *err << temp;

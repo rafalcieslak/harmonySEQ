@@ -92,7 +92,7 @@ namespace Config{
                 //Returned 1, so confing file is wrong. So we'll not load it.
                 return;
             }
-        } catch (Glib::Error e) {
+        } catch (const Glib::Error& e) {
             //Exception cought. Leave the file, maybe it doesn't exist etc.
             return;
         }
