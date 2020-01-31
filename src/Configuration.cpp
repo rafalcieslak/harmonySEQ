@@ -17,7 +17,7 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <glibmm-2.4/glibmm/keyfile.h>
+#include <glibmm/keyfile.h>
 #include <fstream>
 
 #include "Configuration.h"

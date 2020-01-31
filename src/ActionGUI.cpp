@@ -44,7 +44,9 @@ ActionGUI::ActionGUI(Action *prt)
     set_border_width(5);
     set_position(Gtk::WIN_POS_CENTER_ON_PARENT);
     set_resizable(0);
-    
+
+    /* Holy shit, are we really building the entire interface BY
+     * HAND?! This needs to be rewritten with Glade ASAP. */
     add(main_box);
     main_box.set_spacing(5);
 
