@@ -1,0 +1,17 @@
+.bzr
+.bzrignore
+*~
+old
+build
+dist
+nbproject
+harmonyseq
+harmonySEQ
+*.o
+Makefile
+stamp-h1
+autoscan.log
+config.log
+.deps
+examples/Makefile
+autom4te.cache
