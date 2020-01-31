@@ -301,9 +301,9 @@ void Chord::Set(const Chord& other,bool apply_octave){
 
 
 Glib::ustring Chord::GetName(bool do_not_use_octave){
-    char temp[100];
-    char temp2[100];
-    char octave[100];
+    char temp[80];
+    char temp2[102];
+    char octave[20];
     bool use_octave = !do_not_use_octave;
     if(use_octave) sprintf(octave,_("octave: %d"),base_octave);
     Glib::ustring a;
@@ -368,9 +368,9 @@ Glib::ustring Chord::GetName(bool do_not_use_octave){
 
 
 Glib::ustring Chord::GetSummary(bool do_not_use_octave){
-    char temp[100];
-    char temp2[100];
-    char octave[100];
+    char temp[80];
+    char temp2[102];
+    char octave[20];
     bool use_octave = !do_not_use_octave;
     if(use_octave) sprintf(octave,_("o:%d"),base_octave);
     Glib::ustring a;

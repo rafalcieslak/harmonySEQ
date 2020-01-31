@@ -208,7 +208,8 @@ void ActionGUI::UpdateChordwidget(){
 
 void ActionGUI::OnChordWidgetNoteChanged(int n, int p){
     if(parent->type != Action::SEQ_CHANGE_CHORD) return;
-    Sequencer* seq = seqH(parent->args[1]);
+    // ????
+    // Sequencer* seq = seqH(parent->args[1]);
 
 }
 

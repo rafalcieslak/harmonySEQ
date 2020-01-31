@@ -1146,7 +1146,7 @@ void PatternWidget::RedrawDiode(bool on, DiodeMidiEvent* diodev){
     cr_diodes_context->set_line_cap(Cairo::LINE_CAP_SQUARE);
     cr_diodes_context->set_line_width(4.0);
     
-    int x,y,h;
+    int x=0, y=0, h=0;
     
     //determine coords
     if(diodev->type == DIODE_TYPE_NOTE){

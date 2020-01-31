@@ -118,7 +118,7 @@ void MidiDriver::Open(){
     }
 
     //Increase pool size for greater kernel buffer
-    int x = snd_seq_set_client_pool_output(seq_handle,2000);
+    snd_seq_set_client_pool_output(seq_handle,2000);
 
     //If we got so far, then it seems everything gone well and we have now working sequencer ports.
     working = true;
