@@ -21,7 +21,10 @@
 #ifndef FILES_H
 #define	FILES_H
 
+#include <glibmm/keyfile.h>
+
 #include "global.h"
+
 
 namespace Files{
     /**States whether the file was modified or not*/

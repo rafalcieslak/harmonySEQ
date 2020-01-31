@@ -4,6 +4,7 @@ To run harmonySEQ you need to have {gtkmm-2.4,glibmm-2.4,alsa,liblo} run-time li
 To compile it, you will also need the developement headers of above libraries.
 
 To compile:
+    autoreconf --install
 	./configure
 	make
 	
