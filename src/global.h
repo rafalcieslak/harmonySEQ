@@ -29,7 +29,7 @@
 #include <map>
 #include <glibmm/ustring.h>
 #include <glibmm/refptr.h>
-#include <gdkmm-2.4/gdkmm/pixbuf.h>
+#include <gdkmm/pixbuf.h>
 #include "gettext.h"
 
 #define VERSION_STRING "0.16"//VERSION is provided by autotools in config.h
