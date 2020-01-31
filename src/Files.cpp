@@ -42,7 +42,7 @@ bool fexists(const char *filename)
    //Trick used to tell whether a file exists.
   ifstream ifile(filename);
   //Returns 1 if opening file succeeded, 0 elsewhere.
-  return ifile;
+  return !ifile.fail();
 }
 
 bool SetFileModified(bool modified){

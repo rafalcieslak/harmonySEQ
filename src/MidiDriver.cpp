@@ -213,7 +213,7 @@ void MidiDriver::ScheduleCtrlEventLinearSlope(int channel, int ctrl_no, int star
 void MidiDriver::ScheduleDiodeEvent(DiodeType type, seqHandle handle, int tick_time, double time, int value, int color, int max_res){
     if(diodes_disabled) return;
     DiodeMidiEvent diodeev(type,time,value,color,max_res);
-    diode_events.insert(std::make_pair<int,DiodeMidiEvent>(diode_event_id_next,diodeev));
+    diode_events.insert(std::pair<int,DiodeMidiEvent>(diode_event_id_next,diodeev));
     
     snd_seq_event_t ev;
     snd_seq_ev_clear(&ev);
