@@ -807,13 +807,13 @@ void MainWindow::OnMenuSaveAsClicked(){
     dialog.add_button(Gtk::Stock::CANCEL,Gtk::RESPONSE_CANCEL);
     dialog.add_button(Gtk::Stock::SAVE,Gtk::RESPONSE_OK);
 
-    Gtk::FileFilter hseq;
-    hseq.set_name("HarmonySEQ files (*.hseq)");
-    hseq.add_pattern("*.hseq");
+    Glib::RefPtr<Gtk::FileFilter> hseq = Gtk::FileFilter::create();
+    hseq->set_name("HarmonySEQ files (*.hseq)");
+    hseq->add_pattern("*.hseq");
     dialog.add_filter(hseq);
-    Gtk::FileFilter all;
-    all.set_name("All files");
-    all.add_pattern("*");
+    Glib::RefPtr<Gtk::FileFilter> all = Gtk::FileFilter::create();
+    all->set_name("All files");
+    all->add_pattern("*");
     dialog.add_filter(all);
 
     if (Files::file_name != "")
@@ -828,7 +828,7 @@ void MainWindow::OnMenuSaveAsClicked(){
         case Gtk::RESPONSE_OK:
 
             //add .hseq extention
-            if (dialog.get_filter() == &hseq) if (filename.size() < 5 || 0 != (filename.substr(filename.length() - 5, 5).compare(".hseq"))) {
+            if (dialog.get_filter() == hseq) if (filename.size() < 5 || 0 != (filename.substr(filename.length() - 5, 5).compare(".hseq"))) {
                     filename += ".hseq";
               }
             //check whether it already exists

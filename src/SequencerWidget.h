@@ -117,7 +117,7 @@ private:
     void OnLengthChanged();
     void OnActivePatternChanged();
     void OnSetAsActivePatternClicked();
-    void OnNotebookPageChanged(GtkNotebookPage* page, guint page_num);
+    void OnNotebookPageChanged(Gtk::Widget* page, guint page_num);
     void OnAddPatternClicked();
     void OnClonePatternClicked();
     void OnRemovePatternClicked();

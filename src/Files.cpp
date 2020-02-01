@@ -72,13 +72,13 @@ void LoadFileDialog(){
     dialog.add_button(Gtk::Stock::OPEN,Gtk::RESPONSE_OK);
 
     //Creating filters...
-    Gtk::FileFilter hseq;
-    hseq.set_name("HarmonySEQ files (*.hseq)");
-    hseq.add_pattern("*.hseq");
+    Glib::RefPtr<Gtk::FileFilter> hseq = Gtk::FileFilter::create();
+    hseq->set_name("HarmonySEQ files (*.hseq)");
+    hseq->add_pattern("*.hseq");
     dialog.add_filter(hseq);
-    Gtk::FileFilter all;
-    all.set_name("All files");
-    all.add_pattern("*");
+    Glib::RefPtr<Gtk::FileFilter> all = Gtk::FileFilter::create();
+    all->set_name("All files");
+    all->add_pattern("*");
     dialog.add_filter(all);
 
     //Running the dialog - passing the control to it, and waiting for the user to choose a file.
