@@ -124,7 +124,7 @@ ChordWidget::ChordWidget(){
         note_buttons[x]->set_increments(1.0, 12.0);
         note_buttons[x]->set_width_chars(3);
         note_buttons[x]->signal_value_changed().connect(sigc::bind<int>(sigc::mem_fun(*this, &ChordWidget::OnNoteChanged), x));
-        NotesVBox.pack_start(*note_buttons[x],Gtk::PACK_SHRINK);
+        NotesVBox.pack_start(*note_buttons[x],Gtk::PACK_EXPAND_WIDGET);
         focus_list.insert(focus_list.begin(), note_buttons[x]); //Push_front-ing IS complex, BUT: a) we call it only 6 times b) we store pointers there. This is ok then.
     }
     
