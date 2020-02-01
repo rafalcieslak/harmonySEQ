@@ -24,33 +24,6 @@
 #include "PatternWidget.h"
 #include "DiodeMidiEvent.h"
 class Sequencer;
-#ifdef YES_I_HOMEHOW_NEED_TO_ACCESS_DEPRACATED_CONTENTS
-class PatternLine : public Gtk::VBox{
-public:
-    PatternLine();
-    PatternLine(Glib::ustring mark);
-    ~PatternLine();
-
-    /**Sets a button to a given value.*/
-    void SetButton(int c, bool value);
-    /**Returns the state of a button.*/
-    bool GetButton(int c);
-    /**Signal emited when one fo the buttons is clicked.*/
-    sigc::signal<void,int,bool> OnButtonClicked;
-    /**Lights the diode up*/
-    void LightOn();
-    /**Lights the diode up, using alternative colur.*/
-    void LightOnAlternate();
-    /**Dims the light*/
-    void LightOff();
-    Gtk::Label marker;
-private:
-    void OnButtonsToggled(int c);
-    std::vector<Gtk::CheckButton *> buttons;
-    Gtk::EventBox diode;
-    bool diode_on;
-};
-#endif
 
 /**Displays given sequencer's properties, and allows to edit them.*/
 class SequencerWidget : public Gtk::VBox{
