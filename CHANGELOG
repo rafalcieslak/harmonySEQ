@@ -1,3 +1,9 @@
+unreleased:
+	- Ported user interface code to use GTK3 and gtkmm-3.0 / 3.24.
+	- Fixed compatibility with modern C++ compilers.
+	- Cleaned up unnecessary autotool files.
+	- Fixed a major race condition related to opening files while sequencer diodes were operating.
+
 harmonyseq 0.16 "ranpiollo"
 	- Implemented an advanced piano-roll interface for sequencers.
 	- Added a new type of sequencer - control sequencers, that are used to output MIDI event messages.
