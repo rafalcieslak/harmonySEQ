@@ -16,8 +16,8 @@ AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_CPP
 
-CXXFLAGS="-O3 -Wno-deprecated-declarations"
-#CXXFLAGS="-g -O0"
+# CXXFLAGS="-O3 -Wno-deprecated-declarations"
+CXXFLAGS="-g -O0 -Wno-deprecated-declarations"
 
 osc_enabled=true
 
@@ -45,6 +45,7 @@ AC_CHECK_HEADERS([libintl.h locale.h], [] , [
 PKG_CHECK_MODULES([GTKMM], [gtkmm-3.0], [] , [
 					echo "Gtkmm 3.0 library missing - install gtkmm-3.0 developement headers! [gtkmm-3.0-dev on Ubuntu]"
 					exit -1 ])
+
 
 if test "$osc_enabled" = "true"; then
 	# Need to check for liblo headers.
