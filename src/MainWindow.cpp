@@ -467,7 +467,7 @@ void MainWindow::InitTreeData(){
     for (unsigned int x = 0; x < seqVector.size(); x++) {
         if (!seqV(x)) continue; //seems it was removed
         Gtk::TreeModel::iterator iter = TreeModel_sequencers->append();
-        register Sequencer* seq = seqV(x);
+        Sequencer* seq = seqV(x);
         row = *(iter);
         row[m_columns_sequencers.col_handle] = seq->MyHandle;
         row[m_columns_sequencers.col_muted] = seq->GetOn();
@@ -515,7 +515,7 @@ void MainWindow::RefreshRow(Gtk::TreeRow row){
     //*dbg << "Refreshing ROW, the handle ";
     seqHandle h = row[m_columns_sequencers.col_handle];
     //*dbg << h << ENDL;
-    register Sequencer* seq = seqH(h);
+    Sequencer* seq = seqH(h);
     
     row[m_columns_sequencers.col_muted] = seq->GetOn();
     row[m_columns_sequencers.col_name] = seq->GetName();
