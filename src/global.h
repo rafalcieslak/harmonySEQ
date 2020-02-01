@@ -32,10 +32,10 @@
 #include <gdkmm/pixbuf.h>
 #include "gettext.h"
 
-#define VERSION_STRING "0.16"//VERSION is provided by autotools in config.h
+#define VERSION_STRING "0.16.1"//VERSION is provided by autotools in config.h
 #define VERSION_A 0
 #define VERSION_B 16
-#define VERSION_C 0
+#define VERSION_C 1
 
 #define ENDL "\n"
 //Internal resolution of ALSA sequencer.

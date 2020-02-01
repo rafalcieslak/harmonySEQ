@@ -178,12 +178,15 @@ bool LoadFile(Glib::ustring file){
             //File is older
             sprintf(temp,_("This file was created by older harmonySEQ version (%d.%d)"),VA,VB);
             sprintf(temp2,_("This file contains data in format, which is too old."));
-            if(VA == 0 && VB == 15){
-                Info(temp,_("harmonySEQ will convert this file automatically. This may take a while."));
-                e_flag = ConvertFile_0_15_to_0_16(&kf);
-            }else{
+            if(VA == 0 && VB < 15){
+              // Unsupported.
                 Info(temp2,_("Sorry, but harmonySEQ cannot convert this file to current format.\nThis applies only to files from harmonySEQ older than 0.15.\n\nIf you really need to open this file, try downloading harmonySEQ 0.15, and using it to convert this file to 0.15 format, which will make it openable with this harmonySEQ version."));
                 return 1;
+            }
+            if(VA == 0 && VB == 15){
+                Info(temp,_("harmonySEQ will convert this file from 0.15 to 0.16 format. This may take a while."));
+                e_flag = ConvertFile_0_15_to_0_16(&kf);
+                VA = 0; VB = 16; VC = 0;
             }
             
         }

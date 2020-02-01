@@ -1,4 +1,5 @@
-unreleased:
+harmonyseq 0.16.1:
+	- Maintenance only release.
 	- Ported user interface code to use GTK3 and gtkmm-3.0 / 3.24.
 	- Fixed compatibility with modern C++ compilers.
 	- Cleaned up unnecessary autotool files.
@@ -56,7 +57,7 @@ harmonyseq 0.13 "polyphony"
 	- Included harmonySEQ icon and used it used widely
 	- Basic shortcuts support
 	- Added integration with desktop - menu entry, icon, MIME type support
-	
+
 harmonyseq 0.12
 	- Added ability to bind multiple melodies to one sequencer
 	- Added Play/Pause button
