@@ -30,7 +30,6 @@
 #include <glibmm/ustring.h>
 #include <glibmm/refptr.h>
 #include <gdkmm/pixbuf.h>
-#include "gettext.h"
 
 #define VERSION_STRING "0.16.1"//VERSION is provided by autotools in config.h
 #define VERSION_A 0
@@ -41,8 +40,11 @@
 //Internal resolution of ALSA sequencer.
 #define TICKS_PER_QUARTERNOTE 128
 #define TICKS_PER_NOTE (4*TICKS_PER_QUARTERNOTE)
-//Makro for easier internalisation.
-#define _(STRING) gettext(STRING)
+
+// Macro for easier internalisation.
+// Gettext was disabled during source code cleanup, as it's difficult
+// to maintain, and we'd rather focus on other features.
+#define _(STRING) (STRING)
 
 #define DEFAULT_TEMPO 60.0
 

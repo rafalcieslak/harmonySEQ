@@ -6,8 +6,6 @@ AC_INIT([harmonySEQ], [0.16.1], [https://bugs.launchpad.net/harmonyseq])
 AC_CONFIG_SRCDIR([src/Sequencer.h])
 AC_CONFIG_HEADERS([src/config.h])
 AM_INIT_AUTOMAKE([harmonySEQ], [0.16.1])
-AM_GNU_GETTEXT_VERSION([0.18.1])
-AM_GNU_GETTEXT([external])
 
 AC_PREFIX_DEFAULT(/usr/local)
 
@@ -35,12 +33,6 @@ AM_CONDITIONAL(DISABLEOSC, test x$enable_osc = xno)
 AC_CHECK_LIB([asound], [snd_seq_open], [] , [
 					echo "Alsa library missing - install alsa developement headers! [libasound2-dev on Ubuntu]"
 					exit -1 ])
-
-# Checks for header files.
-AC_CHECK_HEADERS([libintl.h locale.h], [] , [
-					echo "Gettext locale header files missing! [libintl.h locale.h]"
-					exit -1 ])
-
 
 PKG_CHECK_MODULES([GTKMM], [gtkmm-3.0], [] , [
 					echo "Gtkmm 3.0 library missing - install gtkmm-3.0 developement headers! [gtkmm-3.0-dev on Ubuntu]"
@@ -74,5 +66,5 @@ AC_CHECK_FUNCS([select])
 AC_DEFINE([DATA_PATH], [], [Prefix path])
 AC_DEFINE_UNQUOTED([DATA_PATH], ["${prefix}"])
 
-AC_CONFIG_FILES([Makefile po/Makefile.in examples/Makefile src/Makefile pixmaps/Makefile])
+AC_CONFIG_FILES([Makefile examples/Makefile src/Makefile pixmaps/Makefile])
 AC_OUTPUT

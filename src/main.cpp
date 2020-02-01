@@ -165,14 +165,6 @@ void InitGui(){
     
 }
 
-/**Inits gettext, must be called before any internationalized message is required*/
-void InitGetText(){
-     //sets the locale to user's locale
-    setlocale(LC_ALL, "");
-    bindtextdomain(PACKAGE,LOCALEDIR);
-    textdomain(PACKAGE);
-}
-
 /**Prepares the Midi Driver*/
 void InitMidiDriver(){
     //create the midi driver
@@ -284,8 +276,6 @@ int main(int argc, char** argv) {
     //random number generator init, may got useful somewhere in the future
     srand(time(NULL));
 
-    InitGetText();
-
     running = 1;        //the program IS running
     debugging = 0;      //by default
     help = 0;           //by default
@@ -325,7 +315,7 @@ int main(int argc, char** argv) {
                     sprintf(temp,_("unknown option '%c'\n"), optopt);
                     *err << temp;
                 }else{
-                    sprintf(temp, gettext("unrecognized option '%s'\n"),argv[optind-1]); //a trick to tell what was the LONG option we couldn't recognize.
+                    sprintf(temp, _("unrecognized option '%s'\n"),argv[optind-1]); //a trick to tell what was the LONG option we couldn't recognize.
                     *err << temp;
                 }
                 help = 1;

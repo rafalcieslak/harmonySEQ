@@ -1,3 +1,6 @@
+unreleased:
+	- Disabled i18n support to allow for cleaning up the build system.
+
 harmonyseq 0.16.1:
 	- Maintenance only release.
 	- Ported user interface code to use GTK3 and gtkmm-3.0 / 3.24.

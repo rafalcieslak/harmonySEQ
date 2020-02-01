@@ -20,10 +20,8 @@
 #include <libintl.h>
 #include <locale.h>
 #include "messages.h"
-#include "gettext.h"
+#include "global.h"
 #include <ctime>
-//Makro for easier internalisation.
-#define _(STRING) gettext(STRING)
 
 debug::debug(int debug) {
     if (debug != 0){
