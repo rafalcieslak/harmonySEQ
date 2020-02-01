@@ -818,22 +818,23 @@ void SequencerWidget::OnShowChordButtonClicked(){
 }
 
 void SequencerWidget::SetOnOffColour(OnOffColour c){
-  
-  /* XXX: This styling was disabled during migration to GTK-3.0, and needs to be restored eventually. */
-  //  if (c == NONE) {
-  //      wOnOfColour.unset_bg(Gtk::STATE_NORMAL);
-  //      wMuteToggle.unset_bg(Gtk::STATE_PRELIGHT);
-  //  }else if (c == ON) {
-  //      wOnOfColour.modify_bg(Gtk::STATE_NORMAL,Gdk::Color("green1"));
-  //      wMuteToggle.modify_bg(Gtk::STATE_PRELIGHT,Gdk::Color("green3"));
-  //  }else if (c ==ONCE) {
-  //      wOnOfColour.modify_bg(Gtk::STATE_NORMAL,Gdk::Color("yellow"));
-  //      wMuteToggle.modify_bg(Gtk::STATE_PRELIGHT,Gdk::Color("yellow2"));
-  //  }else if (c == ONCE_PRE){
-  //      wOnOfColour.modify_bg(Gtk::STATE_NORMAL,Gdk::Color("gold"));
-  //      wMuteToggle.modify_bg(Gtk::STATE_PRELIGHT,Gdk::Color("gold2"));
-  //      
-  //  }
+  wOnOfColour.get_style_context()->remove_class("seq-on");
+  wMuteToggle.get_style_context()->remove_class("seq-on");
+  wOnOfColour.get_style_context()->remove_class("seq-once");
+  wMuteToggle.get_style_context()->remove_class("seq-once");
+  wOnOfColour.get_style_context()->remove_class("seq-oncepre");
+  wMuteToggle.get_style_context()->remove_class("seq-oncepre");
+    
+  if(c == ON) {
+    wOnOfColour.get_style_context()->add_class("seq-on");
+    wMuteToggle.get_style_context()->add_class("seq-on");
+  }else if(c == ONCE) {
+    wOnOfColour.get_style_context()->add_class("seq-once");
+    wMuteToggle.get_style_context()->add_class("seq-once");
+  }else if(c == ONCE_PRE) {
+    wOnOfColour.get_style_context()->add_class("seq-oncepre");
+    wMuteToggle.get_style_context()->add_class("seq-oncepre");
+  }
 }
 
 void SequencerWidget::OnPatternWidgetScrollLeft(){

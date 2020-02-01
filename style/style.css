@@ -1,0 +1,40 @@
+/* This is useful for testing theme compatibility. */
+
+/*
+* {
+   all: unset;
+}
+*/
+
+
+* {
+  border-radius: unset;
+  -gtk-outline-radius: unset;
+}
+
+separator {
+  min-width: 1px;
+  min-height: 1px;
+  background-color: unset;
+}
+
+eventbox.seq-on {
+    background-color: #00ff00;
+}
+checkbutton.seq-on {
+    background-color: #00cd00;
+}
+
+eventbox.seq-once {
+    background-color: #ffff00;
+}
+checkbutton.seq-once {
+    background-color: #eeee00;
+}
+
+eventbox.seq-oncepre {
+    background-color: #ffd700;
+}
+checkbutton.seq-oncepre {
+    background-color: #eec900;
+}

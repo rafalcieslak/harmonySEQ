@@ -206,6 +206,7 @@ void LoadIcons(){
     	
     }else
     //Trying to find where are the icons located, by looking for harmonyseq.png.
+    // XXX: For the love of God, rewrite this with a loop!
     if (Files::fexists("/usr/share/icons/hicolor/48x48/apps/harmonyseq.png")){
         //seems we are installed defaultly in /usr/share
         *dbg << "harmonySEQ icon found at: /usr/share/icons/hicolor/48x48/apps/harmonyseq.png" << ENDL;
@@ -251,6 +252,16 @@ void LoadIcons(){
     }
     
 }
+
+void EnableCSSProvider() {
+  auto css_provider = Gtk::CssProvider::create();
+  // XXX: Support alternative and installed paths!
+  css_provider->load_from_path("style/style.css");
+  Gtk::StyleContext::add_provider_for_screen(
+    Gdk::Screen::get_default(),
+    css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+}
+
 
 /**As in the name: When we got a filename from command-line, we try to open it.*/
 bool TryToOpenFileFromCommandLine(){
@@ -350,6 +361,9 @@ int main(int argc, char** argv) {
     //..icons...
     LoadIcons();
 
+    //..CSS provider...
+    EnableCSSProvider();
+    
     //...configuration...
     gdk_threads_enter();
     LoadConfig();
