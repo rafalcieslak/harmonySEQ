@@ -42,8 +42,8 @@ AC_CHECK_HEADERS([libintl.h locale.h], [] , [
 					exit -1 ])
 
 
-PKG_CHECK_MODULES([GTKMM], [gtkmm-2.4], [] , [
-					echo "Gtkmm 2.4 library missing - install gtkmm-2.4 developement headers! [gtkmm-2.4-dev on Ubuntu]"
+PKG_CHECK_MODULES([GTKMM], [gtkmm-3.0], [] , [
+					echo "Gtkmm 3.0 library missing - install gtkmm-3.0 developement headers! [gtkmm-3.0-dev on Ubuntu]"
 					exit -1 ])
 
 if test "$osc_enabled" = "true"; then

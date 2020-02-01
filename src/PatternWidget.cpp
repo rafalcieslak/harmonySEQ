@@ -1083,21 +1083,29 @@ bool PatternWidget::on_expose_event(GdkEventExpose* event){
     ct.set_source(cr_buffer_surface,0,0);
 
     //repainting only needed rectangles
-    GdkRectangle *rects;
-    int n_rects;
-    int i;
-    gdk_region_get_rectangles(event->region, &rects, &n_rects);
-
-    for (i = 0; i < n_rects; i++) {
-        /* Repaint rectangle: (rects[i].x, rects[i].y),
-         *                    (rects[i].width, rects[i].height)
-         */
-
-        ct.rectangle(rects[i].x, rects[i].y, rects[i].width, rects[i].height);
-        ct.fill();
+    // GdkRectangle *rects;
+    // int n_rects;
+    // int i;
+    // gdk_region_get_rectangles(event->region, &rects, &n_rects);
+    // 
+    // for (i = 0; i < n_rects; i++) {
+    //     /* Repaint rectangle: (rects[i].x, rects[i].y),
+    //      *                    (rects[i].width, rects[i].height)
+    //      */
+    // 
+    //     ct.rectangle(rects[i].x, rects[i].y, rects[i].width, rects[i].height);
+    //     ct.fill();
+    // }
+    // 
+    // g_free(rects);
+    int n_rects = cairo_region_num_rectangles(event->region);
+    for (int i = 0; i < n_rects; i++) {
+      cairo_rectangle_int_t rect;
+      cairo_region_get_rectangle(event->region, i, &rect);
+      ct.rectangle(rect.x, rect.y, rect.width, rect.height);
+      ct.fill();
     }
-
-    g_free(rects);
+    
    
    cairo_destroy(c_t);
   

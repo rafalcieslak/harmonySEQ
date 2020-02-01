@@ -57,7 +57,7 @@ SequencerWidget::SequencerWidget()
     wNotebookAndPatternOpsHBox.pack_start(wNotebookVbox/*,Gtk::PACK_EXPAND_WIDGET*/);
     wNotebookAndPatternOpsHBox.pack_start(wNotebook,Gtk::PACK_SHRINK);
     wNotebookAndPatternOpsHBox.pack_end(wPtOpsVBox,Gtk::PACK_SHRINK);
-    wViewport = new Gtk::Viewport(*wPatternScroll.get_adjustment(),*wPatternScroll2.get_adjustment());
+    wViewport = new Gtk::Viewport(wPatternScroll.get_adjustment(),wPatternScroll2.get_adjustment());
     wNotebookVbox.pack_start(*wViewport);
     wNotebookVbox.pack_end(wPatternScroll,Gtk::PACK_SHRINK);
     wViewport->add(wPatternWidgetBox);
@@ -123,14 +123,17 @@ SequencerWidget::SequencerWidget()
     wZoomIn.set_relief(Gtk::RELIEF_NONE);
     wZoomOut.set_relief(Gtk::RELIEF_NONE);
     wZoomIn.set_border_width(0);
-    Glib::RefPtr<Gtk::RcStyle> style;
-    style = wZoomIn.get_modifier_style();
-    style->set_xthickness(0);
-    style->set_ythickness(0);
-    wZoomIn.modify_style(style);
-    wZoomOut.modify_style(style);
-    wZoomInImg.modify_style(style);
-    wZoomOutImg.modify_style(style);
+
+    /* XXX: This styling was disabled during migration to GTK-3.0, and needs to be restored eventually. 
+     * It was probably responsible for no borders around the zoomin/out buttons. */
+    // Glib::RefPtr<Gtk::RcStyle> style;
+    // style = wZoomIn.get_modifier_style();
+    // style->set_xthickness(0);
+    // style->set_ythickness(0);
+    // wZoomIn.modify_style(style);
+    // wZoomOut.modify_style(style);
+    // wZoomInImg.modify_style(style);
+    // wZoomOutImg.modify_style(style);
     wZoomOut.set_border_width(0);
     wZoomIn.set_tooltip_markup(_("<b>Zoom in</b> (Ctrl+MouseScroll)"));
     wZoomOut.set_tooltip_markup(_("<b>Zoom out</b> (Ctrl+MouseScroll)"));
@@ -676,7 +679,7 @@ void SequencerWidget::OnSetAsActivePatternClicked(){
     int current = wNotebook.get_current_page();
     wActivePattern.set_value((double)current);    
 }
-void SequencerWidget::OnNotebookPageChanged(GtkNotebookPage* page, guint page_num){
+void SequencerWidget::OnNotebookPageChanged(Gtk::Widget* page, guint page_num){
     if(ignore_signals) return;
     if(do_not_react_on_page_changes) return;
     *dbg << "page changed!\n";
@@ -815,20 +818,22 @@ void SequencerWidget::OnShowChordButtonClicked(){
 }
 
 void SequencerWidget::SetOnOffColour(OnOffColour c){
-    if (c == NONE) {
-        wOnOfColour.unset_bg(Gtk::STATE_NORMAL);
-        wMuteToggle.unset_bg(Gtk::STATE_PRELIGHT);
-    }else if (c == ON) {
-        wOnOfColour.modify_bg(Gtk::STATE_NORMAL,Gdk::Color("green1"));
-        wMuteToggle.modify_bg(Gtk::STATE_PRELIGHT,Gdk::Color("green3"));
-    }else if (c ==ONCE) {
-        wOnOfColour.modify_bg(Gtk::STATE_NORMAL,Gdk::Color("yellow"));
-        wMuteToggle.modify_bg(Gtk::STATE_PRELIGHT,Gdk::Color("yellow2"));
-    }else if (c == ONCE_PRE){
-        wOnOfColour.modify_bg(Gtk::STATE_NORMAL,Gdk::Color("gold"));
-        wMuteToggle.modify_bg(Gtk::STATE_PRELIGHT,Gdk::Color("gold2"));
-        
-    }
+  
+  /* XXX: This styling was disabled during migration to GTK-3.0, and needs to be restored eventually. */
+  //  if (c == NONE) {
+  //      wOnOfColour.unset_bg(Gtk::STATE_NORMAL);
+  //      wMuteToggle.unset_bg(Gtk::STATE_PRELIGHT);
+  //  }else if (c == ON) {
+  //      wOnOfColour.modify_bg(Gtk::STATE_NORMAL,Gdk::Color("green1"));
+  //      wMuteToggle.modify_bg(Gtk::STATE_PRELIGHT,Gdk::Color("green3"));
+  //  }else if (c ==ONCE) {
+  //      wOnOfColour.modify_bg(Gtk::STATE_NORMAL,Gdk::Color("yellow"));
+  //      wMuteToggle.modify_bg(Gtk::STATE_PRELIGHT,Gdk::Color("yellow2"));
+  //  }else if (c == ONCE_PRE){
+  //      wOnOfColour.modify_bg(Gtk::STATE_NORMAL,Gdk::Color("gold"));
+  //      wMuteToggle.modify_bg(Gtk::STATE_PRELIGHT,Gdk::Color("gold2"));
+  //      
+  //  }
 }
 
 void SequencerWidget::OnPatternWidgetScrollLeft(){
