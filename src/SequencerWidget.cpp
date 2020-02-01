@@ -142,9 +142,10 @@ SequencerWidget::SequencerWidget()
     wZoomInImg.show();
     wZoomOutImg.show();
     
-    wBoxOfChord.pack_start(wChordNotebook,Gtk::PACK_SHRINK);
-    wBoxOfChord.pack_start(wVirtualSpaceLabel,Gtk::PACK_EXPAND_WIDGET,1); //extra alligments space - 1 stands for the notebook's border witdth
+    wBoxOfChord.pack_start(wChordNotebook,Gtk::PACK_EXPAND_WIDGET);
+    wBoxOfChord.pack_start(wVirtualSpaceLabel,Gtk::PACK_SHRINK,1); //extra alligments space - 1 stands for the notebook's border witdth
     wVirtualSpaceLabel.set_text(" ");
+    wVirtualSpaceLabel.set_size_request(6, 0);
     wChordNotebook.append_page(chordwidget);
     wChordNotebook.append_page(wCtrlHBox);
     wChordNotebook.set_show_tabs(0);

@@ -7,10 +7,31 @@
 */
 
 
-* {
+#mainwindow * {
   border-radius: unset;
   -gtk-outline-radius: unset;
+  box-shadow: unset;
+  -gtk-dpi: 77.7;
 }
+
+spinbutton, button {
+    min-height: 1.8em;
+}
+button {
+    min-height: 1.2em;
+}
+.view button {
+    min-height: 0rem;
+}
+entry {
+    min-height: 1.2rem;
+}
+entry.cell {
+    min-height: 0;
+}
+
+
+
 
 separator {
   min-width: 1px;

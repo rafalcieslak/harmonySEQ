@@ -48,6 +48,8 @@ bool seq_list_drag_in_progress;
 
 MainWindow::MainWindow()
 {
+    set_name("mainwindow");
+  
     set_border_width(0);
     //set_resizable(0);
     set_default_size(950,600);
@@ -243,6 +245,7 @@ MainWindow::MainWindow()
         column = wTreeView.get_column(col_count-1);
         cell = wTreeView.get_column_cell_renderer(col_count - 1);
         column->add_attribute(cell->property_cell_background(),m_columns_sequencers.col_colour);
+        column->set_min_width(32);
         Gtk::CellRendererToggle& tgl = dynamic_cast<Gtk::CellRendererToggle&> (*cell);
         tgl.signal_toggled().connect(mem_fun(*this, &MainWindow::OnMutedToggleToggled));
         
