@@ -17,6 +17,8 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <thread>
+
 #include <alsa/asoundlib.h>
 
 #ifndef MIDIDRIVER_H
@@ -128,6 +130,7 @@ private:
 
     int diode_event_id_next;
     /**Diode data is kept here*/
+    std::mutex diode_events_mutex;
     std::map<int, DiodeMidiEvent> diode_events;
 
     
