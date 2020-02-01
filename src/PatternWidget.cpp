@@ -1063,10 +1063,9 @@ bool PatternWidget::DrawDiodesTimeout(){
 }
 //=======================DRAWING==============
 
-bool PatternWidget::on_expose_event(GdkEventExpose* event){
-    
+bool PatternWidget::on_draw(const Cairo::RefPtr<Cairo::Context>& ct){
     Th->mutex_drawing.lock();
-    
+
     Gtk::Allocation allocation = get_allocation();
     const double width = allocation.get_width();
     const int height = allocation.get_height();
@@ -1077,44 +1076,13 @@ bool PatternWidget::on_expose_event(GdkEventExpose* event){
     if(last_drawn_height != height || last_drawn_width != width) RedrawEverything();  
     last_drawn_height = height; last_drawn_width = width;
     
-    cairo_t * c_t = gdk_cairo_create(event->window);
-    Cairo::Context ct(c_t);
-
-    ct.set_source(cr_buffer_surface,0,0);
-
-    //repainting only needed rectangles
-    // GdkRectangle *rects;
-    // int n_rects;
-    // int i;
-    // gdk_region_get_rectangles(event->region, &rects, &n_rects);
-    // 
-    // for (i = 0; i < n_rects; i++) {
-    //     /* Repaint rectangle: (rects[i].x, rects[i].y),
-    //      *                    (rects[i].width, rects[i].height)
-    //      */
-    // 
-    //     ct.rectangle(rects[i].x, rects[i].y, rects[i].width, rects[i].height);
-    //     ct.fill();
-    // }
-    // 
-    // g_free(rects);
-    int n_rects = cairo_region_num_rectangles(event->region);
-    for (int i = 0; i < n_rects; i++) {
-      cairo_rectangle_int_t rect;
-      cairo_region_get_rectangle(event->region, i, &rect);
-      ct.rectangle(rect.x, rect.y, rect.width, rect.height);
-      ct.fill();
-    }
+    ct->set_source(cr_buffer_surface,0,0);
+    ct->paint();
     
+    Th->mutex_drawing.unlock();
    
-   cairo_destroy(c_t);
-  
-   Th->mutex_drawing.unlock();
-   
-  return true;
-      
-  }
-
+    return true;
+}
 
 bool PatternWidget::TimeLockDiodesCompleted(){
     all_diodes_lock = 0;
