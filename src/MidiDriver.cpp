@@ -682,7 +682,10 @@ void MidiDriver::ProcessInput(){
 
                     diode_events_mutex.lock();
                     it = diode_events.find(id);
-                    if(it != diode_events.end()) break; // If the event wasn't found, ignore this message.
+                    if(it == diode_events.end()) {
+                      diode_events_mutex.unlock();
+                      break; // If the event wasn't found, ignore this message.
+                    }
                     diodev = (*it).second;
                     diode_events.erase(it);
                     diode_events_mutex.unlock();
