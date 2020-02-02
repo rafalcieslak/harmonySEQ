@@ -718,7 +718,7 @@ void MainWindow::OnAboutMenuClicked(){
     aboutbox.set_program_name("harmonySEQ");
     aboutbox.set_version(VERSION);
     aboutbox.set_logo(harmonySEQ_logo_48);
-    aboutbox.set_copyright("Copyright © 2010,2011 Rafał Cieślak");
+    aboutbox.set_copyright("Copyright © 2010-2011, 2020 Rafał Cieślak");
     aboutbox.set_comments(_("A MIDI sequencing application helpful for music composers and live artists."));
     /* TRANSLATORS:The GNU GPL v.3*/
      aboutbox.set_license(_("HarmonySEQ is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n"
@@ -731,13 +731,10 @@ void MainWindow::OnAboutMenuClicked(){
     authors.push_back(_("Main author:"));
     authors.push_back("   Rafał Cieślak <rafalcieslak256@gmail.com>");
     authors.push_back("");
-    authors.push_back(_("Consultants:"));
+    authors.push_back(_("Special thanks to:"));
+    authors.push_back("   Louigi Verona <http://www.louigiverona.ru>");
     authors.push_back("   Joanna Łopuch");
-    authors.push_back("   Louigi Verona <http://www.louigiverona.ru>");
     authors.push_back("   Krzysztof Platis");
-    authors.push_back("");
-    authors.push_back(_("Testers:"));
-    authors.push_back("   Louigi Verona <http://www.louigiverona.ru>");
     authors.push_back("   Nel Pogorzelska");
     aboutbox.set_authors(authors);
     /* TRANSLATORS: The list of translators to be placed in about-box */
