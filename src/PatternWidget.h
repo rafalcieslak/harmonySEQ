@@ -188,6 +188,7 @@ private:
 
     SlopeType GetSelectionSlopeType();
 
+    void OnRealize();
     void UpdateSizeRequest();
     double Snap(double t);
     double SnapDown(double t);

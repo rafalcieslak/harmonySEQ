@@ -75,7 +75,7 @@ Gtk::TreeModel::Row spawn_control_sequencer(){
 
 Gtk::TreeModel::Row clone_sequencer(int orig){
     int n = seqVector.size();
-    
+
     Sequencer *new_seq = seqVector[orig]->Clone();
     new_seq->SetOn(0);
     seqHandle h = RequestNewSeqHandle(n);
@@ -137,7 +137,7 @@ void Sequencer::Init(){
     on = false;
     active_pattern = 0;
     channel = 1;
-    length_numerator = 1;
+    length_numerator = 4;
     length_denominator = 1;
     play_from_here_marker = 0.0;
     play_once_phase = 0;
@@ -191,7 +191,7 @@ Glib::ustring Sequencer::GetName(){return name;}
 
 void Sequencer::SetPlayOncePhase(int p){
     play_once_phase = p;
-    
+
 }
 
 int Sequencer::GetPlayOncePhase(){

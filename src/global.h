@@ -41,7 +41,7 @@
 // to maintain, and we'd rather focus on other features.
 #define _(STRING) (STRING)
 
-#define DEFAULT_TEMPO 60.0
+#define DEFAULT_TEMPO 120.0
 
 //How long is the tempo indicatior RED.
 #define FLASH_INTERVAL 50
@@ -132,4 +132,3 @@ bool Ask(Glib::ustring message, Glib::ustring secondary_message = "");
 void Info(Glib::ustring message, Glib::ustring secondary_message = "");
 
 #endif	/* GLOBAL_H */
-

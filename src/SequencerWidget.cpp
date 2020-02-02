@@ -42,7 +42,7 @@ SequencerWidget::SequencerWidget()
 
     wMainVbox.pack_start(wUpBox,Gtk::PACK_SHRINK);
     wMainVbox.pack_start(wDownTable,Gtk::PACK_SHRINK);
-    
+
     wDownTable.resize(4,4);
     wDownTable.attach(wUpperHBox1,0,2,0,1);
     wDownTable.attach(wShowChordButton,0,1,1,3,Gtk::FILL);
@@ -53,20 +53,21 @@ SequencerWidget::SequencerWidget()
     wDownTable.attach(wBoxOfChord,0,1,3,4,Gtk::SHRINK);
     wDownTable.attach(wNotebookAndPatternOpsHBox,1,4,3,4);
     wRightBoxSep.set_size_request(4,0);
-    
-    wNotebookAndPatternOpsHBox.pack_start(wNotebookVbox/*,Gtk::PACK_EXPAND_WIDGET*/);
+
+    wNotebookAndPatternOpsHBox.pack_start(wScrolledWindow/*,Gtk::PACK_EXPAND_WIDGET*/);
     wNotebookAndPatternOpsHBox.pack_start(wNotebook,Gtk::PACK_SHRINK);
     wNotebookAndPatternOpsHBox.pack_end(wPtOpsVBox,Gtk::PACK_SHRINK);
-    wViewport = new Gtk::Viewport(wPatternScroll.get_adjustment(),wPatternScroll2.get_adjustment());
-    wNotebookVbox.pack_start(*wViewport);
-    wNotebookVbox.pack_end(wPatternScroll,Gtk::PACK_SHRINK);
-    wViewport->add(wPatternWidgetBox);
-    wViewport->set_shadow_type(Gtk::SHADOW_NONE);
+
+    wScrolledWindow.add(wPatternWidgetBox);
     wPatternWidgetBox.pack_start(pattern_widget,Gtk::PACK_SHRINK);
-    
+
+    wScrolledWindow.set_policy(Gtk::POLICY_ALWAYS, Gtk::POLICY_NEVER);
+    wScrolledWindow.add(pattern_widget);
+    wScrolledWindow.set_overlay_scrolling(false);
+
     pattern_widget.on_selection_changed.connect(sigc::mem_fun(*this,&SequencerWidget::OnSelectionChanged));
     pattern_widget.on_slope_type_needs_additional_refreshing.connect(sigc::mem_fun(*this,&SequencerWidget::UpdateSlopeType));
-    
+
     wUpperHBox1.pack_start(wNameLabel,Gtk::PACK_SHRINK);
     wUpperHBox1.pack_start(wNameEntry,Gtk::PACK_SHRINK);
     wNameEntry.set_width_chars(10);
@@ -90,7 +91,7 @@ SequencerWidget::SequencerWidget()
     wRightBox2.pack_start(wLengthDivision,Gtk::PACK_SHRINK);
     wRightBox2.pack_start(wLengthDenominator,Gtk::PACK_SHRINK);
     wRightBox2.pack_start(wLengthResult,Gtk::PACK_SHRINK);
-    
+
     //wUpperHBox2.pack_start(wShowChordButton,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wSlopeSelectorSep,Gtk::PACK_SHRINK);
     wUpperHBox2.pack_start(wCtrlSlopeFlat,Gtk::PACK_SHRINK);
@@ -105,17 +106,17 @@ SequencerWidget::SequencerWidget()
     wUpperHBox2.pack_end(wZoomIn,Gtk::PACK_SHRINK);
     wVelSep.set_size_request(8,0);
     wSlopeSelectorSep.set_size_request(8,0);
-    
+
     wShowChordButton.add(wShowChordLabel);
     wShowChordLabel.set_markup(_("<b>Chord</b>"));
     wShowChordButton.set_tooltip_markup(_("Shows/hides the chord's detailed settings."));
     wShowChordButton.signal_toggled().connect(sigc::mem_fun(*this,&SequencerWidget::OnShowChordButtonClicked));
-    
+
     wSnapToggle.set_label(_("Snap to grid"));
     wSnapToggle.set_tooltip_markup(_("If on, notes will be snapped to the visible grid.\nGrid density changes with sequence resolution."));
     wSnapToggle.set_active(1); //As this is default value
     wSnapToggle.signal_toggled().connect(sigc::mem_fun(*this,&SequencerWidget::OnSnapClicked));
-    
+
     wZoomInImg.set(Gtk::Stock::ZOOM_IN,Gtk::ICON_SIZE_MENU);
     wZoomOutImg.set(Gtk::Stock::ZOOM_OUT,Gtk::ICON_SIZE_MENU);
     wZoomIn.set_image(wZoomInImg);
@@ -124,16 +125,6 @@ SequencerWidget::SequencerWidget()
     wZoomOut.set_relief(Gtk::RELIEF_NONE);
     wZoomIn.set_border_width(0);
 
-    /* XXX: This styling was disabled during migration to GTK-3.0, and needs to be restored eventually. 
-     * It was probably responsible for no borders around the zoomin/out buttons. */
-    // Glib::RefPtr<Gtk::RcStyle> style;
-    // style = wZoomIn.get_modifier_style();
-    // style->set_xthickness(0);
-    // style->set_ythickness(0);
-    // wZoomIn.modify_style(style);
-    // wZoomOut.modify_style(style);
-    // wZoomInImg.modify_style(style);
-    // wZoomOutImg.modify_style(style);
     wZoomOut.set_border_width(0);
     wZoomIn.set_tooltip_markup(_("<b>Zoom in</b> (Ctrl+MouseScroll)"));
     wZoomOut.set_tooltip_markup(_("<b>Zoom out</b> (Ctrl+MouseScroll)"));
@@ -141,7 +132,7 @@ SequencerWidget::SequencerWidget()
     wZoomOut.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWidget::OnZoomOutClicked));
     wZoomInImg.show();
     wZoomOutImg.show();
-    
+
     wBoxOfChord.pack_start(wChordNotebook,Gtk::PACK_EXPAND_WIDGET);
     wBoxOfChord.pack_start(wVirtualSpaceLabel,Gtk::PACK_SHRINK,1); //extra alligments space - 1 stands for the notebook's border witdth
     wVirtualSpaceLabel.set_text(" ");
@@ -160,7 +151,7 @@ SequencerWidget::SequencerWidget()
     wCtrl127.set_label("127");
     wCtrl64.set_label("64");
     wCtrl0.set_label("0");
-    
+
     wNotebook.set_tab_pos(Gtk::POS_RIGHT);
     wNotebook.set_show_border(0);
     wNotebook.set_scrollable(1);
@@ -245,7 +236,7 @@ SequencerWidget::SequencerWidget()
     wCtrlSlopeFlat.signal_toggled().connect(sigc::mem_fun(*this,&SequencerWidget::OnSlopeFlatToggled));
     wCtrlSlopeLinear.signal_toggled().connect(sigc::mem_fun(*this,&SequencerWidget::OnSlopeLinearToggled));
     //my_slope_mode_for_adding = SLOPE_TYPE_LINEAR;
-    
+
     //lengths selector
     wResolutionsLabel.set_text(_("Resolution:"));
     wResolutions.set_range(1.0,64.0);
@@ -256,7 +247,7 @@ SequencerWidget::SequencerWidget()
 
 
     wLengthsLabel.set_text(_("Length:"));
-    
+
     wLengthNumerator.set_tooltip_markup(_("Selects the <b>length</b> of this sequencer. It defines <i>how many bars</i> the sequence in this sequencer will last. In case it's smaller then 1, the sequence may be repeated few times in each bar.\n\nThis it the length's fraction numerator."));
     wLengthDenominator.set_tooltip_markup(_("Selects the <b>length</b> of this sequencer. It defines <i>how many bars</i> the sequence in this sequencer will last. In case it's smaller then 1, the sequence may be repeated few times in each bar.\n\nThis it the length's fraction denominator."));
     wLengthResult.set_tooltip_markup(_("Selects the <b>length</b> of this sequencer. It defines <i>how many bars</i> the sequence in this sequencer will last. In case it's smaller then 1, the sequence may be repeated few times in each bar."));
@@ -269,10 +260,10 @@ SequencerWidget::SequencerWidget()
     wLengthDivision.set_text(" / ");
     wLengthNumerator.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnLengthChanged));
     wLengthDenominator.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnLengthChanged));
-    
+
     pattern_widget.on_scroll_left.connect(mem_fun(*this,&SequencerWidget::OnPatternWidgetScrollLeft));
     pattern_widget.on_scroll_right.connect(mem_fun(*this,&SequencerWidget::OnPatternWidgetScrollRight));
-    
+
     if(icon_slope_flat){
         wImageSlopeFlat.set(icon_slope_flat);
         wImageSlopeLinear.set(icon_slope_linear);
@@ -285,9 +276,9 @@ SequencerWidget::SequencerWidget()
         wImageSlopeFlat.show();
         wImageSlopeLinear.show();
     }
-    
+
     add(wMainVbox);
-    
+
     show_all_children(1);
     hide(); //hide at start, but let the children be shown
 }
@@ -295,7 +286,7 @@ SequencerWidget::SequencerWidget()
 SequencerWidget::~SequencerWidget(){
     do_not_react_on_page_changes = 1;
     for(int x = 0; x < (int) notebook_pages.size();x++) delete notebook_pages[x]; //TODO: check if they need to be removed from notebook first.
-    delete wViewport;
+    // delete wViewport;
 }
 
 void SequencerWidget::SelectSeq(seqHandle h){
@@ -320,9 +311,9 @@ void SequencerWidget::SelectNothing(){
 void SequencerWidget::UpdateEverything(){
     *dbg << "SeqencerWidget - Updating everything\n";
     if (AnythingSelected){
-        
+
         HideAndShowWidgetsDependingOnSeqType();
-        
+
         if(selectedSeqType == SEQ_TYPE_NOTE){
                 UpdateShowChord();
                 UpdateChord();
@@ -431,17 +422,17 @@ void SequencerWidget::UpdateController(){
 void SequencerWidget::UpdateRelLenBoxes(){
     if (AnythingSelected == 0) return;
     Sequencer* seq = seqH(selectedSeq);
-    
+
     ignore_signals = 1;
-    
+
    wLengthNumerator.set_value(seq->GetLengthNumerator());
    wLengthDenominator.set_value(seq->GetLengthDenominator());
     char temp[20];
    sprintf(temp," = %.4f",seq->GetLength());
    wLengthResult.set_text(temp);
-        
+
    wResolutions.set_value(seq->resolution);
-   
+
    ignore_signals = 0;
 }
 
@@ -530,7 +521,7 @@ void SequencerWidget::OnChannelChanged(){
     if(ignore_signals) return;
     if(!AnythingSelected) return;
     Sequencer* seq = seqH(selectedSeq);
-    
+
     seq->SetChannel( wChannelButton.get_value());
     mainwindow->RefreshRow(seq->my_row);
     Files::SetFileModified(1);
@@ -539,18 +530,18 @@ void SequencerWidget::OnChannelChanged(){
 void SequencerWidget::OnVelocityChanged(){
     if(ignore_signals) return;
     if(!AnythingSelected) return;
-    
+
     pattern_widget.SetSelectionVelocity(wVelocityButton.get_value());
-    
+
     Files::SetFileModified(1);
 }
 
 void SequencerWidget::OnValueChanged(){
     if(ignore_signals) return;
     if(!AnythingSelected) return;
-    
+
     pattern_widget.SetSelectionValue(wValueButton.get_value());
-    
+
     Files::SetFileModified(1);
 }
 
@@ -564,7 +555,7 @@ void SequencerWidget::OnSlopeFlatToggled(){
     }else{
         wCtrlSlopeLinear.set_active(1);
     }
-    
+
     Files::SetFileModified(1);
 }
 
@@ -578,7 +569,7 @@ void SequencerWidget::OnSlopeLinearToggled(){
     }else{
         wCtrlSlopeFlat.set_active(1);
     }
-    
+
     Files::SetFileModified(1);
 }
 
@@ -623,7 +614,7 @@ void SequencerWidget::OnToggleMuteToggled(){
 void SequencerWidget::OnResolutionChanged(){
     if(ignore_signals) return;
     if(!AnythingSelected) return;
-    
+
     Sequencer* seq = seqH(selectedSeq);
 
 
@@ -668,7 +659,7 @@ void SequencerWidget::UpdateAsterisk(int from, int to){
     char temp[100];
 
     if(wNotebook.get_n_pages() == 0) return;
-    
+
     sprintf(temp,_(" %d"),from);
     wNotebook.set_tab_label_text(*notebook_pages[from],temp);
 
@@ -678,7 +669,7 @@ void SequencerWidget::UpdateAsterisk(int from, int to){
 }
 void SequencerWidget::OnSetAsActivePatternClicked(){
     int current = wNotebook.get_current_page();
-    wActivePattern.set_value((double)current);    
+    wActivePattern.set_value((double)current);
 }
 void SequencerWidget::OnNotebookPageChanged(Gtk::Widget* page, guint page_num){
     if(ignore_signals) return;
@@ -743,7 +734,7 @@ void SequencerWidget::OnClonePatternClicked(){
     wNotebook.set_current_page(n);
     UpdateActivePatternRange();
     Files::SetFileModified(1);
-    
+
 }
 
 void SequencerWidget::SetRemoveButtonSensitivity(){
@@ -757,7 +748,7 @@ void SequencerWidget::OnNameEdited(){
     if(ignore_signals) return;
     if(!AnythingSelected) return;
     Sequencer* seq = seqH(selectedSeq);
-    
+
     seq->SetName(wNameEntry.get_text());
     mainwindow->RefreshRow(seq->my_row);
     mainwindow->eventsWidget.SeqListChanged();
@@ -825,7 +816,7 @@ void SequencerWidget::SetOnOffColour(OnOffColour c){
   wMuteToggle.get_style_context()->remove_class("seq-once");
   wOnOfColour.get_style_context()->remove_class("seq-oncepre");
   wMuteToggle.get_style_context()->remove_class("seq-oncepre");
-    
+
   if(c == ON) {
     wOnOfColour.get_style_context()->add_class("seq-on");
     wMuteToggle.get_style_context()->add_class("seq-on");
@@ -839,21 +830,23 @@ void SequencerWidget::SetOnOffColour(OnOffColour c){
 }
 
 void SequencerWidget::OnPatternWidgetScrollLeft(){
-    double inc = wViewport->get_hadjustment()->get_step_increment();
-    wViewport->get_hadjustment()->set_value(-inc + wViewport->get_hadjustment()->get_value());
-    if (wViewport->get_hadjustment()->get_value() > wViewport->get_hadjustment()->get_upper() - wViewport->get_hadjustment()->get_page_size()) wViewport->get_hadjustment()->set_value(wViewport->get_hadjustment()->get_upper() - wViewport->get_hadjustment()->get_page_size());
+    auto adjustment = wScrolledWindow.get_hadjustment();
+    double inc = adjustment->get_step_increment();
+    adjustment->set_value(-inc + adjustment->get_value());
+    if (adjustment->get_value() > adjustment->get_upper() - adjustment->get_page_size()) adjustment->set_value(adjustment->get_upper() - adjustment->get_page_size());
 
 }
 
 void SequencerWidget::OnPatternWidgetScrollRight(){
-    double inc = wViewport->get_hadjustment()->get_step_increment();
-    if (!(wViewport->get_hadjustment()->get_value() + wViewport->get_hadjustment()->get_page_size() + inc > wViewport->get_hadjustment()->get_upper()))
-        wViewport->get_hadjustment()->set_value(inc + wViewport->get_hadjustment()->get_value());
+    auto adjustment = wScrolledWindow.get_hadjustment();
+    double inc = adjustment->get_step_increment();
+    if (!(adjustment->get_value() + adjustment->get_page_size() + inc > adjustment->get_upper()))
+        adjustment->set_value(inc + adjustment->get_value());
     else
         //too high value, trimming to desired
-        wViewport->get_hadjustment()->set_value(wViewport->get_hadjustment()->get_upper() - wViewport->get_hadjustment()->get_page_size());
-    
-    if (wViewport->get_hadjustment()->get_value() > wViewport->get_hadjustment()->get_upper() - wViewport->get_hadjustment()->get_page_size()) wViewport->get_hadjustment()->set_value(wViewport->get_hadjustment()->get_upper() - wViewport->get_hadjustment()->get_page_size());
+        adjustment->set_value(adjustment->get_upper() - adjustment->get_page_size());
+
+    if (adjustment->get_value() > adjustment->get_upper() - adjustment->get_page_size()) adjustment->set_value(adjustment->get_upper() - adjustment->get_page_size());
 
 }
 

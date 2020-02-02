@@ -83,6 +83,7 @@ PatternWidget::PatternWidget(){
     drag_in_progress = 0;
     select_only_this_atom_on_LMB_release = NULL;
 
+    signal_realize().connect(sigc::mem_fun(*this,&PatternWidget::OnRealize));
     if(!Config::Interaction::DisableDiodes) Glib::signal_timeout().connect(sigc::mem_fun(*this,&PatternWidget::DrawDiodesTimeout),DIODE_FADEOUT_TIME/8);
 }
 
@@ -92,6 +93,10 @@ PatternWidget::~PatternWidget(){
 
 void PatternWidget::SetInternalHeight(int h){
     internal_height = h;
+    UpdateSizeRequest();
+}
+
+void PatternWidget::OnRealize(){
     UpdateSizeRequest();
 }
 
@@ -972,6 +977,7 @@ bool PatternWidget::on_scroll_event(GdkEventScroll* e){
                 }else if (e->direction == GDK_SCROLL_DOWN){
                     ZoomOut();
                 }
+                return false;
     }else{ //ctrl key not pressed
         if (found != NULL) {//scrolled a note
             NoteAtom* note = dynamic_cast<NoteAtom*> (found);
@@ -994,12 +1000,14 @@ bool PatternWidget::on_scroll_event(GdkEventScroll* e){
                 }
                 RedrawAtoms();
             }
+            return false;
         } else { //empty space scrolled, we'll scroll view
             if (e->direction == GDK_SCROLL_UP) {
                 on_scroll_left.emit();
             } else if (e->direction == GDK_SCROLL_DOWN) {
                 on_scroll_right.emit();
             }
+            return true;
         }
     }
 

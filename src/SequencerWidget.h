@@ -49,10 +49,10 @@ public:
 
     /**Inits the notebook*/
     void InitNotebook();
-    
+
     void ActivateDiode(DiodeMidiEvent diodev);
     void DeacivateAllDiodes();
-    
+
     bool AnythingSelected;
     seqHandle selectedSeq;
     SeqType_t selectedSeqType;
@@ -110,9 +110,9 @@ private:
     void UpdateSlopeType();
     void OnZoomInClicked();
     void OnZoomOutClicked();
-    
+
     PatternWidget pattern_widget;
-    
+
     Gtk::VBox wMainVbox;
     Gtk::VBox wUpBox;
     Gtk::Table wDownTable;
@@ -142,11 +142,10 @@ private:
     Gtk::VSeparator wSlopeSelectorSep;
 
     Gtk::Notebook wNotebook;
-    Gtk::VBox wNotebookVbox;
     std::vector<Gtk::Label *> notebook_pages;
     /**It allows the patternwidget to not fill the whole viewport area.*/
     Gtk::HBox wPatternWidgetBox;
-    Gtk::Viewport* wViewport; //must be a pointer, as constructor needs agruments
+    Gtk::ScrolledWindow wScrolledWindow;
     Gtk::HScrollbar wPatternScroll;
     Gtk::VScrollbar wPatternScroll2;
     Gtk::SpinButton wChannelButton;
@@ -188,11 +187,10 @@ private:
     Gtk::RadioButton wCtrlSlopeLinear;
     //not displayed, but used to choose none of the other two
     Gtk::RadioButton wCtrlSlopeNone;
-    
+
     Gtk::Image wImageSlopeLinear;
     Gtk::Image wImageSlopeFlat;\
 
 };
 
 #endif	/* SEQUENCERWIDGET_H */
-
