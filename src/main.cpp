@@ -38,6 +38,7 @@
 vector<Sequencer *> seqVector;
 vector<Event *> Events;
 double tempo = DEFAULT_TEMPO;
+bool midi_clock_enabled = true;
 int ports_number;
 int running = 1; //states, whether the application is running. When it's changed to 0, all infinite loops in background break, and the whole program closes.
 debug* dbg; //the stream-like objects responsible of putting messages into stdio
@@ -76,6 +77,7 @@ Glib::RefPtr< Gdk::Pixbuf > icon_slope_flat;
 int debugging = 0, help = 0, version = 0; //flags set by getopt, depending on command-line parameters
 
 bool metronome;
+int metronome_counter = 0;
 bool diodes_disabled;
 
 void print_help(); //forward declaration of few functions

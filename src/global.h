@@ -33,8 +33,10 @@
 
 #define ENDL "\n"
 //Internal resolution of ALSA sequencer.
-#define TICKS_PER_QUARTERNOTE 128
-#define TICKS_PER_NOTE (4*TICKS_PER_QUARTERNOTE)
+#define TICKS_PER_BEAT 192
+
+// This matches MIDI standard.
+#define MIDI_PPQ 24
 
 // Macro for easier internalisation.
 // Gettext was disabled during source code cleanup, as it's difficult
@@ -107,10 +109,12 @@ class Event;
 class SettingsWindow;
 extern std::vector<Sequencer *> seqVector;
 extern double tempo;
+extern bool midi_clock_enabled;
 extern int ports_number;
 extern int running;
 extern int debugging;
 extern bool metronome;
+extern int metronome_counter;
 extern debug* dbg;
 extern error* err;
 extern MidiDriver* midi;

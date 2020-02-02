@@ -76,6 +76,8 @@ MainWindow::MainWindow()
     m_refActionGroup->add(Gtk::Action::create("RemoveSeq", Gtk::Stock::REMOVE, _("Remove"),_("Removes selected sequencer")), sigc::mem_fun(*this, &MainWindow::OnRemoveClicked));
     m_refActionGroup->add(Gtk::Action::create("DuplicateSeq", Gtk::Stock::CONVERT, _("Duplicate"), _("Duplicates selected sequencer")), sigc::mem_fun(*this, &MainWindow::OnCloneClicked));
     m_refActionGroup->add(Gtk::Action::create("About", Gtk::Stock::ABOUT), sigc::mem_fun(*this, &MainWindow::OnAboutMenuClicked));
+    m_refActionGroup->add(Gtk::ToggleAction::create("MIDIClock", _("MIDIClock"),_("Toggle MIDI clock and start/stop messages output")));
+    m_refActionGroup->add(Gtk::Action::create("Sync", Gtk::Stock::MEDIA_PLAY, _("Sync"),_("Toggle MIDI clock and start/stop messages output")));
     m_refActionGroup->add(Gtk::ToggleAction::create("Metronome", _("Metronome"),_("Toggle metronome on/off")), sigc::mem_fun(*this, &MainWindow::OnMetronomeToggleClicked));
     m_refActionGroup->add(Gtk::Action::create("PlayPause", Gtk::Stock::MEDIA_PAUSE, _("Play/Pause"),_("Toggle play/pause")), sigc::mem_fun(*this, &MainWindow::OnPlayPauseClicked));
     m_refActionGroup->add(Gtk::ToggleAction::create("PassMidiEvents", _("Pass MIDI events"),_("States whether MIDI events are passed-through harmonySEQ.")), sigc::mem_fun(*this, &MainWindow::OnPassToggleClicked));
@@ -123,6 +125,8 @@ MainWindow::MainWindow()
             "   <toolitem name='RemoveTool' action='RemoveSeq'/>"
             "   <toolitem name='DuplicateTool' action='DuplicateSeq'/>"
             "   <separator expand='true'/>"
+            "   <toolitem name='MIDIClock' action='MIDIClock'/>"
+            "   <toolitem name='Sync' action='Sync'/>"
             "   <toolitem name='Metronome' action='Metronome'/>"
             "   <toolitem name='TempoLabel' action='Empty'/>"
             "   <toolitem name='Tempo' action='Empty'/>"
@@ -172,6 +176,11 @@ MainWindow::MainWindow()
     Gtk::Widget* pMetronome = m_refUIManager->get_widget("/ToolBar/Metronome");
     Gtk::ToggleToolButton& MetronomeTool = dynamic_cast<Gtk::ToggleToolButton&> (*pMetronome);
     MetronomeTool.set_active(metronome);
+    Gtk::Widget* pMidiClock = m_refUIManager->get_widget("/ToolBar/MIDIClock");
+    Gtk::ToggleToolButton& MidiClockTool = dynamic_cast<Gtk::ToggleToolButton&> (*pMidiClock);
+    MidiClockTool.set_active(midi_clock_enabled);
+    Gtk::Widget* pSync = m_refUIManager->get_widget("/ToolBar/Sync");
+    Gtk::ToolButton& SyncTool = dynamic_cast<Gtk::ToolButton&> (*pSync);
     Gtk::Widget* pAddCtrl = m_refUIManager->get_widget("/ToolBar/AddCtrlSeq");
     Gtk::ToolButton& AddCtrlTool = dynamic_cast<Gtk::ToolButton&> (*pAddCtrl);
     Gtk::Widget* pAddNote = m_refUIManager->get_widget("/ToolBar/AddNoteSeq");
@@ -214,6 +223,21 @@ MainWindow::MainWindow()
     tempo_button.set_width_chars(5);
     tempo_button.set_value(tempo);
     tempo_button.signal_value_changed().connect(sigc::mem_fun(*this, &MainWindow::TempoChanged));
+
+    MidiClockTool.remove();
+    MidiClockTool.add(midi_clock_button);
+    MidiClockTool.set_homogeneous(0);
+    midi_clock_button.set_label(_("MIDI Clock"));
+    midi_clock_button.set_active(midi_clock_enabled);
+    midi_clock_button.set_tooltip_markup(_("Toggles MIDI clock and start/stop messages output."));
+    midi_clock_button.signal_toggled().connect(sigc::mem_fun(*this, &MainWindow::OnMIDIClockToggled));
+
+    SyncTool.remove();
+    SyncTool.add(sync_button);
+    SyncTool.set_homogeneous(0);
+    sync_button.set_label(_("Sync"));
+    sync_button.set_tooltip_markup(_("Synchronizes external devices to harmonySEQs output buffer."));
+    sync_button.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::OnSyncClicked));
 
     UpdatePlayPauseTool();
     UpdatePassMidiToggle(); //sometimes we pass midi by default.
@@ -911,6 +935,14 @@ void MainWindow::UpdateVisibleColumns(){
         col_iter++;
         pColumn = wTreeView.get_column(col_iter); //Chord
         pColumn->set_visible(Config::VisibleColumns::ChordAndCtrlNo);
+}
+
+void MainWindow::OnMIDIClockToggled(){
+    midi->SetMidiClockEnabled(midi_clock_button.get_active());
+}
+
+void MainWindow::OnSyncClicked(){
+    midi->Sync();
 }
 
 void MainWindow::OnMetronomeToggleClicked(){

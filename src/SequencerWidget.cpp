@@ -62,7 +62,6 @@ SequencerWidget::SequencerWidget()
     wPatternWidgetBox.pack_start(pattern_widget,Gtk::PACK_SHRINK);
 
     wScrolledWindow.set_policy(Gtk::POLICY_ALWAYS, Gtk::POLICY_NEVER);
-    wScrolledWindow.add(pattern_widget);
     wScrolledWindow.set_overlay_scrolling(false);
 
     pattern_widget.on_selection_changed.connect(sigc::mem_fun(*this,&SequencerWidget::OnSelectionChanged));

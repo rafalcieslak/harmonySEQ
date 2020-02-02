@@ -1,6 +1,7 @@
 ## unreleased:
  - Replaced the build system with CMake.
  - HiDPI display support.
+ - MIDI Clock and Start/Stop messages output support.
  - Fixed pattern editor zoom behavior.
  - Disabled i18n support to allow for cleaning up the build system.
 

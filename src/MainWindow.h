@@ -47,10 +47,10 @@ public:
 
     /**Adds a single row, when a new sequencer is spawned (and return a Row, so that the sequencer will know where is it's row)*/
     Gtk::TreeModel::Row AddSequencerRow(int n);
-    
+
     /**Called when user changed tempo*/
     void TempoChanged();
-    
+
     /**Called every tempo, starts the animation*/
     void FlashTempoStart();
     /**Ends the animation after timeout*/
@@ -74,7 +74,7 @@ public:
     seqHandle GetSelectedSequencerHandle();
 
     void OnSeqEdited(seqHandle h);
-    
+
     SequencerWidget seqWidget;
     EventsWidget eventsWidget;
 private:
@@ -107,6 +107,8 @@ private:
     void OnMenuOpenClicked();
     void OnMenuNewClicked();
     void OnPreferencesClicked();
+    void OnMIDIClockToggled();
+    void OnSyncClicked();
     void OnMetronomeToggleClicked();
 
     void OnPopupPlayOnce();
@@ -119,6 +121,9 @@ private:
   Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
 
   Gtk::ScrolledWindow wScrolledWindow;
+
+    Gtk::CheckButton midi_clock_button;
+    Gtk::Button sync_button;
 
     Gtk::VBox wMainVBox;
     Gtk::VBox wVBox1;
@@ -139,4 +144,3 @@ private:
 
 
 #endif	/* MAINWINDOW_H */
-

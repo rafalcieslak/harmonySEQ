@@ -44,14 +44,14 @@ public:
 
 
     /**Stops playback - pauses the queue*/
-    void PauseQueueImmediately(); 
+    void PauseQueueImmediately();
 
     /**Stops playback on next bar. NOT YET IMPLEMENTED*/
     void PauseOnNextBar();
 
     /*Tell whether the queue is paused*/
     bool GetPaused();
-    
+
     /**Unpauses the queue*/
     void ContinueQueue();
 
@@ -78,12 +78,18 @@ public:
     void ScheduleCtrlEventSingle(int channel, int tick_time, int ctrl_no, int value);
     /**Schedules a set of MIDI controller events on the output queue, so that to emulate a linear slope.*/
     void ScheduleCtrlEventLinearSlope(int channel, int ctrl_no, int start_tick_time, int start_value, int end_tick_time, int end_value);
-    
+
     void ScheduleDiodeEvent(DiodeType type, seqHandle handle, int tick_time, double time, int value, int color, int max_res = 0);
-    
+
+    /** Immediatelly send MIDI start/stop messages. **/
+    void SendStop();
+    void SendStart();
+
     /**Sets tempo*/
     void SetTempo(double bpm);
 
+    /** Enables MIDI Clock output **/
+    void SetMidiClockEnabled(bool enabled);
 
     /**Ends all note events (send noteoffs)*/
     void AllNotesOff();
@@ -115,7 +121,7 @@ private:
 
     /**States whether queue is paused or not*/
     bool paused;
-    
+
 
     /**Outputs event immediately.
      * @parram ev an event to pass*/
@@ -133,7 +139,7 @@ private:
     std::mutex diode_events_mutex;
     std::map<int, DiodeMidiEvent> diode_events;
 
-    
+
     /**Returns queue's current tick*/
     snd_seq_tick_time_t GetTick();
 
@@ -144,4 +150,3 @@ private:
 };
 
 #endif	/* MIDIDRIVER_H */
-
