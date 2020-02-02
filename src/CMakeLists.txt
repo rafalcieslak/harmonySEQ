@@ -23,6 +23,13 @@ if(NOT LIBLO_FOUND)
     -DDISABLE_OSC)
 endif()
 
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+  message(STATUS "Release mode")
+  target_compile_definitions(
+    harmonySEQ PUBLIC
+    -DRELEASE)
+endif()
+
 # Use C++17
 set_target_properties(
   harmonySEQ PROPERTIES

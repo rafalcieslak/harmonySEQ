@@ -50,7 +50,21 @@ int passing_midi; //states whether all midi events are passed through, or not.
 Glib::ustring file;
 std::map<Glib::ustring, int> keymap_stoi; //map used for keyname -> id conversion
 std::map<int, Glib::ustring> keymap_itos; //map used for id -> keyname conversion
-std::map<int, Glib::ustring> notemap;         //map used for note_number -> note_name conversion
+//map used for note_number -> note_name conversion
+std::map<int, Glib::ustring> notemap = {
+    {0, "C"},
+    {1, "C#"},
+    {2, "D"},
+    {3, "D#"},
+    {4, "E"},
+    {5, "F"},
+    {6, "F#"},
+    {7, "G"},
+    {8, "G#"},
+    {9, "A"},
+    {10, "A#"},
+    {11, "H"},
+};
 
 Glib::RefPtr< Gdk::Pixbuf > harmonySEQ_logo_48;
 Glib::RefPtr< Gdk::Pixbuf > metronome_icon_24;
@@ -65,7 +79,6 @@ bool metronome;
 bool diodes_disabled;
 
 void print_help(); //forward declaration of few functions
-void end_program();
 
 //for getopt - defines which flag is related to which variable
 static struct option long_options[]={
@@ -106,21 +119,18 @@ void InitKeyMap()
     }
 }
 
-/**Prepares notes map*/
-void InitNoteMap(){
-    notemap[0] = "C";
-    notemap[1] = "C#";
-    notemap[2] = "D";
-    notemap[3] = "D#";
-    notemap[4] = "E";
-    notemap[5] = "F";
-    notemap[6] = "F#";
-    notemap[7] = "G";
-    notemap[8] = "G#";
-    notemap[9] = "A";
-    notemap[10] = "A#";
-    notemap[11] = "H";
-    
+void print_help(){
+    *dbg << "Hey, seems you wish to debug help message?" << "Nothing to debug, just a few printf's!";
+
+    printf(_("harmonySEQ, version %s\n"
+            "\n"
+            "usage: harmonySEQ [-hdv] [FILE]\n"
+            "\n"
+            "   -d    --debug       enters debug mode, prints lots of debug messeges\n"
+            "         --pass-midi   passes the midi events through the program by default\n"
+            "   -h    --help        prints this help messase and exits\n"
+            "   -v    --version     prints the program version\n"), VERSION);
+    printf("\n");
 }
 
 threadb::threadb() {
@@ -145,42 +155,24 @@ void threadb::th1(){
   **Thread 2 passec control to GTK, which makes it responsble for the GUI. */
 void threadb::th2(){
     *dbg << "th2 started\n";
-
-
     gdk_threads_enter();
     //Pass control to gtk.
     Gtk::Main::run(*mainwindow);
     gdk_threads_leave();
 }
 
-/**Prepates the GUI. Constructs both the MainWindow and the EventsWindow*/
-void InitGui(){
-    gdk_threads_enter();
-    {
-        mainwindow = new MainWindow; 
-        settingswindow = new SettingsWindow;
-    }
-    gdk_threads_leave();
-    
-}
-
-/**Prepares the Midi Driver*/
-void InitMidiDriver(){
-    //create the midi driver
-    midi = new MidiDriver;
-    midi->SetTempo(tempo);
-}
-
-void LoadConfig(){
-    Config::LoadDefaultConfiguration();
-    Config::LoadFromFile();
-}
-
 std::string DetermineDataPath() {
   std::string test_file = "style/harmonySEQ.css";
   std::vector<std::string> candidates = {
-    "../", // OOTB with cmake
-    DATA_PATH, // Installed with cmake
+#ifdef RELEASE
+    // Installed with cmake - only look for resources in installation
+    // path.
+    DATA_PATH,
+#else
+    // OOTB with cmake
+    "../",
+    "./",
+#endif
   };
 
   for(const std::string& candidate: candidates){
@@ -191,9 +183,10 @@ std::string DetermineDataPath() {
     }
   }
 
-  printf("Data files could not be located in any of these paths:");
+  printf("Data files could not be located in any of these paths:\n");
   for(const std::string& candidate: candidates)
     printf("    %s\n", candidate.c_str());
+  printf("This usually indicates harmonySEQ was not installed correctly.\n");
   exit(1);
 }
 
@@ -219,27 +212,13 @@ void EnableCSSProvider(std::string data_path) {
   }
 }
 
-
-/**As in the name: When we got a filename from command-line, we try to open it.*/
-bool TryToOpenFileFromCommandLine(){
-    gdk_threads_enter(); //lodking the threads. Loading file MAY ASK!!
-    bool x = Files::LoadFile(file);
-    gdk_threads_leave();
-    if (!x){
-        return 0; 
-    }
-    else return 1;
-}
-
 int main(int argc, char** argv) {
-
-    //Initializing GTK.
-    Glib::thread_init();
-    gdk_threads_init();
-    Gtk::Main kit(argc, argv);
-
     //random number generator init, may got useful somewhere in the future
     srand(time(NULL));
+
+    // Find where data files are. This is tied with the build system.
+    // If this fails, harmonySEQ must not have been installed correctly.
+    std::string data_path = DetermineDataPath();
 
     running = 1;        //the program IS running
     debugging = 0;      //by default
@@ -252,7 +231,7 @@ int main(int argc, char** argv) {
 
     //Start thread class...
     Th = new threadb;
-   
+
     //Now, parse the arguments.
     char c, temp[100];
     opterr = 0; //this prevents getarg from printing his error message
@@ -297,21 +276,24 @@ int main(int argc, char** argv) {
     //print help, if required
     if (help) {print_help();exit(0);}
     //print version, if required
-    if (version) {printf(VERSION);printf("\n");exit(0);} 
+    if (version) {printf(VERSION);printf("\n");exit(0);}
 
     //here file path from command line is obtained, if any
     bool file_from_cli = false;
     if (argc>optind){ file = argv[optind];file_from_cli=1;}
 
-    // Find where data files are.
-    std::string data_path = DetermineDataPath();
-      
+    //Initializing GTK.
+    Glib::thread_init();
+    gdk_threads_init();
+    Gtk::Main kit(argc, argv);
+
     //Initing the driver...
-    InitMidiDriver();
+    //create the midi driver
+    midi = new MidiDriver;
+    midi->SetTempo(tempo);
 
     //...the maps...
     InitKeyMap();
-    InitNoteMap();
 
     //...tree models...
     InitAllTreeModels();
@@ -321,30 +303,38 @@ int main(int argc, char** argv) {
 
     //..CSS provider...
     EnableCSSProvider(data_path);
-    
+
     //...configuration...
     gdk_threads_enter();
-    LoadConfig();
+    Config::LoadDefaultConfiguration();
+    Config::LoadFromFile();
     Config::SaveToFile();
     if(Config::Interaction::DisableDiodes) diodes_disabled = 1;
     else diodes_disabled = 0;
     gdk_threads_leave();
 
-    //...GUI...
-    InitGui();  //(Ow... better have all the main windows constructed, before any sequencer or event is. Might cause problems elsewhere).
+    //...GUI...  Sequencer and UI logic is so intertangled, we must
+    // initialize the GUI before any sequencer or even is created.
+    gdk_threads_enter();
+    mainwindow = new MainWindow;
+    settingswindow = new SettingsWindow;
+    gdk_threads_leave();
 
     //...and the OSC server.
 #ifndef DISABLE_OSC
     InitOSC();
 #endif /*DISABLE_OSC*/
-    
+
     //Here we init the filename, if it's empty, it means the file was not yet saved
     Files::file_name = "";
 
     //Trying to open file...
-    if (file_from_cli) TryToOpenFileFromCommandLine();
-    //else InitDefaultData();
-    
+    if (file_from_cli) {
+        gdk_threads_enter(); //locking the threads. Loading file MAY ASK!!
+        bool x = Files::LoadFile(file);
+        gdk_threads_leave();
+    }
+
     //Putting some values into GUI
     mainwindow->tempo_button.set_value(tempo);
 
@@ -352,9 +342,6 @@ int main(int argc, char** argv) {
     mainwindow->InitTreeData();
     mainwindow->UpdateEventWidget();
 
-    //At the beggining, file is not modified.
-    Files::SetFileModified(0);
-    
     //And creating both threads.
     Glib::Thread::create(sigc::mem_fun(*Th, &threadb::th1), 0,true,1,Glib::THREAD_PRIORITY_URGENT);
     Glib::Thread::create(sigc::mem_fun(*Th, &threadb::th2),0, true,1,Glib::THREAD_PRIORITY_LOW);
@@ -363,30 +350,10 @@ int main(int argc, char** argv) {
     while (running == 1)
         usleep(10000);
 
-    end_program();
-    return 0;
-}
-
-void print_help(){
-    *dbg << "Hey, seems you wish to debug help message?" << "Nothing to debug, just a few printf's!";
-
-    printf(_("harmonySEQ, version %s\n"
-            "\n"
-            "usage: harmonySEQ [-hdv] [FILE]\n"
-            "\n"
-            "   -d    --debug       enters debug mode, prints lots of debug messeges\n"
-            "         --pass-midi   passes the midi events through the program by default\n"
-            "   -h    --help        prints this help messase and exits\n"
-            "   -v    --version     prints the program version\n"), VERSION);
-    printf("\n");
-}
-
-void end_program(){
-
     *dbg << "ending the program...\n";
-    
+
     gdk_threads_enter();//to ensure thread safety...
-    
+
     if (midi != NULL) { //maybe we are ending the program before midi driver was constructed
         midi->ClearQueue();
         sleep(1); //giving it some time, for the noteoffs that are left on
@@ -397,5 +364,6 @@ void end_program(){
     delete midi;
     delete dbg;
     delete err;
-    exit(0);
+
+    return 0;
 }

@@ -33,7 +33,7 @@
 
 namespace Files {
 
-     bool file_modified;
+     bool file_modified = false;
     Glib::ustring file_name;
     Glib::ustring file_dir;
     
