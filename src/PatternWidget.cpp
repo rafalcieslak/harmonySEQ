@@ -46,7 +46,7 @@ const double crtl_Tsurrounding = 8.0;
 const double handle_size = 15.0;
 
 PatternWidget::PatternWidget(){
-    container = NULL; //zeruj zmienne ;)
+    container = NULL;
     internal_height=50; //random guess. will be reset soon anyway by the SequencerWidget, but better protect from 0-like values.
     horiz_size = 450.0; //adjust for better default size
     snap = true;
@@ -59,14 +59,17 @@ PatternWidget::PatternWidget(){
     add_events(Gdk::BUTTON3_MOTION_MASK);
     add_events(Gdk::KEY_PRESS_MASK);
     set_can_focus(1);//required to receive key_presses
-    cr_buffer_surface = Cairo::ImageSurface::create(Cairo::FORMAT_RGB24,2400,300);
-    cr_buffer_context = Cairo::Context::create(cr_buffer_surface); 
-    cr_atoms_surface = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32,2400,300);
-    cr_atoms_context = Cairo::Context::create(cr_atoms_surface); 
-    cr_grid_surface = Cairo::ImageSurface::create(Cairo::FORMAT_RGB24,2400,300);
+
+    last_scale_factor = -1;
+    cr_buffer_surface = Cairo::ImageSurface::create(Cairo::FORMAT_RGB24,1,1);
+    cr_buffer_context = Cairo::Context::create(cr_buffer_surface);
+    cr_atoms_surface = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32,1,1);
+    cr_atoms_context = Cairo::Context::create(cr_atoms_surface);
+    cr_grid_surface = Cairo::ImageSurface::create(Cairo::FORMAT_RGB24,1,1);
     cr_grid_context = Cairo::Context::create(cr_grid_surface);
-    cr_diodes_surface = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32,2400,300);
+    cr_diodes_surface = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32,1,1);
     cr_diodes_context = Cairo::Context::create(cr_diodes_surface);
+
     grid_lock = 0;
     atoms_lock = 0;
     all_diodes_lock = 0;
@@ -75,11 +78,11 @@ PatternWidget::PatternWidget(){
     man_i_wanted_to_redraw_diodes_but_it_was_locked_could_you_please_do_it_later_for_me = 0;
     last_drawn_height = 0;
     last_drawn_width = 0;
-    
+
     button_pressed = NONE;
     drag_in_progress = 0;
     select_only_this_atom_on_LMB_release = NULL;
-    
+
     if(!Config::Interaction::DisableDiodes) Glib::signal_timeout().connect(sigc::mem_fun(*this,&PatternWidget::DrawDiodesTimeout),DIODE_FADEOUT_TIME/8);
 }
 
@@ -93,6 +96,20 @@ void PatternWidget::SetInternalHeight(int h){
 }
 
 void PatternWidget::UpdateSizeRequest(){
+    int scale_factor = get_window() ? get_window()->get_scale_factor() : 1;
+    if(scale_factor != last_scale_factor){
+        // Recreate buffers with enough surface area.
+        cr_buffer_surface = Cairo::ImageSurface::create(Cairo::FORMAT_RGB24,2400*scale_factor,300*scale_factor);
+        cr_buffer_context = Cairo::Context::create(cr_buffer_surface);
+        cr_atoms_surface = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32,2400*scale_factor,300*scale_factor);
+        cr_atoms_context = Cairo::Context::create(cr_atoms_surface);
+        cr_grid_surface = Cairo::ImageSurface::create(Cairo::FORMAT_RGB24,2400*scale_factor,300*scale_factor);
+        cr_grid_context = Cairo::Context::create(cr_grid_surface);
+        cr_diodes_surface = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32,2400*scale_factor,300*scale_factor);
+        cr_diodes_context = Cairo::Context::create(cr_diodes_surface);
+        last_scale_factor = scale_factor;
+    }
+
     //*dbg << "sizerequest " << vert_size << " " << internal_height+20 << ENDL;
     set_size_request(horiz_size,internal_height);
 }
@@ -135,7 +152,7 @@ void PatternWidget::DeleteNth(int n){
     for (; it != selection.end(); it++) {
         if(*it == n) selection.erase(it);
         if(*it < n) selection.;
-    }   */ 
+    }   */
 }
 
 void PatternWidget::DeleteSelected(){
@@ -161,7 +178,7 @@ void PatternWidget::SetSelectionVelocity(int v){
     for (; it != selection.end(); it++) {
         NoteAtom* note = dynamic_cast<NoteAtom*>(*it);
         note->velocity = v;
-    }    
+    }
     Files::FileModified();
     RedrawAtoms();
 }
@@ -173,7 +190,7 @@ int PatternWidget::GetSelectionVelocity(){
     for (; it != selection.end(); it++) {
         NoteAtom* note = dynamic_cast<NoteAtom*> (*it);
         sum += note->velocity;
-    }    
+    }
     if(selection.size()==0) return 0;
     return sum/(selection.size());
 }
@@ -184,7 +201,7 @@ void PatternWidget::SetSelectionValue(int v){
     for (; it != selection.end(); it++) {
         ControllerAtom* ctrl = dynamic_cast<ControllerAtom*>(*it);
         ctrl->value = v;
-    }    
+    }
     Files::FileModified();
     RedrawAtoms();
 }
@@ -196,7 +213,7 @@ int PatternWidget::GetSelectionValue(){
     for (; it != selection.end(); it++) {
         ControllerAtom* ctrl = dynamic_cast<ControllerAtom*> (*it);
         sum += ctrl->value;
-    }    
+    }
     if(selection.size()==0) return 0;
     return sum/(selection.size());
 }
@@ -209,7 +226,7 @@ SlopeType PatternWidget::GetSelectionSlopeType(){
         ControllerAtom* ctrl = dynamic_cast<ControllerAtom*> (*it);
         if(s == SLOPE_TYPE_NONE) s = ctrl->slope_type;
         else if (s != ctrl->slope_type){ s = SLOPE_TYPE_NONE; break;}
-    }    
+    }
     return s;
 }
 
@@ -380,7 +397,7 @@ void PatternWidget::DecreaseSelectionValue(int amount){
 double PatternWidget::Snap(double t){
     if (!container->owner) // if no owner...
         return t; //do not snap, if we can't get the resolution.
-    
+
     t*= container->owner->resolution;
     t += 0.5;
     if(t<0) t--;
@@ -392,7 +409,7 @@ double PatternWidget::Snap(double t){
 double PatternWidget::SnapDown(double t){
     if (!container->owner) // if no owner...
         return t; //do not snap, if we can't get the resolution.
-    
+
     t*= container->owner->resolution;
     if(t<0) t--;
     t = (int)t;
@@ -404,18 +421,18 @@ void PatternWidget::InitDrag(){
     Gtk::Allocation allocation = get_allocation();
     const int width = allocation.get_width();
     //const int height = allocation.get_height();
-    
+
     //calculate position
-    double line_d = 6.0 - drag_beggining_y / ((double)internal_height / 6.0); 
+    double line_d = 6.0 - drag_beggining_y / ((double)internal_height / 6.0);
     int line = line_d;
     double time = (double) drag_beggining_x / (double) width;
     int value = 127 - drag_beggining_y *(double)127.0/ (internal_height);
-    
+
     if(button_pressed == LMB){
-        
+
         drag_in_progress = 1;
         select_only_this_atom_on_LMB_release = NULL;
-        
+
         if(drag_note_dragged != NULL){
             //check what we're dragging!
             if(seq_type == SEQ_TYPE_CONTROL){
@@ -438,7 +455,7 @@ void PatternWidget::InitDrag(){
                 double note_start_x = note->time*width;
                 double note_end_x = (note->time+note->length)*width;
                 double wl = note->pitch+0.5-line_d;
-                if(wl>0 && 2.0*wl*handle_size >= note_end_x - drag_beggining_x){ 
+                if(wl>0 && 2.0*wl*handle_size >= note_end_x - drag_beggining_x){
                     //dragging handle
                     drag_mode = DRAG_MODE_RESIZE;
                     drag_beggining_line = line;
@@ -452,7 +469,7 @@ void PatternWidget::InitDrag(){
                 }else if(drag_beggining_x < note_start_x + 10.0){
                     //dragging bar
                     drag_mode = DRAG_MODE_CHANGE_VELOCITY;
-                    
+
                     //Store velocities
                     std::set<Atom*>::iterator it = selection.begin();
                     for (; it != selection.end(); it++) {
@@ -475,22 +492,22 @@ void PatternWidget::InitDrag(){
                         NoteAtom* note = dynamic_cast<NoteAtom*> (atm);
                         note->drag_offset_line = note->pitch - line;
                     }
-                    
+
                 }
             }
         }
     }else if(button_pressed == LMBs || button_pressed == MMB){
-        
+
         drag_in_progress = 1;
         drag_mode = DRAG_MODE_SELECT_AREA;
         drag_beggining_line = line;
         drag_beggining_time = time;
         drag_beggining_value = value;
         drag_temporary_selection.clear();
-        
+
         cancel_unselecting = 1;
     }else if(button_pressed == RMB){
-        
+
         selection.clear();
         drag_in_progress = 1;
         drag_mode = DRAG_MODE_SELECT_AREA;
@@ -498,21 +515,21 @@ void PatternWidget::InitDrag(){
         drag_beggining_time = time;
         drag_beggining_value = value;
         drag_temporary_selection.clear();
-        
+
     }
 }
 
 void PatternWidget::ProcessDrag(double x, double y){
-    
+
     Gtk::Allocation allocation = get_allocation();
     const int width = allocation.get_width();
     //const int height = allocation.get_height();
-    
+
     //count position
     int line = 6 - y / (internal_height / 6);
     double time = (double) x / (double) width;
     int value = 127 - y *(double)127.0/ (internal_height);
-    
+
     if (drag_mode == DRAG_MODE_MOVE_SELECTION) {
 
         Atom* dragged_note = dynamic_cast<Atom*> (drag_note_dragged);
@@ -564,7 +581,7 @@ void PatternWidget::ProcessDrag(double x, double y){
         Files::FileModified(); //Mark file as modified
         //additionally:
         if (seq_type == SEQ_TYPE_CONTROL) on_selection_changed.emit(selection.size()); //this will update the value spinbutton
-        
+
     } else if (drag_mode == DRAG_MODE_SELECT_AREA) {
         drag_current_x = x;
         drag_current_y = y;
@@ -608,7 +625,7 @@ void PatternWidget::ProcessDrag(double x, double y){
             }//check next note.
         }
 
-        
+
     } else if (drag_mode == DRAG_MODE_RESIZE && seq_type == SEQ_TYPE_NOTE) { //resizing do not exist within control sequencers
 
         NoteAtom* dragged_note = dynamic_cast<NoteAtom*> (drag_note_dragged);
@@ -634,7 +651,7 @@ void PatternWidget::ProcessDrag(double x, double y){
         Files::FileModified(); //Mark file as modified
     } else if (drag_mode == DRAG_MODE_CHANGE_VELOCITY && seq_type == SEQ_TYPE_NOTE) { //velocity change do not exist within control sequencers
         double vel_added = (drag_beggining_y - y);
-        
+
         std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
         for (; it != selection.end(); it++) {
             NoteAtom* note = dynamic_cast<NoteAtom*> (*it);
@@ -645,14 +662,14 @@ void PatternWidget::ProcessDrag(double x, double y){
         }
         Files::FileModified(); //Mark file as modified
     }
-    
+
     RedrawAtoms();
 
 }
 
 bool PatternWidget::on_button_press_event(GdkEventButton* event){
     grab_focus();//required to receive key_presses
-    
+
     Gtk::Allocation allocation = get_allocation();
     const int width = allocation.get_width();
         //const int height = allocation.get_height();
@@ -661,10 +678,10 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
     int value = 127 - event->y *(double)127.0/ (internal_height);
     double timeS  = ((double) event->x -(double)crtl_Tsurrounding)/ (double) width;
     double timeE  = ((double) event->x +(double)crtl_Tsurrounding)/ (double) width;
-    
+
     drag_beggining_x = event->x;
     drag_beggining_y = event->y;
-    
+
     //Checking whether clicked place was note or an empty space.
     Atom* found = NULL;
     int size = container->GetSize();
@@ -687,10 +704,10 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
             }
         }
     }
-    
+
     drag_note_dragged = found;
     select_only_this_atom_on_LMB_release = NULL;
-    
+
     if(button_pressed == NONE){
         last_clicked_note = found;
         if(event->button == 1 || event->button == 2){
@@ -792,16 +809,16 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                 on_selection_changed.emit(selection.size());
                 RedrawAtoms();
             }
-            
-        } 
+
+        }
     }
     return false;
 }
 
 bool PatternWidget::on_button_release_event(GdkEventButton* event){
-    
+
     if(button_pressed == NONE) return false;
-    
+
     //Finish drag-select, by moving temporarily selected notes to the real selection.
     if(drag_in_progress == 1 && drag_mode == DRAG_MODE_SELECT_AREA){
         //Finished selection by dragging.
@@ -813,7 +830,7 @@ bool PatternWidget::on_button_release_event(GdkEventButton* event){
 
         on_selection_changed.emit(selection.size());
     }
-    
+
     //Determine which button click was ended
     if (event->button == 1 || event->button == 2){
         if ((button_pressed == LMB) && event->button == 1){
@@ -824,7 +841,7 @@ bool PatternWidget::on_button_release_event(GdkEventButton* event){
                 selection.insert(select_only_this_atom_on_LMB_release);
                 on_selection_changed.emit(selection.size());
             }
-            
+
         }else if((button_pressed == LMBs && event->button == 1) || (button_pressed == MMB && event->button == 2)){
             //LMBs/MMB ended
             button_pressed = NONE;
@@ -837,7 +854,7 @@ bool PatternWidget::on_button_release_event(GdkEventButton* event){
                     on_selection_changed.emit(selection.size());
                 }
             }
-            
+
         }
     }
     else if(button_pressed == RMB && event->button == 3){
@@ -849,12 +866,12 @@ bool PatternWidget::on_button_release_event(GdkEventButton* event){
                 on_selection_changed.emit(selection.size());
         }
     }
-    
+
     //Reset drag flag.
    drag_in_progress = 0;
 
     RedrawAtoms();
-    
+
     return false;
 }
 
@@ -867,7 +884,7 @@ bool PatternWidget::on_leave_notify_event(GdkEventCrossing* event){
 bool PatternWidget::on_motion_notify_event(GdkEventMotion* event){
     if(!drag_in_progress){//there is no drag in progress, maybe we need to initiate one?
         if (button_pressed!=NONE) {
-            //if moved some distance, mark drag as in progress. 
+            //if moved some distance, mark drag as in progress.
             const int distance = 3;
             if (event->x > drag_beggining_x + distance || event->y > drag_beggining_y + distance || event->x < drag_beggining_x - distance || event->y < drag_beggining_y - distance) {
                 InitDrag();
@@ -896,7 +913,7 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
                 else if (seq_type == SEQ_TYPE_CONTROL) IncreaseSelectionValue(8);
             }else
                 MoveSelectionUp();
-            
+
             return true;
             break;
         case 0xff54: //down
@@ -905,17 +922,17 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
                 else if (seq_type == SEQ_TYPE_CONTROL) DecreaseSelectionValue(8);
             }else
                 MoveSelectionDown();
-            
+
             return true;
             break;
         case 0xff53: //right
             MoveSelectionRight();
-            
+
             return true;
             break;
         case 0xff51: //left
             MoveSelectionLeft();
-            
+
             return true;
             break;
         default:
@@ -933,7 +950,7 @@ bool PatternWidget::on_scroll_event(GdkEventScroll* e){
     //const int height = allocation.get_height();
     int line = 6 - e->y / (internal_height / 6);
     double time = (double) e->x / (double) width;
-    
+
     //Checking whether scrolled place was note or an empty space.
     Atom* found = NULL;
     int size = container->GetSize();
@@ -947,7 +964,7 @@ bool PatternWidget::on_scroll_event(GdkEventScroll* e){
             }
         }
     } // don'/t look for ctrl atoms, if that's a ctrl seq we'll never adjust velocity.
-    
+
     if (e->state & (1 << 2)) //if ctrl key is pressed...
     {
                 if(e->direction == GDK_SCROLL_UP){
@@ -955,7 +972,7 @@ bool PatternWidget::on_scroll_event(GdkEventScroll* e){
                 }else if (e->direction == GDK_SCROLL_DOWN){
                     ZoomOut();
                 }
-    }else{ //ctrl key not pressed            
+    }else{ //ctrl key not pressed
         if (found != NULL) {//scrolled a note
             NoteAtom* note = dynamic_cast<NoteAtom*> (found);
             if (e->direction == GDK_SCROLL_DOWN) {
@@ -985,7 +1002,7 @@ bool PatternWidget::on_scroll_event(GdkEventScroll* e){
             }
         }
     }
-    
+
     return false;
 }
 
@@ -1026,13 +1043,13 @@ bool PatternWidget::DimDiode(DiodeMidiEvent* diode_ptr){
 }
 
 bool PatternWidget::DrawDiodesTimeout(){
-    
+
     double l = 1.0;
     //if (container != NULL)
     //    if (container->owner != NULL)
     //        if (container->owner->GetLength() < 1.0)
     //            l = container->owner->GetLength();
-        
+
     active_diodes_mtx.lock();
     std::vector<DiodeMidiEvent*> diodes_to_delete;
     for (std::set<DiodeMidiEvent*>::iterator it = active_diodes.begin(); it != active_diodes.end(); it++) {
@@ -1063,27 +1080,6 @@ bool PatternWidget::DrawDiodesTimeout(){
 }
 //=======================DRAWING==============
 
-bool PatternWidget::on_draw(const Cairo::RefPtr<Cairo::Context>& ct){
-    Th->mutex_drawing.lock();
-
-    Gtk::Allocation allocation = get_allocation();
-    const double width = allocation.get_width();
-    const int height = allocation.get_height();
-    
-    //check if everything wasn't resized, this would mean we have to redraw things.... 
-    // an important case is when the widget is show()n, for it changes it's size from
-    // something like 1,1 to something like 500,120, and we cannot leave it blank
-    if(last_drawn_height != height || last_drawn_width != width) RedrawEverything();  
-    last_drawn_height = height; last_drawn_width = width;
-    
-    ct->set_source(cr_buffer_surface,0,0);
-    ct->paint();
-    
-    Th->mutex_drawing.unlock();
-   
-    return true;
-}
-
 bool PatternWidget::TimeLockDiodesCompleted(){
     all_diodes_lock = 0;
     if (man_i_wanted_to_redraw_diodes_but_it_was_locked_could_you_please_do_it_later_for_me)
@@ -1111,36 +1107,40 @@ bool PatternWidget::TimeLockGridCompleted(){
 }
 
 void PatternWidget::RedrawDiode(bool on, DiodeMidiEvent* diodev){
-    
+
     Th->mutex_redraw_diode.lock();
-    
+
     Gtk::Allocation allocation = get_allocation();
     const double width = allocation.get_width();
-    
+
+    int scale_factor = get_window() ? get_window()->get_scale_factor() : 1;
+    int draw_width = width, draw_height = internal_height;
+
     cr_diodes_context->save();
-    
+    cr_diodes_context->scale(scale_factor, scale_factor);
+
     cr_diodes_context->set_line_cap(Cairo::LINE_CAP_SQUARE);
     cr_diodes_context->set_line_width(4.0);
-    
+
     int x=0, y=0, h=0;
-    
+
     //determine coords
     if(diodev->type == DIODE_TYPE_NOTE){
         if (seq_type != SEQ_TYPE_NOTE) return; //just to ensure safety
 
         //calculate some coordinates
-        y = (5 - diodev->value) * internal_height / 6;
-        h = internal_height / 6;
-        x = diodev->time*width;
- 
+        y = (5 - diodev->value) * draw_height / 6;
+        h = draw_height / 6;
+        x = diodev->time*draw_width;
+
     } else if (diodev->type == DIODE_TYPE_CTRL) {
         if (seq_type != SEQ_TYPE_CONTROL) return; //just to ensure safety
 
         //calculate some coordinates
-        y = (double) internal_height * ((127 - diodev->value) / (127.0));
-        x = diodev->time*width;
+        y = (double) draw_height * ((127 - diodev->value) / (127.0));
+        x = diodev->time*draw_width;
     }
-    
+
     //check state
     if(on){
         timeval curr,res;
@@ -1157,22 +1157,27 @@ void PatternWidget::RedrawDiode(bool on, DiodeMidiEvent* diodev){
         cr_diodes_context->set_source_rgba(0.0,0.0,0.0,0.0);
         cr_diodes_context->set_operator(Cairo::OPERATOR_SOURCE);
     }
-    
+
     //perform cairo geometry drawing
+    int redraw_x = 0, redraw_y = 0, redraw_w = 0, redraw_h = 0;
     if(diodev->type == DIODE_TYPE_NOTE){
         cr_diodes_context->move_to(x + 2, y + 2);
         cr_diodes_context->line_to(x + 2, y + h - 2 + 1);
         cr_diodes_context->stroke();
         cr_diodes_context->restore();
-        Redraw(x,y,4,h);
+        redraw_x = x, redraw_y = y;
+        redraw_w = 4, redraw_h = h;
     } else if (diodev->type == DIODE_TYPE_CTRL) {
         cr_diodes_context->arc(x + 0.5, y + 0.5, 6.5-(on*0.5), 0, 2 * M_PI); //the on*0.5 is here to make the cleared area bit smaller, to clear the anti-aliasing effects
         cr_diodes_context->fill();
         cr_diodes_context->restore();
-        Redraw(x-7,y-7,14,14);
+        redraw_x = x-7, redraw_y = y-7;
+        redraw_w = 14, redraw_h = 14;
     }
-    
-    
+    Redraw(redraw_x, redraw_y,
+           redraw_w, redraw_h);
+
+
     Th->mutex_redraw_diode.unlock();
 }
 
@@ -1182,16 +1187,16 @@ void PatternWidget::RedrawAllDiodes(){
         man_i_wanted_to_redraw_diodes_but_it_was_locked_could_you_please_do_it_later_for_me = 1;
         return; //do not draw too ofter!
     }
-    
+
     Th->mutex_redraw_all_diodes.lock();
-    
+
     //clearing...
     cr_diodes_context->save();
     cr_diodes_context->set_source_rgba(0.0, 0.0, 0.0, 0.0);
     cr_diodes_context->set_operator(Cairo::OPERATOR_SOURCE);
     cr_diodes_context->paint();
     cr_diodes_context->restore();
-    
+
     active_diodes_mtx.lock();
     for(std::set<DiodeMidiEvent*>::iterator it = active_diodes.begin();it != active_diodes.end(); it++){
         if (*it == NULL) continue; //removed?
@@ -1199,32 +1204,38 @@ void PatternWidget::RedrawAllDiodes(){
         RedrawDiode(1,diodev);
     }
     active_diodes_mtx.unlock();
-    
+
     all_diodes_lock = 1;
     man_i_wanted_to_redraw_diodes_but_it_was_locked_could_you_please_do_it_later_for_me = 0;
     Glib::signal_timeout().connect(sigc::mem_fun(*this, &PatternWidget::TimeLockDiodesCompleted), Config::Interaction::PatternRefreshMS);
 
     Redraw();
-    
+
     Th->mutex_redraw_all_diodes.unlock();
 }
-  
-  void PatternWidget::RedrawGrid(){
-      
+
+void PatternWidget::RedrawGrid(){
+
       if(grid_lock){
           man_i_wanted_to_redraw_grid_but_it_was_locked_could_you_please_do_it_later_for_me = 1;
           return; //do not draw to often!
       }
-      
+
     if (!container) return; //just in case it's NULL...
-    
-    
+
+
     Gtk::Allocation allocation = get_allocation();
     const double width = allocation.get_width();
     //const int height = allocation.get_height();
-    
+
+    int scale_factor = get_window() ? get_window()->get_scale_factor() : 1;
+    int draw_width = width, draw_height = internal_height;
+
+    cr_grid_context->save();
+    cr_grid_context->scale(scale_factor, scale_factor);
+
     int resolution = container->owner->resolution;
-    
+
       //clearing...
       cr_grid_context->save();
       cr_grid_context->set_source_rgb(1.0,1.0,1.0);
@@ -1234,6 +1245,25 @@ void PatternWidget::RedrawAllDiodes(){
 
     //The +0.5 that often appears below in coordinates it to prevent cairo from antyaliasing lines.
 
+    //vertical grid
+    int hints = resolution_hints[resolution];
+    for (int x = 0; x <= resolution; x++) {
+        if (x % hints == 0) {
+            cr_grid_context->set_line_width(1.5);
+            cr_grid_context->set_source_rgb(0.0, 0.5, 0.0); //hint colour
+        } else {
+            cr_grid_context->set_line_width(1.0);
+            cr_grid_context->set_source_rgb(0.5, 0.5, 0.4); //normal grid colour
+        }
+        if (x != resolution) {
+            cr_grid_context->move_to((int) ((double) x * (double) draw_width / resolution) + 0.5, 0);
+            cr_grid_context->line_to((int) ((double) x * (double) draw_width / resolution) + 0.5, draw_height);
+        } else {
+            cr_grid_context->move_to((int) ((double) x * (double) draw_width / resolution) - 0.5, 0);
+            cr_grid_context->line_to((int) ((double) x * (double) draw_width / resolution) - 0.5, draw_height); //the last one must be in drawing area, so let's put it a 1 px before
+        }
+        cr_grid_context->stroke();
+    }
 
     //horizontal grid
     if (seq_type == SEQ_TYPE_NOTE) {
@@ -1241,8 +1271,8 @@ void PatternWidget::RedrawAllDiodes(){
         cr_grid_context->set_source_rgb(0.0, 0.0, 0.0);
         for (int x = 0; x <= 6; x++) {
             //the ' - (x==6)' does the trick, so that the last line is drawn not outside the widget.
-            cr_grid_context->move_to(0, x * internal_height / 6 + 0.5 - (x==6));
-            cr_grid_context->line_to(width, x * internal_height / 6 + 0.5 - (x==6));
+            cr_grid_context->move_to(0, x * draw_height / 6 + 0.5 - (x==6));
+            cr_grid_context->line_to(draw_width, x * draw_height / 6 + 0.5 - (x==6));
             cr_grid_context->stroke();
         }
     } else if (seq_type == SEQ_TYPE_CONTROL) {
@@ -1260,62 +1290,49 @@ void PatternWidget::RedrawAllDiodes(){
                 cr_grid_context->set_source_rgb(0.0, 0.0, 0.0);
 
             //the ' - (x==4)' does the trick, so that the last line is drawn not outside the widget.
-            cr_grid_context->move_to(0, x * internal_height / 4 + 0.5 - (x==4));
-            cr_grid_context->line_to(width, x * internal_height / 4 + 0.5 - (x==4));
+            cr_grid_context->move_to(0, x * draw_height / 4 + 0.5 - (x==4));
+            cr_grid_context->line_to(draw_width, x * draw_height / 4 + 0.5 - (x==4));
             cr_grid_context->stroke();
         }
     }
 
-    //vertical grid
-    int hints = resolution_hints[resolution];
-    for (int x = 0; x <= resolution; x++) {
-        if (x % hints == 0) {
-            cr_grid_context->set_line_width(1.5);
-            cr_grid_context->set_source_rgb(0.0, 0.5, 0.0); //hint colour
-        } else {
-            cr_grid_context->set_line_width(1.0);
-            cr_grid_context->set_source_rgb(0.5, 0.5, 0.4); //normal grid colour
-        }
-        if (x != resolution) {
-            cr_grid_context->move_to((int) ((double) x * (double) width / resolution) + 0.5, 0);
-            cr_grid_context->line_to((int) ((double) x * (double) width / resolution) + 0.5, internal_height);
-        } else {
-            cr_grid_context->move_to((int) ((double) x * (double) width / resolution) - 0.5, 0);
-            cr_grid_context->line_to((int) ((double) x * (double) width / resolution) - 0.5, internal_height); //the last one must be in drawing area, so let's put it a 1 px before
-        }
-        cr_grid_context->stroke();
-    }
-    
+    cr_grid_context->restore();
+
     grid_lock = 1;
     man_i_wanted_to_redraw_grid_but_it_was_locked_could_you_please_do_it_later_for_me = 0;
     Glib::signal_timeout().connect(sigc::mem_fun(*this,&PatternWidget::TimeLockGridCompleted),Config::Interaction::PatternRefreshMS);
-    
+
     Redraw();
   }
-  
+
   void PatternWidget::RedrawAtoms(){
 
     if (atoms_lock) {
         man_i_wanted_to_redraw_atoms_but_it_was_locked_could_you_please_do_it_later_for_me = 1;
         return; //do not draw to often!
     }
-      
+
     if (!container) return; //just in case it's NULL...
-    
+
             //clearing...
       cr_atoms_context->save();
       cr_atoms_context->set_source_rgba(0,0,0,0);
       cr_atoms_context->set_operator(Cairo::OPERATOR_SOURCE);
       cr_atoms_context->paint();
       cr_atoms_context->restore();
-  
+
     Gtk::Allocation allocation = get_allocation();
     const double width = allocation.get_width();
     //const int height = allocation.get_height();
 
+    int scale_factor = get_window() ? get_window()->get_scale_factor() : 1;
+    int draw_width = width, draw_height = internal_height;
+
+    cr_atoms_context->save();
+    cr_atoms_context->scale(scale_factor, scale_factor);
 
     int size = container->GetSize();
-  
+
   //notes
   if(seq_type == SEQ_TYPE_NOTE){
                         for (int x = size-1; x >= 0; x--){ //iterating backwards, to draw shades below notes
@@ -1324,10 +1341,10 @@ void PatternWidget::RedrawAllDiodes(){
                               if(note == NULL) {*err << _("While drawing pattern: note = null. This should never happen! Please report this bug to harmonySEQ developers.\n"); continue;}
 
                               //calculate coordinates
-                              double y1 = (5-note->pitch)*internal_height/6;
-                              double h = internal_height/6;
-                              double x1 = note->time*width;
-                              double w = note->length*width;
+                              double y1 = (5-note->pitch)*draw_height/6;
+                              double h = draw_height/6;
+                              double x1 = note->time*draw_width;
+                              double w = note->length*draw_width;
                               y1++; // This is because the very first 1px line is the upper border.
                               //Check if note is in selection.
                               bool selected = false;
@@ -1347,12 +1364,12 @@ void PatternWidget::RedrawAllDiodes(){
                               if(selected) cr_atoms_context->set_source_rgb(0.4,0.0,0.0);
                               else cr_atoms_context->set_source_rgb(0.0,0.0,0.4);
                               cr_atoms_context->stroke();
-                                  
+
                               //cr_atoms_context->save();
                               {
                                   cr_atoms_context->rectangle(x1+1.5,y1+1.5,w-3,h-3);
                                   cr_atoms_context->clip();
-                                  
+
                                   //draw velocity bar
                                  double velbar_up = y1+(127.0-(double)note->velocity)*h/127.0;
                                  double velbar_h = h*(double)note->velocity/127.0;
@@ -1360,7 +1377,7 @@ void PatternWidget::RedrawAllDiodes(){
                                  if(selected) cr_atoms_context->set_source_rgb(0.8,0.0,0.0);
                                  else cr_atoms_context->set_source_rgb(0.0,0.0,0.8);
                                  cr_atoms_context->fill();
-                                 
+
                                   //length handle
                                   cr_atoms_context->move_to(x1+w-1.5,y1+h-1.5);
                                   cr_atoms_context->line_to(x1+w-1.5,y1+h-1.5-handle_size);
@@ -1369,19 +1386,19 @@ void PatternWidget::RedrawAllDiodes(){
                                   if(selected) cr_atoms_context->set_source_rgb(0.4,0.0,0.0);
                                   else cr_atoms_context->set_source_rgb(0.0,0.0,0.4);
                                   cr_atoms_context->fill();
-                                  
+
                                   cr_atoms_context->reset_clip();
-                              }  
+                              }
                               //cr_atoms_context->restore();
 
                              if (note->time + note->length > 1.0) {
                                  //draw shade
-                                 x1 -= width;
+                                 x1 -= draw_width;
                                  cr_atoms_context->rectangle(x1 + 1.5, y1 + 1.5, w - 3, h - 3);
-                                 cr_atoms_context->set_source_rgba(0.8, 0.8, 0.8, af*0.75); 
+                                 cr_atoms_context->set_source_rgba(0.8, 0.8, 0.8, af*0.75);
                                  cr_atoms_context->fill_preserve();
                                  cr_atoms_context->set_source_rgb(0.7, 0.7, 0.7);
-                                 cr_atoms_context->stroke(); 
+                                 cr_atoms_context->stroke();
                              }
                         }
       }else if (seq_type == SEQ_TYPE_CONTROL){
@@ -1402,35 +1419,35 @@ void PatternWidget::RedrawAllDiodes(){
                                }
                               ControllerAtom* ctrl = dynamic_cast<ControllerAtom*>(atm);
                               ControllerAtom* nextctrl = dynamic_cast<ControllerAtom*>(nextatm);
-                              
+
                               if(ctrl == NULL) {*err << _("While drawing pattern: ctrl = null. This should never happen! Please report this bug to harmonySEQ developers.\n"); continue;}
-                              
+
                               //these are ints intentionally - to avoid unnecesary cairo anti-aliasing we round everything to 1.0 and add 0.5
-                              int y = (double)internal_height*((127.0-ctrl->value)/(127.0));
-                              int x = ctrl->time*width ;
+                              int y = (double)draw_height*((127.0-ctrl->value)/(127.0));
+                              int x = ctrl->time*draw_width ;
                               //Check if note is in selection.
                               bool selected = false;
                               if(selection.find(ctrl) != selection.end()) selected = true;
                               //check if in temp. selection
                               if(drag_temporary_selection.find(ctrl) != drag_temporary_selection.end()) selected = true;
-                              
+
                               //draw line to next point
                               cr_atoms_context->set_line_width(3.0);
                               if(n == -1 || n == size-1)
                                   cr_atoms_context->set_source_rgb(0.65,0.65,0.65);
                               else
                                 cr_atoms_context->set_source_rgb(0.2,0.2,0.2);
-                              cr_atoms_context->move_to(x-(n==-1)*width+0.5,y+0.5);
+                              cr_atoms_context->move_to(x-(n==-1)*draw_width+0.5,y+0.5);
                               if(ctrl->slope_type == SLOPE_TYPE_FLAT)
-                                  cr_atoms_context->line_to(nextctrl->time*width+(n==size-1)*width+0.5, y+0.5);
+                                  cr_atoms_context->line_to(nextctrl->time*draw_width+(n==size-1)*draw_width+0.5, y+0.5);
                               else if(ctrl->slope_type == SLOPE_TYPE_LINEAR){
-                                  int next_y =  (double)internal_height*((127.0-nextctrl->value)/(127.0));
-                                  cr_atoms_context->line_to(nextctrl->time*width+(n==size-1)*width+0.5, next_y+0.5);
+                                  int next_y =  (double)draw_height*((127.0-nextctrl->value)/(127.0));
+                                  cr_atoms_context->line_to(nextctrl->time*draw_width+(n==size-1)*draw_width+0.5, next_y+0.5);
                               }
                               cr_atoms_context->stroke();
-                              
+
                               if(n == -1) continue; //no need to draw -1th atom
-                              
+
                               //draw atom
                               cr_atoms_context->set_line_width(1.0);
                               if(ctrl->slope_type == SLOPE_TYPE_FLAT)
@@ -1445,55 +1462,60 @@ void PatternWidget::RedrawAllDiodes(){
                               cr_atoms_context->stroke();
                         }
       }
-  
-    
+
+    cr_atoms_context->restore();
+
     atoms_lock = 1;
     man_i_wanted_to_redraw_atoms_but_it_was_locked_could_you_please_do_it_later_for_me = 0;
     Glib::signal_timeout().connect(sigc::mem_fun(*this,&PatternWidget::TimeLockAtomsCompleted),Config::Interaction::PatternRefreshMS);
 
     Redraw();
-      
+
   }
-  
+
   bool PatternWidget::RedrawEverything(){
       RedrawAtoms();
       RedrawGrid();
       RedrawAllDiodes();
       return false;
   }
-  
-  void PatternWidget::Redraw(int x, int y, int width, int height){
+
+  void PatternWidget::Redraw(int x_dip, int y_dip, int width_dip, int height_dip){
+      // This function receives arguments in DIP. But cairo surfaces use real pixel measurements, so we need to account for the scale factor.
+
       //Glib::Timer T;
     //long unsigned int t;
       //T.reset(); T.start();
       Th->mutex_redrawarea.lock();
-      
-    Gtk::Allocation allocation = get_allocation();
-    const double my_width = allocation.get_width();
-    if (width == -1) width = my_width;
-    if (height == -1) height = allocation.get_height();
-    
+
+    int scale_factor = get_window() ? get_window()->get_scale_factor() : 1;
+    if (width_dip == -1) width_dip = get_allocation().get_width();
+    if (height_dip == -1) height_dip = get_allocation().get_height();
+    int draw_x = x_dip * scale_factor, draw_y = y_dip * scale_factor,
+        draw_width = width_dip * scale_factor, draw_height = height_dip * scale_factor;
+
     cr_buffer_context->save();
     cr_buffer_context->set_source(cr_grid_surface,0,0);
-    cr_buffer_context->rectangle(x,y,width,height);
+    cr_buffer_context->rectangle(draw_x,draw_y,draw_width,draw_height);
     cr_buffer_context->fill();
     cr_buffer_context->restore();
-    
+
     cr_buffer_context->save();
     cr_buffer_context->set_source(cr_atoms_surface,0,0);
-    cr_buffer_context->rectangle(x,y,width,height);
+    cr_buffer_context->rectangle(draw_x,draw_y,draw_width,draw_height);
     cr_buffer_context->fill();
     cr_buffer_context->restore();
-    
+
     cr_buffer_context->save();
     cr_buffer_context->set_source(cr_diodes_surface,0,0);
-    cr_buffer_context->rectangle(x,y,width,height);
+    cr_buffer_context->rectangle(draw_x,draw_y,draw_width,draw_height);
     cr_buffer_context->fill();
     cr_buffer_context->restore();
-    
+
     //TODO: optimize following to use only the redrawn area
   if(drag_in_progress && drag_mode==DRAG_MODE_SELECT_AREA){
       cr_buffer_context->save();
+      cr_buffer_context->scale(scale_factor, scale_factor);
       cr_buffer_context->set_line_width(2);
       cr_buffer_context->rectangle(drag_beggining_x,drag_beggining_y,drag_current_x-drag_beggining_x,drag_current_y-drag_beggining_y);
       cr_buffer_context->set_source_rgba(0.9,0.4,0.3,0.2);
@@ -1504,9 +1526,37 @@ void PatternWidget::RedrawAllDiodes(){
   }
     //T.elapsed(t);
     //*err << (int)t << ENDL;
-    
+
    // T.stop();
-    queue_draw_area(x,y,width,height);
-   
+    queue_draw_area(x_dip, y_dip, width_dip, height_dip);
+
     Th->mutex_redrawarea.unlock();
+}
+
+
+bool PatternWidget::on_draw(const Cairo::RefPtr<Cairo::Context>& ct){
+    Th->mutex_drawing.lock();
+
+    Gtk::Allocation allocation = get_allocation();
+    const double width = allocation.get_width();
+    const int height = allocation.get_height();
+
+    //check if everything wasn't resized, this would mean we have to redraw things....
+    // an important case is when the widget is show()n, for it changes it's size from
+    // something like 1,1 to something like 500,120, and we cannot leave it blank
+    if(last_drawn_height != height || last_drawn_width != width) RedrawEverything();
+    last_drawn_height = height; last_drawn_width = width;
+
+    ct->save();
+    ct->set_source(cr_buffer_surface,100,100);
+    Cairo::Matrix m = Cairo::identity_matrix();
+    int scale_factor = get_window() ? get_window()->get_scale_factor() : 1;
+    m.scale(scale_factor, scale_factor);
+    ct->get_source()->set_matrix(m);
+    ct->paint();
+    ct->restore();
+
+    Th->mutex_drawing.unlock();
+
+    return true;
 }

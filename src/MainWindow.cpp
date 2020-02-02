@@ -1,6 +1,6 @@
 /*
     Copyright (C) 2010-2012 Rafał Cieślak
- 
+
     This file is part of harmonySEQ.
 
     HarmonySEQ is free software: you can redistribute it and/or modify
@@ -48,11 +48,11 @@ bool seq_list_drag_in_progress;
 MainWindow::MainWindow()
 {
     set_name("mainwindow");
-  
+
     set_border_width(0);
     //set_resizable(0);
-    set_default_size(950,600);
-    set_size_request(900,450); //minimum size
+    set_default_size(950, 600);
+    set_size_request(900, 450); //minimum size
     //set_resizable(0);
     UpdateTitle();
 
@@ -101,7 +101,7 @@ MainWindow::MainWindow()
             "      <menuitem action='FileSaveAs'/>"
             "      <separator/>"
             "      <menuitem action='FileQuit'/>"
-            "    </menu>" 
+            "    </menu>"
             "    <menu action='MenuTools'>"
             "      <menuitem action='PassMidiEvents'/>"
             "      <separator/>"
@@ -232,7 +232,7 @@ MainWindow::MainWindow()
         TreeModel_sequencers = Gtk::ListStore::create(m_columns_sequencers);
 
         wTreeView.append_column(_("Handle"), m_columns_sequencers.col_handle);
-        
+
         int col_count = wTreeView.append_column_editable(_("Name"), m_columns_sequencers.col_name);
         Gtk::CellRenderer* cell = wTreeView.get_column_cell_renderer(col_count - 1);
         Gtk::TreeViewColumn * column = wTreeView.get_column(col_count-1);
@@ -247,7 +247,7 @@ MainWindow::MainWindow()
         column->set_min_width(32);
         Gtk::CellRendererToggle& tgl = dynamic_cast<Gtk::CellRendererToggle&> (*cell);
         tgl.signal_toggled().connect(mem_fun(*this, &MainWindow::OnMutedToggleToggled));
-        
+
         col_count = wTreeView.append_column(_("Channel"), m_columns_sequencers.col_channel);
         col_count = wTreeView.append_column(_("Pattern"), m_columns_sequencers.col_pattern);
         col_count = wTreeView.append_column(_("Resolution"), m_columns_sequencers.col_res);
@@ -311,7 +311,7 @@ MainWindow::MainWindow()
     }
 
     show_all_children(1);
-    
+
     //This is the cure for any Gtk warnings one may experience.
     realize();
     //Magic, isn't it?
@@ -322,7 +322,7 @@ MainWindow::~MainWindow()
 
     delete wPopupMenu;
 }
- 
+
 void MainWindow::UpdateTitle(){
     char temp[300];
     if (Files::file_name == ""){
@@ -346,7 +346,7 @@ MainWindow::on_delete_event(GdkEventAny* event)
     if(Files::file_modified)
         if(!Ask(_("The file has unsaved changes."),_("Are sure you want to quit?")))
           return 1;
-    
+
     running = 0;
     return 0;
 }
@@ -392,7 +392,7 @@ MainWindow::OnMutedToggleToggled(const Glib::ustring& path)
    seqH(h)->SetOn(!row[m_columns_sequencers.col_muted]);
 
     if(seqWidget.selectedSeq == h) seqWidget.UpdateOnOff();
-   
+
    if(seqH(h)->my_row) RefreshRow(seqH(h)->my_row);
 
    //Files::SetFileModified(1); do not detect mutes
@@ -412,7 +412,7 @@ MainWindow::OnNameEdited(const Glib::ustring& path, const Glib::ustring& newtext
     if(seqWidget.selectedSeq == h) seqWidget.UpdateName();
 
     eventsWidget.SeqListChanged();
-    
+
     UpdateEventWidget();
     Files::SetFileModified(1);
 }
@@ -442,7 +442,7 @@ Gtk::TreeModel::Row MainWindow::AddSequencerRow(int x)
         row[m_columns_sequencers.col_chord] = temp;
         row[m_columns_sequencers.col_name_color] = TREEVIEW_COLOR_T_CTRL;
     }
-    
+
     if(seq->GetOn()){
         row[m_columns_sequencers.col_colour] = TREEVIEW_COLOR_ON;
     }else if (seq->GetPlayOncePhase() == 2 || seq->GetPlayOncePhase() == 3){
@@ -475,7 +475,7 @@ void MainWindow::InitTreeData(){
         row[m_columns_sequencers.col_res] = seq->resolution;
         row[m_columns_sequencers.col_pattern] = seq->GetActivePatternNumber();
         row[m_columns_sequencers.col_len] = seq->GetLength();
-        
+
         if(seq->GetType() == SEQ_TYPE_NOTE){
             NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seq);
             row[m_columns_sequencers.col_chord] = noteseq->chord.GetName();
@@ -487,7 +487,7 @@ void MainWindow::InitTreeData(){
             row[m_columns_sequencers.col_chord] = temp;
             row[m_columns_sequencers.col_name_color] = TREEVIEW_COLOR_T_CTRL;
         }
-        
+
         if(seq->GetOn()){
             row[m_columns_sequencers.col_colour] = TREEVIEW_COLOR_ON;
         }else if (seq->GetPlayOncePhase() == 2 || seq->GetPlayOncePhase() == 3){
@@ -497,7 +497,7 @@ void MainWindow::InitTreeData(){
         }else{
             row[m_columns_sequencers.col_colour] = TREEVIEW_COLOR_OFF;
         }
-        
+
         seqV(x)->my_row = row;
         rowcount++;
     }
@@ -515,14 +515,14 @@ void MainWindow::RefreshRow(Gtk::TreeRow row){
     seqHandle h = row[m_columns_sequencers.col_handle];
     //*dbg << h << ENDL;
     Sequencer* seq = seqH(h);
-    
+
     row[m_columns_sequencers.col_muted] = seq->GetOn();
     row[m_columns_sequencers.col_name] = seq->GetName();
     row[m_columns_sequencers.col_channel] = seq->GetChannel();
     row[m_columns_sequencers.col_res] = seq->resolution;
     row[m_columns_sequencers.col_pattern] = seq->GetActivePatternNumber();
     row[m_columns_sequencers.col_len] = seq->GetLength();
-    
+
     if(seq->GetType() == SEQ_TYPE_NOTE){
         NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seq);
         row[m_columns_sequencers.col_chord] = noteseq->chord.GetName();
@@ -534,7 +534,7 @@ void MainWindow::RefreshRow(Gtk::TreeRow row){
         row[m_columns_sequencers.col_chord] = temp;
         row[m_columns_sequencers.col_name_color] = TREEVIEW_COLOR_T_CTRL;
     }
-    
+
     if(seq->GetOn()){
         row[m_columns_sequencers.col_colour] = TREEVIEW_COLOR_ON;
     }else if (seq->GetPlayOncePhase() == 2 || seq->GetPlayOncePhase() == 3){
@@ -573,11 +573,11 @@ void MainWindow::OnAddNoteSeqClicked(){
 
     seq_list_drag_in_progress = 0; //important
     Gtk::TreeModel::Row row = spawn_sequencer(SEQ_TYPE_NOTE);
-    
+
     wTreeView.get_selection()->select(row);
 
     eventsWidget.SeqListChanged();
-    
+
     Files::SetFileModified(1);
 }
 
@@ -585,9 +585,9 @@ void MainWindow::OnAddControlSeqClicked(){
 
     seq_list_drag_in_progress = 0; //important
     Gtk::TreeModel::Row row = spawn_sequencer(SEQ_TYPE_CONTROL);
-    
+
     wTreeView.get_selection()->select(row);
-    
+
     eventsWidget.SeqListChanged();
 
     Files::SetFileModified(1);
@@ -646,7 +646,7 @@ bool MainWindow::OnKeyPress(GdkEventKey* event){
     } else if (event->keyval == 65505){ // Shift(left)
         if (!ShiftKeyDown) ShiftKeyDown = true;
     }
-    
+
     FindAndProcessEvents(Event::KEYBOARD,event->keyval);
 
     return 1;
@@ -677,7 +677,7 @@ void MainWindow::OnSelectionChanged(){
         pRemoveTool->set_sensitive(0);
         Gtk::Widget* pDuplicateTool = m_refUIManager->get_widget("/ToolBar/DuplicateTool");
         pDuplicateTool->set_sensitive(0);
-        
+
         seqWidget.SelectNothing();
         wFrameNotebook.set_current_page(0);
     }
@@ -701,7 +701,7 @@ void MainWindow::UpdatePlayPauseTool(){
 }
 
 void MainWindow::OnPlayPauseClicked(){
-    
+
      switch (midi->GetPaused()){
         case true:
             midi->ContinueQueue();
@@ -739,7 +739,7 @@ void MainWindow::OnAboutMenuClicked(){
     aboutbox.set_authors(authors);
     /* TRANSLATORS: The list of translators to be placed in about-box */
     aboutbox.set_translator_credits(_("translator-credits"));
-    
+
     aboutbox.run();
 
 }
@@ -761,7 +761,7 @@ void MainWindow::OnMenuNewClicked(){
         }
 
     Files::file_name = "";
-    
+
 
     //clear everything.
     ClearEvents();
@@ -774,7 +774,7 @@ void MainWindow::OnMenuNewClicked(){
     tempo_button.set_value((double)DEFAULT_TEMPO);
 
     UpdateTitle();
-    
+
     Files::SetFileModified(0);
 }
 
@@ -817,12 +817,12 @@ void MainWindow::OnMenuSaveAsClicked(){
 
     if (Files::file_name != "")
         dialog.set_filename(Files::file_dir+Files::file_name);
-    
+
     int result = dialog.run();
 
     Glib::ustring filename = dialog.get_filename();
     char temp[300];
-    
+
     switch (result) {
         case Gtk::RESPONSE_OK:
 
@@ -836,7 +836,7 @@ void MainWindow::OnMenuSaveAsClicked(){
                 if (!Ask(temp, _("Do you want to overwrite this file?")))
                     return; //user choosed not to overwrite it.
             }
-            
+
             Files::SaveToFile(filename);
 
         case Gtk::RESPONSE_CANCEL:
@@ -847,7 +847,7 @@ void MainWindow::OnMenuSaveAsClicked(){
             *dbg << "unknown response returned!\n";
             break;
     }
-    
+
 }
 
 bool MainWindow::OnTreviewButtonPress(GdkEventButton* event){
@@ -859,7 +859,7 @@ bool MainWindow::OnTreviewButtonPress(GdkEventButton* event){
   {
     wPopupMenu->popup(event->button, event->time);
   }
-   
+
   return false;
 }
 
