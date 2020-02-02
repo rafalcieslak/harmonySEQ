@@ -70,13 +70,3 @@ install(
   TARGETS harmonySEQ
   RUNTIME DESTINATION bin
   )
-
-install(
-  DIRECTORY "${PROJECT_SOURCE_DIR}/style/"
-  DESTINATION share/harmonySEQ/style/
-  )
-
-install(
-  DIRECTORY "${PROJECT_SOURCE_DIR}/pixmaps/"
-  DESTINATION share/harmonySEQ/pixmaps/
-  )

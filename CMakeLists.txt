@@ -27,6 +27,28 @@ find_package(PkgConfig REQUIRED)
 
 add_subdirectory(src)
 
+# Data files and resources
+install(
+  DIRECTORY "${PROJECT_SOURCE_DIR}/style/"
+  DESTINATION share/harmonySEQ/style/
+  )
+
+install(
+  DIRECTORY "${PROJECT_SOURCE_DIR}/pixmaps/"
+  DESTINATION share/harmonySEQ/pixmaps/
+  )
+
+install(
+  FILES "${PROJECT_SOURCE_DIR}/harmonyseq-mime.xml"
+  DESTINATION share/mime/packages/
+  )
+
+configure_file(harmonyseq.desktop.in harmonyseq.desktop)
+install(
+  FILES "${PROJECT_BINARY_DIR}/harmonyseq.desktop"
+  DESTINATION share/applications/
+  )
+
 # Debian package
 SET(CPACK_GENERATOR "DEB")
 SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libgtkmm-3.0-1v5, libglibmm-2.4-1v5, libasound2, liblo7, libstdc++6, libc6")
