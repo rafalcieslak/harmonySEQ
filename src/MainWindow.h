@@ -51,10 +51,8 @@ public:
     /**Called when user changed tempo*/
     void TempoChanged();
 
-    /**Called every tempo, starts the animation*/
-    void FlashTempoStart();
-    /**Ends the animation after timeout*/
-    bool FlashTempoEnd();
+    /** Called on every beat, animates tempo spinbutton */
+    void FlashTempo();
 
     /**Sets title and icon for the play-pause button*/
     void UpdatePlayPauseTool();

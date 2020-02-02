@@ -351,7 +351,7 @@ void MidiDriver::ContinueQueue(){
     if(midi_clock_enabled) SendStart();
 
     //Update the queue
-    UpdateQueue(1);
+    UpdateQueue();
 
     //Continue the queue
     int i = snd_seq_continue_queue(seq_handle,queueid,NULL) ;
@@ -366,7 +366,7 @@ void MidiDriver::ContinueQueue(){
     Glib::signal_idle().connect(
         [=](){
             //Indicate graphically a starting bar
-            mainwindow->FlashTempoStart();
+            mainwindow->FlashTempo();
             //Choose an icon/label for the toggle in the main window
             mainwindow->UpdatePlayPauseTool();
             return false;
@@ -428,7 +428,7 @@ double Wrap(double x){
    return x - (int) x;
 }
 
-void MidiDriver::UpdateQueue(bool do_not_lock_threads){
+void MidiDriver::UpdateQueue(){
 
     snd_seq_event_t ev;
     Sequencer* seq;
@@ -689,19 +689,25 @@ void MidiDriver::ProcessInput(){
             case SND_SEQ_EVENT_NOTEON:
                 if (ev->data.note.velocity != 0) {
                     //That's a note-on. It might have triggered events, so let's check for them.
-                     gdk_threads_enter(); //just in case.
-                    FindAndProcessEvents(Event::NOTE,ev->data.note.note,ev->data.note.channel+1);
-                    gdk_threads_leave(); //freeing lock.
+
+                    Glib::signal_idle().connect(
+                        [=](){
+                            FindAndProcessEvents(Event::NOTE,ev->data.note.note,ev->data.note.channel+1);
+                            return false;
+                        });
                 } else {
                     //That's a note-off. We ignore it as for now.
                 }
                 break;
             case SND_SEQ_EVENT_ECHO:
                 *dbg << "ECHO!\n";
-                gdk_threads_enter(); //to interact with gui thread we MUST lock it's thread
-                //Indicate graphically that a new bar is starting
-                //mainwindow->FlashTempoStart();
-                gdk_threads_leave(); //freeing lock
+
+                Glib::signal_idle().connect(
+                    [=](){
+                        //Indicate graphically that a new bar is starting
+                        mainwindow->FlashTempo();
+                        return false;
+                    });
 
                 //As we got the ECHO event, this means we must prepare the next bar, that is starting right now.
                 UpdateQueue();
@@ -709,9 +715,11 @@ void MidiDriver::ProcessInput(){
                 break;
             case SND_SEQ_EVENT_CONTROLLER:
                 //This is a controller event. t might have triggered events, so let's check for them.
-                gdk_threads_enter(); //just in case.
-                FindAndProcessEvents(Event::CONTROLLER,ev->data.control.param,ev->data.control.channel+1);
-                gdk_threads_leave(); //freeing lock
+                Glib::signal_idle().connect(
+                    [=](){
+                        FindAndProcessEvents(Event::CONTROLLER,ev->data.control.param,ev->data.control.channel+1);
+                        return false;
+                    });
                 break;
             case SND_SEQ_EVENT_PITCHBEND:
                 //Pithbend event. Pass it through.
@@ -745,9 +753,11 @@ void MidiDriver::ProcessInput(){
                     if (it == diode_events.end()) break; //in case such event was not registered, avoid crashes
                     if (diodev.type == DIODE_TYPE_NOTE && mainwindow->seqWidget.selectedSeqType == SEQ_TYPE_CONTROL) break; //mismatched type
                     if (diodev.type == DIODE_TYPE_CTRL && mainwindow->seqWidget.selectedSeqType == SEQ_TYPE_NOTE) break;    //mismatched type
-                    gdk_threads_enter(); //to interact with gui thread we MUST lock it's thread
-                        mainwindow->seqWidget.ActivateDiode(diodev);
-                    gdk_threads_leave(); //freeing lock
+                    Glib::signal_idle().connect(
+                        [=](){
+                            mainwindow->seqWidget.ActivateDiode(diodev);
+                            return false;
+                        });
                 }
                 break;
             default:

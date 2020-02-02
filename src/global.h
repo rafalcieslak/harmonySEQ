@@ -46,7 +46,7 @@
 #define DEFAULT_TEMPO 120.0
 
 //How long is the tempo indicatior RED.
-#define FLASH_INTERVAL 50
+#define FLASH_INTERVAL 25
     //in ms
 
 //enables colorful indicator when event gets triggered

@@ -30,6 +30,10 @@ entry.cell {
     min-height: 0;
 }
 
+spinbutton#tempo.lit {
+    background-color: #2222cc;
+    transition: 200ms;
+}
 
 separator {
   min-width: 1px;

@@ -216,6 +216,7 @@ MainWindow::MainWindow()
     TempoLabelTool.remove();
     TempoLabelTool.add(wTempoLabel);
     TempoLabelTool.set_homogeneous(0);
+    tempo_button.set_name("tempo");
     tempo_button.set_range(2.0, 1000.0);
     tempo_button.set_tooltip_markup(_("Sets the <b>tempo</b> applied to all sequencers."));
     tempo_button.set_increments(1.0, 5.0);
@@ -629,18 +630,16 @@ void MainWindow::OnCloneClicked(){
     Files::SetFileModified(1);
 }
 
-void MainWindow::FlashTempoStart(){
-    //Th->mutex_flash_tempo.lock();
-    //tempo_button.modify_base(Gtk::STATE_NORMAL,Gdk::Color("red"));
-    //Glib::signal_timeout().connect(mem_fun(*this,&MainWindow::FlashTempoEnd),FLASH_INTERVAL,Glib::PRIORITY_DEFAULT_IDLE);
-    //Th->mutex_flash_tempo.unlock();
-}
+void MainWindow::FlashTempo(){
+    auto sc = tempo_button.get_style_context();
 
-bool MainWindow::FlashTempoEnd(){
-    //Th->mutex_flash_tempo.lock();
-    //tempo_button.unset_base(Gtk::STATE_NORMAL);
-    //Th->mutex_flash_tempo.unlock();
-    return false; //do not repeat the timeout
+    /* For some reason, CSS transitions do not work, so we do a custom animation. */
+    sc->add_class("lit");
+    Glib::signal_timeout().connect(
+        [=](){
+            sc->remove_class("lit");
+            return false;
+        }, FLASH_INTERVAL, Glib::PRIORITY_DEFAULT_IDLE);
 }
 
 void MainWindow::OnPassToggleClicked(){

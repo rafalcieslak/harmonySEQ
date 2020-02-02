@@ -3,6 +3,7 @@
  - HiDPI display support.
  - MIDI Clock and Start/Stop messages output support.
  - Fixed pattern editor zoom behavior.
+ - Restored tempo flash animation which was disabled before 0.16.
  - Disabled i18n support to allow for cleaning up the build system.
 
 ## harmonyseq 0.16.1 (2020-02-01):

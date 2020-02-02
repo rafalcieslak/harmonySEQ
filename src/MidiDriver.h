@@ -57,7 +57,7 @@ public:
 
 
     /**This routine gets called every time the ECHO event is received. It puts next set of notes (one bar long) into the queue, and puts next ECHO event to harmonySEQ itself, so it gets called consequently. */
-    void UpdateQueue(bool do_not_lock_threads = 0);
+    void UpdateQueue();
 
     /**Stops all notes and updates queue IMMIDIATELLY*/
     void Sync();
