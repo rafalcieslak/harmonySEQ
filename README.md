@@ -36,20 +36,20 @@ above libraries.
 
 To compile:
 ```
-autoreconf --install
-./configure
+mkdir build && cd build
+cmake ..
 make
 ```
 
-To run:
+To run without installing, from the `build` directory run:
 
 ```
-src/harmonySEQ
+./harmonySEQ
 ```
 
-Optional installation:
+To install, from the `build` directory run:
 ```
-	make install
+make install
 ```
 
 No user documentation exists at the moment, but you can refer to UI

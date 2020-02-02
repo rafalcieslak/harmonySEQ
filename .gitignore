@@ -4,6 +4,7 @@
 # Build files
 build
 dist
+release
 harmonyseq
 harmonySEQ
 *.o

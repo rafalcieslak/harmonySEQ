@@ -20,9 +20,6 @@
 
 #ifndef GLOBAL_H
 #define	GLOBAL_H
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 #include <libintl.h>
 #include <locale.h>
 #include <vector>
@@ -31,10 +28,8 @@
 #include <glibmm/refptr.h>
 #include <gdkmm/pixbuf.h>
 
-#define VERSION_STRING "0.16.1"//VERSION is provided by autotools in config.h
-#define VERSION_A 0
-#define VERSION_B 16
-#define VERSION_C 1
+// Build system config
+#include "config.h"
 
 #define ENDL "\n"
 //Internal resolution of ALSA sequencer.

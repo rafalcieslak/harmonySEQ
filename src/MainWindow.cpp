@@ -25,7 +25,6 @@
 #include "Files.h"
 #include "Event.h"
 #include "TreeModels.h"
-#include "config.h"
 #include "SettingsWindow.h"
 #include "Configuration.h"
 #include "ControlSequencer.h"

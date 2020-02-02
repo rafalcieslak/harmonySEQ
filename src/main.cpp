@@ -34,7 +34,6 @@
 #include "Configuration.h"
 #include "SettingsWindow.h"
 #include "OSC.h"
-#include "config.h"
 //global objects
 vector<Sequencer *> seqVector;
 vector<Event *> Events;
@@ -177,81 +176,47 @@ void LoadConfig(){
     Config::LoadFromFile();
 }
 
-void LoadIcons(){
-    char path[1000];
-    sprintf(path,"%s/share/icons/hicolor/48x48/apps/harmonyseq.png",DATA_PATH);
-    if(Files::fexists(path)){
-    	//found in the prefix path from AutoConf
-        *dbg << "harmonySEQ icon found at: " << path << ENDL;
-    	sprintf(path,"%s/share/icons/hicolor/48x48/apps/harmonyseq.png",DATA_PATH);
-        harmonySEQ_logo_48 = Gdk::Pixbuf::create_from_file(path);
-    	sprintf(path,"%s/share/harmonyseq/icons/hicolor/24x24/actions/metronome.png",DATA_PATH);
-        metronome_icon_24 = Gdk::Pixbuf::create_from_file(path);
-    	sprintf(path,"%s/share/harmonyseq/icons/hicolor/24x24/actions/add_ctrl_seq.png",DATA_PATH);
-        icon_add_ctrl_seq = Gdk::Pixbuf::create_from_file(path);
-    	sprintf(path,"%s/share/harmonyseq/icons/hicolor/24x24/actions/add_note_seq.png",DATA_PATH);
-        icon_add_note_seq = Gdk::Pixbuf::create_from_file(path);
-    	sprintf(path,"%s/share/harmonyseq/icons/hicolor/16x16/actions/slope_flat.png",DATA_PATH);
-        icon_slope_flat = Gdk::Pixbuf::create_from_file(path);
-    	sprintf(path,"%s/share/harmonyseq/icons/hicolor/16x16/actions/slope_linear.png",DATA_PATH);
-        icon_slope_linear = Gdk::Pixbuf::create_from_file(path);
-    	
-    }else
-    //Trying to find where are the icons located, by looking for harmonyseq.png.
-    // XXX: For the love of God, rewrite this with a loop!
-    if (Files::fexists("/usr/share/icons/hicolor/48x48/apps/harmonyseq.png")){
-        //seems we are installed defaultly in /usr/share
-        *dbg << "harmonySEQ icon found at: /usr/share/icons/hicolor/48x48/apps/harmonyseq.png" << ENDL;
-        harmonySEQ_logo_48 = Gdk::Pixbuf::create_from_file("/usr/share/icons/hicolor/48x48/apps/harmonyseq.png");
-        metronome_icon_24 = Gdk::Pixbuf::create_from_file("/usr/share/harmonyseq/icons/hicolor/24x24/actions/metronome.png");
-        icon_add_ctrl_seq = Gdk::Pixbuf::create_from_file("/usr/share/harmonyseq/icons/hicolor/24x24/actions/add_ctrl_seq.png");
-        icon_add_note_seq = Gdk::Pixbuf::create_from_file("/usr/share/harmonyseq/icons/hicolor/24x24/actions/add_note_seq.png");
-        icon_slope_flat = Gdk::Pixbuf::create_from_file("/usr/share/harmonyseq/icons/hicolor/16x16/actions/slope_flat.png");
-        icon_slope_linear = Gdk::Pixbuf::create_from_file("/usr/share/harmonyseq/icons/hicolor/16x16/actions/slope_linear.png");
-    } else
-    if (Files::fexists("/usr/local/share/icons/hicolor/48x48/apps/harmonyseq.png")){
-        //seems we are installed defaultly in /usr/share/local
-        *dbg << "harmonySEQ icon found at: /usr/local/share/icons/hicolor/48x48/apps/harmonyseq.png" << ENDL;
-        harmonySEQ_logo_48 = Gdk::Pixbuf::create_from_file("/usr/local/share/icons/hicolor/48x48/apps/harmonyseq.png");
-        metronome_icon_24 = Gdk::Pixbuf::create_from_file("/usr/local/share/harmonyseq/icons/hicolor/24x24/actions/metronome.png");
-        icon_add_ctrl_seq = Gdk::Pixbuf::create_from_file("/usr/local/share/harmonyseq/icons/hicolor/24x24/actions/add_ctrl_seq.png");
-        icon_add_note_seq = Gdk::Pixbuf::create_from_file("/usr/local/share/harmonyseq/icons/hicolor/24x24/actions/add_note_seq.png");
-        icon_slope_flat = Gdk::Pixbuf::create_from_file("/usr/local/share/harmonyseq/icons/hicolor/16x16/actions/slope_flat.png");
-        icon_slope_linear = Gdk::Pixbuf::create_from_file("/usr/local/share/harmonyseq/icons/hicolor/16x16/actions/slope_linear.png");
-    } else
-    if (Files::fexists("pixmaps/48x48/apps/harmonyseq.png")){
-        //seems we are not installed, and run from main source directory
-        *dbg << "harmonySEQ icon found at: pixmaps/48x48/apps/harmonyseq.png" << ENDL;
-        harmonySEQ_logo_48 = Gdk::Pixbuf::create_from_file("pixmaps/48x48/apps/harmonyseq.png");
-        metronome_icon_24 = Gdk::Pixbuf::create_from_file("pixmaps/24x24/metronome.png");
-        icon_add_ctrl_seq = Gdk::Pixbuf::create_from_file("pixmaps/24x24/add_ctrl_seq.png");
-        icon_add_note_seq = Gdk::Pixbuf::create_from_file("pixmaps/24x24/add_note_seq.png");
-        icon_slope_flat = Gdk::Pixbuf::create_from_file("pixmaps/16x16/slope_flat.png");
-        icon_slope_linear = Gdk::Pixbuf::create_from_file("pixmaps/16x16/slope_linear.png");
-    } else
-   if (Files::fexists("../pixmaps/48x48/apps/harmonyseq.png")) {
-        //seems we are not installed, and run from src/ directory
-        *dbg << "harmonySEQ icon found at: ../pixmaps/48x48/apps/harmonyseq.png" << ENDL;
-        harmonySEQ_logo_48 = Gdk::Pixbuf::create_from_file("../pixmaps/48x48/apps/harmonyseq.png");
-        metronome_icon_24 = Gdk::Pixbuf::create_from_file("../pixmaps/24x24/metronome.png");
-        icon_add_ctrl_seq = Gdk::Pixbuf::create_from_file("../pixmaps/24x24/add_ctrl_seq.png");
-        icon_add_note_seq = Gdk::Pixbuf::create_from_file("../pixmaps/24x24/add_note_seq.png");
-        icon_slope_flat = Gdk::Pixbuf::create_from_file("../pixmaps/16x16/slope_flat.png");
-        icon_slope_linear = Gdk::Pixbuf::create_from_file("../pixmaps/16x16/slope_linear.png");
-    } else{
-       //icons not found.
-        *err << ("Failed to find harmonySEQ icon files.\n");
+std::string DetermineDataPath() {
+  std::string test_file = "style/harmonySEQ.css";
+  std::vector<std::string> candidates = {
+    "../", // OOTB with cmake
+    DATA_PATH, // Installed with cmake
+  };
+
+  for(const std::string& candidate: candidates){
+    std::string path = candidate + test_file;
+    if(Files::fexists(path.c_str())){
+      printf("Data files found in %s\n", candidate.c_str());
+      return candidate;
     }
-    
+  }
+
+  printf("Data files could not be located in any of these paths:");
+  for(const std::string& candidate: candidates)
+    printf("    %s\n", candidate.c_str());
+  exit(1);
 }
 
-void EnableCSSProvider() {
+void LoadIcons(std::string data_path){
+    harmonySEQ_logo_48 = Gdk::Pixbuf::create_from_file(data_path + "pixmaps/48x48/apps/harmonyseq.png");
+    metronome_icon_24 = Gdk::Pixbuf::create_from_file(data_path + "pixmaps/24x24/metronome.png");
+    icon_add_ctrl_seq = Gdk::Pixbuf::create_from_file(data_path + "pixmaps/24x24/add_ctrl_seq.png");
+    icon_add_note_seq = Gdk::Pixbuf::create_from_file(data_path + "pixmaps/24x24/add_note_seq.png");
+    icon_slope_flat = Gdk::Pixbuf::create_from_file(data_path + "pixmaps/16x16/slope_flat.png");
+    icon_slope_linear = Gdk::Pixbuf::create_from_file(data_path + "pixmaps/16x16/slope_linear.png");
+}
+
+void EnableCSSProvider(std::string data_path) {
   auto css_provider = Gtk::CssProvider::create();
-  // XXX: Support alternative and installed paths!
-  css_provider->load_from_path("style/style.css");
-  Gtk::StyleContext::add_provider_for_screen(
-    Gdk::Screen::get_default(),
-    css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+  try{
+    css_provider->load_from_path(data_path + "style/harmonySEQ.css");
+    Gtk::StyleContext::add_provider_for_screen(
+      Gdk::Screen::get_default(),
+      css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+  }catch(const Gtk::CssProviderError& e){
+    printf("CssProviderError: %s\n", e.what().c_str());
+    exit(1);
+  }
 }
 
 
@@ -338,6 +303,9 @@ int main(int argc, char** argv) {
     bool file_from_cli = false;
     if (argc>optind){ file = argv[optind];file_from_cli=1;}
 
+    // Find where data files are.
+    std::string data_path = DetermineDataPath();
+      
     //Initing the driver...
     InitMidiDriver();
 
@@ -349,10 +317,10 @@ int main(int argc, char** argv) {
     InitAllTreeModels();
 
     //..icons...
-    LoadIcons();
+    LoadIcons(data_path);
 
     //..CSS provider...
-    EnableCSSProvider();
+    EnableCSSProvider(data_path);
     
     //...configuration...
     gdk_threads_enter();
