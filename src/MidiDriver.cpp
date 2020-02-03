@@ -289,19 +289,24 @@ double MidiDriver::GetTempo() {
 
 void MidiDriver::TapTempo(){
     double now = GetRealTime();
-    double current = now, sum = 0;
-    int count = 0;
+    double current = now, sum = 0.0;
+    std::vector<double> deltas;
     for(double q : tap_times){
         double delta = current - q;
         if(delta > 6.0)
             break;
-        sum += delta;
-        count += 1;
+        deltas.push_back(delta);
         current = q;
     }
-    if(count >= 5) {
-        double new_tempo = 60.0/(sum/count);
-        *dbg << "new tap tempo:" << new_tempo << " from " << count << ENDL;
+    if(deltas.size() >= 5) {
+        std::sort(deltas.begin(), deltas.end());
+        int n1 = deltas.size() * 1 / 3, n2 = deltas.size() * 2 / 3;
+        *dbg << n1 << " " << n2 << ENDL;
+        for(auto it = deltas.begin() + n1; it != deltas.begin() + n2; it++){
+            sum += *it;
+        }
+        double new_tempo = 60.0*(n2 - n1)/sum;
+        *dbg << "new tap tempo: " << new_tempo << " from " << n2 - n1 << ENDL;
         SetTempo(new_tempo);
     }
 

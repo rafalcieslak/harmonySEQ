@@ -61,6 +61,22 @@ debug & operator <<(debug &dbg, std::string message){
     return dbg;
 }
 
+debug & operator <<(debug &dbg, unsigned int number){
+    if(!dbg.debug_mode) return dbg;
+    char temp[20];
+    sprintf(temp,"%d",number);
+    dbg.say(temp);
+    return dbg;
+}
+
+debug & operator <<(debug &dbg, long unsigned int number){
+    if(!dbg.debug_mode) return dbg;
+    char temp[20];
+    sprintf(temp,"%ld",number);
+    dbg.say(temp);
+    return dbg;
+}
+
 debug & operator <<(debug &dbg, int number){
     if(!dbg.debug_mode) return dbg;
     char temp[20];
@@ -68,14 +84,14 @@ debug & operator <<(debug &dbg, int number){
     dbg.say(temp);
     return dbg;
 }
-/*
+
 debug & operator <<(debug &dbg, double number){
     if(!dbg.debug_mode) return dbg;
     char temp[20];
     sprintf(temp,"%f",number);
     dbg.say(temp);
     return dbg;
-}*/
+}
 //================================================
 
 error::error() {
@@ -110,7 +126,7 @@ error & operator <<(error &err, long long int number){
     sprintf(temp,"%lld",number);
     err.say(temp);
     return err;
-    
+
 }
 
 error & operator <<(error &err, double number){

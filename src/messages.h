@@ -22,6 +22,10 @@
 #define	DEBUG_H
 #include <glibmm/ustring.h>
 #include <cstdio>
+
+/* The entire concept of this mechanism is completely unnecessary.
+ */
+
 class debug {
 public:
     int debug_mode;
@@ -50,8 +54,10 @@ error & operator <<(error &err, long int number);
 error & operator <<(error &err, double number);
 error & operator <<(error &dbg, Glib::ustring message);
 debug & operator <<(debug &dbg, const char* message);
+debug & operator <<(debug &dbg, long unsigned number);
+debug & operator <<(debug &dbg, unsigned number);
 debug & operator <<(debug &dbg, int number);
-//debug & operator <<(debug &dbg, double number);
+debug & operator <<(debug &dbg, double number);
 debug & operator <<(debug &dbg, Glib::ustring message);
 debug & operator <<(debug &dbg, std::string message);
 
@@ -67,4 +73,3 @@ private:
     double time;
 };
 #endif	/* DEBUG_H */
-
