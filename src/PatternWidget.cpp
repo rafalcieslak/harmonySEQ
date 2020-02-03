@@ -18,6 +18,7 @@
 */
 #include <cairo/cairo.h>
 
+#include "MidiDriver.h"
 #include "PatternWidget.h"
 #include "cairomm/context.h"
 #include "global.h"
@@ -84,6 +85,12 @@ PatternWidget::PatternWidget(){
     select_only_this_atom_on_LMB_release = NULL;
 
     signal_realize().connect(sigc::mem_fun(*this,&PatternWidget::OnRealize));
+    Glib::signal_timeout().connect(
+        [=](){
+            queue_draw();
+            return true;
+        }, Config::Interaction::PatternRefreshMS, Glib::PRIORITY_DEFAULT_IDLE);
+
     if(!Config::Interaction::DisableDiodes) Glib::signal_timeout().connect(sigc::mem_fun(*this,&PatternWidget::DrawDiodesTimeout),DIODE_FADEOUT_TIME/8);
 }
 
@@ -1563,6 +1570,27 @@ bool PatternWidget::on_draw(const Cairo::RefPtr<Cairo::Context>& ct){
     ct->get_source()->set_matrix(m);
     ct->paint();
     ct->restore();
+
+    // Playback marker
+    if(not midi->GetPaused() and
+       container->owner and
+       (container->owner->GetOn() or
+        container->owner->GetPlayOncePhase() >= 2)){
+        Sequencer *seq = container->owner;
+        double t = GetRealTime();
+        double s = seq->playback_marker__start_pos, e = seq->playback_marker__end_pos;
+        double st = seq->playback_marker__start_time, et = seq->playback_marker__end_time;
+        double delta = et - st, q = (t - st) / delta;
+        double pos = s + (e - s) * q;
+        // printf("delta = %f, q = %f, s = %f, e = %f, pos = %f\n", delta, q, s, e, pos);
+        // Wrap around.
+        pos = pos - int(pos);
+        ct->set_line_width(2.0);
+        ct->set_source_rgb(0.9, 0.2, 0.2);
+        ct->move_to(width*pos, 0.0);
+        ct->line_to(width*pos, 200.0);
+        ct->stroke();
+    }
 
     Th->mutex_drawing.unlock();
 

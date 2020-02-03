@@ -288,8 +288,7 @@ double MidiDriver::GetTempo() {
 }
 
 void MidiDriver::TapTempo(){
-    Glib::DateTime dt = Glib::DateTime::create_now_utc();
-    double now = dt.to_unix() + dt.get_microsecond()/1000000.0;
+    double now = GetRealTime();
     double current = now, sum = 0;
     int count = 0;
     for(double q : tap_times){
@@ -457,6 +456,7 @@ void MidiDriver::UpdateQueue(){
 
     snd_seq_event_t ev;
     Sequencer* seq;
+    double real_time = GetRealTime();
 
    //send ECHO event to harmonySEQ itself, so it will be notified when the bar finishes, and new notes must be put on the queue.
    //sending the ECHO event takes place before all the notes, just in case the buffer is to small - to avoid dropping the echo event
@@ -618,10 +618,18 @@ void MidiDriver::UpdateQueue(){
                       }
             }
 
-            double play_from_here_marker = Wrap(end_marker);
+
+            // Store playback data so that the UI can accurately draw the playback marker.
+            seq->playback_marker__start_pos = seq->play_from_here_marker;
+            seq->playback_marker__start_time = real_time;
+            seq->playback_marker__end_pos = end_marker;
+            seq->playback_marker__end_time = real_time + 60.0/tempo;
+
+            double new_play_from_here_marker = Wrap(end_marker);
             //rounding to ensure sync...
-            if(play_from_here_marker > -0.000000001 && play_from_here_marker < 0.000000001) play_from_here_marker = 0.0;
-            seq->play_from_here_marker = play_from_here_marker;
+            if(new_play_from_here_marker > -0.000000001 && new_play_from_here_marker < 0.000000001) new_play_from_here_marker = 0.0;
+            // Save playback position
+            seq->play_from_here_marker = new_play_from_here_marker;
         } //[If seq is on or in 2nd phase]
 
         //Finally, no matter whether the sequencer was on or not...

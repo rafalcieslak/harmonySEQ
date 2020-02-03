@@ -63,10 +63,10 @@ public:
     int AddPattern();
     /**Removes selected pattern.*/
     bool RemovePattern(int x);
-    
+
     /**Returns sequencer's type*/
     virtual SeqType_t GetType() = 0;
-    
+
     /**Fills in everything with default values*/
     virtual void Init();
 
@@ -83,10 +83,10 @@ public:
     double GetLength() volatile;
     int GetLengthNumerator();
     int GetLengthDenominator();
-    
+
     void SetActivePatternNumber(int a);
     int GetActivePatternNumber();
-    
+
     AtomContainer* GetActivePattern();
 
     /**Sets the sequencer on/off*/
@@ -116,21 +116,26 @@ public:
     /**Remembers where to start playback in next bar.*/
     double play_from_here_marker;
 
+    double playback_marker__start_pos = 0.0;
+    double playback_marker__end_pos = 0.0;
+    double playback_marker__start_time = 0.0;
+    double playback_marker__end_time = 0.0;
+
     /**Keeps a reference to a row in Sequencers TreeModel*/
     Gtk::TreeRow my_row;
 
     /**Remembers the handle to this sequencer.*/
     seqHandle MyHandle;
-    
+
 protected:
 
     /**The active sequence number*/
     int active_pattern;
-    
+
     /**Stores the length of  sequence*/
     int length_numerator;
     int length_denominator;
-    
+
     int channel;
     bool on;
     Glib::ustring name;
@@ -141,4 +146,3 @@ private:
 };
 
 #endif	/* SEQUENCER_H */
-

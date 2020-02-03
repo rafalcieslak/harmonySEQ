@@ -56,7 +56,7 @@ namespace Config{
     namespace OSC{
         int Port;
     }
-    
+
     void LoadDefaultConfiguration(){
         //Default values
         Metronome::Channel = 10;
@@ -71,7 +71,7 @@ namespace Config{
         VisibleColumns::Length = 1;
         VisibleColumns::ChordAndCtrlNo = 1;
         Interaction::PlayOnEdit = 1;
-        Interaction::PatternRefreshMS = 40;
+        Interaction::PatternRefreshMS = 60;
         Interaction::DisableDiodes = 0;
         OSC::Port = 7773;
     }
@@ -194,7 +194,7 @@ namespace Config{
 #endif
 
     }
-    
+
     Glib::ustring GetOldConfigFilePath(){
         char temp[200];
 
@@ -219,14 +219,13 @@ namespace Config{
 #endif
 
     }
-    
+
     void MakeConfigDir(){
         mkdir(GetConfigDirPath().c_str(),0755); //chmod 0755 = owner can read write and execute, others cannot write but can read & execute
         if (errno == 17) {
             //everything all right, the directory exists
         }
-        
+
     }
 
 }
-

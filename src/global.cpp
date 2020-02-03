@@ -46,3 +46,8 @@ void Info(Glib::ustring message, Glib::ustring secondary_message){
     dialog.run();
 
 }
+
+double GetRealTime(){
+    Glib::DateTime dt = Glib::DateTime::create_now_utc();
+    return dt.to_unix() + dt.get_microsecond()/1000000.0;
+}

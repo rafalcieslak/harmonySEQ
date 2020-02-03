@@ -134,4 +134,7 @@ bool Ask(Glib::ustring message, Glib::ustring secondary_message = "");
 /**Shows user a message.*/
 void Info(Glib::ustring message, Glib::ustring secondary_message = "");
 
+/** Return current wallclock timestamp as a double **/
+double GetRealTime();
+
 #endif	/* GLOBAL_H */

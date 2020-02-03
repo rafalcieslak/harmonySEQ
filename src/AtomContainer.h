@@ -31,41 +31,40 @@ public:
     AtomContainer(const AtomContainer& orig);
     AtomContainer();
     virtual ~AtomContainer();
-    
+
     /**Returns the number of atoms inside*/
     int GetSize();
-    
+
     /**Adds an atom to the container*/
     int Add(Atom * a);
-    
+
     /**Removes an atom from container*/
     void Remove(int n);
     void Remove(Atom* a);
     void RemoveList(std::set<Atom*,AtomComparingClass>* V);
-    
+
     /**Gets n-th atom*/
     Atom* operator[](int n);
-    
+
     /**Removes all atoms from pattern.*/
     void Clear();
-    
+
     /**Tell the container who's its owner.*/
     void SetOwner(Sequencer* owner);
-    
+
     /**The sequencer this container belongs to, if known.*/
-    volatile Sequencer* owner;
-    
+    Sequencer* owner;
+
     /**Finds if there is and if is then where, note with given ID. Complexity linear.*/
     int FindID(int ID);
-    
+
     /**Call if notes were moved or added.*/
     void Sort();
-    
+
     AtomContainer & operator= (const AtomContainer & other);
 private:
     std::vector<Atom *> AtmVec;
-    
+
 };
 
 #endif	/* ATOMCONTAINER_H */
-

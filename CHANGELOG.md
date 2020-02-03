@@ -1,7 +1,8 @@
 ## unreleased:
- - HiDPI display support.
  - MIDI Clock and Start/Stop messages output support.
  - Added a tempo tap button.
+ - HiDPI display support.
+ - Playback display marker.
  - Replaced the build system with CMake.
  - Fixed pattern editor zoom behavior.
  - Restored tempo flash animation which was disabled before 0.16.
