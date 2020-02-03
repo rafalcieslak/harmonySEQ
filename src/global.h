@@ -108,7 +108,6 @@ class MainWindow;
 class Event;
 class SettingsWindow;
 extern std::vector<Sequencer *> seqVector;
-extern double tempo;
 extern bool midi_clock_enabled;
 extern int ports_number;
 extern int running;

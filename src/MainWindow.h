@@ -108,6 +108,7 @@ private:
     void OnMIDIClockToggled();
     void OnSyncClicked();
     void OnMetronomeToggleClicked();
+    void OnTapTempoClicked();
 
     void OnPopupPlayOnce();
     void OnPopupRemove();
@@ -122,6 +123,7 @@ private:
 
     Gtk::CheckButton midi_clock_button;
     Gtk::Button sync_button;
+    Gtk::Button tap_button;
 
     Gtk::VBox wMainVBox;
     Gtk::VBox wVBox1;

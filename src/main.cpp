@@ -37,7 +37,6 @@
 //global objects
 vector<Sequencer *> seqVector;
 vector<Event *> Events;
-double tempo = DEFAULT_TEMPO;
 bool midi_clock_enabled = true;
 int ports_number;
 int running = 1; //states, whether the application is running. When it's changed to 0, all infinite loops in background break, and the whole program closes.
@@ -228,7 +227,6 @@ int main(int argc, char** argv) {
     ports_number = 1;   //by default
     passing_midi = 0;   //by default
     metronome = 0; //by default
-    tempo = DEFAULT_TEMPO;
     err = new error();  //error stream is never quiet! so we open it, not caring about what we got in arguments
 
     //Start thread class...
@@ -291,8 +289,7 @@ int main(int argc, char** argv) {
 
     //Initing the driver...
     //create the midi driver
-    midi = new MidiDriver;
-    midi->SetTempo(tempo);
+    midi = new MidiDriver();
 
     //...the maps...
     InitKeyMap();
@@ -336,9 +333,6 @@ int main(int argc, char** argv) {
         bool x = Files::LoadFile(file);
         gdk_threads_leave();
     }
-
-    //Putting some values into GUI
-    mainwindow->tempo_button.set_value(tempo);
 
     //Initing trees in both windows.
     mainwindow->InitTreeData();

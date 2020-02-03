@@ -79,6 +79,7 @@ MainWindow::MainWindow()
     m_refActionGroup->add(Gtk::ToggleAction::create("MIDIClock", _("MIDIClock"),_("Toggle MIDI clock and start/stop messages output")));
     m_refActionGroup->add(Gtk::Action::create("Sync", Gtk::Stock::MEDIA_PLAY, _("Sync"),_("Toggle MIDI clock and start/stop messages output")));
     m_refActionGroup->add(Gtk::ToggleAction::create("Metronome", _("Metronome"),_("Toggle metronome on/off")), sigc::mem_fun(*this, &MainWindow::OnMetronomeToggleClicked));
+    m_refActionGroup->add(Gtk::Action::create("Tap", Gtk::Stock::MEDIA_PLAY, _("Tap"),_("Tap multiple times to calculate and set BPM")));
     m_refActionGroup->add(Gtk::Action::create("PlayPause", Gtk::Stock::MEDIA_PAUSE, _("Play/Pause"),_("Toggle play/pause")), sigc::mem_fun(*this, &MainWindow::OnPlayPauseClicked));
     m_refActionGroup->add(Gtk::ToggleAction::create("PassMidiEvents", _("Pass MIDI events"),_("States whether MIDI events are passed-through harmonySEQ.")), sigc::mem_fun(*this, &MainWindow::OnPassToggleClicked));
     //m_refActionGroup->add(Gtk::ToggleAction::create("PlayOnEdit", _("Play on edit"),_("If on, harmonySEQ will play a brief preview of note, when it's added, or changed manually in chord.")), sigc::mem_fun(*this, &MainWindow::OnPlayOnEditClicked));
@@ -130,6 +131,7 @@ MainWindow::MainWindow()
             "   <toolitem name='Metronome' action='Metronome'/>"
             "   <toolitem name='TempoLabel' action='Empty'/>"
             "   <toolitem name='Tempo' action='Empty'/>"
+            "   <toolitem name='Tap' action='Tap'/>"
             "   <toolitem name='PlayPauseTool' action='PlayPause'/>"
             "  </toolbar>"
 
@@ -181,6 +183,8 @@ MainWindow::MainWindow()
     MidiClockTool.set_active(midi_clock_enabled);
     Gtk::Widget* pSync = m_refUIManager->get_widget("/ToolBar/Sync");
     Gtk::ToolButton& SyncTool = dynamic_cast<Gtk::ToolButton&> (*pSync);
+    Gtk::Widget* pTap = m_refUIManager->get_widget("/ToolBar/Tap");
+    Gtk::ToolButton& TapTool = dynamic_cast<Gtk::ToolButton&> (*pTap);
     Gtk::Widget* pAddCtrl = m_refUIManager->get_widget("/ToolBar/AddCtrlSeq");
     Gtk::ToolButton& AddCtrlTool = dynamic_cast<Gtk::ToolButton&> (*pAddCtrl);
     Gtk::Widget* pAddNote = m_refUIManager->get_widget("/ToolBar/AddNoteSeq");
@@ -222,7 +226,7 @@ MainWindow::MainWindow()
     tempo_button.set_increments(1.0, 5.0);
     tempo_button.set_digits(1);
     tempo_button.set_width_chars(5);
-    tempo_button.set_value(tempo);
+    tempo_button.set_value(midi->GetTempo());
     tempo_button.signal_value_changed().connect(sigc::mem_fun(*this, &MainWindow::TempoChanged));
 
     MidiClockTool.remove();
@@ -239,6 +243,13 @@ MainWindow::MainWindow()
     sync_button.set_label(_("Sync"));
     sync_button.set_tooltip_markup(_("Synchronizes external devices to harmonySEQs output buffer."));
     sync_button.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::OnSyncClicked));
+
+    TapTool.remove();
+    TapTool.add(tap_button);
+    TapTool.set_homogeneous(0);
+    tap_button.set_label(_("Tap"));
+    tap_button.set_tooltip_markup(_("Tap multiple times to calculate BPM and set tempo."));
+    tap_button.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::OnTapTempoClicked));
 
     UpdatePlayPauseTool();
     UpdatePassMidiToggle(); //sometimes we pass midi by default.
@@ -379,7 +390,7 @@ MainWindow::on_delete_event(GdkEventAny* event)
 void
 MainWindow::TempoChanged()
 {
-    tempo = tempo_button.get_value();
+    double tempo = tempo_button.get_value();
     midi->SetTempo(tempo);
     Files::SetFileModified(1);
 }
@@ -793,7 +804,7 @@ void MainWindow::OnMenuNewClicked(){
     UpdateEventWidget();
     InitTreeData();
 
-    tempo = DEFAULT_TEMPO;
+    midi->SetTempo(DEFAULT_TEMPO);
     tempo_button.set_value((double)DEFAULT_TEMPO);
 
     UpdateTitle();
@@ -949,6 +960,11 @@ void MainWindow::OnMetronomeToggleClicked(){
     Gtk::ToggleToolButton& Metronome = dynamic_cast<Gtk::ToggleToolButton&> (*pMetronome);
     metronome = Metronome.get_active();
 
+}
+
+void MainWindow::OnTapTempoClicked(){
+    midi->TapTempo();
+    tempo_button.set_value(midi->GetTempo());
 }
 
 void MainWindow::OnTreeviewDragBegin(const Glib::RefPtr<Gdk::DragContext>& ct){

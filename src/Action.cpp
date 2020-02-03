@@ -74,7 +74,7 @@ void Action::Trigger(int data){
 
         case TEMPO_SET:
             mainwindow->tempo_button.set_value((double)args[1]);
-            tempo = args[1];
+            midi->SetTempo(args[1]);
             Files::SetFileModified(1);
             break;
 

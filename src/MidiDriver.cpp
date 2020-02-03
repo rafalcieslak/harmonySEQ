@@ -39,11 +39,15 @@ MidiDriver::MidiDriver() {
     working = false; //at the beggining the driver is not active, it isn't working
     paused = false; //and it's not paused at start
 
+    for(int i = 0; i < 30; i++)
+        tap_times.push_front(0.0);
+
     //First, we try to open the driver: starting, connectig to system etc.
     Open();
     //And then we prepare the queue.
     InitQueue();
     //Finally, we'll set the tempo to it's current value.
+    tempo = DEFAULT_TEMPO;
     SetTempo(tempo);
 
     diode_event_id_next = 0;
@@ -270,19 +274,40 @@ void MidiDriver::InitQueue(){
 }
 
 void MidiDriver::SetTempo(double bpm){
-    //Create a new tempo-class (strange usage, but that's how ALSA want to receive the tempo)
     snd_seq_queue_tempo_t* queue_tempo;
     snd_seq_queue_tempo_malloc(&queue_tempo);
-    //Calculate the real tempo value from the BPM
     snd_seq_queue_tempo_set_tempo(queue_tempo,((double)6e7/((double)bpm*4.0)));
-    //Set number of ticks per quarternote
     snd_seq_queue_tempo_set_ppq(queue_tempo,TICKS_PER_BEAT/4);
-    //Apply the tempo to the queue
     snd_seq_set_queue_tempo(seq_handle,queueid,queue_tempo);
-    //Set the tempo variable
     tempo = bpm;
-    //Get rid of the tempo-class
     snd_seq_queue_tempo_free(queue_tempo);
+}
+
+double MidiDriver::GetTempo() {
+    return tempo;
+}
+
+void MidiDriver::TapTempo(){
+    Glib::DateTime dt = Glib::DateTime::create_now_utc();
+    double now = dt.to_unix() + dt.get_microsecond()/1000000.0;
+    double current = now, sum = 0;
+    int count = 0;
+    for(double q : tap_times){
+        double delta = current - q;
+        if(delta > 6.0)
+            break;
+        sum += delta;
+        count += 1;
+        current = q;
+    }
+    if(count >= 5) {
+        double new_tempo = 60.0/(sum/count);
+        *dbg << "new tap tempo:" << new_tempo << " from " << count << ENDL;
+        SetTempo(new_tempo);
+    }
+
+    tap_times.pop_back();
+    tap_times.push_front(now);
 }
 
 void MidiDriver::SetMidiClockEnabled(bool enabled){

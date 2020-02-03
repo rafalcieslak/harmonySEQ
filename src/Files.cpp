@@ -36,7 +36,7 @@ namespace Files {
      bool file_modified = false;
     Glib::ustring file_name;
     Glib::ustring file_dir;
-    
+
 bool fexists(const char *filename)
 {
    //Trick used to tell whether a file exists.
@@ -86,10 +86,10 @@ void LoadFileDialog(){
 
     //Obtaining the file the user has chosen..
     Glib::ustring filename = dialog.get_filename();
-    
+
     //Hiding the dialog...
     dialog.hide();
-    
+
     //To avoid lag....
     bool was_paused = false;
     if (!midi->GetPaused()){
@@ -118,7 +118,7 @@ void LoadFileDialog(){
 
     //Some things that must be done to update the GUI fully.
     //mainwindow->InitTreeData();
-    mainwindow->tempo_button.set_value(tempo);
+    mainwindow->tempo_button.set_value(midi->GetTempo());
     mainwindow->UpdateEventWidget();
 
     if (was_paused) midi->ContinueQueue();
@@ -159,10 +159,10 @@ bool LoadFile(Glib::ustring file){
         int VA = kf.get_integer("harmonySEQ","versionA");
         int VB = kf.get_integer("harmonySEQ","versionB");
         int VC = kf.get_integer("harmonySEQ","versionC");
-        
+
         /*Error flag.*/
         bool e_flag = 0;
-        
+
         //Compaing versions...
         if (VA > VERSION_A || (VA == VERSION_A && VB > VERSION_B) || (VA == VERSION_A && VB == VERSION_B && VC > VERSION_C)){
             //File is too new
@@ -188,9 +188,9 @@ bool LoadFile(Glib::ustring file){
                 e_flag = ConvertFile_0_15_to_0_16(&kf);
                 VA = 0; VB = 16; VC = 0;
             }
-            
+
         }
-        
+
         if(!e_flag)
                 e_flag = LoadFileCurrent(&kf);
 
@@ -203,7 +203,7 @@ bool LoadFile(Glib::ustring file){
             return 1;
         }
 
-        
+
         //At beggining, file is unmodidied.
         SetFileModified(0);
 
@@ -211,7 +211,7 @@ bool LoadFile(Glib::ustring file){
         int found =  file.find_last_of("/\\");  //Will work on linux and windows both
         file_name = file.substr(found+1);
         file_dir = file.substr(0,found+1);
-        
+
          //If file name has changed, we have to show it in the title of the main window.
         mainwindow->UpdateTitle();
 
@@ -242,7 +242,7 @@ bool LoadFile(Glib::ustring file){
 }
 
 void SaveToFile(Glib::ustring filename){
-    
+
     //This routine should always save using current format.
 
     //The keyfile intepreter.
@@ -275,7 +275,7 @@ void SaveToFile(Glib::ustring filename){
     kf.set_integer("harmonySEQ","versionA",VERSION_A);
     kf.set_integer("harmonySEQ","versionB",VERSION_B);
     kf.set_integer("harmonySEQ","versionC",VERSION_C);
-    kf.set_double("System","tempo",tempo);
+    kf.set_double("System","tempo",midi->GetTempo());
 
     kf.set_integer("System","sequencers_number",seqVector.size());
     kf.set_integer("System","events_number",Events.size());
@@ -338,7 +338,7 @@ void SaveToFile(Glib::ustring filename){
                     kf.set_double_list(temp, temp2, S);
                 }
         }
-        
+
     }
 
     //Then, save the events.
@@ -381,10 +381,10 @@ void SaveToFile(Glib::ustring filename){
     file_dir = filename.substr(0,found+1);
     //If file name has changed, we have to show it in the title of the main window.
     mainwindow->UpdateTitle();
-    
-    
+
+
     //File has no unsaved changes now, so...
-    SetFileModified(0); 
+    SetFileModified(0);
 }
 
 bool LoadFileCurrent(Glib::KeyFile* kfp){
@@ -394,7 +394,7 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
         char temp2[1000];
 
         //Read some basic data...
-        tempo = kfp->get_double("System", "tempo");
+        midi->SetTempo(kfp->get_double("System", "tempo"));
         seqNum = kfp->get_integer("System", "sequencers_number");
 
         //Get rid of any seqeuncers.
@@ -414,7 +414,7 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
                 return 1;
             }
             int seq_type = kfp->get_integer(temp,"seq_type");
-            
+
             //If we got here, this means this sequencer was NOT removed. So: let's create it.
             if(seq_type == SEQ_TYPE_NOTE) seqVector.push_back(new NoteSequencer());
             else if (seq_type == SEQ_TYPE_CONTROL) seqVector.push_back(new ControlSequencer());
@@ -436,13 +436,13 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
             //Now, load the patterns.
             //Number of pattrens -> n
             int n = kfp->get_integer(temp, "patterns_num");
-            
+
             if(seq_type == SEQ_TYPE_NOTE){
-                
+
                     NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seq);
-                    
+
                     noteseq->expand_chord = kfp->get_boolean(temp,"expand_chord");
-                    
+
                     //For each pattern we load...
                     for (int s = 0; s < n; s++) {
                         //First add an empty pattern.
@@ -470,9 +470,9 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
                         std::vector<int> vec = kfp->get_integer_list(temp, "chord");
                         noteseq->chord.SetFromVector(vec);
                     }
-            
+
             }else if (seq_type == SEQ_TYPE_CONTROL) {
-                
+
                 ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*> (seq);
 
                 ctrlseq->controller_number = kfp->get_integer(temp, "controller");
@@ -501,16 +501,16 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
                     }
 
                 }//next pattern
-                
+
             }
-            
+
             seq->SetActivePatternNumber(kfp->get_integer(temp,"active_pattern"));
-            
+
             //Just to make sure, check if the sequencer we've just loaded from file has any patterns...
             if (seqVector[x]->patterns.size() == 0)
                 //wtf, there were no sequences in the file? strange. We have to create one in order to prevent crashes. What would be a sequencer with no patterns? At least that's something we better aviod.
                 seqVector[x]->AddPattern();
-            
+
             //Now proceed to the...
         } //...next sequencer.
 
@@ -522,7 +522,7 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
 
         //Now, proceed to events.
 
-        //No such key? something really wrong. 
+        //No such key? something really wrong.
         if (!kfp->has_key("System", "events_number")) {
             *err << "ERROR - No EventsNumber key in file.\n";
             return 1;
@@ -574,7 +574,7 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
                     Events[x]->actions[a]->chord.SetFromVector(vec);
                 }
             }//next action.
-            
+
             //Update this event's GUI, using newly loaded data.
             Events[x]->UpdateGUI();
 
@@ -594,8 +594,8 @@ bool ConvertFile_0_15_to_0_16(Glib::KeyFile* kfp){
     tempo /= 4;
     kfp->remove_key("System","tempo");
     kfp->set_double("System","tempo",tempo);
-    
-    
+
+
     char temp[2000];
     char temp2[200];
     char temp3[200];
@@ -657,7 +657,7 @@ bool ConvertFile_0_15_to_0_16(Glib::KeyFile* kfp){
             }
             kfp->set_double_list(temp,temp3,B);
         }
-        
+
     }
     return 0;
 }

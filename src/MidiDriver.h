@@ -18,6 +18,7 @@
 */
 
 #include <thread>
+#include <deque>
 
 #include <alsa/asoundlib.h>
 
@@ -87,6 +88,9 @@ public:
 
     /**Sets tempo*/
     void SetTempo(double bpm);
+    double GetTempo();
+
+    void TapTempo();
 
     /** Enables MIDI Clock output **/
     void SetMidiClockEnabled(bool enabled);
@@ -121,6 +125,8 @@ private:
 
     /**States whether queue is paused or not*/
     bool paused;
+
+    std::deque<double> tap_times;
 
 
     /**Outputs event immediately.
