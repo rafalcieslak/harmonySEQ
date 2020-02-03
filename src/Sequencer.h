@@ -95,6 +95,12 @@ public:
     /**Returns true if sequencer is on, or false otherwise*/
     bool GetOn();
 
+    /** Returns true if this sequencer is playing at the moment. This may be because it's on, or because it's in play-once mode. */
+    bool IsPlaying();
+
+    /** Used by the midi driver to mark whether this sequencer is being played or not. Updated only on each bar. */
+    void SetPlaying(bool);
+
     /**Renames the sequencer*/
     void SetName(Glib::ustring n);
 
@@ -137,7 +143,16 @@ protected:
     int length_denominator;
 
     int channel;
+
+    /* Playing status and on status are different - turning a
+     * sequencer on is merely a request to start playing it on the
+     * next beat. Turning a sequencer off will stop playing on the
+     * next bar. So in a way playing status lags after on status. User
+     * requests to switch sequencer on/off, but the playing status is
+     * what determines wheter playback animation takes place. */
     bool on;
+    bool playing = false;
+
     Glib::ustring name;
 
     int play_once_phase;

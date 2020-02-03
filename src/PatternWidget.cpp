@@ -1543,7 +1543,7 @@ void PatternWidget::RedrawGrid(){
     //*err << (int)t << ENDL;
 
    // T.stop();
-    queue_draw_area(x_dip, y_dip, width_dip, height_dip);
+  //queue_draw_area(x_dip, y_dip, width_dip, height_dip);
 
     Th->mutex_redrawarea.unlock();
 }
@@ -1574,8 +1574,7 @@ bool PatternWidget::on_draw(const Cairo::RefPtr<Cairo::Context>& ct){
     // Playback marker
     if(not midi->GetPaused() and
        container->owner and
-       (container->owner->GetOn() or
-        container->owner->GetPlayOncePhase() >= 2)){
+       (container->owner->IsPlaying())){
         Sequencer *seq = container->owner;
         double t = GetRealTime();
         double s = seq->playback_marker__start_pos, e = seq->playback_marker__end_pos;

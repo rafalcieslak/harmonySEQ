@@ -135,6 +135,7 @@ Sequencer::~Sequencer() {
 void Sequencer::Init(){
 
     on = false;
+    playing = false;
     active_pattern = 0;
     channel = 1;
     length_numerator = 4;
@@ -184,6 +185,8 @@ AtomContainer* Sequencer::GetActivePattern(){
 
 void Sequencer::SetOn(bool m){on = m;play_once_phase=0;}
 bool Sequencer::GetOn(){return on;}
+bool Sequencer::IsPlaying(){return playing;}
+void Sequencer::SetPlaying(bool p){playing = p;}
 void Sequencer::SetChannel(int ch){channel = ch;}
 int Sequencer::GetChannel(){return channel;}
 void Sequencer::SetName(Glib::ustring nm){name = nm;}

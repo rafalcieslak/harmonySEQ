@@ -453,10 +453,6 @@ double RoundTimeDouble(double marker){
             return ((double)(temp))/(double)(1e9);
 }
 
-double Wrap(double x){
-   return x - (int) x;
-}
-
 void MidiDriver::UpdateQueue(){
 
     snd_seq_event_t ev;
@@ -518,13 +514,14 @@ void MidiDriver::UpdateQueue(){
         }
 
         //Output the notes only if the sequencer is on, or it's in 2nd phase. Otherwise skip the note outputting routines....
-        if (seq->GetOn() || seq->GetPlayOncePhase() == 2){
+        if (seq->GetOn() || seq->GetPlayOncePhase() == 2) {
 
             //Selecting diode color according to mode
             int diode_colour;
             if (seq->GetPlayOncePhase() == 2) diode_colour = 1;
             else diode_colour = 0;
 
+            seq->SetPlaying(true);
 
             //The time (in ticks)  how long one sequence repetition will last. Note it can be larger than TICKS_PER_BEAT and that's OK.
             double sequence_time = TICKS_PER_BEAT*seq->GetLength();
@@ -554,7 +551,11 @@ void MidiDriver::UpdateQueue(){
                 int X = -1;
                 while(1){
                     X++;
-                    if(seq->GetPlayOncePhase() == 2 && X == size) {seq->SetPlayOncePhase(3); break;}
+                    // if(seq->GetPlayOncePhase() == 2 && X == size) {
+                    //     printf("Ending A\n");
+                    //     seq->SetPlayOncePhase(3);
+                    //     break;
+                    // }
                     //*err << "at note " << X << ", X/size = " << X/size << ENDL;
                     Atom* atm = ((*pattern)[X%size]);
                     if(atm->time + (X/size)*1.0 >= start_marker && s == -1) s = X ;
@@ -563,7 +564,7 @@ void MidiDriver::UpdateQueue(){
                 }
             }else{
                 //if empty thing was played once...
-                if(seq->GetPlayOncePhase() == 2) seq->SetPlayOncePhase(3);
+                // if(seq->GetPlayOncePhase() == 2) seq->SetPlayOncePhase(3);
             }
 
 
@@ -623,19 +624,25 @@ void MidiDriver::UpdateQueue(){
                       }
             }
 
-
             // Store playback data so that the UI can accurately draw the playback marker.
             seq->playback_marker__start_pos = seq->play_from_here_marker;
             seq->playback_marker__start_time = real_time;
             seq->playback_marker__end_pos = end_marker;
             seq->playback_marker__end_time = real_time + 60.0/tempo;
 
-            double new_play_from_here_marker = Wrap(end_marker);
+            if(end_marker >= 1.0){
+                end_marker = end_marker - (int)end_marker;
+                if(seq->GetPlayOncePhase() == 2)
+                    seq->SetPlayOncePhase(3);
+            }
             //rounding to ensure sync...
-            if(new_play_from_here_marker > -0.000000001 && new_play_from_here_marker < 0.000000001) new_play_from_here_marker = 0.0;
+            if(end_marker > -0.000000001 && end_marker < 0.000000001) end_marker = 0.0;
             // Save playback position
-            seq->play_from_here_marker = new_play_from_here_marker;
-        } //[If seq is on or in 2nd phase]
+            seq->play_from_here_marker = end_marker;
+        }else{
+            // Sequencer is off
+            seq->SetPlaying(false);
+        }
 
         //Finally, no matter whether the sequencer was on or not...
 
