@@ -34,7 +34,8 @@ endif()
 set_target_properties(
   harmonySEQ PROPERTIES
   CXX_STANDARD 17
-  CXX_STANDARD_REQUIRED True)
+  CXX_STANDARD_REQUIRED True
+  CXX_EXTENSIONS OFF)
 
 target_include_directories(
   harmonySEQ PUBLIC

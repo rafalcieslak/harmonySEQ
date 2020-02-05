@@ -46,22 +46,16 @@ int pause_handler(const char *path, const char *types, lo_arg **argv,
  		    int argc, void *data, void *user_data)
 {
     *dbg << "OSC: pause signal got.\n";
-    if (midi->GetPaused() == 0){
-        gdk_threads_enter(); //this is necessary, because PauseQueueImmediately updates the play/pause button in the main window
+    if (midi->GetPaused() == 0)
         midi->PauseQueueImmediately();
-        gdk_threads_leave();
-    }
     return 0;
 }
 int unpause_handler(const char *path, const char *types, lo_arg **argv,
  		    int argc, void *data, void *user_data)
 {
     *dbg << "OSC: unpause signal got.\n";
-    if (midi->GetPaused() == 1){
-        gdk_threads_enter();//this is necessary, because ContinueQueue updates the play/pause button in the main window
+    if (midi->GetPaused() == 1)
         midi->ContinueQueue();
-        gdk_threads_leave();
-    }
     return 0;
 }
 
@@ -70,9 +64,12 @@ int tempo_handler(const char *path, const char *types, lo_arg **argv,
 {
     *dbg << "OSC : tempo change got.\n";
     double tmp = argv[0]->f;
-    gdk_threads_enter();
-        mainwindow->tempo_button.set_value(tmp);
-    gdk_threads_leave();
+    midi->SetTempo(tmp);
+    Glib::signal_idle().connect(
+        [=](){
+            mainwindow->tempo_button.set_value(midi->GetTempo());
+            return false;
+        });
     return 0;
 }
 int kill_handler(const char *path, const char *types, lo_arg **argv,
@@ -86,10 +83,8 @@ int sync_handler(const char *path, const char *types, lo_arg **argv,
  		    int argc, void *data, void *user_data)
 {
     *dbg << "OSC : sync signal got.\n";
-    gdk_threads_enter();
     if (!midi->GetPaused()) //do not sync while in pause!
         midi->Sync();
-    gdk_threads_leave();
     return 0;
 }
 int events_handler(const char *path, const char *types, lo_arg **argv,
@@ -97,9 +92,12 @@ int events_handler(const char *path, const char *types, lo_arg **argv,
 {
     int TAG = argv[0]->i;
     *dbg << "OSC : event signal got, TAG = " << TAG << ".\n";
-    gdk_threads_enter();
-    FindAndProcessEvents(Event::OSC,TAG,0);
-    gdk_threads_leave();
+    // For now it is the UI thread that processes events.
+    Glib::signal_idle().connect(
+        [=](){
+            FindAndProcessEvents(Event::OSC,TAG,0);
+            return false;
+        });
     return 0;
 }
 
@@ -122,7 +120,6 @@ void InitOSC(){
     lo_server_thread_add_method(st,NULL,NULL,generic_handler,NULL);
     lo_server_thread_start(st);
 }
- 
+
 
 #endif /*DISABLE_OSC*/
-
