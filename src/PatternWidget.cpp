@@ -1122,9 +1122,6 @@ bool PatternWidget::TimeLockGridCompleted(){
 }
 
 void PatternWidget::RedrawDiode(bool on, DiodeMidiEvent* diodev){
-
-    Th->mutex_redraw_diode.lock();
-
     Gtk::Allocation allocation = get_allocation();
     const double width = allocation.get_width();
 
@@ -1192,8 +1189,6 @@ void PatternWidget::RedrawDiode(bool on, DiodeMidiEvent* diodev){
     Redraw(redraw_x, redraw_y,
            redraw_w, redraw_h);
 
-
-    Th->mutex_redraw_diode.unlock();
 }
 
 
@@ -1202,8 +1197,6 @@ void PatternWidget::RedrawAllDiodes(){
         man_i_wanted_to_redraw_diodes_but_it_was_locked_could_you_please_do_it_later_for_me = 1;
         return; //do not draw too ofter!
     }
-
-    Th->mutex_redraw_all_diodes.lock();
 
     //clearing...
     cr_diodes_context->save();
@@ -1225,8 +1218,6 @@ void PatternWidget::RedrawAllDiodes(){
     Glib::signal_timeout().connect(sigc::mem_fun(*this, &PatternWidget::TimeLockDiodesCompleted), Config::Interaction::PatternRefreshMS);
 
     Redraw();
-
-    Th->mutex_redraw_all_diodes.unlock();
 }
 
 void PatternWidget::RedrawGrid(){
@@ -1501,7 +1492,6 @@ void PatternWidget::RedrawGrid(){
       //Glib::Timer T;
     //long unsigned int t;
       //T.reset(); T.start();
-      Th->mutex_redrawarea.lock();
 
     int scale_factor = get_window() ? get_window()->get_scale_factor() : 1;
     if (width_dip == -1) width_dip = get_allocation().get_width();
@@ -1545,12 +1535,10 @@ void PatternWidget::RedrawGrid(){
    // T.stop();
   //queue_draw_area(x_dip, y_dip, width_dip, height_dip);
 
-    Th->mutex_redrawarea.unlock();
 }
 
 
 bool PatternWidget::on_draw(const Cairo::RefPtr<Cairo::Context>& ct){
-    Th->mutex_drawing.lock();
 
     Gtk::Allocation allocation = get_allocation();
     const double width = allocation.get_width();
@@ -1590,8 +1578,6 @@ bool PatternWidget::on_draw(const Cairo::RefPtr<Cairo::Context>& ct){
         ct->line_to(width*pos, 200.0);
         ct->stroke();
     }
-
-    Th->mutex_drawing.unlock();
 
     return true;
 }

@@ -413,9 +413,7 @@ void MidiDriver::ClearQueue(bool remove_noteoffs){
     snd_seq_remove_events_free(re);
 
     //also, clear the diode events map.
-    diode_events_mutex.lock();
     diode_events.clear();
-    diode_events_mutex.unlock();
     *dbg << "queue cleared.\n";
 }
 
@@ -785,15 +783,12 @@ void MidiDriver::ProcessInput(){
                 id = ev->data.raw32.d[1];
                 if (mainwindow->seqWidget.selectedSeq == h){
 
-                    diode_events_mutex.lock();
                     it = diode_events.find(id);
                     if(it == diode_events.end()) {
-                      diode_events_mutex.unlock();
                       break; // If the event wasn't found, ignore this message.
                     }
                     diodev = (*it).second;
                     diode_events.erase(it);
-                    diode_events_mutex.unlock();
 
                     if (it == diode_events.end()) break; //in case such event was not registered, avoid crashes
                     if (diodev.type == DIODE_TYPE_NOTE && mainwindow->seqWidget.selectedSeqType == SEQ_TYPE_CONTROL) break; //mismatched type
