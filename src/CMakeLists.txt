@@ -49,9 +49,11 @@ target_include_directories(
 
 target_compile_options(
   harmonySEQ PUBLIC
+  -Wall -Wextra
   # Glib has deprecated some interfaces that are still used by
   # GTK. This generates a ton of warnings we can't resolve...
   -Wno-deprecated-declarations
+  -Wno-unused-parameter
   )
 
 target_link_libraries(

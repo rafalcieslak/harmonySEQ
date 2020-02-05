@@ -35,16 +35,11 @@
 #include "SettingsWindow.h"
 #include "OSC.h"
 //global objects
-vector<Sequencer *> seqVector;
-vector<Event *> Events;
-bool midi_clock_enabled = true;
-int ports_number;
 debug* dbg; //the stream-like objects responsible of putting messages into stdio
 error* err;     //see above
 MidiDriver* midi;
 MainWindow* mainwindow;
 SettingsWindow* settingswindow;
-int passing_midi; //states whether all midi events are passed through, or not.
 Glib::ustring file;
 std::map<Glib::ustring, int> keymap_stoi; //map used for keyname -> id conversion
 std::map<int, Glib::ustring> keymap_itos; //map used for id -> keyname conversion
@@ -73,10 +68,6 @@ Glib::RefPtr< Gdk::Pixbuf > icon_slope_flat;
 
 int debugging = 0, help = 0, version = 0; //flags set by getopt, depending on command-line parameters
 
-bool metronome;
-int metronome_counter = 0;
-bool diodes_disabled;
-
 void print_help(); //forward declaration of few functions
 
 //for getopt - defines which flag is related to which variable
@@ -84,7 +75,6 @@ static struct option long_options[]={
     {"debug",no_argument,&debugging,1},
     {"help",no_argument,&help,1},
     {"version",no_argument,&version,1},
-    {"pass-midi",no_argument,&passing_midi,1},
     {0,0,0,0}
 
 };
@@ -126,7 +116,6 @@ void print_help(){
             "usage: harmonySEQ [-hdv] [FILE]\n"
             "\n"
             "   -d    --debug       enters debug mode, prints lots of debug messeges\n"
-            "         --pass-midi   passes the midi events through the program by default\n"
             "   -h    --help        prints this help messase and exits\n"
             "   -v    --version     prints the program version\n"), VERSION);
     printf("\n");
@@ -193,9 +182,6 @@ int main(int argc, char** argv) {
 
     debugging = 0;      //by default
     help = 0;           //by default
-    ports_number = 1;   //by default
-    passing_midi = 0;   //by default
-    metronome = 0; //by default
     err = new error();  //error stream is never quiet! so we open it, not caring about what we got in arguments
 
     //Now, parse the arguments.
@@ -203,7 +189,7 @@ int main(int argc, char** argv) {
     opterr = 0; //this prevents getarg from printing his error message
     int option_index; //getopt stores index here
     //Calling getopt to parse agrs, until there are none left.
-    while((c=getopt_long(argc,argv,"dhvp",long_options,&option_index))!=-1){
+    while((c=getopt_long(argc,argv,"dhv",long_options,&option_index))!=-1){
         switch(c){
             case 0:
                 break;
@@ -216,10 +202,6 @@ int main(int argc, char** argv) {
             case 'v':
                 version = 1;
                 break;
-            case 'p':
-                ports_number = atoi(optarg);
-                break;
-
             case '?':
                 if (optopt){
                     sprintf(temp,_("unknown option '%c'\n"), optopt);
@@ -270,11 +252,12 @@ int main(int argc, char** argv) {
     Config::LoadDefaultConfiguration();
     Config::LoadFromFile();
     Config::SaveToFile();
-    if(Config::Interaction::DisableDiodes) diodes_disabled = 1;
-    else diodes_disabled = 0;
+
+    // Apply some global config values to the engine
+    midi->SetDiodesEnabled(Config::Interaction::DisableDiodes);
 
     //...GUI...  Sequencer and UI logic is so intertangled, we must
-    // initialize the GUI before any sequencer or even is created.
+    // initialize the GUI before any sequencer or event is created.
     mainwindow = new MainWindow;
     settingswindow = new SettingsWindow;
 

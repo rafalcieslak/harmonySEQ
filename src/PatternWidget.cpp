@@ -602,12 +602,12 @@ void PatternWidget::ProcessDrag(double x, double y){
 
         //Determining drag selection.
         drag_temporary_selection.clear();
-        int sel_value_min = min(drag_current_value, drag_beggining_value);
-        int sel_value_max = max(drag_current_value, drag_beggining_value);
-        int sel_pith_min = min(drag_current_line, drag_beggining_line);
-        int sel_pith_max = max(drag_current_line, drag_beggining_line);
-        double sel_time_min = min(drag_current_time, drag_beggining_time);
-        double sel_time_max = max(drag_current_time, drag_beggining_time);
+        int sel_value_min = std::min(drag_current_value, drag_beggining_value);
+        int sel_value_max = std::max(drag_current_value, drag_beggining_value);
+        int sel_pith_min = std::min(drag_current_line, drag_beggining_line);
+        int sel_pith_max = std::max(drag_current_line, drag_beggining_line);
+        double sel_time_min = std::min(drag_current_time, drag_beggining_time);
+        double sel_time_max = std::max(drag_current_time, drag_beggining_time);
         int size = container->GetSize();
         if (seq_type == SEQ_TYPE_NOTE) {
             for (int x = 0; x < size; x++) {

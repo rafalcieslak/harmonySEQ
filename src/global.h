@@ -1,4 +1,4 @@
-/*
+ /*
     Copyright (C) 2010, 2011 Rafał Cieślak
 
     This file is part of harmonySEQ.
@@ -45,14 +45,12 @@
 
 #define DEFAULT_TEMPO 120.0
 
-//How long is the tempo indicatior RED.
+// Time (ms) how long does the tempo button blink on beat.
 #define FLASH_INTERVAL 25
-    //in ms
 
-//enables colorful indicator when event gets triggered
+// Enables colorful indicator when event gets triggered (time in ms).
 #define EVENTS_FLASH
 #define EVENTS_FLASH_TIMEOUT 200
-    //in ms
 
 #define PLAY_ON_EDIT_MS 300
 
@@ -65,39 +63,6 @@
 
 #define SEQUENCER_DEFAULT_NAME _("sequencer")
 
-/*
-#define FILE_GROUP_SYSTEM "System"
-#define FILE_KEY_SYSTEM_TEMPO "tempo"
-#define FILE_KEY_SYSTEM_MAINNOTE "mainnote"
-#define FILE_KEY_SYSTEM_SEQ_NUM "sequencers_number"
-#define FILE_KEY_SYSTEM_EVENTS_NUM "events_number"
-
-#define FILE_GROUP_TEMPLATE_SEQ "Seq %d"
-#define FILE_KEY_SEQ_RESOLUTION "resolution"
-#define FILE_KEY_SEQ_HANDLE "handle"
-#define FILE_KEY_SEQ_LENGTH "length"
-#define FILE_KEY_SEQ_ON "on"
-#define FILE_KEY_SEQ_APPLY_MAIN_NOTE "apply_mn"
-#define FILE_KEY_SEQ_CHANNEL "channel"
-#define FILE_KEY_SEQ_VELOCITY "volume"
-#define FILE_KEY_SEQ_NAME "name"
-#define FILE_KEY_SEQ_SEQUENCE "sequence"
-#define FILE_KEY_SEQ_PATTERNS_NUMBER "sequences_num"
-#define FILE_KEY_SEQ_ACTIVE_SEQUENCE "active_sequence"
-#define FILE_KEY_SEQ_PATTERN_TEMPLATE "sequence_%d" //God, it should be "pattern_%d". Too late to change, older files use "sequence".  Maybe in future a workaround will be found.
-#define FILE_KEY_SEQ_CHORD "chord"
-
-#define FILE_GROUP_TEMPLATE_EVENT "Event %d"
-#define FILE_KEY_EVENT_TYPE "type"
-#define FILE_KEY_EVENT_ARG1 "arg1"
-#define FILE_KEY_EVENT_ARG2 "arg2"
-#define FILE_KEY_EVENT_ACTIONS_NUM "actions"
-
-#define FILE_GROUP_TEMPLATE_EVENT_ACTION_TYPE "Action_%d_type"
-#define FILE_GROUP_TEMPLATE_EVENT_ACTION_ARGS "Action_%d_args"
-#define FILE_GROUP_TEMPLATE_EVENT_ACTION_CHORD "Action_%d_chord"
-**/
-
 
 #ifndef I_DO_NOT_WANT_EXTERNS_FROM_GLOBAL_H
 class Sequencer;
@@ -107,27 +72,25 @@ class MidiDriver;
 class MainWindow;
 class Event;
 class SettingsWindow;
-extern std::vector<Sequencer *> seqVector;
-extern bool midi_clock_enabled;
-extern int ports_number;
+
 extern int debugging;
-extern bool metronome;
-extern int metronome_counter;
 extern debug* dbg;
 extern error* err;
+
 extern MidiDriver* midi;
 extern MainWindow* mainwindow;
 extern SettingsWindow* settingswindow;
-extern int passing_midi;
+
 extern std::map<Glib::ustring, int> keymap_stoi;
 extern std::map<int, Glib::ustring> keymap_itos;
-extern std::vector<Event *> Events;
 extern std::map<int,Glib::ustring> notemap;
+
 extern Glib::RefPtr< Gdk::Pixbuf > harmonySEQ_logo_48;
 extern Glib::RefPtr< Gdk::Pixbuf > metronome_icon_24;
 extern Glib::RefPtr< Gdk::Pixbuf > icon_add_note_seq;
 extern Glib::RefPtr< Gdk::Pixbuf > icon_add_ctrl_seq;
 #endif
+
 /**Ask user a YES-NO question.*/
 bool Ask(Glib::ustring message, Glib::ustring secondary_message = "");
 /**Shows user a message.*/

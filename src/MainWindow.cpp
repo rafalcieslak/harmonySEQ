@@ -37,6 +37,8 @@
 #define TREEVIEW_COLOR_T_NOTE "lightblue"
 #define TREEVIEW_COLOR_T_CTRL "lightgray"
 
+extern std::vector<Sequencer *> seqVector;
+
 bool CtrlKeyDown;
 bool ShiftKeyDown;
 
@@ -48,16 +50,13 @@ MainWindow::MainWindow()
     set_name("mainwindow");
 
     set_border_width(0);
-    //set_resizable(0);
     set_default_size(950, 600);
     set_size_request(900, 450); //minimum size
-    //set_resizable(0);
     UpdateTitle();
 
     wTempoLabel.set_text(_("Tempo:"));
     add(wMainVBox);
 
-    // <editor-fold defaultstate="collapsed" desc="menus, actions and toolbar creation and initialisation">
     m_refActionGroup = Gtk::ActionGroup::create();
 
     m_refActionGroup->add(Gtk::Action::create("MenuFile",_("File")));
@@ -175,10 +174,9 @@ MainWindow::MainWindow()
     PlayPauseTool.set_is_important(1); // will display text text to the icon
     Gtk::Widget* pMetronome = m_refUIManager->get_widget("/ToolBar/Metronome");
     Gtk::ToggleToolButton& MetronomeTool = dynamic_cast<Gtk::ToggleToolButton&> (*pMetronome);
-    MetronomeTool.set_active(metronome);
+    MetronomeTool.set_active(false);
     Gtk::Widget* pMidiClock = m_refUIManager->get_widget("/ToolBar/MIDIClock");
     Gtk::ToggleToolButton& MidiClockTool = dynamic_cast<Gtk::ToggleToolButton&> (*pMidiClock);
-    MidiClockTool.set_active(midi_clock_enabled);
     Gtk::Widget* pSync = m_refUIManager->get_widget("/ToolBar/Sync");
     Gtk::ToolButton& SyncTool = dynamic_cast<Gtk::ToolButton&> (*pSync);
     Gtk::Widget* pTap = m_refUIManager->get_widget("/ToolBar/Tap");
@@ -191,7 +189,6 @@ MainWindow::MainWindow()
     Gtk::ToolItem& TempoTool = dynamic_cast<Gtk::ToolItem&> (*pTempo);
     Gtk::Widget* pTempoLabelTool = m_refUIManager->get_widget("/ToolBar/TempoLabel");
     Gtk::ToolItem& TempoLabelTool = dynamic_cast<Gtk::ToolItem&> (*pTempoLabelTool);
-    // </editor-fold>
 
     wMainVBox.pack_start(*pMenubar,Gtk::PACK_SHRINK);
     wMainVBox.pack_start(Toolbar,Gtk::PACK_SHRINK);
@@ -231,7 +228,7 @@ MainWindow::MainWindow()
     MidiClockTool.add(midi_clock_button);
     MidiClockTool.set_homogeneous(0);
     midi_clock_button.set_label(_("MIDI Clock"));
-    midi_clock_button.set_active(midi_clock_enabled);
+    midi_clock_button.set_active(midi->GetMidiClockEnabled());
     midi_clock_button.set_tooltip_markup(_("Toggles MIDI clock and start/stop messages output."));
     midi_clock_button.signal_toggled().connect(sigc::mem_fun(*this, &MainWindow::OnMIDIClockToggled));
 
@@ -654,13 +651,13 @@ void MainWindow::FlashTempo(){
 void MainWindow::OnPassToggleClicked(){
     Gtk::Widget* pPassToggle = m_refUIManager->get_widget("/MenuBar/MenuTools/PassMidiEvents");
     Gtk::CheckMenuItem& PassToggle = dynamic_cast<Gtk::CheckMenuItem&> (*pPassToggle);
-    passing_midi = PassToggle.get_active();
+    midi->SetPassMidiEvents(PassToggle.get_active());
 }
 
 void MainWindow::UpdatePassMidiToggle(){
     Gtk::Widget* pPassToggle = m_refUIManager->get_widget("/MenuBar/MenuTools/PassMidiEvents");
     Gtk::CheckMenuItem& PassToggle = dynamic_cast<Gtk::CheckMenuItem&> (*pPassToggle);
-    PassToggle.set_active(passing_midi);
+    PassToggle.set_active(midi->GetPassMidiEvents());
 }
 
 bool MainWindow::OnKeyPress(GdkEventKey* event){
@@ -719,29 +716,20 @@ void MainWindow::OnSelectionChanged(){
 void MainWindow::UpdatePlayPauseTool(){
     Gtk::Widget* pPlayPauseTool = m_refUIManager->get_widget("/ToolBar/PlayPauseTool");
     Gtk::ToolButton& PlayPauseTool = dynamic_cast<Gtk::ToolButton&> (*pPlayPauseTool);
-    switch (midi->GetPaused()){
-        case true:
-            PlayPauseTool.set_label(_("Play"));
-            PlayPauseTool.set_stock_id(Gtk::Stock::MEDIA_PLAY);
-            break;
-        case false:
-            PlayPauseTool.set_label(_("Pause"));
-            PlayPauseTool.set_stock_id(Gtk::Stock::MEDIA_PAUSE);
-            break;
+    if (midi->GetPaused()){
+        PlayPauseTool.set_label(_("Play"));
+        PlayPauseTool.set_stock_id(Gtk::Stock::MEDIA_PLAY);
+    }else{
+        PlayPauseTool.set_label(_("Pause"));
+        PlayPauseTool.set_stock_id(Gtk::Stock::MEDIA_PAUSE);
     }
-
 }
 
 void MainWindow::OnPlayPauseClicked(){
-
-     switch (midi->GetPaused()){
-        case true:
-            midi->ContinueQueue();
-            break;
-        case false:
-            midi->PauseQueueImmediately();
-            break;
-    }
+    if (midi->GetPaused())
+        midi->Unpause();
+    else
+        midi->PauseImmediately();
 }
 
 void MainWindow::OnAboutMenuClicked(){
@@ -955,8 +943,7 @@ void MainWindow::OnSyncClicked(){
 void MainWindow::OnMetronomeToggleClicked(){
     Gtk::Widget* pMetronome = m_refUIManager->get_widget("/ToolBar/Metronome");
     Gtk::ToggleToolButton& Metronome = dynamic_cast<Gtk::ToggleToolButton&> (*pMetronome);
-    metronome = Metronome.get_active();
-
+    midi->SetMetronome(Metronome.get_active());
 }
 
 void MainWindow::OnTapTempoClicked(){

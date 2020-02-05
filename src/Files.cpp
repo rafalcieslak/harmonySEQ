@@ -31,18 +31,19 @@
 #include "NoteAtom.h"
 #include "ControllerAtom.h"
 
+extern std::vector<Sequencer *> seqVector;
+
 namespace Files {
 
-     bool file_modified = false;
-    Glib::ustring file_name;
-    Glib::ustring file_dir;
+bool file_modified = false;
+Glib::ustring file_name;
+Glib::ustring file_dir;
 
+//Returns 1 if opening file succeeded, 0 elsewhere.
 bool fexists(const char *filename)
 {
-   //Trick used to tell whether a file exists.
-  ifstream ifile(filename);
-  //Returns 1 if opening file succeeded, 0 elsewhere.
-  return !ifile.fail();
+    std::ifstream ifile(filename);
+    return !ifile.fail();
 }
 
 bool SetFileModified(bool modified){
@@ -90,38 +91,25 @@ void LoadFileDialog(){
     //Hiding the dialog...
     dialog.hide();
 
-    //To avoid lag....
-    bool was_paused = false;
-    if (!midi->GetPaused()){
-        midi->PauseQueueImmediately();
-        was_paused = true;
-    }
-    //And depending on which button did the user choose
-    switch (result){
-        case Gtk::RESPONSE_OK:
-            //User clicked OK. Calling other procedure, that will load the file.
-            LoadFile(filename);
-            SetFileModified(0);
-            break;
-        case Gtk::RESPONSE_CANCEL:
-            //User clicked CANCEL. Do nothing.
-            if (was_paused) midi->ContinueQueue();
-            return;
-            break;
-        default:
-            //User uses cheat codes.
-            *dbg << "unknown response returned!\n";
-            if (was_paused) midi->ContinueQueue();
-            return;
-        break;
+    if (result == Gtk::RESPONSE_CANCEL)
+        return;
+    if (result != Gtk::RESPONSE_OK){
+        *err << "Unexpected dialog response: " << result << ENDL;
     }
 
+    // To avoid lag pause engine while file is being processed.
+    bool was_paused = midi->GetPaused();
+    if (!was_paused) midi->PauseImmediately();
+
+    LoadFile(filename);
+    SetFileModified(0);
+
     //Some things that must be done to update the GUI fully.
-    //mainwindow->InitTreeData();
+    //mainwindow->InitTreeData(); // TODO: Is this necessary?
     mainwindow->tempo_button.set_value(midi->GetTempo());
     mainwindow->UpdateEventWidget();
 
-    if (was_paused) midi->ContinueQueue();
+    if (!was_paused) midi->Unpause();
 }
 
 bool LoadFile(Glib::ustring file){
@@ -253,10 +241,10 @@ void SaveToFile(Glib::ustring filename){
     char temp2[300];
 
     //The output file stream we'll put the data into.
-    ofstream output_file;
+    std::ofstream output_file;
 
     //Trying to open the file, using Truncate mode.
-    output_file.open(filename.c_str(),ios_base::trunc);
+    output_file.open(filename.c_str(), std::ios_base::trunc);
 
     //If something went wrong...
     if(!output_file.good()){
@@ -307,7 +295,7 @@ void SaveToFile(Glib::ustring filename){
                 for (int s = 0; s < (int)seq->patterns.size(); s++) {
                     sprintf(temp2, "pattern_%d", s);
                     int notes = seq->patterns[s].GetSize();
-                    vector<double> S(notes * 4);
+                    std::vector<double> S(notes * 4);
                     for (int r = 0; r < notes; r++) {
                         NoteAtom* note = dynamic_cast<NoteAtom*>(seq->patterns[s][r]);
                         S[4*r] = note->time;
@@ -327,7 +315,7 @@ void SaveToFile(Glib::ustring filename){
                 for (int s = 0; s < (int) seq->patterns.size(); s++) {
                     sprintf(temp2, "pattern_%d", s);
                     int notes = seq->patterns[s].GetSize();
-                    vector<double> S(notes * 3);
+                    std::vector<double> S(notes * 3);
                     for (int r = 0; r < notes; r++) {
                         ControllerAtom* ctrl = dynamic_cast<ControllerAtom*> (seq->patterns[s][r]);
                         S[3 * r] = ctrl->time;
@@ -570,7 +558,7 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
                 //...and a chord, if any.
                 sprintf(temp2, "Action_%d_chord", a);
                 if (kfp->has_key(temp, temp2)) {
-                    vector<int> vec = kfp->get_integer_list(temp, temp2);
+                    std::vector<int> vec = kfp->get_integer_list(temp, temp2);
                     Events[x]->actions[a]->chord.SetFromVector(vec);
                 }
             }//next action.

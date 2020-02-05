@@ -94,9 +94,6 @@ void InitActionTypesTreeModel(){
     row = *(TreeModel_ActionTypes->append());
     row[m_columns_action_types.type] = Action::SYNC;
     row[m_columns_action_types.label] = _("Synchronize");
-    row = *(TreeModel_ActionTypes->append());
-    row[m_columns_action_types.type] = Action::TOGGLE_PASS_MIDI;
-    row[m_columns_action_types.label] = _("Toggle passing MIDI events");
 
 }
 
@@ -168,7 +165,7 @@ void InitNotesTreeModel(){
    /* Gtk::TreeModel::Row row = *(m_refTreeModel_Notes->append());
     row[m_columns_notes.note] = 12;
     row[m_columns_notes.name] = "C";*/
-    
+
 }
 void InitTriadModesTreeModel(){
     TreeModel_TriadModes = Gtk::ListStore::create(m_columns_IdAndName);
@@ -201,7 +198,7 @@ void InitChordGuitarModesTreeModel(){
     row = *(TreeModel_ChordGuitarModes->append());
     row[m_columns_IdAndName.id] = Chord::CHORD_GUITAR_MODE_M7;
     row[m_columns_IdAndName.name] = _("m7");
-    
+
 }
 
 void InitChordTypesTreeModel(){
@@ -229,4 +226,3 @@ void InitAllTreeModels(){
     InitChordTypesTreeModel();
     InitNotesTreeModel();
 }
-

@@ -24,6 +24,9 @@
 #include "messages.h"
 #include "MainWindow.h"
 
+// TODO: This data structure desperately needs a mutex.
+std::vector<Event *> Events;
+
 bool event_capturing_mode;
 Event* event_to_capture_to;
 
@@ -73,7 +76,7 @@ std::string Event::GetLabel(){
             break;
         case OSC:
             sprintf(temp,_("When OSC message '/harmonyseq/event i %d' is got..."),arg1);
-            
+
             break;
         default:
             sprintf(temp,_("Unknown event."));
@@ -92,7 +95,7 @@ void Event::Trigger(){
 #ifdef EVENTS_FLASH
     mainwindow->eventsWidget.ColorizeEvent(row_in_event_widget);
 #endif
-    
+
     for (unsigned int i = 0; i < actions.size(); i++){
         if (!actions[i]) continue; //it was removed
         actions[i]->Trigger();
@@ -143,7 +146,7 @@ void FindAndProcessEvents(Event::EventTypes ev,int arg1, int arg2){
                     break;
                 case Event::NONE:
                     *err << _("Error - empty event would be triggered.\n");
-                    
+
             }
 
         }

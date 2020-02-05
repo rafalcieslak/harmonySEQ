@@ -27,6 +27,9 @@
 #include "MainWindow.h"
 #include "global.h"
 
+extern std::vector<Sequencer *> seqVector;
+
+
 ActionGUI::ActionGUI(Action *prt)
 {
     //Set the pointer to point to the parent
@@ -40,7 +43,7 @@ ActionGUI::ActionGUI(Action *prt)
     chordwidget.on_apply_octave_toggled.connect(sigc::mem_fun(*this,&ActionGUI::OnApplyOctaveToogled));
     //window's title
     set_title(_("Action"));
- 
+
     set_border_width(5);
     set_position(Gtk::WIN_POS_CENTER_ON_PARENT);
     set_resizable(0);
@@ -137,17 +140,17 @@ ActionGUI::ActionGUI(Action *prt)
     ok_button.set_label(_("OK"));
     label_octave1.set_text(_("Transpose by "));
     label_octave2.set_text(_(" octave(s)."));
-    
+
     ok_button.signal_clicked().connect(mem_fun(*this,&ActionGUI::OnOKClicked));
 
     Types_combo.set_model(TreeModel_ActionTypes);
     Types_combo.pack_start(m_columns_action_types.label);
     SetTypeCombo(parent->type); //Setting the typecombo BEFORE connecting the signal is ESSENTIAL, since otherwise when the type in Types_combo is changed (by setting it to parent->type), it emits a signal
     Types_combo.signal_changed().connect(mem_fun(*this,&ActionGUI::OnTypeChanged));
-    
+
     m_ref_treemodel_allseqs = Gtk::ListStore::create(m_col_seqs);
     m_ref_treemodel_noteseqs = Gtk::ListStore::create(m_col_seqs);
-    
+
     AllSeqs_combo.set_model(m_ref_treemodel_allseqs);
     AllSeqs_combo.pack_start(m_col_seqs.name);
     AllSeqs_combo.signal_changed().connect(mem_fun(*this,&ActionGUI::OnAllSeqComboChanged));
@@ -218,7 +221,7 @@ void ActionGUI::OnChordWidgetNoteChanged(int n, int p){
 void ActionGUI::UpdateValues(){
     //For following: see we_are_copying_data_from_parent_action_so_do_not_handle_signals delaration.
     we_are_copying_data_from_parent_action_so_do_not_handle_signals = true;
-    SetTypeCombo(parent->type); 
+    SetTypeCombo(parent->type);
     ChangeVisibleLines();
     int type = parent->type;
     switch (type){
@@ -272,11 +275,10 @@ void ActionGUI::UpdateValues(){
                     play_TOGGLE.set_active(1);
                     break;
             }
+            break;
         case Action::SEQ_TRANSPOSE_OCTAVE:
             SetSeqCombos(parent->args[1]);
             octave_spinbutton.set_value(parent->args[2]);
-            break;
-        case Action::TOGGLE_PASS_MIDI:
             break;
         default:
             break;
@@ -343,14 +345,12 @@ void ActionGUI::ChangeVisibleLines(){
             NoteSeqs_combo.show();
             line_octave.show();
             break;
-        case Action::TOGGLE_PASS_MIDI:
-            break;
         default:
             break;
 
     }
     resize(2,2);
-    
+
 }
 
 void ActionGUI::OnTypeChanged(){
@@ -406,8 +406,6 @@ void ActionGUI::InitType(){
             play_TOGGLE.set_active(1); //it does not triggler signal_clicked, so we have to set the mode mannually!
             parent->args[1]=2;
             break;
-        case Action::TOGGLE_PASS_MIDI:
-            break;
         case Action::SEQ_TRANSPOSE_OCTAVE:
             NoteSeqs_combo.set_active(0);
             octave_spinbutton.set_value(1.0);
@@ -442,7 +440,7 @@ void ActionGUI::OnAllSeqComboChanged(){
     mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
 
     Files::SetFileModified(1);
-    
+
 }
 
 void ActionGUI::OnNoteSeqComboChanged(){
@@ -456,7 +454,7 @@ void ActionGUI::OnNoteSeqComboChanged(){
     mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
 
     Files::SetFileModified(1);
-    
+
 }
 
 void ActionGUI::OnNoteSeqChanged(){

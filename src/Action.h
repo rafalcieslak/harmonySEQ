@@ -46,7 +46,6 @@ public:
         /**1)seq 3) do not apply octave?*/
         SEQ_CHANGE_CHORD,
         SEQ_PLAY_ONCE,
-        TOGGLE_PASS_MIDI,
         /**1)mode: 0- off, 1 - on, 2 - toggle*/
         PLAY_PAUSE,
         SYNC,
@@ -61,7 +60,7 @@ public:
     Action(const Action& orig);
     virtual ~Action();
 
-    
+
 
     /**Keeps a reference to events TreeModel row (a child of an event). Useful f.e. for refreshing data in that row*/
     Gtk::TreeRowReference row_in_event_widget;
@@ -91,10 +90,10 @@ public:
 
     /**Refreshes chordwidget*/
     void GUIUpdateChordwidget();
-    
+
     /**Called when sequencer list changed, will update treemodels*/
     void GUISequencerListChanged();
-    
+
 private:
 
     /**The related GUI window.*/
@@ -102,4 +101,3 @@ private:
 };
 
 #endif	/* ACTION_H */
-

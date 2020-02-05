@@ -36,34 +36,21 @@ public:
 
     virtual ~MidiDriver();
 
+    /** Enters the main event loop. */
+    void Run();
 
-
-    /**Infinite loop, exiting when"running" variable is set to 0. Waits for any MIDI events on input, and calls ProcessInput() when something is on the input.*/
-    void LoopWhileWaitingForInput();
-
-    /**Runs the queue. Called on startup.  Warning: It's not unpausing, unpausing is implemented in ContinueQueue().*/
-    void StartQueue();
-
+    /** Requests the call to Run() to return */
+    void Stop();
 
     /**Stops playback - pauses the queue*/
-    void PauseQueueImmediately();
-
-    /**Stops playback on next bar. NOT YET IMPLEMENTED*/
-    void PauseOnNextBar();
-
-    /*Tell whether the queue is paused*/
-    bool GetPaused();
-
+    void PauseImmediately();
     /**Unpauses the queue*/
-    void ContinueQueue();
-
-
-    /**This routine gets called every time the ECHO event is received. It puts next set of notes (one bar long) into the queue, and puts next ECHO event to harmonySEQ itself, so it gets called consequently. */
-    void UpdateQueue();
+    void Unpause();
+    /** Tell whether the queue is paused*/
+    bool GetPaused();
 
     /**Stops all notes and updates queue IMMIDIATELLY*/
     void Sync();
-
 
     /**Outputs immediately a noteon*/
     void SendNoteOnEventImmediatelly(int channel, int pitch, int velocity);
@@ -73,15 +60,6 @@ public:
 
     /**Outputs a noteon and a noteoff after given time period.*/
     void SendNoteEvent(int channel, int pitch, int velocity, int duration);
-
-    /**Schedules a single note on the output queue.*/
-    void ScheduleNote(int channel, int tick_time, int pitch, int velocity, int length);
-    /**Schedules a single MIDI control event on the output queue.*/
-    void ScheduleCtrlEventSingle(int channel, int tick_time, int ctrl_no, int value);
-    /**Schedules a set of MIDI controller events on the output queue, so that to emulate a linear slope.*/
-    void ScheduleCtrlEventLinearSlope(int channel, int ctrl_no, int start_tick_time, int start_value, int end_tick_time, int end_value);
-
-    void ScheduleDiodeEvent(DiodeType type, seqHandle handle, int tick_time, double time, int value, int color, int max_res = 0);
 
     /** Immediatelly send MIDI start/stop messages. **/
     void SendStop();
@@ -93,11 +71,38 @@ public:
 
     void TapTempo();
 
-    /** Enables MIDI Clock output **/
-    void SetMidiClockEnabled(bool enabled);
+    /** Enables or disables metronome output. */
+    /** These methods can be safely called from other threads. */
+    void SetMetronome(bool enabled);
+    bool GetMetronome();
 
-    /**Ends all note events (send noteoffs)*/
-    void AllNotesOff();
+    /** Enables or disables MIDI clock output. */
+    /** These methods can be safely called from other threads. */
+    void SetMidiClockEnabled(bool enabled);
+    bool GetMidiClockEnabled();
+
+    /** Enables or disables MIDI event passing through harmonySEQ. */
+    /** These methods can be safely called from other threads. */
+    void SetPassMidiEvents(bool enabled);
+    bool GetPassMidiEvents();
+
+    /** Enables or disables diode event emitting. */
+    /** These methods can be safely called from other threads. */
+    void SetDiodesEnabled(bool disabled);
+    bool GetDiodesEnabled();
+
+private:
+    /**Infinite loop, exiting when"running" variable is set to 0. Waits for any MIDI events on input, and calls ProcessInput() when something is on the input.*/
+    void LoopWhileWaitingForInput();
+
+    /**Called every time there are MIDI events on input, this procedure processes them; no need to call it from anywhere else*/
+    void ProcessInput();
+
+    /**Runs the queue. Called on startup.  Warning: It's not unpausing, unpausing is implemented in ContinueQueue().*/
+    void StartQueue();
+
+    /**This routine gets called every time the ECHO event is received. It puts next set of notes (one bar long) into the queue, and puts next ECHO event to harmonySEQ itself, so it gets called consequently. */
+    void UpdateQueue();
 
     /**Removes all events from queue, except noteoffs*/
     void ClearQueue(bool remove_noteoffs = 0);
@@ -105,13 +110,23 @@ public:
     /**Closes and removes queue*/
     void DeleteQueue();
 
-    /** Enters the main event loop. */
-    void Run();
+    /**Ends all note events (send noteoffs)*/
+    void AllNotesOff();
 
-    /** Requests the call to Run() to return */
-    void Stop();
+    /**Opens the sequencer MIDI ports, activates the driver.*/
+    void Open();
 
-private:
+    /**Inits Queue*/
+    void InitQueue();
+
+    /**Schedules a single note on the output queue.*/
+    void ScheduleNote(int channel, int tick_time, int pitch, int velocity, int length);
+    /**Schedules a single MIDI control event on the output queue.*/
+    void ScheduleCtrlEventSingle(int channel, int tick_time, int ctrl_no, int value);
+    /**Schedules a set of MIDI controller events on the output queue, so that to emulate a linear slope.*/
+    void ScheduleCtrlEventLinearSlope(int channel, int ctrl_no, int start_tick_time, int start_value, int end_tick_time, int end_value);
+    /** Schedules a Diode callback event. */
+    void ScheduleDiodeEvent(DiodeType type, seqHandle handle, int tick_time, double time, int value, int color, int max_res = 0);
 
     /**ALSA MIDI sequencer's handle*/
     snd_seq_t* seq_handle;
@@ -141,11 +156,18 @@ private:
      * @parram ev an event to pass*/
     void PassEvent(snd_seq_event_t *ev);
 
-    /**Opens the sequencer MIDI ports, activates the driver.*/
-    void Open();
+    /** Controls metronome event output. */
+    std::atomic<bool> metronome;
+    int metronome_counter = 0;
 
-    /**Inits Queue*/
-    void InitQueue();
+    /** Controls MIDI clock output. */
+    std::atomic<bool> midi_clock_enabled;
+
+    /** Controls MIDI event passthrough. */
+    std::atomic<bool> passing_midi_events;
+
+    /** Used to optionally disables diode event processing. */
+    std::atomic<bool> diodes_enabled;
 
 
     int diode_event_id_next;
@@ -155,10 +177,6 @@ private:
 
     /**Returns queue's current tick*/
     snd_seq_tick_time_t GetTick();
-
-
-    /**Called every time there are MIDI events on input, this procedure processes them; no need to call it from anywhere else*/
-    void ProcessInput();
 
 };
 

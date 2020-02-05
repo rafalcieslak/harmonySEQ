@@ -17,9 +17,7 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifdef __linux__
 #include <alsa/asoundlib.h>
-#endif
 #include "global.h"
 #include "MidiDriver.h"
 #include "messages.h"
@@ -32,11 +30,14 @@
 #include "SequencerWidget.h"
 #include "NoteAtom.h"
 
-extern bool diodes_disabled;
+extern std::vector<Sequencer *> seqVector;
 
 MidiDriver::MidiDriver() {
-    paused = false; //and it's not paused at start
+    paused = false;
     running = false;
+    metronome = false;
+    midi_clock_enabled = true;
+    diodes_enabled = true;
 
     for(int i = 0; i < 30; i++)
         tap_times.push_front(0.0);
@@ -58,8 +59,6 @@ MidiDriver::~MidiDriver() {
 bool MidiDriver::GetPaused(){
     return paused;
 }
-
-#ifdef __linux__                                            /*Linux-specific implementation below.*/
 
 void MidiDriver::Run() {
     // Set running flag to true, but return if it was already set.
@@ -96,12 +95,9 @@ void MidiDriver::LoopWhileWaitingForInput(){
     pfd = (struct pollfd*)alloca(npfd*sizeof(struct pollfd*));
     snd_seq_poll_descriptors(seq_handle,pfd,npfd,POLLIN);
 
-    while(running == 1){
+    while(running == 1)
         if (poll(pfd,npfd,1000)>0)
-            //*dbg << "w00t! an event got!\n";
             ProcessInput();
-    };
-
 }
 
 void MidiDriver::Open(){
@@ -235,7 +231,7 @@ void MidiDriver::ScheduleCtrlEventLinearSlope(int channel, int ctrl_no, int star
 }
 
 void MidiDriver::ScheduleDiodeEvent(DiodeType type, seqHandle handle, int tick_time, double time, int value, int color, int max_res){
-    if(diodes_disabled) return;
+    if(!diodes_enabled) return;
     DiodeMidiEvent diodeev(type,time,value,color,max_res);
     diode_events.insert(std::pair<int,DiodeMidiEvent>(diode_event_id_next,diodeev));
 
@@ -278,7 +274,7 @@ void MidiDriver::SetTempo(double bpm){
     snd_seq_queue_tempo_free(queue_tempo);
 }
 
-double MidiDriver::GetTempo() {
+double MidiDriver::GetTempo(){
     return tempo;
 }
 
@@ -309,11 +305,31 @@ void MidiDriver::TapTempo(){
     tap_times.push_front(now);
 }
 
+void MidiDriver::SetMetronome(bool enabled){
+    metronome = enabled;
+}
+
+bool MidiDriver::GetMetronome(){
+    return metronome;
+}
+
 void MidiDriver::SetMidiClockEnabled(bool enabled){
     midi_clock_enabled = enabled;
 }
 
-void MidiDriver::PauseQueueImmediately(){
+bool MidiDriver::GetMidiClockEnabled(){
+    return midi_clock_enabled;
+}
+
+void MidiDriver::SetPassMidiEvents(bool enabled){
+    passing_midi_events = enabled;
+}
+
+bool MidiDriver::GetPassMidiEvents(){
+    return passing_midi_events;
+}
+
+void MidiDriver::PauseImmediately(){
     //Pause the queue
     snd_seq_stop_queue(seq_handle,queueid,NULL);
     snd_seq_drain_output(seq_handle);
@@ -334,17 +350,13 @@ void MidiDriver::PauseQueueImmediately(){
         });
 }
 
-void MidiDriver::PauseOnNextBar(){
-    *err << "Pausing on next bar is not yet implemented.\n";
-}
-
 void MidiDriver::Sync(){
     snd_seq_drop_output(seq_handle);
-    PauseQueueImmediately();
+    PauseImmediately();
     // Reset sequencer progress
     for (Sequencer* seq: seqVector)
         seq->play_from_here_marker = 0;
-    ContinueQueue();
+    Unpause();
     *dbg << "Sync complete.\n";
 }
 
@@ -359,15 +371,13 @@ snd_seq_tick_time_t MidiDriver::GetTick() {
 }
 
 
-void MidiDriver::ContinueQueue(){
+void MidiDriver::Unpause(){
 
     //Clear the queue, INCLUDING NOTEOFFS (1).
     ClearQueue(1);
     //AllNotesOff(); // here: NOT! might cause artefacts.
     //Sync the tick
     tick = GetTick();
-
-    metronome_counter = 0;
 
     if(midi_clock_enabled) SendStart();
 
@@ -384,6 +394,7 @@ void MidiDriver::ContinueQueue(){
     paused = false;
     *dbg << "Queue unpaused!\n";
 
+    // TODO: Use signals here and have mainwindow set up its own subscription.
     Glib::signal_idle().connect(
         [=](){
             //Indicate graphically a starting bar
@@ -680,20 +691,21 @@ void MidiDriver::UpdateQueue(){
 
 
 void MidiDriver::ProcessInput(){
-
     snd_seq_event_t * ev;
     int h, id;
     std::map<int,DiodeMidiEvent>::iterator it;
     DiodeMidiEvent diodev(DIODE_TYPE_NOTE,0,0,0);
 
-        //Do while there is anything in the input
-        do {
+    //Do while there is anything in the input
+    do {
         //Obtain the event from input
         snd_seq_event_input(seq_handle,&ev);
-        //If we are in passing_midi mode, do pass the event (Well,  unless it's the ECHO, which MUST be caught).
-        if(passing_midi&&ev->type!=SND_SEQ_EVENT_ECHO&&ev->type!=SND_SEQ_EVENT_USR0) {PassEvent(ev);continue;}
+        // If we are in MIDI passthrough mode, pass the event (Well, unless it's the ECHO, which MUST be caught).
+        if(passing_midi_events && ev->type!=SND_SEQ_EVENT_ECHO && ev->type!=SND_SEQ_EVENT_USR0) {
+            PassEvent(ev);
+            continue;
+        }
 
-        //int i, c;
         //Switch, according to the type.
         switch (ev->type){
             case SND_SEQ_EVENT_NOTEON:
@@ -780,32 +792,3 @@ void MidiDriver::ProcessInput(){
     }while (snd_seq_event_input_pending(seq_handle,0)>0);
 
 }
-#else
-#ifdef __WIN32 /*both 32 and 64-bit enviroments*/
-
-
-
-
-
-
-
-    /* The midi driver for Windows shall go
-        *
-        *    H
-        *    E
-        *    R
-        *    E
-        *
-        */
-
-
-
-
-
-
-#else
-
-#error Neither Linux nor Windows, sorry.
-
-#endif
-#endif

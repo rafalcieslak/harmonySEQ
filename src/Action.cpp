@@ -26,6 +26,8 @@
 #include "ActionGUI.h"
 #include "Event.h"
 
+extern std::vector<Sequencer *> seqVector;
+
 Action::Action(ActionTypes t, int a1, int a2){
     args.resize(ACTION_ARGS_NUM);
     type = t;
@@ -100,25 +102,21 @@ void Action::Trigger(int data){
             mainwindow->RefreshRow(seqH(args[1])->my_row);
             if(mainwindow->seqWidget.selectedSeq == args[1]) mainwindow->seqWidget.UpdateOnOff();
             break;
-        case TOGGLE_PASS_MIDI:
-            passing_midi = !passing_midi;
-            mainwindow->UpdatePassMidiToggle();
-            break;
         case NONE:
             *dbg << "empty event triggered\n";
             break;
         case PLAY_PAUSE:
             switch(args[1]){
                 case 0: //just pause
-                    midi->PauseQueueImmediately();
+                    midi->PauseImmediately();
                     break;
                 case 1: //just play
                     if(!midi->GetPaused()) break; //if it is already playing, do not call Sync().
-                    midi->ContinueQueue();
+                    midi->Unpause();
                     break;
                 case 2: //toggle
-                    if (midi->GetPaused()) { midi->ContinueQueue();}
-                    else midi->PauseQueueImmediately();
+                    if (midi->GetPaused()) { midi->Unpause();}
+                    else midi->PauseImmediately();
                     break;
             }
             break;
@@ -177,9 +175,6 @@ Glib::ustring Action::GetLabel(){
             break;
         case SEQ_PLAY_ONCE:
             sprintf(temp,_("Play sequence in '%s' once"),GetSeqName(args[1]).c_str());
-            break;
-        case TOGGLE_PASS_MIDI:
-            sprintf(temp,_("Toggle passing MIDI events"));
             break;
         case PLAY_PAUSE:
             switch (args[1]){

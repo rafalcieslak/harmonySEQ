@@ -28,7 +28,10 @@
 extern debug *dbg;
 
 extern MainWindow* mainwindow;
-extern vector<Sequencer *> seqVector;
+
+// TODO: This structure desparately needs a manager class, with a
+// mutex guard, and access methods.
+std::vector<Sequencer *> seqVector;
 
 Gtk::TreeModel::Row spawn_sequencer(SeqType_t type){
     switch(type){

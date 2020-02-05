@@ -46,7 +46,7 @@ int pause_handler(const char *path, const char *types, lo_arg **argv,
 {
     *dbg << "OSC: pause signal got.\n";
     if (midi->GetPaused() == 0)
-        midi->PauseQueueImmediately();
+        midi->PauseImmediately();
     return 0;
 }
 int unpause_handler(const char *path, const char *types, lo_arg **argv,
@@ -54,7 +54,7 @@ int unpause_handler(const char *path, const char *types, lo_arg **argv,
 {
     *dbg << "OSC: unpause signal got.\n";
     if (midi->GetPaused() == 1)
-        midi->ContinueQueue();
+        midi->Unpause();
     return 0;
 }
 

@@ -21,6 +21,8 @@
 #include "global.h"
 #include "messages.h"
 
+extern std::vector<Sequencer *> seqVector;
+
 std::map<seqHandle, int> seqHandlesMap;
 unsigned int handlecounter = 1;
 
@@ -51,13 +53,13 @@ Sequencer* seqV(int id){
         return seqVector[id];
     }else
         return NULL;
-    
+
 }
 
 seqHandle RequestNewSeqHandle(int ID){
     unsigned int h = handlecounter;
     handlecounter++;
-    
+
     seqHandlesMap[h] = ID;
     return h;
 }
@@ -99,7 +101,7 @@ void UpdateSeqHandlesAfterMoving(int from, int to){
             if (it->second < from && it->second >= to) it->second++;
             else if (it->second == from) it->second = to;
         }
-        
+
     }
     PrintHandlesMap();
 }

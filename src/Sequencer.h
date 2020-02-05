@@ -24,7 +24,6 @@
 #include <gtkmm.h>
 #include "seqHandle.h"
 #include "AtomContainer.h"
-using namespace std;
 
 enum SeqType_t{
     SEQ_TYPE_NOTE,
@@ -57,7 +56,7 @@ public:
     /**List of  patterns.
      *    Each pattern is an AtomContainer, which basically
      *    is a list of notes */
-    vector<AtomContainer> patterns;
+    std::vector<AtomContainer> patterns;
 
     /**Appends a new pattern.*/
     int AddPattern();

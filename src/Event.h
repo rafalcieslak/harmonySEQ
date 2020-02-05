@@ -29,6 +29,10 @@ class Event;
 extern bool event_capturing_mode;
 extern Event* event_to_capture_to;
 
+class Event;
+
+extern std::vector<Event *> Events;
+
 class Event {
 public:
     Event();
@@ -39,8 +43,8 @@ public:
         NONE = 0,        //no arguments
         KEYBOARD = 1,    //keyboard key code
         NOTE = 2,        //note pitch, channel [0 - all]
-        CONTROLLER = 3  //ctrl num, channel [0 - all]
-        ,OSC = 4 //tag
+        CONTROLLER = 3,  //ctrl num, channel [0 - all]
+        OSC = 4,         //tag
     };
 
     int type;
@@ -79,4 +83,3 @@ bool FindAndProcessEventsKeyPress(GdkEventKey* event);
 /**Removes all events, clears whole list*/
 void ClearEvents();
 #endif	/* EVENT_H */
-
