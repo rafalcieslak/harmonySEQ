@@ -25,9 +25,12 @@
 
 #include <lo/lo.h>
 
-/*Starts OSC server and inits it*/
-void InitOSC();
- 
+/* TODO: Does this mechanism deserve a class? */
+
+/* Prepares and runs OSC server thread. */
+void RunOSCThread();
+/* Stops and joins the OSC server thread. */
+void StopOSCThead();
 
 #endif /*DISABLE_OSC*/
 

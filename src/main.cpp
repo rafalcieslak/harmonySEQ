@@ -39,13 +39,11 @@ vector<Sequencer *> seqVector;
 vector<Event *> Events;
 bool midi_clock_enabled = true;
 int ports_number;
-int running = 1; //states, whether the application is running. When it's changed to 0, all infinite loops in background break, and the whole program closes.
 debug* dbg; //the stream-like objects responsible of putting messages into stdio
 error* err;     //see above
 MidiDriver* midi;
 MainWindow* mainwindow;
 SettingsWindow* settingswindow;
-    threadb* Th;
 int passing_midi; //states whether all midi events are passed through, or not.
 Glib::ustring file;
 std::map<Glib::ustring, int> keymap_stoi; //map used for keyname -> id conversion
@@ -134,34 +132,6 @@ void print_help(){
     printf("\n");
 }
 
-threadb::threadb() {
-}
-
-threadb::~threadb() {
-}
-
-/**The function that is run, when thread 1 starts.
-  **Thread 1 is responsible for midi i/o */
-void threadb::th1(){
-    *dbg << "th1 started\n";
-    //preparing the queue...
-    midi->StartQueue();
-    //initial call, puts the first ECHO event, to make sure the loop will loop.
-    midi->UpdateQueue();
-    //go into infinite loop (while running = 1)
-    midi->LoopWhileWaitingForInput();
-}
-
-/**The function that is run, when thread 2 starts.
-  **Thread 2 passec control to GTK, which makes it responsble for the GUI. */
-void threadb::th2(){
-    *dbg << "th2 started\n";
-    gdk_threads_enter();
-    //Pass control to gtk.
-    Gtk::Main::run(*mainwindow);
-    gdk_threads_leave();
-}
-
 std::string DetermineDataPath() {
   std::string test_file = "style/harmonySEQ.css";
   std::vector<std::string> candidates = {
@@ -221,16 +191,12 @@ int main(int argc, char** argv) {
     // If this fails, harmonySEQ must not have been installed correctly.
     std::string data_path = DetermineDataPath();
 
-    running = 1;        //the program IS running
     debugging = 0;      //by default
     help = 0;           //by default
     ports_number = 1;   //by default
     passing_midi = 0;   //by default
     metronome = 0; //by default
     err = new error();  //error stream is never quiet! so we open it, not caring about what we got in arguments
-
-    //Start thread class...
-    Th = new threadb;
 
     //Now, parse the arguments.
     char c, temp[100];
@@ -282,13 +248,10 @@ int main(int argc, char** argv) {
     bool file_from_cli = false;
     if (argc>optind){ file = argv[optind];file_from_cli=1;}
 
-    //Initializing GTK.
-    Glib::thread_init();
-    gdk_threads_init();
-    Gtk::Main kit(argc, argv);
+    // Initialize GTK
+    Gtk::Main gtk_main(argc, argv);
 
-    //Initing the driver...
-    //create the midi driver
+    // Initialize the MIDI driver...
     midi = new MidiDriver();
 
     //...the maps...
@@ -304,62 +267,59 @@ int main(int argc, char** argv) {
     EnableCSSProvider(data_path);
 
     //...configuration...
-    gdk_threads_enter();
     Config::LoadDefaultConfiguration();
     Config::LoadFromFile();
     Config::SaveToFile();
     if(Config::Interaction::DisableDiodes) diodes_disabled = 1;
     else diodes_disabled = 0;
-    gdk_threads_leave();
 
     //...GUI...  Sequencer and UI logic is so intertangled, we must
     // initialize the GUI before any sequencer or even is created.
-    gdk_threads_enter();
     mainwindow = new MainWindow;
     settingswindow = new SettingsWindow;
-    gdk_threads_leave();
-
-    //...and the OSC server.
-#ifndef DISABLE_OSC
-    InitOSC();
-#endif /*DISABLE_OSC*/
 
     //Here we init the filename, if it's empty, it means the file was not yet saved
     Files::file_name = "";
 
     //Trying to open file...
-    if (file_from_cli) {
-        gdk_threads_enter(); //locking the threads. Loading file MAY ASK!!
-        bool x = Files::LoadFile(file);
-        gdk_threads_leave();
-    }
+    if (file_from_cli)
+        Files::LoadFile(file);
 
     //Initing trees in both windows.
     mainwindow->InitTreeData();
     mainwindow->UpdateEventWidget();
 
+    // Quit GTK main loop when main window is closed.
+    mainwindow->on_quit_request.connect([&](){gtk_main.quit();});
+
     //And creating both threads.
-    Glib::Thread::create(sigc::mem_fun(*Th, &threadb::th1), 0,true,1,Glib::THREAD_PRIORITY_URGENT);
-    Glib::Thread::create(sigc::mem_fun(*Th, &threadb::th2),0, true,1,Glib::THREAD_PRIORITY_LOW);
+    std::thread engine_thread([](){midi->Run();});
+    std::thread ui_thread([](){Gtk::Main::run(*mainwindow);});
+    //...and the OSC server.
+#ifndef DISABLE_OSC
+    RunOSCThread();
+#endif
 
-    //Wait for signal to exit the program
-    while (running == 1)
-        usleep(10000);
+    // Wait as long as the UI is running.
+    ui_thread.join();
 
-    *dbg << "ending the program...\n";
+    // Request engine thread to stop.
+    midi->Stop();
 
-    gdk_threads_enter();//to ensure thread safety...
-
-    if (midi != NULL) { //maybe we are ending the program before midi driver was constructed
-        midi->ClearQueue();
-        sleep(1); //giving it some time, for the noteoffs that are left on
-        midi->AllNotesOff();
-        midi->DeleteQueue();
-    }
-    delete mainwindow;
-    delete midi;
-    delete dbg;
-    delete err;
+    // Join remaining threads
+    engine_thread.join();
+#ifndef DISABLE_OSC
+    StopOSCThead();
+#endif
 
     return 0;
+}
+
+
+void engine_thread(){
+    midi->Run();
+}
+
+void ui_thread(){
+    Gtk::Main::run(*mainwindow);
 }

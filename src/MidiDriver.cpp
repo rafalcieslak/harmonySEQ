@@ -32,12 +32,11 @@
 #include "SequencerWidget.h"
 #include "NoteAtom.h"
 
-extern int running;
 extern bool diodes_disabled;
 
 MidiDriver::MidiDriver() {
-    working = false; //at the beggining the driver is not active, it isn't working
     paused = false; //and it's not paused at start
+    running = false;
 
     for(int i = 0; i < 30; i++)
         tap_times.push_front(0.0);
@@ -62,12 +61,30 @@ bool MidiDriver::GetPaused(){
 
 #ifdef __linux__                                            /*Linux-specific implementation below.*/
 
+void MidiDriver::Run() {
+    // Set running flag to true, but return if it was already set.
+    if (running.exchange(true)) return;
+    // Initialize queue...
+    midi->StartQueue();
+    // initial call, puts the first ECHO event, to make sure the loop will loop.
+    midi->UpdateQueue();
+    // go into infinite loop (while running = 1)
+    midi->LoopWhileWaitingForInput();
+    // Clean up after we are done.
+    midi->ClearQueue();
+    midi->AllNotesOff();
+    midi->DeleteQueue();
+}
+
+void MidiDriver::Stop() {
+    running = false;
+}
+
 void MidiDriver::StartQueue(){
     //Runs the queue. Warning: It's not unpausing, unpausing is implemented in ContinueQueue().
     *dbg << "The queue is starting!\n";
     snd_seq_start_queue(seq_handle,queueid,NULL);
     snd_seq_drain_output(seq_handle);
-
 }
 
 
@@ -80,9 +97,9 @@ void MidiDriver::LoopWhileWaitingForInput(){
     snd_seq_poll_descriptors(seq_handle,pfd,npfd,POLLIN);
 
     while(running == 1){
-    if (poll(pfd,npfd,1000)>0)
-        //*dbg << "w00t! an event got!\n";
-        ProcessInput();
+        if (poll(pfd,npfd,1000)>0)
+            //*dbg << "w00t! an event got!\n";
+            ProcessInput();
     };
 
 }
@@ -123,8 +140,6 @@ void MidiDriver::Open(){
     //Increase pool size for greater kernel buffer
     snd_seq_set_client_pool_output(seq_handle,2000);
 
-    //If we got so far, then it seems everything gone well and we have now working sequencer ports.
-    working = true;
     *dbg << _("Alsa midi driver init successfull.\n");
 }
 
@@ -186,38 +201,23 @@ void MidiDriver::SendNoteEvent(int channel, int pitch, int velocity, int duratio
 }
 
 void MidiDriver::ScheduleNote(int channel, int tick_time, int pitch, int velocity, int length){
-    //Glib::Timer T;
-    //unsigned long int t;
-
-    //printf("ScheduleNote %d (%d) %d %d %d\n", channel, tick_time, pitch, velocity, length);
-        snd_seq_event_t ev;
-        //Create a new event (clear it)...
-        snd_seq_ev_clear(&ev);
-        //Fill it with note data
-        snd_seq_ev_set_note(&ev, channel, pitch, velocity, length);
-        //Schedule it in appropriate moment in time (rather: tick, not time), putting it on a queue
-        snd_seq_ev_schedule_tick(&ev, queueid, 0, tick_time);
-        //Direct it ti output port, to all it's subscribers
-        snd_seq_ev_set_source(&ev, output_port);
-        snd_seq_ev_set_subs(&ev);
-        //Output the event (but it stays at the queue.)
-        snd_seq_event_output(seq_handle, &ev);
-   // T.elapsed(t);if(t>1000) *err << "Warning: sending note took more than 1ms (" <<(int) t << " us)." << ENDL;
+    snd_seq_event_t ev;
+    snd_seq_ev_clear(&ev);
+    snd_seq_ev_set_note(&ev, channel, pitch, velocity, length);
+    snd_seq_ev_schedule_tick(&ev, queueid, 0, tick_time);
+    snd_seq_ev_set_source(&ev, output_port);
+    snd_seq_ev_set_subs(&ev);
+    snd_seq_event_output(seq_handle, &ev);
 }
 
 void MidiDriver::ScheduleCtrlEventSingle(int channel, int tick_time, int ctrl_no, int value){
-    //Glib::Timer T;
-    //unsigned long int t;
     snd_seq_event_t ev;
     snd_seq_ev_clear(&ev);
-
     snd_seq_ev_set_controller(&ev, channel, ctrl_no, value);
     snd_seq_ev_schedule_tick(&ev, queueid, 0, tick_time);
     snd_seq_ev_set_source(&ev, output_port);
     snd_seq_ev_set_subs(&ev);
-
     snd_seq_event_output(seq_handle, &ev);
-    //T.elapsed(t);if(t>1000) *err << "Warning ctrl event took more than 1ms (" << (int)t << " us)." << ENDL;
 }
 
 void MidiDriver::ScheduleCtrlEventLinearSlope(int channel, int ctrl_no, int start_tick_time, int start_value, int end_tick_time, int end_value){
@@ -228,10 +228,10 @@ void MidiDriver::ScheduleCtrlEventLinearSlope(int channel, int ctrl_no, int star
     int sign = (steps>0)?1:-1;
     if(steps != 0)
         for(int x = 0; x <= abs_steps; x++){
-                ScheduleCtrlEventSingle(channel,start_tick_time+sign*x*time/steps,ctrl_no,start_value+sign*x);
+            ScheduleCtrlEventSingle(channel,start_tick_time+sign*x*time/steps,ctrl_no,start_value+sign*x);
         }
     else
-                ScheduleCtrlEventSingle(channel,start_tick_time,ctrl_no,start_value);
+        ScheduleCtrlEventSingle(channel,start_tick_time,ctrl_no,start_value);
 }
 
 void MidiDriver::ScheduleDiodeEvent(DiodeType type, seqHandle handle, int tick_time, double time, int value, int color, int max_res){
@@ -254,15 +254,10 @@ void MidiDriver::ScheduleDiodeEvent(DiodeType type, seqHandle handle, int tick_t
 }
 
 void MidiDriver::PassEvent(snd_seq_event_t* ev){
-    *dbg << "passing an event...";
-    //Direct the event to output port, to it's all subsctibers
     snd_seq_ev_set_source(ev,output_port);
     snd_seq_ev_set_subs(ev);
     snd_seq_ev_set_direct(ev);
-    //And output immidiatelly - do not push into the queue.
     snd_seq_event_output_direct(seq_handle,ev);
-    //snd_seq_drain_output(seq_handle);
-
 }
 
 void MidiDriver::InitQueue(){
@@ -327,16 +322,14 @@ void MidiDriver::PauseQueueImmediately(){
 
     //Turn all notes off
     AllNotesOff();
-    //Remember the state
     paused = true;
+
     *dbg << "Queue paused!\n";
 
     Glib::signal_idle().connect(
         [=](){
             //Choose an icon/label for the toggle in the main window
             mainwindow->UpdatePlayPauseTool();
-            //All diodes off...
-            //mainwindow->seqWidget.Diodes_AllOff();
             return false;
         });
 }
@@ -356,14 +349,13 @@ void MidiDriver::Sync(){
 }
 
 snd_seq_tick_time_t MidiDriver::GetTick() {
-    //Not much to explain, that's just a constant formule to get the current tick on the queue.
-  snd_seq_queue_status_t *status;
-  snd_seq_tick_time_t current_tick;
-  snd_seq_queue_status_malloc(&status);
-  snd_seq_get_queue_status(seq_handle, queueid, status);
-  current_tick = snd_seq_queue_status_get_tick_time(status);
-  snd_seq_queue_status_free(status);
-  return(current_tick);
+    snd_seq_queue_status_t *status;
+    snd_seq_tick_time_t current_tick;
+    snd_seq_queue_status_malloc(&status);
+    snd_seq_get_queue_status(seq_handle, queueid, status);
+    current_tick = snd_seq_queue_status_get_tick_time(status);
+    snd_seq_queue_status_free(status);
+    return(current_tick);
 }
 
 
@@ -429,7 +421,6 @@ void MidiDriver::DeleteQueue(){
 
 void MidiDriver::AllNotesOff(){
     snd_seq_event_t ev;
-
     for (int ch = 0; ch < 16; ch++){
         snd_seq_ev_clear(&ev);
         snd_seq_ev_set_source(&ev,output_port);
@@ -452,19 +443,17 @@ double RoundTimeDouble(double marker){
 }
 
 void MidiDriver::UpdateQueue(){
-
     snd_seq_event_t ev;
     Sequencer* seq;
     double real_time = GetRealTime();
 
-   //send ECHO event to harmonySEQ itself, so it will be notified when the bar finishes, and new notes must be put on the queue.
-   //sending the ECHO event takes place before all the notes, just in case the buffer is to small - to avoid dropping the echo event
+    // send ECHO event to harmonySEQ itself, so it will be notified when the bar finishes, and new notes must be put on the queue.
+    // sending the ECHO event takes place before all the notes, just in case the buffer is to small - to avoid dropping the echo event
     snd_seq_ev_clear(&ev);
     ev.type = SND_SEQ_EVENT_ECHO;
     snd_seq_ev_schedule_tick(&ev,queueid,0,tick+TICKS_PER_BEAT);
     snd_seq_ev_set_dest(&ev,snd_seq_client_id(seq_handle),input_port); //here INPUT_PORT is used, so the event will be send just to harmonySEQ itself.
     snd_seq_event_output_direct(seq_handle,&ev);
-    // snd_seq_free_event(&ev);
 
     if(midi_clock_enabled) {
         unsigned int clock_every_n_ticks = TICKS_PER_BEAT/MIDI_PPQ;
@@ -546,23 +535,13 @@ void MidiDriver::UpdateQueue(){
 
             //ok, now find the s and e.
             if(size != 0){//ensure there are any notes
-                int X = -1;
-                while(1){
-                    X++;
-                    // if(seq->GetPlayOncePhase() == 2 && X == size) {
-                    //     printf("Ending A\n");
-                    //     seq->SetPlayOncePhase(3);
-                    //     break;
-                    // }
+                for(int X = 0; true; X++){
                     //*err << "at note " << X << ", X/size = " << X/size << ENDL;
                     Atom* atm = ((*pattern)[X%size]);
                     if(atm->time + (X/size)*1.0 >= start_marker && s == -1) s = X ;
                     if(atm->time + (X/size)*1.0 < end_marker) e = X;
                     if(atm->time + (X/size)*1.0 >= end_marker) break;
                 }
-            }else{
-                //if empty thing was played once...
-                // if(seq->GetPlayOncePhase() == 2) seq->SetPlayOncePhase(3);
             }
 
 
@@ -667,29 +646,23 @@ void MidiDriver::UpdateQueue(){
     //Also, playback the metronome notes.
     if (metronome){
         if (metronome_counter % 4 == 0){
-                //Create a new event (clear it)...
-                snd_seq_ev_clear(&ev);
-                //Fill it with note data
-                snd_seq_ev_set_note(&ev, Config::Metronome::Channel-1, Config::Metronome::Hit1Note, Config::Metronome::Hit1Velocity, TICKS_PER_BEAT);
-                //Schedule it in appropriate momment in time (rather: tick, not time), putting it on a queue
-                snd_seq_ev_schedule_tick(&ev, queueid, 0, tick);
-                //Direct it ti output port, to all it's subscribers
-                snd_seq_ev_set_source(&ev, output_port);
-                snd_seq_ev_set_subs(&ev);
-                //Output the event (but it stays at the queue.)
-                snd_seq_event_output_direct(seq_handle, &ev);
-         } else if (Config::Metronome::Hit2){
-                //Create a new event (clear it)...
-                snd_seq_ev_clear(&ev);
-                //Fill it with note data
-                snd_seq_ev_set_note(&ev, Config::Metronome::Channel-1, Config::Metronome::Hit2Note, Config::Metronome::Hit2Velocity, TICKS_PER_BEAT);
-                //Schedule it in appropriate momment in time (rather: tick, not time), putting it on a queue
-                snd_seq_ev_schedule_tick(&ev, queueid, 0, tick);
-                //Direct it ti output port, to all it's subscribers
-                snd_seq_ev_set_source(&ev, output_port);
-                snd_seq_ev_set_subs(&ev);
-                //Output the event (but it stays at the queue.)
-                snd_seq_event_output_direct(seq_handle, &ev);
+            snd_seq_ev_clear(&ev);
+            snd_seq_ev_set_note(
+                &ev, Config::Metronome::Channel-1, Config::Metronome::Hit1Note,
+                Config::Metronome::Hit1Velocity, TICKS_PER_BEAT);
+            snd_seq_ev_schedule_tick(&ev, queueid, 0, tick);
+            snd_seq_ev_set_source(&ev, output_port);
+            snd_seq_ev_set_subs(&ev);
+            snd_seq_event_output_direct(seq_handle, &ev);
+        } else if (Config::Metronome::Hit2){
+            snd_seq_ev_clear(&ev);
+            snd_seq_ev_set_note(
+                &ev, Config::Metronome::Channel-1, Config::Metronome::Hit2Note,
+                Config::Metronome::Hit2Velocity, TICKS_PER_BEAT);
+            snd_seq_ev_schedule_tick(&ev, queueid, 0, tick);
+            snd_seq_ev_set_source(&ev, output_port);
+            snd_seq_ev_set_subs(&ev);
+            snd_seq_event_output_direct(seq_handle, &ev);
 
         }
         metronome_counter += 1;
@@ -699,15 +672,9 @@ void MidiDriver::UpdateQueue(){
     // Increment the internal tick counter
     tick+=TICKS_PER_BEAT;
 
-    //T.elapsed(t);
-    //*err <<"end :" << (int)t << ENDL;
-
-
     /**Note, that if there is A LOT of notes on the queue, the following call will take some time. However, it does not use CPU, and we have already unlocked gtk threads, so it can be safely called.*/
     int res = snd_seq_drain_output(seq_handle);
     if(res != 0) *err << "ERROR: ALSA sequencer interface returned an error code (" << res << ") on snd_seq_drain_output.\n";
-    //T.elapsed(t);
-    //*err <<"end + drain :" << (int)t << ENDL;
 
 }
 

@@ -20,14 +20,4 @@
 #ifndef MAIN_H
 #define	MAIN_H
 
-/** Thread-related magic.*/
-class threadb : public sigc::trackable {
-public:
-    threadb();
-    ~threadb();
-    void th1();
-    void th2();
-    bool locked;
-};
-
 #endif	/* MAIN_H */

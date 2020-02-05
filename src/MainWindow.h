@@ -75,6 +75,10 @@ public:
 
     SequencerWidget seqWidget;
     EventsWidget eventsWidget;
+
+    /** Emitted when user confirms application quit. */
+    sigc::signal<void> on_quit_request;
+
 private:
      /**Reacts on sequencer settings changes from main window*/
     void OnMutedToggleToggled(const Glib::ustring& path);

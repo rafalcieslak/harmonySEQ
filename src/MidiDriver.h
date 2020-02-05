@@ -18,6 +18,7 @@
 */
 
 #include <thread>
+#include <atomic>
 #include <deque>
 
 #include <alsa/asoundlib.h>
@@ -104,6 +105,11 @@ public:
     /**Closes and removes queue*/
     void DeleteQueue();
 
+    /** Enters the main event loop. */
+    void Run();
+
+    /** Requests the call to Run() to return */
+    void Stop();
 
 private:
 
@@ -128,6 +134,8 @@ private:
 
     std::deque<double> tap_times;
 
+    /** Used to notify the engine thread to quit */
+    std::atomic<bool> running;
 
     /**Outputs event immediately.
      * @parram ev an event to pass*/

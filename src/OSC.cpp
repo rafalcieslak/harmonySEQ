@@ -29,7 +29,6 @@
 extern MidiDriver* midi;
 extern error* err;
 extern MainWindow* mainwindow;
-extern int running;
 
 void error_handler(int num, const char *msg, const char *path){
     *err << "OSC error!\n";
@@ -72,13 +71,6 @@ int tempo_handler(const char *path, const char *types, lo_arg **argv,
         });
     return 0;
 }
-int kill_handler(const char *path, const char *types, lo_arg **argv,
- 		    int argc, void *data, void *user_data)
-{
-    *dbg << "OSC : KILL SIGNAL HANDLED! closing immidiatelly....\n";
-    running = 0;
-    return 0;
-}
 int sync_handler(const char *path, const char *types, lo_arg **argv,
  		    int argc, void *data, void *user_data)
 {
@@ -102,24 +94,27 @@ int events_handler(const char *path, const char *types, lo_arg **argv,
 }
 
 
-void InitOSC(){
-    //Not much to do yet.
-    *dbg << "Initing OSC...\n";
+lo_server_thread st;
+
+void RunOSCThread(){
     char port[20];
     sprintf(port,"%d",Config::OSC::Port);
-    lo_server_thread st = lo_server_thread_new(port,error_handler);
+    /* TODO: Any chance we could manage the thread on our own for consistency? */
+    st = lo_server_thread_new(port,error_handler);
     lo_server_thread_add_method(st,"/harmonyseq/event","i",events_handler,NULL);
     lo_server_thread_add_method(st,"/harmonyseq/triger","i",events_handler,NULL);
     lo_server_thread_add_method(st,"/harmonyseq/pause",NULL,pause_handler,NULL);
     lo_server_thread_add_method(st,"/harmonyseq/play",NULL,unpause_handler,NULL);
     lo_server_thread_add_method(st,"/harmonyseq/unpause",NULL,unpause_handler,NULL);
     lo_server_thread_add_method(st,"/harmonyseq/tempo","f",tempo_handler,NULL);
-    lo_server_thread_add_method(st,"/harmonyseq/kill",NULL,kill_handler,NULL);
     lo_server_thread_add_method(st,"/harmonyseq/sync",NULL,sync_handler,NULL);
     lo_server_thread_add_method(st,"/harmonyseq/synchronize",NULL,sync_handler,NULL);
     lo_server_thread_add_method(st,NULL,NULL,generic_handler,NULL);
     lo_server_thread_start(st);
 }
 
+void StopOSCThead(){
+    lo_server_thread_stop(st);
+}
 
 #endif /*DISABLE_OSC*/

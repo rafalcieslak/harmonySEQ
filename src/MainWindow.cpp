@@ -40,8 +40,6 @@
 bool CtrlKeyDown;
 bool ShiftKeyDown;
 
-extern threadb* Th;
-
 Gtk::TreeModel::iterator row_inserted_by_drag;
 bool seq_list_drag_in_progress;
 
@@ -383,7 +381,7 @@ MainWindow::on_delete_event(GdkEventAny* event)
         if(!Ask(_("The file has unsaved changes."),_("Are sure you want to quit?")))
           return 1;
 
-    running = 0;
+    on_quit_request.emit();
     return 0;
 }
 
@@ -779,12 +777,11 @@ void MainWindow::OnAboutMenuClicked(){
 }
 
 void MainWindow::OnMenuQuitClicked(){
-        if(Files::file_modified)
-            if(!Ask(_("The file has unsaved changes."),_("Are sure you want to quit?")))
-                return;
+    if(Files::file_modified)
+        if(!Ask(_("The file has unsaved changes."),_("Are sure you want to quit?")))
+            return;
 
-        hide();
-        running = 0;
+    on_quit_request.emit();
 }
 
 void MainWindow::OnMenuNewClicked(){

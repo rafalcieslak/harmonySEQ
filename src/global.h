@@ -110,7 +110,6 @@ class SettingsWindow;
 extern std::vector<Sequencer *> seqVector;
 extern bool midi_clock_enabled;
 extern int ports_number;
-extern int running;
 extern int debugging;
 extern bool metronome;
 extern int metronome_counter;
