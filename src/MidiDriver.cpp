@@ -329,6 +329,14 @@ bool MidiDriver::GetPassMidiEvents(){
     return passing_midi_events;
 }
 
+void MidiDriver::SetDiodesEnabled(bool enabled){
+    diodes_enabled = enabled;
+}
+
+bool MidiDriver::GetDiodesEnabled(){
+    return diodes_enabled;
+}
+
 void MidiDriver::PauseImmediately(){
     //Pause the queue
     snd_seq_stop_queue(seq_handle,queueid,NULL);

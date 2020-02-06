@@ -35,6 +35,9 @@ public:
     enum ActionTypes {
         NONE = 0,
 
+        /* Note: Do not remove elements from this enum, as their IDs
+         * are used in .hseq files. */
+
         /**1) seq 2) mode: 0 - off, 1 - on, 2 - toggle */
         SEQ_ON_OFF_TOGGLE,
         DEPRACATED_1,
@@ -43,6 +46,7 @@ public:
         DEPRACATED_3,
         TEMPO_SET,
         SEQ_CHANGE_ONE_NOTE,
+        TOGGLE_PASS_MIDI,
         /**1)seq 3) do not apply octave?*/
         SEQ_CHANGE_CHORD,
         SEQ_PLAY_ONCE,

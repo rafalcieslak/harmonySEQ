@@ -139,6 +139,9 @@ void Action::Trigger(int data){
             if(mainwindow->seqWidget.selectedSeq == args[1]) mainwindow->seqWidget.UpdateChord();;
             Files::SetFileModified(1);
             break;
+        case TOGGLE_PASS_MIDI:
+            // No longer supported.
+            break;
         default:
 
             *err << _("WARNING: Unknown action triggered.\n");
@@ -204,6 +207,9 @@ Glib::ustring Action::GetLabel(){
             break;
         case NONE:
             sprintf(temp,_("(empty action)"));
+            break;
+        case TOGGLE_PASS_MIDI:
+            sprintf(temp,_("(unsupported)"));
             break;
         default:
             sprintf(temp,_("(unknown action)"));

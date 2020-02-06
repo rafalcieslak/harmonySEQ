@@ -280,6 +280,8 @@ void ActionGUI::UpdateValues(){
             SetSeqCombos(parent->args[1]);
             octave_spinbutton.set_value(parent->args[2]);
             break;
+        case Action::TOGGLE_PASS_MIDI:
+            break;
         default:
             break;
 
@@ -345,6 +347,8 @@ void ActionGUI::ChangeVisibleLines(){
             NoteSeqs_combo.show();
             line_octave.show();
             break;
+        case Action::TOGGLE_PASS_MIDI:
+            break;
         default:
             break;
 
@@ -409,6 +413,8 @@ void ActionGUI::InitType(){
         case Action::SEQ_TRANSPOSE_OCTAVE:
             NoteSeqs_combo.set_active(0);
             octave_spinbutton.set_value(1.0);
+            break;
+        case Action::TOGGLE_PASS_MIDI:
             break;
         default:
             break;
