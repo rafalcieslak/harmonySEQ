@@ -63,11 +63,11 @@ ChordWidget::ChordWidget(){
     combo_note.pack_start(m_columns_notes.name);
     combo_guitar_mode.pack_start(m_columns_IdAndName.name);
     combo_triad_mode.pack_start(m_columns_IdAndName.name);
-    combo_type.signal_changed().connect(sigc::mem_fun(*this,&ChordWidget::OnTypeChanged));
-    combo_root.signal_changed().connect(sigc::mem_fun(*this,&ChordWidget::OnRootChanged));
-    combo_note.signal_changed().connect(sigc::mem_fun(*this,&ChordWidget::OnBaseNoteChanged));
-    combo_guitar_mode.signal_changed().connect(sigc::mem_fun(*this,&ChordWidget::OnGuitarModeChanged));
-    combo_triad_mode.signal_changed().connect(sigc::mem_fun(*this,&ChordWidget::OnTriadModeChanged));
+    combo_type.signal_changed().connect(std::bind(&ChordWidget::OnTypeChanged, this));
+    combo_root.signal_changed().connect(std::bind(&ChordWidget::OnRootChanged, this));
+    combo_note.signal_changed().connect(std::bind(&ChordWidget::OnBaseNoteChanged, this));
+    combo_guitar_mode.signal_changed().connect(std::bind(&ChordWidget::OnGuitarModeChanged, this));
+    combo_triad_mode.signal_changed().connect(std::bind(&ChordWidget::OnTriadModeChanged, this));
     combo_type.set_tooltip_markup(_("Sets <b>type</b> of this chord."));
     combo_guitar_mode.set_tooltip_markup(_("Sets <b>mode</b> of this chord."));
     combo_triad_mode.set_tooltip_markup(_("Sets <b>mode</b> of this chord."));
@@ -76,18 +76,18 @@ ChordWidget::ChordWidget(){
     octave.set_range(-5.0,5.0);
     octave.set_increments(1.0,2.0);
     octave.set_width_chars(2);
-    octave.signal_value_changed().connect(sigc::mem_fun(*this,&ChordWidget::OnBaseOctaveChanged));
+    octave.signal_value_changed().connect(std::bind(&ChordWidget::OnBaseOctaveChanged, this));
     octave_label.set_text(_("Octave:"));
 
     inversion.set_range(0.0,2.0);
     inversion.set_increments(1.0,1.0);
     inversion.set_width_chars(1);
-    inversion.signal_value_changed().connect(sigc::mem_fun(*this,&ChordWidget::OnInversionChanged));
+    inversion.signal_value_changed().connect(std::bind(&ChordWidget::OnInversionChanged, this));
     inversion.set_tooltip_markup(_("Sets the <b>inversion</b> of the triad."));
 
 
     use_base.set_label(_("Base:"));
-    use_base.signal_toggled().connect(sigc::mem_fun(*this,&ChordWidget::OnUseBaseToggled));
+    use_base.signal_toggled().connect(std::bind(&ChordWidget::OnUseBaseToggled, this));
     use_base.set_tooltip_text(_("Sets whether this chord uses the base note.\n - If on, chord notes are set relatively to the base note.\n - If off, the chord ignores the base note."));
     note_label.set_text(_("\tNote:"));
     eq_label.set_text("=");
@@ -95,13 +95,13 @@ ChordWidget::ChordWidget(){
     base.set_range(0.0, 128.0);
     base.set_increments(1.0, 12.0);
     base.set_width_chars(3);
-    base.signal_value_changed().connect(sigc::mem_fun(*this, &ChordWidget::OnBaseChanged));
+    base.signal_value_changed().connect(std::bind(&ChordWidget::OnBaseChanged, this));
     base.set_tooltip_markup(_("The <b>base note</b> for this chord. If it uses the base, which is determined by the switch on the left-hand side, all notes of this chord are given relatively to this base note."));
 
     do_not_apply_octave.set_label(_("Do not change chord's octave"));
     do_not_apply_octave.set_tooltip_markup(_("If checked, the octave will not be applied to the chord."));
-    do_not_apply_octave.signal_toggled().connect(sigc::mem_fun(*this,&ChordWidget::OnApplyOctaveClicked));
-    
+    do_not_apply_octave.signal_toggled().connect(std::bind(&ChordWidget::OnApplyOctaveClicked, this));
+
     line1.pack_start(type_label,Gtk::PACK_SHRINK);
     line1.pack_start(combo_type,Gtk::PACK_SHRINK);
     line2.pack_start(combo_root,Gtk::PACK_SHRINK);
@@ -123,11 +123,11 @@ ChordWidget::ChordWidget(){
         note_buttons[x]->set_range(-128.0, 128.0);
         note_buttons[x]->set_increments(1.0, 12.0);
         note_buttons[x]->set_width_chars(3);
-        note_buttons[x]->signal_value_changed().connect(sigc::bind<int>(sigc::mem_fun(*this, &ChordWidget::OnNoteChanged), x));
+        note_buttons[x]->signal_value_changed().connect(std::bind(&ChordWidget::OnNoteChanged, this, x));
         NotesVBox.pack_start(*note_buttons[x],Gtk::PACK_EXPAND_WIDGET);
         focus_list.insert(focus_list.begin(), note_buttons[x]); //Push_front-ing IS complex, BUT: a) we call it only 6 times b) we store pointers there. This is ok then.
     }
-    
+
     NotesVBox.set_focus_chain(focus_list);
 
     we_are_copying_note_values_from_chord_so_do_not_handle_the_signals=false;
@@ -158,8 +158,8 @@ void ChordWidget::OnNoteChanged(int n){
     combo_type.set_active(Chord::CHORD_TYPE_CUSTOM); //this will call the signal handler, which update widgets visibility&sensitivity
     UpdateSummary();
 
-    on_note_changed.emit(n,(use_base.get_active())?(note_buttons[n]->get_value()+base.get_value()):note_buttons[n]->get_value());
-    on_changed.emit();
+    on_note_changed(n,(use_base.get_active())?(note_buttons[n]->get_value()+base.get_value()):note_buttons[n]->get_value());
+    on_changed();
 }
 
 void ChordWidget::UpdateWhatToShowAndWhatIsSensitive(){
@@ -177,7 +177,7 @@ void ChordWidget::UpdateWhatToShowAndWhatIsSensitive(){
     int type = row[m_columns_IdAndName.id];
     switch (type){
         case Chord::CHORD_TYPE_CUSTOM:
-            
+
             break;
         case Chord::CHORD_TYPE_TRIAD:
             combo_root.show();
@@ -197,8 +197,8 @@ void ChordWidget::UpdateWhatToShowAndWhatIsSensitive(){
             combo_note.set_sensitive(0);
             use_base.set_sensitive(0);
             break;
-            
-        
+
+
     }
 }
 
@@ -217,9 +217,9 @@ void ChordWidget::OnTypeChanged(){
     combo_note.set_active(chord->GetBaseNote());
     base.set_value(chord->GetBase());
     we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = false;
-    
+
     UpdateNotes();
-    on_changed.emit();
+    on_changed();
 }
 
 void ChordWidget::UpdateNotes(){
@@ -238,7 +238,7 @@ void ChordWidget::OnRootChanged(){
     Gtk::TreeModel::Row row = *(combo_root.get_active());
     chord->SetRoot(row[m_columns_notes.note]);
     UpdateNotes();
-    on_changed.emit();
+    on_changed();
 }
 
 void ChordWidget::OnBaseNoteChanged(){
@@ -250,7 +250,7 @@ void ChordWidget::OnBaseNoteChanged(){
     base.set_value(chord->GetBase());
     we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = false;
     UpdateNotes();
-    on_changed.emit();
+    on_changed();
 }
 
 void ChordWidget::OnTriadModeChanged(){
@@ -259,7 +259,7 @@ void ChordWidget::OnTriadModeChanged(){
     Gtk::TreeModel::Row row = *(combo_triad_mode.get_active());
     chord->SetTriadMode(row[m_columns_notes.note]);
     UpdateNotes();
-    on_changed.emit();
+    on_changed();
 }
 
 void ChordWidget::OnGuitarModeChanged(){
@@ -268,7 +268,7 @@ void ChordWidget::OnGuitarModeChanged(){
     Gtk::TreeModel::Row row = *(combo_guitar_mode.get_active());
     chord->SetGuitarMode(row[m_columns_notes.note]);
     UpdateNotes();
-    on_changed.emit();
+    on_changed();
 }
 
 void ChordWidget::OnBaseOctaveChanged(){
@@ -279,7 +279,7 @@ void ChordWidget::OnBaseOctaveChanged(){
     base.set_value(chord->GetBase());
     we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = false;
     UpdateNotes();
-    on_changed.emit();
+    on_changed();
 }
 
 void ChordWidget::OnBaseChanged(){
@@ -291,7 +291,7 @@ void ChordWidget::OnBaseChanged(){
     combo_note.set_active(chord->GetBaseNote());
     we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = false;
     UpdateNotes();
-    on_changed.emit();
+    on_changed();
 }
 
 void ChordWidget::OnInversionChanged(){
@@ -299,7 +299,7 @@ void ChordWidget::OnInversionChanged(){
     if(we_are_copying_note_values_from_chord_so_do_not_handle_the_signals) return;
     chord->SetInversion(inversion.get_value());
     UpdateNotes();
-    on_changed.emit();
+    on_changed();
 }
 
 void ChordWidget::OnUseBaseToggled(){
@@ -307,8 +307,7 @@ void ChordWidget::OnUseBaseToggled(){
     if(we_are_copying_note_values_from_chord_so_do_not_handle_the_signals) return;
     chord->SetBaseUse(use_base.get_active());
     UpdateNotes();
-    on_changed.emit();
-
+    on_changed();
 }
 
 void ChordWidget::Update(){
@@ -327,7 +326,7 @@ void ChordWidget::Update(){
     UpdateNotes();
     UpdateSummary();
     we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = false;
-    on_changed.emit();
+    on_changed();
 }
 
 void ChordWidget::ShowApplyOctave(bool show){
@@ -344,10 +343,10 @@ void ChordWidget::ShowApplyOctave(bool show){
 void ChordWidget::OnApplyOctaveClicked(){
     if(we_are_copying_note_values_from_chord_so_do_not_handle_the_signals) return;
     if(do_not_apply_octave.get_active() == 1){
-        on_apply_octave_toggled.emit(1);
+        on_apply_octave_toggled(1);
         octave.set_sensitive(0);
     }else{
-        on_apply_octave_toggled.emit(0);
+        on_apply_octave_toggled(0);
         octave.set_sensitive(1);
     }
 }
@@ -355,7 +354,7 @@ void ChordWidget::OnApplyOctaveClicked(){
 void ChordWidget::UpdateApplyOctave(bool apply){
     we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = 1;
     do_not_apply_octave.set_active(apply);
-    if (apply) 
+    if (apply)
         octave.set_sensitive(0);
     else
         octave.set_sensitive(1);
@@ -366,7 +365,7 @@ void ChordWidget::SetExpandDetails(bool e){
     if(e){
         summary_label.hide();
         LeftHBox.show();
-        
+
     }else{
     	UpdateSummary();
         summary_label.show();

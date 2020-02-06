@@ -66,13 +66,13 @@ SequencerWidget::SequencerWidget()
     wScrolledWindow.set_policy(Gtk::POLICY_ALWAYS, Gtk::POLICY_NEVER);
     wScrolledWindow.set_overlay_scrolling(false);
 
-    pattern_widget.on_selection_changed.connect(sigc::mem_fun(*this,&SequencerWidget::OnSelectionChanged));
-    pattern_widget.on_slope_type_needs_additional_refreshing.connect(sigc::mem_fun(*this,&SequencerWidget::UpdateSlopeType));
+    pattern_widget.on_selection_changed.connect(std::bind(&SequencerWidget::OnSelectionChanged, this, std::placeholders::_1));
+    pattern_widget.on_slope_type_needs_additional_refreshing.connect(std::bind(&SequencerWidget::UpdateSlopeType, this));
 
     wUpperHBox1.pack_start(wNameLabel,Gtk::PACK_SHRINK);
     wUpperHBox1.pack_start(wNameEntry,Gtk::PACK_SHRINK);
     wNameEntry.set_width_chars(10);
-    wNameEntry.signal_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnNameEdited));
+    wNameEntry.signal_changed().connect(std::bind(&SequencerWidget::OnNameEdited, this));
     wUpperHBox1.pack_start(wOnOfColour,Gtk::PACK_SHRINK);
     wOnOfColour.add(wMuteToggle);
     wUpperHBox1.pack_start(wPlayOnceButton,Gtk::PACK_SHRINK);
@@ -111,12 +111,12 @@ SequencerWidget::SequencerWidget()
     wShowChordButton.add(wShowChordLabel);
     wShowChordLabel.set_markup(_("<b>Chord</b>"));
     wShowChordButton.set_tooltip_markup(_("Shows/hides the chord's detailed settings."));
-    wShowChordButton.signal_toggled().connect(sigc::mem_fun(*this,&SequencerWidget::OnShowChordButtonClicked));
+    wShowChordButton.signal_toggled().connect(std::bind(&SequencerWidget::OnShowChordButtonClicked, this));
 
     wSnapToggle.set_label(_("Snap to grid"));
     wSnapToggle.set_tooltip_markup(_("If on, notes will be snapped to the visible grid.\nGrid density changes with sequence resolution."));
     wSnapToggle.set_active(1); //As this is default value
-    wSnapToggle.signal_toggled().connect(sigc::mem_fun(*this,&SequencerWidget::OnSnapClicked));
+    wSnapToggle.signal_toggled().connect(std::bind(&SequencerWidget::OnSnapClicked, this));
 
     wZoomInImg.set(Gtk::Stock::ZOOM_IN,Gtk::ICON_SIZE_MENU);
     wZoomOutImg.set(Gtk::Stock::ZOOM_OUT,Gtk::ICON_SIZE_MENU);
@@ -129,8 +129,8 @@ SequencerWidget::SequencerWidget()
     wZoomOut.set_border_width(0);
     wZoomIn.set_tooltip_markup(_("<b>Zoom in</b> (Ctrl+MouseScroll)"));
     wZoomOut.set_tooltip_markup(_("<b>Zoom out</b> (Ctrl+MouseScroll)"));
-    wZoomIn.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWidget::OnZoomInClicked));
-    wZoomOut.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWidget::OnZoomOutClicked));
+    wZoomIn.signal_clicked().connect(std::bind(&SequencerWidget::OnZoomInClicked, this));
+    wZoomOut.signal_clicked().connect(std::bind(&SequencerWidget::OnZoomOutClicked, this));
     wZoomInImg.show();
     wZoomOutImg.show();
 
@@ -142,8 +142,8 @@ SequencerWidget::SequencerWidget()
     wChordNotebook.append_page(wCtrlHBox);
     wChordNotebook.set_show_tabs(0);
     wChordNotebook.set_show_border(0);
-    chordwidget.on_changed.connect(sigc::mem_fun(*this,&SequencerWidget::OnChordWidgetChanged));
-    chordwidget.on_note_changed.connect(sigc::mem_fun(*this,&SequencerWidget::OnChordWidgetNoteChanged));
+    chordwidget.on_changed.connect(std::bind(&SequencerWidget::OnChordWidgetChanged, this));
+    chordwidget.on_note_changed.connect(std::bind(&SequencerWidget::OnChordWidgetNoteChanged, this, std::placeholders::_1, std::placeholders::_2));
 
     wCtrlHBox.pack_end(wCtrlScale,Gtk::PACK_SHRINK);
     wCtrlScale.pack_start(wCtrl127,Gtk::PACK_SHRINK);
@@ -156,7 +156,7 @@ SequencerWidget::SequencerWidget()
     wNotebook.set_tab_pos(Gtk::POS_RIGHT);
     wNotebook.set_show_border(0);
     wNotebook.set_scrollable(1);
-    wNotebook.signal_switch_page().connect(sigc::mem_fun(*this, &SequencerWidget::OnNotebookPageChanged));
+    wNotebook.signal_switch_page().connect(std::bind(&SequencerWidget::OnNotebookPageChanged, this, std::placeholders::_1, std::placeholders::_2));
 
     wPtOpsVBox.pack_end(wClearPatternHBox,Gtk::PACK_SHRINK);
     wPtOpsVBox.pack_start(wPtOpsHBox1,Gtk::PACK_SHRINK);
@@ -171,13 +171,13 @@ SequencerWidget::SequencerWidget()
 
     wClearPatternHBox.pack_start(wClearPattern,Gtk::PACK_SHRINK);
 
-    wClearPattern.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWidget::OnClearPatternClicked));
-    wClonePattern.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWidget::OnClonePatternClicked));
-    wSetAsActivePatternButton.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWidget::OnSetAsActivePatternClicked));
-    wAddPatternButton.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWidget::OnAddPatternClicked));
-    wRemovePattern.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWidget::OnRemovePatternClicked));
+    wClearPattern.signal_clicked().connect(std::bind(&SequencerWidget::OnClearPatternClicked, this));
+    wClonePattern.signal_clicked().connect(std::bind(&SequencerWidget::OnClonePatternClicked, this));
+    wSetAsActivePatternButton.signal_clicked().connect(std::bind(&SequencerWidget::OnSetAsActivePatternClicked, this));
+    wAddPatternButton.signal_clicked().connect(std::bind(&SequencerWidget::OnAddPatternClicked, this));
+    wRemovePattern.signal_clicked().connect(std::bind(&SequencerWidget::OnRemovePatternClicked, this));
 
-    wPlayOnceButton.signal_clicked().connect(sigc::mem_fun(*this,&SequencerWidget::OnPlayOnceButtonClicked));
+    wPlayOnceButton.signal_clicked().connect(std::bind(&SequencerWidget::OnPlayOnceButtonClicked, this));
 
     wChannelLabel.set_text(_("MIDI channel:"));
     wVelocityLabel.set_text(_("Velocity:"));
@@ -217,14 +217,14 @@ SequencerWidget::SequencerWidget()
     wVelocityButton.set_width_chars(3);
     wValueButton.set_width_chars(3);
     wControllerButton.set_width_chars(3);
-    wVelocityButton.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnVelocityChanged));
-    wValueButton.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnValueChanged));
-    wChannelButton.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnChannelChanged));
-    wControllerButton.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnControllerChanged));
-    wActivePattern.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnActivePatternChanged));
+    wVelocityButton.signal_value_changed().connect(std::bind(&SequencerWidget::OnVelocityChanged, this));
+    wValueButton.signal_value_changed().connect(std::bind(&SequencerWidget::OnValueChanged, this));
+    wChannelButton.signal_value_changed().connect(std::bind(&SequencerWidget::OnChannelChanged, this));
+    wControllerButton.signal_value_changed().connect(std::bind(&SequencerWidget::OnControllerChanged, this));
+    wActivePattern.signal_value_changed().connect(std::bind(&SequencerWidget::OnActivePatternChanged, this));
     wMuteToggle.set_label(_("ON/OFF"));
     wMuteToggle.set_tooltip_markup(_("Turns this sequencer <b>on/off</b>."));
-    wMuteToggle.signal_clicked().connect(mem_fun(*this,&SequencerWidget::OnToggleMuteToggled));
+    wMuteToggle.signal_clicked().connect(std::bind(&SequencerWidget::OnToggleMuteToggled, this));
 
     //todo: add icons & tooltips
     wCtrlSlopeFlat.set_label("F");
@@ -234,8 +234,8 @@ SequencerWidget::SequencerWidget()
     Gtk::RadioButton::Group group = wCtrlSlopeFlat.get_group();
     wCtrlSlopeLinear.set_group(group);
     wCtrlSlopeNone.set_group(group);
-    wCtrlSlopeFlat.signal_toggled().connect(sigc::mem_fun(*this,&SequencerWidget::OnSlopeFlatToggled));
-    wCtrlSlopeLinear.signal_toggled().connect(sigc::mem_fun(*this,&SequencerWidget::OnSlopeLinearToggled));
+    wCtrlSlopeFlat.signal_toggled().connect(std::bind(&SequencerWidget::OnSlopeFlatToggled, this));
+    wCtrlSlopeLinear.signal_toggled().connect(std::bind(&SequencerWidget::OnSlopeLinearToggled, this));
     //my_slope_mode_for_adding = SLOPE_TYPE_LINEAR;
 
     //lengths selector
@@ -244,7 +244,7 @@ SequencerWidget::SequencerWidget()
     wResolutions.set_increments(1.0,4.0);
     wResolutions.set_width_chars(2);
     wResolutions.set_tooltip_markup(_("Selects the <b>resolution</b> of this sequencer. It defines the grid density in this sequencer's patterns."));
-    wResolutions.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnResolutionChanged));
+    wResolutions.signal_value_changed().connect(std::bind(&SequencerWidget::OnResolutionChanged, this));
 
 
     wLengthsLabel.set_text(_("Length:"));
@@ -259,11 +259,11 @@ SequencerWidget::SequencerWidget()
     wLengthNumerator.set_range(1.0,64.0);
     wLengthDenominator.set_range(1.0,32.0);
     wLengthDivision.set_text(" / ");
-    wLengthNumerator.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnLengthChanged));
-    wLengthDenominator.signal_value_changed().connect(sigc::mem_fun(*this,&SequencerWidget::OnLengthChanged));
+    wLengthNumerator.signal_value_changed().connect(std::bind(&SequencerWidget::OnLengthChanged, this));
+    wLengthDenominator.signal_value_changed().connect(std::bind(&SequencerWidget::OnLengthChanged, this));
 
-    pattern_widget.on_scroll_left.connect(mem_fun(*this,&SequencerWidget::OnPatternWidgetScrollLeft));
-    pattern_widget.on_scroll_right.connect(mem_fun(*this,&SequencerWidget::OnPatternWidgetScrollRight));
+    pattern_widget.on_scroll_left.connect(std::bind(&SequencerWidget::OnPatternWidgetScrollLeft, this));
+    pattern_widget.on_scroll_right.connect(std::bind(&SequencerWidget::OnPatternWidgetScrollRight, this));
 
     if(icon_slope_flat){
         wImageSlopeFlat.set(icon_slope_flat);
@@ -334,7 +334,6 @@ void SequencerWidget::UpdateEverything(){
                 UpdateController();
                 UpdateSlopeType();
         }
-        //Glib::signal_timeout().connect(mem_fun(pattern_widget,&PatternWidget::RedrawEverything),50);
     }else{
 
     }

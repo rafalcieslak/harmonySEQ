@@ -28,6 +28,9 @@
 #include <glibmm/refptr.h>
 #include <gdkmm/pixbuf.h>
 
+#include <boost/signals2.hpp>
+namespace bs2 = boost::signals2;
+
 // Build system config
 #include "config.h"
 

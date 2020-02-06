@@ -95,12 +95,12 @@ public:
     std::set<DiodeMidiEvent *> active_diodes;
 
     /**Emitted when selection is changed. Provides an argument that is equal to number of notes in selection.*/
-    sigc::signal<void,int> on_selection_changed;
+    bs2::signal<void(int)> on_selection_changed;
 
-    sigc::signal<void> on_slope_type_needs_additional_refreshing;
+    bs2::signal<void()> on_slope_type_needs_additional_refreshing;
 
-    sigc::signal<void> on_scroll_left;
-    sigc::signal<void> on_scroll_right;
+    bs2::signal<void()> on_scroll_left;
+    bs2::signal<void()> on_scroll_right;
 
 protected:
     //Override default signal handler:

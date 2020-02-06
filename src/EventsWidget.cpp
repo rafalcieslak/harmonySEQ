@@ -38,15 +38,15 @@ EventsWidget::EventsWidget(){
     lower_button_Hbox.pack_end(remove_button);
     add_button.set_label(_("Add Event"));
     add_button.set_tooltip_markup(_("Adds a new <b>event</b>.\n\nEvents define on what should harmonySEQ react - examples include keypresses on computer's keyboard or MIDI input from an external controller."));
-    add_button.signal_clicked().connect(sigc::mem_fun(*this,&EventsWidget::OnAddEventClicked));
+    add_button.signal_clicked().connect(std::bind(&EventsWidget::OnAddEventClicked, this));
     remove_button.set_label(_("Remove"));
     remove_button.set_tooltip_markup(_("Removes selected action or event."));
     remove_button.set_sensitive(0);
-    remove_button.signal_clicked().connect(sigc::mem_fun(*this,&EventsWidget::OnRemoveClicked));
+    remove_button.signal_clicked().connect(std::bind(&EventsWidget::OnRemoveClicked, this));
     add_action_button.set_sensitive(0);
     add_action_button.set_label(_("Add Action"));
     add_action_button.set_tooltip_markup(_("Adds a new <b>action</b> assigned to selected event.\n\nActions define what harmonySEQ should do on corresponding event - for example it can toggle one of the sequencers, or change it's chord."));
-    add_action_button.signal_clicked().connect(sigc::mem_fun(*this,&EventsWidget::OnAddActionClicked));
+    add_action_button.signal_clicked().connect(std::bind(&EventsWidget::OnAddActionClicked, this));
 
     m_refTreeModel = Gtk::TreeStore::create(m_columns);
     m_TreeView.set_model(m_refTreeModel);
@@ -63,11 +63,11 @@ EventsWidget::EventsWidget(){
 
     m_TreeView.set_headers_visible(1);//showing the upper headers
 
-    m_TreeView.signal_row_activated().connect(sigc::mem_fun(*this, &EventsWidget::OnRowChosen));
+    m_TreeView.signal_row_activated().connect(std::bind(&EventsWidget::OnRowChosen, this, std::placeholders::_1, std::placeholders::_2));
     Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = m_TreeView.get_selection();
-    refTreeSelection->signal_changed().connect(sigc::mem_fun(*this, &EventsWidget::OnSelectionChanged));
-    m_TreeView.signal_row_collapsed().connect(sigc::mem_fun(*this, &EventsWidget::OnRowCollapsed));
-    
+    refTreeSelection->signal_changed().connect(std::bind(&EventsWidget::OnSelectionChanged, this));
+    m_TreeView.signal_row_collapsed().connect(std::bind(&EventsWidget::OnRowCollapsed, this, std::placeholders::_1, std::placeholders::_2));
+
 
     m_TreeView.set_enable_search(0);
     show_all_children(1);
@@ -115,7 +115,7 @@ void EventsWidget::UpdateAll(){
 }
 
 void EventsWidget::SeqListChanged(){
-    
+
     for (unsigned int x = 0; x < Events.size(); x++) {
         if (!Events[x]) continue; //seems it was removed
         for (unsigned int c = 0; c < Events[x]->actions.size();c++){
@@ -134,7 +134,7 @@ void EventsWidget::ColorizeEvent(Gtk::TreeRowReference rowref){
     }
 
     row[m_columns.col_colour] = "royal blue";
-    Glib::signal_timeout().connect(sigc::bind(sigc::mem_fun(*this,&EventsWidget::UncolorizeEvent),rowref),EVENTS_FLASH_TIMEOUT,Glib::PRIORITY_DEFAULT_IDLE);
+    Glib::signal_timeout().connect([=](){return UncolorizeEvent(rowref);},EVENTS_FLASH_TIMEOUT,Glib::PRIORITY_DEFAULT_IDLE);
 }
 
 bool EventsWidget::UncolorizeEvent(Gtk::TreeRowReference rowref){
@@ -152,7 +152,7 @@ void EventsWidget::ColorizeAction(Gtk::TreeRowReference rowref){
     }
 
     row[m_columns.col_colour] = "light blue";
-    Glib::signal_timeout().connect(sigc::bind(sigc::mem_fun(*this,&EventsWidget::UncolorizeAction),rowref),EVENTS_FLASH_TIMEOUT,Glib::PRIORITY_DEFAULT_IDLE);
+    Glib::signal_timeout().connect([=](){return UncolorizeAction(rowref);},EVENTS_FLASH_TIMEOUT,Glib::PRIORITY_DEFAULT_IDLE);
 }
 
 bool EventsWidget::UncolorizeAction(Gtk::TreeRowReference rowref){

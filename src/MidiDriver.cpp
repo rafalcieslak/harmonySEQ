@@ -193,11 +193,6 @@ void MidiDriver::SendStop() {
     snd_seq_event_output_direct(seq_handle,&ev);
 }
 
-void MidiDriver::SendNoteEvent(int channel, int pitch, int velocity, int duration_ms){
-    SendNoteOnEventImmediatelly(channel,pitch,velocity);
-    Glib::signal_timeout().connect_once(sigc::bind(sigc::mem_fun(*this,&MidiDriver::SendNoteOffEventImmediatelly),channel,pitch),duration_ms);
-}
-
 void MidiDriver::ScheduleNote(int channel, int tick_time, int pitch, int velocity, int length){
     snd_seq_event_t ev;
     snd_seq_ev_clear(&ev);
@@ -352,7 +347,7 @@ void MidiDriver::PauseImmediately(){
 
     *dbg << "Queue paused!\n";
 
-    on_paused.emit();
+    on_paused();
 }
 
 void MidiDriver::Sync(){
@@ -399,7 +394,7 @@ void MidiDriver::Unpause(){
     paused = false;
     *dbg << "Queue unpaused!\n";
 
-    on_unpaused.emit();
+    on_unpaused();
 }
 
 void MidiDriver::ClearQueue(bool remove_noteoffs){
@@ -684,7 +679,7 @@ void MidiDriver::UpdateQueue(){
     int res = snd_seq_drain_output(seq_handle);
     if(res != 0) *err << "ERROR: ALSA sequencer interface returned an error code (" << res << ") on snd_seq_drain_output.\n";
 
-    on_beat.emit();
+    on_beat();
 }
 
 

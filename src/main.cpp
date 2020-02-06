@@ -254,7 +254,7 @@ int main(int argc, char** argv) {
     Config::SaveToFile();
 
     // Apply some global config values to the engine
-    midi->SetDiodesEnabled(Config::Interaction::DisableDiodes);
+    midi->SetDiodesEnabled(!Config::Interaction::DisableDiodes);
 
     //...GUI...  Sequencer and UI logic is so intertangled, we must
     // initialize the GUI before any sequencer or event is created.

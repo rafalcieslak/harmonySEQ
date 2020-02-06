@@ -40,7 +40,7 @@ ActionGUI::ActionGUI(Action *prt)
 
     chordwidget.Select(&parent->chord);
     chordwidget.ShowApplyOctave(1);
-    chordwidget.on_apply_octave_toggled.connect(sigc::mem_fun(*this,&ActionGUI::OnApplyOctaveToogled));
+    chordwidget.on_apply_octave_toggled.connect(std::bind(&ActionGUI::OnApplyOctaveToogled, this, std::placeholders::_1));
     //window's title
     set_title(_("Action"));
 
@@ -81,9 +81,9 @@ ActionGUI::ActionGUI(Action *prt)
     Gtk::RadioButtonGroup group = on_off_toggle_OFF.get_group();
     on_off_toggle_ON.set_group(group);
     on_off_toggle_TOGGLE.set_group(group);
-    on_off_toggle_OFF.signal_clicked().connect(mem_fun(*this,&ActionGUI::OnOnOffToggleChanged));
-    on_off_toggle_ON.signal_clicked().connect(mem_fun(*this,&ActionGUI::OnOnOffToggleChanged));
-    on_off_toggle_TOGGLE.signal_clicked().connect(mem_fun(*this,&ActionGUI::OnOnOffToggleChanged));
+    on_off_toggle_OFF.signal_clicked().connect(std::bind(&ActionGUI::OnOnOffToggleChanged, this));
+    on_off_toggle_ON.signal_clicked().connect(std::bind(&ActionGUI::OnOnOffToggleChanged, this));
+    on_off_toggle_TOGGLE.signal_clicked().connect(std::bind(&ActionGUI::OnOnOffToggleChanged, this));
 
     line_play.pack_start(play_TOGGLE,Gtk::PACK_SHRINK);
     line_play.pack_start(play_ON,Gtk::PACK_SHRINK);
@@ -91,9 +91,9 @@ ActionGUI::ActionGUI(Action *prt)
     group = play_OFF.get_group();
     play_ON.set_group(group);
     play_TOGGLE.set_group(group);
-    play_OFF.signal_clicked().connect(mem_fun(*this,&ActionGUI::OnPlayOnOffToggleClicked));
-    play_ON.signal_clicked().connect(mem_fun(*this,&ActionGUI::OnPlayOnOffToggleClicked));
-    play_TOGGLE.signal_clicked().connect(mem_fun(*this,&ActionGUI::OnPlayOnOffToggleClicked));
+    play_OFF.signal_clicked().connect(std::bind(&ActionGUI::OnPlayOnOffToggleClicked, this));
+    play_ON.signal_clicked().connect(std::bind(&ActionGUI::OnPlayOnOffToggleClicked, this));
+    play_TOGGLE.signal_clicked().connect(std::bind(&ActionGUI::OnPlayOnOffToggleClicked, this));
 
     line_type.pack_start(Types_combo,Gtk::PACK_SHRINK);
     line_seq.pack_start(AllSeqs_combo,Gtk::PACK_SHRINK);
@@ -108,22 +108,22 @@ ActionGUI::ActionGUI(Action *prt)
 
     notenr_button.set_range(1.0,6.0);
     notenr_button.set_increments(1.0,2.0);
-    notenr_button.signal_value_changed().connect(mem_fun(*this,&ActionGUI::OnNoteNrChanged));
+    notenr_button.signal_value_changed().connect(std::bind(&ActionGUI::OnNoteNrChanged, this));
     chordseq_button.set_range(-48.0,48.0);
     chordseq_button.set_increments(1.0,12.0);
-    chordseq_button.signal_value_changed().connect(mem_fun(*this,&ActionGUI::OnNoteSeqChanged));
+    chordseq_button.signal_value_changed().connect(std::bind(&ActionGUI::OnNoteSeqChanged, this));
     pattern_button.set_range(0.0,100.0);
     pattern_button.set_increments(1.0,10.0);
-    pattern_button.signal_value_changed().connect(mem_fun(*this,&ActionGUI::OnPatternChanged));
+    pattern_button.signal_value_changed().connect(std::bind(&ActionGUI::OnPatternChanged, this));
     tempo_button.set_range(30.0,320.0);
     tempo_button.set_increments(1.0,20.0);
-    tempo_button.signal_value_changed().connect(mem_fun(*this,&ActionGUI::OnTempoChanged));
+    tempo_button.signal_value_changed().connect(std::bind(&ActionGUI::OnTempoChanged, this));
     octave_spinbutton.set_range(-5.0,5.0);
     octave_spinbutton.set_increments(1.0,2.0);
-    octave_spinbutton.signal_value_changed().connect(mem_fun(*this,&ActionGUI::OnOctaveChanged));
+    octave_spinbutton.signal_value_changed().connect(std::bind(&ActionGUI::OnOctaveChanged, this));
 
-    chordwidget.on_changed.connect(mem_fun(*this,&ActionGUI::OnChordWidgetChanged));
-    chordwidget.on_note_changed.connect(mem_fun(*this,&ActionGUI::OnChordWidgetNoteChanged));
+    chordwidget.on_changed.connect(std::bind(&ActionGUI::OnChordWidgetChanged, this));
+    chordwidget.on_note_changed.connect(std::bind(&ActionGUI::OnChordWidgetNoteChanged, this, std::placeholders::_1, std::placeholders::_2));
 
     label_type.set_text(_("Type:"));
     label_seq.set_text(_("Sequencer:"));
@@ -141,25 +141,25 @@ ActionGUI::ActionGUI(Action *prt)
     label_octave1.set_text(_("Transpose by "));
     label_octave2.set_text(_(" octave(s)."));
 
-    ok_button.signal_clicked().connect(mem_fun(*this,&ActionGUI::OnOKClicked));
+    ok_button.signal_clicked().connect(std::bind(&ActionGUI::OnOKClicked, this));
 
     Types_combo.set_model(TreeModel_ActionTypes);
     Types_combo.pack_start(m_columns_action_types.label);
     SetTypeCombo(parent->type); //Setting the typecombo BEFORE connecting the signal is ESSENTIAL, since otherwise when the type in Types_combo is changed (by setting it to parent->type), it emits a signal
-    Types_combo.signal_changed().connect(mem_fun(*this,&ActionGUI::OnTypeChanged));
+    Types_combo.signal_changed().connect(std::bind(&ActionGUI::OnTypeChanged, this));
 
     m_ref_treemodel_allseqs = Gtk::ListStore::create(m_col_seqs);
     m_ref_treemodel_noteseqs = Gtk::ListStore::create(m_col_seqs);
 
     AllSeqs_combo.set_model(m_ref_treemodel_allseqs);
     AllSeqs_combo.pack_start(m_col_seqs.name);
-    AllSeqs_combo.signal_changed().connect(mem_fun(*this,&ActionGUI::OnAllSeqComboChanged));
+    AllSeqs_combo.signal_changed().connect(std::bind(&ActionGUI::OnAllSeqComboChanged, this));
     NoteSeqs_combo.set_model(m_ref_treemodel_noteseqs);
     NoteSeqs_combo.pack_start(m_col_seqs.name);
-    NoteSeqs_combo.signal_changed().connect(mem_fun(*this,&ActionGUI::OnNoteSeqComboChanged));
+    NoteSeqs_combo.signal_changed().connect(std::bind(&ActionGUI::OnNoteSeqComboChanged, this));
 
-    signal_show().connect(mem_fun(*this,&ActionGUI::OnShow));
-    signal_hide().connect(mem_fun(*this,&ActionGUI::OnHide));
+    signal_show().connect(std::bind(&ActionGUI::OnShow, this));
+    signal_hide().connect(std::bind(&ActionGUI::OnHide, this));
 
     //Setting the label's text, to parent action's name.
     label_preview.set_text(parent->GetLabel());

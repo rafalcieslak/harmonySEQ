@@ -8,6 +8,7 @@ pkg_check_modules(GTKMM gtkmm-3.0 REQUIRED)
 pkg_check_modules(GLIBMM glibmm-2.4 REQUIRED)
 pkg_check_modules(LIBLO liblo)
 find_package(ALSA REQUIRED)
+find_package(Boost 1.67 REQUIRED COMPONENTS signals)
 
 add_executable(
   harmonySEQ
@@ -45,6 +46,7 @@ target_include_directories(
   ${ALSA_INCLUDE_DIRS}
   ${GTKMM_INCLUDE_DIRS}
   ${LIBLO_INCLUDE_DIRS}
+  ${Boost_INCLUDE_DIRS}
   )
 
 target_compile_options(

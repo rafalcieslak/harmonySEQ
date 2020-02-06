@@ -83,14 +83,14 @@ PatternWidget::PatternWidget(){
     drag_in_progress = 0;
     select_only_this_atom_on_LMB_release = NULL;
 
-    signal_realize().connect(sigc::mem_fun(*this,&PatternWidget::OnRealize));
+    signal_realize().connect(std::bind(&PatternWidget::OnRealize, this));
     Glib::signal_timeout().connect(
         [=](){
             queue_draw();
             return true;
         }, Config::Interaction::PatternRefreshMS, Glib::PRIORITY_DEFAULT_IDLE);
 
-    if(!Config::Interaction::DisableDiodes) Glib::signal_timeout().connect(sigc::mem_fun(*this,&PatternWidget::DrawDiodesTimeout),DIODE_FADEOUT_TIME/8);
+    if(!Config::Interaction::DisableDiodes) Glib::signal_timeout().connect([=](){return DrawDiodesTimeout();},DIODE_FADEOUT_TIME/8);
 }
 
 PatternWidget::~PatternWidget(){
@@ -153,7 +153,7 @@ void PatternWidget::AssignPattern(AtomContainer* cont, SeqType_t type){
 void PatternWidget::ClearSelection(){
     //Note that clearing selection must not delete the pointers - notes are still kept in aproprieate AtomContainer
     selection.clear();
-    on_selection_changed.emit(0);
+    on_selection_changed(0);
     RedrawAtoms();
 }
 
@@ -171,7 +171,7 @@ void PatternWidget::DeleteSelected(){
     for(std::set<Atom*, AtomComparingClass>::iterator it = selection.begin(); it != selection.end(); it++) delete *it;
     selection.clear();
     Files::FileModified();
-    on_selection_changed.emit(0);
+    on_selection_changed(0);
     RedrawAtoms();
 }
 
@@ -346,7 +346,7 @@ void PatternWidget::IncreaseSelectionVelocity(int amount){
         selection = resulting_selection;
         //container->Sort(); //no need to sort, when velocity was changed
         Files::FileModified();
-        on_selection_changed.emit(selection.size());//this will update the velocity spinbutton
+        on_selection_changed(selection.size());//this will update the velocity spinbutton
         RedrawAtoms();
 }
 
@@ -364,7 +364,7 @@ void PatternWidget::DecreaseSelectionVelocity(int amount){
         selection = resulting_selection;
         //container->Sort(); //no need to sort, when velocity was changed
         Files::FileModified();
-        on_selection_changed.emit(selection.size());//this will update the velocity spinbutton
+        on_selection_changed(selection.size());//this will update the velocity spinbutton
         RedrawAtoms();
 }
 
@@ -382,7 +382,7 @@ void PatternWidget::IncreaseSelectionValue(int amount){
         selection = resulting_selection;
         //container->Sort(); //no need to sort, when value was changed
         Files::FileModified();
-        on_selection_changed.emit(selection.size());//this will update the value spinbutton
+        on_selection_changed(selection.size());//this will update the value spinbutton
         RedrawAtoms();
 }
 
@@ -400,7 +400,7 @@ void PatternWidget::DecreaseSelectionValue(int amount){
         selection = resulting_selection;
         //container->Sort(); //no need to sort, when value was changed
         Files::FileModified();
-        on_selection_changed.emit(selection.size());//this will update the value spinbutton
+        on_selection_changed(selection.size());//this will update the value spinbutton
         RedrawAtoms();
 }
 
@@ -591,7 +591,7 @@ void PatternWidget::ProcessDrag(double x, double y){
         container->Sort();
         Files::FileModified(); //Mark file as modified
         //additionally:
-        if (seq_type == SEQ_TYPE_CONTROL) on_selection_changed.emit(selection.size()); //this will update the value spinbutton
+        if (seq_type == SEQ_TYPE_CONTROL) on_selection_changed(selection.size()); //this will update the value spinbutton
 
     } else if (drag_mode == DRAG_MODE_SELECT_AREA) {
         drag_current_x = x;
@@ -735,7 +735,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                         //this note wasn't selected, select only it (immidiatelly)
                         selection.clear();
                         selection.insert(found);
-                        on_selection_changed.emit(selection.size());
+                        on_selection_changed(selection.size());
                         RedrawAtoms();
                     }
                 }else{
@@ -757,7 +757,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                         drag_note_dragged = note;
                         selection.clear();
                         selection.insert(note);
-                        on_selection_changed.emit(selection.size());
+                        on_selection_changed(selection.size());
                     } else if (seq_type == SEQ_TYPE_CONTROL) {
                         if (snap) {
                             temp_time = Snap(temp_time); //fair snapping for control atoms!
@@ -773,7 +773,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                         drag_note_dragged = ctrl;
                         selection.clear();
                         selection.insert(ctrl);
-                        on_selection_changed.emit(selection.size());
+                        on_selection_changed(selection.size());
                     }
                     Files::FileModified(); //Mark file as modified
                     RedrawAtoms();
@@ -791,7 +791,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                         //wasn't selected, select it
                         selection.insert(found);
                         note_that_was_just_added_to_selection = found;
-                        on_selection_changed.emit(selection.size());
+                        on_selection_changed(selection.size());
                         RedrawAtoms();
                     }
                     cancel_unselecting = 0;
@@ -810,14 +810,14 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                 std::set<Atom*,AtomComparingClass>::iterator it = selection.find(found);
                 if (it != selection.end()){
                     selection.erase(it);
-                    on_selection_changed.emit(selection.size());
+                    on_selection_changed(selection.size());
                 }
                 RedrawAtoms();
             } else {
                 //RMB on empty space
                 //'clear selection'
                 selection.clear();
-                on_selection_changed.emit(selection.size());
+                on_selection_changed(selection.size());
                 RedrawAtoms();
             }
 
@@ -839,7 +839,7 @@ bool PatternWidget::on_button_release_event(GdkEventButton* event){
         }
         drag_temporary_selection.clear();
 
-        on_selection_changed.emit(selection.size());
+        on_selection_changed(selection.size());
     }
 
     //Determine which button click was ended
@@ -850,7 +850,7 @@ bool PatternWidget::on_button_release_event(GdkEventButton* event){
             if(select_only_this_atom_on_LMB_release != NULL){
                 selection.clear();
                 selection.insert(select_only_this_atom_on_LMB_release);
-                on_selection_changed.emit(selection.size());
+                on_selection_changed(selection.size());
             }
 
         }else if((button_pressed == LMBs && event->button == 1) || (button_pressed == MMB && event->button == 2)){
@@ -862,7 +862,7 @@ bool PatternWidget::on_button_release_event(GdkEventButton* event){
                     //was selected, unselecting
                     selection.erase(it);
                     if (note_that_was_just_added_to_selection != NULL) selection.insert(note_that_was_just_added_to_selection);
-                    on_selection_changed.emit(selection.size());
+                    on_selection_changed(selection.size());
                 }
             }
 
@@ -874,7 +874,7 @@ bool PatternWidget::on_button_release_event(GdkEventButton* event){
         if(drag_in_progress == 1){
                 DeleteSelected();
                 selection.clear();
-                on_selection_changed.emit(selection.size());
+                on_selection_changed(selection.size());
         }
     }
 
@@ -991,7 +991,7 @@ bool PatternWidget::on_scroll_event(GdkEventScroll* e){
                 if (selection.empty() || selection.find(found) == selection.end()) {
                     note->velocity -= 8;
                     if (note->velocity < 0) note->velocity = 0;
-                    on_selection_changed.emit(selection.size());
+                    on_selection_changed(selection.size());
                 } else {
                     DecreaseSelectionVelocity(8);
                 }
@@ -1000,7 +1000,7 @@ bool PatternWidget::on_scroll_event(GdkEventScroll* e){
                 if (selection.empty()|| selection.find(found) == selection.end()) {
                     note->velocity += 8;
                     if (note->velocity > 127) note->velocity = 127;
-                    on_selection_changed.emit(selection.size());
+                    on_selection_changed(selection.size());
                 } else {
                     IncreaseSelectionVelocity(8);
                 }
@@ -1009,9 +1009,9 @@ bool PatternWidget::on_scroll_event(GdkEventScroll* e){
             return false;
         } else { //empty space scrolled, we'll scroll view
             if (e->direction == GDK_SCROLL_UP) {
-                on_scroll_left.emit();
+                on_scroll_left();
             } else if (e->direction == GDK_SCROLL_DOWN) {
-                on_scroll_right.emit();
+                on_scroll_right();
             }
             return true;
         }
@@ -1037,10 +1037,6 @@ DiodeMidiEvent* PatternWidget::LightUpDiode(DiodeMidiEvent diodev){
     active_diodes_mtx.lock();
     active_diodes.insert(diode_ptr);
     active_diodes_mtx.unlock();
-    //double l = 1.0;
-    //if (container != NULL && container->owner != NULL && container->owner->GetLength() < 1.0)
-    //    l = container->owner->GetLength();
-    //Glib::signal_timeout().connect(sigc::bind<DiodeMidiEvent *>(sigc::mem_fun(*this, &PatternWidget::DimDiode), diode_ptr),DIODE_FADEOUT_TIME * l);
     RedrawDiode(1,diode_ptr);
     return diode_ptr;
 }
@@ -1089,7 +1085,7 @@ bool PatternWidget::DrawDiodesTimeout(){
     }
     active_diodes_mtx.unlock();
 
-    Glib::signal_timeout().connect(sigc::mem_fun(*this,&PatternWidget::DrawDiodesTimeout),DIODE_FADEOUT_TIME * l /8);
+    Glib::signal_timeout().connect([=](){return DrawDiodesTimeout();},DIODE_FADEOUT_TIME * l /8);
     return false; // DO NOT REPEAT TIMEOUT
 }
 //=======================DRAWING==============
@@ -1214,7 +1210,7 @@ void PatternWidget::RedrawAllDiodes(){
 
     all_diodes_lock = 1;
     man_i_wanted_to_redraw_diodes_but_it_was_locked_could_you_please_do_it_later_for_me = 0;
-    Glib::signal_timeout().connect(sigc::mem_fun(*this, &PatternWidget::TimeLockDiodesCompleted), Config::Interaction::PatternRefreshMS);
+    Glib::signal_timeout().connect([=](){return TimeLockDiodesCompleted();}, Config::Interaction::PatternRefreshMS);
 
     Redraw();
 }
@@ -1305,7 +1301,7 @@ void PatternWidget::RedrawGrid(){
 
     grid_lock = 1;
     man_i_wanted_to_redraw_grid_but_it_was_locked_could_you_please_do_it_later_for_me = 0;
-    Glib::signal_timeout().connect(sigc::mem_fun(*this,&PatternWidget::TimeLockGridCompleted),Config::Interaction::PatternRefreshMS);
+    Glib::signal_timeout().connect([=](){return TimeLockGridCompleted();}, Config::Interaction::PatternRefreshMS);
 
     Redraw();
   }
@@ -1472,7 +1468,7 @@ void PatternWidget::RedrawGrid(){
 
     atoms_lock = 1;
     man_i_wanted_to_redraw_atoms_but_it_was_locked_could_you_please_do_it_later_for_me = 0;
-    Glib::signal_timeout().connect(sigc::mem_fun(*this,&PatternWidget::TimeLockAtomsCompleted),Config::Interaction::PatternRefreshMS);
+    Glib::signal_timeout().connect([=](){return TimeLockAtomsCompleted();}, Config::Interaction::PatternRefreshMS);
 
     Redraw();
 

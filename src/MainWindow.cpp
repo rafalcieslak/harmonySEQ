@@ -71,27 +71,27 @@ MainWindow::MainWindow()
     m_refActionGroup->add(Gtk::Action::create("MenuFile",_("File")));
     m_refActionGroup->add(Gtk::Action::create("MenuHelp",_( "Help")));
     m_refActionGroup->add(Gtk::Action::create("MenuTools",_( "Tools")));
-    m_refActionGroup->add(Gtk::Action::create("FileNew", Gtk::Stock::NEW,_("New"),_("Creates a new file.")), sigc::mem_fun(*this, &MainWindow::OnMenuNewClicked));
-    m_refActionGroup->add(Gtk::Action::create("FileOpen", Gtk::Stock::OPEN,_("Open"),_("Opens a file.")), sigc::mem_fun(*this, &MainWindow::OnMenuOpenClicked));
-    m_refActionGroup->add(Gtk::Action::create("FileSave", Gtk::Stock::SAVE,_("Save"),_("Saves the current file.")), sigc::mem_fun(*this, &MainWindow::OnMenuSaveClicked));
-    m_refActionGroup->add(Gtk::Action::create("FileSaveAs", Gtk::Stock::SAVE_AS,_("Save as..."),_("Saves the current file with a different name.")), sigc::mem_fun(*this, &MainWindow::OnMenuSaveAsClicked));
-    m_refActionGroup->add(Gtk::Action::create("FileQuit", Gtk::Stock::QUIT,_("Quit"),_("Quits harmonySEQ.")), sigc::mem_fun(*this, &MainWindow::OnMenuQuitClicked));
-    m_refActionGroup->add(Gtk::Action::create("Preferences", Gtk::Stock::PREFERENCES,_("Preferences"),_("harmonySEQ configuration.")), sigc::mem_fun(*this, &MainWindow::OnPreferencesClicked));
-    m_refActionGroup->add(Gtk::Action::create("AddNoteSeq", _("Add note sequencer"),_("Adds a new note seqencer. Note sequencers store melodies and output them as MIDI notes.")), sigc::mem_fun(*this, &MainWindow::OnAddNoteSeqClicked));
-    m_refActionGroup->add(Gtk::Action::create("AddCtrlSeq", _("Add control sequencer"),_("Adds a new control seqencer. Control sequencers store a graph of a particular setting, and output it as MIDI control messages.")), sigc::mem_fun(*this, &MainWindow::OnAddControlSeqClicked));
-    m_refActionGroup->add(Gtk::Action::create("RemoveSeq", Gtk::Stock::REMOVE, _("Remove"),_("Removes selected sequencer")), sigc::mem_fun(*this, &MainWindow::OnRemoveClicked));
-    m_refActionGroup->add(Gtk::Action::create("DuplicateSeq", Gtk::Stock::CONVERT, _("Duplicate"), _("Duplicates selected sequencer")), sigc::mem_fun(*this, &MainWindow::OnCloneClicked));
-    m_refActionGroup->add(Gtk::Action::create("About", Gtk::Stock::ABOUT), sigc::mem_fun(*this, &MainWindow::OnAboutMenuClicked));
+    m_refActionGroup->add(Gtk::Action::create("FileNew", Gtk::Stock::NEW,_("New"),_("Creates a new file.")), std::bind(&MainWindow::OnMenuNewClicked, this));
+    m_refActionGroup->add(Gtk::Action::create("FileOpen", Gtk::Stock::OPEN,_("Open"),_("Opens a file.")), std::bind(&MainWindow::OnMenuOpenClicked, this));
+    m_refActionGroup->add(Gtk::Action::create("FileSave", Gtk::Stock::SAVE,_("Save"),_("Saves the current file.")), std::bind(&MainWindow::OnMenuSaveClicked, this));
+    m_refActionGroup->add(Gtk::Action::create("FileSaveAs", Gtk::Stock::SAVE_AS,_("Save as..."),_("Saves the current file with a different name.")), std::bind(&MainWindow::OnMenuSaveAsClicked, this));
+    m_refActionGroup->add(Gtk::Action::create("FileQuit", Gtk::Stock::QUIT,_("Quit"),_("Quits harmonySEQ.")), std::bind(&MainWindow::OnMenuQuitClicked, this));
+    m_refActionGroup->add(Gtk::Action::create("Preferences", Gtk::Stock::PREFERENCES,_("Preferences"),_("harmonySEQ configuration.")), std::bind(&MainWindow::OnPreferencesClicked, this));
+    m_refActionGroup->add(Gtk::Action::create("AddNoteSeq", _("Add note sequencer"),_("Adds a new note seqencer. Note sequencers store melodies and output them as MIDI notes.")), std::bind(&MainWindow::OnAddNoteSeqClicked, this));
+    m_refActionGroup->add(Gtk::Action::create("AddCtrlSeq", _("Add control sequencer"),_("Adds a new control seqencer. Control sequencers store a graph of a particular setting, and output it as MIDI control messages.")), std::bind(&MainWindow::OnAddControlSeqClicked, this));
+    m_refActionGroup->add(Gtk::Action::create("RemoveSeq", Gtk::Stock::REMOVE, _("Remove"),_("Removes selected sequencer")), std::bind(&MainWindow::OnRemoveClicked, this));
+    m_refActionGroup->add(Gtk::Action::create("DuplicateSeq", Gtk::Stock::CONVERT, _("Duplicate"), _("Duplicates selected sequencer")), std::bind(&MainWindow::OnCloneClicked, this));
+    m_refActionGroup->add(Gtk::Action::create("About", Gtk::Stock::ABOUT), std::bind(&MainWindow::OnAboutMenuClicked, this));
     m_refActionGroup->add(Gtk::ToggleAction::create("MIDIClock", _("MIDIClock"),_("Toggle MIDI clock and start/stop messages output")));
     m_refActionGroup->add(Gtk::Action::create("Sync", Gtk::Stock::MEDIA_PLAY, _("Sync"),_("Toggle MIDI clock and start/stop messages output")));
-    m_refActionGroup->add(Gtk::ToggleAction::create("Metronome", _("Metronome"),_("Toggle metronome on/off")), sigc::mem_fun(*this, &MainWindow::OnMetronomeToggleClicked));
+    m_refActionGroup->add(Gtk::ToggleAction::create("Metronome", _("Metronome"),_("Toggle metronome on/off")), std::bind(&MainWindow::OnMetronomeToggleClicked, this));
     m_refActionGroup->add(Gtk::Action::create("Tap", Gtk::Stock::MEDIA_PLAY, _("Tap"),_("Tap multiple times to calculate and set BPM")));
-    m_refActionGroup->add(Gtk::Action::create("PlayPause", Gtk::Stock::MEDIA_PAUSE, _("Play/Pause"),_("Toggle play/pause")), sigc::mem_fun(*this, &MainWindow::OnPlayPauseClicked));
-    m_refActionGroup->add(Gtk::ToggleAction::create("PassMidiEvents", _("Pass MIDI events"),_("States whether MIDI events are passed-through harmonySEQ.")), sigc::mem_fun(*this, &MainWindow::OnPassToggleClicked));
-    //m_refActionGroup->add(Gtk::ToggleAction::create("PlayOnEdit", _("Play on edit"),_("If on, harmonySEQ will play a brief preview of note, when it's added, or changed manually in chord.")), sigc::mem_fun(*this, &MainWindow::OnPlayOnEditClicked));
-    m_refActionGroup->add(Gtk::Action::create("seq/PlayOnce", Gtk::Stock::MEDIA_NEXT, _("Play once"), _("Plays the sequence once.")), sigc::mem_fun(*this, &MainWindow::OnPopupPlayOnce));
-    m_refActionGroup->add(Gtk::Action::create("seq/Remove", Gtk::Stock::REMOVE, _("Remove"), _("Removes the sequencer.")), sigc::mem_fun(*this, &MainWindow::OnPopupRemove));
-    m_refActionGroup->add(Gtk::Action::create("seq/Duplicate", Gtk::Stock::CONVERT, _("Duplicate"), _("Duplicates the sequencer")), sigc::mem_fun(*this, &MainWindow::OnPopupDuplicate));
+    m_refActionGroup->add(Gtk::Action::create("PlayPause", Gtk::Stock::MEDIA_PAUSE, _("Play/Pause"),_("Toggle play/pause")), std::bind(&MainWindow::OnPlayPauseClicked, this));
+    m_refActionGroup->add(Gtk::ToggleAction::create("PassMidiEvents", _("Pass MIDI events"),_("States whether MIDI events are passed-through harmonySEQ.")), std::bind(&MainWindow::OnPassToggleClicked, this));
+    //m_refActionGroup->add(Gtk::ToggleAction::create("PlayOnEdit", _("Play on edit"),_("If on, harmonySEQ will play a brief preview of note, when it's added, or changed manually in chord.")), std::bind(&MainWindow::OnPlayOnEditClicked, this));
+    m_refActionGroup->add(Gtk::Action::create("seq/PlayOnce", Gtk::Stock::MEDIA_NEXT, _("Play once"), _("Plays the sequence once.")), std::bind(&MainWindow::OnPopupPlayOnce, this));
+    m_refActionGroup->add(Gtk::Action::create("seq/Remove", Gtk::Stock::REMOVE, _("Remove"), _("Removes the sequencer.")), std::bind(&MainWindow::OnPopupRemove, this));
+    m_refActionGroup->add(Gtk::Action::create("seq/Duplicate", Gtk::Stock::CONVERT, _("Duplicate"), _("Duplicates the sequencer")), std::bind(&MainWindow::OnPopupDuplicate, this));
 
     m_refActionGroup->add(Gtk::Action::create("Empty"));
 
@@ -231,7 +231,7 @@ MainWindow::MainWindow()
     tempo_button.set_digits(1);
     tempo_button.set_width_chars(5);
     tempo_button.set_value(midi->GetTempo());
-    tempo_button.signal_value_changed().connect(sigc::mem_fun(*this, &MainWindow::TempoChanged));
+    tempo_button.signal_value_changed().connect(std::bind(&MainWindow::TempoChanged, this));
 
     MidiClockTool.remove();
     MidiClockTool.add(midi_clock_button);
@@ -239,21 +239,21 @@ MainWindow::MainWindow()
     midi_clock_button.set_label(_("MIDI Clock"));
     midi_clock_button.set_active(midi->GetMidiClockEnabled());
     midi_clock_button.set_tooltip_markup(_("Toggles MIDI clock and start/stop messages output."));
-    midi_clock_button.signal_toggled().connect(sigc::mem_fun(*this, &MainWindow::OnMIDIClockToggled));
+    midi_clock_button.signal_toggled().connect(std::bind(&MainWindow::OnMIDIClockToggled, this));
 
     SyncTool.remove();
     SyncTool.add(sync_button);
     SyncTool.set_homogeneous(0);
     sync_button.set_label(_("Sync"));
     sync_button.set_tooltip_markup(_("Synchronizes external devices to harmonySEQs output buffer."));
-    sync_button.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::OnSyncClicked));
+    sync_button.signal_clicked().connect(std::bind(&MainWindow::OnSyncClicked, this));
 
     TapTool.remove();
     TapTool.add(tap_button);
     TapTool.set_homogeneous(0);
     tap_button.set_label(_("Tap"));
     tap_button.set_tooltip_markup(_("Tap multiple times to calculate BPM and set tempo."));
-    tap_button.signal_clicked().connect(sigc::mem_fun(*this, &MainWindow::OnTapTempoClicked));
+    tap_button.signal_clicked().connect(std::bind(&MainWindow::OnTapTempoClicked, this));
 
     UpdatePlayPauseTool();
     UpdatePassMidiToggle(); //sometimes we pass midi by default.
@@ -278,7 +278,7 @@ MainWindow::MainWindow()
         Gtk::TreeViewColumn * column = wTreeView.get_column(col_count-1);
         column->add_attribute(cell->property_cell_background(),m_columns_sequencers.col_name_color);
         Gtk::CellRendererText& txt = dynamic_cast<Gtk::CellRendererText&> (*cell);
-        txt.signal_edited().connect(mem_fun(*this, &MainWindow::OnNameEdited));
+        txt.signal_edited().connect(std::bind(&MainWindow::OnNameEdited, this, std::placeholders::_1, std::placeholders::_2));
 
         col_count = wTreeView.append_column_editable(_("On"), m_columns_sequencers.col_muted);
         column = wTreeView.get_column(col_count-1);
@@ -286,7 +286,7 @@ MainWindow::MainWindow()
         column->add_attribute(cell->property_cell_background(),m_columns_sequencers.col_colour);
         column->set_min_width(32);
         Gtk::CellRendererToggle& tgl = dynamic_cast<Gtk::CellRendererToggle&> (*cell);
-        tgl.signal_toggled().connect(mem_fun(*this, &MainWindow::OnMutedToggleToggled));
+        tgl.signal_toggled().connect(std::bind(&MainWindow::OnMutedToggleToggled, this, std::placeholders::_1));
 
         col_count = wTreeView.append_column(_("Channel"), m_columns_sequencers.col_channel);
         col_count = wTreeView.append_column(_("Pattern"), m_columns_sequencers.col_pattern);
@@ -311,20 +311,20 @@ MainWindow::MainWindow()
         wTreeView.enable_model_drag_source();
         wTreeView.enable_model_drag_dest();
 
-        wTreeView.signal_drag_begin().connect(sigc::mem_fun(*this, &MainWindow::OnTreeviewDragBegin));
-        wTreeView.signal_drag_end().connect(sigc::mem_fun(*this, &MainWindow::OnTreeviewDragEnd));
-        TreeModel_sequencers->signal_row_deleted().connect(sigc::mem_fun(*this, &MainWindow::OnTreeModelRowDeleted));
-        TreeModel_sequencers->signal_row_inserted().connect(sigc::mem_fun(*this, &MainWindow::OnTreeModelRowInserted));
+        wTreeView.signal_drag_begin().connect(std::bind(&MainWindow::OnTreeviewDragBegin, this, std::placeholders::_1));
+        wTreeView.signal_drag_end().connect(std::bind(&MainWindow::OnTreeviewDragEnd, this, std::placeholders::_1));
+        TreeModel_sequencers->signal_row_deleted().connect(std::bind(&MainWindow::OnTreeModelRowDeleted, this, std::placeholders::_1));
+        TreeModel_sequencers->signal_row_inserted().connect(std::bind(&MainWindow::OnTreeModelRowInserted, this, std::placeholders::_1, std::placeholders::_2));
 
         //forbids to typesearch
         wTreeView.set_enable_search(0);
 
         //click signal (for popup)
-        wTreeView.signal_button_press_event().connect(sigc::mem_fun(*this,&MainWindow::OnTreviewButtonPress), false);
+        wTreeView.signal_button_press_event().connect([=](GdkEventButton* ev){return OnTreviewButtonPress(ev);});
 
         //react on selection change
         Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = wTreeView.get_selection();
-        refTreeSelection->signal_changed().connect(mem_fun(*this,&MainWindow::OnSelectionChanged));
+        refTreeSelection->signal_changed().connect(std::bind(&MainWindow::OnSelectionChanged, this));
 
         wTreeView.set_model(TreeModel_sequencers);
         //initial data
@@ -336,8 +336,8 @@ MainWindow::MainWindow()
     }// </editor-fold>
 
     add_events(Gdk::KEY_PRESS_MASK);
-    signal_key_press_event().connect(mem_fun(*this,&MainWindow::OnKeyPress));
-    signal_key_release_event().connect(mem_fun(*this,&MainWindow::OnKeyRelease));
+    signal_key_press_event().connect([=](GdkEventKey* k){return OnKeyPress(k);});
+    signal_key_release_event().connect([=](GdkEventKey* k){return OnKeyRelease(k);});
 
     //icons settings
     if (harmonySEQ_logo_48) set_icon(harmonySEQ_logo_48);
@@ -403,7 +403,7 @@ MainWindow::on_delete_event(GdkEventAny* event)
         if(!Ask(_("The file has unsaved changes."),_("Are sure you want to quit?")))
           return 1;
 
-    on_quit_request.emit();
+    on_quit_request();
     return 0;
 }
 
@@ -794,7 +794,7 @@ void MainWindow::OnMenuQuitClicked(){
         if(!Ask(_("The file has unsaved changes."),_("Are sure you want to quit?")))
             return;
 
-    on_quit_request.emit();
+    on_quit_request();
 }
 
 void MainWindow::OnMenuNewClicked(){

@@ -29,6 +29,7 @@
 #include "DiodeMidiEvent.h"
 #include "seqHandle.h"
 
+
 class MidiDriver {
 public:
     /**Constructor, called only from main()*/
@@ -57,9 +58,6 @@ public:
 
     /**Outputs immediately a noteoff*/
     void SendNoteOffEventImmediatelly(int channel, int pitch);
-
-    /**Outputs a noteon and a noteoff after given time period.*/
-    void SendNoteEvent(int channel, int pitch, int velocity, int duration);
 
     /** Immediatelly send MIDI start/stop messages. **/
     void SendStop();
@@ -94,9 +92,9 @@ public:
     /** These signals may be emitted by any thread - the
      * subscriber must relay work to a different thread if
      * necessary. */
-    sigc::signal<void> on_paused;
-    sigc::signal<void> on_unpaused;
-    sigc::signal<void> on_beat;
+    bs2::signal<void()> on_paused;
+    bs2::signal<void()> on_unpaused;
+    bs2::signal<void()> on_beat;
 
 private:
     /**Infinite loop, exiting when"running" variable is set to 0. Waits for any MIDI events on input, and calls ProcessInput() when something is on the input.*/

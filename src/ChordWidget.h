@@ -34,7 +34,7 @@ public:
 
     /**Refreshes the GUI using data from parent chord*/
     void Update();
-    
+
     /**Whether to show an option setting 'apply octave'*/
     void ShowApplyOctave(bool show);
     void UpdateApplyOctave(bool apply);
@@ -43,17 +43,17 @@ public:
     void UpdateWhatToShowAndWhatIsSensitive();
 
     /**Called when any widget in chordwidget gets his data changed*/
-    sigc::signal<void> on_changed;
+    bs2::signal<void()> on_changed;
     /**Calleed when a note is MANUALLY changed. Prototype: ...(int note_number,int pitch)*/
-    sigc::signal<void,int,int> on_note_changed;
+    bs2::signal<void(int,int)> on_note_changed;
     /**Called when the Apply Octave toggle is toggled*/
-    sigc::signal<void,bool> on_apply_octave_toggled;
+    bs2::signal<void(bool)> on_apply_octave_toggled;
 
     void Select(Chord* ch);
     void UnSelect();
 
     void SetExpandDetails(bool e);
-    
+
     bool AnythingSelected;
     Gtk::Label caption;
 private:
@@ -71,12 +71,12 @@ private:
     void OnNoteChanged(int n);
     void OnShow();
     void OnApplyOctaveClicked();
-    
+
     /**Flag disabling reaction on signals, used to set data in widgets without reacting (react only if it was the user that changes the data)*/
     bool we_are_copying_note_values_from_chord_so_do_not_handle_the_signals;
 
     bool show_dnao;
-    
+
     Gtk::HBox MainBox;
 
     Gtk::VBox LeftHBox;
@@ -110,9 +110,8 @@ private:
     Gtk::SpinButton base;
 
     Gtk::Label summary_label;
-    
+
     Gtk::SpinButton* note_buttons[6];
 };
 
 #endif	/* CHORDWIDGET_H */
-

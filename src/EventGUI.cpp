@@ -85,9 +85,9 @@ EventGUI::EventGUI(Event *prt){
     note_spinbutton.set_increments(1.0,16.0);
     ctrl_spinbutton.set_increments(1.0,16.0);
     osc_tag.set_increments(1.0,16.0);
-    note_spinbutton.signal_value_changed().connect(mem_fun(*this,&EventGUI::OnNoteChanged));
-    ctrl_spinbutton.signal_value_changed().connect(mem_fun(*this,&EventGUI::OnCtrlChanged));
-    osc_tag.signal_value_changed().connect(mem_fun(*this,&EventGUI::OnOSCPortChanged));
+    note_spinbutton.signal_value_changed().connect(std::bind(&EventGUI::OnNoteChanged, this));
+    ctrl_spinbutton.signal_value_changed().connect(std::bind(&EventGUI::OnCtrlChanged, this));
+    osc_tag.signal_value_changed().connect(std::bind(&EventGUI::OnOSCPortChanged, this));
 
     label_type.set_text(_("Type:"));
     label_channel.set_text(_("Channel:"));
@@ -98,23 +98,23 @@ EventGUI::EventGUI(Event *prt){
     capture.set_label(_("Capture"));
     capture.set_tooltip_markup(_("Cathes next event end fill this one's type and arguments to fit the one triggered.\n<i>Example usage: press this button and then the X key on your keyboard. The event will be automatically set to type: keyboard, key: X.</i>"));
 
-    capture.signal_clicked().connect(sigc::mem_fun(*this,&EventGUI::OnCaptureClicked));
+    capture.signal_clicked().connect(std::bind(&EventGUI::OnCaptureClicked, this));
 
     Types_combo.pack_start(m_columns_event_types.label);
     Types_combo.set_active(parent->type);
-    Types_combo.signal_changed().connect(mem_fun(*this,&EventGUI::OnTypeChanged));
+    Types_combo.signal_changed().connect(std::bind(&EventGUI::OnTypeChanged, this));
     Keys_combo.pack_start(m_columns_key_codes.label);
-    Keys_combo.signal_changed().connect(mem_fun(*this,&EventGUI::OnKeyChanged));
+    Keys_combo.signal_changed().connect(std::bind(&EventGUI::OnKeyChanged, this));
     Channels_combo.pack_start(m_columns_channels.label);
-    Channels_combo.signal_changed().connect(mem_fun(*this,&EventGUI::OnChannelChanged));
+    Channels_combo.signal_changed().connect(std::bind(&EventGUI::OnChannelChanged, this));
 
     main_box.pack_start(ok_button,Gtk::PACK_SHRINK);
     ok_button.set_label(_("OK"));
-    ok_button.signal_clicked().connect(mem_fun(*this,&EventGUI::OnOKClicked));
+    ok_button.signal_clicked().connect(std::bind(&EventGUI::OnOKClicked, this));
 
-    signal_show().connect(mem_fun(*this,&EventGUI::UpdateValues));
+    signal_show().connect(std::bind(&EventGUI::UpdateValues, this));
     add_events(Gdk::KEY_PRESS_MASK);
-    signal_key_press_event().connect(mem_fun(*this,&EventGUI::OnKeyPress));
+    signal_key_press_event().connect([=](GdkEventKey *e){return OnKeyPress(e);});
 
     label_preview.set_text(parent->GetLabel());
     show_all_children(1);

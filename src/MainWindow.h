@@ -77,7 +77,7 @@ public:
     EventsWidget eventsWidget;
 
     /** Emitted when user confirms application quit. */
-    sigc::signal<void> on_quit_request;
+    bs2::signal<void()> on_quit_request;
 
 private:
      /**Reacts on sequencer settings changes from main window*/

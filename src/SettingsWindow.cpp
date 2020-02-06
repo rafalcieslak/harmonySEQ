@@ -115,7 +115,7 @@ SettingsWindow::SettingsWindow(){
     metronome_bar_label.set_text(_("Bar:"));
     metronome_1_4.set_label(_("1/4 bar:"));
     metronome_1_4.set_tooltip_markup(_("Mark here, and the metronome will also tick on every 1/4 of each bar."));
-    metronome_1_4.signal_toggled().connect(mem_fun(*this,&SettingsWindow::OnUse14BarToggled));
+    metronome_1_4.signal_toggled().connect(std::bind(&SettingsWindow::OnUse14BarToggled, this));
     metronome_note_label.set_text(_("Note:"));
     metronome_velocity_label.set_text(_("Velocity:"));
     metronome_channel_label.set_text(_("Channel:"));
@@ -164,14 +164,14 @@ SettingsWindow::SettingsWindow(){
     osc_description.set_markup(_("\n<span size='small'><b>harmonySEQ supports following OSC messages:</b>\n<i>/harmonyseq/pause</i> and <i>/harmonyseq/play</i>\n<i>/harmonyseq/tempo [float]</i>\n<i>/harmonyseq/sync</i> (for synchronizing)\n<i>/karmonyseq/kill</i> (to quit immidiatelly)\n<i>/harmonyseq/event [int]</i> (to trigger events with\nthe given tag).</span>"));
 
 
-    ok_button.signal_clicked().connect(mem_fun(*this,&SettingsWindow::OnOKClicked));
-    cancel_button.signal_clicked().connect(mem_fun(*this,&SettingsWindow::OnCancelClicked));
-    restore_defaults_button.signal_clicked().connect(mem_fun(*this,&SettingsWindow::OnRestoreDefaults));
+    ok_button.signal_clicked().connect(std::bind(&SettingsWindow::OnOKClicked, this));
+    cancel_button.signal_clicked().connect(std::bind(&SettingsWindow::OnCancelClicked, this));
+    restore_defaults_button.signal_clicked().connect(std::bind(&SettingsWindow::OnRestoreDefaults, this));
 
     show_all();
     hide();
 
-    signal_show().connect(mem_fun(*this,&SettingsWindow::OnShowed));
+    signal_show().connect(std::bind(&SettingsWindow::OnShowed, this));
 }
 
 SettingsWindow::~SettingsWindow(){
