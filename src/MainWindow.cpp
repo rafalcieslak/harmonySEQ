@@ -45,6 +45,15 @@ bool ShiftKeyDown;
 Gtk::TreeModel::iterator row_inserted_by_drag;
 bool seq_list_drag_in_progress;
 
+template <typename Functor>
+void DeferWorkToUIThread(Functor&& f){
+    Glib::signal_idle().connect(
+        [=](){
+            f();
+            return false;
+        });
+}
+
 MainWindow::MainWindow()
 {
     set_name("mainwindow");
@@ -340,6 +349,22 @@ MainWindow::MainWindow()
         AddCtrlTool.set_icon_widget(add_ctrl_seq_icon);
         AddNoteTool.set_icon_widget(add_note_seq_icon);
     }
+
+    // Subscribe to engine signals. They are emitted by the engine
+    // thread, so we refer them to the idle timeout, which is
+    // processed by the GTK thread.
+
+    midi->on_beat.connect(
+        [=](){ DeferWorkToUIThread(
+            [=](){ FlashTempo(); });});
+
+    midi->on_paused.connect(
+        [=](){ DeferWorkToUIThread(
+            [=](){ UpdatePlayPauseTool(); });});
+
+    midi->on_unpaused.connect(
+        [=](){ DeferWorkToUIThread(
+            [=](){ UpdatePlayPauseTool(); });});
 
     show_all_children(1);
 
@@ -821,7 +846,7 @@ void MainWindow::OnMenuSaveAsClicked(){
 
     *dbg << "saiving to file!\n";
     Gtk::FileChooserDialog dialog(_("Choose a file to save..."),Gtk::FILE_CHOOSER_ACTION_SAVE);
-    dialog.set_transient_for(*mainwindow);
+    dialog.set_transient_for(*this);
     dialog.add_button(Gtk::Stock::CANCEL,Gtk::RESPONSE_CANCEL);
     dialog.add_button(Gtk::Stock::SAVE,Gtk::RESPONSE_OK);
 

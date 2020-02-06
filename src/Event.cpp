@@ -26,6 +26,7 @@
 
 // TODO: This data structure desperately needs a mutex.
 std::vector<Event *> Events;
+extern MainWindow* mainwindow;
 
 bool event_capturing_mode;
 Event* event_to_capture_to;

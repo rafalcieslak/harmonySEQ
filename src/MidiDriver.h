@@ -91,6 +91,13 @@ public:
     void SetDiodesEnabled(bool disabled);
     bool GetDiodesEnabled();
 
+    /** These signals may be emitted by any thread - the
+     * subscriber must relay work to a different thread if
+     * necessary. */
+    sigc::signal<void> on_paused;
+    sigc::signal<void> on_unpaused;
+    sigc::signal<void> on_beat;
+
 private:
     /**Infinite loop, exiting when"running" variable is set to 0. Waits for any MIDI events on input, and calls ProcessInput() when something is on the input.*/
     void LoopWhileWaitingForInput();

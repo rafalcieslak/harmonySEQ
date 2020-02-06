@@ -23,6 +23,10 @@
 #include "Files.h"
 #include "MainWindow.h"
 #include "Configuration.h"
+
+extern MainWindow* mainwindow;
+
+
 EventGUI::EventGUI(Event *prt){
     parent = prt;
 
@@ -50,16 +54,16 @@ EventGUI::EventGUI(Event *prt){
     main_box.pack_start(separator);
     main_box.pack_start(osc_note);
     main_box.pack_start(label_preview);
-    
+
     char temp[200];
 #ifndef DISABLE_OSC
     sprintf(temp,_("<span size='small'>harmonySEQ listens for OSC messages at port %d</span>"),Config::OSC::Port);
 #else
     sprintf(temp,_("<span size='small'><b>harmonySEQ was compiled without OSC support!</b>\nThis means this event cannot be triggered.</span>"));
 #endif
-    
+
     osc_note.set_markup(temp);
-    
+
     line_type.pack_start(label_type,Gtk::PACK_SHRINK);
     line_key.pack_start(label_key,Gtk::PACK_SHRINK);
     line_note.pack_start(label_note,Gtk::PACK_SHRINK);
@@ -206,7 +210,7 @@ void EventGUI::OnChannelChanged(){
     if(parent->type == Event::CONTROLLER || parent->type == Event::NOTE){
 
             parent->arg2 = (*(Channels_combo.get_active()))[m_columns_channels.ch];
-        
+
     }else *err << _("Error: channel has changed, while event is not MIDI-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
@@ -254,7 +258,7 @@ void EventGUI::OnOSCPortChanged(){
 
     label_preview.set_text(parent->GetLabel());
     if(parent->row_in_event_widget) mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
-    Files::SetFileModified(1); 
+    Files::SetFileModified(1);
 }
 
 void EventGUI::OnOKClicked(){

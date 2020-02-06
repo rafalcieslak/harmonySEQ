@@ -20,6 +20,8 @@
 #include "SettingsWindow.h"
 #include "Configuration.h"
 
+extern MainWindow* mainwindow;
+
 SettingsWindow::SettingsWindow(){
     hide();
     set_title(_("Settings"));
@@ -47,14 +49,14 @@ SettingsWindow::SettingsWindow(){
     page_OSC.set_border_width(5);
 
     page_main.pack_start(disable_diodes_vbox);
-    
+
     disable_diodes_vbox.pack_start(disable_diodes_label_hbox);
     disable_diodes_label_hbox.pack_start(disable_diodes_label,Gtk::PACK_SHRINK);
     disable_diodes_vbox.pack_start(disable_diodes,Gtk::PACK_SHRINK);
     disable_diodes_label.set_markup(_("<b>Disable diodes</b>"));
     disable_diodes.set_label(_("Disable all animated diodes"));
     disable_diodes.set_tooltip_markup(_("Disables animated diodes, which may improve performance.\n<b>Requires restart to take effect.</b>"));
-    
+
     page_main.pack_start(sepFPS);
     page_main.pack_start(boxFPS);
     boxFPS.pack_start(boxFPSlabel);
@@ -68,9 +70,9 @@ SettingsWindow::SettingsWindow(){
     FPSbutton.set_increments(1.0,10.0);
     FPSbutton.set_tooltip_markup(_("The <b>maximum</b> FPS value used when smooth animation is needed, for example when dragging notes. Note this is the maximum value, it is usually much much lower, as the pattern is redrawn only when nessesary.\n\nHigh values may cause higher CPU usage when dragging notes, moving graph points etc., but result in much smoothier animations."));
     FPSbutton_label.set_tooltip_markup(_("The <b>maximum</b> FPS value used when smooth animation is needed, for example when dragging notes. Note this is the maximum value, it is usually much much lower, as the pattern is redrawn only when nessesary.\n\nHigh values may cause higher CPU usage when dragging notes, moving graph points etc., but result in much smoothier animations."));
-    
+
     page_main.pack_start(sep1);
-    
+
     // <editor-fold defaultstate="collapsed" desc="visible colums">
     page_main.pack_start(columns_label_hbox);
     page_main.pack_start(colums_vbox);
@@ -160,7 +162,7 @@ SettingsWindow::SettingsWindow(){
     osc_note_restart.set_markup(_("<span size='small'>Changing this setting needs restarting\nharmonySEQ to take effect.</span>"));
     osc_description_hbox.pack_start(osc_description,Gtk::PACK_SHRINK);
     osc_description.set_markup(_("\n<span size='small'><b>harmonySEQ supports following OSC messages:</b>\n<i>/harmonyseq/pause</i> and <i>/harmonyseq/play</i>\n<i>/harmonyseq/tempo [float]</i>\n<i>/harmonyseq/sync</i> (for synchronizing)\n<i>/karmonyseq/kill</i> (to quit immidiatelly)\n<i>/harmonyseq/event [int]</i> (to trigger events with\nthe given tag).</span>"));
-    
+
 
     ok_button.signal_clicked().connect(mem_fun(*this,&SettingsWindow::OnOKClicked));
     cancel_button.signal_clicked().connect(mem_fun(*this,&SettingsWindow::OnCancelClicked));
@@ -168,7 +170,7 @@ SettingsWindow::SettingsWindow(){
 
     show_all();
     hide();
-    
+
     signal_show().connect(mem_fun(*this,&SettingsWindow::OnShowed));
 }
 

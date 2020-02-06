@@ -21,6 +21,10 @@
 #include "global.h"
 #include "messages.h"
 #include "MainWindow.h"
+
+extern MainWindow* mainwindow;
+
+
 bool Ask(Glib::ustring message, Glib::ustring secondary_message){
     Gtk::MessageDialog dialog(*mainwindow,message,false,Gtk::MESSAGE_QUESTION,Gtk::BUTTONS_YES_NO);
     dialog.set_secondary_text(secondary_message);

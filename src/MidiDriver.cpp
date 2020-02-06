@@ -31,6 +31,8 @@
 #include "NoteAtom.h"
 
 extern std::vector<Sequencer *> seqVector;
+extern MainWindow* mainwindow;
+
 
 MidiDriver::MidiDriver() {
     paused = false;
@@ -350,12 +352,7 @@ void MidiDriver::PauseImmediately(){
 
     *dbg << "Queue paused!\n";
 
-    Glib::signal_idle().connect(
-        [=](){
-            //Choose an icon/label for the toggle in the main window
-            mainwindow->UpdatePlayPauseTool();
-            return false;
-        });
+    on_paused.emit();
 }
 
 void MidiDriver::Sync(){
@@ -402,15 +399,7 @@ void MidiDriver::Unpause(){
     paused = false;
     *dbg << "Queue unpaused!\n";
 
-    // TODO: Use signals here and have mainwindow set up its own subscription.
-    Glib::signal_idle().connect(
-        [=](){
-            //Indicate graphically a starting bar
-            mainwindow->FlashTempo();
-            //Choose an icon/label for the toggle in the main window
-            mainwindow->UpdatePlayPauseTool();
-            return false;
-        });
+    on_unpaused.emit();
 }
 
 void MidiDriver::ClearQueue(bool remove_noteoffs){
@@ -695,6 +684,7 @@ void MidiDriver::UpdateQueue(){
     int res = snd_seq_drain_output(seq_handle);
     if(res != 0) *err << "ERROR: ALSA sequencer interface returned an error code (" << res << ") on snd_seq_drain_output.\n";
 
+    on_beat.emit();
 }
 
 
@@ -731,17 +721,8 @@ void MidiDriver::ProcessInput(){
                 break;
             case SND_SEQ_EVENT_ECHO:
                 *dbg << "ECHO!\n";
-
-                Glib::signal_idle().connect(
-                    [=](){
-                        //Indicate graphically that a new bar is starting
-                        mainwindow->FlashTempo();
-                        return false;
-                    });
-
                 //As we got the ECHO event, this means we must prepare the next bar, that is starting right now.
                 UpdateQueue();
-
                 break;
             case SND_SEQ_EVENT_CONTROLLER:
                 //This is a controller event. t might have triggered events, so let's check for them.

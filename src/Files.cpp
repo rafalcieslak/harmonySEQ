@@ -32,6 +32,7 @@
 #include "ControllerAtom.h"
 
 extern std::vector<Sequencer *> seqVector;
+extern MainWindow* mainwindow;
 
 namespace Files {
 

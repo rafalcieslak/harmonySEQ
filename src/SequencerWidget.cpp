@@ -32,6 +32,8 @@
 extern Glib::RefPtr< Gdk::Pixbuf > icon_slope_linear;
 extern Glib::RefPtr< Gdk::Pixbuf > icon_slope_flat;
 
+extern MainWindow* mainwindow;
+
 SequencerWidget::SequencerWidget()
 {
     *dbg << "constructing new SEQUENCERWIDGET\n";

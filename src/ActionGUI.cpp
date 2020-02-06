@@ -28,7 +28,7 @@
 #include "global.h"
 
 extern std::vector<Sequencer *> seqVector;
-
+extern MainWindow* mainwindow;
 
 ActionGUI::ActionGUI(Action *prt)
 {

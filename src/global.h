@@ -78,7 +78,6 @@ extern debug* dbg;
 extern error* err;
 
 extern MidiDriver* midi;
-extern MainWindow* mainwindow;
 extern SettingsWindow* settingswindow;
 
 extern std::map<Glib::ustring, int> keymap_stoi;
