@@ -71,8 +71,6 @@ void Action::Trigger(int data){
                     seqH(args[1])->SetOn(!seqH(args[1])->GetOn());
                     break;
             }
-            mainwindow->RefreshRow(seqH(args[1])->my_row);
-            if(mainwindow->seqWidget.selectedSeq == args[1]) mainwindow->seqWidget.UpdateOnOff();
             break;
 
         case TEMPO_SET:
@@ -100,8 +98,6 @@ void Action::Trigger(int data){
         case SEQ_PLAY_ONCE:
             if (seqVector.size()==0 || !seqH(args[1])) break;
             seqH(args[1])->SetPlayOncePhase(1);
-            mainwindow->RefreshRow(seqH(args[1])->my_row);
-            if(mainwindow->seqWidget.selectedSeq == args[1]) mainwindow->seqWidget.UpdateOnOff();
             break;
         case NONE:
             *dbg << "empty event triggered\n";
@@ -128,9 +124,6 @@ void Action::Trigger(int data){
         case SEQ_CHANGE_PATTERN:
             if (seqVector.size()==0 || !seqH(args[1])) break;
             seqH(args[1])->SetActivePatternNumber(args[2]);
-            mainwindow->RefreshRow(seqH(args[1])->my_row);
-            if(mainwindow->seqWidget.selectedSeq == args[1]) mainwindow->seqWidget.UpdateActivePattern()
-            ;
             break;
         case SEQ_TRANSPOSE_OCTAVE:
             if (seqVector.size()==0 || !seqH(args[1])  || seqH(args[1])->GetType() != SEQ_TYPE_NOTE) break;

@@ -517,7 +517,7 @@ void MainWindow::RefreshRow(Gtk::TreeRow row){
     row[m_columns_sequencers.col_muted] = seq->GetOn();
     row[m_columns_sequencers.col_name] = seq->GetName();
     row[m_columns_sequencers.col_channel] = seq->GetChannel();
-    row[m_columns_sequencers.col_res] = seq->resolution;
+    row[m_columns_sequencers.col_res] = seq->GetResolution();
     row[m_columns_sequencers.col_pattern] = seq->GetActivePatternNumber();
     row[m_columns_sequencers.col_len] = seq->GetLength();
 

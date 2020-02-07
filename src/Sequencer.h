@@ -69,17 +69,15 @@ public:
     /**Fills in everything with default values*/
     virtual void Init();
 
-    /**Stores the resolution of sequence. Note it should be used only to store in file, the actual resolution is no more used - that's graphical only.*/
-    int resolution;
-
     /**Used to change resolution of this sequencer*/
     void SetResolution(int res);
+    int GetResolution();
 
     /**Used to change this seq's length*/
     void SetLength(int numerator, int denominator);
 
     /**Returns seq's length*/
-    double GetLength() volatile;
+    double GetLength();
     int GetLengthNumerator();
     int GetLengthDenominator();
 
@@ -134,11 +132,16 @@ public:
 
     /* These signals can be emitted by any thread - it's up to the
      * receiver to relay work to the right thread. */
+
     /* Triggered whenever this sequencer's play state changes
      * (including on/off switches and playOnce phase. */
     bs2::signal<void()> on_playstate_change;
 
+    bs2::signal<void()> on_activepattern_change;
+
 protected:
+    /**Stores the resolution of sequence. */
+    int resolution;
 
     /**The active sequence number*/
     int active_pattern;

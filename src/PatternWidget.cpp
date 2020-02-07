@@ -305,7 +305,7 @@ void PatternWidget::MoveSelectionRight(){
         std::set<Atom *, AtomComparingClass> resulting_selection;
         for (; it != selection.end(); it++) {
             Atom* atm = (*it);
-            atm->time = (atm->time+1.0/(double)container->owner->resolution);
+            atm->time = (atm->time+1.0/(double)container->owner->GetResolution());
             if(atm->time >= 1.0) atm->time -= 1.0;
             if(atm->time < 0.0) atm->time += 1.0;
             resulting_selection.insert(atm);
@@ -321,7 +321,7 @@ void PatternWidget::MoveSelectionLeft(){
         std::set<Atom *, AtomComparingClass> resulting_selection;
         for (; it != selection.end(); it++) {
             Atom* atm = (*it);
-            atm->time = (atm->time-1.0/(double)container->owner->resolution);
+            atm->time = (atm->time-1.0/(double)container->owner->GetResolution());
             if(atm->time >= 1.0) atm->time -= 1.0;
             if(atm->time < 0.0) atm->time += 1.0;
             resulting_selection.insert(atm);
@@ -409,11 +409,11 @@ double PatternWidget::Snap(double t){
     if (!container->owner) // if no owner...
         return t; //do not snap, if we can't get the resolution.
 
-    t*= container->owner->resolution;
+    t*= container->owner->GetResolution();
     t += 0.5;
     if(t<0) t--;
     t = (int)t;
-    t /= container->owner->resolution;
+    t /= container->owner->GetResolution();
     return t;
 }
 
@@ -421,10 +421,10 @@ double PatternWidget::SnapDown(double t){
     if (!container->owner) // if no owner...
         return t; //do not snap, if we can't get the resolution.
 
-    t*= container->owner->resolution;
+    t*= container->owner->GetResolution();
     if(t<0) t--;
     t = (int)t;
-    t /= container->owner->resolution;
+    t /= container->owner->GetResolution();
     return t;
 }
 
@@ -647,7 +647,7 @@ void PatternWidget::ProcessDrag(double x, double y){
 
         double note_min_len = 0.01;
         if (snap) { //if snap
-            note_min_len = (double) 1.0 / container->owner->resolution;
+            note_min_len = (double) 1.0 / container->owner->GetResolution();
         }
         double note_max_len = 1.0;
 
@@ -746,7 +746,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                         if (snap) {
                             temp_time = SnapDown(temp_time);
                         }
-                        double len = (double) 1.0 / container->owner->resolution;
+                        double len = (double) 1.0 / container->owner->GetResolution();
                         NoteAtom* note = new NoteAtom(temp_time, len, line);
                         if (event->state & (1 << 2)) note->velocity = 0; // If ctrl key was hold, add a quiet note
                         container->Add(note);
@@ -1235,7 +1235,7 @@ void PatternWidget::RedrawGrid(){
     cr_grid_context->save();
     cr_grid_context->scale(scale_factor, scale_factor);
 
-    int resolution = container->owner->resolution;
+    int resolution = container->owner->GetResolution();
 
       //clearing...
       cr_grid_context->save();

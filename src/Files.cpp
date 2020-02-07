@@ -281,7 +281,7 @@ void SaveToFile(Glib::ustring filename){
         kf.set_integer(temp,"handle",seq->MyHandle);
         kf.set_boolean(temp,"on",seq->GetOn());
         kf.set_integer(temp,"channel",seq->GetChannel());
-        kf.set_integer(temp,"resolution",seq->resolution);
+        kf.set_integer(temp,"resolution",seq->GetResolution());
         kf.set_integer(temp,"length_numerator",seq->GetLengthNumerator());
         kf.set_integer(temp,"length_denominator",seq->GetLengthDenominator());
         int seq_type = seq->GetType();
@@ -416,7 +416,7 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
             seq->SetName(kfp->get_string(temp, "name"));
             seq->SetOn(kfp->get_boolean(temp, "on"));
             seq->SetChannel(kfp->get_integer(temp, "channel"));
-            seq->resolution = kfp->get_integer(temp, "resolution");
+            seq->SetResolution(kfp->get_integer(temp, "resolution"));
             seq->SetLength(kfp->get_integer(temp, "length_numerator"),kfp->get_integer(temp, "length_denominator"));
 
 

@@ -303,7 +303,11 @@ void SequencerWidget::SelectSeq(seqHandle h){
 
     seq->on_playstate_change.connect(
         [=](){ DeferWorkToUIThread(
-            [=](){ UpdateOnOffColour(); });});
+            [=](){ UpdateOnOff(); });});
+
+    seq->on_activepattern_change.connect(
+        [=](){ DeferWorkToUIThread(
+            [=](){ UpdateActivePattern(); });});
 
     UpdateEverything();
     DeacivateAllDiodes();
@@ -437,7 +441,7 @@ void SequencerWidget::UpdateRelLenBoxes(){
    sprintf(temp," = %.4f",seq->GetLength());
    wLengthResult.set_text(temp);
 
-   wResolutions.set_value(seq->resolution);
+   wResolutions.set_value(seq->GetResolution());
 
    ignore_signals = 0;
 }

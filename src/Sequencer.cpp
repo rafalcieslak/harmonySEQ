@@ -152,13 +152,16 @@ void Sequencer::Init(){
 void Sequencer::SetResolution(int res){
     resolution = res;
 }
+int Sequencer::GetResolution(){
+    return resolution;
+}
 
 void Sequencer::SetLength(int numerator, int denominator){
     length_numerator = numerator;
     length_denominator = denominator;
 }
 
-double Sequencer::GetLength() volatile{
+double Sequencer::GetLength(){
     if (length_denominator == 0) return 1.0;
     return (double)length_numerator/(double)length_denominator;
 }
@@ -176,6 +179,7 @@ void Sequencer::SetActivePatternNumber(int a){
         active_pattern = a%(patterns.size());
     else
         active_pattern = 0;
+    on_activepattern_change();
 }
 
 int Sequencer::GetActivePatternNumber(){
