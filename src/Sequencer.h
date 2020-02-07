@@ -132,6 +132,12 @@ public:
     /**Remembers the handle to this sequencer.*/
     seqHandle MyHandle;
 
+    /* These signals can be emitted by any thread - it's up to the
+     * receiver to relay work to the right thread. */
+    /* Triggered whenever this sequencer's play state changes
+     * (including on/off switches and playOnce phase. */
+    bs2::signal<void()> on_playstate_change;
+
 protected:
 
     /**The active sequence number*/

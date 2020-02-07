@@ -186,7 +186,12 @@ AtomContainer* Sequencer::GetActivePattern(){
     return &patterns[active_pattern];
 }
 
-void Sequencer::SetOn(bool m){on = m;play_once_phase=0;}
+void Sequencer::SetOn(bool m){
+    on = m;
+    play_once_phase=0;
+    on_playstate_change();
+}
+
 bool Sequencer::GetOn(){return on;}
 bool Sequencer::IsPlaying(){return playing;}
 void Sequencer::SetPlaying(bool p){playing = p;}
@@ -197,7 +202,7 @@ Glib::ustring Sequencer::GetName(){return name;}
 
 void Sequencer::SetPlayOncePhase(int p){
     play_once_phase = p;
-
+    on_playstate_change();
 }
 
 int Sequencer::GetPlayOncePhase(){

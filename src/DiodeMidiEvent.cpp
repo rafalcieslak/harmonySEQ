@@ -20,7 +20,8 @@
 #include "DiodeMidiEvent.h"
 
 
-DiodeMidiEvent::DiodeMidiEvent(DiodeType type_, double time_, int value_, int color_, int max_res_){
+DiodeMidiEvent::DiodeMidiEvent(seqHandle target_, DiodeType type_, double time_, int value_, int color_, int max_res_){
+    target = target_;
     type = type_;
     time = time_;
     value = value_;
@@ -29,6 +30,7 @@ DiodeMidiEvent::DiodeMidiEvent(DiodeType type_, double time_, int value_, int co
 }
 
 DiodeMidiEvent::DiodeMidiEvent(const DiodeMidiEvent& orig){
+    target = orig.target;
     type = orig.type;
     time = orig.time;
     value = orig.value;
@@ -41,12 +43,13 @@ DiodeMidiEvent::~DiodeMidiEvent(){
 
 DiodeMidiEvent & DiodeMidiEvent::operator =(const DiodeMidiEvent& other){
     if(this != &other){
+        target = other.target;
         type = other.type;
         time = other.time;
         value = other.value;
         max_res = other.max_res;
         color = other.color;
-        
+
     }
     return *this;
 }

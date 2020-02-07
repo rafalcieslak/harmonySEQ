@@ -45,15 +45,6 @@ bool ShiftKeyDown;
 Gtk::TreeModel::iterator row_inserted_by_drag;
 bool seq_list_drag_in_progress;
 
-template <typename Functor>
-void DeferWorkToUIThread(Functor&& f){
-    Glib::signal_idle().connect(
-        [=](){
-            f();
-            return false;
-        });
-}
-
 MainWindow::MainWindow()
 {
     set_name("mainwindow");
@@ -366,6 +357,10 @@ MainWindow::MainWindow()
         [=](){ DeferWorkToUIThread(
             [=](){ UpdatePlayPauseTool(); });});
 
+    midi->on_diode.connect(
+        [=](auto dev){ DeferWorkToUIThread(
+            [=](){ OnDiodeEvent(dev); });});
+
     show_all_children(1);
 
     //This is the cure for any Gtk warnings one may experience.
@@ -479,35 +474,16 @@ Gtk::TreeModel::Row MainWindow::AddSequencerRow(int x)
     Gtk::TreeModel::iterator iter = TreeModel_sequencers->append();
     Gtk::TreeModel::Row row = *(iter);
     Sequencer* seq = seqV(x);
+
     row[m_columns_sequencers.col_handle] = seq->MyHandle;
-    row[m_columns_sequencers.col_name] = seq->GetName();
-    row[m_columns_sequencers.col_muted] = seq->GetOn();
-    row[m_columns_sequencers.col_channel] = seq->GetChannel();
-    row[m_columns_sequencers.col_pattern] = seq->GetActivePatternNumber();
-    row[m_columns_sequencers.col_res] = seq->resolution;
-    row[m_columns_sequencers.col_len] = seq->GetLength();
 
-    if(seq->GetType() == SEQ_TYPE_NOTE){
-        NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seq);
-        row[m_columns_sequencers.col_chord] = noteseq->chord.GetName();
-        row[m_columns_sequencers.col_name_color] = TREEVIEW_COLOR_T_NOTE;
-    } else if (seq->GetType() == SEQ_TYPE_CONTROL){
-        ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*>(seq);
-        char temp[20];
-        sprintf(temp,_("Ctrl %d"),ctrlseq->controller_number);
-        row[m_columns_sequencers.col_chord] = temp;
-        row[m_columns_sequencers.col_name_color] = TREEVIEW_COLOR_T_CTRL;
-    }
+    RefreshRow(row);
 
-    if(seq->GetOn()){
-        row[m_columns_sequencers.col_colour] = TREEVIEW_COLOR_ON;
-    }else if (seq->GetPlayOncePhase() == 2 || seq->GetPlayOncePhase() == 3){
-        row[m_columns_sequencers.col_colour] = TREEVIEW_COLOR_P1;
-    }else if(seq->GetPlayOncePhase()== 1){
-        row[m_columns_sequencers.col_colour] = TREEVIEW_COLOR_PRE_P1;
-    }else{
-        row[m_columns_sequencers.col_colour] = TREEVIEW_COLOR_OFF;
-    }
+    // TODO: Do we need to disconnect this when the row is removed?
+    seq->on_playstate_change.connect(
+        [=](){ DeferWorkToUIThread(
+            [=](){ RefreshRow(row); });});
+
     seq->my_row = row;
     return row;
 }
@@ -518,44 +494,10 @@ void MainWindow::InitTreeData(){
     *dbg << "loading initial data to the treeview\n";
     TreeModel_sequencers->clear();
     Gtk::TreeModel::Row row;
-    int rowcount = 0;
     for (unsigned int x = 0; x < seqVector.size(); x++) {
         if (!seqV(x)) continue; //seems it was removed
-        Gtk::TreeModel::iterator iter = TreeModel_sequencers->append();
-        Sequencer* seq = seqV(x);
-        row = *(iter);
-        row[m_columns_sequencers.col_handle] = seq->MyHandle;
-        row[m_columns_sequencers.col_muted] = seq->GetOn();
-        row[m_columns_sequencers.col_name] = seq->GetName();
-        row[m_columns_sequencers.col_channel] = seq->GetChannel();
-        row[m_columns_sequencers.col_res] = seq->resolution;
-        row[m_columns_sequencers.col_pattern] = seq->GetActivePatternNumber();
-        row[m_columns_sequencers.col_len] = seq->GetLength();
 
-        if(seq->GetType() == SEQ_TYPE_NOTE){
-            NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seq);
-            row[m_columns_sequencers.col_chord] = noteseq->chord.GetName();
-            row[m_columns_sequencers.col_name_color] = TREEVIEW_COLOR_T_NOTE;
-        } else if (seq->GetType() == SEQ_TYPE_CONTROL){
-            ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*>(seq);
-            char temp[20];
-            sprintf(temp,_("Ctrl %d"),ctrlseq->controller_number);
-            row[m_columns_sequencers.col_chord] = temp;
-            row[m_columns_sequencers.col_name_color] = TREEVIEW_COLOR_T_CTRL;
-        }
-
-        if(seq->GetOn()){
-            row[m_columns_sequencers.col_colour] = TREEVIEW_COLOR_ON;
-        }else if (seq->GetPlayOncePhase() == 2 || seq->GetPlayOncePhase() == 3){
-            row[m_columns_sequencers.col_colour] = TREEVIEW_COLOR_P1;
-        }else if(seq->GetPlayOncePhase()== 1){
-            row[m_columns_sequencers.col_colour] = TREEVIEW_COLOR_PRE_P1;
-        }else{
-            row[m_columns_sequencers.col_colour] = TREEVIEW_COLOR_OFF;
-        }
-
-        seqV(x)->my_row = row;
-        rowcount++;
+        AddSequencerRow(x);
     }
 
 }
@@ -755,6 +697,12 @@ void MainWindow::OnPlayPauseClicked(){
         midi->Unpause();
     else
         midi->PauseImmediately();
+}
+
+void MainWindow::OnDiodeEvent(DiodeMidiEvent dev){
+    // TODO: Move this logic to sequencer widget
+    if (seqWidget.selectedSeq == dev.target)
+        seqWidget.ActivateDiode(dev);
 }
 
 void MainWindow::OnAboutMenuClicked(){

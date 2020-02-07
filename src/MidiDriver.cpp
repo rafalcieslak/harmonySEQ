@@ -227,16 +227,15 @@ void MidiDriver::ScheduleCtrlEventLinearSlope(int channel, int ctrl_no, int star
         ScheduleCtrlEventSingle(channel,start_tick_time,ctrl_no,start_value);
 }
 
-void MidiDriver::ScheduleDiodeEvent(DiodeType type, seqHandle handle, int tick_time, double time, int value, int color, int max_res){
+void MidiDriver::ScheduleDiodeEvent(const DiodeMidiEvent& dev, int tick_time){
     if(!diodes_enabled) return;
-    DiodeMidiEvent diodeev(type,time,value,color,max_res);
-    diode_events.insert(std::pair<int,DiodeMidiEvent>(diode_event_id_next,diodeev));
+    diode_events.insert(std::pair<int,DiodeMidiEvent>(diode_event_id_next, dev));
 
     snd_seq_event_t ev;
     snd_seq_ev_clear(&ev);
     ev.type = SND_SEQ_EVENT_USR0; //Diode ON
-    ev.data.raw32.d[0] = handle; //seq handle
-    ev.data.raw32.d[1] = diode_event_id_next; //diode id
+    ev.data.raw32.d[0] = diode_event_id_next; //diode event storage ID
+    ev.data.raw32.d[1] = 0; //unused
     ev.data.raw32.d[2] = 0;//unused
     snd_seq_ev_schedule_tick(&ev, queueid, 0, tick_time);
     snd_seq_ev_set_dest(&ev, snd_seq_client_id(seq_handle), input_port); //here INPUT_PORT is used, so the event will be send just to harmonySEQ itself.
@@ -479,8 +478,6 @@ void MidiDriver::UpdateQueue(){
         //Shortcut pointer to the sequencer we are currently dealing with.
         seq = seqVector[n];
 
-        bool needs_to_have_its_row_refreshed = false;
-
         //Update the seq's PlayOnce phase.
 
         //If the sequencer is about to play it's pattern once, but it's on anyway, reset the playonce phase, and use the sequencer as if it was
@@ -492,7 +489,6 @@ void MidiDriver::UpdateQueue(){
         if(seq->GetPlayOncePhase() == 3) {
             seq->SetPlayOncePhase(0);
             seq->play_from_here_marker = 0.0; //reset the starting playback position.
-            needs_to_have_its_row_refreshed = true;
         }
         //If phase is set to 1, this means this sequencer is about to be played once right now, so we'll change the phase to 2 (to change the colour
         //in main window corresponding to this sequencer). The last_played_note is set to 0, to make sure that when a loooong sequence (more
@@ -500,7 +496,6 @@ void MidiDriver::UpdateQueue(){
         if(seq->GetPlayOncePhase() == 1) {
             seq->SetPlayOncePhase(2);
             seq->play_from_here_marker = 0.0;
-            needs_to_have_its_row_refreshed = true;
         }
 
         //Output the notes only if the sequencer is on, or it's in 2nd phase. Otherwise skip the note outputting routines....
@@ -561,7 +556,8 @@ void MidiDriver::UpdateQueue(){
                                         ScheduleNote(seq->GetChannel()-1,local_tick + (V/size)*sequence_time + note->time*TICKS_PER_BEAT*seq->GetLength(),pitch,note->velocity,note->length*TICKS_PER_BEAT*seq->GetLength());
                                         ;
                                         //each note shall have correspoinding diode event.
-                                        ScheduleDiodeEvent(DIODE_TYPE_NOTE, seq->MyHandle, local_tick + (V / size) * sequence_time + note->time * TICKS_PER_BEAT * seq->GetLength(), note->time, note->pitch, diode_colour);
+                                        DiodeMidiEvent dev(seq->MyHandle, DIODE_TYPE_NOTE, note->time, note->pitch, diode_colour);
+                                        ScheduleDiodeEvent(dev, local_tick + (V / size) * sequence_time + note->time * TICKS_PER_BEAT * seq->GetLength());
 
                                   }
                       }else if(seq->GetType() == SEQ_TYPE_CONTROL){
@@ -595,7 +591,8 @@ void MidiDriver::UpdateQueue(){
                                         }
 
                                         //each note shall have correspoinding diode event.
-                                        ScheduleDiodeEvent(DIODE_TYPE_CTRL, seq->MyHandle, local_tick + (V / size) * sequence_time + ctrl->time * TICKS_PER_BEAT * seq->GetLength(), ctrl->time, ctrl->value, diode_colour);
+                                        DiodeMidiEvent dev(seq->MyHandle, DIODE_TYPE_CTRL, ctrl->time, ctrl->value, diode_colour);
+                                        ScheduleDiodeEvent(dev, local_tick + (V / size) * sequence_time + ctrl->time * TICKS_PER_BEAT * seq->GetLength());
 
                                   }
 
@@ -623,25 +620,6 @@ void MidiDriver::UpdateQueue(){
             // Sequencer is off
             seq->SetPlaying(false);
         }
-
-        //Finally, no matter whether the sequencer was on or not...
-
-        //Refreshing the sequencer's row in main window, if it's play-once status was changed.
-        if (needs_to_have_its_row_refreshed){
-            // In some spare time, perform UI update from the UI thread.
-            Glib::signal_idle().connect(
-                [=](){
-                    // TODO: Move this logic to MainWindow.
-                    // TODO: Don't store references like this, have mainwindow search for the row instead.
-                    // TODO: What if seq has been destructed by the time we run this?
-                    if (seq->my_row) mainwindow->RefreshRow(seq->my_row);
-                    // Commented out to reduce the footprint of this procedure.
-                    // if (mainwindow->seqWidget.selectedSeq == seq->MyHandle)
-                    mainwindow->seqWidget.UpdateOnOffColour();
-                    return false;
-                });
-        }
-
 
         //And proceed to next sequencer.
     }
@@ -685,9 +663,9 @@ void MidiDriver::UpdateQueue(){
 
 void MidiDriver::ProcessInput(){
     snd_seq_event_t * ev;
-    int h, id;
+    int id;
     std::map<int,DiodeMidiEvent>::iterator it;
-    DiodeMidiEvent diodev(DIODE_TYPE_NOTE,0,0,0);
+    DiodeMidiEvent diodev(0, DIODE_TYPE_NOTE,0,0,0);
 
     //Do while there is anything in the input
     do {
@@ -742,26 +720,18 @@ void MidiDriver::ProcessInput(){
                 snd_seq_event_output_direct(seq_handle,ev);
                 break;
             case SND_SEQ_EVENT_USR0:
-                h = ev->data.raw32.d[0];
-                id = ev->data.raw32.d[1];
-                if (mainwindow->seqWidget.selectedSeq == h){
+                id = ev->data.raw32.d[0];
 
-                    it = diode_events.find(id);
-                    if(it == diode_events.end()) {
-                      break; // If the event wasn't found, ignore this message.
-                    }
-                    diodev = (*it).second;
-                    diode_events.erase(it);
-
-                    if (it == diode_events.end()) break; //in case such event was not registered, avoid crashes
-                    if (diodev.type == DIODE_TYPE_NOTE && mainwindow->seqWidget.selectedSeqType == SEQ_TYPE_CONTROL) break; //mismatched type
-                    if (diodev.type == DIODE_TYPE_CTRL && mainwindow->seqWidget.selectedSeqType == SEQ_TYPE_NOTE) break;    //mismatched type
-                    Glib::signal_idle().connect(
-                        [=](){
-                            mainwindow->seqWidget.ActivateDiode(diodev);
-                            return false;
-                        });
+                it = diode_events.find(id);
+                if(it == diode_events.end()) {
+                    break; // If the event wasn't found, ignore this message.
                 }
+                diodev = (*it).second;
+                diode_events.erase(it);
+
+                if (it == diode_events.end()) break; //in case such event was not registered, avoid crashes
+
+                on_diode(diodev);
                 break;
             default:
                 //Some unmatched event.

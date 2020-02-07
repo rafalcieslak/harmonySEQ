@@ -118,6 +118,8 @@ private:
     void OnPopupRemove();
     void OnPopupDuplicate();
 
+    void OnDiodeEvent(DiodeMidiEvent dev);
+
     Gtk::TreeView wTreeView;
 
   Glib::RefPtr<Gtk::UIManager> m_refUIManager;

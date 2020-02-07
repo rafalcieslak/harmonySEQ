@@ -294,11 +294,17 @@ void SequencerWidget::SelectSeq(seqHandle h){
     *dbg << "SeqencerWidget - selected " << h << "\n";
     AnythingSelected = 1;
     selectedSeq = h;
-    selectedSeqType = seqH(h)->GetType();
+    Sequencer* seq = seqH(h);
+    selectedSeqType = seq->GetType();
     if(selectedSeqType == SEQ_TYPE_NOTE){
-        NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seqH(h));
+        NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seq);
         chordwidget.Select(&noteseq->chord);
     }
+
+    seq->on_playstate_change.connect(
+        [=](){ DeferWorkToUIThread(
+            [=](){ UpdateOnOffColour(); });});
+
     UpdateEverything();
     DeacivateAllDiodes();
 }

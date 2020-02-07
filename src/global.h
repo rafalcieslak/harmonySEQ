@@ -24,6 +24,7 @@
 #include <locale.h>
 #include <vector>
 #include <map>
+#include <glibmm/main.h>
 #include <glibmm/ustring.h>
 #include <glibmm/refptr.h>
 #include <gdkmm/pixbuf.h>
@@ -100,5 +101,16 @@ void Info(Glib::ustring message, Glib::ustring secondary_message = "");
 
 /** Return current wallclock timestamp as a double **/
 double GetRealTime();
+
+
+template <typename... Args, typename Functor>
+void DeferWorkToUIThread(Functor&& f, Args... a){
+    Glib::signal_idle().connect(
+        [=](){
+            f(a...);
+            return false;
+        });
+}
+
 
 #endif	/* GLOBAL_H */

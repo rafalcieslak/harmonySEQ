@@ -96,6 +96,11 @@ public:
     bs2::signal<void()> on_unpaused;
     bs2::signal<void()> on_beat;
 
+    /* TODO: Each sequencer should have their own diode signal, so
+     * that sequencerwidgets could subscribe to events on that one
+     * specific seq. */
+    bs2::signal<void(DiodeMidiEvent)> on_diode;
+
 private:
     /**Infinite loop, exiting when"running" variable is set to 0. Waits for any MIDI events on input, and calls ProcessInput() when something is on the input.*/
     void LoopWhileWaitingForInput();
@@ -131,7 +136,7 @@ private:
     /**Schedules a set of MIDI controller events on the output queue, so that to emulate a linear slope.*/
     void ScheduleCtrlEventLinearSlope(int channel, int ctrl_no, int start_tick_time, int start_value, int end_tick_time, int end_value);
     /** Schedules a Diode callback event. */
-    void ScheduleDiodeEvent(DiodeType type, seqHandle handle, int tick_time, double time, int value, int color, int max_res = 0);
+    void ScheduleDiodeEvent(const DiodeMidiEvent& dev, int tick_time);
 
     /**ALSA MIDI sequencer's handle*/
     snd_seq_t* seq_handle;

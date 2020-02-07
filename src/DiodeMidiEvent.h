@@ -21,6 +21,8 @@
 #define	DIODEMIDIEVENT_H
 #include <sys/time.h>
 
+#include "seqHandle.h"
+
 enum DiodeType{
     DIODE_TYPE_NOTE,
     DIODE_TYPE_CTRL,
@@ -29,12 +31,14 @@ enum DiodeType{
 
 class DiodeMidiEvent {
 public:
-    DiodeMidiEvent(DiodeType type_, double time_, int value_, int color_, int max_res_ = 0);
+    DiodeMidiEvent(seqHandle target, DiodeType type_, double time_, int value_, int color_, int max_res_ = 0);
     DiodeMidiEvent(const DiodeMidiEvent &orig);
     virtual ~DiodeMidiEvent();
-    
+
     DiodeMidiEvent & operator= (const DiodeMidiEvent & other);
-    
+
+    seqHandle target;
+
     DiodeType type;
     double time;
     /**0-127 for crtls, 0-5 for notes, 0-res grid*/
@@ -43,11 +47,10 @@ public:
     int max_res;
     /** 0 - green, 1 - yellow*/
     int color;
-    
+
     timeval starttime;
 private:
 
 };
 
 #endif	/* DIODEMIDIEVENT_H */
-
