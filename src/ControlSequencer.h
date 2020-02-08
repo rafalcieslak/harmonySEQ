@@ -31,14 +31,15 @@ public:
     virtual ~ControlSequencer();
     /**Virtual copy constructor.*/
     virtual Sequencer* Clone();
-    
+
     virtual SeqType_t GetType();
-    
-    /**Stores the controller number (ie. 11 -> expression)*/
-    int controller_number;
+
+    void SetControllerNumber(int number);
+    int GetControllerNumber();
 private:
 
+    /**Stores the controller number (ie. 11 -> expression)*/
+    int controller_number;
 };
 
 #endif	/* CONTROLSEQUENCER_H */
-

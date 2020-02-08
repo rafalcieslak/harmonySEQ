@@ -24,11 +24,9 @@
 #include "Configuration.h"
 #include "messages.h"
 #include "MidiDriver.h"
-#include "MainWindow.h"
 #include "Event.h"
 extern MidiDriver* midi;
 extern error* err;
-extern MainWindow* mainwindow;
 
 void error_handler(int num, const char *msg, const char *path){
     *err << "OSC error!\n";

@@ -35,6 +35,10 @@ ActionGUI::ActionGUI(Action *prt)
     //Set the pointer to point to the parent
     parent = prt;
 
+    set_transient_for(*mainwindow); // We'll only be able to get rid of this mainwindow reference once Event/Action GUIs are managed by the UI, not the Event/Action.
+    set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
+    set_modal(true);
+
     //by defalut default
     we_are_copying_data_from_parent_action_so_do_not_handle_signals = false;
 
@@ -190,7 +194,6 @@ void ActionGUI::OnOKClicked(){
 
 void ActionGUI::OnShow(){
     shown = 1;
-    set_transient_for(*mainwindow);
     SetupTreeModels(); //important that this has to be done befor UpdateValues, otherwise the SetSeqCombos methou wouldn't be able to select the sequencer
     UpdateValues();
 }

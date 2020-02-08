@@ -142,8 +142,6 @@ SequencerWidget::SequencerWidget()
     wChordNotebook.append_page(wCtrlHBox);
     wChordNotebook.set_show_tabs(0);
     wChordNotebook.set_show_border(0);
-    chordwidget.on_changed.connect(std::bind(&SequencerWidget::OnChordWidgetChanged, this));
-    chordwidget.on_note_changed.connect(std::bind(&SequencerWidget::OnChordWidgetNoteChanged, this, std::placeholders::_1, std::placeholders::_2));
 
     wCtrlHBox.pack_end(wCtrlScale,Gtk::PACK_SHRINK);
     wCtrlScale.pack_start(wCtrl127,Gtk::PACK_SHRINK);
@@ -296,10 +294,6 @@ void SequencerWidget::SelectSeq(seqHandle h){
     selectedSeq = h;
     Sequencer* seq = seqH(h);
     selectedSeqType = seq->GetType();
-    if(selectedSeqType == SEQ_TYPE_NOTE){
-        NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seq);
-        chordwidget.Select(&noteseq->chord);
-    }
 
     seq->on_playstate_change.connect(
         [=](){ DeferWorkToUIThread(
@@ -308,6 +302,16 @@ void SequencerWidget::SelectSeq(seqHandle h){
     seq->on_activepattern_change.connect(
         [=](){ DeferWorkToUIThread(
             [=](){ UpdateActivePattern(); });});
+
+    if(selectedSeqType == SEQ_TYPE_NOTE){
+        NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seq);
+
+        chordwidget.Select(&noteseq->chord);
+
+        noteseq->on_chord_change.connect(
+            [=](){ DeferWorkToUIThread(
+                    [=](){ UpdateChord(); });});
+    }
 
     UpdateEverything();
     DeacivateAllDiodes();
@@ -425,7 +429,7 @@ void SequencerWidget::UpdateController(){
     if (AnythingSelected == 0 || selectedSeqType != SEQ_TYPE_CONTROL) return;
     ignore_signals = 1;
     ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*>(seqH(selectedSeq));
-    wControllerButton.set_value(ctrlseq->controller_number);
+    wControllerButton.set_value(ctrlseq->GetControllerNumber());
     ignore_signals = 0;
 }
 
@@ -532,8 +536,7 @@ void SequencerWidget::OnChannelChanged(){
     if(!AnythingSelected) return;
     Sequencer* seq = seqH(selectedSeq);
 
-    seq->SetChannel( wChannelButton.get_value());
-    mainwindow->RefreshRow(seq->my_row);
+    seq->SetChannel(wChannelButton.get_value());
     Files::SetFileModified(1);
 }
 
@@ -596,19 +599,6 @@ void SequencerWidget::UpdateSlopeType(){
     ignore_signals = 0;
 }
 
-void SequencerWidget::OnChordWidgetChanged(){
-    //The chord updates the seq on it's own.
-    //Just refresh the row.
-    if(ignore_signals) return;
-    if(!AnythingSelected) return;
-    Sequencer* seq = seqH(selectedSeq);
-    mainwindow->RefreshRow(seq->my_row);
-}
-void SequencerWidget::OnChordWidgetNoteChanged(int n, int p){
-    //if(!AnythingSelected) return;
-    //Sequencer* seq = seqH(selectedSeq);
-}
-
 void SequencerWidget::OnToggleMuteToggled(){
     if(ignore_signals) return;
     if(!AnythingSelected) return;
@@ -616,7 +606,6 @@ void SequencerWidget::OnToggleMuteToggled(){
 
     seq->SetOn(wMuteToggle.get_active());
     seq->SetPlayOncePhase(0);
-    mainwindow->RefreshRow(seq->my_row);
     UpdateOnOffColour();
 
     //Files::SetFileModified(1); come on, do not write mutes.
@@ -631,7 +620,6 @@ void SequencerWidget::OnResolutionChanged(){
     seq->SetResolution(wResolutions.get_value());
     pattern_widget.RedrawGrid();
 
-    mainwindow->RefreshRow(seq->my_row);
     Files::SetFileModified(1);
 }
 void SequencerWidget::OnLengthChanged(){
@@ -645,7 +633,6 @@ void SequencerWidget::OnLengthChanged(){
     wLengthResult.set_text(temp);
     seq->play_from_here_marker = 0.0; //important, to avoid shifts
 
-    mainwindow->RefreshRow(seq->my_row);
     Files::SetFileModified(1);
 }
 void SequencerWidget::OnActivePatternChanged(){
@@ -660,7 +647,6 @@ void SequencerWidget::OnActivePatternChanged(){
 
     seq->SetActivePatternNumber(activepattern); //store in parent
 
-    mainwindow->RefreshRow(seq->my_row);
     Files::SetFileModified(1);
 }
 
@@ -718,13 +704,19 @@ void SequencerWidget::OnRemovePatternClicked(){
     notebook_pages.erase(notebook_pages.begin()+n);
     seq->patterns.erase(seq->patterns.begin()+n);
     do_not_react_on_page_changes = 0;
-    if (seq->GetActivePatternNumber() == n ) { seq->SetActivePatternNumber(0);wActivePattern.set_value(0.0);}
-    if (seq->GetActivePatternNumber() > n ) {seq->SetActivePatternNumber(seq->GetActivePatternNumber()-1);wActivePattern.set_value(seq->GetActivePatternNumber()); }
+    // TODO: This logic should be moved to pattern manager.
+    if (seq->GetActivePatternNumber() == n ) {
+        seq->SetActivePatternNumber(0);
+        wActivePattern.set_value(0.0);
+    }
+    if (seq->GetActivePatternNumber() > n ) {
+        seq->SetActivePatternNumber(seq->GetActivePatternNumber()-1);
+        wActivePattern.set_value(seq->GetActivePatternNumber());
+    }
     InitNotebook();
     wNotebook.set_current_page(n);
     UpdateActivePatternRange();
     SetRemoveButtonSensitivity();
-    mainwindow->RefreshRow(seq->my_row);
     Files::SetFileModified(1);
 }
 
@@ -754,23 +746,22 @@ void SequencerWidget::SetRemoveButtonSensitivity(){
         wRemovePattern.set_sensitive(1);
     }
 }
+
 void SequencerWidget::OnNameEdited(){
     if(ignore_signals) return;
     if(!AnythingSelected) return;
     Sequencer* seq = seqH(selectedSeq);
 
     seq->SetName(wNameEntry.get_text());
-    mainwindow->RefreshRow(seq->my_row);
-    mainwindow->eventsWidget.SeqListChanged();
+    mainwindow->eventsWidget.SeqListChanged(); // This mainwindow reference will become easy to remove once either we have a SequencerManager, or action UIs are managed by EventsWidget (instead of Actions).
     Files::SetFileModified(1);
-
 }
+
 void SequencerWidget::OnPlayOnceButtonClicked(){
     if(!AnythingSelected) return;
     Sequencer* seq = seqH(selectedSeq);
 
     seq->SetPlayOncePhase(1);
-    mainwindow->RefreshRow(seq->my_row);
     UpdateOnOffColour();
 }
 
@@ -806,8 +797,7 @@ void SequencerWidget::OnControllerChanged(){
     if(ignore_signals) return;
     if(!AnythingSelected || selectedSeqType != SEQ_TYPE_CONTROL) return;
     ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*>(seqH(selectedSeq));
-    ctrlseq->controller_number = wControllerButton.get_value();
-    mainwindow->RefreshRow(ctrlseq->my_row);
+    ctrlseq->SetControllerNumber(wControllerButton.get_value());
 }
 
 void SequencerWidget::OnShowChordButtonClicked(){

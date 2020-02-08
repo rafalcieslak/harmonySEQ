@@ -20,8 +20,6 @@
 #include "SettingsWindow.h"
 #include "Configuration.h"
 
-extern MainWindow* mainwindow;
-
 SettingsWindow::SettingsWindow(){
     hide();
     set_title(_("Settings"));
@@ -216,6 +214,8 @@ void SettingsWindow::StoreDataToConfig(){
     Config::Interaction::DisableDiodes = disable_diodes.get_active();
     Config::Interaction::PatternRefreshMS = 1000/FPSbutton.get_value();
     Config::OSC::Port = osc_port.get_value();
+
+    Config::on_changed();
 }
 
 void SettingsWindow::OnCancelClicked(){
@@ -226,7 +226,6 @@ void SettingsWindow::OnCancelClicked(){
 void SettingsWindow::OnOKClicked(){
     StoreDataToConfig();
     Config::SaveToFile();
-    mainwindow->UpdateVisibleColumns();
     hide();
 }
 
@@ -246,7 +245,6 @@ void SettingsWindow::OnRestoreDefaults(){
         Config::LoadDefaultConfiguration();
         LoadDataFromConfig();
         Config::SaveToFile();
-        mainwindow->UpdateVisibleColumns();
     }else{
         return;
     }

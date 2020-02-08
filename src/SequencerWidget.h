@@ -80,8 +80,6 @@ private:
     bool ignore_signals;
     int do_not_react_on_page_changes;
     void UpdateActivePatternRange();
-    void OnChordWidgetChanged();
-    void OnChordWidgetNoteChanged(int n, int p);
     void OnChannelChanged();
     void OnVelocityChanged();
     void OnValueChanged();

@@ -28,27 +28,29 @@ class NoteSequencer : public Sequencer {
 public:
     NoteSequencer();
     NoteSequencer(Glib::ustring _name0);
-    NoteSequencer(const NoteSequencer& orig);
+    NoteSequencer(const Sequencer& orig);
     virtual ~NoteSequencer();
+    void Init();
     /**Virtual copy constructor.*/
-    virtual Sequencer* Clone(); 
-    
+    virtual Sequencer* Clone();
+
     /**Returns SEQ_TYPE_NOTE*/
     virtual SeqType_t GetType();
-    
+
     /**The main chord*/
    Chord chord;
-   
+
    /**Whether to show detailed chord settings in GUI, or hide them. This is stored here, in order to save this data to file.*/
     bool expand_chord;
-    
+
     /**Returns a one note of chord of this sequencer
      *  @parram n note number*/
     int GetNoteOfChord(int n);
-    
+
+    /* This signal can be emitted by any thread. */
+    bs2::signal<void()> on_chord_change;
 private:
 
 };
 
 #endif	/* NOTESEQUENCER_H */
-

@@ -311,7 +311,7 @@ void SaveToFile(Glib::ustring filename){
                 kf.set_integer_list(temp,"chord",noteseq->chord.SaveToVector());
         }else if(seq_type == SEQ_TYPE_CONTROL){
                 ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*> (seq);
-                kf.set_integer(temp,"controller",ctrlseq->controller_number);
+                kf.set_integer(temp,"controller",ctrlseq->GetControllerNumber());
                 //For each pattern in this sequencer...
                 for (int s = 0; s < (int) seq->patterns.size(); s++) {
                     sprintf(temp2, "pattern_%d", s);
@@ -464,7 +464,7 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
 
                 ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*> (seq);
 
-                ctrlseq->controller_number = kfp->get_integer(temp, "controller");
+                ctrlseq->SetControllerNumber(kfp->get_integer(temp, "controller"));
 
                 //For each pattern we load...
                 for (int s = 0; s < n; s++) {

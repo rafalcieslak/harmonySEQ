@@ -139,6 +139,11 @@ public:
 
     bs2::signal<void()> on_activepattern_change;
 
+    /* This signal is triggered whenever any of the common sequencer
+     * parameters, such as name, channel, length or resolution are
+     * changed. */
+    bs2::signal<void()> on_parameter_change;
+
 protected:
     /**Stores the resolution of sequence. */
     int resolution;

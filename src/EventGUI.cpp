@@ -30,6 +30,10 @@ extern MainWindow* mainwindow;
 EventGUI::EventGUI(Event *prt){
     parent = prt;
 
+    set_transient_for(*mainwindow); // We'll only be able to get rid of this mainwindow reference once Event/Action GUIs are managed by the UI, not the Event/Action.
+    set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
+    set_modal(true);
+
     //setting window attributes
     set_title(_("Event"));
     set_border_width(5);
@@ -268,7 +272,6 @@ void EventGUI::OnOKClicked(){
 }
 
 void EventGUI::UpdateValues(){
-    set_transient_for(*mainwindow);
     Gtk::TreeModel::iterator it = TreeModel_EventTypes->get_iter("0");
     Gtk::TreeModel::Row row;
     DO_NOT_INIT_TYPE = true; //causes the Types_combo.signal_changed reciver know he shouldnt clear event args with zeros;

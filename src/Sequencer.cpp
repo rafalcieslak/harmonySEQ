@@ -58,7 +58,7 @@ Gtk::TreeModel::Row spawn_note_sequencer(){
     new_seq->MyHandle = h;
 
     //add to main window
-    return mainwindow->AddSequencerRow(n);
+    return mainwindow->AddSequencerRow(n); // I don't think we can get rid of this mainwindow reference until we have a SequecerManager.
 }
 
 Gtk::TreeModel::Row spawn_control_sequencer(){
@@ -73,7 +73,7 @@ Gtk::TreeModel::Row spawn_control_sequencer(){
     new_seq->MyHandle = h;
 
     //add to main window
-    return mainwindow->AddSequencerRow(n);
+    return mainwindow->AddSequencerRow(n); // I don't think we can get rid of this mainwindow reference until we have a SequecerManager.
 }
 
 Gtk::TreeModel::Row clone_sequencer(int orig){
@@ -84,7 +84,7 @@ Gtk::TreeModel::Row clone_sequencer(int orig){
     seqHandle h = RequestNewSeqHandle(n);
     new_seq->MyHandle = h;
     seqVector.push_back(new_seq);
-    return mainwindow->AddSequencerRow(n);
+    return mainwindow->AddSequencerRow(n); // I don't think we can get rid of this mainwindow reference until we have a SequecerManager.
 
 }
 
@@ -146,11 +146,13 @@ void Sequencer::Init(){
     play_from_here_marker = 0.0;
     play_once_phase = 0;
     resolution = SEQUENCE_DEFAULT_SIZE;
+
     AddPattern();
 }
 
 void Sequencer::SetResolution(int res){
     resolution = res;
+    on_parameter_change();
 }
 int Sequencer::GetResolution(){
     return resolution;
@@ -159,6 +161,7 @@ int Sequencer::GetResolution(){
 void Sequencer::SetLength(int numerator, int denominator){
     length_numerator = numerator;
     length_denominator = denominator;
+    on_parameter_change();
 }
 
 double Sequencer::GetLength(){
@@ -196,13 +199,35 @@ void Sequencer::SetOn(bool m){
     on_playstate_change();
 }
 
-bool Sequencer::GetOn(){return on;}
-bool Sequencer::IsPlaying(){return playing;}
-void Sequencer::SetPlaying(bool p){playing = p;}
-void Sequencer::SetChannel(int ch){channel = ch;}
-int Sequencer::GetChannel(){return channel;}
-void Sequencer::SetName(Glib::ustring nm){name = nm;}
-Glib::ustring Sequencer::GetName(){return name;}
+bool Sequencer::GetOn(){
+    return on;
+}
+
+bool Sequencer::IsPlaying(){
+    return playing;
+}
+
+void Sequencer::SetPlaying(bool p){
+    playing = p;
+}
+
+void Sequencer::SetChannel(int ch){
+    channel = ch;
+    on_parameter_change();
+}
+
+int Sequencer::GetChannel(){
+    return channel;
+}
+
+void Sequencer::SetName(Glib::ustring nm){
+    name = nm;
+    on_parameter_change();
+}
+
+Glib::ustring Sequencer::GetName(){
+    return name;
+}
 
 void Sequencer::SetPlayOncePhase(int p){
     play_once_phase = p;

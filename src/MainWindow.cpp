@@ -365,6 +365,10 @@ MainWindow::MainWindow()
         [=](){ DeferWorkToUIThread(
             [=](){ UpdateTempo(); });});
 
+    Config::on_changed.connect(
+        [=](){ DeferWorkToUIThread(
+            [=](){ UpdateVisibleColumns(); });});
+
     show_all_children(1);
 
     //This is the cure for any Gtk warnings one may experience.
@@ -490,10 +494,21 @@ Gtk::TreeModel::Row MainWindow::AddSequencerRow(int x)
 
     RefreshRow(row);
 
-    // TODO: Do we need to disconnect this when the row is removed?
     seq->on_playstate_change.connect(
         [=](){ DeferWorkToUIThread(
             [=](){ RefreshRow(row); });});
+
+    seq->on_parameter_change.connect(
+        [=](){ DeferWorkToUIThread(
+            [=](){ RefreshRow(row); });});
+
+    if(seq->GetType() == SEQ_TYPE_NOTE){
+        NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seq);
+
+        noteseq->on_chord_change.connect(
+            [=](){ DeferWorkToUIThread(
+                [=](){ RefreshRow(row); });});
+    }
 
     seq->my_row = row;
     return row;
@@ -539,7 +554,7 @@ void MainWindow::RefreshRow(Gtk::TreeRow row){
     } else if (seq->GetType() == SEQ_TYPE_CONTROL){
         ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*>(seq);
         char temp[20];
-        sprintf(temp,_("Ctrl %d"),ctrlseq->controller_number);
+        sprintf(temp,_("Ctrl %d"),ctrlseq->GetControllerNumber());
         row[m_columns_sequencers.col_chord] = temp;
         row[m_columns_sequencers.col_name_color] = TREEVIEW_COLOR_T_CTRL;
     }
@@ -857,11 +872,16 @@ bool MainWindow::OnTreviewButtonPress(GdkEventButton* event){
    Gtk::TreePath path;
    wTreeView.get_path_at_pos(event->x,event->y,path);
 
-  if (path) //right-clicked on a seq, not on the empty space
-  if( (event->type == GDK_BUTTON_PRESS) && (event->button == 3) )
-  {
-    wPopupMenu->popup(event->button, event->time);
-  }
+   printf("POPUP 1!\n");
+   if (path){
+       printf("POPUP 2 %d %d!\n", event->type, event->button);
+       // right-clicked on a seq, not on the empty space
+       if( (event->type == GDK_BUTTON_PRESS) && (event->button == 3) )
+           {
+               printf("POPUP 3!\n");
+               wPopupMenu->popup(event->button, event->time);
+           }
+   }
 
   return false;
 }

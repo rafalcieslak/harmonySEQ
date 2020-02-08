@@ -104,6 +104,21 @@ Chord::Chord(){
 Chord::~Chord(){
 }
 
+
+void Chord::CopyInto(Chord& c) const{
+    c.type = type;
+    c.inversion = inversion;
+    c.root = root;
+    c.mode_guitar = mode_guitar;
+    c.mode_triad = mode_triad;
+    c.base_octave = base_octave;
+    c.base_note = base_note;
+    c.base_use = base_use;
+    c.NoteAndOctaveToBase();
+    c.RecalcNotes();
+}
+
+
 void Chord::RecalcNotes(){
     *dbg<<"recalculating chord\n";
     int n1,n2,n3;
@@ -163,6 +178,7 @@ void Chord::RecalcNotes(){
             break;
     }
 
+    on_change();
 }
 
 int Chord::GetNotePlusBasenote(int n){
@@ -183,6 +199,7 @@ void Chord::SetNote(int note, int pitch){
     type = CHORD_TYPE_CUSTOM;
     notes[note] = pitch;
     //RecalcNotes(); //well, in fact: not needed;
+    on_change();
 }
 
 void Chord::SetRoot(int pitch){

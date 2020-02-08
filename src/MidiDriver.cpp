@@ -21,7 +21,6 @@
 #include "global.h"
 #include "MidiDriver.h"
 #include "messages.h"
-#include "MainWindow.h"
 #include "NoteSequencer.h"
 #include "ControlSequencer.h"
 #include "Event.h"
@@ -31,8 +30,6 @@
 #include "NoteAtom.h"
 
 extern std::vector<Sequencer *> seqVector;
-extern MainWindow* mainwindow;
-
 
 MidiDriver::MidiDriver() {
     paused = false;
@@ -569,7 +566,7 @@ void MidiDriver::UpdateQueue(){
                                   for(int V = s; V<=e;V++){
                                         ctrl = dynamic_cast<ControllerAtom*> ((*pattern)[V % size]);
                                         if(ctrl->slope_type == SLOPE_TYPE_FLAT){
-                                            ScheduleCtrlEventSingle(seq->GetChannel()-1, local_tick + (V/size)*sequence_time + ctrl->time*TICKS_PER_BEAT*seq->GetLength(),ctrlseq->controller_number,ctrl->value);
+                                            ScheduleCtrlEventSingle(seq->GetChannel()-1, local_tick + (V/size)*sequence_time + ctrl->time*TICKS_PER_BEAT*seq->GetLength(),ctrlseq->GetControllerNumber(),ctrl->value);
                                         }else if(ctrl->slope_type == SLOPE_TYPE_LINEAR){
 
 
@@ -581,7 +578,7 @@ void MidiDriver::UpdateQueue(){
                                             if(V==size-1) nextctrl_time += 1.0; //if this is a last note in pattern, make sure to schedule it's slope later!
                                             ScheduleCtrlEventLinearSlope(
                                                                          seq->GetChannel()-1,
-                                                                         ctrlseq->controller_number,
+                                                                         ctrlseq->GetControllerNumber(),
                                                                          local_tick + (V/size)*sequence_time + ctrl->time*TICKS_PER_BEAT*seq->GetLength(),
                                                                          ctrl->value,
                                                                          local_tick + (V/size)*sequence_time + nextctrl_time*TICKS_PER_BEAT*seq->GetLength(),

@@ -57,18 +57,21 @@ namespace Config{
 
     /**Returns the path to config file, depending on the OS*/
     Glib::ustring GetConfigFilePath();
-    
+
     /**Returns the path to config directory, depending on the OS*/
     Glib::ustring GetConfigDirPath();
 
     /**Returns the path to the old config file, depending on the OS*/
     Glib::ustring GetOldConfigFilePath();
-    
+
     /**Returns the path to the old config directory, depending on the OS*/
     Glib::ustring GetOldConfigDirPath();
 
     /**Creates the config directory*/
     void MakeConfigDir();
+
+/* This signal is normally emitted by the UI thread, but don't assume this is always the case. */
+extern bs2::signal<void()> on_changed;
 
     #define KF_GROUP_METRONOME "Metronome"
 #define KF_METRONOME_KEY_CHANNEL "Channel"
@@ -81,4 +84,3 @@ namespace Config{
 
 
 #endif	/* CONFIG_H */
-

@@ -48,3 +48,11 @@ SeqType_t ControlSequencer::GetType(){
 Sequencer* ControlSequencer::Clone(){
     return new ControlSequencer(*this);
 }
+
+void ControlSequencer::SetControllerNumber(int number){
+    controller_number = number;
+    on_parameter_change();
+}
+int ControlSequencer::GetControllerNumber(){
+    return controller_number;
+}

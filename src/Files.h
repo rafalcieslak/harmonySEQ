@@ -46,7 +46,7 @@ namespace Files{
     /**Loads a file, but without showing the dialog (so the filename must be passed as an argument).
         * Also, it converts it before opening, if it's an old file. */
     bool LoadFile(Glib::ustring file);
-    
+
     /**Loads a file, assuming it's in current format*/
     bool LoadFileCurrent(Glib::KeyFile* kf);
     /**Converts file format from 0.15 to 0.16*/
@@ -55,4 +55,3 @@ namespace Files{
 
 
 #endif	/* FILES_H */
-

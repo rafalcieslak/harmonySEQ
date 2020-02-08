@@ -31,6 +31,8 @@
 #include <errno.h>
 #endif
 
+bs2::signal<void()> Config::on_changed;
+
 namespace Config{
     namespace Metronome{
         int Channel;
@@ -74,6 +76,8 @@ namespace Config{
         Interaction::PatternRefreshMS = 60;
         Interaction::DisableDiodes = 0;
         OSC::Port = 7773;
+
+        on_changed();
     }
 
     void LoadFromFile(){
@@ -121,6 +125,8 @@ namespace Config{
         if(kf.has_group("OSC")){
             if(kf.has_key("OSC","Port")) OSC::Port = kf.get_integer("OSC","Port");
         }
+
+        on_changed();
 
     }
 

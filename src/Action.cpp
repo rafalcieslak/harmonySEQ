@@ -19,7 +19,6 @@
 
 #include "Action.h"
 #include "NoteSequencer.h"
-#include "MainWindow.h"
 #include "messages.h"
 #include "MidiDriver.h"
 #include "Files.h"
@@ -27,7 +26,6 @@
 #include "Event.h"
 
 extern std::vector<Sequencer *> seqVector;
-extern MainWindow* mainwindow;
 
 Action::Action(ActionTypes t, int a1, int a2){
     args.resize(ACTION_ARGS_NUM);
@@ -76,7 +74,6 @@ void Action::Trigger(int data){
             if (seqVector.size()==0 || !seqH(args[1]) || seqH(args[1])->GetType() != SEQ_TYPE_NOTE) break;
             noteseq = dynamic_cast<NoteSequencer*>(seqH(args[1]));
             noteseq->chord.SetNote(args[2]-1, args[3]);
-            if(mainwindow->seqWidget.selectedSeq == args[1]) mainwindow->seqWidget.UpdateChord();
             Files::SetFileModified(1);
             break;
 
@@ -84,8 +81,6 @@ void Action::Trigger(int data){
             if (seqVector.size()==0 || !seqH(args[1])  || seqH(args[1])->GetType() != SEQ_TYPE_NOTE) break;
             noteseq = dynamic_cast<NoteSequencer*>(seqH(args[1]));
             noteseq->chord.Set(chord,!args[3]);
-            mainwindow->RefreshRow(seqH(args[1])->my_row);
-            if(mainwindow->seqWidget.selectedSeq == args[1]) mainwindow->seqWidget.UpdateChord();
             Files::SetFileModified(1);
              break;
         case SEQ_PLAY_ONCE:
@@ -122,8 +117,6 @@ void Action::Trigger(int data){
             if (seqVector.size()==0 || !seqH(args[1])  || seqH(args[1])->GetType() != SEQ_TYPE_NOTE) break;
             noteseq = dynamic_cast<NoteSequencer*>(seqH(args[1]));
             noteseq->chord.SetBaseOctave(noteseq->chord.GetBaseOctave()+args[2]);
-            mainwindow->RefreshRow(seqH(args[1])->my_row);
-            if(mainwindow->seqWidget.selectedSeq == args[1]) mainwindow->seqWidget.UpdateChord();;
             Files::SetFileModified(1);
             break;
         case TOGGLE_PASS_MIDI:

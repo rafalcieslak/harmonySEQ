@@ -21,43 +21,53 @@
 
 #include "NoteSequencer.h"
 
-
 NoteSequencer::NoteSequencer()
                                                 : Sequencer()
 {
-    expand_chord = 1;
-    chord.SetType(Chord::CHORD_TYPE_TRIAD);
-    chord.SetRoot(0);
-    chord.SetTriadMode(Chord::CHORD_TRIAD_MODE_MAJOR);
-    chord.SetBaseOctave(0);
-    chord.SetInversion(0);
+    Init();
+}
+
+NoteSequencer::NoteSequencer(const Sequencer& s)
+                                                : Sequencer(s)
+{
+    Init();
 }
 
 
 NoteSequencer::NoteSequencer(Glib::ustring _name0)
                                                 :Sequencer(_name0)
 {
+    Init();
+}
+
+void NoteSequencer::Init()
+{
     expand_chord = 1;
     chord.SetType(Chord::CHORD_TYPE_TRIAD);
     chord.SetRoot(0);
     chord.SetTriadMode(Chord::CHORD_TRIAD_MODE_MAJOR);
     chord.SetBaseOctave(0);
     chord.SetInversion(0);
+
+    chord.on_change.connect(
+        [=](){ on_chord_change(); });
 }
 
-NoteSequencer::NoteSequencer(const NoteSequencer& orig)
-                                                : Sequencer(orig)
+/*NoteSequencer::NoteSequencer(const NoteSequencer& orig)
+    : Sequencer(orig)
 {
-    chord = orig.chord;
+    chord = orig.chord.copy();
     expand_chord = orig.expand_chord;
-}
+    }*/
 
 
 NoteSequencer::~NoteSequencer(){
 }
 
 Sequencer* NoteSequencer::Clone(){
-    return new NoteSequencer(*this);
+    NoteSequencer* seq = new NoteSequencer(*(Sequencer*)this);
+    chord.CopyInto(seq->chord);
+    return seq;
 }
 
 SeqType_t NoteSequencer::GetType(){

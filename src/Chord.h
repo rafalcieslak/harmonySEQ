@@ -22,6 +22,8 @@
 #define	CHORD_H
 #include <vector>
 #include <glibmm/ustring.h>
+#include "global.h"
+
 class Chord {
 public:
     Chord();
@@ -50,7 +52,7 @@ public:
         CHORD_TRIAD_MODE_AUGMENTED,
         CHORD_TRIAD_MODE_DIMINISCHED
     };
-    
+
     //The following have obvious names, they does not require to be commented
 
     int GetNotePlusBasenote(int n);
@@ -72,7 +74,7 @@ public:
 
     void SetInversion(int n);
     int GetInversion();
-    
+
     void SetBaseOctave(int n);
     int GetBaseOctave();
 
@@ -84,10 +86,11 @@ public:
 
     void SetBaseUse(bool use);
     bool GetBaseUse();
-    
+
    /**Copies all data from another chord (fe. from an action)*/
    void Set(const Chord& other, bool apply_octave=1);
 
+    void CopyInto(Chord& c) const;
 
    /**Load chord settings from vector. Should have following format: mode, guitar_root, guitar_note, triad_root,triad_note,octave,inversion,notes(6)(if custom).*/
    void SetFromVector(std::vector<int> &V);
@@ -99,7 +102,7 @@ public:
 
    /**Generates a name for the chord, like "Guitar, E-moll"*/
     Glib::ustring GetName(bool do_not_use_octave=0);
-    
+
    /**Generates a summarized name for the chord, like "Triad, a-moll, i:1, o:2"*/
     Glib::ustring GetSummary(bool do_not_use_octave=0);
 
@@ -107,6 +110,8 @@ public:
     void BaseToOctaveAndNote();
     /**Recalcs Note and Octave to Base*/
     void NoteAndOctaveToBase();
+
+    bs2::signal<void()> on_change;
 private:
 
     /**Recalculates notes (given the modes, roots etc) and stores them to notes array.*/
@@ -132,4 +137,3 @@ private:
 };
 
 #endif	/* CHORD_H */
-
