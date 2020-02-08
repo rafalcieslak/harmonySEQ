@@ -21,7 +21,6 @@
 #include "Files.h"
 #include "messages.h"
 #include "Sequencer.h"
-#include "MainWindow.h"
 #include "Event.h"
 #include "Action.h"
 #include "MidiDriver.h"
@@ -32,13 +31,16 @@
 #include "ControllerAtom.h"
 
 extern std::vector<Sequencer *> seqVector;
-extern MainWindow* mainwindow;
 
 namespace Files {
 
 bool file_modified = false;
 Glib::ustring file_name;
 Glib::ustring file_dir;
+
+bs2::signal<void()> on_file_loaded;
+bs2::signal<void()> on_file_saved;
+bs2::signal<void()> on_file_modified;
 
 //Returns 1 if opening file succeeded, 0 elsewhere.
 bool fexists(const char *filename)
@@ -48,9 +50,10 @@ bool fexists(const char *filename)
 }
 
 bool SetFileModified(bool modified){
+    printf("File Modified: %d\n", int(modified));
     if (modified != file_modified){
         file_modified = modified;
-        mainwindow->UpdateTitle();
+        on_file_modified();
     }
     else
         file_modified = modified;
@@ -59,16 +62,13 @@ bool SetFileModified(bool modified){
 }
 
 void FileModified(){
-    if (!file_modified){
-        file_modified = 1;
-        mainwindow->UpdateTitle();
-    }
+    SetFileModified(true);
 }
 
-void LoadFileDialog(){
+void LoadFileDialog(Gtk::Window* parent){
     //Creating a new File Choosing Dialog
     Gtk::FileChooserDialog dialog(_("Choose a file to open..."),Gtk::FILE_CHOOSER_ACTION_OPEN);
-    dialog.set_transient_for(*mainwindow);
+    dialog.set_transient_for(*parent);
     //And adding to it some buttons.
     dialog.add_button(Gtk::Stock::CANCEL,Gtk::RESPONSE_CANCEL);
     dialog.add_button(Gtk::Stock::OPEN,Gtk::RESPONSE_OK);
@@ -105,12 +105,55 @@ void LoadFileDialog(){
     LoadFile(filename);
     SetFileModified(0);
 
-    //Some things that must be done to update the GUI fully.
-    //mainwindow->InitTreeData(); // TODO: Is this necessary?
-    mainwindow->tempo_button.set_value(midi->GetTempo());
-    mainwindow->UpdateEventWidget();
-
     if (!was_paused) midi->Unpause();
+}
+
+void SaveFileDialog(Gtk::Window* parent){
+
+    Gtk::FileChooserDialog dialog(_("Choose a file to save..."),Gtk::FILE_CHOOSER_ACTION_SAVE);
+    dialog.set_transient_for(*parent);
+    dialog.add_button(Gtk::Stock::CANCEL,Gtk::RESPONSE_CANCEL);
+    dialog.add_button(Gtk::Stock::SAVE,Gtk::RESPONSE_OK);
+
+    Glib::RefPtr<Gtk::FileFilter> hseq = Gtk::FileFilter::create();
+    hseq->set_name("HarmonySEQ files (*.hseq)");
+    hseq->add_pattern("*.hseq");
+    dialog.add_filter(hseq);
+    Glib::RefPtr<Gtk::FileFilter> all = Gtk::FileFilter::create();
+    all->set_name("All files");
+    all->add_pattern("*");
+    dialog.add_filter(all);
+
+    if (Files::file_name != "")
+        dialog.set_filename(Files::file_dir+Files::file_name);
+
+    int result = dialog.run();
+
+    Glib::ustring filename = dialog.get_filename();
+
+    if (result == Gtk::RESPONSE_CANCEL)
+        return;
+    if (result != Gtk::RESPONSE_OK){
+        *err << "Unexpected dialog response: " << result << ENDL;
+    }
+
+    //add .hseq extention
+    if (dialog.get_filter() == hseq
+        and (filename.size() < 5
+             or (filename.substr(filename.length() - 5, 5).compare(".hseq")) != 0)) {
+        filename += ".hseq";
+    }
+
+    //check whether it already exists
+    if (Files::fexists(filename.c_str())) {
+        char temp[300];
+        sprintf(temp, _("File '%s'  already exist."), filename.c_str());
+        if (!Ask(temp, _("Do you want to overwrite this file?")))
+            return; //user choosed not to overwrite it.
+    }
+
+    Files::SaveToFile(filename);
+
 }
 
 bool LoadFile(Glib::ustring file){
@@ -201,11 +244,10 @@ bool LoadFile(Glib::ustring file){
         file_name = file.substr(found+1);
         file_dir = file.substr(0,found+1);
 
-         //If file name has changed, we have to show it in the title of the main window.
-        mainwindow->UpdateTitle();
-
         //To make sure all goes well:
         midi->Sync();
+
+        on_file_loaded();
 
     //Only exception handles are left...
     }catch(const Glib::KeyFileError& e){
@@ -368,12 +410,11 @@ void SaveToFile(Glib::ustring filename){
     found =  filename.find_last_of("/\\");
     file_name = filename.substr(found+1);
     file_dir = filename.substr(0,found+1);
-    //If file name has changed, we have to show it in the title of the main window.
-    mainwindow->UpdateTitle();
-
 
     //File has no unsaved changes now, so...
     SetFileModified(0);
+
+    on_file_saved();
 }
 
 bool LoadFileCurrent(Glib::KeyFile* kfp){
@@ -505,8 +546,6 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
 
         ManuallySetSeqHandleCounter(maximal_handle + 1);
 
-        //This must be done here, for events display seq's from the same tree.
-        mainwindow->InitTreeData();
         //Done loading sequencers.
 
         //Now, proceed to events.
@@ -568,9 +607,6 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
             Events[x]->UpdateGUI();
 
         }//next event.
-
-
-
 
 
         //And that's all, file is loaded.

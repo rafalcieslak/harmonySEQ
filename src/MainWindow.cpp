@@ -369,6 +369,27 @@ MainWindow::MainWindow()
         [=](){ DeferWorkToUIThread(
             [=](){ UpdateVisibleColumns(); });});
 
+    Files::on_file_loaded.connect(
+        [=](){ DeferWorkToUIThread(
+            [=](){
+                InitTreeData();
+                UpdateTempo();
+                UpdateEventWidget();
+                UpdateTitle();
+            });});
+
+    Files::on_file_saved.connect(
+        [=](){ DeferWorkToUIThread(
+            [=](){
+                UpdateTitle();
+            });});
+
+    Files::on_file_modified.connect(
+        [=](){ DeferWorkToUIThread(
+            [=](){
+                UpdateTitle();
+            });});
+
     show_all_children(1);
 
     //This is the cure for any Gtk warnings one may experience.
@@ -384,6 +405,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::UpdateTitle(){
     char temp[300];
+    printf("Updating main window title.\n");
     if (Files::file_name == ""){
         if (Files::file_modified)
            sprintf(temp, "harmonySEQ %s - %s [*]", VERSION,_("Untitled")) ;
@@ -414,8 +436,10 @@ void
 MainWindow::TempoChanged()
 {
     double tempo = tempo_button.get_value();
-    midi->SetTempo(tempo);
-    Files::SetFileModified(1);
+    if(midi->GetTempo() != tempo){
+        midi->SetTempo(tempo);
+        Files::SetFileModified(1);
+    }
 }
 
 void MainWindow::UpdateTempo(){
@@ -691,7 +715,8 @@ void MainWindow::OnSelectionChanged(){
         Gtk::Widget* pDuplicateTool = m_refUIManager->get_widget("/ToolBar/DuplicateTool");
         pDuplicateTool->set_sensitive(1);
 
-        seqWidget.SelectSeq((*iter)[m_columns_sequencers.col_handle]);
+        seqHandle s = (*iter)[m_columns_sequencers.col_handle];
+        seqWidget.SelectSeq(s);
         wFrameNotebook.set_current_page(1);
     } else {
         //selection is empty
@@ -789,7 +814,6 @@ void MainWindow::OnMenuNewClicked(){
     InitTreeData();
 
     midi->SetTempo(DEFAULT_TEMPO);
-    tempo_button.set_value((double)DEFAULT_TEMPO);
 
     UpdateTitle();
 
@@ -802,70 +826,19 @@ void MainWindow::OnMenuOpenClicked(){
         {
             return;
         }
-    Files::LoadFileDialog();
+    Files::LoadFileDialog(this);
 }
 
 void MainWindow::OnMenuSaveClicked(){
-
-    if (Files::file_name == ""){ //if it's the first save, behave just if we were saving as
+    if (Files::file_name == ""){ // if it's the first save, behave just if we were saving as
         OnMenuSaveAsClicked();
         return;
     }
-
-    Files::SaveToFile(Files::file_dir+Files::file_name);
-
+    Files::SaveToFile(Files::file_dir + Files::file_name);
 }
 
 void MainWindow::OnMenuSaveAsClicked(){
-
-    *dbg << "saiving to file!\n";
-    Gtk::FileChooserDialog dialog(_("Choose a file to save..."),Gtk::FILE_CHOOSER_ACTION_SAVE);
-    dialog.set_transient_for(*this);
-    dialog.add_button(Gtk::Stock::CANCEL,Gtk::RESPONSE_CANCEL);
-    dialog.add_button(Gtk::Stock::SAVE,Gtk::RESPONSE_OK);
-
-    Glib::RefPtr<Gtk::FileFilter> hseq = Gtk::FileFilter::create();
-    hseq->set_name("HarmonySEQ files (*.hseq)");
-    hseq->add_pattern("*.hseq");
-    dialog.add_filter(hseq);
-    Glib::RefPtr<Gtk::FileFilter> all = Gtk::FileFilter::create();
-    all->set_name("All files");
-    all->add_pattern("*");
-    dialog.add_filter(all);
-
-    if (Files::file_name != "")
-        dialog.set_filename(Files::file_dir+Files::file_name);
-
-    int result = dialog.run();
-
-    Glib::ustring filename = dialog.get_filename();
-    char temp[300];
-
-    switch (result) {
-        case Gtk::RESPONSE_OK:
-
-            //add .hseq extention
-            if (dialog.get_filter() == hseq) if (filename.size() < 5 || 0 != (filename.substr(filename.length() - 5, 5).compare(".hseq"))) {
-                    filename += ".hseq";
-              }
-            //check whether it already exists
-            if (Files::fexists(filename.c_str())) {
-                sprintf(temp, _("File '%s'  already exist."), filename.c_str());
-                if (!Ask(temp, _("Do you want to overwrite this file?")))
-                    return; //user choosed not to overwrite it.
-            }
-
-            Files::SaveToFile(filename);
-
-        case Gtk::RESPONSE_CANCEL:
-
-            break;
-
-        default:
-            *dbg << "unknown response returned!\n";
-            break;
-    }
-
+    Files::SaveFileDialog(this);
 }
 
 bool MainWindow::OnTreviewButtonPress(GdkEventButton* event){

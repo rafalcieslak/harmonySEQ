@@ -293,6 +293,8 @@ void SequencerWidget::SelectSeq(seqHandle h){
     AnythingSelected = 1;
     selectedSeq = h;
     Sequencer* seq = seqH(h);
+    if(!seq) return;
+
     selectedSeqType = seq->GetType();
 
     seq->on_playstate_change.connect(

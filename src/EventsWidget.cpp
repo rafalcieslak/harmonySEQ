@@ -30,8 +30,11 @@ EventsWidget::EventsWidget(){
 
     pack_start(main_Vbox);
     main_Vbox.pack_start(scrolledwindow);
+
     scrolledwindow.add(m_TreeView);
-    scrolledwindow.set_policy(Gtk::POLICY_AUTOMATIC,Gtk::POLICY_AUTOMATIC);
+    scrolledwindow.set_policy(Gtk::POLICY_NEVER,Gtk::POLICY_ALWAYS);
+    scrolledwindow.set_overlay_scrolling(false);
+
     main_Vbox.pack_start(lower_button_Hbox,Gtk::PACK_SHRINK);
     lower_button_Hbox.pack_end(add_button);
     lower_button_Hbox.pack_end(add_action_button);

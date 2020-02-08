@@ -22,6 +22,7 @@
 #define	FILES_H
 
 #include <glibmm/keyfile.h>
+#include <gtkmm/window.h>
 
 #include "global.h"
 
@@ -42,7 +43,9 @@ namespace Files{
     /**Saves a file. Does not show any dialog, does not check for overwriting. Just saves.*/
     void SaveToFile(Glib::ustring filename);
     /**Shows a file load dialog*/
-    void LoadFileDialog();
+    void LoadFileDialog(Gtk::Window* parent);
+    /**Shows a file save dialog*/
+    void SaveFileDialog(Gtk::Window* parent);
     /**Loads a file, but without showing the dialog (so the filename must be passed as an argument).
         * Also, it converts it before opening, if it's an old file. */
     bool LoadFile(Glib::ustring file);
@@ -51,6 +54,11 @@ namespace Files{
     bool LoadFileCurrent(Glib::KeyFile* kf);
     /**Converts file format from 0.15 to 0.16*/
     bool ConvertFile_0_15_to_0_16(Glib::KeyFile* kf);
+
+extern bs2::signal<void()> on_file_loaded;
+extern bs2::signal<void()> on_file_saved;
+extern bs2::signal<void()> on_file_modified;
+
 }
 
 
