@@ -71,14 +71,19 @@ private:
         ModelColumns(){add(col_ID);add(col_label);add(col_colour);add(col_type);add(col_prt);}
         Gtk::TreeModelColumn<int> col_ID;
         Gtk::TreeModelColumn<Glib::ustring> col_label;
-        Gtk::TreeModelColumn<Glib::ustring> col_colour;
+        Gtk::TreeModelColumn<Gdk::RGBA> col_colour;
         Gtk::TreeModelColumn<int> col_type;
         Gtk::TreeModelColumn<int> col_prt;
     };
 
+    void UpdateColors();
+
     ModelColumns m_columns;
     Gtk::TreeView m_TreeView;
     Glib::RefPtr<Gtk::TreeStore> m_refTreeModel;
+
+    Gdk::RGBA background_color;
+    Gdk::RGBA highlight_color;
 };
 
 #endif	/* EVENTSWIDGET_H */

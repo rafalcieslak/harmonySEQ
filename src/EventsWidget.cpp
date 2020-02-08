@@ -23,6 +23,7 @@
 #include "Action.h"
 #include "global.h"
 #include "messages.h"
+#include "MainWindow.h"
 #include "Files.h"
 
 EventsWidget::EventsWidget(){
@@ -53,6 +54,7 @@ EventsWidget::EventsWidget(){
 
     m_refTreeModel = Gtk::TreeStore::create(m_columns);
     m_TreeView.set_model(m_refTreeModel);
+    m_TreeView.set_name("events");
 
     if (debugging) m_TreeView.append_column(_("ID"),m_columns.col_ID);
     //m_TreeView.append_column("prt",m_columns.col_prt);
@@ -60,9 +62,8 @@ EventsWidget::EventsWidget(){
     Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
     int colcount = m_TreeView.append_column(_("Events"),*pRenderer);
     Gtk::TreeViewColumn * column = m_TreeView.get_column(colcount-1);
-    column->add_attribute(pRenderer->property_cell_background(),m_columns.col_colour);
     column->add_attribute(pRenderer->property_text(),m_columns.col_label);
-    column->add_attribute(pRenderer->property_cell_background(),m_columns.col_colour);
+    column->add_attribute(pRenderer->property_cell_background_rgba(), m_columns.col_colour);
 
     m_TreeView.set_headers_visible(1);//showing the upper headers
 
@@ -75,17 +76,40 @@ EventsWidget::EventsWidget(){
     m_TreeView.set_enable_search(0);
     show_all_children(1);
     hide();//hidden at beggining;
+
+    signal_style_updated().connect(std::bind(&EventsWidget::UpdateColors, this));
+    UpdateColors();
 }
 
 
 EventsWidget::~EventsWidget(){
 }
 
+void EventsWidget::UpdateColors(){
+    background_color = m_TreeView.get_style_context()->get_background_color();
+    highlight_color = m_TreeView.get_style_context()->get_background_color(
+        Gtk::STATE_FLAG_SELECTED | Gtk::STATE_FLAG_FOCUSED | Gtk::STATE_FLAG_ACTIVE);
+
+    /* Update existing rows to use new color. */
+    Gtk::TreeModel::Children children = m_refTreeModel->children();
+    for(Gtk::TreeModel::Children::iterator iter = children.begin(); iter != children.end(); ++iter){
+        Gtk::TreeModel::Row row = *iter;
+        /* Event */
+        row[m_columns.col_colour] = background_color;
+
+        Gtk::TreeModel::Children children2 = row->children();
+        for(Gtk::TreeModel::Children::iterator iter = children2.begin(); iter != children2.end(); ++iter){
+            Gtk::TreeModel::Row row = *iter;
+            /* Action */
+            row[m_columns.col_colour] = background_color;
+        }
+    }
+}
 
 void EventsWidget::InitTreeData(){
-
     m_refTreeModel->clear();
     Gtk::TreeModel::Row row;
+
     for (unsigned int x = 0; x < Events.size(); x++) {
         if (!Events[x]) continue; //seems it was removed
         Gtk::TreeModel::iterator iter = m_refTreeModel->append();
@@ -93,7 +117,7 @@ void EventsWidget::InitTreeData(){
         Event* event = Events[x];
         row[m_columns.col_ID] = x;
         row[m_columns.col_label] = event->GetLabel();
-        row[m_columns.col_colour] = "white";
+        row[m_columns.col_colour] = background_color;
         row[m_columns.col_type] = EVENT;
         row[m_columns.col_prt] = -1;
 
@@ -113,23 +137,22 @@ void EventsWidget::InitTreeData(){
             Action* action = event->actions[c];
             row_child[m_columns.col_ID] = c;
             row_child[m_columns.col_label] = action->GetLabel();
-            row_child[m_columns.col_colour] = "beige";
+            row_child[m_columns.col_colour] = background_color;
             row_child[m_columns.col_type] = ACTION;
             row_child[m_columns.col_prt] = x;
 
             action->on_trigger.connect(
                 [=](){ DeferWorkToUIThread(
-                        [=](){ ColorizeAction(row); });});
+                        [=](){ ColorizeAction(row_child); });});
 
             action->on_changed.connect(
                 [=](){ DeferWorkToUIThread(
-                        [=](){ UpdateRow(row); });});
+                        [=](){ UpdateRow(row_child); });});
         }
     }
 }
 
 void EventsWidget::OnAddEventClicked(){
-
     Gtk::TreeModel::iterator iter = m_refTreeModel->append();
     Gtk::TreeModel::Row row = *(iter);
     Event* event = new Event(Event::NONE,0,0);
@@ -137,7 +160,7 @@ void EventsWidget::OnAddEventClicked(){
     // TODO: Store shared ptrs insted of IDs
     row[m_columns.col_ID] = Events.size()-1;
     row[m_columns.col_label] = event->GetLabel();
-    row[m_columns.col_colour] = "white";
+    row[m_columns.col_colour] = background_color;
     row[m_columns.col_type] = EVENT;
     row[m_columns.col_prt] = -1;
     event->ShowWindow();
@@ -160,19 +183,23 @@ void EventsWidget::OnAddActionClicked(){
     if(!iter_selected) return; //should not happen, button wolud not be sensitive
 
     Gtk::TreeModel::Row row = *iter_selected;
+    Gtk::TreeModel::iterator iter_parent;
     switch (row[m_columns.col_type]){
         case EVENT:
             id = row[m_columns.col_ID];
+            iter_parent = iter_selected;
             break;
         case ACTION:
             id = row[m_columns.col_prt];
+            Gtk::TreePath path(iter_selected);
+            path.up();
+            iter_parent = m_refTreeModel->get_iter(path);
             break;
     }
 
     Action* action = new Action(Action::NONE);
     Events[id]->actions.push_back(action);
     int act = Events[id]->actions.size() - 1;
-    Gtk::TreeModel::iterator iter_parent = iter_selected;
     row = *iter_parent;
     Gtk::TreeModel::iterator iter_new = m_refTreeModel->append(row.children());
     row = *iter_new;
@@ -180,7 +207,7 @@ void EventsWidget::OnAddActionClicked(){
     row[m_columns.col_prt] = id;
     row[m_columns.col_ID] = act;
     row[m_columns.col_label] = action->GetLabel();
-    row[m_columns.col_colour] = "beige";
+    row[m_columns.col_colour] = background_color;
 
     action->on_trigger.connect(
         [=](){ DeferWorkToUIThread(
@@ -216,20 +243,20 @@ void EventsWidget::SeqListChanged(){
 }
 
 void EventsWidget::ColorizeEvent(Gtk::TreeModel::Row row){
-    row[m_columns.col_colour] = "royal blue";
+    row[m_columns.col_colour] = highlight_color;
     Glib::signal_timeout().connect([=](){UncolorizeEvent(row); return false;},EVENTS_FLASH_TIMEOUT,Glib::PRIORITY_DEFAULT_IDLE);
 }
 
 void EventsWidget::UncolorizeEvent(Gtk::TreeModel::Row row){
-    row[m_columns.col_colour] = "white";
+    row[m_columns.col_colour] = background_color;
 }
 void EventsWidget::ColorizeAction(Gtk::TreeModel::Row row){
-    row[m_columns.col_colour] = "light blue";
+    row[m_columns.col_colour] = highlight_color;
     Glib::signal_timeout().connect([=](){UncolorizeAction(row); return false;},EVENTS_FLASH_TIMEOUT,Glib::PRIORITY_DEFAULT_IDLE);
 }
 
 void EventsWidget::UncolorizeAction(Gtk::TreeModel::Row row){
-    row[m_columns.col_colour] = "beige";
+    row[m_columns.col_colour] = background_color;
 }
 void EventsWidget::OnRowChosen(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column){
 

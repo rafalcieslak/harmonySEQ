@@ -50,7 +50,6 @@ bool fexists(const char *filename)
 }
 
 bool SetFileModified(bool modified){
-    printf("File Modified: %d\n", int(modified));
     if (modified != file_modified){
         file_modified = modified;
         on_file_modified();

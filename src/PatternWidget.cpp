@@ -45,6 +45,10 @@ const double crtl_Tsurrounding = 8.0;
 
 const double handle_size = 15.0;
 
+void ContextSetSourceGdkRGBA(Cairo::RefPtr<Cairo::Context> ct, Gdk::RGBA color){
+    ct->set_source_rgba(color.get_red(), color.get_green(), color.get_blue(), color.get_alpha());
+}
+
 PatternWidget::PatternWidget(){
     container = NULL;
     internal_height=50; //random guess. will be reset soon anyway by the SequencerWidget, but better protect from 0-like values.
@@ -91,6 +95,28 @@ PatternWidget::PatternWidget(){
         }, Config::Interaction::PatternRefreshMS, Glib::PRIORITY_DEFAULT_IDLE);
 
     if(!Config::Interaction::DisableDiodes) Glib::signal_timeout().connect([=](){return DrawDiodesTimeout();},DIODE_FADEOUT_TIME/8);
+
+    signal_style_updated().connect(std::bind(&PatternWidget::UpdateColors, this));
+    UpdateColors();
+}
+
+void PatternWidget::UpdateColors(){
+    /* Drawing area itself has no useful style definitions, so we need
+     * to query something else. The heuristic below seems to give good
+     * results on a variety of themes tested. */
+    Gtk::Window temporary;
+    Gtk::CheckButton widget;
+    temporary.add(widget);
+    background_color = temporary.get_style_context()->get_background_color();
+    highlight_color = widget.get_style_context()->get_border_color(
+        Gtk::STATE_FLAG_SELECTED | Gtk::STATE_FLAG_FOCUSED | Gtk::STATE_FLAG_ACTIVE | Gtk::STATE_FLAG_CHECKED);
+    border_color = widget.get_style_context()->get_border_color(
+        Gtk::STATE_FLAG_SELECTED | Gtk::STATE_FLAG_ACTIVE | Gtk::STATE_FLAG_CHECKED);
+    border_color.set_alpha(1.0);
+    inactive_color = border_color;
+    inactive_color.set_alpha(0.3);
+
+    RedrawEverything();
 }
 
 PatternWidget::~PatternWidget(){
@@ -110,11 +136,11 @@ void PatternWidget::UpdateSizeRequest(){
     int scale_factor = get_window() ? get_window()->get_scale_factor() : 1;
     if(scale_factor != last_scale_factor){
         // Recreate buffers with enough surface area.
-        cr_buffer_surface = Cairo::ImageSurface::create(Cairo::FORMAT_RGB24,2400*scale_factor,300*scale_factor);
+        cr_buffer_surface = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32,2400*scale_factor,300*scale_factor);
         cr_buffer_context = Cairo::Context::create(cr_buffer_surface);
         cr_atoms_surface = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32,2400*scale_factor,300*scale_factor);
         cr_atoms_context = Cairo::Context::create(cr_atoms_surface);
-        cr_grid_surface = Cairo::ImageSurface::create(Cairo::FORMAT_RGB24,2400*scale_factor,300*scale_factor);
+        cr_grid_surface = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32,2400*scale_factor,300*scale_factor);
         cr_grid_context = Cairo::Context::create(cr_grid_surface);
         cr_diodes_surface = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32,2400*scale_factor,300*scale_factor);
         cr_diodes_context = Cairo::Context::create(cr_diodes_surface);
@@ -1194,11 +1220,11 @@ void PatternWidget::RedrawAllDiodes(){
     }
 
     //clearing...
-    cr_diodes_context->save();
+    /*cr_diodes_context->save();
     cr_diodes_context->set_source_rgba(0.0, 0.0, 0.0, 0.0);
     cr_diodes_context->set_operator(Cairo::OPERATOR_SOURCE);
     cr_diodes_context->paint();
-    cr_diodes_context->restore();
+    cr_diodes_context->restore();*/
 
     active_diodes_mtx.lock();
     for(std::set<DiodeMidiEvent*>::iterator it = active_diodes.begin();it != active_diodes.end(); it++){
@@ -1237,12 +1263,13 @@ void PatternWidget::RedrawGrid(){
 
     int resolution = container->owner->GetResolution();
 
-      //clearing...
-      cr_grid_context->save();
-      cr_grid_context->set_source_rgb(1.0,1.0,1.0);
-      //cr_grid_context->set_operator(Cairo::OPERATOR_SOURCE);
-      cr_grid_context->paint();
-      cr_grid_context->restore();
+    //clearing...
+    cr_grid_context->save();
+    //cr_diodes_context->set_source_rgba(0.0, 0.0, 0.0, 0.0);
+    ContextSetSourceGdkRGBA(cr_grid_context, background_color);
+    //cr_grid_context->set_operator(Cairo::OPERATOR_SOURCE);
+    cr_grid_context->paint();
+    cr_grid_context->restore();
 
     //The +0.5 that often appears below in coordinates it to prevent cairo from antyaliasing lines.
 
@@ -1251,10 +1278,10 @@ void PatternWidget::RedrawGrid(){
     for (int x = 0; x <= resolution; x++) {
         if (x % hints == 0) {
             cr_grid_context->set_line_width(1.5);
-            cr_grid_context->set_source_rgb(0.0, 0.5, 0.0); //hint colour
+            ContextSetSourceGdkRGBA(cr_grid_context, border_color);
         } else {
             cr_grid_context->set_line_width(1.0);
-            cr_grid_context->set_source_rgb(0.5, 0.5, 0.4); //normal grid colour
+            ContextSetSourceGdkRGBA(cr_grid_context, inactive_color);
         }
         if (x != resolution) {
             cr_grid_context->move_to((int) ((double) x * (double) draw_width / resolution) + 0.5, 0);
@@ -1269,7 +1296,7 @@ void PatternWidget::RedrawGrid(){
     //horizontal grid
     if (seq_type == SEQ_TYPE_NOTE) {
         cr_grid_context->set_line_width(1);
-        cr_grid_context->set_source_rgb(0.0, 0.0, 0.0);
+        ContextSetSourceGdkRGBA(cr_grid_context, inactive_color);
         for (int x = 0; x <= 6; x++) {
             //the ' - (x==6)' does the trick, so that the last line is drawn not outside the widget.
             cr_grid_context->move_to(0, x * draw_height / 6 + 0.5 - (x==6));
@@ -1280,15 +1307,15 @@ void PatternWidget::RedrawGrid(){
         cr_grid_context->set_line_width(1);
         for (int x = 0; x <= 4; x++) {
 
+            double lwidth = 1.0;
             if (x == 2)
-                cr_grid_context->set_line_width(2.0);
-            else
-                cr_grid_context->set_line_width(1.0);
+                lwidth = 2.0;
+            cr_grid_context->set_line_width(lwidth);
 
             if (x == 2)
-                cr_grid_context->set_source_rgb(7.0, 0.0, 0.0);
+                ContextSetSourceGdkRGBA(cr_grid_context, highlight_color);
             else
-                cr_grid_context->set_source_rgb(0.0, 0.0, 0.0);
+                ContextSetSourceGdkRGBA(cr_grid_context, inactive_color);
 
             //the ' - (x==4)' does the trick, so that the last line is drawn not outside the widget.
             cr_grid_context->move_to(0, x * draw_height / 4 + 0.5 - (x==4));
@@ -1481,18 +1508,26 @@ void PatternWidget::RedrawGrid(){
       return false;
   }
 
-  void PatternWidget::Redraw(int x_dip, int y_dip, int width_dip, int height_dip){
-      // This function receives arguments in DIP. But cairo surfaces use real pixel measurements, so we need to account for the scale factor.
+void PatternWidget::Redraw(int x_dip, int y_dip, int width_dip, int height_dip){
+    // This function receives arguments in DIP. But cairo surfaces use real pixel measurements, so we need to account for the scale factor.
 
-      //Glib::Timer T;
+    //Glib::Timer T;
     //long unsigned int t;
-      //T.reset(); T.start();
+    //T.reset(); T.start();
 
     int scale_factor = get_window() ? get_window()->get_scale_factor() : 1;
     if (width_dip == -1) width_dip = get_allocation().get_width();
     if (height_dip == -1) height_dip = get_allocation().get_height();
     int draw_x = x_dip * scale_factor, draw_y = y_dip * scale_factor,
         draw_width = width_dip * scale_factor, draw_height = height_dip * scale_factor;
+
+    // Clear the buffer.
+    cr_buffer_context->save();
+    cr_buffer_context->set_source_rgba(0,0,0,0);
+    cr_buffer_context->set_operator(Cairo::OPERATOR_SOURCE);
+    cr_buffer_context->rectangle(draw_x,draw_y,draw_width,draw_height);
+    cr_buffer_context->fill();
+    cr_buffer_context->restore();
 
     cr_buffer_context->save();
     cr_buffer_context->set_source(cr_grid_surface,0,0);
@@ -1513,23 +1548,23 @@ void PatternWidget::RedrawGrid(){
     cr_buffer_context->restore();
 
     //TODO: optimize following to use only the redrawn area
-  if(drag_in_progress && drag_mode==DRAG_MODE_SELECT_AREA){
-      cr_buffer_context->save();
-      cr_buffer_context->scale(scale_factor, scale_factor);
-      cr_buffer_context->set_line_width(2);
-      cr_buffer_context->rectangle(drag_beggining_x,drag_beggining_y,drag_current_x-drag_beggining_x,drag_current_y-drag_beggining_y);
-      cr_buffer_context->set_source_rgba(0.9,0.4,0.3,0.2);
-      cr_buffer_context->fill_preserve();
-      cr_buffer_context->set_source_rgb(0.9,0.4,0.3);
-      cr_buffer_context->stroke();
-      cr_buffer_context->restore();
-  }
+    if(drag_in_progress && drag_mode==DRAG_MODE_SELECT_AREA){
+        cr_buffer_context->save();
+        cr_buffer_context->scale(scale_factor, scale_factor);
+        cr_buffer_context->set_line_width(2);
+        cr_buffer_context->rectangle(drag_beggining_x,drag_beggining_y,drag_current_x-drag_beggining_x,drag_current_y-drag_beggining_y);
+        cr_buffer_context->set_source_rgba(0.9,0.4,0.3,0.2);
+        cr_buffer_context->fill_preserve();
+        cr_buffer_context->set_source_rgb(0.9,0.4,0.3);
+        cr_buffer_context->stroke();
+        cr_buffer_context->restore();
+    }
+
     //T.elapsed(t);
     //*err << (int)t << ENDL;
 
-   // T.stop();
-  //queue_draw_area(x_dip, y_dip, width_dip, height_dip);
-
+    // T.stop();
+    //queue_draw_area(x_dip, y_dip, width_dip, height_dip);
 }
 
 

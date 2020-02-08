@@ -49,10 +49,15 @@ spinbutton button {
 }
 
 
-
 spinbutton#tempo.lit {
     background-color: #2222cc;
+    background-image: unset;
     transition: 200ms;
+}
+spinbutton#tempo.lit entry {
+    background-color: #2222cc;
+    transition: 200ms;
+    background-image: unset;
 }
 
 separator {

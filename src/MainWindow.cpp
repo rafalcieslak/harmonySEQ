@@ -405,7 +405,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::UpdateTitle(){
     char temp[300];
-    printf("Updating main window title.\n");
     if (Files::file_name == ""){
         if (Files::file_modified)
            sprintf(temp, "harmonySEQ %s - %s [*]", VERSION,_("Untitled")) ;
@@ -845,13 +844,10 @@ bool MainWindow::OnTreviewButtonPress(GdkEventButton* event){
    Gtk::TreePath path;
    wTreeView.get_path_at_pos(event->x,event->y,path);
 
-   printf("POPUP 1!\n");
    if (path){
-       printf("POPUP 2 %d %d!\n", event->type, event->button);
        // right-clicked on a seq, not on the empty space
        if( (event->type == GDK_BUTTON_PRESS) && (event->button == 3) )
            {
-               printf("POPUP 3!\n");
                wPopupMenu->popup(event->button, event->time);
            }
    }

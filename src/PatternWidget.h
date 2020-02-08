@@ -211,6 +211,12 @@ private:
     void IncreaseSelectionValue(int amount);
     void DecreaseSelectionValue(int amount);
 
+    void UpdateColors();
+
+    Gdk::RGBA background_color;
+    Gdk::RGBA highlight_color;
+    Gdk::RGBA border_color;
+    Gdk::RGBA inactive_color;
 };
 
 #endif	/* PATTERNWIDGET_H */

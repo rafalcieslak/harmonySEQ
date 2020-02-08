@@ -70,6 +70,15 @@ set_target_properties(
   harmonySEQ PROPERTIES
   LINK_FLAGS_RELEASE -s)
 
+
+# Aditional optional linging
+# find_program(iwyu_path NAMES include-what-you-use iwyu)
+# if(iwyu_path)
+#   set_target_properties(harmonySEQ PROPERTIES
+#     CXX_INCLUDE_WHAT_YOU_USE ${iwyu_path})
+# endif()
+
+
 # When building inplace directory, place the binary in the root.
 set_target_properties(
   harmonySEQ
