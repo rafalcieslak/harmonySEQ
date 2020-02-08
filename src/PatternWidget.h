@@ -22,6 +22,7 @@
 #include "gtkmm.h"
 #include <set>
 #include <list>
+#include "Color.h"
 #include "Sequencer.h"
 #include "ControllerAtom.h"
 #include "DiodeMidiEvent.h"
@@ -213,10 +214,15 @@ private:
 
     void UpdateColors();
 
-    Gdk::RGBA background_color;
-    Gdk::RGBA highlight_color;
-    Gdk::RGBA border_color;
-    Gdk::RGBA inactive_color;
+    Color background_color;
+    Color highlight_color;
+    Color border_color;
+    Color inactive_color;
+
+    Color atom_color;
+    Color atom_border_color;
+    Color selected_atom_color;
+    Color selected_atom_border_color;
 };
 
 #endif	/* PATTERNWIDGET_H */

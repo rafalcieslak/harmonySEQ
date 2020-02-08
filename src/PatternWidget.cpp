@@ -43,11 +43,7 @@ int resolution_hints[65] = {1,1,2,3,2,5,3,7,4,3,5,11,3,13,7,5,4,17,6,19,5,7,11,2
 const double ctrl_Vsurrounding = 8.0;
 const double crtl_Tsurrounding = 8.0;
 
-const double handle_size = 15.0;
-
-void ContextSetSourceGdkRGBA(Cairo::RefPtr<Cairo::Context> ct, Gdk::RGBA color){
-    ct->set_source_rgba(color.get_red(), color.get_green(), color.get_blue(), color.get_alpha());
-}
+const double handle_size = 12.0;
 
 PatternWidget::PatternWidget(){
     container = NULL;
@@ -112,9 +108,14 @@ void PatternWidget::UpdateColors(){
         Gtk::STATE_FLAG_SELECTED | Gtk::STATE_FLAG_FOCUSED | Gtk::STATE_FLAG_ACTIVE | Gtk::STATE_FLAG_CHECKED);
     border_color = widget.get_style_context()->get_border_color(
         Gtk::STATE_FLAG_SELECTED | Gtk::STATE_FLAG_ACTIVE | Gtk::STATE_FLAG_CHECKED);
-    border_color.set_alpha(1.0);
+    border_color.a = 1.0;
     inactive_color = border_color;
-    inactive_color.set_alpha(0.3);
+    inactive_color.a = 0.3;
+
+    atom_color = Color(0.26, 0.26, 0.9);
+    atom_border_color = Color(0.125, 0.125, 0.5);
+    selected_atom_color = Color(0.9, 0.26, 0.26);
+    selected_atom_border_color = Color(0.5, 0.125, 0.125);
 
     RedrawEverything();
 }
@@ -1157,23 +1158,6 @@ void PatternWidget::RedrawDiode(bool on, DiodeMidiEvent* diodev){
 
     int x=0, y=0, h=0;
 
-    //determine coords
-    if(diodev->type == DIODE_TYPE_NOTE){
-        if (seq_type != SEQ_TYPE_NOTE) return; //just to ensure safety
-
-        //calculate some coordinates
-        y = (5 - diodev->value) * draw_height / 6;
-        h = draw_height / 6;
-        x = diodev->time*draw_width;
-
-    } else if (diodev->type == DIODE_TYPE_CTRL) {
-        if (seq_type != SEQ_TYPE_CONTROL) return; //just to ensure safety
-
-        //calculate some coordinates
-        y = (double) draw_height * ((127 - diodev->value) / (127.0));
-        x = diodev->time*draw_width;
-    }
-
     //check state
     if(on){
         timeval curr,res;
@@ -1191,16 +1175,27 @@ void PatternWidget::RedrawDiode(bool on, DiodeMidiEvent* diodev){
         cr_diodes_context->set_operator(Cairo::OPERATOR_SOURCE);
     }
 
-    //perform cairo geometry drawing
     int redraw_x = 0, redraw_y = 0, redraw_w = 0, redraw_h = 0;
     if(diodev->type == DIODE_TYPE_NOTE){
+        if (seq_type != SEQ_TYPE_NOTE) return; //just in case
+
+        y = (5 - diodev->value) * draw_height / 6;
+        h = draw_height / 6;
+        x = diodev->time*draw_width;
+
         cr_diodes_context->move_to(x + 2, y + 2);
         cr_diodes_context->line_to(x + 2, y + h - 2 + 1);
         cr_diodes_context->stroke();
         cr_diodes_context->restore();
+        // TODO: We can get the bounding box from Cairo.
         redraw_x = x, redraw_y = y;
         redraw_w = 4, redraw_h = h;
     } else if (diodev->type == DIODE_TYPE_CTRL) {
+        if (seq_type != SEQ_TYPE_CONTROL) return; //just in case
+
+        y = (double) draw_height * ((127 - diodev->value) / (127.0));
+        x = diodev->time*draw_width;
+
         cr_diodes_context->arc(x + 0.5, y + 0.5, 6.5-(on*0.5), 0, 2 * M_PI); //the on*0.5 is here to make the cleared area bit smaller, to clear the anti-aliasing effects
         cr_diodes_context->fill();
         cr_diodes_context->restore();
@@ -1220,11 +1215,11 @@ void PatternWidget::RedrawAllDiodes(){
     }
 
     //clearing...
-    /*cr_diodes_context->save();
+    cr_diodes_context->save();
     cr_diodes_context->set_source_rgba(0.0, 0.0, 0.0, 0.0);
     cr_diodes_context->set_operator(Cairo::OPERATOR_SOURCE);
     cr_diodes_context->paint();
-    cr_diodes_context->restore();*/
+    cr_diodes_context->restore();
 
     active_diodes_mtx.lock();
     for(std::set<DiodeMidiEvent*>::iterator it = active_diodes.begin();it != active_diodes.end(); it++){
@@ -1265,8 +1260,7 @@ void PatternWidget::RedrawGrid(){
 
     //clearing...
     cr_grid_context->save();
-    //cr_diodes_context->set_source_rgba(0.0, 0.0, 0.0, 0.0);
-    ContextSetSourceGdkRGBA(cr_grid_context, background_color);
+    background_color.to_context(cr_grid_context);
     //cr_grid_context->set_operator(Cairo::OPERATOR_SOURCE);
     cr_grid_context->paint();
     cr_grid_context->restore();
@@ -1278,10 +1272,10 @@ void PatternWidget::RedrawGrid(){
     for (int x = 0; x <= resolution; x++) {
         if (x % hints == 0) {
             cr_grid_context->set_line_width(1.5);
-            ContextSetSourceGdkRGBA(cr_grid_context, border_color);
+            border_color.to_context(cr_grid_context);
         } else {
             cr_grid_context->set_line_width(1.0);
-            ContextSetSourceGdkRGBA(cr_grid_context, inactive_color);
+            inactive_color.to_context(cr_grid_context);
         }
         if (x != resolution) {
             cr_grid_context->move_to((int) ((double) x * (double) draw_width / resolution) + 0.5, 0);
@@ -1296,11 +1290,10 @@ void PatternWidget::RedrawGrid(){
     //horizontal grid
     if (seq_type == SEQ_TYPE_NOTE) {
         cr_grid_context->set_line_width(1);
-        ContextSetSourceGdkRGBA(cr_grid_context, inactive_color);
+        inactive_color.to_context(cr_grid_context);
         for (int x = 0; x <= 6; x++) {
-            //the ' - (x==6)' does the trick, so that the last line is drawn not outside the widget.
-            cr_grid_context->move_to(0, x * draw_height / 6 + 0.5 - (x==6));
-            cr_grid_context->line_to(draw_width, x * draw_height / 6 + 0.5 - (x==6));
+            cr_grid_context->move_to(0, x * draw_height / 6);
+            cr_grid_context->line_to(draw_width, x * draw_height / 6);
             cr_grid_context->stroke();
         }
     } else if (seq_type == SEQ_TYPE_CONTROL) {
@@ -1313,9 +1306,9 @@ void PatternWidget::RedrawGrid(){
             cr_grid_context->set_line_width(lwidth);
 
             if (x == 2)
-                ContextSetSourceGdkRGBA(cr_grid_context, highlight_color);
+                highlight_color.to_context(cr_grid_context);
             else
-                ContextSetSourceGdkRGBA(cr_grid_context, inactive_color);
+                inactive_color.to_context(cr_grid_context);
 
             //the ' - (x==4)' does the trick, so that the last line is drawn not outside the widget.
             cr_grid_context->move_to(0, x * draw_height / 4 + 0.5 - (x==4));
@@ -1373,8 +1366,7 @@ void PatternWidget::RedrawGrid(){
                               double h = draw_height/6;
                               double x1 = note->time*draw_width;
                               double w = note->length*draw_width;
-                              y1++; // This is because the very first 1px line is the upper border.
-                              //Check if note is in selection.
+                              // y1 += 0.5; // To align with the grid
                               bool selected = false;
                               //TODO: searching should be faster! Might be better to mark an atom's flag stating whether the note is in selection?
                               if(selection.find(note) != selection.end()) selected = true;
@@ -1386,11 +1378,11 @@ void PatternWidget::RedrawGrid(){
                               cr_atoms_context->set_line_join(Cairo::LINE_JOIN_ROUND);
                               cr_atoms_context->rectangle(x1+1.5,y1+1.5,w-3,h-3);
                               double af = (double)note->velocity/127; //may be changed to 128, this will not affect the graphics visibly, but may work slightly faster.
-                              if(selected) cr_atoms_context->set_source_rgba(0.8,0.0,0.0,af);
-                              else cr_atoms_context->set_source_rgba(0.,0.0,0.8,af);
+                              if (selected) selected_atom_color.with_a(af).to_context(cr_atoms_context);
+                              else atom_color.with_a(af).to_context(cr_atoms_context);
                               cr_atoms_context->fill_preserve();
-                              if(selected) cr_atoms_context->set_source_rgb(0.4,0.0,0.0);
-                              else cr_atoms_context->set_source_rgb(0.0,0.0,0.4);
+                              if (selected) selected_atom_border_color.to_context(cr_atoms_context);
+                              else atom_border_color.to_context(cr_atoms_context);
                               cr_atoms_context->stroke();
 
                               //cr_atoms_context->save();
@@ -1401,9 +1393,9 @@ void PatternWidget::RedrawGrid(){
                                   //draw velocity bar
                                  double velbar_up = y1+(127.0-(double)note->velocity)*h/127.0;
                                  double velbar_h = h*(double)note->velocity/127.0;
-                                 cr_atoms_context->rectangle(x1+3,velbar_up,7,velbar_h);
-                                 if(selected) cr_atoms_context->set_source_rgb(0.8,0.0,0.0);
-                                 else cr_atoms_context->set_source_rgb(0.0,0.0,0.8);
+                                 cr_atoms_context->rectangle(x1,velbar_up,7,velbar_h);
+                                 if (selected) selected_atom_border_color.to_context(cr_atoms_context);
+                                 else atom_border_color.to_context(cr_atoms_context);
                                  cr_atoms_context->fill();
 
                                   //length handle
@@ -1411,8 +1403,8 @@ void PatternWidget::RedrawGrid(){
                                   cr_atoms_context->line_to(x1+w-1.5,y1+h-1.5-handle_size);
                                   cr_atoms_context->line_to(x1+w-1.5-handle_size,y1+h-1.5);
                                   cr_atoms_context->line_to(x1+w-1.5,y1+h-1.5);
-                                  if(selected) cr_atoms_context->set_source_rgb(0.4,0.0,0.0);
-                                  else cr_atoms_context->set_source_rgb(0.0,0.0,0.4);
+                                  if (selected) selected_atom_border_color.to_context(cr_atoms_context);
+                                  else atom_border_color.to_context(cr_atoms_context);
                                   cr_atoms_context->fill();
 
                                   cr_atoms_context->reset_clip();
@@ -1462,9 +1454,9 @@ void PatternWidget::RedrawGrid(){
                               //draw line to next point
                               cr_atoms_context->set_line_width(3.0);
                               if(n == -1 || n == size-1)
-                                  cr_atoms_context->set_source_rgb(0.65,0.65,0.65);
+                                  border_color.with_a(0.6).to_context(cr_atoms_context);
                               else
-                                cr_atoms_context->set_source_rgb(0.2,0.2,0.2);
+                                  border_color.to_context(cr_atoms_context);
                               cr_atoms_context->move_to(x-(n==-1)*draw_width+0.5,y+0.5);
                               if(ctrl->slope_type == SLOPE_TYPE_FLAT)
                                   cr_atoms_context->line_to(nextctrl->time*draw_width+(n==size-1)*draw_width+0.5, y+0.5);
@@ -1482,11 +1474,11 @@ void PatternWidget::RedrawGrid(){
                                   cr_atoms_context->rectangle(x-4.5,y-4.5,11.0,11.0);
                               else if(ctrl->slope_type == SLOPE_TYPE_LINEAR)
                                   cr_atoms_context->arc(x+0.5,y+0.5,7.0,0,2*M_PI);
-                              if(selected) cr_atoms_context->set_source_rgb(0.8,0.0,0.0);
-                              else cr_atoms_context->set_source_rgb(0.,0.0,0.8);
+                              if (selected) selected_atom_color.to_context(cr_atoms_context);
+                              else atom_color.to_context(cr_atoms_context);
                               cr_atoms_context->fill_preserve();
-                              if(selected) cr_atoms_context->set_source_rgb(0.4,0.0,0.0);
-                              else cr_atoms_context->set_source_rgb(0.0,0.0,0.4);
+                              if (selected) selected_atom_border_color.to_context(cr_atoms_context);
+                              else atom_border_color.to_context(cr_atoms_context);
                               cr_atoms_context->stroke();
                         }
       }
