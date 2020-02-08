@@ -28,7 +28,7 @@ class ActionGUI : public Gtk::Window{
 public:
     ActionGUI(Action *prt);
     virtual ~ActionGUI();
-    
+
     /**Called mostly from outside this class, it refreshes the GUI according to parent Action*/
     void UpdateValues();
 
@@ -65,8 +65,6 @@ private:
     void OnNoteSeqChanged();
     void OnOnOffToggleChanged();
     void OnPlayOnOffToggleClicked();
-    void OnChordWidgetChanged();
-    void OnChordWidgetNoteChanged(int n, int p);
     void OnPatternChanged();
     void OnOctaveChanged();
     void OnApplyOctaveToogled(bool apply);
@@ -131,4 +129,3 @@ private:
 };
 
 #endif	/* ACTIONGUI_H */
-

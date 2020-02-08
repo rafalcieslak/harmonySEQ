@@ -44,7 +44,9 @@ ActionGUI::ActionGUI(Action *prt)
 
     chordwidget.Select(&parent->chord);
     chordwidget.ShowApplyOctave(1);
+    // TODO: We can get rid of this signal once Actions are polymorphic and we can listen to action's chord events directly.
     chordwidget.on_apply_octave_toggled.connect(std::bind(&ActionGUI::OnApplyOctaveToogled, this, std::placeholders::_1));
+
     //window's title
     set_title(_("Action"));
 
@@ -126,8 +128,6 @@ ActionGUI::ActionGUI(Action *prt)
     octave_spinbutton.set_increments(1.0,2.0);
     octave_spinbutton.signal_value_changed().connect(std::bind(&ActionGUI::OnOctaveChanged, this));
 
-    chordwidget.on_changed.connect(std::bind(&ActionGUI::OnChordWidgetChanged, this));
-    chordwidget.on_note_changed.connect(std::bind(&ActionGUI::OnChordWidgetNoteChanged, this, std::placeholders::_1, std::placeholders::_2));
 
     label_type.set_text(_("Type:"));
     label_seq.set_text(_("Sequencer:"));
@@ -212,13 +212,6 @@ void ActionGUI::OnSequencerListChanged(){
 
 void ActionGUI::UpdateChordwidget(){
     chordwidget.Update();
-}
-
-void ActionGUI::OnChordWidgetNoteChanged(int n, int p){
-    if(parent->type != Action::SEQ_CHANGE_CHORD) return;
-    // ????
-    // Sequencer* seq = seqH(parent->args[1]);
-
 }
 
 void ActionGUI::UpdateValues(){
@@ -513,15 +506,6 @@ void ActionGUI::OnPlayOnOffToggleClicked(){
     Files::SetFileModified(1);
 }
 
-void ActionGUI::OnChordWidgetChanged(){
-        //chord widget updates chord settings automatically, we just need to update labels
-
-    label_preview.set_text(parent->GetLabel());
-    parent->on_changed();
-
-    Files::SetFileModified(1);
-
-}
 void ActionGUI::OnOctaveChanged(){
     if(parent->type == Action::SEQ_TRANSPOSE_OCTAVE){
         parent->args[2] = octave_spinbutton.get_value();

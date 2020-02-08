@@ -42,10 +42,6 @@ public:
     /**Updates the visibility/sensitivity (f.e. hides chors root selector, it the type is CUSTOM)*/
     void UpdateWhatToShowAndWhatIsSensitive();
 
-    /**Called when any widget in chordwidget gets his data changed*/
-    bs2::signal<void()> on_changed;
-    /**Calleed when a note is MANUALLY changed. Prototype: ...(int note_number,int pitch)*/
-    bs2::signal<void(int,int)> on_note_changed;
     /**Called when the Apply Octave toggle is toggled*/
     bs2::signal<void(bool)> on_apply_octave_toggled;
 
