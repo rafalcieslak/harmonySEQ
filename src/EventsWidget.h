@@ -27,20 +27,13 @@ class EventsWidget : public Gtk::VBox{
 public:
     EventsWidget();
     virtual ~EventsWidget();
-    
+
     /**Fills the treeview with all events from events list*/
     void InitTreeData();
     /**Refreshes settings for all events in the treeview*/
     void UpdateAll();
-    /**Refreshes one, particular row*/
-    void UpdateRow(Gtk::TreeRowReference rowref);
     /**Asks all visible action-guis to refresh the seq combos*/
     void SeqListChanged();
-    /**Used to set colors for rows*/
-    void ColorizeEvent(Gtk::TreeRowReference rowref);
-    bool UncolorizeEvent(Gtk::TreeRowReference rowref);
-    void ColorizeAction(Gtk::TreeRowReference rowref);
-    bool UncolorizeAction(Gtk::TreeRowReference rowref);
 
     Gtk::VBox main_Vbox;
     Gtk::HBox lower_button_Hbox;
@@ -55,7 +48,18 @@ public:
     void OnSelectionChanged();
     void OnRowChosen(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column);
     void OnRowCollapsed(const Gtk::TreeModel::iterator& iter, const Gtk::TreeModel::Path& path);
-    
+
+
+private:
+    /** Refreshes one, particular row. */
+    void UpdateRow(Gtk::TreeModel::Row rowref);
+
+    /** Used to set colors for rows. */
+    void ColorizeEvent(Gtk::TreeModel::Row row);
+    void UncolorizeEvent(Gtk::TreeModel::Row row);
+    void ColorizeAction(Gtk::TreeModel::Row row);
+    void UncolorizeAction(Gtk::TreeModel::Row row);
+
     enum RowType{
         EVENT,
         ACTION
@@ -75,10 +79,6 @@ public:
     ModelColumns m_columns;
     Gtk::TreeView m_TreeView;
     Glib::RefPtr<Gtk::TreeStore> m_refTreeModel;
-
-private:
-
 };
 
 #endif	/* EVENTSWIDGET_H */
-

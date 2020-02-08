@@ -87,35 +87,122 @@ void EventsWidget::InitTreeData(){
         if (!Events[x]) continue; //seems it was removed
         Gtk::TreeModel::iterator iter = m_refTreeModel->append();
         row = *(iter);
+        Event* event = Events[x];
         row[m_columns.col_ID] = x;
-        row[m_columns.col_label] = Events[x]->GetLabel();
+        row[m_columns.col_label] = event->GetLabel();
         row[m_columns.col_colour] = "white";
         row[m_columns.col_type] = EVENT;
         row[m_columns.col_prt] = -1;
-        Gtk::TreeRowReference rowref(m_refTreeModel, m_refTreeModel->get_path(iter));
-        Events[x]->row_in_event_widget = rowref;
+
+        event->on_trigger.connect(
+            [=](){ DeferWorkToUIThread(
+                    [=](){ ColorizeEvent(row); });});
+
+        event->on_changed.connect(
+            [=](){ DeferWorkToUIThread(
+                    [=](){ UpdateRow(row); });});
+
         //actions
-        for (unsigned int c = 0; c < Events[x]->actions.size();c++){
-            if(!Events[x]->actions[c]) continue;
+        for (unsigned int c = 0; c < event->actions.size();c++){
+            if(!event->actions[c]) continue;
             Gtk::TreeModel::iterator iter_child = m_refTreeModel->append(row.children());
             Gtk::TreeModel::Row row_child = *iter_child;
+            Action* action = event->actions[c];
             row_child[m_columns.col_ID] = c;
-            row_child[m_columns.col_label] = Events[x]->actions[c]->GetLabel();
+            row_child[m_columns.col_label] = action->GetLabel();
             row_child[m_columns.col_colour] = "beige";
             row_child[m_columns.col_type] = ACTION;
             row_child[m_columns.col_prt] = x;
-            Gtk::TreeRowReference rowref_child(m_refTreeModel, m_refTreeModel->get_path(iter_child));
-            Events[x]->actions[c]->row_in_event_widget = rowref_child;
+
+            action->on_trigger.connect(
+                [=](){ DeferWorkToUIThread(
+                        [=](){ ColorizeAction(row); });});
+
+            action->on_changed.connect(
+                [=](){ DeferWorkToUIThread(
+                        [=](){ UpdateRow(row); });});
         }
     }
 }
+
+void EventsWidget::OnAddEventClicked(){
+
+    Gtk::TreeModel::iterator iter = m_refTreeModel->append();
+    Gtk::TreeModel::Row row = *(iter);
+    Event* event = new Event(Event::NONE,0,0);
+    Events.push_back(event);
+    // TODO: Store shared ptrs insted of IDs
+    row[m_columns.col_ID] = Events.size()-1;
+    row[m_columns.col_label] = event->GetLabel();
+    row[m_columns.col_colour] = "white";
+    row[m_columns.col_type] = EVENT;
+    row[m_columns.col_prt] = -1;
+    event->ShowWindow();
+
+    event->on_trigger.connect(
+        [=](){ DeferWorkToUIThread(
+                [=](){ ColorizeEvent(row); });});
+
+    event->on_changed.connect(
+        [=](){ DeferWorkToUIThread(
+                [=](){ UpdateRow(row); });});
+
+    m_TreeView.get_selection()->select(iter); //select the event that was just added
+    Files::SetFileModified(1);
+}
+
+void EventsWidget::OnAddActionClicked(){
+    int id = -1; //assert
+    Gtk::TreeModel::iterator iter_selected = m_TreeView.get_selection()->get_selected();
+    if(!iter_selected) return; //should not happen, button wolud not be sensitive
+
+    Gtk::TreeModel::Row row = *iter_selected;
+    switch (row[m_columns.col_type]){
+        case EVENT:
+            id = row[m_columns.col_ID];
+            break;
+        case ACTION:
+            id = row[m_columns.col_prt];
+            break;
+    }
+
+    Action* action = new Action(Action::NONE);
+    Events[id]->actions.push_back(action);
+    int act = Events[id]->actions.size() - 1;
+    Gtk::TreeModel::iterator iter_parent = iter_selected;
+    row = *iter_parent;
+    Gtk::TreeModel::iterator iter_new = m_refTreeModel->append(row.children());
+    row = *iter_new;
+    row[m_columns.col_type] = ACTION;
+    row[m_columns.col_prt] = id;
+    row[m_columns.col_ID] = act;
+    row[m_columns.col_label] = action->GetLabel();
+    row[m_columns.col_colour] = "beige";
+
+    action->on_trigger.connect(
+        [=](){ DeferWorkToUIThread(
+                [=](){ ColorizeAction(row); });});
+
+    action->on_changed.connect(
+        [=](){ DeferWorkToUIThread(
+                [=](){ UpdateRow(row); });});
+
+    action->GUIShowWindow();
+
+    row = *iter_selected;
+    if (row[m_columns.col_type] == EVENT)
+        m_TreeView.expand_row(m_refTreeModel->get_path(iter_selected),false); //auto expanding if possible to show the action;
+
+    Files::SetFileModified(1);
+}
+
+
 
 void EventsWidget::UpdateAll(){
     InitTreeData();
 }
 
 void EventsWidget::SeqListChanged(){
-
     for (unsigned int x = 0; x < Events.size(); x++) {
         if (!Events[x]) continue; //seems it was removed
         for (unsigned int c = 0; c < Events[x]->actions.size();c++){
@@ -125,41 +212,21 @@ void EventsWidget::SeqListChanged(){
     }
 }
 
-void EventsWidget::ColorizeEvent(Gtk::TreeRowReference rowref){
-    Gtk::TreeModel::Row row = *(m_refTreeModel->get_iter(rowref.get_path()));
-
-    if (!row) {
-        *err << _("Error - cannot colorize triggered event: row is empty.\n");
-        return;
-    }
-
+void EventsWidget::ColorizeEvent(Gtk::TreeModel::Row row){
     row[m_columns.col_colour] = "royal blue";
-    Glib::signal_timeout().connect([=](){return UncolorizeEvent(rowref);},EVENTS_FLASH_TIMEOUT,Glib::PRIORITY_DEFAULT_IDLE);
+    Glib::signal_timeout().connect([=](){UncolorizeEvent(row); return false;},EVENTS_FLASH_TIMEOUT,Glib::PRIORITY_DEFAULT_IDLE);
 }
 
-bool EventsWidget::UncolorizeEvent(Gtk::TreeRowReference rowref){
-    Gtk::TreeModel::Row row = *(m_refTreeModel->get_iter(rowref.get_path()));
-
+void EventsWidget::UncolorizeEvent(Gtk::TreeModel::Row row){
     row[m_columns.col_colour] = "white";
-    return 0;
 }
-void EventsWidget::ColorizeAction(Gtk::TreeRowReference rowref){
-    Gtk::TreeModel::Row row = *(m_refTreeModel->get_iter(rowref.get_path()));
-
-    if (!row) {
-        *err << _("Error - cannot colorize triggered action: row is empty.\n");
-        return;
-    }
-
+void EventsWidget::ColorizeAction(Gtk::TreeModel::Row row){
     row[m_columns.col_colour] = "light blue";
-    Glib::signal_timeout().connect([=](){return UncolorizeAction(rowref);},EVENTS_FLASH_TIMEOUT,Glib::PRIORITY_DEFAULT_IDLE);
+    Glib::signal_timeout().connect([=](){UncolorizeAction(row); return false;},EVENTS_FLASH_TIMEOUT,Glib::PRIORITY_DEFAULT_IDLE);
 }
 
-bool EventsWidget::UncolorizeAction(Gtk::TreeRowReference rowref){
-    Gtk::TreeModel::Row row = *(m_refTreeModel->get_iter(rowref.get_path()));
-
+void EventsWidget::UncolorizeAction(Gtk::TreeModel::Row row){
     row[m_columns.col_colour] = "beige";
-    return 0;
 }
 void EventsWidget::OnRowChosen(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column){
 
@@ -179,35 +246,16 @@ void EventsWidget::OnRowChosen(const Gtk::TreeModel::Path& path, Gtk::TreeViewCo
 
 }
 
-void EventsWidget::UpdateRow(Gtk::TreeRowReference rowref){
-    Gtk::TreeModel::Row row = *(m_refTreeModel->get_iter(rowref.get_path()));
-        switch (row[m_columns.col_type]){
-            case EVENT:
-                row[m_columns.col_label] = Events[row[m_columns.col_ID]]->GetLabel();
-                break;
-            case ACTION:
-                row[m_columns.col_label] = Events[row[m_columns.col_prt]]->actions[row[m_columns.col_ID]]->GetLabel();
-                break;
-        }
+void EventsWidget::UpdateRow(Gtk::TreeModel::Row row){
+    switch (row[m_columns.col_type]){
+    case EVENT:
+        row[m_columns.col_label] = Events[row[m_columns.col_ID]]->GetLabel();
+        break;
+    case ACTION:
+        row[m_columns.col_label] = Events[row[m_columns.col_prt]]->actions[row[m_columns.col_ID]]->GetLabel();
+        break;
+    }
 
-}
-
-void EventsWidget::OnAddEventClicked(){
-
-    Gtk::TreeModel::iterator iter = m_refTreeModel->append();
-    Gtk::TreeModel::Row row = *(iter);
-    Events.push_back(new Event(Event::NONE,0,0));
-    row[m_columns.col_ID] = Events.size()-1;
-    row[m_columns.col_label] = Events[Events.size()-1]->GetLabel();
-    row[m_columns.col_colour] = "white";
-    row[m_columns.col_type] = EVENT;
-    row[m_columns.col_prt] = -1;
-    Gtk::TreeRowReference rowref(m_refTreeModel, m_refTreeModel->get_path(iter));
-    Events[Events.size()-1]->row_in_event_widget = rowref;
-    Events[Events.size()-1]->ShowWindow();
-
-    m_TreeView.get_selection()->select(iter); //select the event that was just added
-    Files::SetFileModified(1);
 }
 
 void EventsWidget::OnRemoveClicked(){
@@ -255,42 +303,4 @@ void EventsWidget::OnSelectionChanged(){
 
 void EventsWidget::OnRowCollapsed(const Gtk::TreeModel::iterator& iter, const Gtk::TreeModel::Path& path){
     //void!
-}
-
-void EventsWidget::OnAddActionClicked(){
-    int id = -1; //assert
-    Gtk::TreeModel::iterator iter_selected = m_TreeView.get_selection()->get_selected();
-    if(!iter_selected) return; //should not happen, button wolud not be sensitive
-
-    Gtk::TreeModel::Row row = *iter_selected;
-    switch (row[m_columns.col_type]){
-        case EVENT:
-            id = row[m_columns.col_ID];
-            break;
-        case ACTION:
-            id = row[m_columns.col_prt];
-            break;
-    }
-
-    Events[id]->actions.push_back(new Action(Action::NONE));
-    int act = Events[id]->actions.size() - 1;
-    Gtk::TreeModel::iterator iter_parent = m_refTreeModel->get_iter(Events[id]->row_in_event_widget.get_path());
-    row = *iter_parent;
-    Gtk::TreeModel::iterator iter_new = m_refTreeModel->append(row.children());
-    row = *iter_new;
-    row[m_columns.col_type] = ACTION;
-    row[m_columns.col_prt] = id;
-    row[m_columns.col_ID] = act;
-    row[m_columns.col_label] = Events[id]->actions[act]->GetLabel();
-    row[m_columns.col_colour] = "beige";
-    Gtk::TreeRowReference rowref_child(m_refTreeModel, m_refTreeModel->get_path(iter_new));
-    Events[id]->actions[act]->row_in_event_widget = rowref_child;
-
-    Events[id]->actions[act]->GUIShowWindow();
-
-    row = *iter_selected;
-    if (row[m_columns.col_type] == EVENT)
-        m_TreeView.expand_row(m_refTreeModel->get_path(iter_selected),false); //auto expanding if possible to show the action;
-
-    Files::SetFileModified(1);
 }

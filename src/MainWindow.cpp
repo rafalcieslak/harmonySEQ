@@ -361,6 +361,10 @@ MainWindow::MainWindow()
         [=](auto dev){ DeferWorkToUIThread(
             [=](){ OnDiodeEvent(dev); });});
 
+    midi->on_tempo_changed.connect(
+        [=](){ DeferWorkToUIThread(
+            [=](){ UpdateTempo(); });});
+
     show_all_children(1);
 
     //This is the cure for any Gtk warnings one may experience.
@@ -409,6 +413,13 @@ MainWindow::TempoChanged()
     midi->SetTempo(tempo);
     Files::SetFileModified(1);
 }
+
+void MainWindow::UpdateTempo(){
+    double tempo = midi->GetTempo();
+    if(tempo != tempo_button.get_value())
+        tempo_button.set_value(tempo);
+}
+
 /*
 int MainWindow::GetSelectedSequencerID(){
      Gtk::TreeModel::iterator iter = GetSelectedSequencerIter();

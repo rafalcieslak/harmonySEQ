@@ -95,6 +95,7 @@ public:
     bs2::signal<void()> on_paused;
     bs2::signal<void()> on_unpaused;
     bs2::signal<void()> on_beat;
+    bs2::signal<void()> on_tempo_changed;
 
     /* TODO: Each sequencer should have their own diode signal, so
      * that sequencerwidgets could subscribe to events on that one

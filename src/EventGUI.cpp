@@ -200,7 +200,7 @@ void EventGUI::OnTypeChanged(){
     ChangeVisibleLines();
     if (!DO_NOT_INIT_TYPE) InitType();
     label_preview.set_text(parent->GetLabel());
-    if(parent->row_in_event_widget) mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
+    parent->on_changed();
     Files::SetFileModified(1);
 }
 
@@ -214,7 +214,7 @@ void EventGUI::OnChannelChanged(){
     }else *err << _("Error: channel has changed, while event is not MIDI-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
-    if(parent->row_in_event_widget) mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
+    parent->on_changed();
     Files::SetFileModified(1);
 }
 
@@ -224,7 +224,7 @@ void EventGUI::OnKeyChanged(){
     }else *err << _("Error: key has changed, while event is not key-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
-    if(parent->row_in_event_widget) mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
+    parent->on_changed();
     Files::SetFileModified(1);
 }
 
@@ -235,7 +235,7 @@ void EventGUI::OnCtrlChanged(){
     }else *err << _("Error: controller has changed, while event is not ctrl-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
-    if(parent->row_in_event_widget) mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
+    parent->on_changed();
     Files::SetFileModified(1);
 
 }
@@ -246,7 +246,7 @@ void EventGUI::OnNoteChanged(){
     }else *err << _("Error: note has changed, while event is not note-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
-    if(parent->row_in_event_widget) mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
+    parent->on_changed();
     Files::SetFileModified(1);
 
 }
@@ -257,7 +257,7 @@ void EventGUI::OnOSCPortChanged(){
     }else *err << _("Error: porthas changed, while event is not OSC-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
-    if(parent->row_in_event_widget) mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
+    parent->on_changed();
     Files::SetFileModified(1);
 }
 

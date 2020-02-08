@@ -49,12 +49,6 @@ Action::~Action(){
 void Action::Trigger(int data){
     *dbg << "-- Action triggered '" << GetLabel() << "'.\n";
 
-
-#ifdef EVENTS_FLASH
-    //Animating the row representing the triggered action.
-    mainwindow->eventsWidget.ColorizeAction(row_in_event_widget);
-#endif
-
     NoteSequencer* noteseq; //may be needed, declaring before switch
     //Reactions depend on action type.
     switch (type){
@@ -74,7 +68,6 @@ void Action::Trigger(int data){
             break;
 
         case TEMPO_SET:
-            mainwindow->tempo_button.set_value((double)args[1]);
             midi->SetTempo(args[1]);
             Files::SetFileModified(1);
             break;
@@ -141,6 +134,8 @@ void Action::Trigger(int data){
             *err << _("WARNING: Unknown action triggered.\n");
             break;
     }
+
+    on_trigger();
 }
 
 Glib::ustring Action::GetLabel(){

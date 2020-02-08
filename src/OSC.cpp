@@ -64,11 +64,6 @@ int tempo_handler(const char *path, const char *types, lo_arg **argv,
     *dbg << "OSC : tempo change got.\n";
     double tmp = argv[0]->f;
     midi->SetTempo(tmp);
-    Glib::signal_idle().connect(
-        [=](){
-            mainwindow->tempo_button.set_value(midi->GetTempo());
-            return false;
-        });
     return 0;
 }
 int sync_handler(const char *path, const char *types, lo_arg **argv,

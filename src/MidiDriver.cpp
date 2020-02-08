@@ -268,6 +268,8 @@ void MidiDriver::SetTempo(double bpm){
     snd_seq_set_queue_tempo(seq_handle,queueid,queue_tempo);
     tempo = bpm;
     snd_seq_queue_tempo_free(queue_tempo);
+
+    on_tempo_changed();
 }
 
 double MidiDriver::GetTempo(){

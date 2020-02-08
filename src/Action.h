@@ -65,10 +65,6 @@ public:
     virtual ~Action();
 
 
-
-    /**Keeps a reference to events TreeModel row (a child of an event). Useful f.e. for refreshing data in that row*/
-    Gtk::TreeRowReference row_in_event_widget;
-
     /**Stores the type of this action*/
     int type;
 
@@ -97,6 +93,14 @@ public:
 
     /**Called when sequencer list changed, will update treemodels*/
     void GUISequencerListChanged();
+
+    /** This signal is emitted by the events thread (or the UI's
+     * thread, if the events thread hasn't been implemented yet). It's
+     * up to the subscriber to relay work to a different thread. */
+    bs2::signal<void()> on_trigger;
+
+    /** This signal can be emitted by any thread. */
+    bs2::signal<void()> on_changed;
 
 private:
 

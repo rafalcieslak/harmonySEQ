@@ -67,9 +67,13 @@ public:
     /**Actions list*/
     std::vector<Action*> actions;
 
-    /**Reference to treerow in events widget*/
-    Gtk::TreeRowReference row_in_event_widget;
+    /** This signal is emitted by the events thread (or the UI's
+     * thread, if the events thread hasn't been implemented yet). It's
+     * up to the subscriber to relay work to a different thread. */
+    bs2::signal<void()> on_trigger;
 
+    /** This signal can be emitted by any thread. */
+    bs2::signal<void()> on_changed;
 private:
 
     EventGUI *gui_window;

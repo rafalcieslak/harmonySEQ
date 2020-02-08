@@ -183,7 +183,7 @@ ActionGUI::~ActionGUI(){
 
 void ActionGUI::OnOKClicked(){
     //Updating corresponding row, and hiding the window.
-    mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
+    parent->on_changed();
     hide();
 
 }
@@ -366,7 +366,7 @@ void ActionGUI::OnTypeChanged(){
     InitType();
 
     label_preview.set_text(parent->GetLabel());
-    if(parent->row_in_event_widget) mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
+    parent->on_changed();
     Files::SetFileModified(1);
 }
 
@@ -430,7 +430,7 @@ void ActionGUI::OnTempoChanged(){
     }else *err << _("Error: tempo has changed, while action is not tempo-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
-    mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
+    parent->on_changed();
 
     Files::SetFileModified(1);
 }
@@ -443,8 +443,7 @@ void ActionGUI::OnAllSeqComboChanged(){
     }else *err << "Error: all-sequencer has changed, while action is not all-sequencer-type." << ENDL;
 
     label_preview.set_text(parent->GetLabel());
-    mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
-
+    parent->on_changed();
     Files::SetFileModified(1);
 
 }
@@ -457,7 +456,7 @@ void ActionGUI::OnNoteSeqComboChanged(){
     }else *err << "Error: note-sequencer has changed, while action is not note-sequencer-type." << ENDL;
 
     label_preview.set_text(parent->GetLabel());
-    mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
+    parent->on_changed();
 
     Files::SetFileModified(1);
 
@@ -469,7 +468,7 @@ void ActionGUI::OnNoteSeqChanged(){
     }else *err << _("Error: note to set has changed, while action is not set-seq-note-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
-    mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
+    parent->on_changed();
 
     Files::SetFileModified(1);
 }
@@ -480,7 +479,7 @@ void ActionGUI::OnNoteNrChanged(){
     }else *err << _("Error: note number has changed, while action is not set-seq-note-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
-    mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
+    parent->on_changed();
 
     Files::SetFileModified(1);
 }
@@ -493,7 +492,7 @@ void ActionGUI::OnOnOffToggleChanged(){
     }else *err << _("Error: on-off-toggle has changed, while action is not on-off-toggle-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
-    mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
+    parent->on_changed();
 
     Files::SetFileModified(1);
 }
@@ -506,7 +505,7 @@ void ActionGUI::OnPlayOnOffToggleClicked(){
     }else *err << _("Error: play-pause-toggle has changed, while action is not play-pause-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
-    mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
+    parent->on_changed();
 
     Files::SetFileModified(1);
 }
@@ -515,7 +514,7 @@ void ActionGUI::OnChordWidgetChanged(){
         //chord widget updates chord settings automatically, we just need to update labels
 
     label_preview.set_text(parent->GetLabel());
-    mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
+    parent->on_changed();
 
     Files::SetFileModified(1);
 
@@ -526,7 +525,7 @@ void ActionGUI::OnOctaveChanged(){
     }else *err << _("Error: octave has changed, while action is not transpose-by-octave type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
-    mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
+    parent->on_changed();
 
     Files::SetFileModified(1);
 }
@@ -537,7 +536,7 @@ void ActionGUI::OnPatternChanged(){
     }else *err << _("Error: pattern has changed, while action is not pattern-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
-    mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
+    parent->on_changed();
 
     Files::SetFileModified(1);
 }
@@ -549,7 +548,7 @@ void ActionGUI::OnApplyOctaveToogled(bool apply){
     }else *err << _("Error: apply octave has changed, while action is not change-chord-type.") << ENDL;
 
     label_preview.set_text(parent->GetLabel());
-    mainwindow->eventsWidget.UpdateRow(parent->row_in_event_widget);
+    parent->on_changed();
 
     Files::SetFileModified(1);
 }

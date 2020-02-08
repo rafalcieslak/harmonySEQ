@@ -93,16 +93,12 @@ void Event::Trigger(){
     *dbg << "triggered event --'";
     *dbg << GetLabel() << "'--\n";
 
-#ifdef EVENTS_FLASH
-    mainwindow->eventsWidget.ColorizeEvent(row_in_event_widget);
-#endif
-
     for (unsigned int i = 0; i < actions.size(); i++){
         if (!actions[i]) continue; //it was removed
         actions[i]->Trigger();
-
     }
 
+    on_trigger();
 }
 
 void Event::ShowWindow(){
@@ -119,6 +115,7 @@ void FindAndProcessEvents(Event::EventTypes ev,int arg1, int arg2){
             event_to_capture_to->type = ev;
             event_to_capture_to->arg1 = arg1;
             event_to_capture_to->arg2 = arg2;
+            event_to_capture_to->on_changed();
             event_capturing_mode = 0; //switch the mode off
             event_to_capture_to->UpdateGUI();
             return; //do not process this event

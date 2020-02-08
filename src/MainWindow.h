@@ -48,8 +48,6 @@ public:
     /**Adds a single row, when a new sequencer is spawned (and return a Row, so that the sequencer will know where is it's row)*/
     Gtk::TreeModel::Row AddSequencerRow(int n);
 
-    /**Called when user changed tempo*/
-    void TempoChanged();
 
     /** Called on every beat, animates tempo spinbutton */
     void FlashTempo();
@@ -99,6 +97,9 @@ private:
     bool OnKeyPress(GdkEventKey* event);
     bool OnKeyRelease(GdkEventKey* event);
 
+    /**Called when user changed tempo*/
+    void TempoChanged();
+    void UpdateTempo();
 
     bool OnTreviewButtonPress(GdkEventButton* event);
 
