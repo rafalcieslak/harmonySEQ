@@ -23,13 +23,10 @@
 #include "gtkmm.h"
 
 class Action;
-class EventGUI;
 class Event;
 
 extern bool event_capturing_mode;
 extern Event* event_to_capture_to;
-
-class Event;
 
 extern std::vector<Event *> Events;
 
@@ -58,12 +55,6 @@ public:
     /**Generates a label describing this event*/
     std::string GetLabel();
 
-    /**Shows this event GUI window*/
-    void ShowWindow();
-
-    /**Updates the GUI*/
-    void UpdateGUI();
-
     /**Actions list*/
     std::vector<Action*> actions;
 
@@ -74,10 +65,8 @@ public:
 
     /** This signal can be emitted by any thread. */
     bs2::signal<void()> on_changed;
-private:
-
-    EventGUI *gui_window;
 };
+
 /**Magic function that triggers all events that are of appropriate type and args (as specified in function arguments)*/
 void FindAndProcessEvents(Event::EventTypes ev,int arg1 = 0, int arg2 = 0);
 

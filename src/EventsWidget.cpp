@@ -163,7 +163,6 @@ void EventsWidget::OnAddEventClicked(){
     row[m_columns.col_colour] = background_color;
     row[m_columns.col_type] = EVENT;
     row[m_columns.col_prt] = -1;
-    event->ShowWindow();
 
     event->on_trigger.connect(
         [=](){ DeferWorkToUIThread(
@@ -172,6 +171,8 @@ void EventsWidget::OnAddEventClicked(){
     event->on_changed.connect(
         [=](){ DeferWorkToUIThread(
                 [=](){ UpdateRow(row); });});
+
+    ShowEventGUI(event);
 
     m_TreeView.get_selection()->select(iter); //select the event that was just added
     Files::SetFileModified(1);
@@ -233,6 +234,13 @@ void EventsWidget::ShowActionGUI(Action* target){
     action_gui.raise();
 }
 
+void EventsWidget::ShowEventGUI(Event* target){
+    event_gui.SwitchTarget(target);
+    event_gui.set_transient_for(*dynamic_cast<Gtk::Window*>(get_toplevel()));
+    event_gui.show();
+    event_gui.raise();
+}
+
 void EventsWidget::UpdateAll(){
     InitTreeData();
 }
@@ -254,22 +262,15 @@ void EventsWidget::UncolorizeAction(Gtk::TreeModel::Row row){
     row[m_columns.col_colour] = background_color;
 }
 void EventsWidget::OnRowChosen(const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column){
-
     Gtk::TreeModel::iterator iter = m_refTreeModel->get_iter(path);
-    if (iter)
-    {
-        Gtk::TreeModel::Row row = *iter;
-        switch (row[m_columns.col_type]){
-            case EVENT:
-                Events[row[m_columns.col_ID]]->ShowWindow();
-                break;
-            case ACTION:
-                // TODO: The tree model should store pointers / shared pointers to actions.
-                ShowActionGUI(Events[row[m_columns.col_prt]]->actions[row[m_columns.col_ID]]);
-                break;
-        }
-    }
+    if (!iter) return;
 
+    Gtk::TreeModel::Row row = *iter;
+    if(row[m_columns.col_type] == EVENT)
+        ShowEventGUI(Events[row[m_columns.col_ID]]);
+    else if(row[m_columns.col_type] == ACTION)
+        // TODO: The tree model should store pointers / shared pointers to actions.
+        ShowActionGUI(Events[row[m_columns.col_prt]]->actions[row[m_columns.col_ID]]);
 }
 
 void EventsWidget::UpdateRow(Gtk::TreeModel::Row row){

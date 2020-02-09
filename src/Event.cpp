@@ -18,7 +18,6 @@
 */
 
 #include "Event.h"
-#include "EventGUI.h"
 #include "Action.h"
 #include "Chord.h"
 #include "messages.h"
@@ -33,20 +32,17 @@ Event::Event(){
     type = 0;
     arg1 = 0;
     arg2 = 0;
-    gui_window = new EventGUI(this);
 }
 
 Event::Event(int typ, int a1, int a2){
     type = typ;
     arg1 = a1;
     arg2 = a2;
-    gui_window = new EventGUI(this);
 }
 
 
 Event::~Event(){
     if (event_to_capture_to == this) event_to_capture_to = NULL; //if we are being captured to, unset the pointer
-    delete gui_window;
     for (unsigned int x = 0; x < actions.size(); x++){
         delete actions[x];
     }
@@ -99,14 +95,6 @@ void Event::Trigger(){
     on_trigger();
 }
 
-void Event::ShowWindow(){
-
-    gui_window->show();
-    gui_window->raise();
-}
-
-void Event::UpdateGUI(){gui_window->UpdateValues();}
-
 void FindAndProcessEvents(Event::EventTypes ev,int arg1, int arg2){
     if (event_capturing_mode == true){
         if (event_to_capture_to != NULL){ //in case the event was deleted, skip to processing the event
@@ -115,7 +103,6 @@ void FindAndProcessEvents(Event::EventTypes ev,int arg1, int arg2){
             event_to_capture_to->arg2 = arg2;
             event_to_capture_to->on_changed();
             event_capturing_mode = 0; //switch the mode off
-            event_to_capture_to->UpdateGUI();
             return; //do not process this event
         }
     }

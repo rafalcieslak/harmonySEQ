@@ -604,10 +604,6 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
                     Events[x]->actions[a]->chord.SetFromVector(vec);
                 }
             }//next action.
-
-            //Update this event's GUI, using newly loaded data.
-            Events[x]->UpdateGUI();
-
         }//next event.
 
 

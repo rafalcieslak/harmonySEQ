@@ -22,6 +22,7 @@
 #define	EVENTSWIDGET_H
 #include <gtkmm.h>
 #include "ActionGUI.h"
+#include "EventGUI.h"
 
 /**List of all items. Used once in the MainWindow*/
 class EventsWidget : public Gtk::VBox{
@@ -77,6 +78,9 @@ private:
 
     void ShowActionGUI(Action* target);
     ActionGUI action_gui;
+
+    void ShowEventGUI(Event* target);
+    EventGUI event_gui;
 
     void UpdateColors();
 

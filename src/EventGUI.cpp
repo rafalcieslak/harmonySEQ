@@ -21,16 +21,10 @@
 #include "messages.h"
 #include "TreeModels.h"
 #include "Files.h"
-#include "MainWindow.h"
 #include "Configuration.h"
 
-extern MainWindow* mainwindow;
 
-
-EventGUI::EventGUI(Event *prt){
-    parent = prt;
-
-    set_transient_for(*mainwindow); // We'll only be able to get rid of this mainwindow reference once Event/Action GUIs are managed by the UI, not the Event/Action.
+EventGUI::EventGUI(){
     set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
     set_modal(true);
 
@@ -105,7 +99,6 @@ EventGUI::EventGUI(Event *prt){
     capture.signal_clicked().connect(std::bind(&EventGUI::OnCaptureClicked, this));
 
     Types_combo.pack_start(m_columns_event_types.label);
-    Types_combo.set_active(parent->type);
     Types_combo.signal_changed().connect(std::bind(&EventGUI::OnTypeChanged, this));
     Keys_combo.pack_start(m_columns_key_codes.label);
     Keys_combo.signal_changed().connect(std::bind(&EventGUI::OnKeyChanged, this));
@@ -116,15 +109,12 @@ EventGUI::EventGUI(Event *prt){
     ok_button.set_label(_("OK"));
     ok_button.signal_clicked().connect(std::bind(&EventGUI::OnOKClicked, this));
 
-    signal_show().connect(std::bind(&EventGUI::UpdateValues, this));
+    signal_show().connect(std::bind(&EventGUI::UpdateEverything, this));
     add_events(Gdk::KEY_PRESS_MASK);
     signal_key_press_event().connect([=](GdkEventKey *e){return OnKeyPress(e);});
-
-    label_preview.set_text(parent->GetLabel());
     show_all_children(1);
 
     DO_NOT_INIT_TYPE = false;
-    ChangeVisibleLines(); // to hide some of widgets according to the type
     hide();
 }
 
@@ -132,9 +122,14 @@ EventGUI::EventGUI(Event *prt){
 EventGUI::~EventGUI(){
 }
 
-void EventGUI::ChangeVisibleLines(){
-    Gtk::TreeModel::Row row = *(Types_combo.get_active());
-    int type = row[m_columns_event_types.type];
+void EventGUI::SwitchTarget(Event* t){
+    target = t;
+
+    UpdateEverything();
+}
+
+void EventGUI::UpdateVisibleLines(){
+    int type = target->type;
     line_key.hide();
     line_note.hide();
     line_controller.hide();
@@ -167,8 +162,63 @@ void EventGUI::ChangeVisibleLines(){
     resize(2,2);
 }
 
+void EventGUI::UpdateEverything(){
+    Gtk::TreeModel::iterator it = TreeModel_EventTypes->get_iter("0");
+    Gtk::TreeModel::Row row;
+
+    UpdateVisibleLines();
+
+    DO_NOT_INIT_TYPE = true; //causes the Types_combo.signal_changed reciver know he shouldnt clear event args with zeros;
+    for (;it;it++){
+        row = *it;
+        if (row[m_columns_event_types.type] == target->type){
+            Types_combo.set_active(it);
+            break;
+        }
+    }
+    DO_NOT_INIT_TYPE = false;
+    switch (target->type){
+        case Event::NONE:
+
+            break;
+        case Event::KEYBOARD:
+            it = TreeModel_KeyCodes->get_iter("0");
+
+            for (; it; it++) {
+                row = *it;
+                if(row[m_columns_key_codes.keycode]==target->arg1){
+                    Keys_combo.set_active(it);
+                    break;
+                }
+            }
+
+            break;
+        case Event::NOTE:
+            note_spinbutton.set_value(target->arg1);
+            Channels_combo.set_active(target->arg2);
+            break;
+        case Event::CONTROLLER:
+            ctrl_spinbutton.set_value(target->arg1);
+            Channels_combo.set_active(target->arg2);
+            break;
+        case Event::OSC:
+            osc_tag.set_value(target->arg1);
+            break;
+        default:
+            break;
+
+    }
+
+    label_preview.set_text(target->GetLabel());
+
+    if(event_capturing_mode == true && event_to_capture_to == target)
+        capture.set_active(1);
+    else
+        capture.set_active(0);
+}
+
 void EventGUI::InitType(){
-    switch (parent->type){
+    switch (target->type){
         case Event::NONE:
 
             break;
@@ -177,17 +227,17 @@ void EventGUI::InitType(){
             break;
         case Event::NOTE:
             note_spinbutton.set_value(0.0);
-            parent->arg1=0;
+            target->arg1=0;
             Channels_combo.set_active(0);
             break;
         case Event::CONTROLLER:
             ctrl_spinbutton.set_value(0.0);
-            parent->arg1=0;
+            target->arg1=0;
             Channels_combo.set_active(0);
             break;
         case Event::OSC:
             osc_tag.set_value(0.0);
-            parent->arg1=0;
+            target->arg1=0;
             break;
         default:
             break;
@@ -200,127 +250,76 @@ void EventGUI::OnTypeChanged(){
     if(!Types_combo.get_active()) return;
     Gtk::TreeModel::Row row = *(Types_combo.get_active());
     int type = row[m_columns_event_types.type];
-    parent->type = type;
-    ChangeVisibleLines();
+    target->type = type;
+    UpdateVisibleLines();
     if (!DO_NOT_INIT_TYPE) InitType();
-    label_preview.set_text(parent->GetLabel());
-    parent->on_changed();
+    label_preview.set_text(target->GetLabel());
+    target->on_changed();
     Files::SetFileModified(1);
 }
 
 
 
 void EventGUI::OnChannelChanged(){
-    if(parent->type == Event::CONTROLLER || parent->type == Event::NOTE){
+    if(target->type != Event::CONTROLLER &&
+       target->type != Event::NOTE)
+        return;
 
-            parent->arg2 = (*(Channels_combo.get_active()))[m_columns_channels.ch];
+    target->arg2 = (*(Channels_combo.get_active()))[m_columns_channels.ch];
 
-    }else *err << _("Error: channel has changed, while event is not MIDI-type.") << ENDL;
-
-    label_preview.set_text(parent->GetLabel());
-    parent->on_changed();
+    label_preview.set_text(target->GetLabel());
+    target->on_changed();
     Files::SetFileModified(1);
 }
 
 void EventGUI::OnKeyChanged(){
-    if(parent->type == Event::KEYBOARD){
-            parent->arg1 = (*(Keys_combo.get_active()))[m_columns_key_codes.keycode];
-    }else *err << _("Error: key has changed, while event is not key-type.") << ENDL;
+    if(target->type != Event::KEYBOARD)
+        return;
 
-    label_preview.set_text(parent->GetLabel());
-    parent->on_changed();
+    target->arg1 = (*(Keys_combo.get_active()))[m_columns_key_codes.keycode];
+
+    label_preview.set_text(target->GetLabel());
+    target->on_changed();
     Files::SetFileModified(1);
 }
 
 void EventGUI::OnCtrlChanged(){
+    if(target->type != Event::CONTROLLER)
+        return;
+    target->arg1 = ctrl_spinbutton.get_value();
 
-    if(parent->type == Event::CONTROLLER){
-        parent->arg1 = ctrl_spinbutton.get_value();
-    }else *err << _("Error: controller has changed, while event is not ctrl-type.") << ENDL;
-
-    label_preview.set_text(parent->GetLabel());
-    parent->on_changed();
+    label_preview.set_text(target->GetLabel());
+    target->on_changed();
     Files::SetFileModified(1);
 
 }
 
 void EventGUI::OnNoteChanged(){
-    if(parent->type == Event::NOTE){
-        parent->arg1 = note_spinbutton.get_value();
-    }else *err << _("Error: note has changed, while event is not note-type.") << ENDL;
+    if(target->type != Event::NOTE)
+        return;
+    target->arg1 = note_spinbutton.get_value();
 
-    label_preview.set_text(parent->GetLabel());
-    parent->on_changed();
+    label_preview.set_text(target->GetLabel());
+    target->on_changed();
     Files::SetFileModified(1);
 
 }
 
 void EventGUI::OnOSCPortChanged(){
-   if(parent->type == Event::OSC){
-        parent->arg1 = osc_tag.get_value();
-    }else *err << _("Error: porthas changed, while event is not OSC-type.") << ENDL;
+    if(target->type != Event::OSC)
+        return;
+    target->arg1 = osc_tag.get_value();
 
-    label_preview.set_text(parent->GetLabel());
-    parent->on_changed();
+    label_preview.set_text(target->GetLabel());
+    target->on_changed();
     Files::SetFileModified(1);
 }
 
 void EventGUI::OnOKClicked(){
     event_capturing_mode = 0;
     event_to_capture_to = NULL; //not nessesary, but just for cleaning up
+    capture_connection.disconnect();
     hide();
-}
-
-void EventGUI::UpdateValues(){
-    Gtk::TreeModel::iterator it = TreeModel_EventTypes->get_iter("0");
-    Gtk::TreeModel::Row row;
-    DO_NOT_INIT_TYPE = true; //causes the Types_combo.signal_changed reciver know he shouldnt clear event args with zeros;
-
-    for (;it;it++){
-        row = *it;
-        if (row[m_columns_event_types.type] == parent->type){
-            Types_combo.set_active(it);
-            break;
-        }
-    }
-    DO_NOT_INIT_TYPE = false;
-    switch (parent->type){
-        case Event::NONE:
-
-            break;
-        case Event::KEYBOARD:
-            it = TreeModel_KeyCodes->get_iter("0");
-
-            for (; it; it++) {
-                row = *it;
-                if(row[m_columns_key_codes.keycode]==parent->arg1){
-                    Keys_combo.set_active(it);
-                    break;
-                }
-            }
-
-            break;
-        case Event::NOTE:
-            note_spinbutton.set_value(parent->arg1);
-            Channels_combo.set_active(parent->arg2);
-            break;
-        case Event::CONTROLLER:
-            ctrl_spinbutton.set_value(parent->arg1);
-            Channels_combo.set_active(parent->arg2);
-            break;
-        case Event::OSC:
-            osc_tag.set_value(parent->arg1);
-            break;
-        default:
-            break;
-
-    }
-
-    label_preview.set_text(parent->GetLabel());
-
-    if(event_capturing_mode == 1 && event_to_capture_to == parent) capture.set_active(1);
-    else capture.set_active(0);
-
 }
 
 bool EventGUI::OnKeyPress(GdkEventKey* event){
@@ -331,13 +330,14 @@ bool EventGUI::OnKeyPress(GdkEventKey* event){
 
 void EventGUI::OnCaptureClicked(){
     if (capture.get_active() == 1){
-        event_capturing_mode = 1;
-        event_to_capture_to = parent;
+        event_capturing_mode = true;
+        event_to_capture_to = target;
+        capture_connection = target->on_changed.connect(std::bind(&EventGUI::UpdateEverything, this));
         label_preview.set_text(_("(Waiting for an event...)"));
     }else{
-        event_capturing_mode = 0;
+        event_capturing_mode = false;
         event_to_capture_to = NULL; //not nessesary, but just for cleaning up
-        UpdateValues();
+        capture_connection.disconnect();
     }
 
 }

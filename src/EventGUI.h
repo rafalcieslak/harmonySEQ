@@ -19,31 +19,36 @@
 
 #ifndef EVENTGUI_H
 #define	EVENTGUI_H
-#include "global.h"
 #include <gtkmm.h>
+#include "Event.h"
 
 class Event;
 
 
 class EventGUI :public Gtk::Window{
 public:
-    EventGUI(Event *prt);
+    EventGUI();
     virtual ~EventGUI();
 
-    /**Sets all widgets data to the data from parent event.*/
-    void UpdateValues();
 
-    /**Event this GUI is associated with, used for two-way communication between Event and EventGUI.*/
-    Event *parent;
+    void SwitchTarget(Event* t);
 
 private:
     /**Flag disabling signal that is called when type is changed, is true during type manual set.*/
     bool DO_NOT_INIT_TYPE;
 
-    /**Hides and shows lines appropieate to the parent event type.*/
-    void ChangeVisibleLines();
+    /** The event this GUI currently displays. Note: It can be NULL at times.*/
+    Event *target;
+
+    /** Sets all widgets data to the data from target event. */
+    void UpdateEverything();
+
+    /** Hides and shows lines appropieate to the parent event type.*/
+    void UpdateVisibleLines();
     /**Sets all default data for given type, used to avoid having events with strange arguments.*/
     void InitType();
+
+    bs2::connection capture_connection;
 
     void OnTypeChanged();
     void OnKeyChanged();
@@ -85,4 +90,3 @@ private:
 };
 
 #endif	/* EVENTGUI_H */
-
