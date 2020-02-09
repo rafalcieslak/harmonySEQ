@@ -48,6 +48,11 @@ spinbutton button {
 	border-width: 0px;
 }
 
+/* Fixed-width play-pause button. */
+/* Ideally we would ensire constant width with a GtkNotebook... seriously though?! */
+toolbutton#PlayPauseTool button {
+    min-width: 60px;
+}
 
 spinbutton#tempo.lit {
     background-color: #2222cc;
