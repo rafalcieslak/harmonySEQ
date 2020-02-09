@@ -24,6 +24,7 @@
 
 // TODO: This data structure desperately needs a mutex.
 std::vector<Event *> Events;
+bs2::signal<void()> on_events_list_changed;
 
 bool event_capturing_mode;
 Event* event_to_capture_to;
@@ -160,4 +161,5 @@ void ClearEvents(){
 
     Events.clear();
 
+    on_events_list_changed();
 }

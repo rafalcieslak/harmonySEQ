@@ -72,6 +72,9 @@ EventsWidget::EventsWidget(){
     refTreeSelection->signal_changed().connect(std::bind(&EventsWidget::OnSelectionChanged, this));
     m_TreeView.signal_row_collapsed().connect(std::bind(&EventsWidget::OnRowCollapsed, this, std::placeholders::_1, std::placeholders::_2));
 
+    on_events_list_changed.connect(
+        [=](){ DeferWorkToUIThread(
+            [=](){ InitTreeData(); });});
 
     m_TreeView.set_enable_search(0);
     show_all_children(1);
@@ -239,10 +242,6 @@ void EventsWidget::ShowEventGUI(Event* target){
     event_gui.set_transient_for(*dynamic_cast<Gtk::Window*>(get_toplevel()));
     event_gui.show();
     event_gui.raise();
-}
-
-void EventsWidget::UpdateAll(){
-    InitTreeData();
 }
 
 void EventsWidget::ColorizeEvent(Gtk::TreeModel::Row row){

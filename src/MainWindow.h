@@ -58,9 +58,6 @@ public:
     /**Hides and shows columns, according to Config::VisibleColumns*/
     void UpdateVisibleColumns();
 
-    /**Updates data in the events list*/
-    void UpdateEventWidget();
-
     Gtk::SpinButton tempo_button;
 
     void UpdatePassMidiToggle();

@@ -19,6 +19,7 @@
 
 #ifndef TREEMODELS_H
 #define	TREEMODELS_H
+#include <vector>
 #include "global.h"
 #include "seqHandle.h"
 #include <gtkmm.h>
@@ -38,6 +39,7 @@ public:
         add(col_chord);
         add(col_colour);
         add(col_name_color);
+        add(col_connections_using_this_row);
     }
     Gtk::TreeModelColumn<seqHandle> col_handle;
     Gtk::TreeModelColumn<Glib::ustring> col_name;
@@ -50,6 +52,7 @@ public:
     Gtk::TreeModelColumn<Glib::ustring> col_colour;
     Gtk::TreeModelColumn<Glib::ustring> col_chord;
     Gtk::TreeModelColumn<Glib::ustring> col_name_color;
+    Gtk::TreeModelColumn<std::vector<bs2::connection>> col_connections_using_this_row;
 };
 
 

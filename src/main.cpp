@@ -268,10 +268,6 @@ int main(int argc, char** argv) {
     if (file_from_cli)
         Files::LoadFile(file);
 
-    //Initing trees in both windows.
-    mainwindow->InitTreeData();
-    mainwindow->UpdateEventWidget();
-
     // Quit GTK main loop when main window is closed.
     mainwindow->on_quit_request.connect([&](){gtk_main.quit();});
 

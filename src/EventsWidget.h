@@ -32,8 +32,6 @@ public:
 
     /**Fills the treeview with all events from events list*/
     void InitTreeData();
-    /**Refreshes settings for all events in the treeview*/
-    void UpdateAll();
 
     Gtk::VBox main_Vbox;
     Gtk::HBox lower_button_Hbox;

@@ -374,7 +374,6 @@ MainWindow::MainWindow()
             [=](){
                 InitTreeData();
                 UpdateTempo();
-                UpdateEventWidget();
                 UpdateTitle();
             });});
 
@@ -502,7 +501,6 @@ MainWindow::OnNameEdited(const Glib::ustring& path, const Glib::ustring& newtext
 
     on_sequencer_list_changed();
 
-    UpdateEventWidget();
     Files::SetFileModified(1);
 }
 
@@ -515,23 +513,35 @@ Gtk::TreeModel::Row MainWindow::AddSequencerRow(int x)
 
     row[m_columns_sequencers.col_handle] = seq->MyHandle;
 
+    printf("ASR %d\n", x);
+
     RefreshRow(row);
 
-    seq->on_playstate_change.connect(
-        [=](){ DeferWorkToUIThread(
-            [=](){ RefreshRow(row); });});
+    // We store these connections it the row so that we can disconnect
+    // slots when the row is removed.
+    std::vector<bs2::connection> connections;
+    connections.push_back(
+        seq->on_playstate_change.connect(
+            [=](){ DeferWorkToUIThread(
+                [=](){ RefreshRow(row); });})
+        );
 
-    seq->on_parameter_change.connect(
-        [=](){ DeferWorkToUIThread(
-            [=](){ RefreshRow(row); });});
+    connections.push_back(
+        seq->on_parameter_change.connect(
+            [=](){ DeferWorkToUIThread(
+                    [=](){ RefreshRow(row); });})
+        );
 
     if(seq->GetType() == SEQ_TYPE_NOTE){
         NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seq);
 
-        noteseq->on_chord_change.connect(
-            [=](){ DeferWorkToUIThread(
-                [=](){ RefreshRow(row); });});
+        connections.push_back(
+            noteseq->on_chord_change.connect(
+                [=](){ DeferWorkToUIThread(
+                        [=](){ RefreshRow(row); });})
+            );
     }
+    row[m_columns_sequencers.col_connections_using_this_row] = connections;
 
     seq->my_row = row;
     return row;
@@ -540,8 +550,16 @@ Gtk::TreeModel::Row MainWindow::AddSequencerRow(int x)
 
 
 void MainWindow::InitTreeData(){
-    *dbg << "loading initial data to the treeview\n";
+    // Disconnect all signal handlers registered for all rows.
+    for (auto iter = TreeModel_sequencers->children().begin();
+         iter != TreeModel_sequencers->children().end(); ++iter){
+        std::vector<bs2::connection> conns = (*iter)[m_columns_sequencers.col_connections_using_this_row];
+        for (auto &conn : conns)
+            conn.disconnect();
+    }
+
     TreeModel_sequencers->clear();
+
     Gtk::TreeModel::Row row;
     for (unsigned int x = 0; x < seqVector.size(); x++) {
         if (!seqV(x)) continue; //seems it was removed
@@ -601,6 +619,12 @@ void MainWindow::OnRemoveClicked(){
 
     //removing the row
     seq_list_drag_in_progress = 0; //important
+
+
+    std::vector<bs2::connection> conns = (*iter)[m_columns_sequencers.col_connections_using_this_row];
+    for (auto &conn : conns)
+        conn.disconnect();
+
     TreeModel_sequencers->erase(iter);
 
     //and the corresponding sequencer
@@ -609,9 +633,6 @@ void MainWindow::OnRemoveClicked(){
 
     //update hande map data:
     UpdateSeqHandlesAfterDeleting(id);
-
-    // Fixes action display when a sequencer referenced by them was just removed.
-    eventsWidget.UpdateAll();
 
     on_sequencer_list_changed();
 
@@ -809,7 +830,6 @@ void MainWindow::OnMenuNewClicked(){
     ClearEvents();
     ClearSequencers();
     ResetSeqHandles();
-    UpdateEventWidget();
     InitTreeData();
 
     midi->SetTempo(DEFAULT_TEMPO);
@@ -1000,8 +1020,4 @@ void MainWindow::OnTreeModelRowDeleted(const Gtk::TreeModel::Path& path){
 
 void MainWindow::OnSeqEdited(seqHandle h){
     RefreshRow(seqH(h)->my_row);
-}
-
-void MainWindow::UpdateEventWidget(){
-    eventsWidget.UpdateAll();
 }

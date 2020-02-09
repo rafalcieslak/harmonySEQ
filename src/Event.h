@@ -75,4 +75,10 @@ bool FindAndProcessEventsKeyPress(GdkEventKey* event);
 
 /**Removes all events, clears whole list*/
 void ClearEvents();
+
+/** Triggered when events list is rebuilt. This is used by some GUI
+ * elements to rebuild their list of events. This signal will be moved
+ * to event manger class.*/
+extern bs2::signal<void()> on_events_list_changed;
+
 #endif	/* EVENT_H */

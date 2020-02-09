@@ -247,6 +247,8 @@ bool LoadFile(Glib::ustring file){
         midi->Sync();
 
         on_file_loaded();
+        on_sequencer_list_changed();
+        on_events_list_changed();
 
     //Only exception handles are left...
     }catch(const Glib::KeyFileError& e){
