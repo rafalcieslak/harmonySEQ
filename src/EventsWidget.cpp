@@ -217,7 +217,7 @@ void EventsWidget::OnAddActionClicked(){
         [=](){ DeferWorkToUIThread(
                 [=](){ UpdateRow(row); });});
 
-    action->GUIShowWindow();
+    ShowActionGUI(action);
 
     row = *iter_selected;
     if (row[m_columns.col_type] == EVENT)
@@ -226,20 +226,15 @@ void EventsWidget::OnAddActionClicked(){
     Files::SetFileModified(1);
 }
 
-
+void EventsWidget::ShowActionGUI(Action* target){
+    action_gui.SwitchTarget(target);
+    action_gui.set_transient_for(*dynamic_cast<Gtk::Window*>(get_toplevel()));
+    action_gui.show();
+    action_gui.raise();
+}
 
 void EventsWidget::UpdateAll(){
     InitTreeData();
-}
-
-void EventsWidget::SeqListChanged(){
-    for (unsigned int x = 0; x < Events.size(); x++) {
-        if (!Events[x]) continue; //seems it was removed
-        for (unsigned int c = 0; c < Events[x]->actions.size();c++){
-            if(!Events[x]->actions[c]) continue;
-            Events[x]->actions[c]->GUISequencerListChanged();
-        }
-    }
 }
 
 void EventsWidget::ColorizeEvent(Gtk::TreeModel::Row row){
@@ -269,7 +264,8 @@ void EventsWidget::OnRowChosen(const Gtk::TreeModel::Path& path, Gtk::TreeViewCo
                 Events[row[m_columns.col_ID]]->ShowWindow();
                 break;
             case ACTION:
-                Events[row[m_columns.col_prt]]->actions[row[m_columns.col_ID]]->GUIShowWindow();
+                // TODO: The tree model should store pointers / shared pointers to actions.
+                ShowActionGUI(Events[row[m_columns.col_prt]]->actions[row[m_columns.col_ID]]);
                 break;
         }
     }

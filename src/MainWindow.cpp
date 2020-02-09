@@ -500,7 +500,7 @@ MainWindow::OnNameEdited(const Glib::ustring& path, const Glib::ustring& newtext
 
     if(seqWidget.selectedSeq == h) seqWidget.UpdateName();
 
-    eventsWidget.SeqListChanged();
+    on_sequencer_list_changed();
 
     UpdateEventWidget();
     Files::SetFileModified(1);
@@ -610,8 +610,10 @@ void MainWindow::OnRemoveClicked(){
     //update hande map data:
     UpdateSeqHandlesAfterDeleting(id);
 
+    // Fixes action display when a sequencer referenced by them was just removed.
     eventsWidget.UpdateAll();
-    eventsWidget.SeqListChanged();
+
+    on_sequencer_list_changed();
 
     Files::SetFileModified(1);
 }
@@ -621,11 +623,10 @@ void MainWindow::OnAddNoteSeqClicked(){
     seq_list_drag_in_progress = 0; //important
     Gtk::TreeModel::Row row = spawn_sequencer(SEQ_TYPE_NOTE);
 
-    wTreeView.get_selection()->select(row);
-
-    eventsWidget.SeqListChanged();
-
+    on_sequencer_list_changed();
     Files::SetFileModified(1);
+
+    wTreeView.get_selection()->select(row);
 }
 
 void MainWindow::OnAddControlSeqClicked(){
@@ -633,11 +634,10 @@ void MainWindow::OnAddControlSeqClicked(){
     seq_list_drag_in_progress = 0; //important
     Gtk::TreeModel::Row row = spawn_sequencer(SEQ_TYPE_CONTROL);
 
-    wTreeView.get_selection()->select(row);
-
-    eventsWidget.SeqListChanged();
-
+    on_sequencer_list_changed();
     Files::SetFileModified(1);
+
+    wTreeView.get_selection()->select(row);
 }
 
 void MainWindow::OnCloneClicked(){

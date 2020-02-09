@@ -88,12 +88,6 @@ public:
     /**Shows the GUI*/
     void GUIShowWindow();
 
-    /**Refreshes chordwidget*/
-    void GUIUpdateChordwidget();
-
-    /**Called when sequencer list changed, will update treemodels*/
-    void GUISequencerListChanged();
-
     /** This signal is emitted by the events thread (or the UI's
      * thread, if the events thread hasn't been implemented yet). It's
      * up to the subscriber to relay work to a different thread. */
@@ -101,11 +95,6 @@ public:
 
     /** This signal can be emitted by any thread. */
     bs2::signal<void()> on_changed;
-
-private:
-
-    /**The related GUI window.*/
-    ActionGUI *gui_window;
 };
 
 #endif	/* ACTION_H */

@@ -32,16 +32,12 @@ Action::Action(ActionTypes t, int a1, int a2){
     type = t;
     args[1] = a1;
     args[2] = a2;
-    gui_window = new ActionGUI(this);
 }
-
 
 Action::Action(const Action& orig){
 }
 
-
 Action::~Action(){
-    delete gui_window;
 }
 
 void Action::Trigger(int data){
@@ -209,17 +205,4 @@ Glib::ustring Action::GetSeqName(int h){
     else
         sprintf(temp,_("%s"),seqH(h)->GetName().c_str());
     return temp;
-}
-
-void Action::GUIShowWindow(){
-    gui_window->show();
-    gui_window->raise();
-}
-
-void Action::GUIUpdateChordwidget(){
-    gui_window->UpdateChordwidget();
-}
-
-void Action::GUISequencerListChanged(){
-    gui_window->OnSequencerListChanged();
 }

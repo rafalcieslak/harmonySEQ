@@ -24,7 +24,6 @@
 #include "Files.h"
 #include "MidiDriver.h"
 #include "global.h"
-#include "MainWindow.h"
 #include "NoteSequencer.h"
 #include "ControlSequencer.h"
 #include "ControllerAtom.h"
@@ -32,12 +31,8 @@
 extern Glib::RefPtr< Gdk::Pixbuf > icon_slope_linear;
 extern Glib::RefPtr< Gdk::Pixbuf > icon_slope_flat;
 
-extern MainWindow* mainwindow;
-
 SequencerWidget::SequencerWidget()
 {
-    *dbg << "constructing new SEQUENCERWIDGET\n";
-
     AnythingSelected = 0;
     do_not_react_on_page_changes = 0;
     ignore_signals = 0;
@@ -786,7 +781,7 @@ void SequencerWidget::OnNameEdited(){
     Sequencer* seq = seqH(selectedSeq);
 
     seq->SetName(wNameEntry.get_text());
-    mainwindow->eventsWidget.SeqListChanged(); // This mainwindow reference will become easy to remove once either we have a SequencerManager, or action UIs are managed by EventsWidget (instead of Actions).
+    on_sequencer_list_changed();
     Files::SetFileModified(1);
 }
 

@@ -21,6 +21,7 @@
 #ifndef EVENTSWIDGET_H
 #define	EVENTSWIDGET_H
 #include <gtkmm.h>
+#include "ActionGUI.h"
 
 /**List of all items. Used once in the MainWindow*/
 class EventsWidget : public Gtk::VBox{
@@ -32,8 +33,6 @@ public:
     void InitTreeData();
     /**Refreshes settings for all events in the treeview*/
     void UpdateAll();
-    /**Asks all visible action-guis to refresh the seq combos*/
-    void SeqListChanged();
 
     Gtk::VBox main_Vbox;
     Gtk::HBox lower_button_Hbox;
@@ -75,6 +74,9 @@ private:
         Gtk::TreeModelColumn<int> col_type;
         Gtk::TreeModelColumn<int> col_prt;
     };
+
+    void ShowActionGUI(Action* target);
+    ActionGUI action_gui;
 
     void UpdateColors();
 

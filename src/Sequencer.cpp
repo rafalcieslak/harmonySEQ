@@ -32,6 +32,8 @@ extern MainWindow* mainwindow;
 // TODO: This structure desparately needs a manager class, with a
 // mutex guard, and access methods.
 std::vector<Sequencer *> seqVector;
+bs2::signal<void()> on_sequencer_list_changed;
+
 
 Gtk::TreeModel::Row spawn_sequencer(SeqType_t type){
     switch(type){

@@ -173,4 +173,10 @@ private:
 
 };
 
+/* Triggered when new sequencers appear or are removed from the
+ * seqVector list. This is used by some GUI elements to update their
+ * list of available targets. This signal will be moved to sequencer
+ * manage class when it gets implemented. */
+extern bs2::signal<void()> on_sequencer_list_changed;
+
 #endif	/* SEQUENCER_H */
