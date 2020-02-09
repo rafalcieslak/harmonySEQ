@@ -4,6 +4,7 @@
  - HiDPI display support.
  - Improved custom widget and color schemes to match system theme.
  - Playback display marker.
+ - Note sequencers can now be configured with gate percent.
  - Replaced the build system with CMake.
  - Fixed pattern editor zoom behavior.
  - Restored tempo flash animation which was disabled before 0.16.

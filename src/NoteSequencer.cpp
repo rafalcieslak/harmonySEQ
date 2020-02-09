@@ -49,6 +49,8 @@ void NoteSequencer::Init()
     chord.SetBaseOctave(0);
     chord.SetInversion(0);
 
+    gate_percent = 100;
+
     chord.on_change.connect(
         [=](){ on_chord_change(); });
 }
@@ -76,4 +78,12 @@ SeqType_t NoteSequencer::GetType(){
 
 int NoteSequencer::GetNoteOfChord(int n){
     return chord.GetNotePlusBasenote(n);
+}
+
+void NoteSequencer::SetGatePercent(int p){
+    gate_percent = p;
+}
+
+int NoteSequencer::GetGatePercent() const{
+    return gate_percent;
 }

@@ -82,6 +82,8 @@ SequencerWidget::SequencerWidget()
     wChannelSep.set_size_request(8,0);
     wUpperHBox1.pack_start(wControllerLabel,Gtk::PACK_SHRINK);
     wUpperHBox1.pack_start(wControllerButton,Gtk::PACK_SHRINK);
+    wUpperHBox1.pack_start(wGatePercentLabel,Gtk::PACK_SHRINK);
+    wUpperHBox1.pack_start(wGatePercentButton,Gtk::PACK_SHRINK);
 
     wRightBox.pack_start(wRightBox1,Gtk::PACK_SHRINK);
     wRightBox.pack_start(wRightBox2,Gtk::PACK_SHRINK);
@@ -177,13 +179,14 @@ SequencerWidget::SequencerWidget()
 
     wPlayOnceButton.signal_clicked().connect(std::bind(&SequencerWidget::OnPlayOnceButtonClicked, this));
 
-    wChannelLabel.set_text(_("MIDI channel:"));
-    wVelocityLabel.set_text(_("Velocity:"));
-    wValueLabel.set_text(_("Value:"));
+
     wActivePanelLabel.set_text(_("Active pattern:"));
     wSetAsActivePatternButton.set_label(_("Set as active pattern"));
     wSetAsActivePatternButton.set_tooltip_markup(_("Sets the chosen pattern to be the <b>active</b> one, which means the one that  will be played back."));
+
     wActivePattern.set_tooltip_markup(_("Selects which patter is <b>active</b>.\nActive pattern is the one that is played back. It's marked on a list with an asterisk (*).\n\n<i>This way all patterns can be edited while only the selected (the active) is played back. </i>"));
+    wActivePattern.signal_value_changed().connect(std::bind(&SequencerWidget::OnActivePatternChanged, this));
+
     wPatternLabel.set_text(_("Pattern:"));
     wAddPatternButton.set_label(_("Add"));
     wAddPatternButton.set_tooltip_markup(_("Adds a new pattern to this sequencer."));
@@ -196,33 +199,47 @@ SequencerWidget::SequencerWidget()
     wClearPattern.set_tooltip_markup(_("Clears all notes of this pattern."));
     wClonePattern.set_label(_("Clone"));
     wClonePattern.set_tooltip_markup(_("Clones this pattern, creating a new one."));
+
+    wChannelLabel.set_text(_("MIDI channel:"));
+    wChannelButton.set_increments(1,1);
+    wChannelButton.set_range(1,16);
+    wChannelButton.set_width_chars(2);
+    wChannelButton.set_tooltip_markup(_("Selects the <b>MIDI channel</b> this sequencer will output notes to. "));
+    wChannelButton.signal_value_changed().connect(std::bind(&SequencerWidget::OnChannelChanged, this));
+
+    wVelocityLabel.set_text(_("Velocity:"));
+    wVelocityButton.set_range(0,127);
+    wVelocityButton.set_increments(1,16);
+    wVelocityButton.set_width_chars(3);
+    wVelocityButton.set_tooltip_markup(_("Sets the <b>velocity</b> of selected note(s).\nUsually higher velocities result in louder sounds."));
+    wVelocityButton.signal_value_changed().connect(std::bind(&SequencerWidget::OnVelocityChanged, this));
+
+    wValueLabel.set_text(_("Value:"));
+    wValueButton.set_range(0,127);
+    wValueButton.set_increments(1,16);
+    wValueButton.set_width_chars(3);
+    wValueButton.set_tooltip_markup(_("Sets the <b>value</b> of selected point(s)."));
+    wValueButton.signal_value_changed().connect(std::bind(&SequencerWidget::OnValueChanged, this));
+
     /* TRANSLATORS: The space befor this string is to force a tiny space between widgets, please keep it in translations.*/
     wControllerLabel.set_text(_(" Controller No."));
-    wControllerButton.set_tooltip_markup(_("The <b>MIDI controller number</b> this sequencer outputs data on.\n\nFor example, synthesizers supporting GM standard should interpret data from controller 7 as volume setting."));
-
-    wVelocityButton.set_range(0,127);
-    wValueButton.set_range(0,127);
-    wChannelButton.set_range(1,16);
-    wControllerButton.set_range(0.0,127.0);
-    wVelocityButton.set_increments(1,16);
-    wValueButton.set_increments(1,16);
-    wChannelButton.set_increments(1,1);
     wControllerButton.set_increments(1.0,16.0);
-    wVelocityButton.set_tooltip_markup(_("Sets the <b>velocity</b> of selected note(s).\nUsually higher velocities result in louder sounds."));
-    wValueButton.set_tooltip_markup(_("Sets the <b>value</b> of selected point(s)."));
-    wChannelButton.set_tooltip_markup(_("Selects the <b>MIDI channel</b> this sequencer will output notes to. "));
-    wChannelButton.set_width_chars(2);
-    wVelocityButton.set_width_chars(3);
-    wValueButton.set_width_chars(3);
+    wControllerButton.set_range(0.0,127.0);
     wControllerButton.set_width_chars(3);
-    wVelocityButton.signal_value_changed().connect(std::bind(&SequencerWidget::OnVelocityChanged, this));
-    wValueButton.signal_value_changed().connect(std::bind(&SequencerWidget::OnValueChanged, this));
-    wChannelButton.signal_value_changed().connect(std::bind(&SequencerWidget::OnChannelChanged, this));
+    wControllerButton.set_tooltip_markup(_("The <b>MIDI controller number</b> this sequencer outputs data on.\n\nFor example, synthesizers supporting GM standard should interpret data from controller 7 as volume setting."));
     wControllerButton.signal_value_changed().connect(std::bind(&SequencerWidget::OnControllerChanged, this));
-    wActivePattern.signal_value_changed().connect(std::bind(&SequencerWidget::OnActivePatternChanged, this));
+
+    wGatePercentLabel.set_text(_("  Gate %:"));
+    wGatePercentButton.set_range(0, 110);
+    wGatePercentButton.set_increments(1, 10);
+    wGatePercentButton.set_width_chars(3);
+    wGatePercentButton.set_tooltip_markup(_("Controls sequencer note <b>gating</b>.\n\nAt the value of 100% all notes will be played at their original length.\nAt 50%, all notes will last only half of their time.\nValues slightly higher than 100% are allowed, this is useful for portamento effects on some synthesizers."));
+    wGatePercentButton.signal_value_changed().connect(std::bind(&SequencerWidget::OnGatePercentChanged, this));
+
     wMuteToggle.set_label(_("ON/OFF"));
     wMuteToggle.set_tooltip_markup(_("Turns this sequencer <b>on/off</b>."));
     wMuteToggle.signal_clicked().connect(std::bind(&SequencerWidget::OnToggleMuteToggled, this));
+
 
     //todo: add icons & tooltips
     wCtrlSlopeFlat.set_label("F");
@@ -338,6 +355,7 @@ void SequencerWidget::UpdateEverything(){
                 UpdateOnOff(); //will also update colour
                 UpdateName();
                 UpdateRelLenBoxes();
+                UpdateGatePercent();
                 InitNotebook();
                 UpdateActivePattern();
         }else if(selectedSeqType == SEQ_TYPE_CONTROL){
@@ -369,6 +387,8 @@ void SequencerWidget::HideAndShowWidgetsDependingOnSeqType(){
         wVelocityButton.show();
         wVelocityLabel.show();
         wShowChordButton.show();
+        wGatePercentButton.show();
+        wGatePercentLabel.show();
     }else if(selectedSeqType == SEQ_TYPE_CONTROL){
         chordwidget.SetExpandDetails(0);
         chordwidget.UnSelect();
@@ -376,6 +396,8 @@ void SequencerWidget::HideAndShowWidgetsDependingOnSeqType(){
         wShowChordButton.hide();
         wVelocityLabel.hide();
         wVelocityButton.hide();
+        wGatePercentButton.hide();
+        wGatePercentLabel.hide();
         wValueButton.show();
         wValueLabel.show();
         wControllerButton.show();
@@ -433,6 +455,15 @@ void SequencerWidget::UpdateController(){
     ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*>(seqH(selectedSeq));
     wControllerButton.set_value(ctrlseq->GetControllerNumber());
     ignore_signals = 0;
+}
+
+void SequencerWidget::UpdateGatePercent(){
+    if (AnythingSelected == 0 || selectedSeqType != SEQ_TYPE_NOTE) return;
+    NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seqH(selectedSeq));
+    int gate_percent = noteseq->GetGatePercent();
+    printf("Setting GP to %d\n", gate_percent);
+    if (gate_percent != wGatePercentButton.get_value())
+        wGatePercentButton.set_value(gate_percent);
 }
 
 void SequencerWidget::UpdateRelLenBoxes(){
@@ -800,6 +831,13 @@ void SequencerWidget::OnControllerChanged(){
     if(!AnythingSelected || selectedSeqType != SEQ_TYPE_CONTROL) return;
     ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*>(seqH(selectedSeq));
     ctrlseq->SetControllerNumber(wControllerButton.get_value());
+}
+
+void SequencerWidget::OnGatePercentChanged(){
+    if(ignore_signals) return;
+    if(!AnythingSelected || selectedSeqType != SEQ_TYPE_NOTE) return;
+    NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seqH(selectedSeq));
+    noteseq->SetGatePercent(wGatePercentButton.get_value());
 }
 
 void SequencerWidget::OnShowChordButtonClicked(){

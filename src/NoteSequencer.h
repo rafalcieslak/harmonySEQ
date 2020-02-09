@@ -38,19 +38,26 @@ public:
     virtual SeqType_t GetType();
 
     /**The main chord*/
-   Chord chord;
+    Chord chord;
 
-   /**Whether to show detailed chord settings in GUI, or hide them. This is stored here, in order to save this data to file.*/
+    /**Whether to show detailed chord settings in GUI, or hide them. This is stored here, in order to save this data to file.*/
     bool expand_chord;
 
     /**Returns a one note of chord of this sequencer
      *  @parram n note number*/
     int GetNoteOfChord(int n);
 
+    void SetGatePercent(int p);
+    int GetGatePercent() const;
+
     /* This signal can be emitted by any thread. */
     bs2::signal<void()> on_chord_change;
 private:
 
+    /** Stores sequencer gating percentage. A value of 100 represents
+     *  that notes are being played at their original length; 50 means
+     *  they get halved. */
+    int gate_percent;
 };
 
 #endif	/* NOTESEQUENCER_H */

@@ -333,6 +333,7 @@ void SaveToFile(Glib::ustring filename){
         if(seq_type == SEQ_TYPE_NOTE){
                 NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seq);
                 kf.set_boolean(temp,"expand_chord",noteseq->expand_chord);
+                kf.set_integer(temp,"gate_percent", noteseq->GetGatePercent());
                 //For each pattern in this sequencer...
                 for (int s = 0; s < (int)seq->patterns.size(); s++) {
                     sprintf(temp2, "pattern_%d", s);
@@ -352,7 +353,7 @@ void SaveToFile(Glib::ustring filename){
                 kf.set_integer_list(temp,"chord",noteseq->chord.SaveToVector());
         }else if(seq_type == SEQ_TYPE_CONTROL){
                 ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*> (seq);
-                kf.set_integer(temp,"controller",ctrlseq->GetControllerNumber());
+                kf.set_integer(temp,"controller", ctrlseq->GetControllerNumber());
                 //For each pattern in this sequencer...
                 for (int s = 0; s < (int) seq->patterns.size(); s++) {
                     sprintf(temp2, "pattern_%d", s);
@@ -471,6 +472,8 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
                     NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seq);
 
                     noteseq->expand_chord = kfp->get_boolean(temp,"expand_chord");
+                    if(kfp->has_key(temp, "gate_percent"))
+                        noteseq->SetGatePercent(kfp->get_integer(temp, "gate_percent"));
 
                     //For each pattern we load...
                     for (int s = 0; s < n; s++) {

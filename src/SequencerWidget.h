@@ -42,6 +42,7 @@ public:
     void UpdateOnOffColour();
     void UpdateShowChord();
     void UpdateController();
+    void UpdateGatePercent();
 
     /**Used to select sequencer that has to be displayed by the SequencerWidget*/
     void SelectSeq(seqHandle h);
@@ -101,6 +102,7 @@ private:
     void OnSnapClicked();
     void OnShowChordButtonClicked();
     void OnControllerChanged();
+    void OnGatePercentChanged();
     /**Called when pattern's selection was changed and we need to display new velocity*/
     void OnSelectionChanged(int n);
     void OnSlopeFlatToggled();
@@ -165,6 +167,8 @@ private:
     Gtk::Entry wNameEntry;
     Gtk::Label wControllerLabel;
     Gtk::SpinButton wControllerButton;
+    Gtk::Label wGatePercentLabel;
+    Gtk::SpinButton wGatePercentButton;
     Gtk::Button wAddPatternButton;
     Gtk::Button wPlayOnceButton;
     Gtk::Button wRemovePattern;

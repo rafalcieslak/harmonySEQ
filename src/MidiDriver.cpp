@@ -552,7 +552,10 @@ void MidiDriver::UpdateQueue(){
                                   for(int V = s; V<=e;V++){
                                         note = dynamic_cast<NoteAtom*>((*pattern)[V%size]);
                                         int pitch = noteseq->GetNoteOfChord(note->pitch);
-                                        ScheduleNote(seq->GetChannel()-1,local_tick + (V/size)*sequence_time + note->time*TICKS_PER_BEAT*seq->GetLength(),pitch,note->velocity,note->length*TICKS_PER_BEAT*seq->GetLength());
+                                        ScheduleNote(seq->GetChannel()-1,
+                                                     local_tick + (V/size)*sequence_time + note->time*TICKS_PER_BEAT*seq->GetLength(),
+                                                     pitch, note->velocity,
+                                                     note->length*TICKS_PER_BEAT*seq->GetLength()*(noteseq->GetGatePercent()/100.0));
                                         ;
                                         //each note shall have correspoinding diode event.
                                         DiodeMidiEvent dev(seq->MyHandle, DIODE_TYPE_NOTE, note->time, note->pitch, diode_colour);
