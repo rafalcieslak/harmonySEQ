@@ -390,10 +390,6 @@ MainWindow::MainWindow()
             });});
 
     show_all_children(1);
-
-    //This is the cure for any Gtk warnings one may experience.
-    realize();
-    //Magic, isn't it?
 }
 
 MainWindow::~MainWindow()
@@ -506,14 +502,11 @@ MainWindow::OnNameEdited(const Glib::ustring& path, const Glib::ustring& newtext
 
 Gtk::TreeModel::Row MainWindow::AddSequencerRow(int x)
 {
-    *dbg << "wooho! sequener " << x << " was just added, and we have to add it now to a new row in the model!" << ENDL;
     Gtk::TreeModel::iterator iter = TreeModel_sequencers->append();
     Gtk::TreeModel::Row row = *(iter);
     Sequencer* seq = seqV(x);
 
     row[m_columns_sequencers.col_handle] = seq->MyHandle;
-
-    printf("ASR %d\n", x);
 
     RefreshRow(row);
 

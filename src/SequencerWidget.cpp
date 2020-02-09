@@ -456,7 +456,6 @@ void SequencerWidget::UpdateGatePercent(){
     if (AnythingSelected == 0 || selectedSeqType != SEQ_TYPE_NOTE) return;
     NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seqH(selectedSeq));
     int gate_percent = noteseq->GetGatePercent();
-    printf("Setting GP to %d\n", gate_percent);
     if (gate_percent != wGatePercentButton.get_value())
         wGatePercentButton.set_value(gate_percent);
 }
