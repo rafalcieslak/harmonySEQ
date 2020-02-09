@@ -8,7 +8,7 @@ pkg_check_modules(GTKMM gtkmm-3.0 REQUIRED)
 pkg_check_modules(GLIBMM glibmm-2.4 REQUIRED)
 pkg_check_modules(LIBLO liblo)
 find_package(ALSA REQUIRED)
-find_package(Boost 1.67 REQUIRED COMPONENTS signals)
+find_package(Boost 1.67.0 REQUIRED)
 
 add_executable(
   harmonySEQ

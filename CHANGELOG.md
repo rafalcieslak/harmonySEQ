@@ -2,6 +2,7 @@
  - MIDI Clock and Start/Stop messages output support.
  - Added a tempo tap button.
  - HiDPI display support.
+ - Improved custom widget and color schemes to match system theme.
  - Playback display marker.
  - Replaced the build system with CMake.
  - Fixed pattern editor zoom behavior.

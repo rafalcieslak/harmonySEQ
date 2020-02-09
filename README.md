@@ -55,10 +55,11 @@ make install
 
 To build a package for Debian 10:
 ```
-apt install cmake build-essential libgtkmm-3.0-dev libglibmm-2.4-dev liblo-dev libasound2-dev
+apt install cmake build-essential libgtkmm-3.0-dev libglibmm-2.4-dev liblo-dev libasound2-dev libboost-signals-dev
 mkdir build && cd build
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr ..
 make -j4
 cpack
 ```
+
 
