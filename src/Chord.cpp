@@ -114,6 +114,8 @@ void Chord::CopyInto(Chord& c) const{
     c.base_octave = base_octave;
     c.base_note = base_note;
     c.base_use = base_use;
+    for(int i = 0; i < 6; i++)
+        c.notes[i] = notes[i];
     c.NoteAndOctaveToBase();
     c.RecalcNotes();
 }

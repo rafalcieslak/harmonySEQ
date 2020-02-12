@@ -271,9 +271,11 @@ int main(int argc, char** argv) {
     // Quit GTK main loop when main window is closed.
     mainwindow->on_quit_request.connect([&](){gtk_main.quit();});
 
+    mainwindow->show();
+
     //And creating both threads.
     std::thread engine_thread([](){midi->Run();});
-    std::thread ui_thread([](){Gtk::Main::run(*mainwindow);});
+    std::thread ui_thread(UIMain);
     //...and the OSC server.
 #ifndef DISABLE_OSC
     RunOSCThread();
@@ -297,8 +299,4 @@ int main(int argc, char** argv) {
 
 void engine_thread(){
     midi->Run();
-}
-
-void ui_thread(){
-    Gtk::Main::run(*mainwindow);
 }
