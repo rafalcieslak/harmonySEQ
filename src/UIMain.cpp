@@ -25,7 +25,17 @@
 #include <thread>
 #include <chrono>
 
+enum DispatcherState{
+    /* The receiver thread did not prepare the dispatcher yet. */
+    DISPATCHER_STATE_NOT_READY = 0,
+    /* The dispatcher is ready to receive events. */
+    DISPATCHER_STATE_READY = 1,
+    /* The main thread has already stopped, it will no longer process events, and the dispatcher ends up in an invalid state. */
+    DISPATCHER_STATE_CLOSED = 2,
+};
+
 Glib::Dispatcher* dispatcher = nullptr;
+DispatcherState dispatcher_state = DISPATCHER_STATE_NOT_READY;
 
 std::deque<std::function<void()>> ui_thread_work_queue;
 std::mutex ui_thread_work_queue__mtx;
@@ -39,7 +49,8 @@ void DeferWorkToUIThread(std::function<void()> f){
 
     /* GUI thread did not yet create the dispatcher object - wait
      * until it does. This only happens once on startup. */
-    while(dispatcher == nullptr) std::this_thread::sleep_for (std::chrono::milliseconds(1));
+    while(dispatcher_state == DISPATCHER_STATE_NOT_READY) std::this_thread::sleep_for (std::chrono::milliseconds(1));
+    if(dispatcher_state == DISPATCHER_STATE_CLOSED) return;
 
     ui_thread_work_queue__mtx.lock();
     ui_thread_work_queue.push_back(f);
@@ -66,5 +77,11 @@ void ProcessUIWorkQueue(){
 void UIMain(){
     dispatcher = new Glib::Dispatcher;
     dispatcher->connect(std::function<void()>(ProcessUIWorkQueue));
+    dispatcher_state = DISPATCHER_STATE_READY;
+
     Gtk::Main::run();
+
+    dispatcher_state = DISPATCHER_STATE_CLOSED;
+    delete dispatcher;
+    dispatcher = nullptr;
 }
