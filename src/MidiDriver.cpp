@@ -737,7 +737,6 @@ void MidiDriver::ProcessInput(){
                 break;
             default:
                 //Some unmatched event.
-                *err << "unknown event recieved:(\n";
                 break;
 
         }

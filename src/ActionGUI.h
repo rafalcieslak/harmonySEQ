@@ -59,6 +59,7 @@ private:
     void OnVelocityChanged();
     void SetTypeCombo(int type);
     void SetSeqCombos(int handle);
+    void OnChordChanged();
     void OnNoteNrChanged();
     void OnNoteSeqChanged();
     void OnOnOffToggleChanged();
@@ -112,6 +113,7 @@ private:
     Gtk::Label label_preview;
     Gtk::HSeparator separator;
 
+    Chord chord;
     ChordWidget chordwidget;
 
     class ModelColumns_Seqs : public Gtk::TreeModel::ColumnRecord {

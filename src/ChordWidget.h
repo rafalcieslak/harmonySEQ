@@ -21,8 +21,8 @@
 #define	CHORDWIDGET_H
 #include <gtkmm.h>
 #include "global.h"
+#include "Chord.h"
 
-class Chord;
 
 class ChordWidget : public Gtk::Box {
 public:

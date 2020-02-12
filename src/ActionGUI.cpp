@@ -36,10 +36,6 @@ ActionGUI::ActionGUI()
     //by defalut default
     we_are_copying_data_from_parent_action_so_do_not_handle_signals = false;
 
-    chordwidget.ShowApplyOctave(1);
-    // TODO: We can get rid of this signal once Actions are polymorphic and we can listen to action's chord events directly.
-    chordwidget.on_apply_octave_toggled.connect(std::bind(&ActionGUI::OnApplyOctaveToogled, this, std::placeholders::_1));
-
     //window's title
     set_title(_("Action"));
 
@@ -160,7 +156,12 @@ ActionGUI::ActionGUI()
     //Show all children widgets
     show_all_children(1);
 
+
+    chordwidget.Select(&chord);
     chordwidget.SetExpandDetails(1);
+    // TODO: We can get rid of this signal once Actions are polymorphic and we can listen to action's chord events directly.
+    chordwidget.on_apply_octave_toggled.connect(std::bind(&ActionGUI::OnApplyOctaveToogled, this, std::placeholders::_1));
+    chord.on_change.connect(std::bind(&ActionGUI::OnChordChanged, this));
 
     on_sequencer_list_changed.connect(
         [=](){ DeferWorkToUIThread(
@@ -240,7 +241,6 @@ void ActionGUI::UpdateEverything(){
             SetSeqCombos(target->args[1]);
             pattern_button.set_value(target->args[2]);
             break;
-            break;
         case Action::TEMPO_SET:
             tempo_button.set_value(target->args[1]);
             break;
@@ -251,6 +251,7 @@ void ActionGUI::UpdateEverything(){
             break;
         case Action::SEQ_CHANGE_CHORD:
             SetSeqCombos(target->args[1]);
+            target->chord.CopyInto(chord);
             chordwidget.Update();
             chordwidget.UpdateApplyOctave(target->args[3]);
             break;
@@ -376,26 +377,26 @@ void ActionGUI::InitType(int action_type){
             break;
         case Action::SEQ_ON_OFF_TOGGLE:
             AllSeqs_combo.set_active(0);
-            target->args[1] = (*(AllSeqs_combo.get_active()))[m_col_seqs.handle];
+            target->args[1] = AllSeqs_combo.get_active() ? (*(AllSeqs_combo.get_active()))[m_col_seqs.handle] : -1;
             on_off_toggle_TOGGLE.set_active(1); //it does not triggler signal_clicked, so we have to set the mode mannually!
             target->args[2]=2;
             break;
         case Action::SEQ_CHANGE_ONE_NOTE:
             NoteSeqs_combo.set_active(0);
-            target->args[1] = (*(NoteSeqs_combo.get_active()))[m_col_seqs.handle];
+            target->args[1] = NoteSeqs_combo.get_active() ? (*(NoteSeqs_combo.get_active()))[m_col_seqs.handle] : -1;
             notenr_button.set_value(1.0);
             target->args[2] = 1;
             chordseq_button.set_value(0.0);
             break;
         case Action::SEQ_CHANGE_CHORD:
             NoteSeqs_combo.set_active(0);
-            target->args[1] = (*(NoteSeqs_combo.get_active()))[m_col_seqs.handle];
+            target->args[1] = NoteSeqs_combo.get_active() ? (*(NoteSeqs_combo.get_active()))[m_col_seqs.handle] : -1;
             target->args[3] = 0;
             chordwidget.Update();
             break;
         case Action::SEQ_CHANGE_PATTERN:
             AllSeqs_combo.set_active(0);
-            target->args[1] = (*(AllSeqs_combo.get_active()))[m_col_seqs.handle];
+            target->args[1] = AllSeqs_combo.get_active() ? (*(AllSeqs_combo.get_active()))[m_col_seqs.handle] : -1;
             pattern_button.set_value(0.0);
             break;
         case Action::TEMPO_SET:
@@ -465,6 +466,18 @@ void ActionGUI::OnNoteSeqComboChanged(){
 
     Files::SetFileModified(1);
 
+}
+
+void ActionGUI::OnChordChanged(){
+    if(target->type != Action::SEQ_CHANGE_CHORD)
+        return;
+
+    chord.CopyInto(target->chord);
+
+    label_preview.set_text(target->GetLabel());
+    target->on_changed();
+
+    Files::SetFileModified(1);
 }
 
 void ActionGUI::OnNoteSeqChanged(){

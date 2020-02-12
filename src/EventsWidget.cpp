@@ -110,6 +110,25 @@ void EventsWidget::UpdateColors(){
 }
 
 void EventsWidget::InitTreeData(){
+    /* Disconnect all signal handlers registered for all rows. */
+    Gtk::TreeModel::Children children = m_refTreeModel->children();
+    for(Gtk::TreeModel::Children::iterator iter = children.begin(); iter != children.end(); ++iter){
+        Gtk::TreeModel::Row row = *iter;
+        /* Event */
+        std::vector<bs2::connection> conns = row[m_columns.col_connections_using_this_row];
+        for (auto &conn : conns)
+            conn.disconnect();
+
+        Gtk::TreeModel::Children children2 = row->children();
+        for(Gtk::TreeModel::Children::iterator iter = children2.begin(); iter != children2.end(); ++iter){
+            Gtk::TreeModel::Row row = *iter;
+            /* Action */
+            std::vector<bs2::connection> conns = row[m_columns.col_connections_using_this_row];
+            for (auto &conn : conns)
+                conn.disconnect();
+        }
+    }
+
     m_refTreeModel->clear();
     Gtk::TreeModel::Row row;
 
@@ -124,13 +143,20 @@ void EventsWidget::InitTreeData(){
         row[m_columns.col_type] = EVENT;
         row[m_columns.col_prt] = -1;
 
-        event->on_trigger.connect(
-            [=](){ DeferWorkToUIThread(
-                    [=](){ ColorizeEvent(row); });});
+        std::vector<bs2::connection> conns;
+        conns.push_back(
+            event->on_trigger.connect(
+                [=](){ DeferWorkToUIThread(
+                        [=](){ ColorizeEvent(row); });})
+            );
 
-        event->on_changed.connect(
-            [=](){ DeferWorkToUIThread(
-                    [=](){ UpdateRow(row); });});
+        conns.push_back(
+            event->on_changed.connect(
+                [=](){ DeferWorkToUIThread(
+                        [=](){ UpdateRow(row); });})
+            );
+
+        row[m_columns.col_connections_using_this_row] = conns;
 
         //actions
         for (unsigned int c = 0; c < event->actions.size();c++){
@@ -144,13 +170,21 @@ void EventsWidget::InitTreeData(){
             row_child[m_columns.col_type] = ACTION;
             row_child[m_columns.col_prt] = x;
 
-            action->on_trigger.connect(
-                [=](){ DeferWorkToUIThread(
-                        [=](){ ColorizeAction(row_child); });});
+            std::vector<bs2::connection> conns;
+            conns.push_back(
+                action->on_trigger.connect(
+                    [=](){ DeferWorkToUIThread(
+                            [=](){ ColorizeAction(row_child); });})
+                );
 
-            action->on_changed.connect(
-                [=](){ DeferWorkToUIThread(
-                        [=](){ UpdateRow(row_child); });});
+
+            conns.push_back(
+                action->on_changed.connect(
+                    [=](){ DeferWorkToUIThread(
+                            [=](){ UpdateRow(row_child); });})
+                );
+
+            row_child[m_columns.col_connections_using_this_row] = conns;
         }
     }
 }
@@ -167,13 +201,22 @@ void EventsWidget::OnAddEventClicked(){
     row[m_columns.col_type] = EVENT;
     row[m_columns.col_prt] = -1;
 
-    event->on_trigger.connect(
-        [=](){ DeferWorkToUIThread(
-                [=](){ ColorizeEvent(row); });});
 
-    event->on_changed.connect(
-        [=](){ DeferWorkToUIThread(
-                [=](){ UpdateRow(row); });});
+    std::vector<bs2::connection> conns;
+
+    conns.push_back(
+        event->on_trigger.connect(
+            [=](){ DeferWorkToUIThread(
+                    [=](){ ColorizeEvent(row); });})
+        );
+
+    conns.push_back(
+        event->on_changed.connect(
+            [=](){ DeferWorkToUIThread(
+                    [=](){ UpdateRow(row); });})
+        );
+
+    row[m_columns.col_connections_using_this_row] = conns;
 
     ShowEventGUI(event);
 
@@ -213,13 +256,21 @@ void EventsWidget::OnAddActionClicked(){
     row[m_columns.col_label] = action->GetLabel();
     row[m_columns.col_colour] = background_color;
 
-    action->on_trigger.connect(
-        [=](){ DeferWorkToUIThread(
-                [=](){ ColorizeAction(row); });});
+    std::vector<bs2::connection> conns;
 
-    action->on_changed.connect(
-        [=](){ DeferWorkToUIThread(
-                [=](){ UpdateRow(row); });});
+    conns.push_back(
+        action->on_trigger.connect(
+            [=](){ DeferWorkToUIThread(
+                    [=](){ ColorizeAction(row); });})
+        );
+
+    conns.push_back(
+        action->on_changed.connect(
+            [=](){ DeferWorkToUIThread(
+                    [=](){ UpdateRow(row); });})
+        );
+
+    row[m_columns.col_connections_using_this_row] = conns;
 
     ShowActionGUI(action);
 
@@ -290,24 +341,26 @@ void EventsWidget::OnRemoveClicked(){
     if(!iter) return;
     Gtk::TreeModel::Row row = *iter;
     int id, prt;
-    switch (row[m_columns.col_type]){
-        case EVENT:
 
-            id = row[m_columns.col_ID];
-            m_refTreeModel->erase(iter);
+    std::vector<bs2::connection> conns = row[m_columns.col_connections_using_this_row];
+    for (auto &conn : conns)
+        conn.disconnect();
 
-            delete Events[id];
-            Events[id] = NULL;
-            break;
-        case ACTION:
-            id = row[m_columns.col_ID];
-            prt = row[m_columns.col_prt];
-            m_refTreeModel->erase(iter);
+    if (row[m_columns.col_type] == EVENT){
+        id = row[m_columns.col_ID];
+        m_refTreeModel->erase(iter);
 
-            //TODO: checck whether we cannot do the following by erasing an item from action's std::vecctor
-            delete Events[prt]->actions[id];
-            Events[prt]->actions[id] = NULL;
-            break;
+        delete Events[id];
+        Events[id] = NULL;
+
+    }else if (row[m_columns.col_type] == ACTION){
+        id = row[m_columns.col_ID];
+        prt = row[m_columns.col_prt];
+        m_refTreeModel->erase(iter);
+
+        //TODO: checck whether we cannot do the following by erasing an item from action's std::vecctor
+        delete Events[prt]->actions[id];
+        Events[prt]->actions[id] = NULL;
     }
 
     Files::SetFileModified(1);

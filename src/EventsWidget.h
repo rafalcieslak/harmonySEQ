@@ -66,12 +66,20 @@ private:
     /**Used for treeview*/
     class ModelColumns : public Gtk::TreeModel::ColumnRecord{
     public:
-        ModelColumns(){add(col_ID);add(col_label);add(col_colour);add(col_type);add(col_prt);}
+        ModelColumns(){
+            add(col_ID);
+            add(col_label);
+            add(col_colour);
+            add(col_type);
+            add(col_prt);
+            add(col_connections_using_this_row);
+        }
         Gtk::TreeModelColumn<int> col_ID;
         Gtk::TreeModelColumn<Glib::ustring> col_label;
         Gtk::TreeModelColumn<Gdk::RGBA> col_colour;
         Gtk::TreeModelColumn<int> col_type;
         Gtk::TreeModelColumn<int> col_prt;
+        Gtk::TreeModelColumn<std::vector<bs2::connection>> col_connections_using_this_row;
     };
 
     void ShowActionGUI(Action* target);
