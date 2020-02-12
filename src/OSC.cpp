@@ -78,7 +78,7 @@ int events_handler(const char *path, const char *types, lo_arg **argv,
     int TAG = argv[0]->i;
     *dbg << "OSC : event signal got, TAG = " << TAG << ".\n";
     // For now it is the UI thread that processes events.
-    Glib::signal_idle().connect(
+    DeferWorkToUIThread(
         [=](){
             FindAndProcessEvents(Event::OSC,TAG,0);
             return false;

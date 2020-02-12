@@ -684,8 +684,8 @@ void MidiDriver::ProcessInput(){
             case SND_SEQ_EVENT_NOTEON:
                 if (ev->data.note.velocity != 0) {
                     //That's a note-on. It might have triggered events, so let's check for them.
-
-                    Glib::signal_idle().connect(
+                    // For now events are processed by the UI thread; this will change once we implement the events thread.
+                    DeferWorkToUIThread(
                         [=](){
                             FindAndProcessEvents(Event::NOTE,ev->data.note.note,ev->data.note.channel+1);
                             return false;
@@ -700,8 +700,8 @@ void MidiDriver::ProcessInput(){
                 UpdateQueue();
                 break;
             case SND_SEQ_EVENT_CONTROLLER:
-                //This is a controller event. t might have triggered events, so let's check for them.
-                Glib::signal_idle().connect(
+                //This is a controller event. It might have triggered events, so let's check for them.
+                DeferWorkToUIThread(
                     [=](){
                         FindAndProcessEvents(Event::CONTROLLER,ev->data.control.param,ev->data.control.channel+1);
                         return false;

@@ -55,7 +55,7 @@ namespace bs2 = boost::signals2;
 
 // Enables colorful indicator when event gets triggered (time in ms).
 #define EVENTS_FLASH
-#define EVENTS_FLASH_TIMEOUT 200
+#define EVENTS_FLASH_TIMEOUT 80
 
 #define PLAY_ON_EDIT_MS 300
 
