@@ -27,8 +27,6 @@
 #define	MIDIDRIVER_H
 #include "global.h"
 #include "DiodeMidiEvent.h"
-#include "seqHandle.h"
-
 
 class MidiDriver {
 public:

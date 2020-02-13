@@ -19,27 +19,12 @@
 
 #include "messages.h"
 #include "Sequencer.h"
-#include "seqHandle.h"
 #include "AtomContainer.h"
 #include "NoteAtom.h"
 #include "NoteSequencer.h"
 #include "ControlSequencer.h"
 extern debug *dbg;
 
-// TODO: This structure desparately needs a manager class, with a
-// mutex guard, and access methods.
-std::vector<Sequencer *> seqVector;
-bs2::signal<void()> on_sequencer_list_changed;
-
-
-void ClearSequencers(){
-    for(unsigned int x = 0; x < seqVector.size(); x++) delete seqVector[x];
-
-    seqVector.clear();
-
-}
-
-//======begin sequencer class===============
 
 int Sequencer::id_counter = 1;
 

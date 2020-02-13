@@ -163,7 +163,7 @@ ActionGUI::ActionGUI()
     chordwidget.on_apply_octave_toggled.connect(std::bind(&ActionGUI::OnApplyOctaveToogled, this, std::placeholders::_1));
     chord.on_change.connect(std::bind(&ActionGUI::OnChordChanged, this));
 
-    on_sequencer_list_changed.connect(
+    SequencerManager::on_sequencer_list_changed.connect(
         [=](){ DeferWorkToUIThread(
             [=](){ UpdateSequencerList(); });});
 

@@ -54,6 +54,8 @@ namespace Files{
     bool LoadFileCurrent(Glib::KeyFile* kf);
     /**Converts file format from 0.15 to 0.16*/
     bool ConvertFile_0_15_to_0_16(Glib::KeyFile* kf);
+    /**Converts file format from 0.16 to 0.17*/
+    bool ConvertFile_0_16_to_0_17(Glib::KeyFile* kf);
 
 extern bs2::signal<void()> on_file_loaded;
 extern bs2::signal<void()> on_file_saved;

@@ -4,7 +4,7 @@ set(PROJECT_NAME "harmonySEQ")
 
 project(
   ${PROJECT_NAME}
-  VERSION 0.16.1
+  VERSION 0.17.0
   LANGUAGES CXX
   )
 

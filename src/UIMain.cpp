@@ -47,15 +47,20 @@ void DeferWorkToUIThread(std::function<void()> f){
      * GTK thread of anything from a foreign thread. Quite silly, but
      * we have to live with it. */
 
-    /* GUI thread did not yet create the dispatcher object - wait
-     * until it does. This only happens once on startup. */
-    while(dispatcher_state == DISPATCHER_STATE_NOT_READY) std::this_thread::sleep_for (std::chrono::milliseconds(1));
-    if(dispatcher_state == DISPATCHER_STATE_CLOSED) return;
-
     ui_thread_work_queue__mtx.lock();
     ui_thread_work_queue.push_back(f);
     ui_thread_work_queue__mtx.unlock();
+
+    /* GUI thread did not yet create the dispatcher object. This only
+     * happens during initialization. */
+    if(dispatcher_state == DISPATCHER_STATE_NOT_READY) return;
+    if(dispatcher_state == DISPATCHER_STATE_CLOSED) return;
     dispatcher->emit();
+}
+
+void WaitForDispatcher(){
+    while(dispatcher_state == DISPATCHER_STATE_NOT_READY)
+        std::this_thread::sleep_for (std::chrono::milliseconds(1));
 }
 
 void ProcessUIWorkQueue(){
@@ -78,6 +83,9 @@ void UIMain(){
     dispatcher = new Glib::Dispatcher;
     dispatcher->connect(std::function<void()>(ProcessUIWorkQueue));
     dispatcher_state = DISPATCHER_STATE_READY;
+
+    /* In case some events are waiting even before we got here. */
+    ProcessUIWorkQueue();
 
     Gtk::Main::run();
 

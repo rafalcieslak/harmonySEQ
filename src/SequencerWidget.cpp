@@ -762,7 +762,10 @@ void SequencerWidget::OnNameEdited(){
     if(!selectedSeq) return;
 
     selectedSeq->SetName(wNameEntry.get_text());
-    on_sequencer_list_changed();
+
+    /* TODO: Ideally this signal would never get triggered outside of
+     * SequencerManager. */
+    SequencerManager::on_sequencer_list_changed();
     Files::SetFileModified(1);
 }
 

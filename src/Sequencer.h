@@ -22,16 +22,12 @@
 #define	SEQUENCER_H
 #include "global.h"
 #include <gtkmm.h>
-#include "seqHandle.h"
 #include "AtomContainer.h"
 
 enum SeqType_t{
     SEQ_TYPE_NOTE,
     SEQ_TYPE_CONTROL
 };
-
-/** Clears the list of sequencers, removing every sequencer */
-void ClearSequencers();
 
 /** Base, pure-virtual class for sequencers. */
 class Sequencer {
@@ -118,9 +114,6 @@ public:
     /**Keeps a reference to a row in Sequencers TreeModel*/
     Gtk::TreeRow my_row;
 
-    /**Remembers the handle to this sequencer.*/
-    seqHandle MyHandle;
-
     /* These signals can be emitted by any thread - it's up to the
      * receiver to relay work to the right thread. */
 
@@ -171,11 +164,5 @@ protected:
 private:
 
 };
-
-/* Triggered when new sequencers appear or are removed from the
- * seqVector list. This is used by some GUI elements to update their
- * list of available targets. This signal will be moved to sequencer
- * manage class when it gets implemented. */
-extern bs2::signal<void()> on_sequencer_list_changed;
 
 #endif	/* SEQUENCER_H */

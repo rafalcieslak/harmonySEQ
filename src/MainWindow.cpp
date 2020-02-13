@@ -467,7 +467,9 @@ MainWindow::OnNameEdited(const Glib::ustring& path, const Glib::ustring& newtext
 
     if(seqWidget.selectedSeq == seq) seqWidget.UpdateName();
 
-    on_sequencer_list_changed();
+    /* TODO: Ideally this signal would never get triggered outside of
+     * SequencerManager. */
+    SequencerManager::on_sequencer_list_changed();
 
     RefreshRow(row);
 
@@ -535,8 +537,10 @@ void MainWindow::InitTreeData(){
 
     TreeModel_sequencers->clear();
 
-    for (auto seq : SequencerManager::GetAll())
-        AddSequencerRow(seq);
+    for (auto seq : SequencerManager::GetAll()){
+        auto row = AddSequencerRow(seq);
+        RefreshRow(row);
+    }
 }
 
 void MainWindow::RefreshRow(Gtk::TreeRowReference rowref){
@@ -594,11 +598,6 @@ void MainWindow::OnRemoveClicked(){
 
     //and the corresponding sequencer
     SequencerManager::Unregister(seq);
-
-    //update hande map data:
-    // UpdateSeqHandlesAfterDeleting(id);
-
-    on_sequencer_list_changed();
 
     Files::SetFileModified(1);
 }
@@ -781,8 +780,7 @@ void MainWindow::OnMenuNewClicked(){
 
     //clear everything.
     ClearEvents();
-    ClearSequencers();
-    ResetSeqHandles();
+    SequencerManager::Clear();
     InitTreeData();
 
     midi->SetTempo(DEFAULT_TEMPO);

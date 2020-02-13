@@ -104,6 +104,7 @@ void Info(Glib::ustring message, Glib::ustring secondary_message = "");
 double GetRealTime();
 
 void DeferWorkToUIThread(std::function<void()> f);
+void WaitForDispatcher();
 void UIMain();
 
 #endif	/* GLOBAL_H */

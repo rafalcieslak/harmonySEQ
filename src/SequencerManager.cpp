@@ -56,3 +56,12 @@ void SequencerManager::Clear(){
     }
     on_sequencer_list_changed();
 }
+
+
+void SequencerManager::ReplaceAll(std::vector<std::shared_ptr<Sequencer>> new_set){
+    {
+        std::lock_guard lock(sequencers_mtx);
+        sequencers = new_set;
+    }
+    on_sequencer_list_changed();
+}

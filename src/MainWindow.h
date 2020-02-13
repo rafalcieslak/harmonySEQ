@@ -23,7 +23,6 @@
 #include <gtkmm.h>
 #include <gtkmm/window.h>
 #include "global.h"
-#include "seqHandle.h"
 #include "SequencerWidget.h"
 #include "EventsWidget.h"
 

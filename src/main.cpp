@@ -274,7 +274,9 @@ int main(int argc, char** argv) {
     mainwindow->show();
 
     //And creating both threads.
-    std::thread engine_thread([](){midi->Run();});
+    std::thread engine_thread([](){
+        WaitForDispatcher();
+        midi->Run();});
     std::thread ui_thread(UIMain);
     //...and the OSC server.
 #ifndef DISABLE_OSC
