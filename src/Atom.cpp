@@ -1,5 +1,5 @@
 /*
-    Copyright (C)  2011 Rafał Cieślak
+    Copyright (C) 2011, 2020 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -58,7 +58,7 @@ Atom::Atom(const Atom&  orig){
 }
 
 Atom::~Atom(){
-    
+
 }
 
 

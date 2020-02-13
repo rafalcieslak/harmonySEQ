@@ -1,5 +1,5 @@
 /*
-    Copyright (C)  2011 Rafał Cieślak
+    Copyright (C) 2011, 2020 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -34,17 +34,16 @@ public:
     ControllerAtom(double _time = 0, int _value = 64);
     ControllerAtom(const ControllerAtom& orig);
     virtual ~ControllerAtom();
-    
+
     /**Creates a copy. Used as virtual constructor.*/
     virtual ControllerAtom* Clone();
-    
+
     /**From 0 to 127*/
     int value;
-    
+
     SlopeType slope_type;
 private:
 
 };
 
 #endif	/* CONTROLLERATOM_H */
-

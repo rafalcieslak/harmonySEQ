@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010, 2011 Rafał Cieślak
+    Copyright (C) 2010-2011, 2020 Rafał Cieślak
 
     This file is part of harmonySEQ.
 

@@ -62,4 +62,7 @@ make -j4
 cpack
 ```
 
+## License
 
+harmonySEQ is released under the terms of the GNU GPL v3 license, read
+the LICENSE file for details.

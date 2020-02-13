@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010-2012 Rafał Cieślak
+    Copyright (C) 2010-2012, 2020 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -88,7 +88,7 @@ private:
         Gtk::SpinButton metronome_1_4_velocity;
 
         Gtk::HSeparator sep2;
-        
+
         Gtk::HBox osc_port_label_hbox;
         Gtk::Label osc_port_label;
         Gtk::SpinButton osc_port;
@@ -96,7 +96,7 @@ private:
         Gtk::HSeparator osc_sep;
         Gtk::Label osc_description;
         Gtk::HBox osc_description_hbox;
-        
+
         Gtk::HSeparator sepFPS;
         Gtk::VBox boxFPS;
         Gtk::HBox boxFPSlabel;
@@ -110,4 +110,3 @@ private:
 
 
 #endif	/* SETTINGSWINDOW_H */
-

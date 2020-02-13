@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2011 Rafał Cieślak
+    Copyright (C) 2011, 2020 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -35,4 +35,3 @@ void StopOSCThead();
 #endif /*DISABLE_OSC*/
 
 #endif	/* OSC_H */
-

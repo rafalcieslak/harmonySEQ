@@ -1,5 +1,5 @@
 /*
-    Copyright (C)  2011 Rafał Cieślak
+    Copyright (C) 2011, 2020 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -34,23 +34,22 @@ public:
     Atom(double _time);
     Atom(const Atom&  orig);
     virtual ~Atom();
-    
+
     /**Returns a pointer to a new identical atom*/
     virtual Atom* Clone() = 0;
-    
+
     /**Value from 0 to 1, representing relative location (in time) in parent container*/
     double time;
-    
+
     /**Unique number used for sorting*/
     int ID;
-    
+
     /**Used when dragging, to store relative position to drag beggining.*/
     double drag_offset_line,drag_offset_time, drag_offset_value;
-    
+
 private:
     static long int counter;
 
 };
 
 #endif	/* ATOM_H */
-
