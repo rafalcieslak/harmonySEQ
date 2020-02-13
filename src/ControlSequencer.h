@@ -27,10 +27,9 @@ class ControlSequencer : public Sequencer{
 public:
     ControlSequencer();
     ControlSequencer(Glib::ustring _name0);
-    ControlSequencer(const ControlSequencer& orig);
     virtual ~ControlSequencer();
     /**Virtual copy constructor.*/
-    virtual Sequencer* Clone();
+    virtual std::shared_ptr<Sequencer> Clone();
 
     virtual SeqType_t GetType();
 
@@ -40,6 +39,9 @@ private:
 
     /**Stores the controller number (ie. 11 -> expression)*/
     int controller_number;
+
+    /* Only used internally - use Clone() instead. */
+    ControlSequencer(const ControlSequencer& orig);
 };
 
 #endif	/* CONTROLSEQUENCER_H */

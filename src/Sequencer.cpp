@@ -19,15 +19,12 @@
 
 #include "messages.h"
 #include "Sequencer.h"
-#include "MainWindow.h"
 #include "seqHandle.h"
 #include "AtomContainer.h"
 #include "NoteAtom.h"
 #include "NoteSequencer.h"
 #include "ControlSequencer.h"
 extern debug *dbg;
-
-extern MainWindow* mainwindow;
 
 // TODO: This structure desparately needs a manager class, with a
 // mutex guard, and access methods.
@@ -87,14 +84,16 @@ Sequencer::Sequencer(const Sequencer& orig) {
 }
 
 Sequencer::~Sequencer() {
-  *dbg << "Sequencer deleted...\n";
-  for(unsigned int x = 0; x < patterns.size(); x++){
-    *dbg << "Clearing the owner attribute of pattern " << x << "\n";
-    patterns[x].owner = NULL; //Hello kids, daddy's dead!
-  }
+    printf("Destruncting sequencer id %d\n", id);
+
+    for(unsigned int x = 0; x < patterns.size(); x++){
+        *dbg << "Clearing the owner attribute of pattern " << x << "\n";
+        patterns[x].owner = NULL; //Hello kids, daddy's dead!
+    }
 }
 
 void Sequencer::Init(){
+    printf("Constructing sequencer id %d\n", id);
 
     on = false;
     playing = false;

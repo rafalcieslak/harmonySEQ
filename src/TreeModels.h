@@ -20,15 +20,16 @@
 #ifndef TREEMODELS_H
 #define	TREEMODELS_H
 #include <vector>
+#include <memory>
 #include "global.h"
-#include "seqHandle.h"
+#include "Sequencer.h"
 #include <gtkmm.h>
 
 class ModelColumns_SEQUENCERS : public Gtk::TreeModel::ColumnRecord {
 public:
 
     ModelColumns_SEQUENCERS() {
-        add(col_handle);
+        add(col_seq);
         add(col_name);
         add(col_muted);
         add(col_channel);
@@ -41,7 +42,7 @@ public:
         add(col_name_color);
         add(col_connections_using_this_row);
     }
-    Gtk::TreeModelColumn<seqHandle> col_handle;
+    Gtk::TreeModelColumn<std::shared_ptr<Sequencer>> col_seq;
     Gtk::TreeModelColumn<Glib::ustring> col_name;
     Gtk::TreeModelColumn<bool> col_muted;
     Gtk::TreeModelColumn<int> col_channel;

@@ -60,11 +60,8 @@ public:
 
     void UpdatePassMidiToggle();
 
-    //int GetSelectedSequencerID();
     Gtk::TreeModel::iterator GetSelectedSequencerIter();
-    seqHandle GetSelectedSequencerHandle();
-
-    void OnSeqEdited(seqHandle h);
+    std::shared_ptr<Sequencer> GetSelectedSequencer();
 
     SequencerWidget seqWidget;
     EventsWidget eventsWidget;
@@ -74,8 +71,8 @@ public:
 
 private:
     /**Adds a single row, when a new sequencer is spawned.*/
-    Gtk::TreeModel::Row AddSequencerRow(Sequencer* seq);
-    void AddSequencer(Sequencer* seq);
+    Gtk::TreeModel::Row AddSequencerRow(std::shared_ptr<Sequencer> seq);
+    void AddSequencer(std::shared_ptr<Sequencer> seq);
 
      /**Reacts on sequencer settings changes from main window*/
     void OnMutedToggleToggled(const Glib::ustring& path);

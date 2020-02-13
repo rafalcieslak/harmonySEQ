@@ -27,13 +27,13 @@
 #include "NoteSequencer.h"
 #include "ControlSequencer.h"
 #include "ControllerAtom.h"
+#include "SequencerManager.hpp"
 
 extern Glib::RefPtr< Gdk::Pixbuf > icon_slope_linear;
 extern Glib::RefPtr< Gdk::Pixbuf > icon_slope_flat;
 
 SequencerWidget::SequencerWidget()
 {
-    AnythingSelected = 0;
     do_not_react_on_page_changes = 0;
     ignore_signals = 0;
 
@@ -300,14 +300,10 @@ SequencerWidget::~SequencerWidget(){
     // delete wViewport;
 }
 
-void SequencerWidget::SelectSeq(seqHandle h){
-    *dbg << "SeqencerWidget - selected " << h << "\n";
-    AnythingSelected = 1;
-    selectedSeq = h;
-    Sequencer* seq = seqH(h);
-    if(!seq) return;
+void SequencerWidget::SelectSeq(std::shared_ptr<Sequencer> seq){
+    selectedSeq = seq;
 
-    selectedSeqType = seq->GetType();
+    if(!seq) return;
 
     seq->on_playstate_change.connect(
         [=](){ DeferWorkToUIThread(
@@ -317,8 +313,9 @@ void SequencerWidget::SelectSeq(seqHandle h){
         [=](){ DeferWorkToUIThread(
             [=](){ UpdateActivePattern(); });});
 
-    if(selectedSeqType == SEQ_TYPE_NOTE){
-        NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seq);
+    if(selectedSeq->GetType() == SEQ_TYPE_NOTE){
+        std::shared_ptr<NoteSequencer> noteseq =
+            std::dynamic_pointer_cast<NoteSequencer>(selectedSeq);
 
         chordwidget.Select(&noteseq->chord);
 
@@ -332,45 +329,42 @@ void SequencerWidget::SelectSeq(seqHandle h){
 }
 
 void SequencerWidget::SelectNothing(){
-    AnythingSelected = 0;
+    selectedSeq = nullptr;
     chordwidget.UnSelect();
     UpdateEverything();
 }
 
 void SequencerWidget::UpdateEverything(){
     *dbg << "SeqencerWidget - Updating everything\n";
-    if (AnythingSelected){
+    if (!selectedSeq) return;
 
-        HideAndShowWidgetsDependingOnSeqType();
+    HideAndShowWidgetsDependingOnSeqType();
 
-        if(selectedSeqType == SEQ_TYPE_NOTE){
-                UpdateShowChord();
-                UpdateChord();
-                UpdateChannel();
-                UpdateOnOff(); //will also update colour
-                UpdateName();
-                UpdateRelLenBoxes();
-                UpdateGatePercent();
-                InitNotebook();
-                UpdateActivePattern();
-        }else if(selectedSeqType == SEQ_TYPE_CONTROL){
-                UpdateChannel();
-                UpdateOnOff(); //will also update colour
-                UpdateName();
-                InitNotebook();
-                UpdateRelLenBoxes();
-                UpdateActivePattern();
-                UpdateController();
-                UpdateSlopeType();
-        }
-    }else{
-
+    if(selectedSeq->GetType() == SEQ_TYPE_NOTE){
+            UpdateShowChord();
+            UpdateChord();
+            UpdateChannel();
+            UpdateOnOff(); //will also update colour
+            UpdateName();
+            UpdateRelLenBoxes();
+            UpdateGatePercent();
+            InitNotebook();
+            UpdateActivePattern();
+    }else if(selectedSeq->GetType() == SEQ_TYPE_CONTROL){
+            UpdateChannel();
+            UpdateOnOff(); //will also update colour
+            UpdateName();
+            InitNotebook();
+            UpdateRelLenBoxes();
+            UpdateActivePattern();
+            UpdateController();
+            UpdateSlopeType();
     }
 }
 
 void SequencerWidget::HideAndShowWidgetsDependingOnSeqType(){
-    if(!AnythingSelected) return;
-    if(selectedSeqType == SEQ_TYPE_NOTE){
+    if(!selectedSeq) return;
+    if(selectedSeq->GetType() == SEQ_TYPE_NOTE){
         wChordNotebook.set_current_page(0); //chordwidget
         wValueButton.hide();
         wValueLabel.hide();
@@ -384,7 +378,7 @@ void SequencerWidget::HideAndShowWidgetsDependingOnSeqType(){
         wShowChordButton.show();
         wGatePercentButton.show();
         wGatePercentLabel.show();
-    }else if(selectedSeqType == SEQ_TYPE_CONTROL){
+    }else if(selectedSeq->GetType() == SEQ_TYPE_CONTROL){
         chordwidget.SetExpandDetails(0);
         chordwidget.UnSelect();
         wChordNotebook.set_current_page(1); //wCtrlHBox
@@ -404,31 +398,30 @@ void SequencerWidget::HideAndShowWidgetsDependingOnSeqType(){
 }
 
 void SequencerWidget::UpdateOnOff(){
-    if (AnythingSelected == 0) return;
-    Sequencer* seq = seqH(selectedSeq);
+    if (!selectedSeq) return;
+
     ignore_signals = 1;
-    wMuteToggle.set_active(seq->GetOn());
+    wMuteToggle.set_active(selectedSeq->GetOn());
     ignore_signals = 0;
     UpdateOnOffColour();
 }
 void SequencerWidget::UpdateChannel(){
-    if (AnythingSelected == 0) return;
-    Sequencer* seq = seqH(selectedSeq);
+    if (!selectedSeq) return;
+
     ignore_signals = 1;
-    wChannelButton.set_value(seq->GetChannel());
+    wChannelButton.set_value(selectedSeq->GetChannel());
     ignore_signals = 0;
 }
 void SequencerWidget::UpdateActivePattern(){
-    if (AnythingSelected == 0) return;
-    Sequencer* seq = seqH(selectedSeq);
+    if (!selectedSeq == 0) return;
 
     ignore_signals = 1;
-    UpdateAsterisk(wActivePattern.get_value(),seq->GetActivePatternNumber());
-    wActivePattern.set_value(seq->GetActivePatternNumber());
+    UpdateAsterisk(wActivePattern.get_value(), selectedSeq->GetActivePatternNumber());
+    wActivePattern.set_value(selectedSeq->GetActivePatternNumber());
     ignore_signals = 0;
 }
 void SequencerWidget::UpdateChord(){
-    if (AnythingSelected == 0) return;
+    if (!selectedSeq) return;
 
     ignore_signals = 1;
     chordwidget.Update();
@@ -436,8 +429,10 @@ void SequencerWidget::UpdateChord(){
 }
 
 void SequencerWidget::UpdateShowChord(){
-    if (AnythingSelected == 0 || selectedSeqType != SEQ_TYPE_NOTE) return;
-    NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seqH(selectedSeq));
+    if (!selectedSeq) return;
+    auto noteseq = std::dynamic_pointer_cast<NoteSequencer>(selectedSeq);
+    if (!noteseq) return;
+
     ignore_signals = 1;
     wShowChordButton.set_active(noteseq->expand_chord);
     ignore_signals = 0;
@@ -445,57 +440,54 @@ void SequencerWidget::UpdateShowChord(){
 }
 
 void SequencerWidget::UpdateController(){
-    if (AnythingSelected == 0 || selectedSeqType != SEQ_TYPE_CONTROL) return;
+    if (!selectedSeq) return;
+    auto ctrlseq = std::dynamic_pointer_cast<ControlSequencer>(selectedSeq);
+    if (!ctrlseq) return;
+
     ignore_signals = 1;
-    ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*>(seqH(selectedSeq));
     wControllerButton.set_value(ctrlseq->GetControllerNumber());
     ignore_signals = 0;
 }
 
 void SequencerWidget::UpdateGatePercent(){
-    if (AnythingSelected == 0 || selectedSeqType != SEQ_TYPE_NOTE) return;
-    NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seqH(selectedSeq));
+    if (!selectedSeq || selectedSeq->GetType() != SEQ_TYPE_NOTE) return;
+    auto noteseq = std::dynamic_pointer_cast<NoteSequencer>(selectedSeq);
+    if (!noteseq) return;
+
     int gate_percent = noteseq->GetGatePercent();
     if (gate_percent != wGatePercentButton.get_value())
         wGatePercentButton.set_value(gate_percent);
 }
 
 void SequencerWidget::UpdateRelLenBoxes(){
-    if (AnythingSelected == 0) return;
-    Sequencer* seq = seqH(selectedSeq);
+    if (!selectedSeq) return;
 
     ignore_signals = 1;
 
-   wLengthNumerator.set_value(seq->GetLengthNumerator());
-   wLengthDenominator.set_value(seq->GetLengthDenominator());
-    char temp[20];
-   sprintf(temp," = %.4f",seq->GetLength());
+   wLengthNumerator.set_value(selectedSeq->GetLengthNumerator());
+   wLengthDenominator.set_value(selectedSeq->GetLengthDenominator());
+
+   char temp[20];
+   sprintf(temp," = %.4f",selectedSeq->GetLength());
    wLengthResult.set_text(temp);
 
-   wResolutions.set_value(seq->GetResolution());
+   wResolutions.set_value(selectedSeq->GetResolution());
 
    ignore_signals = 0;
 }
 
 void SequencerWidget::UpdateName(){
-    if (AnythingSelected == 0) return;
-    Sequencer* seq = seqH(selectedSeq);
+    if (!selectedSeq) return;
     ignore_signals = 1;
-    wNameEntry.set_text(seq->GetName());
+    wNameEntry.set_text(selectedSeq->GetName());
     ignore_signals = 0;
 }
 
 void SequencerWidget::InitNotebook(){
-    if(AnythingSelected == 0){
-        *err<<_("ERROR - Cannot init SequencerWidget's notebook - no sequencer selected.\n");
-        return;
-    }
-    Sequencer* seq = seqH(selectedSeq);
+    if(!selectedSeq) return;
 
     char temp[100];
     do_not_react_on_page_changes = 1;
-
-    *dbg << "SequencerWidget - INITING THE NOTEBOOK!!\n";
 
     for (unsigned int x = 0; x < notebook_pages.size();x++){
         if(!notebook_pages[x]) continue;
@@ -504,8 +496,8 @@ void SequencerWidget::InitNotebook(){
     }
     notebook_pages.clear();
 
-    notebook_pages.resize(seq->patterns.size(),NULL);
-    for (unsigned int x = 0; x < seq->patterns.size();x++){
+    notebook_pages.resize(selectedSeq->patterns.size(),NULL);
+    for (unsigned int x = 0; x < selectedSeq->patterns.size();x++){
         notebook_pages[x] = new Gtk::Label;
         notebook_pages[x]->show();
         sprintf(temp,_("%d"),x);
@@ -514,44 +506,43 @@ void SequencerWidget::InitNotebook(){
     do_not_react_on_page_changes = 0;
 
     //reset the current page
-    wNotebook.set_current_page(seqH(selectedSeq)->GetActivePatternNumber());
+    wNotebook.set_current_page(selectedSeq->GetActivePatternNumber());
     UpdatePatternWidget();
 
     UpdateActivePatternRange();
-    UpdateAsterisk(wActivePattern.get_value(),seq->GetActivePatternNumber()); //this will mark active tab with a star (Pat x*)
+    UpdateAsterisk(wActivePattern.get_value(),
+                   selectedSeq->GetActivePatternNumber()); //this will mark active tab with a star (Pat x*)
     SetRemoveButtonSensitivity(); //according to the number of pages
 }
 
 void SequencerWidget::UpdatePatternWidget(int pattern){
     *dbg << "Updating pattern widget... \n";
-    if (!AnythingSelected) return;
+    if (!selectedSeq) return;
     //if called without parameter...:
     if (pattern == -1) pattern = wNotebook.get_current_page();
-    Sequencer* seq = seqH(selectedSeq);
-    *dbg<<"Assigining pattern no. " << pattern << ", type: " << ((selectedSeqType == SEQ_TYPE_NOTE)?"Note":"Control") << ENDL;
-    pattern_widget.AssignPattern(&(seq->patterns[pattern]),selectedSeqType);
+
+    pattern_widget.AssignPattern(&(selectedSeq->patterns[pattern]), selectedSeq->GetType());
     pattern_widget.SetInternalHeight(chordwidget.get_height());
 }
 
 void SequencerWidget::UpdateActivePatternRange(){
-    if(!AnythingSelected) return;
-    Sequencer* seq = seqH(selectedSeq);
+    if(!selectedSeq) return;
 
     ignore_signals = 1;
     int v = wActivePattern.get_value();
-    wActivePattern.set_range(0.0,(double)seq->patterns.size()-1);
+    wActivePattern.set_range(0.0,(double)selectedSeq->patterns.size()-1);
     wActivePattern.set_increments(1.0,1.0);
     wActivePattern.set_value(v); //if it's too high, it will change to largest possible
     ignore_signals = 0;
 }
 
 void SequencerWidget::UpdateOnOffColour(){
-    Sequencer* seq = seqH(selectedSeq);
-    if (seq->GetOn()){
+    int phase = selectedSeq->GetPlayOncePhase();
+    if (selectedSeq->GetOn()){
         SetOnOffColour(ON);
-    }else if (seq->GetPlayOncePhase() == 2 || seq->GetPlayOncePhase() == 3) {
+    }else if (phase == 2 || phase == 3) {
         SetOnOffColour(ONCE);
-    } else if (seq->GetPlayOncePhase() == 1) {
+    } else if (phase == 1) {
         SetOnOffColour(ONCE_PRE);
     } else {
         SetOnOffColour(NONE);
@@ -560,16 +551,15 @@ void SequencerWidget::UpdateOnOffColour(){
 
 void SequencerWidget::OnChannelChanged(){
     if(ignore_signals) return;
-    if(!AnythingSelected) return;
-    Sequencer* seq = seqH(selectedSeq);
+    if(!selectedSeq) return;
 
-    seq->SetChannel(wChannelButton.get_value());
+    selectedSeq->SetChannel(wChannelButton.get_value());
     Files::SetFileModified(1);
 }
 
 void SequencerWidget::OnVelocityChanged(){
     if(ignore_signals) return;
-    if(!AnythingSelected) return;
+    if(!selectedSeq) return;
 
     pattern_widget.SetSelectionVelocity(wVelocityButton.get_value());
 
@@ -578,7 +568,7 @@ void SequencerWidget::OnVelocityChanged(){
 
 void SequencerWidget::OnValueChanged(){
     if(ignore_signals) return;
-    if(!AnythingSelected) return;
+    if(!selectedSeq) return;
 
     pattern_widget.SetSelectionValue(wValueButton.get_value());
 
@@ -587,7 +577,7 @@ void SequencerWidget::OnValueChanged(){
 
 void SequencerWidget::OnSlopeFlatToggled(){
     if(ignore_signals) return;
-    if(!AnythingSelected) return;
+    if(!selectedSeq) return;
     bool f = wCtrlSlopeFlat.get_active();
     //bool l = wCtrlSlopeLinear.get_active();
     if(f){
@@ -601,7 +591,7 @@ void SequencerWidget::OnSlopeFlatToggled(){
 
 void SequencerWidget::OnSlopeLinearToggled(){
     if(ignore_signals) return;
-    if(!AnythingSelected) return;
+    if(!selectedSeq) return;
     //bool f = wCtrlSlopeFlat.get_active();
     bool l = wCtrlSlopeLinear.get_active();
     if(l){
@@ -628,51 +618,45 @@ void SequencerWidget::UpdateSlopeType(){
 
 void SequencerWidget::OnToggleMuteToggled(){
     if(ignore_signals) return;
-    if(!AnythingSelected) return;
-    Sequencer* seq = seqH(selectedSeq);
+    if(!selectedSeq) return;
 
-    seq->SetOn(wMuteToggle.get_active());
-    seq->SetPlayOncePhase(0);
+    selectedSeq->SetOn(wMuteToggle.get_active());
+    selectedSeq->SetPlayOncePhase(0);
     UpdateOnOffColour();
 
     //Files::SetFileModified(1); come on, do not write mutes.
 }
 void SequencerWidget::OnResolutionChanged(){
     if(ignore_signals) return;
-    if(!AnythingSelected) return;
+    if(!selectedSeq) return;
 
-    Sequencer* seq = seqH(selectedSeq);
-
-
-    seq->SetResolution(wResolutions.get_value());
+    selectedSeq->SetResolution(wResolutions.get_value());
     pattern_widget.RedrawGrid();
 
     Files::SetFileModified(1);
 }
 void SequencerWidget::OnLengthChanged(){
     if(ignore_signals) return;
-    if(!AnythingSelected) return;
-    Sequencer* seq = seqH(selectedSeq);
+    if(!selectedSeq) return;
 
-    seq->SetLength(wLengthNumerator.get_value(),wLengthDenominator.get_value());
+    selectedSeq->SetLength(wLengthNumerator.get_value(),wLengthDenominator.get_value());
     char temp[20];
-    sprintf(temp, " = %.4f", seq->GetLength());
+    sprintf(temp, " = %.4f", selectedSeq->GetLength());
     wLengthResult.set_text(temp);
-    seq->play_from_here_marker = 0.0; //important, to avoid shifts
+    selectedSeq->play_from_here_marker = 0.0; //important, to avoid shifts
 
     Files::SetFileModified(1);
 }
 void SequencerWidget::OnActivePatternChanged(){
     if(ignore_signals) return;
-    if(!AnythingSelected) return;
-    Sequencer* seq = seqH(selectedSeq);
+    if(!selectedSeq) return;
 
     int activepattern = wActivePattern.get_value();
-    int old = seq->GetActivePatternNumber();
+    int old = selectedSeq->GetActivePatternNumber();
 
-    UpdateAsterisk(old,activepattern);
+    UpdateAsterisk(old, activepattern);
 
-    seq->SetActivePatternNumber(activepattern); //store in parent
+    selectedSeq->SetActivePatternNumber(activepattern); //store in parent
 
     Files::SetFileModified(1);
 }
@@ -701,12 +685,11 @@ void SequencerWidget::OnNotebookPageChanged(Gtk::Widget* page, guint page_num){
     UpdatePatternWidget();
 }
 void SequencerWidget::OnAddPatternClicked(){
-    if(!AnythingSelected) return;
-    Sequencer* seq = seqH(selectedSeq);
+    if(!selectedSeq) return;
 
     char temp[100];
 
-    seq->AddPattern();
+    selectedSeq->AddPattern();
 
     notebook_pages.push_back(new Gtk::Label);
     int x = notebook_pages.size() - 1;
@@ -720,8 +703,7 @@ void SequencerWidget::OnAddPatternClicked(){
     Files::SetFileModified(1);
 }
 void SequencerWidget::OnRemovePatternClicked(){
-    if(!AnythingSelected) return;
-    Sequencer* seq = seqH(selectedSeq);
+    if(!selectedSeq) return;
 
     int n = wNotebook.get_current_page();
     *dbg << "removing pattern " << n <<"\n";
@@ -729,16 +711,19 @@ void SequencerWidget::OnRemovePatternClicked(){
     wNotebook.remove(*notebook_pages[n]);
     delete notebook_pages[n];
     notebook_pages.erase(notebook_pages.begin()+n);
-    seq->patterns.erase(seq->patterns.begin()+n);
+
+    // TODO: This MUST be reimplemented using a Sequencer class method.
+    selectedSeq->patterns.erase(selectedSeq->patterns.begin()+n);
+
     do_not_react_on_page_changes = 0;
     // TODO: This logic should be moved to pattern manager.
-    if (seq->GetActivePatternNumber() == n ) {
-        seq->SetActivePatternNumber(0);
+    if (selectedSeq->GetActivePatternNumber() == n ) {
+        selectedSeq->SetActivePatternNumber(0);
         wActivePattern.set_value(0.0);
     }
-    if (seq->GetActivePatternNumber() > n ) {
-        seq->SetActivePatternNumber(seq->GetActivePatternNumber()-1);
-        wActivePattern.set_value(seq->GetActivePatternNumber());
+    if (selectedSeq->GetActivePatternNumber() > n ) {
+        selectedSeq->SetActivePatternNumber(selectedSeq->GetActivePatternNumber()-1);
+        wActivePattern.set_value(selectedSeq->GetActivePatternNumber());
     }
     InitNotebook();
     wNotebook.set_current_page(n);
@@ -748,16 +733,16 @@ void SequencerWidget::OnRemovePatternClicked(){
 }
 
 void SequencerWidget::OnClearPatternClicked(){
-    if(!AnythingSelected) return;
-    seqH(selectedSeq)->ClearPattern(wNotebook.get_current_page());
+    if(!selectedSeq) return;
+    selectedSeq->ClearPattern(wNotebook.get_current_page());
     UpdatePatternWidget();
 }
 
 void SequencerWidget::OnClonePatternClicked(){
-    if(!AnythingSelected) return;
-    AtomContainer pattern = seqH(selectedSeq)->patterns[wNotebook.get_current_page()];
-    int n = seqH(selectedSeq)->AddPattern();
-    AtomContainer* newpattern = &seqH(selectedSeq)->patterns[n];
+    if(!selectedSeq) return;
+    AtomContainer pattern = selectedSeq->patterns[wNotebook.get_current_page()];
+    int n = selectedSeq->AddPattern();
+    AtomContainer* newpattern = &selectedSeq->patterns[n];
     *newpattern = pattern;
     InitNotebook();
     wNotebook.set_current_page(n);
@@ -776,26 +761,24 @@ void SequencerWidget::SetRemoveButtonSensitivity(){
 
 void SequencerWidget::OnNameEdited(){
     if(ignore_signals) return;
-    if(!AnythingSelected) return;
-    Sequencer* seq = seqH(selectedSeq);
+    if(!selectedSeq) return;
 
-    seq->SetName(wNameEntry.get_text());
+    selectedSeq->SetName(wNameEntry.get_text());
     on_sequencer_list_changed();
     Files::SetFileModified(1);
 }
 
 void SequencerWidget::OnPlayOnceButtonClicked(){
-    if(!AnythingSelected) return;
-    Sequencer* seq = seqH(selectedSeq);
+    if(!selectedSeq) return;
 
-    seq->SetPlayOncePhase(1);
+    selectedSeq->SetPlayOncePhase(1);
     UpdateOnOffColour();
 }
 
 void SequencerWidget::OnSelectionChanged(int n){
     if(ignore_signals) return;
     ignore_signals = 1;
-    if(selectedSeqType == SEQ_TYPE_NOTE){
+    if(selectedSeq->GetType() == SEQ_TYPE_NOTE){
         if(n == 0){
             //empty selection
             wVelocityButton.set_sensitive(0);
@@ -803,7 +786,7 @@ void SequencerWidget::OnSelectionChanged(int n){
             wVelocityButton.set_sensitive(1);
             wVelocityButton.set_value(pattern_widget.GetSelectionVelocity());
         }
-    }else if(selectedSeqType == SEQ_TYPE_CONTROL){
+    }else if(selectedSeq->GetType() == SEQ_TYPE_CONTROL){
         if(n == 0){
             //empty selection
             wValueButton.set_sensitive(0);
@@ -822,22 +805,28 @@ void SequencerWidget::OnSnapClicked(){
 
 void SequencerWidget::OnControllerChanged(){
     if(ignore_signals) return;
-    if(!AnythingSelected || selectedSeqType != SEQ_TYPE_CONTROL) return;
-    ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*>(seqH(selectedSeq));
+    if(!selectedSeq) return;
+    auto ctrlseq = std::dynamic_pointer_cast<ControlSequencer>(selectedSeq);
+    if(!ctrlseq) return;
+
     ctrlseq->SetControllerNumber(wControllerButton.get_value());
 }
 
 void SequencerWidget::OnGatePercentChanged(){
     if(ignore_signals) return;
-    if(!AnythingSelected || selectedSeqType != SEQ_TYPE_NOTE) return;
-    NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seqH(selectedSeq));
+    if(!selectedSeq) return;
+    auto noteseq = std::dynamic_pointer_cast<NoteSequencer>(selectedSeq);
+    if(!noteseq) return;
+
     noteseq->SetGatePercent(wGatePercentButton.get_value());
 }
 
 void SequencerWidget::OnShowChordButtonClicked(){
     if(ignore_signals) return;
-    if(!AnythingSelected || selectedSeqType != SEQ_TYPE_NOTE) return;
-    NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seqH(selectedSeq));
+    if(!selectedSeq) return;
+    auto noteseq = std::dynamic_pointer_cast<NoteSequencer>(selectedSeq);
+    if(!noteseq) return;
+
     bool show = wShowChordButton.get_active();
     noteseq->expand_chord = show;
     chordwidget.SetExpandDetails(show);

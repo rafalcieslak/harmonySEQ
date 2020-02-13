@@ -27,10 +27,10 @@ NoteSequencer::NoteSequencer()
     Init();
 }
 
-NoteSequencer::NoteSequencer(const Sequencer& s)
+NoteSequencer::NoteSequencer(const NoteSequencer& s)
                                                 : Sequencer(s)
 {
-    Init();
+    s.chord.CopyInto(chord);
 }
 
 
@@ -66,10 +66,8 @@ void NoteSequencer::Init()
 NoteSequencer::~NoteSequencer(){
 }
 
-Sequencer* NoteSequencer::Clone(){
-    NoteSequencer* seq = new NoteSequencer(*(Sequencer*)this);
-    chord.CopyInto(seq->chord);
-    return seq;
+std::shared_ptr<Sequencer> NoteSequencer::Clone(){
+    return std::shared_ptr<NoteSequencer>(new NoteSequencer(*this));
 }
 
 SeqType_t NoteSequencer::GetType(){

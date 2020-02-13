@@ -30,20 +30,19 @@ enum SeqType_t{
     SEQ_TYPE_CONTROL
 };
 
-/**Clears the list of sequencers, removing every sequencer*/
+/** Clears the list of sequencers, removing every sequencer */
 void ClearSequencers();
 
-/**Base, pure-virtual class for sequencers.*/
+/** Base, pure-virtual class for sequencers. */
 class Sequencer {
 public:
 
     /**Sequencer constructor*/
     Sequencer();
     Sequencer(Glib::ustring _name0);
-    Sequencer(const Sequencer& orig);
     virtual ~Sequencer();
     /**Virtual copy constructor.*/
-    virtual Sequencer* Clone() = 0;
+    virtual std::shared_ptr<Sequencer> Clone() = 0;
 
     /**List of  patterns.
      *    Each pattern is an AtomContainer, which basically
@@ -55,13 +54,13 @@ public:
     /**Removes selected pattern.*/
     bool RemovePattern(int x);
 
-    /**Returns sequencer's type*/
+    /** Returns sequencer's type */
     virtual SeqType_t GetType() = 0;
 
-    /**Fills in everything with default values*/
+    /** Fills in everything with default values */
     virtual void Init();
 
-    /**Used to change resolution of this sequencer*/
+    /** Used to change resolution of this sequencer */
     void SetResolution(int res);
     int GetResolution();
 
@@ -90,7 +89,7 @@ public:
     /** Used by the midi driver to mark whether this sequencer is being played or not. Updated only on each bar. */
     void SetPlaying(bool);
 
-    /**Renames the sequencer*/
+    /** Renames the sequencer */
     void SetName(Glib::ustring n);
 
     /**Returns current sequencer name*/
@@ -165,6 +164,10 @@ protected:
     Glib::ustring name;
 
     int play_once_phase;
+
+    /* Only used to implement polympoprphic Clone() - external
+     * interfaces should use that method instead.*/
+    Sequencer(const Sequencer& orig);
 private:
 
 };

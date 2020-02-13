@@ -28,11 +28,10 @@ class NoteSequencer : public Sequencer {
 public:
     NoteSequencer();
     NoteSequencer(Glib::ustring _name0);
-    NoteSequencer(const Sequencer& orig);
     virtual ~NoteSequencer();
     void Init();
     /**Virtual copy constructor.*/
-    virtual Sequencer* Clone();
+    virtual std::shared_ptr<Sequencer> Clone();
 
     /**Returns SEQ_TYPE_NOTE*/
     virtual SeqType_t GetType();
@@ -58,6 +57,9 @@ private:
      *  that notes are being played at their original length; 50 means
      *  they get halved. */
     int gate_percent;
+
+    /* Only used internally - use Clone() instead. */
+    NoteSequencer(const NoteSequencer& orig);
 };
 
 #endif	/* NOTESEQUENCER_H */

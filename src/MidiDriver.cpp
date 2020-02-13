@@ -27,9 +27,9 @@
 #include "Configuration.h"
 #include "SettingsWindow.h"
 #include "SequencerWidget.h"
+#include "SequencerManager.hpp"
 #include "NoteAtom.h"
 
-extern std::vector<Sequencer *> seqVector;
 
 MidiDriver::MidiDriver() {
     paused = false;
@@ -352,7 +352,7 @@ void MidiDriver::Sync(){
     snd_seq_drop_output(seq_handle);
     PauseImmediately();
     // Reset sequencer progress
-    for (Sequencer* seq: seqVector)
+    for (std::shared_ptr<Sequencer> seq: SequencerManager::GetAll())
         seq->play_from_here_marker = 0;
     Unpause();
     *dbg << "Sync complete.\n";
@@ -445,7 +445,6 @@ double RoundTimeDouble(double marker){
 
 void MidiDriver::UpdateQueue(){
     snd_seq_event_t ev;
-    Sequencer* seq;
     double real_time = GetRealTime();
 
     // send ECHO event to harmonySEQ itself, so it will be notified when the bar finishes, and new notes must be put on the queue.
@@ -471,12 +470,7 @@ void MidiDriver::UpdateQueue(){
     }
 
     //For each sequencer...
-    for (unsigned int n = 0; n < seqVector.size(); n++){
-        if(seqVector[n] == NULL) continue; //seems this sequencer was removed, so proceed to next one.
-
-        //Shortcut pointer to the sequencer we are currently dealing with.
-        seq = seqVector[n];
-
+    for (std::shared_ptr<Sequencer> seq : SequencerManager::GetAll()){
         //Update the seq's PlayOnce phase.
 
         //If the sequencer is about to play it's pattern once, but it's on anyway, reset the playonce phase, and use the sequencer as if it was
@@ -544,63 +538,63 @@ void MidiDriver::UpdateQueue(){
 
             //We know which atoms to play, so lets play them.
             if(e != -1 && s != -1 && e>=s){
-                      //Determine whether to output notes or control messages
-                      if(seq->GetType() == SEQ_TYPE_NOTE){
+                //Determine whether to output notes or control messages
+                if(seq->GetType() == SEQ_TYPE_NOTE){
 
-                                 NoteSequencer* noteseq = dynamic_cast<NoteSequencer*>(seq);
+                    std::shared_ptr<NoteSequencer> noteseq = std::dynamic_pointer_cast<NoteSequencer>(seq);
 
-                                  for(int V = s; V<=e;V++){
-                                        note = dynamic_cast<NoteAtom*>((*pattern)[V%size]);
-                                        int pitch = noteseq->GetNoteOfChord(note->pitch);
-                                        ScheduleNote(seq->GetChannel()-1,
-                                                     local_tick + (V/size)*sequence_time + note->time*TICKS_PER_BEAT*seq->GetLength(),
-                                                     pitch, note->velocity,
-                                                     note->length*TICKS_PER_BEAT*seq->GetLength()*(noteseq->GetGatePercent()/100.0));
-                                        ;
-                                        //each note shall have correspoinding diode event.
-                                        DiodeMidiEvent dev(seq->MyHandle, DIODE_TYPE_NOTE, note->time, note->pitch, diode_colour);
-                                        ScheduleDiodeEvent(dev, local_tick + (V / size) * sequence_time + note->time * TICKS_PER_BEAT * seq->GetLength());
+                    for(int V = s; V<=e;V++){
+                        note = dynamic_cast<NoteAtom*>((*pattern)[V%size]);
+                        int pitch = noteseq->GetNoteOfChord(note->pitch);
+                        ScheduleNote(seq->GetChannel()-1,
+                                     local_tick + (V/size)*sequence_time + note->time*TICKS_PER_BEAT*seq->GetLength(),
+                                     pitch, note->velocity,
+                                     note->length*TICKS_PER_BEAT*seq->GetLength()*(noteseq->GetGatePercent()/100.0));
+                        ;
+                        //each note shall have correspoinding diode event.
+                        DiodeMidiEvent dev(seq, DIODE_TYPE_NOTE, note->time, note->pitch, diode_colour);
+                        ScheduleDiodeEvent(dev, local_tick + (V / size) * sequence_time + note->time * TICKS_PER_BEAT * seq->GetLength());
 
-                                  }
-                      }else if(seq->GetType() == SEQ_TYPE_CONTROL){
+                    }
+                }else if(seq->GetType() == SEQ_TYPE_CONTROL){
 
-                                 ControlSequencer* ctrlseq = dynamic_cast<ControlSequencer*>(seq);
+                    std::shared_ptr<ControlSequencer> ctrlseq = std::dynamic_pointer_cast<ControlSequencer>(seq);
 
-                                  for(int V = s; V<=e;V++){
-                                        ctrl = dynamic_cast<ControllerAtom*> ((*pattern)[V % size]);
-                                        if(ctrl->slope_type == SLOPE_TYPE_FLAT){
-                                            ScheduleCtrlEventSingle(seq->GetChannel()-1, local_tick + (V/size)*sequence_time + ctrl->time*TICKS_PER_BEAT*seq->GetLength(),ctrlseq->GetControllerNumber(),ctrl->value);
-                                        }else if(ctrl->slope_type == SLOPE_TYPE_LINEAR){
-
-
-                                            //TODO very important! output slopes ONLY to next bar!
+                    for(int V = s; V<=e;V++){
+                        ctrl = dynamic_cast<ControllerAtom*> ((*pattern)[V % size]);
+                        if(ctrl->slope_type == SLOPE_TYPE_FLAT){
+                            ScheduleCtrlEventSingle(seq->GetChannel()-1, local_tick + (V/size)*sequence_time + ctrl->time*TICKS_PER_BEAT*seq->GetLength(),ctrlseq->GetControllerNumber(),ctrl->value);
+                        }else if(ctrl->slope_type == SLOPE_TYPE_LINEAR){
 
 
-                                            next_ctrl = dynamic_cast<ControllerAtom*>((*pattern)[(V+1)%size]);
-                                            double nextctrl_time = next_ctrl->time;
-                                            if(V==size-1) nextctrl_time += 1.0; //if this is a last note in pattern, make sure to schedule it's slope later!
-                                            ScheduleCtrlEventLinearSlope(
-                                                                         seq->GetChannel()-1,
-                                                                         ctrlseq->GetControllerNumber(),
-                                                                         local_tick + (V/size)*sequence_time + ctrl->time*TICKS_PER_BEAT*seq->GetLength(),
-                                                                         ctrl->value,
-                                                                         local_tick + (V/size)*sequence_time + nextctrl_time*TICKS_PER_BEAT*seq->GetLength(),
-                                                                         next_ctrl->value
-                                            );
+                            //TODO very important! output slopes ONLY to next bar!
 
-                                        }else{
-                                            //something wrong.
-                                        }
 
-                                        //each note shall have correspoinding diode event.
-                                        DiodeMidiEvent dev(seq->MyHandle, DIODE_TYPE_CTRL, ctrl->time, ctrl->value, diode_colour);
-                                        ScheduleDiodeEvent(dev, local_tick + (V / size) * sequence_time + ctrl->time * TICKS_PER_BEAT * seq->GetLength());
+                            next_ctrl = dynamic_cast<ControllerAtom*>((*pattern)[(V+1)%size]);
+                            double nextctrl_time = next_ctrl->time;
+                            if(V==size-1) nextctrl_time += 1.0; //if this is a last note in pattern, make sure to schedule it's slope later!
+                            ScheduleCtrlEventLinearSlope(
+                                seq->GetChannel()-1,
+                                ctrlseq->GetControllerNumber(),
+                                local_tick + (V/size)*sequence_time + ctrl->time*TICKS_PER_BEAT*seq->GetLength(),
+                                ctrl->value,
+                                local_tick + (V/size)*sequence_time + nextctrl_time*TICKS_PER_BEAT*seq->GetLength(),
+                                next_ctrl->value
+                                );
 
-                                  }
+                        }else{
+                            //something wrong.
+                        }
 
-                      }else{
-                              *err << "Sequencer is neither note nor control type. Don't bother reporting this to harmonySEQ developers. This error message will never display, so if you see it, it means you must have broken something intentionally.\n";
-                      }
+                        //each note shall have correspoinding diode event.
+                        DiodeMidiEvent dev(seq, DIODE_TYPE_CTRL, ctrl->time, ctrl->value, diode_colour);
+                        ScheduleDiodeEvent(dev, local_tick + (V / size) * sequence_time + ctrl->time * TICKS_PER_BEAT * seq->GetLength());
+
+                    }
+
+                }else{
+                    *err << "Sequencer is neither note nor control type. Don't bother reporting this to harmonySEQ developers. This error message will never display, so if you see it, it means you must have broken something intentionally.\n";
+                }
             }
 
             // Store playback data so that the UI can accurately draw the playback marker.
@@ -664,14 +658,10 @@ void MidiDriver::UpdateQueue(){
 
 
 void MidiDriver::ProcessInput(){
-    snd_seq_event_t * ev;
-    int id;
-    std::map<int,DiodeMidiEvent>::iterator it;
-    DiodeMidiEvent diodev(0, DIODE_TYPE_NOTE,0,0,0);
-
-    //Do while there is anything in the input
+    // While there is anything in the input
     do {
         //Obtain the event from input
+        snd_seq_event_t * ev;
         snd_seq_event_input(seq_handle,&ev);
         // If we are in MIDI passthrough mode, pass the event (Well, unless it's the ECHO, which MUST be caught).
         if(passing_midi_events && ev->type!=SND_SEQ_EVENT_ECHO && ev->type!=SND_SEQ_EVENT_USR0) {
@@ -680,64 +670,56 @@ void MidiDriver::ProcessInput(){
         }
 
         //Switch, according to the type.
-        switch (ev->type){
-            case SND_SEQ_EVENT_NOTEON:
-                if (ev->data.note.velocity != 0) {
-                    //That's a note-on. It might have triggered events, so let's check for them.
-                    // For now events are processed by the UI thread; this will change once we implement the events thread.
-                    DeferWorkToUIThread(
-                        [=](){
-                            FindAndProcessEvents(Event::NOTE,ev->data.note.note,ev->data.note.channel+1);
-                            return false;
-                        });
-                } else {
-                    //That's a note-off. We ignore it as for now.
-                }
-                break;
-            case SND_SEQ_EVENT_ECHO:
-                *dbg << "ECHO!\n";
-                //As we got the ECHO event, this means we must prepare the next bar, that is starting right now.
-                UpdateQueue();
-                break;
-            case SND_SEQ_EVENT_CONTROLLER:
-                //This is a controller event. It might have triggered events, so let's check for them.
+        if(ev->type == SND_SEQ_EVENT_NOTEON){
+            if (ev->data.note.velocity != 0) {
+                //That's a note-on. It might have triggered events, so let's check for them.
+                // For now events are processed by the UI thread; this will change once we implement the events thread.
                 DeferWorkToUIThread(
                     [=](){
-                        FindAndProcessEvents(Event::CONTROLLER,ev->data.control.param,ev->data.control.channel+1);
+                        FindAndProcessEvents(Event::NOTE,ev->data.note.note,ev->data.note.channel+1);
                         return false;
                     });
-                break;
-            case SND_SEQ_EVENT_PITCHBEND:
-                //Pithbend event. Pass it through.
-                snd_seq_ev_set_source(ev,output_port);
-                snd_seq_ev_set_subs(ev);
-                snd_seq_ev_set_direct(ev);
-                snd_seq_event_output_direct(seq_handle,ev);
-                break;
-            case SND_SEQ_EVENT_PGMCHANGE:
-                //Program change event. Pass it through
-                snd_seq_ev_set_source(ev,output_port);
-                snd_seq_ev_set_subs(ev);
-                snd_seq_ev_set_direct(ev);
-                snd_seq_event_output_direct(seq_handle,ev);
-                break;
-            case SND_SEQ_EVENT_USR0:
-                id = ev->data.raw32.d[0];
+            } else {
+                //That's a note-off. We ignore it as for now.
+            }
+        } else if (ev->type == SND_SEQ_EVENT_ECHO) {
+            *dbg << "ECHO!\n";
+            //As we got the ECHO event, this means we must prepare the next bar, that is starting right now.
+            UpdateQueue();
+        } else if (ev->type == SND_SEQ_EVENT_CONTROLLER) {
+            //This is a controller event. It might have triggered events, so let's check for them.
+            DeferWorkToUIThread(
+                [=](){
+                    FindAndProcessEvents(Event::CONTROLLER,ev->data.control.param,ev->data.control.channel+1);
+                    return false;
+                });
+        } else if (ev->type == SND_SEQ_EVENT_PITCHBEND) {
+            //Pithbend event. Pass it through.
+            snd_seq_ev_set_source(ev,output_port);
+            snd_seq_ev_set_subs(ev);
+            snd_seq_ev_set_direct(ev);
+            snd_seq_event_output_direct(seq_handle,ev);
+        } else if (ev->type == SND_SEQ_EVENT_PGMCHANGE) {
+            //Program change event. Pass it through
+            snd_seq_ev_set_source(ev,output_port);
+            snd_seq_ev_set_subs(ev);
+            snd_seq_ev_set_direct(ev);
+            snd_seq_event_output_direct(seq_handle,ev);
+        } else if (ev->type == SND_SEQ_EVENT_USR0) {
+            int id = ev->data.raw32.d[0];
 
-                it = diode_events.find(id);
-                if(it == diode_events.end()) {
-                    break; // If the event wasn't found, ignore this message.
-                }
-                diodev = (*it).second;
-                diode_events.erase(it);
-
-                if (it == diode_events.end()) break; //in case such event was not registered, avoid crashes
-
-                on_diode(diodev);
+            std::map<int,DiodeMidiEvent>::iterator it = diode_events.find(id);
+            // If the event wasn't found, ignore this message.
+            if(it == diode_events.end())
                 break;
-            default:
-                //Some unmatched event.
-                break;
+            DiodeMidiEvent diodev = (*it).second;
+            diode_events.erase(it);
+
+            // In case such event was not registered, ignore it.
+            if (it == diode_events.end()) break;
+            on_diode(diodev);
+        } else {
+            //Some unmatched event.
 
         }
         //Get rid of the event.

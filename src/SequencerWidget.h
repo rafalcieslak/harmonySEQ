@@ -18,8 +18,8 @@
 */
 #ifndef SEQUENCERWIDGET_H
 #define	SEQUENCERWIDGET_H
+#include <memory>
 #include <gtkmm.h>
-#include "seqHandle.h"
 #include "ChordWidget.h"
 #include "PatternWidget.h"
 #include "DiodeMidiEvent.h"
@@ -45,7 +45,7 @@ public:
     void UpdateGatePercent();
 
     /**Used to select sequencer that has to be displayed by the SequencerWidget*/
-    void SelectSeq(seqHandle h);
+    void SelectSeq(std::shared_ptr<Sequencer>);
     void SelectNothing();
 
     /**Inits the notebook*/
@@ -54,9 +54,8 @@ public:
     void ActivateDiode(DiodeMidiEvent diodev);
     void DeacivateAllDiodes();
 
-    bool AnythingSelected;
-    seqHandle selectedSeq;
-    SeqType_t selectedSeqType;
+    std::shared_ptr<Sequencer> selectedSeq;
+    // SeqType_t selectedSeqType;
 
 private:
     /*

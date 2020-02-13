@@ -20,8 +20,9 @@
 #ifndef DIODEMIDIEVENT_H
 #define	DIODEMIDIEVENT_H
 #include <sys/time.h>
+#include <memory>
 
-#include "seqHandle.h"
+class Sequencer;
 
 enum DiodeType{
     DIODE_TYPE_NOTE,
@@ -31,13 +32,13 @@ enum DiodeType{
 
 class DiodeMidiEvent {
 public:
-    DiodeMidiEvent(seqHandle target, DiodeType type_, double time_, int value_, int color_, int max_res_ = 0);
+    DiodeMidiEvent(std::weak_ptr<Sequencer> target, DiodeType type_, double time_, int value_, int color_, int max_res_ = 0);
     DiodeMidiEvent(const DiodeMidiEvent &orig);
     virtual ~DiodeMidiEvent();
 
     DiodeMidiEvent & operator= (const DiodeMidiEvent & other);
 
-    seqHandle target;
+    std::weak_ptr<Sequencer> target;
 
     DiodeType type;
     double time;
