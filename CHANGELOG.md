@@ -1,4 +1,4 @@
-## unreleased:
+## harmonyseq 0.17 - UNRELEASED:
  - MIDI Clock and Start/Stop messages output support.
  - Added a tempo tap button.
  - HiDPI display support.

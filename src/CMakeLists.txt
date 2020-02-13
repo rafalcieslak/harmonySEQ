@@ -15,6 +15,12 @@ add_executable(
   ${SOURCES}
   )
 
+if(PROJECT_VERSION_PATCH STREQUAL "")
+  # This is just to make sure no empty values are passed to the C
+  # preprocessor.
+  SET(PROJECT_VERSION_PATCH 0)
+endif()
+
 configure_file(config.h.in config.h)
 
 if(NOT LIBLO_FOUND)
