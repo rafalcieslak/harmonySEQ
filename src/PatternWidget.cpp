@@ -174,7 +174,8 @@ void PatternWidget::AssignPattern(
     std::shared_ptr<Sequencer> o){
     container = cont;
     owner = o;
-    seq_type = owner->GetType();
+    if(owner)
+        seq_type = owner->GetType();
     RedrawGrid(); //ClearSelection will redraw atoms and everything anyway
     ClearSelection();
 }

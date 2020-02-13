@@ -58,7 +58,7 @@ private:
     void OnTempoChanged();
     void OnVelocityChanged();
     void SetTypeCombo(int type);
-    void SetSeqCombos(int handle);
+    void SetSeqCombos(std::shared_ptr<Sequencer>);
     void OnChordChanged();
     void OnNoteNrChanged();
     void OnNoteSeqChanged();
@@ -116,12 +116,15 @@ private:
     Chord chord;
     ChordWidget chordwidget;
 
+    /* Helper method for setting target->target_seq according to selection in ComboBox. */
+    void SetTargetSeq();
+
     class ModelColumns_Seqs : public Gtk::TreeModel::ColumnRecord {
     public:
         ModelColumns_Seqs() {
-            add(handle); add(name);
+            add(seq); add(name);
         }
-        Gtk::TreeModelColumn<int> handle;
+        Gtk::TreeModelColumn<std::weak_ptr<Sequencer>> seq;
         Gtk::TreeModelColumn<Glib::ustring> name;
     };
     ModelColumns_Seqs m_col_seqs;

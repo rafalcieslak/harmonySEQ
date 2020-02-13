@@ -64,12 +64,14 @@ public:
     Action(const Action& orig);
     virtual ~Action();
 
-
     /**Stores the type of this action*/
     int type;
 
     /**Stores arguments, like sequencer number or note pitch, depending on type. */
     std::vector<int> args;
+
+    /** Some actions store a sequencer reference. */
+    std::weak_ptr<Sequencer> target_seq;
 
     /**Some actions take chord as an argument. Here it is stored.*/
     Chord chord;

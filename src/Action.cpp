@@ -25,8 +25,6 @@
 #include "ActionGUI.h"
 #include "Event.h"
 
-extern std::vector<Sequencer *> seqVector;
-
 Action::Action(ActionTypes t, int a1, int a2){
     args.resize(ACTION_ARGS_NUM);
     type = t;
@@ -43,85 +41,69 @@ Action::~Action(){
 void Action::Trigger(int data){
     *dbg << "-- Action triggered '" << GetLabel() << "'.\n";
 
-    NoteSequencer* noteseq; //may be needed, declaring before switch
     //Reactions depend on action type.
-    switch (type){
-        case SEQ_ON_OFF_TOGGLE:
-            if (seqVector.size()==0 || !seqH(args[1])) break;
-            switch (args[2]){
-                case 0:
-                    seqH(args[1])->SetOn(0);
-                    break;
-                case 1:
-                    seqH(args[1])->SetOn(1);
-                    break;
-                case 2:
-                    seqH(args[1])->SetOn(!seqH(args[1])->GetOn());
-                    break;
-            }
+    if(type == SEQ_ON_OFF_TOGGLE) {
+        auto seq = target_seq.lock();
+        if(!seq) return;
+        switch (args[2]){
+        case 0:
+            seq->SetOn(0);
             break;
-
-        case TEMPO_SET:
-            midi->SetTempo(args[1]);
-            Files::SetFileModified(1);
+        case 1:
+            seq->SetOn(1);
             break;
-
-        case SEQ_CHANGE_ONE_NOTE:
-            if (seqVector.size()==0 || !seqH(args[1]) || seqH(args[1])->GetType() != SEQ_TYPE_NOTE) break;
-            noteseq = dynamic_cast<NoteSequencer*>(seqH(args[1]));
-            noteseq->chord.SetNote(args[2]-1, args[3]);
-            Files::SetFileModified(1);
+        case 2:
+            seq->SetOn(!seq->GetOn());
             break;
-
-        case SEQ_CHANGE_CHORD:
-            if (seqVector.size()==0 || !seqH(args[1])  || seqH(args[1])->GetType() != SEQ_TYPE_NOTE) break;
-            noteseq = dynamic_cast<NoteSequencer*>(seqH(args[1]));
-            noteseq->chord.Set(chord,!args[3]);
-            Files::SetFileModified(1);
-             break;
-        case SEQ_PLAY_ONCE:
-            if (seqVector.size()==0 || !seqH(args[1])) break;
-            seqH(args[1])->SetPlayOncePhase(1);
+        }
+    }else if(type == TEMPO_SET){
+        midi->SetTempo(args[1]);
+        Files::SetFileModified(1);
+    }else if(type == SEQ_CHANGE_ONE_NOTE){
+        auto noteseq = std::dynamic_pointer_cast<NoteSequencer>(target_seq.lock());
+        if(!noteseq) return;
+        noteseq->chord.SetNote(args[2]-1, args[3]);
+        Files::SetFileModified(1);
+    }else if(type == SEQ_CHANGE_CHORD){
+        auto noteseq = std::dynamic_pointer_cast<NoteSequencer>(target_seq.lock());
+        if(!noteseq) return;
+        noteseq->chord.Set(chord,!args[3]);
+        Files::SetFileModified(1);
+    }else if(type == SEQ_PLAY_ONCE){
+        auto seq = target_seq.lock();
+        if(!seq) return;
+        seq->SetPlayOncePhase(1);
+    }else if(type == NONE){
+        *dbg << "empty event triggered\n";
+    }else if(type == PLAY_PAUSE){
+        switch(args[1]){
+        case 0: //just pause
+            midi->PauseImmediately();
             break;
-        case NONE:
-            *dbg << "empty event triggered\n";
+        case 1: //just play
+            if(!midi->GetPaused()) break; //if it is already playing, do not call Sync().
+            midi->Unpause();
             break;
-        case PLAY_PAUSE:
-            switch(args[1]){
-                case 0: //just pause
-                    midi->PauseImmediately();
-                    break;
-                case 1: //just play
-                    if(!midi->GetPaused()) break; //if it is already playing, do not call Sync().
-                    midi->Unpause();
-                    break;
-                case 2: //toggle
-                    if (midi->GetPaused()) { midi->Unpause();}
-                    else midi->PauseImmediately();
-                    break;
-            }
+        case 2: //toggle
+            if (midi->GetPaused()) { midi->Unpause();}
+            else midi->PauseImmediately();
             break;
-        case SYNC:
-            if (midi->GetPaused()) break; //do not sync while in pause!
-            midi->Sync();
-            break;
-        case SEQ_CHANGE_PATTERN:
-            if (seqVector.size()==0 || !seqH(args[1])) break;
-            seqH(args[1])->SetActivePatternNumber(args[2]);
-            break;
-        case SEQ_TRANSPOSE_OCTAVE:
-            if (seqVector.size()==0 || !seqH(args[1])  || seqH(args[1])->GetType() != SEQ_TYPE_NOTE) break;
-            noteseq = dynamic_cast<NoteSequencer*>(seqH(args[1]));
-            noteseq->chord.SetBaseOctave(noteseq->chord.GetBaseOctave()+args[2]);
-            Files::SetFileModified(1);
-            break;
-        case TOGGLE_PASS_MIDI:
-            // No longer supported.
-            break;
-        default:
-
-            *err << _("WARNING: Unknown action triggered.\n");
-            break;
+        }
+    }else if(type == SYNC){
+        midi->Sync();
+    }else if(type == SEQ_CHANGE_PATTERN){
+        auto seq = target_seq.lock();
+        if(!seq) return;
+        seq->SetActivePatternNumber(args[2]);
+    }else if(type == SEQ_TRANSPOSE_OCTAVE){
+        auto noteseq = std::dynamic_pointer_cast<NoteSequencer>(target_seq.lock());
+        if(!noteseq) return;
+        noteseq->chord.SetBaseOctave(noteseq->chord.GetBaseOctave()+args[2]);
+        Files::SetFileModified(1);
+    }else if(type == TOGGLE_PASS_MIDI){
+        // No longer supported.
+    }else{
+        *err << _("WARNING: Unknown action triggered.\n");
     }
 
     on_trigger();
@@ -197,12 +179,10 @@ Glib::ustring Action::GetLabel(){
 
 Glib::ustring Action::GetSeqName(int h){
     char temp[100];
-    if (!seqH(h))
-        if (debugging)
-            sprintf(temp,_("(unexisting, the handle was: %d)"),h);
-        else
-            sprintf(temp,_("(unexisting)"));
+    auto seq = target_seq.lock();
+    if (!seq)
+        sprintf(temp,_("(none)"));
     else
-        sprintf(temp,_("%s"),seqH(h)->GetName().c_str());
+        sprintf(temp,_("%s"),seq->GetName().c_str());
     return temp;
 }

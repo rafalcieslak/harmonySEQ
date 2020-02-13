@@ -325,6 +325,7 @@ void SequencerWidget::SelectSeq(std::shared_ptr<Sequencer> seq){
     }
 
     UpdateEverything();
+    UpdatePatternWidget();
     DeacivateAllDiodes();
 }
 
@@ -332,6 +333,7 @@ void SequencerWidget::SelectNothing(){
     selectedSeq = nullptr;
     chordwidget.UnSelect();
     UpdateEverything();
+    UpdatePatternWidget();
 }
 
 void SequencerWidget::UpdateEverything(){
@@ -413,7 +415,7 @@ void SequencerWidget::UpdateChannel(){
     ignore_signals = 0;
 }
 void SequencerWidget::UpdateActivePattern(){
-    if (!selectedSeq == 0) return;
+    if (!selectedSeq) return;
 
     ignore_signals = 1;
     UpdateAsterisk(wActivePattern.get_value(), selectedSeq->GetActivePatternNumber());
@@ -517,7 +519,10 @@ void SequencerWidget::InitNotebook(){
 
 void SequencerWidget::UpdatePatternWidget(int pattern){
     *dbg << "Updating pattern widget... \n";
-    if (!selectedSeq) return;
+    if (!selectedSeq) {
+        pattern_widget.AssignPattern(nullptr, nullptr);
+        return;
+    }
     //if called without parameter...:
     if (pattern == -1) pattern = wNotebook.get_current_page();
 
@@ -770,6 +775,8 @@ void SequencerWidget::OnPlayOnceButtonClicked(){
 
 void SequencerWidget::OnSelectionChanged(int n){
     if(ignore_signals) return;
+    if(!selectedSeq) return;
+
     ignore_signals = 1;
     if(selectedSeq->GetType() == SEQ_TYPE_NOTE){
         if(n == 0){

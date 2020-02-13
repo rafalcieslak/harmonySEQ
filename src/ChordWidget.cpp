@@ -319,10 +319,12 @@ void ChordWidget::Update(){
 void ChordWidget::ShowApplyOctave(bool show){
     if (show_dnao == show) return;
     if (show == 0){
-        line4_5.remove(do_not_apply_octave);
+        do_not_apply_octave.set_visible(false);
+        // line4_5.remove(do_not_apply_octave);
         octave.set_sensitive(1);
     }else{
-        line4_5.pack_start(do_not_apply_octave,Gtk::PACK_SHRINK);
+        do_not_apply_octave.set_visible(true);
+        // line4_5.pack_start(do_not_apply_octave,Gtk::PACK_SHRINK);
     }
     show_dnao = show;
 }
