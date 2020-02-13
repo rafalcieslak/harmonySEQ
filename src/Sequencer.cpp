@@ -26,34 +26,22 @@
 extern debug *dbg;
 
 
-int Sequencer::id_counter = 1;
-
 Sequencer::Sequencer()
     : patterns(0)
 {
-    id = id_counter++;
-
-    char temp[20];
-    snprintf(temp, 20, _("seq %d"), id);
-    name = temp;
-
-    resolution = SEQUENCE_DEFAULT_SIZE;
+    printf("Constructing unnamed sequencee\n");
     Init();
 }
 
 Sequencer::Sequencer(Glib::ustring _name)
     : patterns(0)
 {
-    id = id_counter++;
-
-    name = _name;
-    resolution = SEQUENCE_DEFAULT_SIZE;
+    printf("Constructing sequencer %s\n", _name.c_str());
     Init();
+    name = _name;
 }
 
 Sequencer::Sequencer(const Sequencer& orig) {
-    id = id_counter++;
-
     name = orig.name;
     on = orig.on;
     resolution = orig.resolution;
@@ -67,12 +55,11 @@ Sequencer::Sequencer(const Sequencer& orig) {
 }
 
 Sequencer::~Sequencer() {
-    printf("Destruncting sequencer id %d\n", id);
+    printf("Destructing sequencer %s\n", name.c_str());
 }
 
 void Sequencer::Init(){
-    printf("Constructing sequencer id %d\n", id);
-
+    name = _("seq");
     on = false;
     playing = false;
     active_pattern = 0;

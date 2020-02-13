@@ -31,6 +31,11 @@ std::vector<std::shared_ptr<Sequencer>> SequencerManager::GetAll() {
     return sequencers;
 }
 
+unsigned int SequencerManager::GetCount() {
+    std::lock_guard lock(sequencers_mtx);
+    return sequencers.size();
+}
+
 void SequencerManager::Register(std::shared_ptr<Sequencer> seq){
     {
         std::lock_guard lock(sequencers_mtx);

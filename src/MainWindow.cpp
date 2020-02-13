@@ -605,13 +605,23 @@ void MainWindow::OnRemoveClicked(){
 void MainWindow::OnAddNoteSeqClicked(){
     seq_list_drag_in_progress = 0; //important
 
-    AddSequencer(std::make_shared<NoteSequencer>());
+    int n = SequencerManager::GetCount();
+    char temp[20];
+    snprintf(temp, 20, _("seq %d"), n+1);
+    auto seq = std::make_shared<NoteSequencer>(temp);
+
+    AddSequencer(seq);
 }
 
 void MainWindow::OnAddControlSeqClicked(){
     seq_list_drag_in_progress = 0; //important
 
-    AddSequencer(std::make_shared<ControlSequencer>());
+    int n = SequencerManager::GetCount();
+    char temp[20];
+    snprintf(temp, 20, _("seq %d"), n+1);
+    auto seq = std::make_shared<ControlSequencer>(temp);
+
+    AddSequencer(seq);
 }
 
 void MainWindow::OnCloneClicked(){

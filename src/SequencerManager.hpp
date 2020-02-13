@@ -37,6 +37,9 @@ public:
      * holding the mutex for long. */
     static std::vector<std::shared_ptr<Sequencer>> GetAll();
 
+    /* Returns the number of registered sequencers. */
+    static unsigned int GetCount();
+
     /* Adds a sequencer to the list. */
     static void Register(std::shared_ptr<Sequencer>);
     /* Removes a sequencer from the list. */

@@ -129,10 +129,6 @@ public:
     bs2::signal<void()> on_parameter_change;
 
 protected:
-    // Temporary replacement for sequencer handles.
-    static int id_counter;
-    int id;
-
     /**Stores the resolution of sequence. */
     int resolution;
 
