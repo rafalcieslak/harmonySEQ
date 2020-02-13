@@ -17,37 +17,34 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef NOTEATOM_H
-#define	NOTEATOM_H
+#ifndef CONTROLLERATOM_H
+#define	CONTROLLERATOM_H
 
-#include "Atom.h"
+#include "Atom.hpp"
 
-class NoteAtom : public Atom {
+enum SlopeType{
+    SLOPE_TYPE_FLAT,
+    SLOPE_TYPE_LINEAR,
+            //maybe once there will be more to choose from?
+    SLOPE_TYPE_NONE = 255 //used when the sequencer widget should display it's own setting
+};
+
+class ControllerAtom : public Atom {
 public:
-    NoteAtom(double _time = 0, double _length = 0.125, int _pitch = 0);
-    NoteAtom(const NoteAtom& orig);
-    virtual ~NoteAtom();
+    ControllerAtom(double _time = 0, int _value = 64);
+    ControllerAtom(const ControllerAtom& orig);
+    virtual ~ControllerAtom();
     
-    /**Creates a copy. Used as virtual copy constructor.*/
-    NoteAtom* Clone();
+    /**Creates a copy. Used as virtual constructor.*/
+    virtual ControllerAtom* Clone();
     
-    /**Currently - 0 to 5*/
-    int pitch;
+    /**From 0 to 127*/
+    int value;
     
-    /**Duration time, where 0 = none and 1 = full parent container*/
-    double length;
-    
-    /**Velocity, from 0 to 127*/
-    int velocity;
-    
-    /**Used to store/remember this note's length at drag's beggining*/
-    double drag_beggining_length;
-    
-    /**Used to store&remember note's velocity at drag's beggining*/
-    int drag_beggining_velocity;
+    SlopeType slope_type;
 private:
 
 };
 
-#endif	/* NOTEATOM_H */
+#endif	/* CONTROLLERATOM_H */
 

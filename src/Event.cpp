@@ -17,10 +17,10 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Event.h"
-#include "Action.h"
-#include "Chord.h"
-#include "messages.h"
+#include "Event.hpp"
+#include "Action.hpp"
+#include "Chord.hpp"
+#include "messages.hpp"
 
 // TODO: This data structure desperately needs a mutex.
 std::vector<Event *> Events;

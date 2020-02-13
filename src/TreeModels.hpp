@@ -21,8 +21,8 @@
 #define	TREEMODELS_H
 #include <vector>
 #include <memory>
-#include "global.h"
-#include "Sequencer.h"
+#include "global.hpp"
+#include "Sequencer.hpp"
 #include <gtkmm.h>
 
 class ModelColumns_SEQUENCERS : public Gtk::TreeModel::ColumnRecord {

@@ -25,8 +25,8 @@
 
 #ifndef MIDIDRIVER_H
 #define	MIDIDRIVER_H
-#include "global.h"
-#include "DiodeMidiEvent.h"
+#include "global.hpp"
+#include "DiodeMidiEvent.hpp"
 
 class MidiDriver {
 public:

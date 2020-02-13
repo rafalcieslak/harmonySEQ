@@ -17,7 +17,7 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "DiodeMidiEvent.h"
+#include "DiodeMidiEvent.hpp"
 
 
 DiodeMidiEvent::DiodeMidiEvent(std::weak_ptr<Sequencer> target_, DiodeType type_, double time_, int value_, int color_, int max_res_){

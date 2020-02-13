@@ -20,9 +20,9 @@
 #include <glibmm/keyfile.h>
 #include <fstream>
 
-#include "Configuration.h"
-#include "messages.h"
-#include "Files.h"
+#include "Configuration.hpp"
+#include "messages.hpp"
+#include "Files.hpp"
 
 #ifdef __linux__
 #include <pwd.h>

@@ -19,16 +19,16 @@
 
 #include <fstream>
 #include <map>
-#include "Files.h"
-#include "messages.h"
-#include "Sequencer.h"
-#include "Event.h"
-#include "Action.h"
-#include "MidiDriver.h"
-#include "NoteSequencer.h"
-#include "ControlSequencer.h"
-#include "NoteAtom.h"
-#include "ControllerAtom.h"
+#include "Files.hpp"
+#include "messages.hpp"
+#include "Sequencer.hpp"
+#include "Event.hpp"
+#include "Action.hpp"
+#include "MidiDriver.hpp"
+#include "NoteSequencer.hpp"
+#include "ControlSequencer.hpp"
+#include "NoteAtom.hpp"
+#include "ControllerAtom.hpp"
 #include "SequencerManager.hpp"
 
 namespace Files {

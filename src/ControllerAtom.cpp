@@ -17,7 +17,7 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ControllerAtom.h"
+#include "ControllerAtom.hpp"
 
 
 ControllerAtom::ControllerAtom(double _time, int _value)

@@ -19,8 +19,8 @@
 
 #include <stdlib.h>
 
-#include "Atom.h"
-#include "messages.h"
+#include "Atom.hpp"
+#include "messages.hpp"
 extern error *err;
 
 bool AtomComparison(Atom * a1, Atom * a2)

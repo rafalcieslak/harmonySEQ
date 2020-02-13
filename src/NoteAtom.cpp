@@ -17,7 +17,7 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "NoteAtom.h"
+#include "NoteAtom.hpp"
 
 
 NoteAtom::NoteAtom(double _time, double _length, int _pitch)

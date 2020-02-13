@@ -18,11 +18,11 @@
 */
 
 #define I_DO_NOT_WANT_EXTERNS_FROM_TREE_MODELS
-#include "TreeModels.h"
+#include "TreeModels.hpp"
 #undef I_DO_NOT_WANT_EXTERNS_FROM_TREE_MODELS
-#include "Event.h"
-#include "Action.h"
-#include "messages.h"
+#include "Event.hpp"
+#include "Action.hpp"
+#include "messages.hpp"
 
 ModelColumns_SEQUENCERS m_columns_sequencers;
 Glib::RefPtr<Gtk::ListStore> TreeModel_sequencers;

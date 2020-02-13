@@ -19,9 +19,9 @@
 
 #ifndef ACTIONGUI_H
 #define	ACTIONGUI_H
-#include "global.h"
+#include "global.hpp"
 #include <gtkmm.h>
-#include "ChordWidget.h"
+#include "ChordWidget.hpp"
 class Action;
 
 class ActionGUI : public Gtk::Window {

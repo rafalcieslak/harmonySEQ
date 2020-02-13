@@ -17,20 +17,20 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <cairo/cairo.h>
+#include <cairomm/context.h>
 
-#include "MidiDriver.h"
-#include "PatternWidget.h"
-#include "cairomm/context.h"
-#include "global.h"
-#include "messages.h"
-#include "AtomContainer.h"
-#include "NoteAtom.h"
-#include "Sequencer.h"
-#include "Event.h"
-#include "ControllerAtom.h"
-#include "Configuration.h"
-#include "Files.h"
-#include "main.h"
+#include "MidiDriver.hpp"
+#include "PatternWidget.hpp"
+#include "global.hpp"
+#include "messages.hpp"
+#include "AtomContainer.hpp"
+#include "NoteAtom.hpp"
+#include "Sequencer.hpp"
+#include "Event.hpp"
+#include "ControllerAtom.hpp"
+#include "Configuration.hpp"
+#include "Files.hpp"
+#include "main.hpp"
 #include <sys/time.h> //for gettimeofday
 
 //depends on tempo. Fraction of tempo period.

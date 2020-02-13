@@ -22,7 +22,7 @@
 #define	CHORD_H
 #include <vector>
 #include <glibmm/ustring.h>
-#include "global.h"
+#include "global.hpp"
 
 class Chord {
 public:

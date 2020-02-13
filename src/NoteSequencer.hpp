@@ -19,8 +19,8 @@
 
 #ifndef NOTESEQUENCER_H
 #define	NOTESEQUENCER_H
-#include "Sequencer.h"
-#include "Chord.h"
+#include "Sequencer.hpp"
+#include "Chord.hpp"
 #include <glibmm/ustring.h>
 
 /**A class representing a MIDI note sequencer.*/

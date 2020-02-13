@@ -19,8 +19,8 @@
 
 #include <libintl.h>
 #include <locale.h>
-#include "messages.h"
-#include "global.h"
+#include "messages.hpp"
+#include "global.hpp"
 #include <ctime>
 
 debug::debug(int debug) {

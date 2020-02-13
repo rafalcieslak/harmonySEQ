@@ -17,13 +17,13 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Action.h"
-#include "NoteSequencer.h"
-#include "messages.h"
-#include "MidiDriver.h"
-#include "Files.h"
-#include "ActionGUI.h"
-#include "Event.h"
+#include "Action.hpp"
+#include "NoteSequencer.hpp"
+#include "messages.hpp"
+#include "MidiDriver.hpp"
+#include "Files.hpp"
+#include "ActionGUI.hpp"
+#include "Event.hpp"
 
 Action::Action(ActionTypes t, int a1, int a2){
     args.resize(ACTION_ARGS_NUM);

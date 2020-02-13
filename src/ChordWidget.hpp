@@ -20,8 +20,8 @@
 #ifndef CHORDWIDGET_H
 #define	CHORDWIDGET_H
 #include <gtkmm.h>
-#include "global.h"
-#include "Chord.h"
+#include "global.hpp"
+#include "Chord.hpp"
 
 
 class ChordWidget : public Gtk::Box {

@@ -24,7 +24,7 @@
 #include <glibmm/keyfile.h>
 #include <gtkmm/window.h>
 
-#include "global.h"
+#include "global.hpp"
 
 
 namespace Files{

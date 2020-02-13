@@ -20,9 +20,9 @@
 #define	SEQUENCERWIDGET_H
 #include <memory>
 #include <gtkmm.h>
-#include "ChordWidget.h"
-#include "PatternWidget.h"
-#include "DiodeMidiEvent.h"
+#include "ChordWidget.hpp"
+#include "PatternWidget.hpp"
+#include "DiodeMidiEvent.hpp"
 class Sequencer;
 
 /**Displays given sequencer's properties, and allows to edit them.*/

@@ -19,7 +19,7 @@
 
 #include <valarray>
 
-#include "NoteSequencer.h"
+#include "NoteSequencer.hpp"
 
 NoteSequencer::NoteSequencer()
                                                 : Sequencer()

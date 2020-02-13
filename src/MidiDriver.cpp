@@ -18,17 +18,17 @@
 */
 
 #include <alsa/asoundlib.h>
-#include "global.h"
-#include "MidiDriver.h"
-#include "messages.h"
-#include "NoteSequencer.h"
-#include "ControlSequencer.h"
-#include "Event.h"
-#include "Configuration.h"
-#include "SettingsWindow.h"
-#include "SequencerWidget.h"
+#include "global.hpp"
+#include "MidiDriver.hpp"
+#include "messages.hpp"
+#include "NoteSequencer.hpp"
+#include "ControlSequencer.hpp"
+#include "Event.hpp"
+#include "Configuration.hpp"
+#include "SettingsWindow.hpp"
+#include "SequencerWidget.hpp"
 #include "SequencerManager.hpp"
-#include "NoteAtom.h"
+#include "NoteAtom.hpp"
 
 
 MidiDriver::MidiDriver() {

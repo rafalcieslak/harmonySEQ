@@ -17,12 +17,12 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "messages.h"
-#include "Sequencer.h"
-#include "AtomContainer.h"
-#include "NoteAtom.h"
-#include "NoteSequencer.h"
-#include "ControlSequencer.h"
+#include "messages.hpp"
+#include "Sequencer.hpp"
+#include "AtomContainer.hpp"
+#include "NoteAtom.hpp"
+#include "NoteSequencer.hpp"
+#include "ControlSequencer.hpp"
 extern debug *dbg;
 
 

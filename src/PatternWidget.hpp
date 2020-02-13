@@ -19,13 +19,13 @@
 
 #ifndef PATTERNWIDGET_H
 #define	PATTERNWIDGET_H
-#include "gtkmm.h"
+#include <gtkmm.h>
 #include <set>
 #include <list>
-#include "Color.h"
-#include "Sequencer.h"
-#include "ControllerAtom.h"
-#include "DiodeMidiEvent.h"
+#include "Color.hpp"
+#include "Sequencer.hpp"
+#include "ControllerAtom.hpp"
+#include "DiodeMidiEvent.hpp"
 
 class AtomContainer;
 

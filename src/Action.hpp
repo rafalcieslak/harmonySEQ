@@ -20,9 +20,10 @@
 #ifndef ACTION_H
 #define	ACTION_H
 
-#include "global.h"
-#include "gtkmm.h"
-#include "Chord.h"
+#include <gtkmm.h>
+
+#include "global.hpp"
+#include "Chord.hpp"
 
 class ActionGUI;
 

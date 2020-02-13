@@ -34,7 +34,7 @@
 namespace bs2 = boost::signals2;
 
 // Build system config
-#include "config.h"
+#include "config.hpp"
 
 #define ENDL "\n"
 //Internal resolution of ALSA sequencer.

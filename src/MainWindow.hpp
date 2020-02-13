@@ -22,9 +22,9 @@
 
 #include <gtkmm.h>
 #include <gtkmm/window.h>
-#include "global.h"
-#include "SequencerWidget.h"
-#include "EventsWidget.h"
+#include "global.hpp"
+#include "SequencerWidget.hpp"
+#include "EventsWidget.hpp"
 
 class MainWindow: public Gtk::Window{
 

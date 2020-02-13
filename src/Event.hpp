@@ -19,8 +19,10 @@
 
 #ifndef EVENT_H
 #define	EVENT_H
-#include "global.h"
-#include "gtkmm.h"
+
+#include <gtkmm.h>
+
+#include "global.hpp"
 
 class Action;
 class Event;

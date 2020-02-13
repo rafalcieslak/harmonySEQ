@@ -20,7 +20,7 @@
 #ifndef CONFIG_H
 #define	CONFIG_H
 
-#include "global.h"
+#include "global.hpp"
 
 namespace Config{
     namespace Metronome{

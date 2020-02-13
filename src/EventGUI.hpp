@@ -20,7 +20,7 @@
 #ifndef EVENTGUI_H
 #define	EVENTGUI_H
 #include <gtkmm.h>
-#include "Event.h"
+#include "Event.hpp"
 
 class Event;
 

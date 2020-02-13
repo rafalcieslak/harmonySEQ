@@ -18,13 +18,13 @@
 */
 
 
-#include "EventsWidget.h"
-#include "Event.h"
-#include "Action.h"
-#include "global.h"
-#include "messages.h"
-#include "MainWindow.h"
-#include "Files.h"
+#include "EventsWidget.hpp"
+#include "Event.hpp"
+#include "Action.hpp"
+#include "global.hpp"
+#include "messages.hpp"
+#include "MainWindow.hpp"
+#include "Files.hpp"
 
 EventsWidget::EventsWidget(){
     set_size_request(200,-1);

@@ -19,21 +19,21 @@
 
 #include <gtkmm.h>
 #include <getopt.h>
-#include "main.h"
+#include "main.hpp"
 #define I_DO_NOT_WANT_EXTERNS_FROM_GLOBAL_H
-#include "global.h"
+#include "global.hpp"
 #undef I_DO_NOT_WANT_EXTERNS_FROM_GLOBAL_H
-#include "MidiDriver.h"
-#include "messages.h"
-#include "MainWindow.h"
-#include "Sequencer.h"
-#include "Event.h"
-#include "EventGUI.h"
-#include "Files.h"
-#include "TreeModels.h"
-#include "Configuration.h"
-#include "SettingsWindow.h"
-#include "OSC.h"
+#include "MidiDriver.hpp"
+#include "messages.hpp"
+#include "MainWindow.hpp"
+#include "Sequencer.hpp"
+#include "Event.hpp"
+#include "EventGUI.hpp"
+#include "Files.hpp"
+#include "TreeModels.hpp"
+#include "Configuration.hpp"
+#include "SettingsWindow.hpp"
+#include "OSC.hpp"
 //global objects
 debug* dbg; //the stream-like objects responsible of putting messages into stdio
 error* err;     //see above

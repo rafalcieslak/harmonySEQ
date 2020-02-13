@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "Sequencer.h"
+#include "Sequencer.hpp"
 #include <glibmm/ustring.h>
 
 #ifndef CONTROLSEQUENCER_H

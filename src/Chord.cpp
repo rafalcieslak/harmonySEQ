@@ -18,9 +18,9 @@
 */
 
 
-#include "Chord.h"
-#include "global.h"
-#include "messages.h"
+#include "Chord.hpp"
+#include "global.hpp"
+#include "messages.hpp"
 extern debug *dbg;
 int STANDARD_GUITAR_TUNING[6] =
                                     {0,5,10,15,19,24};

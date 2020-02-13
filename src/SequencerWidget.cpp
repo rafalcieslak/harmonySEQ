@@ -17,16 +17,16 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "SequencerWidget.h"
-#include "messages.h"
-#include "Event.h"
-#include "Configuration.h"
-#include "Files.h"
-#include "MidiDriver.h"
-#include "global.h"
-#include "NoteSequencer.h"
-#include "ControlSequencer.h"
-#include "ControllerAtom.h"
+#include "SequencerWidget.hpp"
+#include "messages.hpp"
+#include "Event.hpp"
+#include "Configuration.hpp"
+#include "Files.hpp"
+#include "MidiDriver.hpp"
+#include "global.hpp"
+#include "NoteSequencer.hpp"
+#include "ControlSequencer.hpp"
+#include "ControllerAtom.hpp"
 #include "SequencerManager.hpp"
 
 extern Glib::RefPtr< Gdk::Pixbuf > icon_slope_linear;

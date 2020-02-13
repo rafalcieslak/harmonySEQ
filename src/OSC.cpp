@@ -20,11 +20,11 @@
 
 #ifndef DISABLE_OSC
 
-#include "OSC.h"
-#include "Configuration.h"
-#include "messages.h"
-#include "MidiDriver.h"
-#include "Event.h"
+#include "OSC.hpp"
+#include "Configuration.hpp"
+#include "messages.hpp"
+#include "MidiDriver.hpp"
+#include "Event.hpp"
 extern MidiDriver* midi;
 extern error* err;
 

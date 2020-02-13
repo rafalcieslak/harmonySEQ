@@ -17,10 +17,10 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ChordWidget.h"
-#include "Chord.h"
-#include "TreeModels.h"
-#include "messages.h"
+#include "ChordWidget.hpp"
+#include "Chord.hpp"
+#include "TreeModels.hpp"
+#include "messages.hpp"
 
 
 ChordWidget::ChordWidget(){

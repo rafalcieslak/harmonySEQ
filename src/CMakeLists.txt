@@ -21,7 +21,7 @@ if(PROJECT_VERSION_PATCH STREQUAL "")
   SET(PROJECT_VERSION_PATCH 0)
 endif()
 
-configure_file(config.h.in config.h)
+configure_file(config.hpp.in config.hpp)
 
 if(NOT LIBLO_FOUND)
   message(STATUS "liblo not found, disabling OSC support.")

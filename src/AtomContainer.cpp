@@ -17,12 +17,12 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "AtomContainer.h"
+#include "AtomContainer.hpp"
 #include <algorithm>
 #include <vector>
 #include <set>
-#include "messages.h"
-#include "global.h"
+#include "messages.hpp"
+#include "global.hpp"
 
 AtomContainer::AtomContainer(){
 }

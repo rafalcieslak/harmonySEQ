@@ -21,8 +21,8 @@
 #ifndef EVENTSWIDGET_H
 #define	EVENTSWIDGET_H
 #include <gtkmm.h>
-#include "ActionGUI.h"
-#include "EventGUI.h"
+#include "ActionGUI.hpp"
+#include "EventGUI.hpp"
 
 /**List of all items. Used once in the MainWindow*/
 class EventsWidget : public Gtk::VBox{

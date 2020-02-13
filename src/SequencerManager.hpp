@@ -24,7 +24,7 @@
 #include <memory>
 #include <mutex>
 
-#include "global.h"
+#include "global.hpp"
 
 class Sequencer;
 

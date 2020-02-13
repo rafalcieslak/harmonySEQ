@@ -20,9 +20,9 @@
 
 #ifndef SEQUENCER_H
 #define	SEQUENCER_H
-#include "global.h"
+#include "global.hpp"
 #include <gtkmm.h>
-#include "AtomContainer.h"
+#include "AtomContainer.hpp"
 
 enum SeqType_t{
     SEQ_TYPE_NOTE,

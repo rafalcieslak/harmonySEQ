@@ -18,9 +18,9 @@
 */
 
 
-#include "global.h"
-#include "messages.h"
-#include "MainWindow.h"
+#include "global.hpp"
+#include "messages.hpp"
+#include "MainWindow.hpp"
 
 extern MainWindow* mainwindow;
 

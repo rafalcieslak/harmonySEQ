@@ -21,7 +21,7 @@
 #define	ATOMCONTAINER_H
 #include <set>
 #include <vector>
-#include "Atom.h"
+#include "Atom.hpp"
 
 class Sequencer;
 

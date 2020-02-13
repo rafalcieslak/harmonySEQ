@@ -16,9 +16,9 @@
     You should have received a copy of the GNU General Public License
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "MainWindow.h"
-#include "SettingsWindow.h"
-#include "Configuration.h"
+#include "MainWindow.hpp"
+#include "SettingsWindow.hpp"
+#include "Configuration.hpp"
 
 SettingsWindow::SettingsWindow(){
     hide();
