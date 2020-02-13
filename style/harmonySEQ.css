@@ -48,6 +48,25 @@ spinbutton button {
 	border-width: 0px;
 }
 
+/* Tighter pattern tabs */
+#sequencer-widget notebook arrow {
+    padding: 0px;
+    min-height: 0px;
+}
+
+#sequencer-widget notebook tab {
+    margin: 2px;
+    padding: 0px;
+    min-height: 10px;
+    min-width: 20px;
+}
+
+#sequencer-widget notebook tab label {
+    margin: 0px;
+    padding: 0px;
+}
+
+
 /* Fixed-width play-pause button. */
 /* Ideally we would ensire constant width with a GtkNotebook... seriously though?! */
 toolbutton#PlayPauseTool button {

@@ -34,6 +34,8 @@ extern Glib::RefPtr< Gdk::Pixbuf > icon_slope_flat;
 
 SequencerWidget::SequencerWidget()
 {
+    set_name("sequencer-widget");
+
     do_not_react_on_page_changes = 0;
     ignore_signals = 0;
 
