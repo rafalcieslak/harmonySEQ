@@ -35,73 +35,26 @@ std::vector<Sequencer *> seqVector;
 bs2::signal<void()> on_sequencer_list_changed;
 
 
-Gtk::TreeModel::Row spawn_sequencer(SeqType_t type){
-    switch(type){
-        case SEQ_TYPE_CONTROL:
-            return spawn_control_sequencer();
-            break;
-        case SEQ_TYPE_NOTE:
-        default:
-            return spawn_note_sequencer();
-            break;
-    }
-}
-
-
-Gtk::TreeModel::Row spawn_note_sequencer(){
-    int n = seqVector.size();
-
-    //init and push to vector
-    char temp[20];
-    seqHandle h = RequestNewSeqHandle(n);
-    sprintf(temp,_("seq %d"),h);
-    Sequencer *new_seq = new NoteSequencer(temp);
-    seqVector.push_back(new_seq);
-    new_seq->MyHandle = h;
-
-    //add to main window
-    return mainwindow->AddSequencerRow(n); // I don't think we can get rid of this mainwindow reference until we have a SequecerManager.
-}
-
-Gtk::TreeModel::Row spawn_control_sequencer(){
-    int n = seqVector.size();
-
-    //init and push to vector
-    char temp[20];
-    seqHandle h = RequestNewSeqHandle(n);
-    sprintf(temp,_("seq %d"),h);
-    Sequencer *new_seq = new ControlSequencer(temp);
-    seqVector.push_back(new_seq);
-    new_seq->MyHandle = h;
-
-    //add to main window
-    return mainwindow->AddSequencerRow(n); // I don't think we can get rid of this mainwindow reference until we have a SequecerManager.
-}
-
-Gtk::TreeModel::Row clone_sequencer(int orig){
-    int n = seqVector.size();
-
-    Sequencer *new_seq = seqVector[orig]->Clone();
-    new_seq->SetOn(0);
-    seqHandle h = RequestNewSeqHandle(n);
-    new_seq->MyHandle = h;
-    seqVector.push_back(new_seq);
-    return mainwindow->AddSequencerRow(n); // I don't think we can get rid of this mainwindow reference until we have a SequecerManager.
-
-}
-
 void ClearSequencers(){
     for(unsigned int x = 0; x < seqVector.size(); x++) delete seqVector[x];
 
     seqVector.clear();
 
 }
+
 //======begin sequencer class===============
+
+int Sequencer::id_counter = 1;
 
 Sequencer::Sequencer()
     : patterns(0)
 {
-    name = SEQUENCER_DEFAULT_NAME;
+    id = id_counter++;
+
+    char temp[20];
+    snprintf(temp, 20, _("seq %d"), id);
+    name = temp;
+
     resolution = SEQUENCE_DEFAULT_SIZE; //AddPattern() must know the resolution
     Init();
 }
@@ -109,12 +62,16 @@ Sequencer::Sequencer()
 Sequencer::Sequencer(Glib::ustring _name)
     : patterns(0)
 {
+    id = id_counter++;
+
     name = _name;
     resolution = SEQUENCE_DEFAULT_SIZE; //AddPattern() must know the resolution
     Init();
 }
 
 Sequencer::Sequencer(const Sequencer& orig) {
+    id = id_counter++;
+
     name = orig.name;
     on = orig.on;
     resolution = orig.resolution;

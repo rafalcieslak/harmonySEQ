@@ -30,14 +30,6 @@ enum SeqType_t{
     SEQ_TYPE_CONTROL
 };
 
-/**Spawns a new sequencer of given type.*/
-Gtk::TreeModel::Row spawn_sequencer(SeqType_t type);
-/**Spawns a new note sequencer*/
-Gtk::TreeModel::Row spawn_note_sequencer();
-/**Spawns a new control sequencer*/
-Gtk::TreeModel::Row spawn_control_sequencer();
-/**Spawns a new sequencer, identical to the one specified as arg*/
-Gtk::TreeModel::Row clone_sequencer(int orig);
 /**Clears the list of sequencers, removing every sequencer*/
 void ClearSequencers();
 
@@ -145,6 +137,10 @@ public:
     bs2::signal<void()> on_parameter_change;
 
 protected:
+    // Temporary replacement for sequencer handles.
+    static int id_counter;
+    int id;
+
     /**Stores the resolution of sequence. */
     int resolution;
 

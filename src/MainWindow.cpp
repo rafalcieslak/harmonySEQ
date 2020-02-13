@@ -491,24 +491,41 @@ MainWindow::OnNameEdited(const Glib::ustring& path, const Glib::ustring& newtext
     Gtk::TreeModel::Row row = *iter;
     seqHandle h = row[m_columns_sequencers.col_handle];
     seqH(h)->SetName(newtext);
-   if(seqH(h)->my_row) RefreshRow(seqH(h)->my_row);
 
     if(seqWidget.selectedSeq == h) seqWidget.UpdateName();
 
     on_sequencer_list_changed();
 
+    RefreshRow(row);
+
     Files::SetFileModified(1);
 }
 
-Gtk::TreeModel::Row MainWindow::AddSequencerRow(int x)
+void MainWindow::AddSequencer(Sequencer* seq)
+{
+
+    seqHandle h = RequestNewSeqHandle(seqVector.size());
+    printf("Setting handle to %d\n", h);
+    seq->MyHandle = h;
+
+    seqVector.push_back(seq);
+    on_sequencer_list_changed();
+
+    Gtk::TreeModel::Row row = AddSequencerRow(seq);
+
+    RefreshRow(row);
+    wTreeView.get_selection()->select(row);
+
+    Files::SetFileModified(1);
+}
+
+Gtk::TreeModel::Row MainWindow::AddSequencerRow(Sequencer* seq)
 {
     Gtk::TreeModel::iterator iter = TreeModel_sequencers->append();
     Gtk::TreeModel::Row row = *(iter);
-    Sequencer* seq = seqV(x);
 
     row[m_columns_sequencers.col_handle] = seq->MyHandle;
 
-    RefreshRow(row);
 
     // We store these connections it the row so that we can disconnect
     // slots when the row is removed.
@@ -540,8 +557,6 @@ Gtk::TreeModel::Row MainWindow::AddSequencerRow(int x)
     return row;
 }
 
-
-
 void MainWindow::InitTreeData(){
     // Disconnect all signal handlers registered for all rows.
     for (auto iter = TreeModel_sequencers->children().begin();
@@ -553,11 +568,9 @@ void MainWindow::InitTreeData(){
 
     TreeModel_sequencers->clear();
 
-    Gtk::TreeModel::Row row;
     for (unsigned int x = 0; x < seqVector.size(); x++) {
         if (!seqV(x)) continue; //seems it was removed
-
-        AddSequencerRow(x);
+        AddSequencerRow(seqVector[x]);
     }
 
 }
@@ -633,37 +646,27 @@ void MainWindow::OnRemoveClicked(){
 }
 
 void MainWindow::OnAddNoteSeqClicked(){
-
     seq_list_drag_in_progress = 0; //important
-    Gtk::TreeModel::Row row = spawn_sequencer(SEQ_TYPE_NOTE);
 
-    on_sequencer_list_changed();
-    Files::SetFileModified(1);
-
-    wTreeView.get_selection()->select(row);
+    Sequencer *new_seq = new NoteSequencer();
+    AddSequencer(new_seq);
 }
 
 void MainWindow::OnAddControlSeqClicked(){
-
     seq_list_drag_in_progress = 0; //important
-    Gtk::TreeModel::Row row = spawn_sequencer(SEQ_TYPE_CONTROL);
 
-    on_sequencer_list_changed();
-    Files::SetFileModified(1);
-
-    wTreeView.get_selection()->select(row);
+    Sequencer *new_seq = new ControlSequencer();
+    AddSequencer(new_seq);
 }
 
 void MainWindow::OnCloneClicked(){
     Gtk::TreeModel::iterator iter = *(wTreeView.get_selection())->get_selected();
     if(!iter) return;
     Gtk::TreeModel::Row row = *iter;
-    int id = HandleToID(row[m_columns_sequencers.col_handle]);
 
-    row = clone_sequencer(id);
-    wTreeView.get_selection()->select(row);
-
-    Files::SetFileModified(1);
+    Sequencer *new_seq = seqH(row[m_columns_sequencers.col_handle])->Clone();
+    new_seq->SetOn(0);
+    AddSequencer(new_seq);
 }
 
 void MainWindow::FlashTempo(){

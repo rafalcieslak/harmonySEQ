@@ -45,8 +45,6 @@ public:
     void RefreshRow(Gtk::TreeRowReference it);
     void RefreshRow(Gtk::TreeRow row);
 
-    /**Adds a single row, when a new sequencer is spawned (and return a Row, so that the sequencer will know where is it's row)*/
-    Gtk::TreeModel::Row AddSequencerRow(int n);
 
 
     /** Called on every beat, animates tempo spinbutton */
@@ -75,6 +73,10 @@ public:
     bs2::signal<void()> on_quit_request;
 
 private:
+    /**Adds a single row, when a new sequencer is spawned.*/
+    Gtk::TreeModel::Row AddSequencerRow(Sequencer* seq);
+    void AddSequencer(Sequencer* seq);
+
      /**Reacts on sequencer settings changes from main window*/
     void OnMutedToggleToggled(const Glib::ustring& path);
     void OnNameEdited(const Glib::ustring& path,const Glib::ustring& newtext);
