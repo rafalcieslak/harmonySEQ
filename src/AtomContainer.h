@@ -27,9 +27,8 @@ class Sequencer;
 
 class AtomContainer {
 public:
-    AtomContainer(Sequencer* parent);
-    AtomContainer(const AtomContainer& orig);
     AtomContainer();
+    AtomContainer(const AtomContainer& orig);
     virtual ~AtomContainer();
 
     /**Returns the number of atoms inside*/
@@ -44,16 +43,11 @@ public:
     void RemoveList(std::set<Atom*,AtomComparingClass>* V);
 
     /**Gets n-th atom*/
+    Atom* get(int n);
     Atom* operator[](int n);
 
     /**Removes all atoms from pattern.*/
     void Clear();
-
-    /**Tell the container who's its owner.*/
-    void SetOwner(Sequencer* owner);
-
-    /**The sequencer this container belongs to, if known.*/
-    Sequencer* owner;
 
     /**Finds if there is and if is then where, note with given ID. Complexity linear.*/
     int FindID(int ID);

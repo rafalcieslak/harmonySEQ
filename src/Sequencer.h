@@ -47,10 +47,10 @@ public:
     /**List of  patterns.
      *    Each pattern is an AtomContainer, which basically
      *    is a list of notes */
-    std::vector<AtomContainer> patterns;
+    std::vector<std::shared_ptr<AtomContainer>> patterns;
 
     /**Appends a new pattern.*/
-    int AddPattern();
+    int AddPattern(std::shared_ptr<AtomContainer>);
     /**Removes selected pattern.*/
     bool RemovePattern(int x);
 
@@ -75,7 +75,7 @@ public:
     void SetActivePatternNumber(int a);
     int GetActivePatternNumber();
 
-    AtomContainer* GetActivePattern();
+    std::shared_ptr<AtomContainer> GetActivePattern();
 
     /**Sets the sequencer on/off*/
     void SetOn(bool m);

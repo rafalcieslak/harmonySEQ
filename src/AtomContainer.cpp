@@ -25,16 +25,10 @@
 #include "global.h"
 
 AtomContainer::AtomContainer(){
-    owner = NULL;
-}
-
-AtomContainer::AtomContainer(Sequencer* _owner){
-    owner = _owner;
 }
 
 //Needed by std::vector
 AtomContainer::AtomContainer(const AtomContainer& orig){
-    owner = orig.owner;
     for(int x = 0; x < (int)orig.AtmVec.size(); x++){
         Atom* atm = orig.AtmVec[x];
         Atom* newatm = atm->Clone();
@@ -44,10 +38,6 @@ AtomContainer::AtomContainer(const AtomContainer& orig){
 
 AtomContainer::~AtomContainer(){
     Clear();
-}
-
-void AtomContainer::SetOwner(Sequencer* _owner){
-    owner = _owner;
 }
 
 int AtomContainer::GetSize(){
@@ -112,17 +102,20 @@ Atom* AtomContainer::operator[](int n){
     return AtmVec[n];
 }
 
+Atom* AtomContainer::get(int n){
+    return AtmVec[n];
+}
+
 
 AtomContainer & AtomContainer::operator= (const AtomContainer & other){
     if(this != &other){
-        owner = other.owner;
         Clear();
         for(int x = 0; x < (int)other.AtmVec.size();x++){
             Atom* atm = other.AtmVec[x];
             Atom* newatm = atm->Clone();
             AtmVec.push_back(newatm);
         }
-        
+
     }
     return *this;
 }

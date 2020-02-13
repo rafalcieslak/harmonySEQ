@@ -507,7 +507,7 @@ void MidiDriver::UpdateQueue(){
             //example in case this repetition has already been played in 1/3.
             double local_tick = tick-seq->play_from_here_marker*TICKS_PER_BEAT*seq->GetLength();
             //Shortcut to the pattern we'll play.
-            AtomContainer* pattern = seq->GetActivePattern();
+            std::shared_ptr<AtomContainer> pattern = seq->GetActivePattern();
             //Number of notes in one sequence
             int size = pattern->GetSize();
             //The note and ctrlatom.

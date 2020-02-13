@@ -339,10 +339,10 @@ void SaveToFile(Glib::ustring filename){
                 //For each pattern in this sequencer...
                 for (int s = 0; s < (int)seq->patterns.size(); s++) {
                     sprintf(temp2, "pattern_%d", s);
-                    int notes = seq->patterns[s].GetSize();
+                    int notes = seq->patterns[s]->GetSize();
                     std::vector<double> S(notes * 4);
                     for (int r = 0; r < notes; r++) {
-                        NoteAtom* note = dynamic_cast<NoteAtom*>(seq->patterns[s][r]);
+                        NoteAtom* note = dynamic_cast<NoteAtom*>(seq->patterns[s]->get(r));
                         S[4*r] = note->time;
                         S[4*r+1] = (double)note->pitch;
                         S[4*r+2] = (double)note->velocity;
@@ -359,10 +359,10 @@ void SaveToFile(Glib::ustring filename){
                 //For each pattern in this sequencer...
                 for (int s = 0; s < (int) seq->patterns.size(); s++) {
                     sprintf(temp2, "pattern_%d", s);
-                    int notes = seq->patterns[s].GetSize();
+                    int notes = seq->patterns[s]->GetSize();
                     std::vector<double> S(notes * 3);
                     for (int r = 0; r < notes; r++) {
-                        ControllerAtom* ctrl = dynamic_cast<ControllerAtom*> (seq->patterns[s][r]);
+                        ControllerAtom* ctrl = dynamic_cast<ControllerAtom*> (seq->patterns[s]->get(r));
                         S[3 * r] = ctrl->time;
                         S[3 * r + 1] = (double) ctrl->value;
                         S[3 * r + 2] = (double) ctrl->slope_type;
@@ -480,7 +480,7 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
                     //For each pattern we load...
                     for (int s = 0; s < n; s++) {
                         //First add an empty pattern.
-                        seq->AddPattern();
+                        seq->AddPattern(std::make_shared<AtomContainer>());
                         //Prepare the value name...
                         sprintf(temp2, "pattern_%d", s);
                         //And get the pattern from file
@@ -494,7 +494,7 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
                             note->pitch = pattern[w + 1];
                             note->velocity = pattern[w + 2];
                             note->length = pattern[w + 3];
-                            seq->patterns[s].Add(note);
+                            seq->patterns[s]->Add(note);
                         }
 
                     }//next pattern
@@ -514,7 +514,7 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
                 //For each pattern we load...
                 for (int s = 0; s < n; s++) {
                     //First add an empty pattern.
-                    seq->AddPattern();
+                    seq->AddPattern(std::make_shared<AtomContainer>());
                     //Prepare the value name...
                     sprintf(temp2, "pattern_%d", s);
                     //And get the pattern from file
@@ -531,7 +531,7 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
                             ctrl->value = pattern[w+1];
                             if(pattern[w+2] == SLOPE_TYPE_FLAT) ctrl->slope_type = SLOPE_TYPE_FLAT;
                             else if(pattern[w+2] == SLOPE_TYPE_LINEAR) ctrl->slope_type = SLOPE_TYPE_LINEAR;
-                            seq->patterns[s].Add(ctrl);
+                            seq->patterns[s]->Add(ctrl);
                     }
 
                 }//next pattern
@@ -543,7 +543,7 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
             //Just to make sure, check if the sequencer we've just loaded from file has any patterns...
             if (seqVector[x]->patterns.size() == 0)
                 //wtf, there were no sequences in the file? strange. We have to create one in order to prevent crashes. What would be a sequencer with no patterns? At least that's something we better aviod.
-                seqVector[x]->AddPattern();
+                seqVector[x]->AddPattern(std::make_shared<AtomContainer>());
 
             //Now proceed to the...
         } //...next sequencer.

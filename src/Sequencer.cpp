@@ -52,7 +52,7 @@ Sequencer::Sequencer()
     snprintf(temp, 20, _("seq %d"), id);
     name = temp;
 
-    resolution = SEQUENCE_DEFAULT_SIZE; //AddPattern() must know the resolution
+    resolution = SEQUENCE_DEFAULT_SIZE;
     Init();
 }
 
@@ -62,7 +62,7 @@ Sequencer::Sequencer(Glib::ustring _name)
     id = id_counter++;
 
     name = _name;
-    resolution = SEQUENCE_DEFAULT_SIZE; //AddPattern() must know the resolution
+    resolution = SEQUENCE_DEFAULT_SIZE;
     Init();
 }
 
@@ -79,17 +79,10 @@ Sequencer::Sequencer(const Sequencer& orig) {
     length_denominator = orig.length_denominator;
     play_from_here_marker = orig.play_from_here_marker;
     play_once_phase = 0;
-    //resetting pattern's owner:
-    for(unsigned int x = 0; x < patterns.size();x++) patterns[x].SetOwner(this);
 }
 
 Sequencer::~Sequencer() {
     printf("Destruncting sequencer id %d\n", id);
-
-    for(unsigned int x = 0; x < patterns.size(); x++){
-        *dbg << "Clearing the owner attribute of pattern " << x << "\n";
-        patterns[x].owner = NULL; //Hello kids, daddy's dead!
-    }
 }
 
 void Sequencer::Init(){
@@ -105,7 +98,7 @@ void Sequencer::Init(){
     play_once_phase = 0;
     resolution = SEQUENCE_DEFAULT_SIZE;
 
-    AddPattern();
+    AddPattern(std::make_shared<AtomContainer>());
 }
 
 void Sequencer::SetResolution(int res){
@@ -147,8 +140,8 @@ int Sequencer::GetActivePatternNumber(){
     return active_pattern;
 }
 
-AtomContainer* Sequencer::GetActivePattern(){
-    return &patterns[active_pattern];
+std::shared_ptr<AtomContainer> Sequencer::GetActivePattern(){
+    return patterns[active_pattern];
 }
 
 void Sequencer::SetOn(bool m){
@@ -196,26 +189,21 @@ int Sequencer::GetPlayOncePhase(){
     return play_once_phase;
 }
 
-
-
-int Sequencer::AddPattern(){
-    AtomContainer atomcont(this);
-    patterns.push_back(atomcont);
-    *dbg<< "Added pattern " << patterns.size() << ".\n";
+int Sequencer::AddPattern(std::shared_ptr<AtomContainer> pattern){
+    patterns.push_back(pattern);
     return patterns.size()-1;
 }
 
 bool Sequencer::RemovePattern(int x){
-    patterns.erase(patterns.begin()+x);
+    patterns.erase(patterns.begin() + x);
     if (active_pattern > x) active_pattern--;
     else if (active_pattern == x) active_pattern = 0;
-
     *dbg<< "Removed pattern " << x << ".\n";
     return 0;
 }
 
 void Sequencer::ClearPattern(int p){
     if (p >= (int)patterns.size()) return;
-    patterns[p].Clear();
+    patterns[p]->Clear();
 
 }

@@ -521,7 +521,7 @@ void SequencerWidget::UpdatePatternWidget(int pattern){
     //if called without parameter...:
     if (pattern == -1) pattern = wNotebook.get_current_page();
 
-    pattern_widget.AssignPattern(&(selectedSeq->patterns[pattern]), selectedSeq->GetType());
+    pattern_widget.AssignPattern(selectedSeq->patterns[pattern], selectedSeq);
     pattern_widget.SetInternalHeight(chordwidget.get_height());
 }
 
@@ -689,7 +689,7 @@ void SequencerWidget::OnAddPatternClicked(){
 
     char temp[100];
 
-    selectedSeq->AddPattern();
+    selectedSeq->AddPattern(std::make_shared<AtomContainer>());
 
     notebook_pages.push_back(new Gtk::Label);
     int x = notebook_pages.size() - 1;
@@ -712,19 +712,10 @@ void SequencerWidget::OnRemovePatternClicked(){
     delete notebook_pages[n];
     notebook_pages.erase(notebook_pages.begin()+n);
 
-    // TODO: This MUST be reimplemented using a Sequencer class method.
-    selectedSeq->patterns.erase(selectedSeq->patterns.begin()+n);
+    selectedSeq->RemovePattern(n);
 
     do_not_react_on_page_changes = 0;
-    // TODO: This logic should be moved to pattern manager.
-    if (selectedSeq->GetActivePatternNumber() == n ) {
-        selectedSeq->SetActivePatternNumber(0);
-        wActivePattern.set_value(0.0);
-    }
-    if (selectedSeq->GetActivePatternNumber() > n ) {
-        selectedSeq->SetActivePatternNumber(selectedSeq->GetActivePatternNumber()-1);
-        wActivePattern.set_value(selectedSeq->GetActivePatternNumber());
-    }
+
     InitNotebook();
     wNotebook.set_current_page(n);
     UpdateActivePatternRange();
@@ -740,10 +731,12 @@ void SequencerWidget::OnClearPatternClicked(){
 
 void SequencerWidget::OnClonePatternClicked(){
     if(!selectedSeq) return;
-    AtomContainer pattern = selectedSeq->patterns[wNotebook.get_current_page()];
-    int n = selectedSeq->AddPattern();
-    AtomContainer* newpattern = &selectedSeq->patterns[n];
-    *newpattern = pattern;
+
+    auto pattern = selectedSeq->patterns[wNotebook.get_current_page()];
+    auto newpattern = std::make_shared<AtomContainer>();
+    *newpattern = *pattern;
+    int n = selectedSeq->AddPattern(newpattern);
+
     InitNotebook();
     wNotebook.set_current_page(n);
     UpdateActivePatternRange();

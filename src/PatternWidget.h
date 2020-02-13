@@ -45,10 +45,9 @@ public:
     /**Redraws both grid and atoms*/
     bool RedrawEverything();
 
-    /**Assigns a pattern to draw.
-     * @parram cont Adress of an AtomContainer that has to be drawn in this Pattern Widget. Note that PatternWidget <b>WILL</b> write data to it, basing on user input!
-     * @parram type Sequencer type (note/control)*/
-    void AssignPattern(AtomContainer* cont, SeqType_t type);
+    /** Assigns a pattern to display. */
+    void AssignPattern(std::shared_ptr<AtomContainer> container,
+                       std::shared_ptr<Sequencer> owner);
 
     /**Resizes this PatternWidget to zoom-in*/
     void ZoomIn();
@@ -197,8 +196,9 @@ private:
     int internal_height;
     double horiz_size; //used to controll zooming
 
-    AtomContainer* container;
-    SeqType_t seq_type;
+    std::shared_ptr<AtomContainer> container;
+    std::shared_ptr<Sequencer> owner;
+    SeqType_t seq_type; // Cached helper value.
 
     void InitDrag();
     void ProcessDrag(double x, double y);

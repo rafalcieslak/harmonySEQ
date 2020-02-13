@@ -169,10 +169,12 @@ int PatternWidget::GetSelectionSize(){
 }
 
 
-void PatternWidget::AssignPattern(AtomContainer* cont, SeqType_t type){
-    *dbg << "assigning pattern \n";
+void PatternWidget::AssignPattern(
+    std::shared_ptr<AtomContainer> cont,
+    std::shared_ptr<Sequencer> o){
     container = cont;
-    seq_type = type;
+    owner = o;
+    seq_type = owner->GetType();
     RedrawGrid(); //ClearSelection will redraw atoms and everything anyway
     ClearSelection();
 }
@@ -332,7 +334,7 @@ void PatternWidget::MoveSelectionRight(){
         std::set<Atom *, AtomComparingClass> resulting_selection;
         for (; it != selection.end(); it++) {
             Atom* atm = (*it);
-            atm->time = (atm->time+1.0/(double)container->owner->GetResolution());
+            atm->time = (atm->time+1.0/(double)owner->GetResolution());
             if(atm->time >= 1.0) atm->time -= 1.0;
             if(atm->time < 0.0) atm->time += 1.0;
             resulting_selection.insert(atm);
@@ -348,7 +350,7 @@ void PatternWidget::MoveSelectionLeft(){
         std::set<Atom *, AtomComparingClass> resulting_selection;
         for (; it != selection.end(); it++) {
             Atom* atm = (*it);
-            atm->time = (atm->time-1.0/(double)container->owner->GetResolution());
+            atm->time = (atm->time-1.0/(double)owner->GetResolution());
             if(atm->time >= 1.0) atm->time -= 1.0;
             if(atm->time < 0.0) atm->time += 1.0;
             resulting_selection.insert(atm);
@@ -433,25 +435,25 @@ void PatternWidget::DecreaseSelectionValue(int amount){
 
 
 double PatternWidget::Snap(double t){
-    if (!container->owner) // if no owner...
+    if (!owner) // if no owner...
         return t; //do not snap, if we can't get the resolution.
 
-    t*= container->owner->GetResolution();
+    t*= owner->GetResolution();
     t += 0.5;
     if(t<0) t--;
     t = (int)t;
-    t /= container->owner->GetResolution();
+    t /= owner->GetResolution();
     return t;
 }
 
 double PatternWidget::SnapDown(double t){
-    if (!container->owner) // if no owner...
+    if (!owner) // if no owner...
         return t; //do not snap, if we can't get the resolution.
 
-    t*= container->owner->GetResolution();
+    t*= owner->GetResolution();
     if(t<0) t--;
     t = (int)t;
-    t /= container->owner->GetResolution();
+    t /= owner->GetResolution();
     return t;
 }
 
@@ -674,7 +676,7 @@ void PatternWidget::ProcessDrag(double x, double y){
 
         double note_min_len = 0.01;
         if (snap) { //if snap
-            note_min_len = (double) 1.0 / container->owner->GetResolution();
+            note_min_len = (double) 1.0 / owner->GetResolution();
         }
         double note_max_len = 1.0;
 
@@ -773,7 +775,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                         if (snap) {
                             temp_time = SnapDown(temp_time);
                         }
-                        double len = (double) 1.0 / container->owner->GetResolution();
+                        double len = (double) 1.0 / owner->GetResolution();
                         NoteAtom* note = new NoteAtom(temp_time, len, line);
                         if (event->state & (1 << 2)) note->velocity = 0; // If ctrl key was hold, add a quiet note
                         container->Add(note);
@@ -1256,7 +1258,7 @@ void PatternWidget::RedrawGrid(){
     cr_grid_context->save();
     cr_grid_context->scale(scale_factor, scale_factor);
 
-    int resolution = container->owner->GetResolution();
+    int resolution = owner->GetResolution();
 
     //clearing...
     cr_grid_context->save();
@@ -1583,12 +1585,11 @@ bool PatternWidget::on_draw(const Cairo::RefPtr<Cairo::Context>& ct){
 
     // Playback marker
     if(not midi->GetPaused() and
-       container->owner and
-       (container->owner->IsPlaying())){
-        Sequencer *seq = container->owner;
+       owner and
+       (owner->IsPlaying())){
         double t = GetRealTime();
-        double s = seq->playback_marker__start_pos, e = seq->playback_marker__end_pos;
-        double st = seq->playback_marker__start_time, et = seq->playback_marker__end_time;
+        double s = owner->playback_marker__start_pos, e = owner->playback_marker__end_pos;
+        double st = owner->playback_marker__start_time, et = owner->playback_marker__end_time;
         double delta = et - st, q = (t - st) / delta;
         double pos = s + (e - s) * q;
         // printf("delta = %f, q = %f, s = %f, e = %f, pos = %f\n", delta, q, s, e, pos);
