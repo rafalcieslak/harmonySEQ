@@ -111,9 +111,6 @@ public:
     double playback_marker__start_time = 0.0;
     double playback_marker__end_time = 0.0;
 
-    /**Keeps a reference to a row in Sequencers TreeModel*/
-    Gtk::TreeRow my_row;
-
     /* These signals can be emitted by any thread - it's up to the
      * receiver to relay work to the right thread. */
 

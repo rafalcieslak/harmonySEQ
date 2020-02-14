@@ -447,7 +447,7 @@ MainWindow::OnMutedToggleToggled(const Glib::ustring& path)
 
     if(seqWidget.selectedSeq == seq) seqWidget.UpdateOnOff();
 
-    if(seq->my_row) RefreshRow(seq->my_row);
+    RefreshRow(row);
 
     //Files::SetFileModified(1); do not detect mutes
 }
@@ -519,7 +519,6 @@ Gtk::TreeModel::Row MainWindow::AddSequencerRow(std::shared_ptr<Sequencer> seq)
     }
     row[m_columns_sequencers.col_connections_using_this_row] = connections;
 
-    seq->my_row = row;
     return row;
 }
 
