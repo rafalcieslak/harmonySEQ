@@ -29,7 +29,7 @@ extern debug *dbg;
 Sequencer::Sequencer()
     : patterns(0)
 {
-    printf("Constructing unnamed sequencee\n");
+    printf("Constructing unnamed sequencer\n");
     Init();
 }
 

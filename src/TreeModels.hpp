@@ -39,7 +39,6 @@ public:
         add(col_vol);
         add(col_chord);
         add(col_colour);
-        add(col_name_color);
         add(col_connections_using_this_row);
     }
     Gtk::TreeModelColumn<std::shared_ptr<Sequencer>> col_seq;
@@ -50,9 +49,8 @@ public:
     Gtk::TreeModelColumn<int> col_res;
     Gtk::TreeModelColumn<double> col_len;
     Gtk::TreeModelColumn<int> col_vol;
-    Gtk::TreeModelColumn<Glib::ustring> col_colour;
+    Gtk::TreeModelColumn<Gdk::RGBA> col_colour;
     Gtk::TreeModelColumn<Glib::ustring> col_chord;
-    Gtk::TreeModelColumn<Glib::ustring> col_name_color;
     Gtk::TreeModelColumn<std::vector<bs2::connection>> col_connections_using_this_row;
 };
 

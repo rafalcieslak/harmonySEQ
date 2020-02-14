@@ -17,6 +17,8 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef COLOR_HPP
+#define COLOR_HPP
 
 
 /* Gdk::RGBA color representation lacks any flexibility and Cairo
@@ -28,11 +30,11 @@
 
 struct Color {
     Color() {}
-    
+
     Color(double r_, double g_, double b_, double a_ = 1.0) {
         r = r_, g = g_, b = b_, a = a_;
     }
-    
+
     Color(const char *text){
         Gdk::RGBA c(text);
         r = c.get_red();
@@ -76,3 +78,5 @@ struct Color {
         return c;
     }
 };
+
+#endif // COLOR_HPP
