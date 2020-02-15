@@ -20,7 +20,11 @@
 #ifndef CONFIG_H
 #define	CONFIG_H
 
-#include "global.hpp"
+#include <boost/signals2.hpp>
+namespace bs2 = boost::signals2;
+
+#include <glibmm/ustring.h>
+
 
 namespace Config{
     namespace Metronome{

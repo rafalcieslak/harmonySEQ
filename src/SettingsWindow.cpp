@@ -16,9 +16,12 @@
     You should have received a copy of the GNU General Public License
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "MainWindow.hpp"
+
 #include "SettingsWindow.hpp"
+
 #include "Configuration.hpp"
+#include "shared.hpp"
+
 
 SettingsWindow::SettingsWindow(){
     hide();
@@ -241,7 +244,7 @@ void SettingsWindow::OnUse14BarToggled(){
 }
 
 void SettingsWindow::OnRestoreDefaults(){
-    if(Ask(_("Restoring default configuration"), _("Are you sure you want to loose all your settings?"))){
+    if(Ask(nullptr, _("Restoring default configuration"), _("Are you sure you want to loose all your settings?"))){
         Config::LoadDefaultConfiguration();
         LoadDataFromConfig();
         Config::SaveToFile();

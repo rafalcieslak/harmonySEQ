@@ -17,16 +17,18 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <thread>
-#include <atomic>
-#include <deque>
 
-#include <alsa/asoundlib.h>
 
 #ifndef MIDIDRIVER_H
 #define	MIDIDRIVER_H
-#include "global.hpp"
-#include "DiodeMidiEvent.hpp"
+
+#include <boost/signals2.hpp>
+namespace bs2 = boost::signals2;
+
+#include <alsa/asoundlib.h>
+
+class DiodeMidiEvent;
+
 
 class MidiDriver {
 public:

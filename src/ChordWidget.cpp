@@ -18,9 +18,11 @@
 */
 
 #include "ChordWidget.hpp"
+
 #include "Chord.hpp"
+#include "Sequencer.hpp"
 #include "TreeModels.hpp"
-#include "messages.hpp"
+#include "shared.hpp"
 
 
 ChordWidget::ChordWidget(){

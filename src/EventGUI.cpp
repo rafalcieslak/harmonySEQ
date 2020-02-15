@@ -16,12 +16,14 @@
     You should have received a copy of the GNU General Public License
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 #include "EventGUI.hpp"
-#include "Event.hpp"
-#include "messages.hpp"
-#include "TreeModels.hpp"
-#include "Files.hpp"
+
 #include "Configuration.hpp"
+#include "Event.hpp"
+#include "Files.hpp"
+#include "TreeModels.hpp"
+#include "shared.hpp"
 
 
 EventGUI::EventGUI(){

@@ -17,19 +17,28 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <fstream>
-#include <map>
 #include "Files.hpp"
-#include "messages.hpp"
-#include "Sequencer.hpp"
-#include "Event.hpp"
+
+#include <fstream>
+
+#include <gtkmm.h>
+
 #include "Action.hpp"
-#include "MidiDriver.hpp"
-#include "NoteSequencer.hpp"
+#include "AtomContainer.hpp"
 #include "ControlSequencer.hpp"
-#include "NoteAtom.hpp"
 #include "ControllerAtom.hpp"
+#include "Event.hpp"
+#include "MidiDriver.hpp"
+#include "NoteAtom.hpp"
+#include "NoteSequencer.hpp"
+#include "Sequencer.hpp"
 #include "SequencerManager.hpp"
+#include "config.hpp"
+#include "messages.hpp"
+#include "shared.hpp"
+
+extern MidiDriver* midi;
+
 
 namespace Files {
 
@@ -100,7 +109,7 @@ void LoadFileDialog(Gtk::Window* parent){
     bool was_paused = midi->GetPaused();
     if (!was_paused) midi->PauseImmediately();
 
-    LoadFile(filename);
+    LoadFile(filename, parent);
     SetFileModified(0);
 
     if (!was_paused) midi->Unpause();
@@ -146,15 +155,15 @@ void SaveFileDialog(Gtk::Window* parent){
     if (Files::fexists(filename.c_str())) {
         char temp[300];
         sprintf(temp, _("File '%s'  already exist."), filename.c_str());
-        if (!Ask(temp, _("Do you want to overwrite this file?")))
+        if (!Ask(parent, temp, _("Do you want to overwrite this file?")))
             return; //user choosed not to overwrite it.
     }
 
-    Files::SaveToFile(filename);
+    Files::SaveToFile(filename, parent);
 
 }
 
-bool LoadFile(Glib::ustring file){
+bool LoadFile(Glib::ustring file, Gtk::Window* parent_window){
 
 
     *dbg << "trying to open |" << file <<"|--\n";
@@ -169,7 +178,7 @@ bool LoadFile(Glib::ustring file){
             //Returned 1, so something strange is with the file.
             sprintf(temp, _("ERROR - error while trying to read file '%s'\n"), file.c_str());
             *err << temp;
-            Info(temp);
+            Info(parent_window, temp);
             return 1;
         }
     }catch(const Glib::Error& e){
@@ -178,7 +187,7 @@ bool LoadFile(Glib::ustring file){
         *err << temp;
         *err << e.what();
         *err << ENDL;
-        Info(temp,e.what());
+        Info(parent_window, temp,e.what());
         return 1;
     }
 
@@ -197,7 +206,7 @@ bool LoadFile(Glib::ustring file){
         if (VA > VERSION_A || (VA == VERSION_A && VB > VERSION_B) || (VA == VERSION_A && VB == VERSION_B && VC > VERSION_C)){
             //File is too new
             sprintf(temp,_("This file was created by harmonySEQ in a newer version (%d.%d.%d). This means it may contain data that is suppored by the newer wersion, but not by the version you are using (%d.%d.%d). It is recommended not to open such file, since it is very likely it may produce strange errors, or may event crash the program unexpectedly. However, in some cases one may want to open such file anyway, for example if it is sure it will open without trouble. Select YES to do so."),VA,VB,VC,VERSION_A,VERSION_B,VERSION_C);
-            if (Ask(_("Do you want to open this file?"),temp)){
+            if (Ask(parent_window, _("Do you want to open this file?"),temp)){
                 //anserwed YES;
                 //Lets try to open it with the lastest routine. So just skip...
             }else{
@@ -210,16 +219,16 @@ bool LoadFile(Glib::ustring file){
             sprintf(temp2,_("This file contains data in format, which is too old."));
             if(VA == 0 && VB < 15){
               // Unsupported.
-                Info(temp2,_("Sorry, but harmonySEQ cannot convert this file to current format.\nThis applies only to files from harmonySEQ older than 0.15.\n\nIf you really need to open this file, try downloading harmonySEQ 0.15, and using it to convert this file to 0.15 format, which will make it openable with this harmonySEQ version."));
+                Info(parent_window, temp2,_("Sorry, but harmonySEQ cannot convert this file to current format.\nThis applies only to files from harmonySEQ older than 0.15.\n\nIf you really need to open this file, try downloading harmonySEQ 0.15, and using it to convert this file to 0.15 format, which will make it openable with this harmonySEQ version."));
                 return 1;
             }
             if(VA == 0 && VB == 15){
-                Info(temp,_("harmonySEQ will convert this file from 0.15 to 0.16 format."));
+                Info(parent_window, temp,_("harmonySEQ will convert this file from 0.15 to 0.16 format."));
                 e_flag = ConvertFile_0_15_to_0_16(&kf);
                 VA = 0; VB = 16; VC = 0;
             }
             if(VA == 0 && VB == 16){
-                Info(temp,_("harmonySEQ will convert this file from 0.16 to 0.17 format."));
+                Info(parent_window, temp,_("harmonySEQ will convert this file from 0.16 to 0.17 format."));
                 e_flag = ConvertFile_0_16_to_0_17(&kf);
                 VA = 0; VB = 17; VC = 0;
             }
@@ -234,7 +243,7 @@ bool LoadFile(Glib::ustring file){
         if (e_flag) {
             sprintf(temp, _("ERROR - error while reading file '%s'\n"), file.c_str());
             *err << temp;
-            Info(temp);
+            Info(parent_window, temp);
             return 1;
         }
 
@@ -263,7 +272,7 @@ bool LoadFile(Glib::ustring file){
         *err << temp;
         *err << e.what();
         *err << ENDL;
-        Info(temp,e.what());
+        Info(parent_window, temp,e.what());
         return 1;
     }catch(const Glib::Error& e){
         //Some other strange file-related errors are cought here.
@@ -271,7 +280,7 @@ bool LoadFile(Glib::ustring file){
         *err << temp;
         *err << e.what();
         *err << ENDL;
-        Info(temp,e.what());
+        Info(parent_window, temp,e.what());
         return 1;
     }
     return 0;
@@ -279,7 +288,7 @@ bool LoadFile(Glib::ustring file){
 
 }
 
-void SaveToFile(Glib::ustring filename){
+void SaveToFile(Glib::ustring filename, Gtk::Window* parent_window){
 
     //This routine should always save using current format.
 
@@ -301,7 +310,7 @@ void SaveToFile(Glib::ustring filename){
         sprintf(temp,_("ERROR - error while opening file %s to write.\n"),filename.c_str());
         //Inform the user about the mistake both by STDIO and a nice graphical MessageBox.
         *err << temp;
-        Info(temp);
+        Info(parent_window, temp);
     }
 
     //The comment in the very first line of .hseq file.
@@ -315,7 +324,7 @@ void SaveToFile(Glib::ustring filename){
     kf.set_integer("harmonySEQ","versionC",VERSION_C);
     kf.set_double("System","tempo",midi->GetTempo());
 
-    auto seqs = SequencerManager::GetAll();
+    std::vector<std::shared_ptr<Sequencer>> seqs = SequencerManager::GetAll();
     kf.set_integer("System","sequencers_number", seqs.size());
     kf.set_integer("System","events_number", Events.size());
 

@@ -77,7 +77,7 @@ set_target_properties(
   LINK_FLAGS_RELEASE -s)
 
 
-# Aditional optional linging
+# # Aditional optional linting
 # find_program(iwyu_path NAMES include-what-you-use iwyu)
 # if(iwyu_path)
 #   set_target_properties(harmonySEQ PROPERTIES

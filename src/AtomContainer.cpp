@@ -18,11 +18,8 @@
 */
 
 #include "AtomContainer.hpp"
+
 #include <algorithm>
-#include <vector>
-#include <set>
-#include "messages.hpp"
-#include "global.hpp"
 
 AtomContainer::AtomContainer(){
 }

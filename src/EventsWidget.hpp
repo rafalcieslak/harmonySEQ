@@ -20,9 +20,15 @@
 
 #ifndef EVENTSWIDGET_H
 #define	EVENTSWIDGET_H
+
 #include <gtkmm.h>
+
+#include <boost/signals2.hpp>
+namespace bs2 = boost::signals2;
+
 #include "ActionGUI.hpp"
 #include "EventGUI.hpp"
+
 
 /**List of all items. Used once in the MainWindow*/
 class EventsWidget : public Gtk::VBox{

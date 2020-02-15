@@ -19,15 +19,19 @@
 
 #ifndef PATTERNWIDGET_H
 #define	PATTERNWIDGET_H
+
+#include <memory>
+
 #include <gtkmm.h>
-#include <set>
-#include <list>
+
 #include "Color.hpp"
-#include "Sequencer.hpp"
 #include "ControllerAtom.hpp"
-#include "DiodeMidiEvent.hpp"
+#include "NoteAtom.hpp"
+#include "Sequencer.hpp"
 
 class AtomContainer;
+class DiodeMidiEvent;
+
 
 /**PatternWidget is basically a GUI for AtomContainer, that uses a DrawingArea to display a piano-roll interface.*/
 class PatternWidget : public Gtk::DrawingArea {

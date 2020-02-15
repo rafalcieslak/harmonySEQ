@@ -16,16 +16,18 @@
     You should have received a copy of the GNU General Public License
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 #include "ActionGUI.hpp"
+
 #include "Action.hpp"
+#include "Files.hpp"
+#include "NoteSequencer.hpp"
+#include "Sequencer.hpp"
+#include "SequencerManager.hpp"
 #include "TreeModels.hpp"
 #include "messages.hpp"
-#include "Files.hpp"
-#include "MidiDriver.hpp"
-#include "Sequencer.hpp"
-#include "Configuration.hpp"
-#include "global.hpp"
-#include "SequencerManager.hpp"
+#include "shared.hpp"
+
 
 ActionGUI::ActionGUI()
 {

@@ -19,8 +19,9 @@
 
 #ifndef SETTINGSWINDOW_H
 #define	SETTINGSWINDOW_H
-#include "global.hpp"
+
 #include <gtkmm.h>
+
 
 class SettingsWindow : public Gtk::Window {
 public:

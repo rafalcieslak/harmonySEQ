@@ -20,9 +20,15 @@
 
 #ifndef CHORD_H
 #define	CHORD_H
+
+#include <map>
 #include <vector>
+
+#include <boost/signals2.hpp>
+namespace bs2 = boost::signals2;
+
 #include <glibmm/ustring.h>
-#include "global.hpp"
+
 
 class Chord {
 public:
@@ -134,6 +140,8 @@ private:
 
     int inversion;
 
+
+    static std::map<int,Glib::ustring> notemap;
 };
 
 #endif	/* CHORD_H */

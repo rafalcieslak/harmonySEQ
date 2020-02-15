@@ -20,12 +20,12 @@
 #ifndef ACTION_H
 #define	ACTION_H
 
-#include <gtkmm.h>
+#include <vector>
+#include <memory>
 
-#include "global.hpp"
 #include "Chord.hpp"
 
-class ActionGUI;
+class Sequencer;
 
 /**Number of arguments each action has*/
 #define ACTION_ARGS_NUM 20

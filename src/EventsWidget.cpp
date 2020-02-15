@@ -17,14 +17,16 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #include "EventsWidget.hpp"
-#include "Event.hpp"
+
 #include "Action.hpp"
-#include "global.hpp"
-#include "messages.hpp"
-#include "MainWindow.hpp"
+#include "Event.hpp"
 #include "Files.hpp"
+#include "messages.hpp"
+#include "shared.hpp"
+
+
+#define EVENTS_FLASH_TIMEOUT 80
 
 EventsWidget::EventsWidget(){
     set_size_request(200,-1);

@@ -25,8 +25,6 @@
    comparibility, so we implement our own wrapper that has some
    convenience functions. */
 
-#include <gdkmm/rgba.h>
-#include <cairomm/context.h>
 
 struct Color {
     Color() {}

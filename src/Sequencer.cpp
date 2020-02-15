@@ -17,14 +17,13 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "messages.hpp"
 #include "Sequencer.hpp"
-#include "AtomContainer.hpp"
-#include "NoteAtom.hpp"
-#include "NoteSequencer.hpp"
-#include "ControlSequencer.hpp"
-extern debug *dbg;
 
+#include "AtomContainer.hpp"
+#include "messages.hpp"
+
+
+#define SEQUENCE_DEFAULT_SIZE 16
 
 Sequencer::Sequencer()
     : patterns(0)

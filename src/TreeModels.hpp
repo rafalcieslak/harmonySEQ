@@ -19,11 +19,13 @@
 
 #ifndef TREEMODELS_H
 #define	TREEMODELS_H
-#include <vector>
-#include <memory>
-#include "global.hpp"
-#include "Sequencer.hpp"
+
+#include <boost/signals2.hpp>
+namespace bs2 = boost::signals2;
+
 #include <gtkmm.h>
+
+class Sequencer;
 
 class ModelColumns_SEQUENCERS : public Gtk::TreeModel::ColumnRecord {
 public:
@@ -113,7 +115,7 @@ public:
     Gtk::TreeModelColumn<int> id;
     Gtk::TreeModelColumn<Glib::ustring> name;
 };
-#ifndef I_DO_NOT_WANT_EXTERNS_FROM_TREE_MODELS
+
 extern ModelColumns_EventTypes m_columns_event_types;
 extern Glib::RefPtr<Gtk::ListStore> TreeModel_EventTypes;
 extern ModelColumns_ActionTypes m_columns_action_types;
@@ -130,7 +132,6 @@ extern ModelColumns_Universal_IDandNAME m_columns_IdAndName;
 extern Glib::RefPtr<Gtk::ListStore> TreeModel_TriadModes;
 extern Glib::RefPtr<Gtk::ListStore> TreeModel_ChordGuitarModes;
 extern Glib::RefPtr<Gtk::ListStore> TreeModel_ChordTypes;
-#endif
 
 /**Init - tree models*/
 void InitEventTypesTreeModel();

@@ -19,8 +19,11 @@
 
 #ifndef EVENTGUI_H
 #define	EVENTGUI_H
+
+#include <boost/signals2.hpp>
+namespace bs2 = boost::signals2;
+
 #include <gtkmm.h>
-#include "Event.hpp"
 
 class Event;
 

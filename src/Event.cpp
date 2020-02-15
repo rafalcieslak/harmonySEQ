@@ -18,9 +18,13 @@
 */
 
 #include "Event.hpp"
+
+#include <gtkmm.h>
+
 #include "Action.hpp"
-#include "Chord.hpp"
 #include "messages.hpp"
+#include "shared.hpp"
+
 
 // TODO: This data structure desperately needs a mutex.
 std::vector<Event *> Events;
@@ -142,7 +146,7 @@ void FindAndProcessEvents(Event::EventTypes ev,int arg1, int arg2){
 
 bool FindAndProcessEventsKeyPress(GdkEventKey* event){
     //*dbg << "triggered " << event->keyval << "\n";
-    std::map<int,Glib::ustring>::iterator iter;
+    std::map<int,std::string>::iterator iter;
     iter = keymap_itos.find(event->keyval);
     if(iter != keymap_itos.end()){
         *dbg << "Pressed key '" << iter->second << "'.\n";

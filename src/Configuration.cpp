@@ -17,12 +17,7 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <glibmm/keyfile.h>
-#include <fstream>
-
 #include "Configuration.hpp"
-#include "messages.hpp"
-#include "Files.hpp"
 
 #ifdef __linux__
 #include <pwd.h>
@@ -30,6 +25,15 @@
 #include <sys/stat.h>
 #include <errno.h>
 #endif
+
+#include <fstream>
+
+#include <glibmm/keyfile.h>
+
+#include "Files.hpp"
+#include "messages.hpp"
+#include "shared.hpp"
+
 
 bs2::signal<void()> Config::on_changed;
 
@@ -147,7 +151,7 @@ namespace Config{
             sprintf(temp, _("ERROR - error while trying to save config file %s.\n(errno = %d)"),path.c_str(),errno);
             //Inform the user about the errror both by STDIO and a nice graphical MessageBox.
             *err << temp;
-            Info(temp);
+            Info(nullptr, temp);
             return;
         }
 

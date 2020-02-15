@@ -17,60 +17,37 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <gtkmm.h>
+#include <string>
+#include <thread>
+
 #include <getopt.h>
-#include "main.hpp"
-#define I_DO_NOT_WANT_EXTERNS_FROM_GLOBAL_H
-#include "global.hpp"
-#undef I_DO_NOT_WANT_EXTERNS_FROM_GLOBAL_H
-#include "MidiDriver.hpp"
-#include "messages.hpp"
-#include "MainWindow.hpp"
-#include "Sequencer.hpp"
-#include "Event.hpp"
-#include "EventGUI.hpp"
-#include "Files.hpp"
-#include "TreeModels.hpp"
+
 #include "Configuration.hpp"
-#include "SettingsWindow.hpp"
+#include "Files.hpp"
+#include "MainWindow.hpp"
+#include "MidiDriver.hpp"
 #include "OSC.hpp"
-//global objects
-debug* dbg; //the stream-like objects responsible of putting messages into stdio
-error* err;     //see above
+#include "SettingsWindow.hpp"
+#include "TreeModels.hpp"
+#include "config.h"
+#include "messages.hpp"
+#include "resources.hpp"
+#include "shared.hpp"
+
+
+/* Key global objects */
 MidiDriver* midi;
 MainWindow* mainwindow;
 SettingsWindow* settingswindow;
-Glib::ustring file;
-std::map<Glib::ustring, int> keymap_stoi; //map used for keyname -> id conversion
-std::map<int, Glib::ustring> keymap_itos; //map used for id -> keyname conversion
-//map used for note_number -> note_name conversion
-std::map<int, Glib::ustring> notemap = {
-    {0, "C"},
-    {1, "C#"},
-    {2, "D"},
-    {3, "D#"},
-    {4, "E"},
-    {5, "F"},
-    {6, "F#"},
-    {7, "G"},
-    {8, "G#"},
-    {9, "A"},
-    {10, "A#"},
-    {11, "H"},
-};
 
-Glib::RefPtr< Gdk::Pixbuf > harmonySEQ_logo_48;
-Glib::RefPtr< Gdk::Pixbuf > metronome_icon_24;
-Glib::RefPtr< Gdk::Pixbuf > icon_add_note_seq;
-Glib::RefPtr< Gdk::Pixbuf > icon_add_ctrl_seq;
-Glib::RefPtr< Gdk::Pixbuf > icon_slope_linear;
-Glib::RefPtr< Gdk::Pixbuf > icon_slope_flat;
+/* TODO: Move this. */
+std::map<std::string, int> keymap_stoi; //map used for keyname -> id conversion
+std::map<int, std::string> keymap_itos; //map used for id -> keyname conversion
 
-int debugging = 0, help = 0, version = 0; //flags set by getopt, depending on command-line parameters
 
-void print_help(); //forward declaration of few functions
-
-//for getopt - defines which flag is related to which variable
+/* flags set by getopt, depending on command-line parameters */
+int debugging = 0, help = 0, version = 0;
+/* for getopt - defines which flag is related to which variable */
 static struct option long_options[]={
     {"debug",no_argument,&debugging,1},
     {"help",no_argument,&help,1},
@@ -109,8 +86,6 @@ void InitKeyMap()
 }
 
 void print_help(){
-    *dbg << "Hey, seems you wish to debug help message?" << "Nothing to debug, just a few printf's!";
-
     printf(_("harmonySEQ, version %s\n"
             "\n"
             "usage: harmonySEQ [-hdv] [FILE]\n"
@@ -150,14 +125,6 @@ std::string DetermineDataPath() {
   exit(1);
 }
 
-void LoadIcons(std::string data_path){
-    harmonySEQ_logo_48 = Gdk::Pixbuf::create_from_file(data_path + "pixmaps/48x48/apps/harmonyseq.png");
-    metronome_icon_24 = Gdk::Pixbuf::create_from_file(data_path + "pixmaps/24x24/metronome.png");
-    icon_add_ctrl_seq = Gdk::Pixbuf::create_from_file(data_path + "pixmaps/24x24/add_ctrl_seq.png");
-    icon_add_note_seq = Gdk::Pixbuf::create_from_file(data_path + "pixmaps/24x24/add_note_seq.png");
-    icon_slope_flat = Gdk::Pixbuf::create_from_file(data_path + "pixmaps/16x16/slope_flat.png");
-    icon_slope_linear = Gdk::Pixbuf::create_from_file(data_path + "pixmaps/16x16/slope_linear.png");
-}
 
 void EnableCSSProvider(std::string data_path) {
   auto css_provider = Gtk::CssProvider::create();
@@ -219,16 +186,29 @@ int main(int argc, char** argv) {
 
     }
 
-    //start the debugger class, enabling it only if debugging = 1.
+    //start the debug output class, enabling it only if debugging = 1.
     dbg = new debug(debugging);
+
     //print help, if required
-    if (help) {print_help();exit(0);}
-    //print version, if required
-    if (version) {printf(VERSION);printf("\n");exit(0);}
+    if (help) {
+        print_help();
+        exit(0);
+    }
+
+    //print version, if reuested
+    if (version) {
+        printf(VERSION);
+        printf("\n");
+        exit(0);
+    }
 
     //here file path from command line is obtained, if any
     bool file_from_cli = false;
-    if (argc>optind){ file = argv[optind];file_from_cli=1;}
+    std::string file;
+    if (argc>optind){
+        file = argv[optind];
+        file_from_cli=1;
+    }
 
     // Initialize GTK
     Gtk::Main gtk_main(argc, argv);
@@ -266,7 +246,7 @@ int main(int argc, char** argv) {
 
     //Trying to open file...
     if (file_from_cli)
-        Files::LoadFile(file);
+        Files::LoadFile(file, nullptr);
 
     // Quit GTK main loop when main window is closed.
     mainwindow->on_quit_request.connect([&](){gtk_main.quit();});

@@ -17,8 +17,9 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <algorithm>
+
 #include "SequencerManager.hpp"
+
 
 std::vector<std::shared_ptr<Sequencer>> SequencerManager::sequencers;
 std::mutex SequencerManager::sequencers_mtx;

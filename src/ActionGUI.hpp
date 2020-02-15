@@ -19,10 +19,15 @@
 
 #ifndef ACTIONGUI_H
 #define	ACTIONGUI_H
-#include "global.hpp"
+
 #include <gtkmm.h>
+
+#include "Chord.hpp"
 #include "ChordWidget.hpp"
+
 class Action;
+class Sequencer;
+
 
 class ActionGUI : public Gtk::Window {
 public:

@@ -18,12 +18,19 @@
 */
 #ifndef SEQUENCERWIDGET_H
 #define	SEQUENCERWIDGET_H
-#include <memory>
+
+#include <boost/signals2.hpp>
+namespace bs2 = boost::signals2;
+
 #include <gtkmm.h>
+
 #include "ChordWidget.hpp"
-#include "PatternWidget.hpp"
 #include "DiodeMidiEvent.hpp"
+#include "EventsWidget.hpp"
+#include "PatternWidget.hpp"
+
 class Sequencer;
+
 
 /**Displays given sequencer's properties, and allows to edit them.*/
 class SequencerWidget : public Gtk::VBox{

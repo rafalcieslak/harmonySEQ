@@ -18,12 +18,16 @@
 */
 
 #include "Action.hpp"
-#include "NoteSequencer.hpp"
-#include "messages.hpp"
-#include "MidiDriver.hpp"
+
+#include "ControlSequencer.hpp"
 #include "Files.hpp"
-#include "ActionGUI.hpp"
-#include "Event.hpp"
+#include "MidiDriver.hpp"
+#include "NoteSequencer.hpp"
+#include "Sequencer.hpp"
+#include "messages.hpp"
+
+extern MidiDriver* midi;
+
 
 Action::Action(ActionTypes t, int a1, int a2){
     args.resize(ACTION_ARGS_NUM);

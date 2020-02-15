@@ -20,8 +20,8 @@
 
 #ifndef DEBUG_H
 #define	DEBUG_H
+
 #include <glibmm/ustring.h>
-#include <cstdio>
 
 /* The entire concept of this mechanism is completely unnecessary.
  */
@@ -72,4 +72,11 @@ private:
     clock_t starttime;
     double time;
 };
+
+extern int debugging;
+extern debug* dbg;
+extern error* err;
+
+#define ENDL "\n"
+
 #endif	/* DEBUG_H */

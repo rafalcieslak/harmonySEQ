@@ -19,7 +19,7 @@
 
 #ifndef DIODEMIDIEVENT_H
 #define	DIODEMIDIEVENT_H
-#include <sys/time.h>
+
 #include <memory>
 
 class Sequencer;

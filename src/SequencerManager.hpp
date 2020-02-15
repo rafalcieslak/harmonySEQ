@@ -20,11 +20,13 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+
 #include <vector>
-#include <memory>
 #include <mutex>
 
-#include "global.hpp"
+#include <boost/signals2.hpp>
+namespace bs2 = boost::signals2;
+
 
 class Sequencer;
 

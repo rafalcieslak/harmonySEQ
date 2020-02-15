@@ -18,19 +18,15 @@
 */
 
 #include "SequencerWidget.hpp"
-#include "messages.hpp"
-#include "Event.hpp"
-#include "Configuration.hpp"
-#include "Files.hpp"
-#include "MidiDriver.hpp"
-#include "global.hpp"
-#include "NoteSequencer.hpp"
-#include "ControlSequencer.hpp"
-#include "ControllerAtom.hpp"
-#include "SequencerManager.hpp"
 
-extern Glib::RefPtr< Gdk::Pixbuf > icon_slope_linear;
-extern Glib::RefPtr< Gdk::Pixbuf > icon_slope_flat;
+#include "AtomContainer.hpp"
+#include "ControlSequencer.hpp"
+#include "Files.hpp"
+#include "NoteSequencer.hpp"
+#include "SequencerManager.hpp"
+#include "messages.hpp"
+#include "resources.hpp"
+
 
 SequencerWidget::SequencerWidget()
 {

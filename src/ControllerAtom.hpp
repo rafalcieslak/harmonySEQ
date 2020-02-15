@@ -22,6 +22,7 @@
 
 #include "Atom.hpp"
 
+
 enum SlopeType{
     SLOPE_TYPE_FLAT,
     SLOPE_TYPE_LINEAR,

@@ -23,7 +23,6 @@
 
 #ifndef DISABLE_OSC
 
-#include <lo/lo.h>
 
 /* TODO: Does this mechanism deserve a class? */
 

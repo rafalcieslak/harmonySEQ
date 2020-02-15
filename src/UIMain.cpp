@@ -17,13 +17,15 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <functional>
 #include <deque>
 #include <mutex>
-#include <glibmm/dispatcher.h>
-#include <gtkmm/main.h>
 #include <thread>
-#include <chrono>
+
+#include <gtkmm.h>
+
+#include "messages.hpp"
+#include "shared.hpp"
+
 
 enum DispatcherState{
     /* The receiver thread did not prepare the dispatcher yet. */
@@ -92,4 +94,32 @@ void UIMain(){
     dispatcher_state = DISPATCHER_STATE_CLOSED;
     delete dispatcher;
     dispatcher = nullptr;
+}
+
+
+/* Some generic UI util functions. Need to find a better place to implement them. */
+
+bool Ask(Gtk::Window* parent, std::string message, std::string secondary_message){
+    Gtk::MessageDialog dialog(message, false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO);
+    if(parent)
+        dialog.set_transient_for(*parent);
+    dialog.set_secondary_text(secondary_message);
+    int result = dialog.run();
+    switch (result){
+        case Gtk::RESPONSE_YES:
+            *dbg << "anserwed YES";
+            return 1;
+        case Gtk::RESPONSE_NO:
+            *dbg << "anserwed NO";
+            return 0;
+    }
+    return 0;
+}
+
+void Info(Gtk::Window* parent, std::string message, std::string secondary_message){
+    Gtk::MessageDialog dialog(message, false, Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK);
+    if(parent)
+        dialog.set_transient_for(*parent);
+    dialog.set_secondary_text(secondary_message);
+    dialog.run();
 }

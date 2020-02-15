@@ -17,9 +17,8 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <valarray>
-
 #include "NoteSequencer.hpp"
+
 
 NoteSequencer::NoteSequencer()
                                                 : Sequencer()

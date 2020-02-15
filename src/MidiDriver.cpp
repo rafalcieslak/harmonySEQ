@@ -17,18 +17,27 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <alsa/asoundlib.h>
-#include "global.hpp"
 #include "MidiDriver.hpp"
-#include "messages.hpp"
-#include "NoteSequencer.hpp"
-#include "ControlSequencer.hpp"
-#include "Event.hpp"
+
+#include "AtomContainer.hpp"
 #include "Configuration.hpp"
-#include "SettingsWindow.hpp"
-#include "SequencerWidget.hpp"
-#include "SequencerManager.hpp"
+#include "ControlSequencer.hpp"
+#include "ControllerAtom.hpp"
+#include "DiodeMidiEvent.hpp"
+#include "Event.hpp"
 #include "NoteAtom.hpp"
+#include "NoteSequencer.hpp"
+#include "Sequencer.hpp"
+#include "SequencerManager.hpp"
+#include "messages.hpp"
+#include "shared.hpp"
+
+
+//Internal resolution of ALSA sequencer.
+#define TICKS_PER_BEAT 192
+
+// This matches MIDI standard.
+#define MIDI_PPQ 24
 
 
 MidiDriver::MidiDriver() {
@@ -63,15 +72,15 @@ void MidiDriver::Run() {
     // Set running flag to true, but return if it was already set.
     if (running.exchange(true)) return;
     // Initialize queue...
-    midi->StartQueue();
+    StartQueue();
     // initial call, puts the first ECHO event, to make sure the loop will loop.
-    midi->UpdateQueue();
+    UpdateQueue();
     // go into infinite loop (while running = 1)
-    midi->LoopWhileWaitingForInput();
+    LoopWhileWaitingForInput();
     // Clean up after we are done.
-    midi->ClearQueue();
-    midi->AllNotesOff();
-    midi->DeleteQueue();
+    ClearQueue();
+    AllNotesOff();
+    DeleteQueue();
 }
 
 void MidiDriver::Stop() {

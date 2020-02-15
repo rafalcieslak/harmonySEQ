@@ -1,5 +1,5 @@
-/*
-    Copyright (C) 2011, 2020 Rafał Cieślak
+ /*
+    Copyright (C) 2020 Rafał Cieślak
 
     This file is part of harmonySEQ.
 
@@ -17,28 +17,20 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "NoteAtom.hpp"
+#ifndef RESOURCES_HPP
+#define RESOURCES_HPP
 
-NoteAtom::NoteAtom(double _time, double _length, int _pitch)
-                                        :  Atom(_time)
-{
-    length = _length;
-    pitch = _pitch;
-    velocity = 100;
-}
-
-NoteAtom::NoteAtom(const NoteAtom& orig)
-                                        :Atom(orig.time){
-    length = orig.length;
-    pitch = orig.pitch;
-    velocity = orig.velocity;
-}
-
-NoteAtom* NoteAtom::Clone(){
-    return new NoteAtom(*this);
-
-}
+#include <glibmm/ustring.h>
+#include <gdkmm/pixbuf.h>
 
 
-NoteAtom::~NoteAtom(){
-}
+void LoadIcons(std::string data_path);
+
+extern Glib::RefPtr< Gdk::Pixbuf > harmonySEQ_logo_48;
+extern Glib::RefPtr< Gdk::Pixbuf > metronome_icon_24;
+extern Glib::RefPtr< Gdk::Pixbuf > icon_add_note_seq;
+extern Glib::RefPtr< Gdk::Pixbuf > icon_add_ctrl_seq;
+extern Glib::RefPtr< Gdk::Pixbuf > icon_slope_linear;
+extern Glib::RefPtr< Gdk::Pixbuf > icon_slope_flat;
+
+#endif // RESOURCES_HPP

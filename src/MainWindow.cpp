@@ -18,19 +18,27 @@
 */
 
 #include "MainWindow.hpp"
-#include "messages.hpp"
-#include "global.hpp"
-#include "MidiDriver.hpp"
-#include "NoteSequencer.hpp"
-#include "Files.hpp"
-#include "Event.hpp"
-#include "TreeModels.hpp"
-#include "SettingsWindow.hpp"
+
 #include "Configuration.hpp"
 #include "ControlSequencer.hpp"
+#include "Event.hpp"
+#include "Files.hpp"
+#include "MidiDriver.hpp"
+#include "NoteSequencer.hpp"
 #include "SequencerManager.hpp"
-#include "main.hpp"
-#include "Color.hpp"
+#include "SettingsWindow.hpp"
+#include "TreeModels.hpp"
+#include "config.hpp"
+#include "messages.hpp"
+#include "resources.hpp"
+#include "shared.hpp"
+
+
+extern MidiDriver* midi;
+extern SettingsWindow* settingswindow;
+
+// Time (ms) how long does the tempo button blink on beat.
+#define FLASH_INTERVAL 25
 
 #define TREEVIEW_COLOR_ON Color(0.0, 1.0, 0.0, 0.5)
 #define TREEVIEW_COLOR_OFF Color(0.0, 0.0, 0.0, 0.0)
@@ -39,6 +47,7 @@
 
 bool CtrlKeyDown;
 bool ShiftKeyDown;
+
 
 Gtk::TreeModel::iterator row_inserted_by_drag;
 bool seq_list_drag_in_progress;
@@ -400,7 +409,7 @@ MainWindow::on_delete_event(GdkEventAny* event)
 {
     *dbg << "user clicked X\n";
     if(Files::file_modified)
-        if(!Ask(_("The file has unsaved changes."),_("Are sure you want to quit?")))
+        if(!Ask(this, _("The file has unsaved changes."),_("Are sure you want to quit?")))
           return 1;
 
     on_quit_request();
@@ -655,7 +664,7 @@ void MainWindow::UpdatePassMidiToggle(){
 
 bool MainWindow::OnKeyPress(GdkEventKey* event){
     //*dbg << "triggered " << event->keyval << "\n";
-    std::map<int,Glib::ustring>::iterator iter;
+    std::map<int,std::string>::iterator iter;
     iter = keymap_itos.find(event->keyval);
     if(iter != keymap_itos.end()){
         *dbg << "Pressed key '" << iter->second << "'.\n";
@@ -766,7 +775,7 @@ void MainWindow::OnAboutMenuClicked(){
 
 void MainWindow::OnMenuQuitClicked(){
     if(Files::file_modified)
-        if(!Ask(_("The file has unsaved changes."),_("Are sure you want to quit?")))
+        if(!Ask(this, _("The file has unsaved changes."),_("Are sure you want to quit?")))
             return;
 
     on_quit_request();
@@ -775,7 +784,7 @@ void MainWindow::OnMenuQuitClicked(){
 void MainWindow::OnMenuNewClicked(){
 
     if (Files::file_modified)
-        if (!Ask(_("The file has unsaved changes."), _("Are sure you want to loose them?"))) {
+        if (!Ask(this, _("The file has unsaved changes."), _("Are sure you want to loose them?"))) {
             return;
         }
 
@@ -796,7 +805,7 @@ void MainWindow::OnMenuNewClicked(){
 
 void MainWindow::OnMenuOpenClicked(){
     if(Files::file_modified)
-        if(!Ask(_("The file has unsaved changes."),_("Are sure you want to loose them and open another file?")))
+        if(!Ask(this, _("The file has unsaved changes."),_("Are sure you want to loose them and open another file?")))
         {
             return;
         }
@@ -808,7 +817,7 @@ void MainWindow::OnMenuSaveClicked(){
         OnMenuSaveAsClicked();
         return;
     }
-    Files::SaveToFile(Files::file_dir + Files::file_name);
+    Files::SaveToFile(Files::file_dir + Files::file_name, this);
 }
 
 void MainWindow::OnMenuSaveAsClicked(){

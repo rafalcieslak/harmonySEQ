@@ -22,6 +22,7 @@
 
 #include "Atom.hpp"
 
+
 class NoteAtom : public Atom {
 public:
     NoteAtom(double _time = 0, double _length = 0.125, int _pitch = 0);

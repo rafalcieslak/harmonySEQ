@@ -19,9 +19,25 @@
 
 
 #include "Chord.hpp"
-#include "global.hpp"
+
 #include "messages.hpp"
-extern debug *dbg;
+#include "shared.hpp"
+
+std::map<int,Glib::ustring> Chord::notemap = {
+    {0, "C"},
+    {1, "C#"},
+    {2, "D"},
+    {3, "D#"},
+    {4, "E"},
+    {5, "F"},
+    {6, "F#"},
+    {7, "G"},
+    {8, "G#"},
+    {9, "A"},
+    {10, "A#"},
+    {11, "H"},
+};
+
 int STANDARD_GUITAR_TUNING[6] =
                                     {0,5,10,15,19,24};
 

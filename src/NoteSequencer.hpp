@@ -19,9 +19,15 @@
 
 #ifndef NOTESEQUENCER_H
 #define	NOTESEQUENCER_H
-#include "Sequencer.hpp"
-#include "Chord.hpp"
+
 #include <glibmm/ustring.h>
+
+#include <boost/signals2.hpp>
+namespace bs2 = boost::signals2;
+
+#include "Chord.hpp"
+#include "Sequencer.hpp"
+
 
 /**A class representing a MIDI note sequencer.*/
 class NoteSequencer : public Sequencer {

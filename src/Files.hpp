@@ -21,10 +21,14 @@
 #ifndef FILES_H
 #define	FILES_H
 
+#include <glibmm/ustring.h>
 #include <glibmm/keyfile.h>
-#include <gtkmm/window.h>
 
-#include "global.hpp"
+#include <boost/signals2.hpp>
+namespace bs2 = boost::signals2;
+
+
+namespace Gtk {class Window;}
 
 
 namespace Files{
@@ -41,14 +45,14 @@ namespace Files{
     bool SetFileModified(bool modified);
     void FileModified();
     /**Saves a file. Does not show any dialog, does not check for overwriting. Just saves.*/
-    void SaveToFile(Glib::ustring filename);
+    void SaveToFile(Glib::ustring filename, Gtk::Window* parent);
     /**Shows a file load dialog*/
     void LoadFileDialog(Gtk::Window* parent);
     /**Shows a file save dialog*/
     void SaveFileDialog(Gtk::Window* parent);
     /**Loads a file, but without showing the dialog (so the filename must be passed as an argument).
         * Also, it converts it before opening, if it's an old file. */
-    bool LoadFile(Glib::ustring file);
+    bool LoadFile(Glib::ustring file, Gtk::Window* parent);
 
     /**Loads a file, assuming it's in current format*/
     bool LoadFileCurrent(Glib::KeyFile* kf);

@@ -16,11 +16,18 @@
     You should have received a copy of the GNU General Public License
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "Sequencer.hpp"
-#include <glibmm/ustring.h>
 
 #ifndef CONTROLSEQUENCER_H
 #define	CONTROLSEQUENCER_H
+
+#include <glibmm/ustring.h>
+
+#include <boost/signals2.hpp>
+namespace bs2 = boost::signals2;
+
+#include "Sequencer.hpp"
+#include "Chord.hpp"
+
 
 /**A control sequencer, outputting MIDI control events*/
 class ControlSequencer : public Sequencer{

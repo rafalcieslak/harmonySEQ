@@ -20,11 +20,15 @@
 #ifndef MAINWINDOW_H
 #define	MAINWINDOW_H
 
+#include <boost/signals2.hpp>
+namespace bs2 = boost::signals2;
+
 #include <gtkmm.h>
-#include <gtkmm/window.h>
-#include "global.hpp"
+
 #include "SequencerWidget.hpp"
-#include "EventsWidget.hpp"
+
+
+class Sequencer;
 
 class MainWindow: public Gtk::Window{
 

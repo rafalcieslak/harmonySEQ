@@ -17,12 +17,12 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define I_DO_NOT_WANT_EXTERNS_FROM_TREE_MODELS
 #include "TreeModels.hpp"
-#undef I_DO_NOT_WANT_EXTERNS_FROM_TREE_MODELS
-#include "Event.hpp"
+
 #include "Action.hpp"
-#include "messages.hpp"
+#include "Event.hpp"
+#include "shared.hpp"
+
 
 ModelColumns_SEQUENCERS m_columns_sequencers;
 Glib::RefPtr<Gtk::ListStore> TreeModel_sequencers;
@@ -100,7 +100,7 @@ void InitActionTypesTreeModel(){
 void InitKeyTypesTreeModel(){
     TreeModel_KeyCodes = Gtk::ListStore::create(m_columns_key_codes);
     Gtk::TreeModel::Row row;
-    std::map<int,Glib::ustring>::iterator iter = keymap_itos.begin();
+    std::map<int,std::string>::iterator iter = keymap_itos.begin();
     for (;iter != keymap_itos.end();iter++){
         row = *(TreeModel_KeyCodes->append());
         row[m_columns_key_codes.keycode] = iter->first;

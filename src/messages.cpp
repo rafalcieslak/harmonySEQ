@@ -17,15 +17,17 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <libintl.h>
-#include <locale.h>
 #include "messages.hpp"
-#include "global.hpp"
-#include <ctime>
+
+#include <cstdio>
+
+
+debug* dbg; // the stream-like objects responsible of putting messages into stdio
+error* err; // like above
 
 debug::debug(int debug) {
     if (debug != 0){
-        printf(_("Debug mode started.\n"));
+        printf("Debug mode enabled.\n");
         debug_mode = 1;
     }else{
         debug_mode = 0;

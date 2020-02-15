@@ -20,10 +20,14 @@
 #ifndef EVENT_H
 #define	EVENT_H
 
-#include <gtkmm.h>
+#include <vector>
+#include <string>
 
-#include "global.hpp"
+#include <boost/signals2.hpp>
+namespace bs2 = boost::signals2;
 
+struct _GdkEventKey;
+typedef struct _GdkEventKey GdkEventKey;
 class Action;
 class Event;
 

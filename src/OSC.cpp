@@ -21,12 +21,17 @@
 #ifndef DISABLE_OSC
 
 #include "OSC.hpp"
+
+#include <lo/lo.h>
+
 #include "Configuration.hpp"
-#include "messages.hpp"
-#include "MidiDriver.hpp"
 #include "Event.hpp"
+#include "MidiDriver.hpp"
+#include "messages.hpp"
+#include "shared.hpp"
+
+
 extern MidiDriver* midi;
-extern error* err;
 
 void error_handler(int num, const char *msg, const char *path){
     *err << "OSC error!\n";

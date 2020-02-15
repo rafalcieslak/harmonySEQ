@@ -19,9 +19,13 @@
 
 #ifndef CHORDWIDGET_H
 #define	CHORDWIDGET_H
+
 #include <gtkmm.h>
-#include "global.hpp"
-#include "Chord.hpp"
+
+#include <boost/signals2.hpp>
+namespace bs2 = boost::signals2;
+
+class Chord;
 
 
 class ChordWidget : public Gtk::Box {

@@ -17,11 +17,9 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <stdlib.h>
-
 #include "Atom.hpp"
+
 #include "messages.hpp"
-extern error *err;
 
 bool AtomComparison(Atom * a1, Atom * a2)
 {
@@ -60,11 +58,3 @@ Atom::Atom(const Atom&  orig){
 Atom::~Atom(){
 
 }
-
-
-/* NOTE: do not implement this, this is pure virtual
-Atom* Atom::Clone(){
-    *err << "Cloning atom as a base class. This should never happen! Please report this bug to harmonySEQ developers.\n";
-    return new Atom(*this);
-}
- */

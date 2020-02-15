@@ -20,9 +20,15 @@
 
 #ifndef SEQUENCER_H
 #define	SEQUENCER_H
-#include "global.hpp"
-#include <gtkmm.h>
-#include "AtomContainer.hpp"
+
+#include <boost/signals2.hpp>
+namespace bs2 = boost::signals2;
+
+#include <glibmm/ustring.h>
+
+#include "shared.hpp"
+
+class AtomContainer;
 
 enum SeqType_t{
     SEQ_TYPE_NOTE,

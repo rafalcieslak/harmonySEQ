@@ -16,22 +16,22 @@
     You should have received a copy of the GNU General Public License
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <cairo/cairo.h>
-#include <cairomm/context.h>
 
-#include "MidiDriver.hpp"
 #include "PatternWidget.hpp"
-#include "global.hpp"
-#include "messages.hpp"
+
+/* TODO: Replace gettimeofday with more portable GetRealTime which uses Glib. */
+#include <sys/time.h>
+
 #include "AtomContainer.hpp"
-#include "NoteAtom.hpp"
-#include "Sequencer.hpp"
-#include "Event.hpp"
-#include "ControllerAtom.hpp"
 #include "Configuration.hpp"
+#include "DiodeMidiEvent.hpp"
+#include "Event.hpp"
 #include "Files.hpp"
-#include "main.hpp"
-#include <sys/time.h> //for gettimeofday
+#include "MidiDriver.hpp"
+#include "messages.hpp"
+
+extern MidiDriver* midi;
+
 
 //depends on tempo. Fraction of tempo period.
 #define DIODE_FADEOUT_TIME 500
