@@ -46,14 +46,6 @@ namespace Config{
         int Hit2Velocity;
         bool Hit2;
     }
-
-    namespace VisibleColumns {
-        bool Channel;
-        bool Pattern;
-        bool Resolution;
-        bool Length;
-        bool ChordAndCtrlNo;
-    }
     namespace Interaction{
         bool PlayOnEdit;
         int PatternRefreshMS;
@@ -71,11 +63,6 @@ namespace Config{
         Metronome::Hit1Velocity = 100;
         Metronome::Hit2Velocity = 60;
         Metronome::Hit2 = true;
-        VisibleColumns::Channel = 1;
-        VisibleColumns::Pattern = 1;
-        VisibleColumns::Resolution = 1;
-        VisibleColumns::Length = 1;
-        VisibleColumns::ChordAndCtrlNo = 1;
         Interaction::PlayOnEdit = 1;
         Interaction::PatternRefreshMS = 60;
         Interaction::DisableDiodes = 0;
@@ -112,13 +99,6 @@ namespace Config{
            if(kf.has_key(KF_GROUP_METRONOME,KF_METRONOME_KEY_H1_VELOCITY)) Metronome::Hit1Velocity = kf.get_integer(KF_GROUP_METRONOME,KF_METRONOME_KEY_H1_VELOCITY);
            if(kf.has_key(KF_GROUP_METRONOME,KF_METRONOME_KEY_H2_VELOCITY)) Metronome::Hit2Velocity = kf.get_integer(KF_GROUP_METRONOME,KF_METRONOME_KEY_H2_VELOCITY);
            if(kf.has_key(KF_GROUP_METRONOME,KF_METRONOME_KEY_H2)) Metronome::Hit2 = kf.get_boolean(KF_GROUP_METRONOME,KF_METRONOME_KEY_H2);
-        }
-        if(kf.has_group("Visible columns")){
-            if(kf.has_key("Visible columns","Channel")) VisibleColumns::Channel = kf.get_boolean("Visible columns","Channel");
-            if(kf.has_key("Visible columns","Pattern")) VisibleColumns::Pattern = kf.get_boolean("Visible columns","Pattern");
-            if(kf.has_key("Visible columns","Resolution")) VisibleColumns::Resolution = kf.get_boolean("Visible columns","Resolution");
-            if(kf.has_key("Visible columns","Length")) VisibleColumns::Length = kf.get_boolean("Visible columns","Length");
-            if(kf.has_key("Visible columns","Chord")) VisibleColumns::ChordAndCtrlNo = kf.get_boolean("Visible columns","Chord");
         }
         if(kf.has_group("Interaction")){
             if(kf.has_key("Interaction","PlayOnEdit")) Interaction::PlayOnEdit = kf.get_boolean("Interaction","PlayOnEdit");
@@ -161,11 +141,6 @@ namespace Config{
         kf.set_integer(KF_GROUP_METRONOME,KF_METRONOME_KEY_H1_VELOCITY,Metronome::Hit1Velocity);
         kf.set_integer(KF_GROUP_METRONOME,KF_METRONOME_KEY_H2_VELOCITY,Metronome::Hit2Velocity);
         kf.set_boolean(KF_GROUP_METRONOME,KF_METRONOME_KEY_H2,Metronome::Hit2);
-        kf.set_boolean("Visible columns","Channel",VisibleColumns::Channel);
-        kf.set_boolean("Visible columns","Pattern",VisibleColumns::Pattern);
-        kf.set_boolean("Visible columns","Resolution",VisibleColumns::Resolution);
-        kf.set_boolean("Visible columns","Length",VisibleColumns::Length);
-        kf.set_boolean("Visible columns","Chord",VisibleColumns::ChordAndCtrlNo);
         kf.set_boolean("Interaction","PlayOnEdit",Interaction::PlayOnEdit);
         kf.set_integer("Interaction","PatternRefreshMS",Interaction::PatternRefreshMS);
         kf.set_integer("Interaction","DisableDiodes",Interaction::DisableDiodes);

@@ -307,8 +307,6 @@ MainWindow::MainWindow()
 
         wTreeView.set_model(TreeModel_sequencers);
 
-        UpdateVisibleColumns();
-
     }// </editor-fold>
 
     add_events(Gdk::KEY_PRESS_MASK);
@@ -349,10 +347,6 @@ MainWindow::MainWindow()
     engine->on_tempo_changed.connect(
         [=](){ DeferWorkToUIThread(
             [=](){ UpdateTempo(); });});
-
-    Config::on_changed.connect(
-        [=](){ DeferWorkToUIThread(
-            [=](){ UpdateVisibleColumns(); });});
 
     Files::on_file_loaded.connect(
         [=](){ DeferWorkToUIThread(
@@ -846,34 +840,6 @@ void MainWindow::OnPopupPlayOnce(){
 
 void MainWindow::OnPreferencesClicked(){
     settingswindow->present();
-}
-
-void MainWindow::UpdateVisibleColumns(){
-        Gtk::TreeView::Column* pColumn;
-        int col_iter = 0;
-        //pColumn = wTreeView.get_column(col_iter); //Handle
-        //pColumn->set_visible(debugging);
-        //col_iter++;
-        pColumn = wTreeView.get_column(col_iter); //Name
-        pColumn->set_visible(1);
-        col_iter++;
-        pColumn = wTreeView.get_column(col_iter); //ON/OFF
-        pColumn->set_visible(1);
-        col_iter++;
-        pColumn = wTreeView.get_column(col_iter); //Channel
-        pColumn->set_visible(Config::VisibleColumns::Channel);
-        col_iter++;
-        pColumn = wTreeView.get_column(col_iter); //Pattern
-        pColumn->set_visible(Config::VisibleColumns::Pattern);
-        col_iter++;
-        pColumn = wTreeView.get_column(col_iter); //Res
-        pColumn->set_visible(Config::VisibleColumns::Resolution);
-        col_iter++;
-        pColumn = wTreeView.get_column(col_iter); //Len
-        pColumn->set_visible(Config::VisibleColumns::Length);
-        col_iter++;
-        pColumn = wTreeView.get_column(col_iter); //Chord
-        pColumn->set_visible(Config::VisibleColumns::ChordAndCtrlNo);
 }
 
 void MainWindow::OnMIDIClockToggled(){

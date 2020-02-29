@@ -59,18 +59,6 @@ private:
         Gtk::HBox disable_diodes_label_hbox;
         Gtk::Label disable_diodes_label;
 
-        Gtk::HBox columns_label_hbox;
-        Gtk::Label colums_label;
-        Gtk::VBox colums_vbox;
-        Gtk::CheckButton colums_id;
-        Gtk::CheckButton colums_name;
-        Gtk::CheckButton colums_onoff;
-        Gtk::CheckButton colums_channel;
-        Gtk::CheckButton colums_pattern;
-        Gtk::CheckButton colums_resolution;
-        Gtk::CheckButton colums_length;
-        Gtk::CheckButton colums_chord;
-
         Gtk::HSeparator sep1;
 
         Gtk::HBox metronome_label_hbox;

@@ -56,9 +56,6 @@ public:
     /**Sets title and icon for the play-pause button*/
     void UpdatePlayPauseTool();
 
-    /**Hides and shows columns, according to Config::VisibleColumns*/
-    void UpdateVisibleColumns();
-
     Gtk::SpinButton tempo_button;
 
     void UpdatePassMidiToggle();

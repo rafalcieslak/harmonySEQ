@@ -35,13 +35,6 @@ namespace Config{
         extern int Hit2Velocity;
         extern bool Hit2;
     }
-    namespace VisibleColumns{
-        extern bool Channel;
-        extern bool Pattern;
-        extern bool Resolution;
-        extern bool Length;
-        extern bool ChordAndCtrlNo;
-    }
     namespace Interaction{
         extern bool PlayOnEdit;
         extern int PatternRefreshMS;

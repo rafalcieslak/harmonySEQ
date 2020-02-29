@@ -74,37 +74,6 @@ SettingsWindow::SettingsWindow(){
 
     page_main.pack_start(sep1);
 
-    // <editor-fold defaultstate="collapsed" desc="visible colums">
-    page_main.pack_start(columns_label_hbox);
-    page_main.pack_start(colums_vbox);
-
-
-    columns_label_hbox.pack_start(colums_label,Gtk::PACK_SHRINK);
-    colums_label.set_markup(_("<b>Visible colums:</b>"));
-
-    colums_vbox.pack_start(colums_name);
-    colums_vbox.pack_start(colums_onoff);
-    colums_vbox.pack_start(colums_channel);
-    colums_vbox.pack_start(colums_pattern);
-    colums_vbox.pack_start(colums_resolution);
-    colums_vbox.pack_start(colums_length);
-    colums_vbox.pack_start(colums_chord);
-
-    colums_name.set_label(_("Name"));
-    colums_onoff.set_label(_("Channel"));
-    colums_channel.set_label(_("Channel"));
-    colums_pattern.set_label(_("Patern"));
-    colums_resolution.set_label(_("Resolution"));
-    colums_length.set_label(_("Length"));
-    colums_chord.set_label(_("Chord (notes) / Ctrl. No."));
-
-    //these are fake checkbuttons, for it is impossible to hide the name or the on/off switch
-    colums_name.set_active(1);
-    colums_name.set_sensitive(0);
-    colums_onoff.set_active(1);
-    colums_onoff.set_sensitive(0);
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="metronome setting widgets placement">
     page_midi.pack_start(metronome_label_hbox,Gtk::PACK_SHRINK);
     page_midi.pack_start(metronome_channel_hbox,Gtk::PACK_SHRINK);
     metronome_channel_hbox.pack_start(metronome_channel_label,Gtk::PACK_SHRINK);
@@ -148,7 +117,6 @@ SettingsWindow::SettingsWindow(){
     metronome_bar_velocity.set_range(0.0,127.0);
     metronome_bar_velocity.set_increments(1.0,1.0);
     metronome_bar_velocity.set_tooltip_markup(_("The metronome's MIDI note velocity'"));
-    // </editor-fold>
 
     page_OSC.pack_start(osc_port_label_hbox,Gtk::PACK_SHRINK);
     page_OSC.pack_start(osc_note_restart,Gtk::PACK_SHRINK);
@@ -191,11 +159,6 @@ void SettingsWindow::LoadDataFromConfig(){
     metronome_bar_velocity.set_value(Config::Metronome::Hit1Velocity);
     metronome_1_4.set_active(Config::Metronome::Hit2);
     OnUse14BarToggled(); //Signal handler won't get called automatically, so we'll call it here, to update widget's sensitivity;
-    colums_channel.set_active(Config::VisibleColumns::Channel);
-    colums_pattern.set_active(Config::VisibleColumns::Pattern);
-    colums_resolution.set_active(Config::VisibleColumns::Resolution);
-    colums_length.set_active(Config::VisibleColumns::Length);
-    colums_chord.set_active(Config::VisibleColumns::ChordAndCtrlNo);
     disable_diodes.set_active(Config::Interaction::DisableDiodes);
     FPSbutton.set_value(1000/Config::Interaction::PatternRefreshMS);
     osc_port.set_value(Config::OSC::Port);
@@ -209,11 +172,6 @@ void SettingsWindow::StoreDataToConfig(){
     Config::Metronome::Hit1Note = metronome_bar_note.get_value();
     Config::Metronome::Hit1Velocity = metronome_bar_velocity.get_value();
     Config::Metronome::Hit2 = metronome_1_4.get_active();
-    Config::VisibleColumns::Channel = colums_channel.get_active();
-    Config::VisibleColumns::Pattern = colums_pattern.get_active();
-    Config::VisibleColumns::Resolution = colums_resolution.get_active();
-    Config::VisibleColumns::Length = colums_length.get_active();
-    Config::VisibleColumns::ChordAndCtrlNo  = colums_chord.get_active();
     Config::Interaction::DisableDiodes = disable_diodes.get_active();
     Config::Interaction::PatternRefreshMS = 1000/FPSbutton.get_value();
     Config::OSC::Port = osc_port.get_value();
