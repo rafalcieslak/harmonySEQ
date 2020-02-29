@@ -121,13 +121,12 @@ ChordWidget::ChordWidget(){
 
     std::vector<Widget*> focus_list;
     for (int x = 0; x < 6; x++) {
-        note_buttons[x] = new Gtk::SpinButton;
-        note_buttons[x]->set_range(-128.0, 128.0);
-        note_buttons[x]->set_increments(1.0, 12.0);
-        note_buttons[x]->set_width_chars(3);
-        note_buttons[x]->signal_value_changed().connect(std::bind(&ChordWidget::OnNoteChanged, this, x));
-        NotesVBox.pack_start(*note_buttons[x],Gtk::PACK_EXPAND_WIDGET);
-        focus_list.insert(focus_list.begin(), note_buttons[x]); //Push_front-ing IS complex, BUT: a) we call it only 6 times b) we store pointers there. This is ok then.
+        auto nb = std::make_shared<NoteWidget>();
+        note_buttons.push_back(nb);
+        nb->on_value_changed.connect(std::bind(&ChordWidget::OnNoteChanged, this, x));
+        NotesVBox.pack_start(*nb, Gtk::PACK_EXPAND_WIDGET);
+        // Build the focus chain in reverse order.
+        focus_list.insert(focus_list.begin(), &(*nb));
     }
 
     NotesVBox.set_focus_chain(focus_list);
@@ -141,22 +140,27 @@ void ChordWidget::OnShow(){
 void ChordWidget::Select(Chord* ch){
     AnythingSelected = 1;
     chord = ch;
+
+    chord_base_changed_connection.disconnect();
+    chord_base_changed_connection = chord->on_base_changed.connect(std::bind(&ChordWidget::OnChordBaseChanged, this, std::placeholders::_1));
+    OnChordBaseChanged(chord->GetBase());
+
     Update();
 }
 
 void ChordWidget::UnSelect(){
     AnythingSelected = 0;
+    chord = nullptr;
+    chord_base_changed_connection.disconnect();
 }
 
 ChordWidget::~ChordWidget(){
-    for (int x = 0; x < 6; x++)
-        delete note_buttons[x];
 }
 
 void ChordWidget::OnNoteChanged(int n){
     if(we_are_copying_note_values_from_chord_so_do_not_handle_the_signals) return;
 
-    chord->SetNote(5-n,note_buttons[n]->get_value());
+    chord->SetNote(5-n,note_buttons[n]->GetValue());
     combo_type.set_active(Chord::CHORD_TYPE_CUSTOM); //this will call the signal handler, which update widgets visibility&sensitivity
     UpdateSummary();
 }
@@ -223,9 +227,8 @@ void ChordWidget::OnTypeChanged(){
 void ChordWidget::UpdateNotes(){
     if(!AnythingSelected) return;
     we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = true;
-    for (int x =0;x < 6; x++){
-        note_buttons[x]->set_value(chord->GetNote(5-x));
-    }
+    for (int x = 0; x < 6; x++)
+        note_buttons[x]->SetValue(chord->GetNote(5-x));
     we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = false;
 
 }
@@ -300,6 +303,10 @@ void ChordWidget::OnUseBaseToggled(){
     UpdateNotes();
 }
 
+void ChordWidget::OnChordBaseChanged(int base){
+    for (auto& nb : note_buttons) nb->SetBaseNote(base);
+}
+
 void ChordWidget::Update(){
     if(!AnythingSelected) return;
     we_are_copying_note_values_from_chord_so_do_not_handle_the_signals = true;
@@ -367,4 +374,5 @@ void ChordWidget::SetExpandDetails(bool e){
 void ChordWidget::UpdateSummary(){
     if(!AnythingSelected) return;
     summary_label.set_text(chord->GetSummary());
+
 }

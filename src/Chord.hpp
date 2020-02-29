@@ -118,6 +118,12 @@ public:
     void NoteAndOctaveToBase();
 
     bs2::signal<void()> on_change;
+
+    bs2::signal<void(int)> on_base_changed;
+
+    /* Helper map for translating 0-11 to C-H note names. */
+    static std::map<int, std::string> notemap;
+
 private:
 
     /**Recalculates notes (given the modes, roots etc) and stores them to notes array.*/
@@ -139,9 +145,6 @@ private:
     int mode_triad;
 
     int inversion;
-
-
-    static std::map<int,Glib::ustring> notemap;
 };
 
 #endif	/* CHORD_H */

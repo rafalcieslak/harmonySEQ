@@ -23,7 +23,7 @@
 #include "messages.hpp"
 #include "shared.hpp"
 
-std::map<int,Glib::ustring> Chord::notemap = {
+std::map<int, std::string> Chord::notemap = {
     {0, "C"},
     {1, "C#"},
     {2, "D"},
@@ -197,6 +197,7 @@ void Chord::RecalcNotes(){
     }
 
     on_change();
+    on_base_changed(GetBase());
 }
 
 int Chord::GetNotePlusBasenote(int n){
@@ -277,6 +278,7 @@ void Chord::SetBaseOctave(int n){
     if (base_octave < -5) base_octave = -5;
     NoteAndOctaveToBase();
     RecalcNotes();
+    on_base_changed(GetBase());
 }
 
 int Chord::GetBaseOctave(){
@@ -287,6 +289,7 @@ void Chord::SetBaseNote(int n){
     base_note = n;
     NoteAndOctaveToBase();
     RecalcNotes();
+    on_base_changed(GetBase());
 }
 int Chord::GetBaseNote(){
     return base_note;
@@ -296,15 +299,20 @@ void Chord::SetBase(int n){
     base = n;
     BaseToOctaveAndNote();
     RecalcNotes();
+    on_base_changed(GetBase());
 }
+
 int Chord::GetBase(){
+    if(!base_use) return 0;
     return base;
 }
 
 void Chord::SetBaseUse(bool use){
     base_use = use;
-    //no need to recalc. base_use is checked on GetNote();
+    NoteAndOctaveToBase();
+    on_base_changed(GetBase());
 }
+
 bool Chord::GetBaseUse(){
     return base_use;
 }

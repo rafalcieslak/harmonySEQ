@@ -5,6 +5,7 @@
  - Improved custom widget and color schemes to match system theme.
  - Playback display marker.
  - Note sequencers can now be configured with gate percent.
+ - Note SPN names (e.g. C4) are now displayed next to note MIDI numbers.
  - Significantly improved stability, fixed numerous race-conditions.
  - Replaced the build system with CMake.
  - Fixed pattern editor zoom behavior.

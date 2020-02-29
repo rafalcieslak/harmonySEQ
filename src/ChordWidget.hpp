@@ -25,6 +25,8 @@
 #include <boost/signals2.hpp>
 namespace bs2 = boost::signals2;
 
+#include "NoteWidget.hpp"
+
 class Chord;
 
 
@@ -72,6 +74,9 @@ private:
     void OnShow();
     void OnApplyOctaveClicked();
 
+    void OnChordBaseChanged(int base);
+    bs2::connection chord_base_changed_connection;
+
     /**Flag disabling reaction on signals, used to set data in widgets without reacting (react only if it was the user that changes the data)*/
     bool we_are_copying_note_values_from_chord_so_do_not_handle_the_signals;
 
@@ -111,7 +116,7 @@ private:
 
     Gtk::Label summary_label;
 
-    Gtk::SpinButton* note_buttons[6];
+    std::vector<std::shared_ptr<NoteWidget>> note_buttons;
 };
 
 #endif	/* CHORDWIDGET_H */
