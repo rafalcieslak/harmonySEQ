@@ -27,10 +27,10 @@
 #include "DiodeMidiEvent.hpp"
 #include "Event.hpp"
 #include "Files.hpp"
-#include "MidiDriver.hpp"
+#include "Engine.hpp"
 #include "messages.hpp"
 
-extern MidiDriver* midi;
+extern Engine* engine;
 
 
 //depends on tempo. Fraction of tempo period.
@@ -1585,7 +1585,7 @@ bool PatternWidget::on_draw(const Cairo::RefPtr<Cairo::Context>& ct){
     ct->restore();
 
     // Playback marker
-    if(not midi->GetPaused() and
+    if(not engine->GetPaused() and
        owner and
        (owner->IsPlaying())){
         double t = GetRealTime();

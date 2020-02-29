@@ -30,12 +30,12 @@ namespace bs2 = boost::signals2;
 class DiodeMidiEvent;
 
 
-class MidiDriver {
+class Engine {
 public:
     /**Constructor, called only from main()*/
-    MidiDriver();
+    Engine();
 
-    virtual ~MidiDriver();
+    virtual ~Engine();
 
     /** Enters the main event loop. */
     void Run();

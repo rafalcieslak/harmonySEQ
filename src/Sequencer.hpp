@@ -88,7 +88,7 @@ public:
     /** Returns true if this sequencer is playing at the moment. This may be because it's on, or because it's in play-once mode. */
     bool IsPlaying();
 
-    /** Used by the midi driver to mark whether this sequencer is being played or not. Updated only on each bar. */
+    /** Used by the engine to mark whether this sequencer is being played or not. Updated only on each bar. */
     void SetPlaying(bool);
 
     /** Renames the sequencer */

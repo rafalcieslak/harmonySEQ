@@ -25,18 +25,18 @@
 #include "Configuration.hpp"
 #include "Files.hpp"
 #include "MainWindow.hpp"
-#include "MidiDriver.hpp"
+#include "Engine.hpp"
 #include "OSC.hpp"
 #include "SettingsWindow.hpp"
 #include "TreeModels.hpp"
-#include "config.h"
+#include "config.hpp"
 #include "messages.hpp"
 #include "resources.hpp"
 #include "shared.hpp"
 
 
 /* Key global objects */
-MidiDriver* midi;
+Engine* engine;
 MainWindow* mainwindow;
 SettingsWindow* settingswindow;
 
@@ -214,7 +214,7 @@ int main(int argc, char** argv) {
     Gtk::Main gtk_main(argc, argv);
 
     // Initialize the MIDI driver...
-    midi = new MidiDriver();
+    engine = new Engine();
 
     //...the maps...
     InitKeyMap();
@@ -234,7 +234,7 @@ int main(int argc, char** argv) {
     Config::SaveToFile();
 
     // Apply some global config values to the engine
-    midi->SetDiodesEnabled(!Config::Interaction::DisableDiodes);
+    engine->SetDiodesEnabled(!Config::Interaction::DisableDiodes);
 
     //...GUI...  Sequencer and UI logic is so intertangled, we must
     // initialize the GUI before any sequencer or event is created.
@@ -256,7 +256,7 @@ int main(int argc, char** argv) {
     //And creating both threads.
     std::thread engine_thread([](){
         WaitForDispatcher();
-        midi->Run();});
+        engine->Run();});
     std::thread ui_thread(UIMain);
     //...and the OSC server.
 #ifndef DISABLE_OSC
@@ -267,7 +267,7 @@ int main(int argc, char** argv) {
     ui_thread.join();
 
     // Request engine thread to stop.
-    midi->Stop();
+    engine->Stop();
 
     // Join remaining threads
     engine_thread.join();
@@ -280,5 +280,5 @@ int main(int argc, char** argv) {
 
 
 void engine_thread(){
-    midi->Run();
+    engine->Run();
 }

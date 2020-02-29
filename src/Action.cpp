@@ -21,12 +21,12 @@
 
 #include "ControlSequencer.hpp"
 #include "Files.hpp"
-#include "MidiDriver.hpp"
+#include "Engine.hpp"
 #include "NoteSequencer.hpp"
 #include "Sequencer.hpp"
 #include "messages.hpp"
 
-extern MidiDriver* midi;
+extern Engine* engine;
 
 
 Action::Action(ActionTypes t, int a1, int a2){
@@ -61,7 +61,7 @@ void Action::Trigger(int data){
             break;
         }
     }else if(type == TEMPO_SET){
-        midi->SetTempo(args[1]);
+        engine->SetTempo(args[1]);
         Files::SetFileModified(1);
     }else if(type == SEQ_CHANGE_ONE_NOTE){
         auto noteseq = std::dynamic_pointer_cast<NoteSequencer>(target_seq.lock());
@@ -82,19 +82,19 @@ void Action::Trigger(int data){
     }else if(type == PLAY_PAUSE){
         switch(args[1]){
         case 0: //just pause
-            midi->PauseImmediately();
+            engine->PauseImmediately();
             break;
         case 1: //just play
-            if(!midi->GetPaused()) break; //if it is already playing, do not call Sync().
-            midi->Unpause();
+            if(!engine->GetPaused()) break; //if it is already playing, do not call Sync().
+            engine->Unpause();
             break;
         case 2: //toggle
-            if (midi->GetPaused()) { midi->Unpause();}
-            else midi->PauseImmediately();
+            if (engine->GetPaused()) { engine->Unpause();}
+            else engine->PauseImmediately();
             break;
         }
     }else if(type == SYNC){
-        midi->Sync();
+        engine->Sync();
     }else if(type == SEQ_CHANGE_PATTERN){
         auto seq = target_seq.lock();
         if(!seq) return;

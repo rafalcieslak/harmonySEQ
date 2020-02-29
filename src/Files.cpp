@@ -28,7 +28,7 @@
 #include "ControlSequencer.hpp"
 #include "ControllerAtom.hpp"
 #include "Event.hpp"
-#include "MidiDriver.hpp"
+#include "Engine.hpp"
 #include "NoteAtom.hpp"
 #include "NoteSequencer.hpp"
 #include "Sequencer.hpp"
@@ -37,7 +37,7 @@
 #include "messages.hpp"
 #include "shared.hpp"
 
-extern MidiDriver* midi;
+extern Engine* engine;
 
 
 namespace Files {
@@ -106,13 +106,13 @@ void LoadFileDialog(Gtk::Window* parent){
     }
 
     // To avoid lag pause engine while file is being processed.
-    bool was_paused = midi->GetPaused();
-    if (!was_paused) midi->PauseImmediately();
+    bool was_paused = engine->GetPaused();
+    if (!was_paused) engine->PauseImmediately();
 
     LoadFile(filename, parent);
     SetFileModified(0);
 
-    if (!was_paused) midi->Unpause();
+    if (!was_paused) engine->Unpause();
 }
 
 void SaveFileDialog(Gtk::Window* parent){
@@ -257,7 +257,7 @@ bool LoadFile(Glib::ustring file, Gtk::Window* parent_window){
         file_dir = file.substr(0,found+1);
 
         //To make sure all goes well:
-        midi->Sync();
+        engine->Sync();
 
         on_file_loaded();
         /* TODO: No need to emit this sequencer list change -
@@ -322,7 +322,7 @@ void SaveToFile(Glib::ustring filename, Gtk::Window* parent_window){
     kf.set_integer("harmonySEQ","versionA",VERSION_A);
     kf.set_integer("harmonySEQ","versionB",VERSION_B);
     kf.set_integer("harmonySEQ","versionC",VERSION_C);
-    kf.set_double("System","tempo",midi->GetTempo());
+    kf.set_double("System","tempo",engine->GetTempo());
 
     std::vector<std::shared_ptr<Sequencer>> seqs = SequencerManager::GetAll();
     kf.set_integer("System","sequencers_number", seqs.size());
@@ -450,7 +450,7 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
         char temp2[1000];
 
         //Read some basic data...
-        midi->SetTempo(kfp->get_double("System", "tempo"));
+        engine->SetTempo(kfp->get_double("System", "tempo"));
         seqNum = kfp->get_integer("System", "sequencers_number");
 
         //Get rid of any seqeuncers.

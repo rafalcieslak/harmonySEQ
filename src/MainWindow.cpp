@@ -23,7 +23,7 @@
 #include "ControlSequencer.hpp"
 #include "Event.hpp"
 #include "Files.hpp"
-#include "MidiDriver.hpp"
+#include "Engine.hpp"
 #include "NoteSequencer.hpp"
 #include "SequencerManager.hpp"
 #include "SettingsWindow.hpp"
@@ -34,7 +34,7 @@
 #include "shared.hpp"
 
 
-extern MidiDriver* midi;
+extern Engine* engine;
 extern SettingsWindow* settingswindow;
 
 // Time (ms) how long does the tempo button blink on beat.
@@ -228,14 +228,14 @@ MainWindow::MainWindow()
     tempo_button.set_increments(1.0, 5.0);
     tempo_button.set_digits(1);
     tempo_button.set_width_chars(5);
-    tempo_button.set_value(midi->GetTempo());
+    tempo_button.set_value(engine->GetTempo());
     tempo_button.signal_value_changed().connect(std::bind(&MainWindow::TempoChanged, this));
 
     MidiClockTool.remove();
     MidiClockTool.add(midi_clock_button);
     MidiClockTool.set_homogeneous(0);
     midi_clock_button.set_label(_("MIDI Clock"));
-    midi_clock_button.set_active(midi->GetMidiClockEnabled());
+    midi_clock_button.set_active(engine->GetMidiClockEnabled());
     midi_clock_button.set_tooltip_markup(_("Toggles MIDI clock and start/stop messages output."));
     midi_clock_button.signal_toggled().connect(std::bind(&MainWindow::OnMIDIClockToggled, this));
 
@@ -254,7 +254,7 @@ MainWindow::MainWindow()
     tap_button.signal_clicked().connect(std::bind(&MainWindow::OnTapTempoClicked, this));
 
     UpdatePlayPauseTool();
-    UpdatePassMidiToggle(); //sometimes we pass midi by default.
+    UpdatePassMidiToggle(); //sometimes we pass engine by default.
     //UpdatePlayOnEditToggle(); //as above
 
     wScrolledWindow.add(wTreeView);
@@ -335,23 +335,23 @@ MainWindow::MainWindow()
     // thread, so we refer them to the idle timeout, which is
     // processed by the GTK thread.
 
-    midi->on_beat.connect(
+    engine->on_beat.connect(
         [=](){ DeferWorkToUIThread(
             [=](){ FlashTempo(); });});
 
-    midi->on_paused.connect(
+    engine->on_paused.connect(
         [=](){ DeferWorkToUIThread(
             [=](){ UpdatePlayPauseTool(); });});
 
-    midi->on_unpaused.connect(
+    engine->on_unpaused.connect(
         [=](){ DeferWorkToUIThread(
             [=](){ UpdatePlayPauseTool(); });});
 
-    midi->on_diode.connect(
+    engine->on_diode.connect(
         [=](auto dev){ DeferWorkToUIThread(
             [=](){ OnDiodeEvent(dev); });});
 
-    midi->on_tempo_changed.connect(
+    engine->on_tempo_changed.connect(
         [=](){ DeferWorkToUIThread(
             [=](){ UpdateTempo(); });});
 
@@ -420,14 +420,14 @@ void
 MainWindow::TempoChanged()
 {
     double tempo = tempo_button.get_value();
-    if(midi->GetTempo() != tempo){
-        midi->SetTempo(tempo);
+    if(engine->GetTempo() != tempo){
+        engine->SetTempo(tempo);
         Files::SetFileModified(1);
     }
 }
 
 void MainWindow::UpdateTempo(){
-    double tempo = midi->GetTempo();
+    double tempo = engine->GetTempo();
     if(tempo != tempo_button.get_value())
         tempo_button.set_value(tempo);
 }
@@ -653,13 +653,13 @@ void MainWindow::FlashTempo(){
 void MainWindow::OnPassToggleClicked(){
     Gtk::Widget* pPassToggle = m_refUIManager->get_widget("/MenuBar/MenuTools/PassMidiEvents");
     Gtk::CheckMenuItem& PassToggle = dynamic_cast<Gtk::CheckMenuItem&> (*pPassToggle);
-    midi->SetPassMidiEvents(PassToggle.get_active());
+    engine->SetPassMidiEvents(PassToggle.get_active());
 }
 
 void MainWindow::UpdatePassMidiToggle(){
     Gtk::Widget* pPassToggle = m_refUIManager->get_widget("/MenuBar/MenuTools/PassMidiEvents");
     Gtk::CheckMenuItem& PassToggle = dynamic_cast<Gtk::CheckMenuItem&> (*pPassToggle);
-    PassToggle.set_active(midi->GetPassMidiEvents());
+    PassToggle.set_active(engine->GetPassMidiEvents());
 }
 
 bool MainWindow::OnKeyPress(GdkEventKey* event){
@@ -719,7 +719,7 @@ void MainWindow::OnSelectionChanged(){
 void MainWindow::UpdatePlayPauseTool(){
     Gtk::Widget* pPlayPauseTool = m_refUIManager->get_widget("/ToolBar/PlayPauseTool");
     Gtk::ToolButton& PlayPauseTool = dynamic_cast<Gtk::ToolButton&> (*pPlayPauseTool);
-    if (midi->GetPaused()){
+    if (engine->GetPaused()){
         PlayPauseTool.set_label(_("Play"));
         PlayPauseTool.set_stock_id(Gtk::Stock::MEDIA_PLAY);
     }else{
@@ -729,10 +729,10 @@ void MainWindow::UpdatePlayPauseTool(){
 }
 
 void MainWindow::OnPlayPauseClicked(){
-    if (midi->GetPaused())
-        midi->Unpause();
+    if (engine->GetPaused())
+        engine->Unpause();
     else
-        midi->PauseImmediately();
+        engine->PauseImmediately();
 }
 
 void MainWindow::OnDiodeEvent(DiodeMidiEvent dev){
@@ -796,7 +796,7 @@ void MainWindow::OnMenuNewClicked(){
     SequencerManager::Clear();
     InitTreeData();
 
-    midi->SetTempo(DEFAULT_TEMPO);
+    engine->SetTempo(DEFAULT_TEMPO);
 
     UpdateTitle();
 
@@ -892,22 +892,22 @@ void MainWindow::UpdateVisibleColumns(){
 }
 
 void MainWindow::OnMIDIClockToggled(){
-    midi->SetMidiClockEnabled(midi_clock_button.get_active());
+    engine->SetMidiClockEnabled(midi_clock_button.get_active());
 }
 
 void MainWindow::OnSyncClicked(){
-    midi->Sync();
+    engine->Sync();
 }
 
 void MainWindow::OnMetronomeToggleClicked(){
     Gtk::Widget* pMetronome = m_refUIManager->get_widget("/ToolBar/Metronome");
     Gtk::ToggleToolButton& Metronome = dynamic_cast<Gtk::ToggleToolButton&> (*pMetronome);
-    midi->SetMetronome(Metronome.get_active());
+    engine->SetMetronome(Metronome.get_active());
 }
 
 void MainWindow::OnTapTempoClicked(){
-    midi->TapTempo();
-    tempo_button.set_value(midi->GetTempo());
+    engine->TapTempo();
+    tempo_button.set_value(engine->GetTempo());
 }
 
 void MainWindow::OnTreeviewDragBegin(const Glib::RefPtr<Gdk::DragContext>& ct){

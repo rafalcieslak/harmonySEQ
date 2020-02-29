@@ -26,12 +26,12 @@
 
 #include "Configuration.hpp"
 #include "Event.hpp"
-#include "MidiDriver.hpp"
+#include "Engine.hpp"
 #include "messages.hpp"
 #include "shared.hpp"
 
 
-extern MidiDriver* midi;
+extern Engine* engine;
 
 void error_handler(int num, const char *msg, const char *path){
     *err << "OSC error!\n";
@@ -48,16 +48,16 @@ int pause_handler(const char *path, const char *types, lo_arg **argv,
  		    int argc, void *data, void *user_data)
 {
     *dbg << "OSC: pause signal got.\n";
-    if (midi->GetPaused() == 0)
-        midi->PauseImmediately();
+    if (engine->GetPaused() == 0)
+        engine->PauseImmediately();
     return 0;
 }
 int unpause_handler(const char *path, const char *types, lo_arg **argv,
  		    int argc, void *data, void *user_data)
 {
     *dbg << "OSC: unpause signal got.\n";
-    if (midi->GetPaused() == 1)
-        midi->Unpause();
+    if (engine->GetPaused() == 1)
+        engine->Unpause();
     return 0;
 }
 
@@ -66,15 +66,15 @@ int tempo_handler(const char *path, const char *types, lo_arg **argv,
 {
     *dbg << "OSC : tempo change got.\n";
     double tmp = argv[0]->f;
-    midi->SetTempo(tmp);
+    engine->SetTempo(tmp);
     return 0;
 }
 int sync_handler(const char *path, const char *types, lo_arg **argv,
  		    int argc, void *data, void *user_data)
 {
     *dbg << "OSC : sync signal got.\n";
-    if (!midi->GetPaused()) //do not sync while in pause!
-        midi->Sync();
+    if (!engine->GetPaused()) //do not sync while in pause!
+        engine->Sync();
     return 0;
 }
 int events_handler(const char *path, const char *types, lo_arg **argv,

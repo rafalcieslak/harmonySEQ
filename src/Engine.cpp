@@ -17,7 +17,7 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "MidiDriver.hpp"
+#include "Engine.hpp"
 
 #include "AtomContainer.hpp"
 #include "Configuration.hpp"
@@ -40,7 +40,7 @@
 #define MIDI_PPQ 24
 
 
-MidiDriver::MidiDriver() {
+Engine::Engine() {
     paused = false;
     running = false;
     metronome = false;
@@ -61,14 +61,14 @@ MidiDriver::MidiDriver() {
     diode_event_id_next = 0;
 }
 
-MidiDriver::~MidiDriver() {
+Engine::~Engine() {
 }
 
-bool MidiDriver::GetPaused(){
+bool Engine::GetPaused(){
     return paused;
 }
 
-void MidiDriver::Run() {
+void Engine::Run() {
     // Set running flag to true, but return if it was already set.
     if (running.exchange(true)) return;
     // Initialize queue...
@@ -83,11 +83,11 @@ void MidiDriver::Run() {
     DeleteQueue();
 }
 
-void MidiDriver::Stop() {
+void Engine::Stop() {
     running = false;
 }
 
-void MidiDriver::StartQueue(){
+void Engine::StartQueue(){
     //Runs the queue. Warning: It's not unpausing, unpausing is implemented in ContinueQueue().
     *dbg << "The queue is starting!\n";
     snd_seq_start_queue(seq_handle,queueid,NULL);
@@ -95,7 +95,7 @@ void MidiDriver::StartQueue(){
 }
 
 
-void MidiDriver::LoopWhileWaitingForInput(){
+void Engine::LoopWhileWaitingForInput(){
     int npfd;
     struct pollfd* pfd;
 
@@ -108,7 +108,7 @@ void MidiDriver::LoopWhileWaitingForInput(){
             ProcessInput();
 }
 
-void MidiDriver::Open(){
+void Engine::Open(){
     //Try to open ALSA sequencer (and get a handle to it)
     int e = snd_seq_open(&seq_handle,"default",SND_SEQ_OPEN_DUPLEX, SND_SEQ_NONBLOCK);
 
@@ -144,10 +144,10 @@ void MidiDriver::Open(){
     //Increase pool size for greater kernel buffer
     snd_seq_set_client_pool_output(seq_handle,2000);
 
-    *dbg << _("Alsa midi driver init successfull.\n");
+    *dbg << _("Alsa engine init successfull.\n");
 }
 
-void MidiDriver::SendNoteOnEventImmediatelly(int channel, int pitch, int velocity){
+void Engine::SendNoteOnEventImmediatelly(int channel, int pitch, int velocity){
     //Create a new clear event
     snd_seq_event_t ev;
     snd_seq_ev_clear(&ev);
@@ -164,7 +164,7 @@ void MidiDriver::SendNoteOnEventImmediatelly(int channel, int pitch, int velocit
 }
 
 
-void MidiDriver::SendNoteOffEventImmediatelly(int channel, int pitch){
+void Engine::SendNoteOffEventImmediatelly(int channel, int pitch){
     //Create a new clear event
     snd_seq_event_t ev;
     snd_seq_ev_clear(&ev);
@@ -179,7 +179,7 @@ void MidiDriver::SendNoteOffEventImmediatelly(int channel, int pitch){
     //snd_seq_drain_output(seq_handle);
 }
 
-void MidiDriver::SendStart() {
+void Engine::SendStart() {
     snd_seq_event_t ev;
     snd_seq_ev_clear(&ev);
     ev.type = SND_SEQ_EVENT_START;
@@ -189,7 +189,7 @@ void MidiDriver::SendStart() {
     snd_seq_event_output_direct(seq_handle,&ev);
 }
 
-void MidiDriver::SendStop() {
+void Engine::SendStop() {
     snd_seq_event_t ev;
     snd_seq_ev_clear(&ev);
     ev.type = SND_SEQ_EVENT_STOP;
@@ -199,7 +199,7 @@ void MidiDriver::SendStop() {
     snd_seq_event_output_direct(seq_handle,&ev);
 }
 
-void MidiDriver::ScheduleNote(int channel, int tick_time, int pitch, int velocity, int length){
+void Engine::ScheduleNote(int channel, int tick_time, int pitch, int velocity, int length){
     snd_seq_event_t ev;
     snd_seq_ev_clear(&ev);
     snd_seq_ev_set_note(&ev, channel, pitch, velocity, length);
@@ -209,7 +209,7 @@ void MidiDriver::ScheduleNote(int channel, int tick_time, int pitch, int velocit
     snd_seq_event_output(seq_handle, &ev);
 }
 
-void MidiDriver::ScheduleCtrlEventSingle(int channel, int tick_time, int ctrl_no, int value){
+void Engine::ScheduleCtrlEventSingle(int channel, int tick_time, int ctrl_no, int value){
     snd_seq_event_t ev;
     snd_seq_ev_clear(&ev);
     snd_seq_ev_set_controller(&ev, channel, ctrl_no, value);
@@ -219,7 +219,7 @@ void MidiDriver::ScheduleCtrlEventSingle(int channel, int tick_time, int ctrl_no
     snd_seq_event_output(seq_handle, &ev);
 }
 
-void MidiDriver::ScheduleCtrlEventLinearSlope(int channel, int ctrl_no, int start_tick_time, int start_value, int end_tick_time, int end_value){
+void Engine::ScheduleCtrlEventLinearSlope(int channel, int ctrl_no, int start_tick_time, int start_value, int end_tick_time, int end_value){
     //*err << "s = " << start_value << ", e = " << end_value << ENDL;
     int steps = end_value - start_value;
     int time = end_tick_time - start_tick_time;
@@ -233,7 +233,7 @@ void MidiDriver::ScheduleCtrlEventLinearSlope(int channel, int ctrl_no, int star
         ScheduleCtrlEventSingle(channel,start_tick_time,ctrl_no,start_value);
 }
 
-void MidiDriver::ScheduleDiodeEvent(const DiodeMidiEvent& dev, int tick_time){
+void Engine::ScheduleDiodeEvent(const DiodeMidiEvent& dev, int tick_time){
     if(!diodes_enabled) return;
     diode_events.insert(std::pair<int,DiodeMidiEvent>(diode_event_id_next, dev));
 
@@ -251,14 +251,14 @@ void MidiDriver::ScheduleDiodeEvent(const DiodeMidiEvent& dev, int tick_time){
     diode_event_id_next++;
 }
 
-void MidiDriver::PassEvent(snd_seq_event_t* ev){
+void Engine::PassEvent(snd_seq_event_t* ev){
     snd_seq_ev_set_source(ev,output_port);
     snd_seq_ev_set_subs(ev);
     snd_seq_ev_set_direct(ev);
     snd_seq_event_output_direct(seq_handle,ev);
 }
 
-void MidiDriver::InitQueue(){
+void Engine::InitQueue(){
     //Asks ALSA for a new queue and get a handle to it (queueid).
     queueid = snd_seq_alloc_named_queue(seq_handle,"harmonySEQ queue");
 
@@ -266,7 +266,7 @@ void MidiDriver::InitQueue(){
     tick = 0;
 }
 
-void MidiDriver::SetTempo(double bpm){
+void Engine::SetTempo(double bpm){
     snd_seq_queue_tempo_t* queue_tempo;
     snd_seq_queue_tempo_malloc(&queue_tempo);
     snd_seq_queue_tempo_set_tempo(queue_tempo,((double)6e7/((double)bpm*4.0)));
@@ -278,11 +278,11 @@ void MidiDriver::SetTempo(double bpm){
     on_tempo_changed();
 }
 
-double MidiDriver::GetTempo(){
+double Engine::GetTempo(){
     return tempo;
 }
 
-void MidiDriver::TapTempo(){
+void Engine::TapTempo(){
     double now = GetRealTime();
     double current = now, sum = 0.0;
     std::vector<double> deltas;
@@ -309,39 +309,39 @@ void MidiDriver::TapTempo(){
     tap_times.push_front(now);
 }
 
-void MidiDriver::SetMetronome(bool enabled){
+void Engine::SetMetronome(bool enabled){
     metronome = enabled;
 }
 
-bool MidiDriver::GetMetronome(){
+bool Engine::GetMetronome(){
     return metronome;
 }
 
-void MidiDriver::SetMidiClockEnabled(bool enabled){
+void Engine::SetMidiClockEnabled(bool enabled){
     midi_clock_enabled = enabled;
 }
 
-bool MidiDriver::GetMidiClockEnabled(){
+bool Engine::GetMidiClockEnabled(){
     return midi_clock_enabled;
 }
 
-void MidiDriver::SetPassMidiEvents(bool enabled){
+void Engine::SetPassMidiEvents(bool enabled){
     passing_midi_events = enabled;
 }
 
-bool MidiDriver::GetPassMidiEvents(){
+bool Engine::GetPassMidiEvents(){
     return passing_midi_events;
 }
 
-void MidiDriver::SetDiodesEnabled(bool enabled){
+void Engine::SetDiodesEnabled(bool enabled){
     diodes_enabled = enabled;
 }
 
-bool MidiDriver::GetDiodesEnabled(){
+bool Engine::GetDiodesEnabled(){
     return diodes_enabled;
 }
 
-void MidiDriver::PauseImmediately(){
+void Engine::PauseImmediately(){
     //Pause the queue
     snd_seq_stop_queue(seq_handle,queueid,NULL);
     snd_seq_drain_output(seq_handle);
@@ -357,7 +357,7 @@ void MidiDriver::PauseImmediately(){
     on_paused();
 }
 
-void MidiDriver::Sync(){
+void Engine::Sync(){
     snd_seq_drop_output(seq_handle);
     PauseImmediately();
     // Reset sequencer progress
@@ -367,7 +367,7 @@ void MidiDriver::Sync(){
     *dbg << "Sync complete.\n";
 }
 
-snd_seq_tick_time_t MidiDriver::GetTick() {
+snd_seq_tick_time_t Engine::GetTick() {
     snd_seq_queue_status_t *status;
     snd_seq_tick_time_t current_tick;
     snd_seq_queue_status_malloc(&status);
@@ -378,7 +378,7 @@ snd_seq_tick_time_t MidiDriver::GetTick() {
 }
 
 
-void MidiDriver::Unpause(){
+void Engine::Unpause(){
 
     //Clear the queue, INCLUDING NOTEOFFS (1).
     ClearQueue(1);
@@ -404,7 +404,7 @@ void MidiDriver::Unpause(){
     on_unpaused();
 }
 
-void MidiDriver::ClearQueue(bool remove_noteoffs){
+void Engine::ClearQueue(bool remove_noteoffs){
     *dbg << "clearing queue...\n";
     snd_seq_remove_events_t *re;
     snd_seq_remove_events_malloc(&re);
@@ -419,7 +419,7 @@ void MidiDriver::ClearQueue(bool remove_noteoffs){
     *dbg << "queue cleared.\n";
 }
 
-void MidiDriver::DeleteQueue(){
+void Engine::DeleteQueue(){
     //If there was no queue, do not even try deleting it.
     if (queueid<0) return;
     *dbg << "stopping queue";
@@ -429,7 +429,7 @@ void MidiDriver::DeleteQueue(){
 }
 
 
-void MidiDriver::AllNotesOff(){
+void Engine::AllNotesOff(){
     snd_seq_event_t ev;
     for (int ch = 0; ch < 16; ch++){
         snd_seq_ev_clear(&ev);
@@ -452,7 +452,7 @@ double RoundTimeDouble(double marker){
             return ((double)(temp))/(double)(1e9);
 }
 
-void MidiDriver::UpdateQueue(){
+void Engine::UpdateQueue(){
     snd_seq_event_t ev;
     double real_time = GetRealTime();
 
@@ -666,7 +666,7 @@ void MidiDriver::UpdateQueue(){
 }
 
 
-void MidiDriver::ProcessInput(){
+void Engine::ProcessInput(){
     // While there is anything in the input
     do {
         //Obtain the event from input
