@@ -153,7 +153,7 @@ private:
 
     /**Current tempo on the queue*/
     double tempo;
-    int tick;
+    unsigned int tick;
 
     /**States whether queue is paused or not*/
     bool paused;

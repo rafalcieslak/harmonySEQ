@@ -406,7 +406,7 @@ void SaveToFile(Glib::ustring filename, Gtk::Window* parent_window){
             sprintf(temp2,"Action_%d_seq",a);
             std::shared_ptr<Sequencer> target = ac->target_seq.lock();
             if(target)
-                for(int r = 0; r < seqs.size(); r++)
+                for(unsigned int r = 0; r < seqs.size(); r++)
                     if(seqs[r] == target)
                         kf.set_integer(temp,temp2,r);
         }
