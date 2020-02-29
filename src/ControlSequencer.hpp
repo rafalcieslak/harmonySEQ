@@ -38,8 +38,6 @@ public:
     /**Virtual copy constructor.*/
     virtual std::shared_ptr<Sequencer> Clone();
 
-    virtual SeqType_t GetType();
-
     void SetControllerNumber(int number);
     int GetControllerNumber();
 private:

@@ -505,9 +505,7 @@ Gtk::TreeModel::Row MainWindow::AddSequencerRow(std::shared_ptr<Sequencer> seq)
                     [=](){ RefreshRow(row); });})
         );
 
-    if(seq->GetType() == SEQ_TYPE_NOTE){
-        auto noteseq = std::dynamic_pointer_cast<NoteSequencer>(seq);
-
+    if(auto noteseq = std::dynamic_pointer_cast<NoteSequencer>(seq)){
         connections.push_back(
             noteseq->on_chord_change.connect(
                 [=](){ DeferWorkToUIThread(
@@ -552,11 +550,9 @@ void MainWindow::RefreshRow(Gtk::TreeRow row){
     row[m_columns_sequencers.col_pattern] = seq->GetActivePatternNumber();
     row[m_columns_sequencers.col_len] = seq->GetLength();
 
-    if(seq->GetType() == SEQ_TYPE_NOTE){
-        auto noteseq = std::dynamic_pointer_cast<NoteSequencer>(seq);
+    if(auto noteseq = std::dynamic_pointer_cast<NoteSequencer>(seq)){
         row[m_columns_sequencers.col_chord] = noteseq->chord.GetName();
-    } else if (seq->GetType() == SEQ_TYPE_CONTROL){
-        auto ctrlseq = std::dynamic_pointer_cast<ControlSequencer>(seq);
+    } else if (auto ctrlseq = std::dynamic_pointer_cast<ControlSequencer>(seq)){
         char temp[20];
         sprintf(temp,_("Ctrl %d"),ctrlseq->GetControllerNumber());
         row[m_columns_sequencers.col_chord] = temp;

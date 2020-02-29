@@ -69,10 +69,6 @@ std::shared_ptr<Sequencer> NoteSequencer::Clone(){
     return std::shared_ptr<NoteSequencer>(new NoteSequencer(*this));
 }
 
-SeqType_t NoteSequencer::GetType(){
-    return SEQ_TYPE_NOTE;
-}
-
 int NoteSequencer::GetNoteOfChord(int n){
     return chord.GetNotePlusBasenote(n);
 }

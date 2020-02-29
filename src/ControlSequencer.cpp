@@ -41,10 +41,6 @@ ControlSequencer::ControlSequencer(const ControlSequencer& orig)
 ControlSequencer::~ControlSequencer(){
 }
 
-SeqType_t ControlSequencer::GetType(){
-    return SEQ_TYPE_CONTROL;
-}
-
 std::shared_ptr<Sequencer> ControlSequencer::Clone(){
     return std::shared_ptr<ControlSequencer>(new ControlSequencer(*this));
 }

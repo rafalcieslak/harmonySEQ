@@ -28,6 +28,8 @@
 #include "ControllerAtom.hpp"
 #include "NoteAtom.hpp"
 #include "Sequencer.hpp"
+#include "NoteSequencer.hpp"
+#include "ControlSequencer.hpp"
 
 class AtomContainer;
 class DiodeMidiEvent;
@@ -107,6 +109,11 @@ public:
     bs2::signal<void()> on_scroll_right;
 
 protected:
+    enum Mode {
+        NOTE,
+        CTRL,
+    };
+
     //Override default signal handler:
    virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr);
 
@@ -202,7 +209,7 @@ private:
 
     std::shared_ptr<AtomContainer> container;
     std::shared_ptr<Sequencer> owner;
-    SeqType_t seq_type; // Cached helper value.
+    Mode mode;
 
     void InitDrag();
     void ProcessDrag(double x, double y);

@@ -168,12 +168,14 @@ int PatternWidget::GetSelectionSize(){
 
 
 void PatternWidget::AssignPattern(
-    std::shared_ptr<AtomContainer> cont,
-    std::shared_ptr<Sequencer> o){
+      std::shared_ptr<AtomContainer> cont,
+      std::shared_ptr<Sequencer> o){
     container = cont;
     owner = o;
-    if(owner)
-        seq_type = owner->GetType();
+    if(std::dynamic_pointer_cast<NoteSequencer>(owner))
+        mode = NOTE;
+    else if(std::dynamic_pointer_cast<ControlSequencer>(owner))
+        mode = CTRL;
     RedrawGrid(); //ClearSelection will redraw atoms and everything anyway
     ClearSelection();
 }
@@ -212,7 +214,7 @@ bool PatternWidget::GetSnap(){
 }
 
 void PatternWidget::SetSelectionVelocity(int v){
-    if(seq_type != SEQ_TYPE_NOTE) return;
+    if(mode != NOTE) return;
     std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
     for (; it != selection.end(); it++) {
         NoteAtom* note = dynamic_cast<NoteAtom*>(*it);
@@ -223,7 +225,7 @@ void PatternWidget::SetSelectionVelocity(int v){
 }
 
 int PatternWidget::GetSelectionVelocity(){
-    if(seq_type != SEQ_TYPE_NOTE) return -1;
+    if(mode != NOTE) return -1;
     int sum = 0;
     std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
     for (; it != selection.end(); it++) {
@@ -235,7 +237,7 @@ int PatternWidget::GetSelectionVelocity(){
 }
 
 void PatternWidget::SetSelectionValue(int v){
-    if(seq_type != SEQ_TYPE_CONTROL) return;
+    if(mode != CTRL) return;
     std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
     for (; it != selection.end(); it++) {
         ControllerAtom* ctrl = dynamic_cast<ControllerAtom*>(*it);
@@ -246,7 +248,7 @@ void PatternWidget::SetSelectionValue(int v){
 }
 
 int PatternWidget::GetSelectionValue(){
-    if(seq_type != SEQ_TYPE_CONTROL) return -1;
+    if(mode != CTRL) return -1;
     int sum = 0;
     std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
     for (; it != selection.end(); it++) {
@@ -258,7 +260,7 @@ int PatternWidget::GetSelectionValue(){
 }
 
 SlopeType PatternWidget::GetSelectionSlopeType(){
-    if(seq_type != SEQ_TYPE_CONTROL) return SLOPE_TYPE_NONE;
+    if(mode != CTRL) return SLOPE_TYPE_NONE;
     SlopeType s = SLOPE_TYPE_NONE;
     std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
     for (; it != selection.end(); it++) {
@@ -270,7 +272,7 @@ SlopeType PatternWidget::GetSelectionSlopeType(){
 }
 
 void PatternWidget::SetSlopeType(SlopeType s){
-    if(seq_type != SEQ_TYPE_CONTROL) return;
+    if(mode != CTRL) return;
     if(s == SLOPE_TYPE_NONE) return; //does not apply
     if(selection.empty()){
         add_slope_type = s;
@@ -286,7 +288,7 @@ void PatternWidget::SetSlopeType(SlopeType s){
 }
 
 SlopeType PatternWidget::GetSlopeType(){
-    if(seq_type != SEQ_TYPE_CONTROL) return SLOPE_TYPE_NONE;
+    if(mode != CTRL) return SLOPE_TYPE_NONE;
     if(!selection.empty())
         return GetSelectionSlopeType();
     else
@@ -294,7 +296,7 @@ SlopeType PatternWidget::GetSlopeType(){
 }
 
 void PatternWidget::MoveSelectionUp(){
-    if(seq_type == SEQ_TYPE_NOTE){
+    if(mode == NOTE){
         std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
         std::set<Atom *, AtomComparingClass> resulting_selection;
         for (; it != selection.end(); it++) {
@@ -306,12 +308,12 @@ void PatternWidget::MoveSelectionUp(){
         //container->Sort(); //no need to sort, when pitch or value was changed
         Files::FileModified();
         RedrawAtoms();
-    }else if (seq_type == SEQ_TYPE_CONTROL)
+    }else if (mode == CTRL)
         IncreaseSelectionValue(8);
 }
 
 void PatternWidget::MoveSelectionDown(){
-    if(seq_type == SEQ_TYPE_NOTE){
+    if(mode == NOTE){
         std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
         std::set<Atom *, AtomComparingClass> resulting_selection;
         for (; it != selection.end(); it++) {
@@ -324,7 +326,7 @@ void PatternWidget::MoveSelectionDown(){
         //container->Sort(); //no need to sort, when pitch or value was changed
         Files::FileModified();
         RedrawAtoms();
-    }else if (seq_type == SEQ_TYPE_CONTROL)
+    }else if (mode == CTRL)
         DecreaseSelectionValue(8);
 }
 
@@ -361,7 +363,7 @@ void PatternWidget::MoveSelectionLeft(){
 }
 
 void PatternWidget::IncreaseSelectionVelocity(int amount){
-        if(seq_type != SEQ_TYPE_NOTE) return;
+        if(mode != NOTE) return;
         std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
         std::set<Atom *, AtomComparingClass> resulting_selection;
         for (; it != selection.end(); it++) {
@@ -379,7 +381,7 @@ void PatternWidget::IncreaseSelectionVelocity(int amount){
 }
 
 void PatternWidget::DecreaseSelectionVelocity(int amount){
-        if(seq_type != SEQ_TYPE_NOTE) return;
+        if(mode != NOTE) return;
         std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
         std::set<Atom *, AtomComparingClass> resulting_selection;
         for (; it != selection.end(); it++) {
@@ -397,7 +399,7 @@ void PatternWidget::DecreaseSelectionVelocity(int amount){
 }
 
 void PatternWidget::IncreaseSelectionValue(int amount){
-        if(seq_type != SEQ_TYPE_CONTROL) return;
+        if(mode != CTRL) return;
         std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
         std::set<Atom *, AtomComparingClass> resulting_selection;
         for (; it != selection.end(); it++) {
@@ -415,7 +417,7 @@ void PatternWidget::IncreaseSelectionValue(int amount){
 }
 
 void PatternWidget::DecreaseSelectionValue(int amount){
-        if(seq_type != SEQ_TYPE_CONTROL) return;
+        if(mode != CTRL) return;
         std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
         std::set<Atom *, AtomComparingClass> resulting_selection;
         for (; it != selection.end(); it++) {
@@ -474,7 +476,7 @@ void PatternWidget::InitDrag(){
 
         if(drag_note_dragged != NULL){
             //check what we're dragging!
-            if(seq_type == SEQ_TYPE_CONTROL){
+            if(mode == CTRL){
                 drag_mode = DRAG_MODE_MOVE_SELECTION;
                 drag_beggining_line = line;
                 drag_beggining_time = time;
@@ -489,7 +491,7 @@ void PatternWidget::InitDrag(){
                     ControllerAtom* ctrl = dynamic_cast<ControllerAtom*> (atm);
                     ctrl->drag_offset_value = ctrl->value - value;
                 }
-            }else if(seq_type == SEQ_TYPE_NOTE){
+            }else if(mode == NOTE){
                 NoteAtom* note = dynamic_cast<NoteAtom*> (drag_note_dragged);
                 double note_start_x = note->time*width;
                 double note_end_x = (note->time+note->length)*width;
@@ -583,7 +585,7 @@ void PatternWidget::ProcessDrag(double x, double y){
 
         std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
         std::set<Atom *, AtomComparingClass> resulting_selection;
-        if (seq_type == SEQ_TYPE_NOTE) {
+        if (mode == NOTE) {
             for (; it != selection.end(); it++) {
                 NoteAtom* note = dynamic_cast<NoteAtom*> (*it);
                 int temp_pitch = line + note->drag_offset_line;
@@ -596,7 +598,7 @@ void PatternWidget::ProcessDrag(double x, double y){
                 note->time = temp_time;
                 resulting_selection.insert(note);
             }
-        } else if (seq_type == SEQ_TYPE_CONTROL) {
+        } else if (mode == CTRL) {
             for (; it != selection.end(); it++) {
                 ControllerAtom* ctrl = dynamic_cast<ControllerAtom*> (*it);
                 int temp_value = value + ctrl->drag_offset_value;
@@ -616,7 +618,7 @@ void PatternWidget::ProcessDrag(double x, double y){
         container->Sort();
         Files::FileModified(); //Mark file as modified
         //additionally:
-        if (seq_type == SEQ_TYPE_CONTROL) on_selection_changed(selection.size()); //this will update the value spinbutton
+        if (mode == CTRL) on_selection_changed(selection.size()); //this will update the value spinbutton
 
     } else if (drag_mode == DRAG_MODE_SELECT_AREA) {
         drag_current_x = x;
@@ -634,7 +636,7 @@ void PatternWidget::ProcessDrag(double x, double y){
         double sel_time_min = std::min(drag_current_time, drag_beggining_time);
         double sel_time_max = std::max(drag_current_time, drag_beggining_time);
         int size = container->GetSize();
-        if (seq_type == SEQ_TYPE_NOTE) {
+        if (mode == NOTE) {
             for (int x = 0; x < size; x++) {
                 Atom* atm = (*container)[x];
                 NoteAtom* note = dynamic_cast<NoteAtom*> (atm);
@@ -649,7 +651,7 @@ void PatternWidget::ProcessDrag(double x, double y){
                     }
                 }
             }//check next note.
-        } else if (seq_type == SEQ_TYPE_CONTROL) {
+        } else if (mode == CTRL) {
             for (int x = 0; x < size; x++) {
                 Atom* atm = (*container)[x];
                 ControllerAtom* ctrl = dynamic_cast<ControllerAtom*> (atm);
@@ -661,7 +663,7 @@ void PatternWidget::ProcessDrag(double x, double y){
         }
 
 
-    } else if (drag_mode == DRAG_MODE_RESIZE && seq_type == SEQ_TYPE_NOTE) { //resizing do not exist within control sequencers
+    } else if (drag_mode == DRAG_MODE_RESIZE && mode == NOTE) { //resizing do not exist within control sequencers
 
         NoteAtom* dragged_note = dynamic_cast<NoteAtom*> (drag_note_dragged);
         if (snap) { //if snap
@@ -684,7 +686,7 @@ void PatternWidget::ProcessDrag(double x, double y){
             note->length = temp_length;
         }
         Files::FileModified(); //Mark file as modified
-    } else if (drag_mode == DRAG_MODE_CHANGE_VELOCITY && seq_type == SEQ_TYPE_NOTE) { //velocity change do not exist within control sequencers
+    } else if (drag_mode == DRAG_MODE_CHANGE_VELOCITY && mode == NOTE) { //velocity change do not exist within control sequencers
         double vel_added = (drag_beggining_y - y);
 
         std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
@@ -720,7 +722,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
     //Checking whether clicked place was note or an empty space.
     Atom* found = NULL;
     int size = container->GetSize();
-    if (seq_type == SEQ_TYPE_NOTE) {
+    if (mode == NOTE) {
         //Looking for notes...
         for (int x = 0; x < size; x++) {
             NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[x]);
@@ -729,7 +731,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                 break;
             }
         }
-    } else if (seq_type == SEQ_TYPE_CONTROL) {
+    } else if (mode == CTRL) {
         //Looking for control atoms...
         for (int x = 0; x < size; x++) {
             ControllerAtom* ctrl = dynamic_cast<ControllerAtom*> ((*container)[x]);
@@ -766,7 +768,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                     //LMB on empty space
                     //'create a new note'
                     double temp_time = time;
-                    if (seq_type == SEQ_TYPE_NOTE) {
+                    if (mode == NOTE) {
                         if (snap) {
                             temp_time = SnapDown(temp_time);
                         }
@@ -782,7 +784,7 @@ bool PatternWidget::on_button_press_event(GdkEventButton* event){
                         selection.clear();
                         selection.insert(note);
                         on_selection_changed(selection.size());
-                    } else if (seq_type == SEQ_TYPE_CONTROL) {
+                    } else if (mode == CTRL) {
                         if (snap) {
                             temp_time = Snap(temp_time); //fair snapping for control atoms!
                         }
@@ -944,8 +946,8 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
             break;
         case 0xff52: //up
             if(event->state & (1 << 0)){ //shift key down
-                if (seq_type == SEQ_TYPE_NOTE) IncreaseSelectionVelocity(10);
-                else if (seq_type == SEQ_TYPE_CONTROL) IncreaseSelectionValue(8);
+                if (mode == NOTE) IncreaseSelectionVelocity(10);
+                else if (mode == CTRL) IncreaseSelectionValue(8);
             }else
                 MoveSelectionUp();
 
@@ -953,8 +955,8 @@ bool PatternWidget::on_key_press_event(GdkEventKey* event){
             break;
         case 0xff54: //down
             if(event->state & (1 << 0)){ //shift key down
-                if (seq_type == SEQ_TYPE_NOTE) DecreaseSelectionVelocity(10);
-                else if (seq_type == SEQ_TYPE_CONTROL) DecreaseSelectionValue(8);
+                if (mode == NOTE) DecreaseSelectionVelocity(10);
+                else if (mode == CTRL) DecreaseSelectionValue(8);
             }else
                 MoveSelectionDown();
 
@@ -989,7 +991,7 @@ bool PatternWidget::on_scroll_event(GdkEventScroll* e){
     //Checking whether scrolled place was note or an empty space.
     Atom* found = NULL;
     int size = container->GetSize();
-    if (seq_type == SEQ_TYPE_NOTE) {
+    if (mode == NOTE) {
         //Looking for notes...
         for (int x = 0; x < size; x++) {
             NoteAtom* note = dynamic_cast<NoteAtom*> ((*container)[x]);
@@ -1173,7 +1175,7 @@ void PatternWidget::RedrawDiode(bool on, DiodeMidiEvent* diodev){
 
     int redraw_x = 0, redraw_y = 0, redraw_w = 0, redraw_h = 0;
     if(diodev->type == DIODE_TYPE_NOTE){
-        if (seq_type != SEQ_TYPE_NOTE) return; //just in case
+        if (mode != NOTE) return; //just in case
 
         y = (5 - diodev->value) * draw_height / 6;
         h = draw_height / 6;
@@ -1187,7 +1189,7 @@ void PatternWidget::RedrawDiode(bool on, DiodeMidiEvent* diodev){
         redraw_x = x, redraw_y = y;
         redraw_w = 4, redraw_h = h;
     } else if (diodev->type == DIODE_TYPE_CTRL) {
-        if (seq_type != SEQ_TYPE_CONTROL) return; //just in case
+        if (mode != CTRL) return; //just in case
 
         y = (double) draw_height * ((127 - diodev->value) / (127.0));
         x = diodev->time*draw_width;
@@ -1284,7 +1286,7 @@ void PatternWidget::RedrawGrid(){
     }
 
     //horizontal grid
-    if (seq_type == SEQ_TYPE_NOTE) {
+    if (mode == NOTE) {
         cr_grid_context->set_line_width(1);
         inactive_color.to_context(cr_grid_context);
         for (int x = 0; x <= 6; x++) {
@@ -1292,7 +1294,7 @@ void PatternWidget::RedrawGrid(){
             cr_grid_context->line_to(draw_width, x * draw_height / 6);
             cr_grid_context->stroke();
         }
-    } else if (seq_type == SEQ_TYPE_CONTROL) {
+    } else if (mode == CTRL) {
         cr_grid_context->set_line_width(1);
         for (int x = 0; x <= 4; x++) {
 
@@ -1320,9 +1322,9 @@ void PatternWidget::RedrawGrid(){
     Glib::signal_timeout().connect([=](){return TimeLockGridCompleted();}, Config::Interaction::PatternRefreshMS);
 
     Redraw();
-  }
+}
 
-  void PatternWidget::RedrawAtoms(){
+void PatternWidget::RedrawAtoms(){
 
     if (atoms_lock) {
         man_i_wanted_to_redraw_atoms_but_it_was_locked_could_you_please_do_it_later_for_me = 1;
@@ -1351,7 +1353,7 @@ void PatternWidget::RedrawGrid(){
     int size = container->GetSize();
 
     //notes
-    if(seq_type == SEQ_TYPE_NOTE){
+    if(mode == NOTE){
         for (int x = size-1; x >= 0; x--){ //iterating backwards, to draw shades below notes
             Atom* atm = (*container)[x];
             NoteAtom* note = dynamic_cast<NoteAtom*>(atm);
@@ -1419,7 +1421,7 @@ void PatternWidget::RedrawGrid(){
                 cr_atoms_context->stroke();
             }
         }
-      }else if (seq_type == SEQ_TYPE_CONTROL){
+      }else if (mode == CTRL){
         if(size!=0) //if there are no atoms, draw nothing
             for (int n = -1; n < size; n++){ //iterating forwards, to draw lines below atoms
                 Atom* atm;

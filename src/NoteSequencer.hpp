@@ -39,9 +39,6 @@ public:
     /**Virtual copy constructor.*/
     virtual std::shared_ptr<Sequencer> Clone();
 
-    /**Returns SEQ_TYPE_NOTE*/
-    virtual SeqType_t GetType();
-
     /**The main chord*/
     Chord chord;
 

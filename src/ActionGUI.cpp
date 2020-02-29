@@ -579,14 +579,13 @@ void ActionGUI::OnApplyOctaveToogled(bool apply){
     Files::SetFileModified(1);
 }
 
-//====^^Add new action gui callbacks above ^^==
 //======================================
 void ActionGUI::SetupTreeModels(){
     m_ref_treemodel_allseqs->clear();
     m_ref_treemodel_noteseqs->clear();
     Gtk::TreeModel::Row row;
     for(auto seq : SequencerManager::GetAll()){
-        if(seq->GetType() == SEQ_TYPE_NOTE){
+        if(auto noteseq = std::dynamic_pointer_cast<NoteSequencer>(seq)){
             row = *(m_ref_treemodel_noteseqs->append());
             row[m_col_seqs.seq] = seq;
             row[m_col_seqs.name] = seq->GetName();

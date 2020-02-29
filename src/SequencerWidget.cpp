@@ -310,10 +310,7 @@ void SequencerWidget::SelectSeq(std::shared_ptr<Sequencer> seq){
         [=](){ DeferWorkToUIThread(
             [=](){ UpdateActivePattern(); });});
 
-    if(selectedSeq->GetType() == SEQ_TYPE_NOTE){
-        std::shared_ptr<NoteSequencer> noteseq =
-            std::dynamic_pointer_cast<NoteSequencer>(selectedSeq);
-
+    if(auto noteseq = std::dynamic_pointer_cast<NoteSequencer>(selectedSeq)){
         chordwidget.Select(&noteseq->chord);
 
         noteseq->on_chord_change.connect(
@@ -338,7 +335,7 @@ void SequencerWidget::UpdateEverything(){
 
     HideAndShowWidgetsDependingOnSeqType();
 
-    if(selectedSeq->GetType() == SEQ_TYPE_NOTE){
+    if(auto noteseq = std::dynamic_pointer_cast<NoteSequencer>(selectedSeq)){
             UpdateShowChord();
             UpdateChord();
             UpdateChannel();
@@ -348,7 +345,7 @@ void SequencerWidget::UpdateEverything(){
             UpdateGatePercent();
             InitNotebook();
             UpdateActivePattern();
-    }else if(selectedSeq->GetType() == SEQ_TYPE_CONTROL){
+    }else if(auto ctrlseq = std::dynamic_pointer_cast<ControlSequencer>(selectedSeq)){
             UpdateChannel();
             UpdateOnOff(); //will also update colour
             UpdateName();
@@ -362,7 +359,7 @@ void SequencerWidget::UpdateEverything(){
 
 void SequencerWidget::HideAndShowWidgetsDependingOnSeqType(){
     if(!selectedSeq) return;
-    if(selectedSeq->GetType() == SEQ_TYPE_NOTE){
+    if(auto noteseq = std::dynamic_pointer_cast<NoteSequencer>(selectedSeq)){
         wChordNotebook.set_current_page(0); //chordwidget
         wValueButton.hide();
         wValueLabel.hide();
@@ -376,7 +373,7 @@ void SequencerWidget::HideAndShowWidgetsDependingOnSeqType(){
         wShowChordButton.show();
         wGatePercentButton.show();
         wGatePercentLabel.show();
-    }else if(selectedSeq->GetType() == SEQ_TYPE_CONTROL){
+    }else if(auto ctrlseq = std::dynamic_pointer_cast<ControlSequencer>(selectedSeq)){
         chordwidget.SetExpandDetails(0);
         chordwidget.UnSelect();
         wChordNotebook.set_current_page(1); //wCtrlHBox
@@ -448,7 +445,6 @@ void SequencerWidget::UpdateController(){
 }
 
 void SequencerWidget::UpdateGatePercent(){
-    if (!selectedSeq || selectedSeq->GetType() != SEQ_TYPE_NOTE) return;
     auto noteseq = std::dynamic_pointer_cast<NoteSequencer>(selectedSeq);
     if (!noteseq) return;
 
@@ -774,7 +770,7 @@ void SequencerWidget::OnSelectionChanged(int n){
     if(!selectedSeq) return;
 
     ignore_signals = 1;
-    if(selectedSeq->GetType() == SEQ_TYPE_NOTE){
+    if(auto noteseq = std::dynamic_pointer_cast<NoteSequencer>(selectedSeq)){
         if(n == 0){
             //empty selection
             wVelocityButton.set_sensitive(0);
@@ -782,7 +778,7 @@ void SequencerWidget::OnSelectionChanged(int n){
             wVelocityButton.set_sensitive(1);
             wVelocityButton.set_value(pattern_widget.GetSelectionVelocity());
         }
-    }else if(selectedSeq->GetType() == SEQ_TYPE_CONTROL){
+    }else if(auto ctrlseq = std::dynamic_pointer_cast<ControlSequencer>(selectedSeq)){
         if(n == 0){
             //empty selection
             wValueButton.set_sensitive(0);

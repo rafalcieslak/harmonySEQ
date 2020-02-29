@@ -30,11 +30,6 @@ namespace bs2 = boost::signals2;
 
 class AtomContainer;
 
-enum SeqType_t{
-    SEQ_TYPE_NOTE,
-    SEQ_TYPE_CONTROL
-};
-
 /** Base, pure-virtual class for sequencers. */
 class Sequencer {
 public:
@@ -55,9 +50,6 @@ public:
     int AddPattern(std::shared_ptr<AtomContainer>);
     /**Removes selected pattern.*/
     bool RemovePattern(int x);
-
-    /** Returns sequencer's type */
-    virtual SeqType_t GetType() = 0;
 
     /** Fills in everything with default values */
     virtual void Init();

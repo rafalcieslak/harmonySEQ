@@ -478,11 +478,7 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
 
             int n = kfp->get_integer(temp, "patterns_num");
 
-            auto noteseq = std::dynamic_pointer_cast<NoteSequencer>(seq);
-            auto ctrlseq = std::dynamic_pointer_cast<ControlSequencer>(seq);
-
-            if(noteseq){
-
+            if(auto noteseq = std::dynamic_pointer_cast<NoteSequencer>(seq)){
                     noteseq->expand_chord = kfp->get_boolean(temp,"expand_chord");
                     if(kfp->has_key(temp, "gate_percent"))
                         noteseq->SetGatePercent(kfp->get_integer(temp, "gate_percent"));
@@ -517,7 +513,7 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
                         noteseq->chord.SetFromVector(vec);
                     }
 
-            }else if (ctrlseq) {
+            }else if (auto ctrlseq = std::dynamic_pointer_cast<ControlSequencer>(seq)) {
 
                 ctrlseq->SetControllerNumber(kfp->get_integer(temp, "controller"));
 
@@ -651,7 +647,7 @@ bool ConvertFile_0_15_to_0_16(Glib::KeyFile* kfp){
     for(int x = 0; x < n; x++){
         sprintf(temp,"Seq %d",x);
         kfp->set_boolean(temp,"expand_chord",1);
-        kfp->set_integer(temp,"seq_type",SEQ_TYPE_NOTE);
+        kfp->set_integer(temp,"seq_type",1);
         double length = kfp->get_double(temp,"length");
         kfp->remove_key(temp,"length");
         if(length == 0.125){
