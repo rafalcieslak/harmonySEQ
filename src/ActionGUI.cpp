@@ -25,7 +25,6 @@
 #include "Sequencer.hpp"
 #include "SequencerManager.hpp"
 #include "TreeModels.hpp"
-#include "messages.hpp"
 #include "shared.hpp"
 
 
@@ -438,10 +437,9 @@ void ActionGUI::InitType(int action_type){
 
 
 void ActionGUI::OnTempoChanged(){
+    if(target->type != Action::TEMPO_SET) return;
 
-    if(target->type == Action::TEMPO_SET){
-        target->args[1] = tempo_button.get_value();
-    }else *err << _("Error: tempo has changed, while action is not tempo-type.") << ENDL;
+    target->args[1] = tempo_button.get_value();
 
     label_preview.set_text(target->GetLabel());
     target->on_changed();

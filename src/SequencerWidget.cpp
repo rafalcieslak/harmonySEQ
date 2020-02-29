@@ -24,7 +24,6 @@
 #include "Files.hpp"
 #include "NoteSequencer.hpp"
 #include "SequencerManager.hpp"
-#include "messages.hpp"
 #include "resources.hpp"
 
 
@@ -335,7 +334,6 @@ void SequencerWidget::SelectNothing(){
 }
 
 void SequencerWidget::UpdateEverything(){
-    *dbg << "SeqencerWidget - Updating everything\n";
     if (!selectedSeq) return;
 
     HideAndShowWidgetsDependingOnSeqType();
@@ -516,7 +514,6 @@ void SequencerWidget::InitNotebook(){
 }
 
 void SequencerWidget::UpdatePatternWidget(int pattern){
-    *dbg << "Updating pattern widget... \n";
     if (!selectedSeq) {
         pattern_widget.AssignPattern(nullptr, nullptr);
         return;
@@ -684,7 +681,6 @@ void SequencerWidget::OnSetAsActivePatternClicked(){
 void SequencerWidget::OnNotebookPageChanged(Gtk::Widget* page, guint page_num){
     if(ignore_signals) return;
     if(do_not_react_on_page_changes) return;
-    *dbg << "page changed!\n";
     UpdatePatternWidget();
 }
 void SequencerWidget::OnAddPatternClicked(){
@@ -709,7 +705,6 @@ void SequencerWidget::OnRemovePatternClicked(){
     if(!selectedSeq) return;
 
     int n = wNotebook.get_current_page();
-    *dbg << "removing pattern " << n <<"\n";
     do_not_react_on_page_changes = 1;
     wNotebook.remove(*notebook_pages[n]);
     delete notebook_pages[n];

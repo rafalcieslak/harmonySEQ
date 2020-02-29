@@ -20,7 +20,8 @@
 
 #include "Chord.hpp"
 
-#include "messages.hpp"
+#include <iostream>
+
 #include "shared.hpp"
 
 std::map<int, std::string> Chord::notemap = {
@@ -138,7 +139,6 @@ void Chord::CopyInto(Chord& c) const{
 
 
 void Chord::RecalcNotes(){
-    *dbg<<"recalculating chord\n";
     int n1,n2,n3;
     switch (type){
         case CHORD_TYPE_CUSTOM:
@@ -162,7 +162,6 @@ void Chord::RecalcNotes(){
             break;
         case CHORD_TYPE_TRIAD:
             n1 =root;
-            *dbg << "    base+triad_root  = " << n1 << ENDL;
             if (mode_triad == CHORD_TRIAD_MODE_MAJOR || mode_triad == CHORD_TRIAD_MODE_AUGMENTED) n2 = n1+4;
             else n2 = n1+3;
             if(mode_triad == CHORD_TRIAD_MODE_MINOR || mode_triad == CHORD_TRIAD_MODE_AUGMENTED) n3 = n2+4;
@@ -328,7 +327,6 @@ void Chord::NoteAndOctaveToBase(){
 }
 
 void Chord::Set(const Chord& other,bool apply_octave){
-    *dbg << "copying chord." << ENDL;
     type = other.type;
     if (type == CHORD_TYPE_CUSTOM) for (int x = 0 ; x < 6; x++) notes[x] = other.notes[x];
     if (apply_octave) base_octave = other.base_octave;
@@ -493,7 +491,7 @@ std::vector<int> Chord::SaveToVector(){
 
 void Chord::SetFromVector(std::vector<int>& V){
     if (V.size() < 7) {
-        *err << "ERROR: chord vector too small\n";
+        std::cerr << "ERROR: chord vector too small\n";
         return;
     }
     type = V[0];
@@ -512,7 +510,7 @@ void Chord::SetFromVector(std::vector<int>& V){
    void Chord::SetFromVector_OLD_FILE_PRE_0_14(std::vector<int> &V){
    /**Old files have following format: mode, guitar_root, guitar_note, triad_root,triad_note,octave,inversion,notes(6)(if custom)*/
     if (V.size() < 7) {
-        *err << "ERROR: chord vector too small\n";
+        std::cerr << "ERROR: chord vector too small\n";
         return;
     }
     type = V[0];

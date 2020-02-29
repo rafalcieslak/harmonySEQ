@@ -19,6 +19,8 @@
 
 #include "MainWindow.hpp"
 
+#include <iostream>
+
 #include "Configuration.hpp"
 #include "ControlSequencer.hpp"
 #include "Event.hpp"
@@ -29,7 +31,6 @@
 #include "SettingsWindow.hpp"
 #include "TreeModels.hpp"
 #include "config.hpp"
-#include "messages.hpp"
 #include "resources.hpp"
 #include "shared.hpp"
 
@@ -47,7 +48,6 @@ extern SettingsWindow* settingswindow;
 
 bool CtrlKeyDown;
 bool ShiftKeyDown;
-
 
 Gtk::TreeModel::iterator row_inserted_by_drag;
 bool seq_list_drag_in_progress;
@@ -146,19 +146,12 @@ MainWindow::MainWindow()
             "   <menuitem action='seq/Remove'/>"
             "  </popup>"
             "</ui>";
-#ifdef GLIBMM_EXCEPTIONS_ENABLED
+
     try {
         m_refUIManager->add_ui_from_string(ui_info);
     } catch (const Glib::Error& ex) {
-        *err << _("ERROR - error while building menus: ") << ex.what();
+        std::cerr << "ERROR - error while building menus: " << ex.what() << std::endl;
     }
-#else
-    std::auto_ptr<Glib::Error> ex;
-    m_refUIManager->add_ui_from_string(ui_info, ex);
-    if (ex.get()) {
-        *err << _("ERROR - error while building menus: ") << ex->what();
-    }
-#endif //GLIBMM_EXCEPTIONS_ENABLED
 
     Gtk::Widget* pMenubar = m_refUIManager->get_widget("/MenuBar");
     Gtk::Widget* pToolbar = m_refUIManager->get_widget("/ToolBar");
@@ -409,7 +402,6 @@ void MainWindow::UpdateTitle(){
 bool
 MainWindow::on_delete_event(GdkEventAny* event)
 {
-    *dbg << "user clicked X\n";
     if(Files::file_modified)
         if(!Ask(this, _("The file has unsaved changes."),_("Are sure you want to quit?")))
           return 1;
@@ -665,25 +657,16 @@ void MainWindow::UpdatePassMidiToggle(){
 }
 
 bool MainWindow::OnKeyPress(GdkEventKey* event){
-    //*dbg << "triggered " << event->keyval << "\n";
-    std::map<int,std::string>::iterator iter;
-    iter = keymap_itos.find(event->keyval);
-    if(iter != keymap_itos.end()){
-        *dbg << "Pressed key '" << iter->second << "'.\n";
-
-    }else
-        *dbg << "Unknown key pressed\n";
-
     if (event->keyval == 65507){ //Ctrl (left)
         if (!CtrlKeyDown) CtrlKeyDown = true;
     } else if (event->keyval == 65505){ // Shift(left)
         if (!ShiftKeyDown) ShiftKeyDown = true;
     }
 
-    FindAndProcessEvents(Event::KEYBOARD,event->keyval);
-
+    FindAndProcessEvents(Event::KEYBOARD, event->keyval);
     return 1;
 }
+
 bool MainWindow::OnKeyRelease(GdkEventKey* event){
 
     if (event->keyval == 65507){ //Ctrl (left)
@@ -956,7 +939,6 @@ void MainWindow::OnTreeModelRowDeleted(const Gtk::TreeModel::Path& path){
         }else{
             ID2 = 0;
         }
-        *dbg << "Moved " << ID << "-" << ID2 << ENDL;
 
         //OK, now we know where from and to we moved a seq, we can switch the seq's in vector.
         if (ID == ID2) return;

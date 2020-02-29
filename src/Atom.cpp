@@ -19,8 +19,6 @@
 
 #include "Atom.hpp"
 
-#include "messages.hpp"
-
 bool AtomComparison(Atom * a1, Atom * a2)
 {
     if( (a1->time)==(a2->time)){

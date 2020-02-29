@@ -27,11 +27,11 @@
 #endif
 
 #include <fstream>
+#include <iostream>
 
 #include <glibmm/keyfile.h>
 
 #include "Files.hpp"
-#include "messages.hpp"
 #include "shared.hpp"
 
 
@@ -85,7 +85,6 @@ namespace Config{
     }
 
     void LoadFromFile(){
-        *dbg << "loading config from file..." << ENDL;
         Glib::KeyFile kf;
 
 	Glib::ustring path;
@@ -135,7 +134,6 @@ namespace Config{
     }
 
     void SaveToFile(){
-        *dbg << "saving to config file..." << ENDL;
         Glib::KeyFile kf;
         char temp[200];
         std::ofstream output_file;
@@ -150,7 +148,7 @@ namespace Config{
         if (!output_file.good()) {
             sprintf(temp, _("ERROR - error while trying to save config file %s.\n(errno = %d)"),path.c_str(),errno);
             //Inform the user about the errror both by STDIO and a nice graphical MessageBox.
-            *err << temp;
+            std::cerr << temp << std::endl;
             Info(nullptr, temp);
             return;
         }
@@ -176,7 +174,6 @@ namespace Config{
         output_file <<  kf.to_data().c_str();
 
         output_file.close();
-        *dbg << "saving to config file done." << ENDL;
     }
 
 

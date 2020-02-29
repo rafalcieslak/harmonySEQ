@@ -41,5 +41,6 @@ void UIMain();
 extern std::map<std::string, int> keymap_stoi;
 extern std::map<int, std::string> keymap_itos;
 
+extern int debug;
 
 #endif

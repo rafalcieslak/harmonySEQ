@@ -24,7 +24,6 @@
 #include "Engine.hpp"
 #include "NoteSequencer.hpp"
 #include "Sequencer.hpp"
-#include "messages.hpp"
 
 extern Engine* engine;
 
@@ -43,7 +42,6 @@ Action::~Action(){
 }
 
 void Action::Trigger(int data){
-    *dbg << "-- Action triggered '" << GetLabel() << "'.\n";
 
     //Reactions depend on action type.
     if(type == SEQ_ON_OFF_TOGGLE) {
@@ -78,7 +76,7 @@ void Action::Trigger(int data){
         if(!seq) return;
         seq->SetPlayOncePhase(1);
     }else if(type == NONE){
-        *dbg << "empty event triggered\n";
+
     }else if(type == PLAY_PAUSE){
         switch(args[1]){
         case 0: //just pause
@@ -107,7 +105,7 @@ void Action::Trigger(int data){
     }else if(type == TOGGLE_PASS_MIDI){
         // No longer supported.
     }else{
-        *err << _("WARNING: Unknown action triggered.\n");
+        fprintf(stderr, "WARNING: Unknown action triggered.\n");
     }
 
     on_trigger();

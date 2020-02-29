@@ -19,6 +19,8 @@
 
 #include "Engine.hpp"
 
+#include <iostream>
+
 #include "AtomContainer.hpp"
 #include "Configuration.hpp"
 #include "ControlSequencer.hpp"
@@ -29,7 +31,6 @@
 #include "NoteSequencer.hpp"
 #include "Sequencer.hpp"
 #include "SequencerManager.hpp"
-#include "messages.hpp"
 #include "shared.hpp"
 
 
@@ -89,7 +90,6 @@ void Engine::Stop() {
 
 void Engine::StartQueue(){
     //Runs the queue. Warning: It's not unpausing, unpausing is implemented in ContinueQueue().
-    *dbg << "The queue is starting!\n";
     snd_seq_start_queue(seq_handle,queueid,NULL);
     snd_seq_drain_output(seq_handle);
 }
@@ -114,7 +114,7 @@ void Engine::Open(){
 
     //catch errors
     if (e < 0){
-        *err << _("Failed to open ALSA sequencer.\n");
+        std::cerr << "Failed to open ALSA sequencer." << std::endl;
         return;
     }
 
@@ -128,7 +128,7 @@ void Engine::Open(){
 
     //catch errors
     if (output_port < 0){
-        *err << _("Failed to create output port.\n");
+        std::cerr << "Failed to create output port." << std::endl;
         return;
     }
 
@@ -137,14 +137,12 @@ void Engine::Open(){
 
     //catch errors
     if (input_port < 0){
-        *err << _("Failed to create input port.\n");
+        std::cerr << "Failed to create input port." << std::endl;
         return;
     }
 
     //Increase pool size for greater kernel buffer
     snd_seq_set_client_pool_output(seq_handle,2000);
-
-    *dbg << _("Alsa engine init successfull.\n");
 }
 
 void Engine::SendNoteOnEventImmediatelly(int channel, int pitch, int velocity){
@@ -220,7 +218,6 @@ void Engine::ScheduleCtrlEventSingle(int channel, int tick_time, int ctrl_no, in
 }
 
 void Engine::ScheduleCtrlEventLinearSlope(int channel, int ctrl_no, int start_tick_time, int start_value, int end_tick_time, int end_value){
-    //*err << "s = " << start_value << ", e = " << end_value << ENDL;
     int steps = end_value - start_value;
     int time = end_tick_time - start_tick_time;
     int abs_steps = (steps>0)?steps:-steps;
@@ -296,12 +293,10 @@ void Engine::TapTempo(){
     if(deltas.size() >= 5) {
         std::sort(deltas.begin(), deltas.end());
         int n1 = deltas.size() * 1 / 3, n2 = deltas.size() * 2 / 3;
-        *dbg << n1 << " " << n2 << ENDL;
         for(auto it = deltas.begin() + n1; it != deltas.begin() + n2; it++){
             sum += *it;
         }
         double new_tempo = 60.0*(n2 - n1)/sum;
-        *dbg << "new tap tempo: " << new_tempo << " from " << n2 - n1 << ENDL;
         SetTempo(new_tempo);
     }
 
@@ -352,8 +347,6 @@ void Engine::PauseImmediately(){
     AllNotesOff();
     paused = true;
 
-    *dbg << "Queue paused!\n";
-
     on_paused();
 }
 
@@ -364,7 +357,6 @@ void Engine::Sync(){
     for (std::shared_ptr<Sequencer> seq: SequencerManager::GetAll())
         seq->play_from_here_marker = 0;
     Unpause();
-    *dbg << "Sync complete.\n";
 }
 
 snd_seq_tick_time_t Engine::GetTick() {
@@ -392,20 +384,15 @@ void Engine::Unpause(){
     UpdateQueue();
 
     //Continue the queue
-    int i = snd_seq_continue_queue(seq_handle,queueid,NULL) ;
-    if (i==-11) {//EAGAIN error. May happen sometimes unpredictably. Usually repeating request helps.
-        *dbg <<  i<< ENDL;
-    }
+    snd_seq_continue_queue(seq_handle,queueid,NULL);
     snd_seq_drain_output(seq_handle);
     //Remember the state
     paused = false;
-    *dbg << "Queue unpaused!\n";
 
     on_unpaused();
 }
 
 void Engine::ClearQueue(bool remove_noteoffs){
-    *dbg << "clearing queue...\n";
     snd_seq_remove_events_t *re;
     snd_seq_remove_events_malloc(&re);
     snd_seq_remove_events_set_queue(re,queueid);
@@ -416,13 +403,11 @@ void Engine::ClearQueue(bool remove_noteoffs){
 
     //also, clear the diode events map.
     diode_events.clear();
-    *dbg << "queue cleared.\n";
 }
 
 void Engine::DeleteQueue(){
     //If there was no queue, do not even try deleting it.
     if (queueid<0) return;
-    *dbg << "stopping queue";
     //Stop and free the queue.
     snd_seq_stop_queue(seq_handle,queueid,NULL);
     snd_seq_free_queue(seq_handle,queueid);
@@ -536,7 +521,6 @@ void Engine::UpdateQueue(){
             //ok, now find the s and e.
             if(size != 0){//ensure there are any notes
                 for(int X = 0; true; X++){
-                    //*err << "at note " << X << ", X/size = " << X/size << ENDL;
                     Atom* atm = ((*pattern)[X%size]);
                     if(atm->time + (X/size)*1.0 >= start_marker && s == -1) s = X ;
                     if(atm->time + (X/size)*1.0 < end_marker) e = X;
@@ -548,10 +532,11 @@ void Engine::UpdateQueue(){
             //We know which atoms to play, so lets play them.
             if(e != -1 && s != -1 && e>=s){
                 //Determine whether to output notes or control messages
-                if(seq->GetType() == SEQ_TYPE_NOTE){
 
-                    std::shared_ptr<NoteSequencer> noteseq = std::dynamic_pointer_cast<NoteSequencer>(seq);
+                std::shared_ptr<NoteSequencer> noteseq = std::dynamic_pointer_cast<NoteSequencer>(seq);
+                std::shared_ptr<ControlSequencer> ctrlseq = std::dynamic_pointer_cast<ControlSequencer>(seq);
 
+                if(noteseq){
                     for(int V = s; V<=e;V++){
                         note = dynamic_cast<NoteAtom*>((*pattern)[V%size]);
                         int pitch = noteseq->GetNoteOfChord(note->pitch);
@@ -565,10 +550,7 @@ void Engine::UpdateQueue(){
                         ScheduleDiodeEvent(dev, local_tick + (V / size) * sequence_time + note->time * TICKS_PER_BEAT * seq->GetLength());
 
                     }
-                }else if(seq->GetType() == SEQ_TYPE_CONTROL){
-
-                    std::shared_ptr<ControlSequencer> ctrlseq = std::dynamic_pointer_cast<ControlSequencer>(seq);
-
+                }else if(ctrlseq){
                     for(int V = s; V<=e;V++){
                         ctrl = dynamic_cast<ControllerAtom*> ((*pattern)[V % size]);
                         if(ctrl->slope_type == SLOPE_TYPE_FLAT){
@@ -577,7 +559,6 @@ void Engine::UpdateQueue(){
 
 
                             //TODO very important! output slopes ONLY to next bar!
-
 
                             next_ctrl = dynamic_cast<ControllerAtom*>((*pattern)[(V+1)%size]);
                             double nextctrl_time = next_ctrl->time;
@@ -601,8 +582,6 @@ void Engine::UpdateQueue(){
 
                     }
 
-                }else{
-                    *err << "Sequencer is neither note nor control type. Don't bother reporting this to harmonySEQ developers. This error message will never display, so if you see it, it means you must have broken something intentionally.\n";
                 }
             }
 
@@ -660,7 +639,7 @@ void Engine::UpdateQueue(){
 
     /**Note, that if there is A LOT of notes on the queue, the following call will take some time. However, it does not use CPU, and we have already unlocked gtk threads, so it can be safely called.*/
     int res = snd_seq_drain_output(seq_handle);
-    if(res != 0) *err << "ERROR: ALSA sequencer interface returned an error code (" << res << ") on snd_seq_drain_output.\n";
+    if(res != 0) std::cerr << "ERROR: ALSA sequencer interface returned an error code (" << res << ") on snd_seq_drain_output." << std::endl;
 
     on_beat();
 }
@@ -692,7 +671,7 @@ void Engine::ProcessInput(){
                 //That's a note-off. We ignore it as for now.
             }
         } else if (ev->type == SND_SEQ_EVENT_ECHO) {
-            *dbg << "ECHO!\n";
+            if(debug) std::cerr << "ECHO!" << std::endl;
             //As we got the ECHO event, this means we must prepare the next bar, that is starting right now.
             UpdateQueue();
         } else if (ev->type == SND_SEQ_EVENT_CONTROLLER) {

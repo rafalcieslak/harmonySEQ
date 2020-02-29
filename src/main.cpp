@@ -21,6 +21,7 @@
 #include <thread>
 
 #include <getopt.h>
+#include <iostream>
 
 #include "Configuration.hpp"
 #include "Files.hpp"
@@ -30,7 +31,6 @@
 #include "SettingsWindow.hpp"
 #include "TreeModels.hpp"
 #include "config.hpp"
-#include "messages.hpp"
 #include "resources.hpp"
 #include "shared.hpp"
 
@@ -46,10 +46,10 @@ std::map<int, std::string> keymap_itos; //map used for id -> keyname conversion
 
 
 /* flags set by getopt, depending on command-line parameters */
-int debugging = 0, help = 0, version = 0;
+int debug = 0, help = 0, version = 0;
 /* for getopt - defines which flag is related to which variable */
 static struct option long_options[]={
-    {"debug",no_argument,&debugging,1},
+    {"debug",no_argument,&debug,1},
     {"help",no_argument,&help,1},
     {"version",no_argument,&version,1},
     {0,0,0,0}
@@ -147,9 +147,8 @@ int main(int argc, char** argv) {
     // If this fails, harmonySEQ must not have been installed correctly.
     std::string data_path = DetermineDataPath();
 
-    debugging = 0;      //by default
+    debug = 0;      //by default
     help = 0;           //by default
-    err = new error();  //error stream is never quiet! so we open it, not caring about what we got in arguments
 
     //Now, parse the arguments.
     char c, temp[100];
@@ -161,7 +160,7 @@ int main(int argc, char** argv) {
             case 0:
                 break;
             case 'd':
-                debugging = 1;
+                debug = 1;
                 break;
             case 'h':
                 help = 1;
@@ -171,11 +170,11 @@ int main(int argc, char** argv) {
                 break;
             case '?':
                 if (optopt){
-                    sprintf(temp,_("unknown option '%c'\n"), optopt);
-                    *err << temp;
+                    sprintf(temp,_("unknown option '%c'"), optopt);
+                    std::cerr << temp << std::endl;
                 }else{
-                    sprintf(temp, _("unrecognized option '%s'\n"),argv[optind-1]); //a trick to tell what was the LONG option we couldn't recognize.
-                    *err << temp;
+                    sprintf(temp, _("unrecognized option '%s'"),argv[optind-1]); //a trick to tell what was the LONG option we couldn't recognize.
+                    std::cerr << temp << std::endl;
                 }
                 help = 1;
                 break;
@@ -185,9 +184,6 @@ int main(int argc, char** argv) {
         }
 
     }
-
-    //start the debug output class, enabling it only if debugging = 1.
-    dbg = new debug(debugging);
 
     //print help, if required
     if (help) {

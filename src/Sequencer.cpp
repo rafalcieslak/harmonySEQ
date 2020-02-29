@@ -20,7 +20,6 @@
 #include "Sequencer.hpp"
 
 #include "AtomContainer.hpp"
-#include "messages.hpp"
 
 
 #define SEQUENCE_DEFAULT_SIZE 16
@@ -169,7 +168,6 @@ bool Sequencer::RemovePattern(int x){
     patterns.erase(patterns.begin() + x);
     if (active_pattern > x) active_pattern--;
     else if (active_pattern == x) active_pattern = 0;
-    *dbg<< "Removed pattern " << x << ".\n";
     return 0;
 }
 

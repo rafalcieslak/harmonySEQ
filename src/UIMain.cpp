@@ -23,7 +23,6 @@
 
 #include <gtkmm.h>
 
-#include "messages.hpp"
 #include "shared.hpp"
 
 
@@ -107,10 +106,8 @@ bool Ask(Gtk::Window* parent, std::string message, std::string secondary_message
     int result = dialog.run();
     switch (result){
         case Gtk::RESPONSE_YES:
-            *dbg << "anserwed YES";
             return 1;
         case Gtk::RESPONSE_NO:
-            *dbg << "anserwed NO";
             return 0;
     }
     return 0;

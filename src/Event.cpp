@@ -19,10 +19,11 @@
 
 #include "Event.hpp"
 
+#include <iostream>
+
 #include <gtkmm.h>
 
 #include "Action.hpp"
-#include "messages.hpp"
 #include "shared.hpp"
 
 
@@ -89,9 +90,6 @@ std::string Event::GetLabel(){
 
 
 void Event::Trigger(){
-    *dbg << "triggered event --'";
-    *dbg << GetLabel() << "'--\n";
-
     for (unsigned int i = 0; i < actions.size(); i++){
         if (!actions[i]) continue; //it was removed
         actions[i]->Trigger();
@@ -133,8 +131,7 @@ void FindAndProcessEvents(Event::EventTypes ev,int arg1, int arg2){
                         Events[x]->Trigger();
                     break;
                 case Event::NONE:
-                    *err << _("Error - empty event would be triggered.\n");
-
+                    break;
             }
 
         }
@@ -145,17 +142,7 @@ void FindAndProcessEvents(Event::EventTypes ev,int arg1, int arg2){
 
 
 bool FindAndProcessEventsKeyPress(GdkEventKey* event){
-    //*dbg << "triggered " << event->keyval << "\n";
-    std::map<int,std::string>::iterator iter;
-    iter = keymap_itos.find(event->keyval);
-    if(iter != keymap_itos.end()){
-        *dbg << "Pressed key '" << iter->second << "'.\n";
-
-    }else
-        *dbg << "Unknown key pressed\n";
-
-    FindAndProcessEvents(Event::KEYBOARD,event->keyval);
-
+    FindAndProcessEvents(Event::KEYBOARD, event->keyval);
     return 1;
 }
 

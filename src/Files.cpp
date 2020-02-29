@@ -20,6 +20,7 @@
 #include "Files.hpp"
 
 #include <fstream>
+#include <iostream>
 
 #include <gtkmm.h>
 
@@ -34,7 +35,6 @@
 #include "Sequencer.hpp"
 #include "SequencerManager.hpp"
 #include "config.hpp"
-#include "messages.hpp"
 #include "shared.hpp"
 
 extern Engine* engine;
@@ -102,7 +102,7 @@ void LoadFileDialog(Gtk::Window* parent){
     if (result == Gtk::RESPONSE_CANCEL)
         return;
     if (result != Gtk::RESPONSE_OK){
-        *err << "Unexpected dialog response: " << result << ENDL;
+        std::cerr << "Unexpected dialog response: " << result << std::endl;
     }
 
     // To avoid lag pause engine while file is being processed.
@@ -141,7 +141,7 @@ void SaveFileDialog(Gtk::Window* parent){
     if (result == Gtk::RESPONSE_CANCEL)
         return;
     if (result != Gtk::RESPONSE_OK){
-        *err << "Unexpected dialog response: " << result << ENDL;
+        std::cerr << "Unexpected dialog response: " << result << std::endl;
     }
 
     //add .hseq extention
@@ -164,9 +164,6 @@ void SaveFileDialog(Gtk::Window* parent){
 }
 
 bool LoadFile(Glib::ustring file, Gtk::Window* parent_window){
-
-
-    *dbg << "trying to open |" << file <<"|--\n";
     Glib::KeyFile kf;
     char temp[3000];
     char temp2[3000];
@@ -176,17 +173,15 @@ bool LoadFile(Glib::ustring file, Gtk::Window* parent_window){
     try{
         if (!kf.load_from_file(file)) {
             //Returned 1, so something strange is with the file.
-            sprintf(temp, _("ERROR - error while trying to read file '%s'\n"), file.c_str());
-            *err << temp;
+            sprintf(temp, _("ERROR - error while trying to read file '%s'"), file.c_str());
+            std::cerr << temp << std::endl;
             Info(parent_window, temp);
             return 1;
         }
     }catch(const Glib::Error& e){
         //Exception cought. So can even tell what's wrong (usually some filesystem-related problem, not a problem with it's contains).
         sprintf(temp, _("ERROR - error while trying to read file '%s': "), file.c_str());
-        *err << temp;
-        *err << e.what();
-        *err << ENDL;
+        std::cerr << temp << e.what() << std::endl;
         Info(parent_window, temp,e.what());
         return 1;
     }
@@ -205,7 +200,7 @@ bool LoadFile(Glib::ustring file, Gtk::Window* parent_window){
         //Compaing versions...
         if (VA > VERSION_A || (VA == VERSION_A && VB > VERSION_B) || (VA == VERSION_A && VB == VERSION_B && VC > VERSION_C)){
             //File is too new
-            sprintf(temp,_("This file was created by harmonySEQ in a newer version (%d.%d.%d). This means it may contain data that is suppored by the newer wersion, but not by the version you are using (%d.%d.%d). It is recommended not to open such file, since it is very likely it may produce strange errors, or may event crash the program unexpectedly. However, in some cases one may want to open such file anyway, for example if it is sure it will open without trouble. Select YES to do so."),VA,VB,VC,VERSION_A,VERSION_B,VERSION_C);
+            sprintf(temp,_("This file was created by harmonySEQ in a newer version (%d.%d.%d). It is recommended not to open such file, since it is very likely it may produce strange errors, or may event crash the program unexpectedly. Do you want to open it anyway?."),VA,VB,VC);
             if (Ask(parent_window, _("Do you want to open this file?"),temp)){
                 //anserwed YES;
                 //Lets try to open it with the lastest routine. So just skip...
@@ -241,8 +236,8 @@ bool LoadFile(Glib::ustring file, Gtk::Window* parent_window){
 
         //In case of errors...
         if (e_flag) {
-            sprintf(temp, _("ERROR - error while reading file '%s'\n"), file.c_str());
-            *err << temp;
+            sprintf(temp, _("ERROR - error while reading file '%s'"), file.c_str());
+            std::cerr << temp << std::endl;
             Info(parent_window, temp);
             return 1;
         }
@@ -269,17 +264,13 @@ bool LoadFile(Glib::ustring file, Gtk::Window* parent_window){
     }catch(const Glib::KeyFileError& e){
         //KeyFile error means some trouble with data in the file. Missing key, wrong format, wrong characters, all these goes here.
         sprintf(temp, _("ERROR - Glib::KeyFile error while processing file '%s': "), file.c_str());
-        *err << temp;
-        *err << e.what();
-        *err << ENDL;
+        std::cerr << temp << e.what() << std::endl;
         Info(parent_window, temp,e.what());
         return 1;
     }catch(const Glib::Error& e){
         //Some other strange file-related errors are cought here.
         sprintf(temp, _("ERROR - unknown error while processing file '%s': "), file.c_str());
-        *err << temp;
-        *err << e.what();
-        *err << ENDL;
+        std::cerr << temp <<  e.what() << std::endl;
         Info(parent_window, temp,e.what());
         return 1;
     }
@@ -308,8 +299,7 @@ void SaveToFile(Glib::ustring filename, Gtk::Window* parent_window){
     //If something went wrong...
     if(!output_file.good()){
         sprintf(temp,_("ERROR - error while opening file %s to write.\n"),filename.c_str());
-        //Inform the user about the mistake both by STDIO and a nice graphical MessageBox.
-        *err << temp;
+        std::cerr << temp << std::endl;
         Info(parent_window, temp);
     }
 
@@ -465,8 +455,8 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
 
             //In case there is no such sequencer...
             if (!kfp->has_group(temp)) {
-                sprintf(temp, _("ERROR - Missing sequencer %d in file\n"), x);
-                *err << temp;
+                sprintf(temp, _("ERROR - Missing sequencer %d in file"), x);
+                std::cerr << temp << std::endl;
                 return 1;
             }
             int seq_type = kfp->get_integer(temp,"seq_type");
@@ -490,8 +480,10 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
 
             int n = kfp->get_integer(temp, "patterns_num");
 
-            if(seq_type == SEQ_TYPE_NOTE){
-                    auto noteseq = std::dynamic_pointer_cast<NoteSequencer>(seq);
+            auto noteseq = std::dynamic_pointer_cast<NoteSequencer>(seq);
+            auto ctrlseq = std::dynamic_pointer_cast<ControlSequencer>(seq);
+
+            if(noteseq){
 
                     noteseq->expand_chord = kfp->get_boolean(temp,"expand_chord");
                     if(kfp->has_key(temp, "gate_percent"))
@@ -505,7 +497,10 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
                         //And get the pattern from file
                         std::vector<double> pattern_data = kfp->get_double_list(temp, temp2);
 
-                        if(pattern_data.size()%4 != 0){*err << "ERROR - pattern size in file %4 != 0  - aborting opening"; return 1;}
+                        if(pattern_data.size()%4 != 0){
+                            std::cerr << "ERROR - pattern size in file %4 != 0  - aborting opening" << std::endl;
+                            return 1;
+                        }
                         //Simple algorithm, just copying data from the pattern from file to the pattern in the sequencer
                         for (unsigned int w = 0; w < pattern_data.size(); w+=4) {
                             NoteAtom *note = new NoteAtom;
@@ -524,9 +519,7 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
                         noteseq->chord.SetFromVector(vec);
                     }
 
-            }else if (seq_type == SEQ_TYPE_CONTROL) {
-
-                auto ctrlseq = std::dynamic_pointer_cast<ControlSequencer>(seq);
+            }else if (ctrlseq) {
 
                 ctrlseq->SetControllerNumber(kfp->get_integer(temp, "controller"));
 
@@ -540,7 +533,7 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
                     std::vector<double> pattern_data = kfp->get_double_list(temp, temp2);
 
                     if (pattern_data.size() % 3 != 0) {
-                        *err << "ERROR - pattern size in file %3 != 0  - aborting opening";
+                        std::cerr << "ERROR - pattern size in file %3 != 0  - aborting opening" << std::endl;
                         return 1;
                     }
                     //Simple algorithm, just copying data from the pattern from file to the pattern in the sequencer
@@ -575,7 +568,7 @@ bool LoadFileCurrent(Glib::KeyFile* kfp){
 
         //No such key? something really wrong.
         if (!kfp->has_key("System", "events_number")) {
-            *err << "ERROR - No events_number key in file.\n";
+            std::cerr << "ERROR - No events_number key in file." << std::endl;
             return 1;
         }
 

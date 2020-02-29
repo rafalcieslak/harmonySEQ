@@ -28,7 +28,6 @@
 #include "Event.hpp"
 #include "Files.hpp"
 #include "Engine.hpp"
-#include "messages.hpp"
 
 extern Engine* engine;
 
@@ -148,7 +147,6 @@ void PatternWidget::UpdateSizeRequest(){
         last_scale_factor = scale_factor;
     }
 
-    //*dbg << "sizerequest " << vert_size << " " << internal_height+20 << ENDL;
     set_size_request(horiz_size,internal_height);
 }
 
@@ -582,7 +580,6 @@ void PatternWidget::ProcessDrag(double x, double y){
         }
         //Remembers how much was the dragged note moved due to snapping feature, so that we can move other notes by the same distance.
         double snap_offset = snapped_time - temp_time;
-        // *dbg << snap_offset << ENDL;
 
         std::set<Atom *, AtomComparingClass>::iterator it = selection.begin();
         std::set<Atom *, AtomComparingClass> resulting_selection;
@@ -598,7 +595,6 @@ void PatternWidget::ProcessDrag(double x, double y){
                 note->pitch = temp_pitch;
                 note->time = temp_time;
                 resulting_selection.insert(note);
-                // *dbg << " " << note->pitch << " " << note->time <<ENDL;
             }
         } else if (seq_type == SEQ_TYPE_CONTROL) {
             for (; it != selection.end(); it++) {
@@ -613,7 +609,6 @@ void PatternWidget::ProcessDrag(double x, double y){
                 ctrl->value = temp_value;
                 ctrl->time = temp_time;
                 resulting_selection.insert(ctrl);
-                // *dbg << " " << note->pitch << " " << note->time <<ENDL;
             }
         }
         //important!
@@ -645,7 +640,6 @@ void PatternWidget::ProcessDrag(double x, double y){
                 NoteAtom* note = dynamic_cast<NoteAtom*> (atm);
                 //check if pitch is in bounds...
                 if (note->pitch <= sel_pith_max && note->pitch >= sel_pith_min) {
-                    // *dbg << " note " << x << " pith ("<<note->pitch <<")  in bounds.\n";
                     //check time...
                     double start = note->time;
                     double end = note->time + note->length;
@@ -1061,7 +1055,6 @@ void PatternWidget::AllDiodesOff(){
 }
 
 DiodeMidiEvent* PatternWidget::LightUpDiode(DiodeMidiEvent diodev){
-    //*err << diodev.time << ", " << diodev.value << ", " << diodev.color << ENDL;
     DiodeMidiEvent* diode_ptr = new DiodeMidiEvent(diodev);
     gettimeofday(&diode_ptr->starttime,NULL);
     active_diodes_mtx.lock();
@@ -1357,134 +1350,138 @@ void PatternWidget::RedrawGrid(){
 
     int size = container->GetSize();
 
-  //notes
-  if(seq_type == SEQ_TYPE_NOTE){
-                        for (int x = size-1; x >= 0; x--){ //iterating backwards, to draw shades below notes
-                              Atom* atm = (*container)[x];
-                              NoteAtom* note = dynamic_cast<NoteAtom*>(atm);
-                              if(note == NULL) {*err << _("While drawing pattern: note = null. This should never happen! Please report this bug to harmonySEQ developers.\n"); continue;}
+    //notes
+    if(seq_type == SEQ_TYPE_NOTE){
+        for (int x = size-1; x >= 0; x--){ //iterating backwards, to draw shades below notes
+            Atom* atm = (*container)[x];
+            NoteAtom* note = dynamic_cast<NoteAtom*>(atm);
+            if(note == NULL) {
+                continue;
+            }
 
-                              //calculate coordinates
-                              double y1 = (5-note->pitch)*draw_height/6;
-                              double h = draw_height/6;
-                              double x1 = note->time*draw_width;
-                              double w = note->length*draw_width;
-                              // y1 += 0.5; // To align with the grid
-                              bool selected = false;
-                              //TODO: searching should be faster! Might be better to mark an atom's flag stating whether the note is in selection?
-                              if(selection.find(note) != selection.end()) selected = true;
-                              //check if in temp. selection
-                              if(drag_temporary_selection.find(note) != drag_temporary_selection.end()) selected = true;
+            //calculate coordinates
+            double y1 = (5-note->pitch)*draw_height/6;
+            double h = draw_height/6;
+            double x1 = note->time*draw_width;
+            double w = note->length*draw_width;
+            // y1 += 0.5; // To align with the grid
+            bool selected = false;
+            //TODO: searching should be faster! Might be better to mark an atom's flag stating whether the note is in selection?
+            if(selection.find(note) != selection.end()) selected = true;
+            //check if in temp. selection
+            if(drag_temporary_selection.find(note) != drag_temporary_selection.end()) selected = true;
 
-                              //draw note
-                              cr_atoms_context->set_line_width(3.0);
-                              cr_atoms_context->set_line_join(Cairo::LINE_JOIN_ROUND);
-                              cr_atoms_context->rectangle(x1+1.5,y1+1.5,w-3,h-3);
-                              double af = (double)note->velocity/127; //may be changed to 128, this will not affect the graphics visibly, but may work slightly faster.
-                              if (selected) selected_atom_color.with_a(af).to_context(cr_atoms_context);
-                              else atom_color.with_a(af).to_context(cr_atoms_context);
-                              cr_atoms_context->fill_preserve();
-                              if (selected) selected_atom_border_color.to_context(cr_atoms_context);
-                              else atom_border_color.to_context(cr_atoms_context);
-                              cr_atoms_context->stroke();
+            //draw note
+            cr_atoms_context->set_line_width(3.0);
+            cr_atoms_context->set_line_join(Cairo::LINE_JOIN_ROUND);
+            cr_atoms_context->rectangle(x1+1.5,y1+1.5,w-3,h-3);
+            double af = (double)note->velocity/127; //may be changed to 128, this will not affect the graphics visibly, but may work slightly faster.
+            if (selected) selected_atom_color.with_a(af).to_context(cr_atoms_context);
+            else atom_color.with_a(af).to_context(cr_atoms_context);
+            cr_atoms_context->fill_preserve();
+            if (selected) selected_atom_border_color.to_context(cr_atoms_context);
+            else atom_border_color.to_context(cr_atoms_context);
+            cr_atoms_context->stroke();
 
-                              //cr_atoms_context->save();
-                              {
-                                  cr_atoms_context->rectangle(x1+1.5,y1+1.5,w-3,h-3);
-                                  cr_atoms_context->clip();
+            //cr_atoms_context->save();
+            {
+                cr_atoms_context->rectangle(x1+1.5,y1+1.5,w-3,h-3);
+                cr_atoms_context->clip();
 
-                                  //draw velocity bar
-                                 double velbar_up = y1+(127.0-(double)note->velocity)*h/127.0;
-                                 double velbar_h = h*(double)note->velocity/127.0;
-                                 cr_atoms_context->rectangle(x1,velbar_up,7,velbar_h);
-                                 if (selected) selected_atom_border_color.to_context(cr_atoms_context);
-                                 else atom_border_color.to_context(cr_atoms_context);
-                                 cr_atoms_context->fill();
+                //draw velocity bar
+                double velbar_up = y1+(127.0-(double)note->velocity)*h/127.0;
+                double velbar_h = h*(double)note->velocity/127.0;
+                cr_atoms_context->rectangle(x1,velbar_up,7,velbar_h);
+                if (selected) selected_atom_border_color.to_context(cr_atoms_context);
+                else atom_border_color.to_context(cr_atoms_context);
+                cr_atoms_context->fill();
 
-                                  //length handle
-                                  cr_atoms_context->move_to(x1+w-1.5,y1+h-1.5);
-                                  cr_atoms_context->line_to(x1+w-1.5,y1+h-1.5-handle_size);
-                                  cr_atoms_context->line_to(x1+w-1.5-handle_size,y1+h-1.5);
-                                  cr_atoms_context->line_to(x1+w-1.5,y1+h-1.5);
-                                  if (selected) selected_atom_border_color.to_context(cr_atoms_context);
-                                  else atom_border_color.to_context(cr_atoms_context);
-                                  cr_atoms_context->fill();
+                //length handle
+                cr_atoms_context->move_to(x1+w-1.5,y1+h-1.5);
+                cr_atoms_context->line_to(x1+w-1.5,y1+h-1.5-handle_size);
+                cr_atoms_context->line_to(x1+w-1.5-handle_size,y1+h-1.5);
+                cr_atoms_context->line_to(x1+w-1.5,y1+h-1.5);
+                if (selected) selected_atom_border_color.to_context(cr_atoms_context);
+                else atom_border_color.to_context(cr_atoms_context);
+                cr_atoms_context->fill();
 
-                                  cr_atoms_context->reset_clip();
-                              }
-                              //cr_atoms_context->restore();
+                cr_atoms_context->reset_clip();
+            }
+            //cr_atoms_context->restore();
 
-                             if (note->time + note->length > 1.0) {
-                                 //draw shade
-                                 x1 -= draw_width;
-                                 cr_atoms_context->rectangle(x1 + 1.5, y1 + 1.5, w - 3, h - 3);
-                                 cr_atoms_context->set_source_rgba(0.8, 0.8, 0.8, af*0.75);
-                                 cr_atoms_context->fill_preserve();
-                                 cr_atoms_context->set_source_rgb(0.7, 0.7, 0.7);
-                                 cr_atoms_context->stroke();
-                             }
-                        }
+            if (note->time + note->length > 1.0) {
+                //draw shade
+                x1 -= draw_width;
+                cr_atoms_context->rectangle(x1 + 1.5, y1 + 1.5, w - 3, h - 3);
+                cr_atoms_context->set_source_rgba(0.8, 0.8, 0.8, af*0.75);
+                cr_atoms_context->fill_preserve();
+                cr_atoms_context->set_source_rgb(0.7, 0.7, 0.7);
+                cr_atoms_context->stroke();
+            }
+        }
       }else if (seq_type == SEQ_TYPE_CONTROL){
-                        if(size!=0) //if there are no atoms, draw nothing
-                        for (int n = -1; n < size; n++){ //iterating forwards, to draw lines below atoms
-                               Atom* atm;
-                               Atom* nextatm;
-                               if(size == 1) nextatm = atm = (*container)[0];
-                               else{
-                                   if(n==-1)
-                                            atm = (*container)[size-1];
-                                   else
-                                            atm = (*container)[n];
-                                   if(n== size-1)
-                                            nextatm = (*container)[0];
-                                   else
-                                            nextatm = (*container)[n+1];
-                               }
-                              ControllerAtom* ctrl = dynamic_cast<ControllerAtom*>(atm);
-                              ControllerAtom* nextctrl = dynamic_cast<ControllerAtom*>(nextatm);
+        if(size!=0) //if there are no atoms, draw nothing
+            for (int n = -1; n < size; n++){ //iterating forwards, to draw lines below atoms
+                Atom* atm;
+                Atom* nextatm;
+                if(size == 1) nextatm = atm = (*container)[0];
+                else{
+                    if(n==-1)
+                        atm = (*container)[size-1];
+                    else
+                        atm = (*container)[n];
+                    if(n== size-1)
+                        nextatm = (*container)[0];
+                    else
+                        nextatm = (*container)[n+1];
+                }
+                ControllerAtom* ctrl = dynamic_cast<ControllerAtom*>(atm);
+                ControllerAtom* nextctrl = dynamic_cast<ControllerAtom*>(nextatm);
 
-                              if(ctrl == NULL) {*err << _("While drawing pattern: ctrl = null. This should never happen! Please report this bug to harmonySEQ developers.\n"); continue;}
+                if(ctrl == NULL) {
+                    continue;
+                }
 
-                              //these are ints intentionally - to avoid unnecesary cairo anti-aliasing we round everything to 1.0 and add 0.5
-                              int y = (double)draw_height*((127.0-ctrl->value)/(127.0));
-                              int x = ctrl->time*draw_width ;
-                              //Check if note is in selection.
-                              bool selected = false;
-                              if(selection.find(ctrl) != selection.end()) selected = true;
-                              //check if in temp. selection
-                              if(drag_temporary_selection.find(ctrl) != drag_temporary_selection.end()) selected = true;
+                //these are ints intentionally - to avoid unnecesary cairo anti-aliasing we round everything to 1.0 and add 0.5
+                int y = (double)draw_height*((127.0-ctrl->value)/(127.0));
+                int x = ctrl->time*draw_width ;
+                //Check if note is in selection.
+                bool selected = false;
+                if(selection.find(ctrl) != selection.end()) selected = true;
+                //check if in temp. selection
+                if(drag_temporary_selection.find(ctrl) != drag_temporary_selection.end()) selected = true;
 
-                              //draw line to next point
-                              cr_atoms_context->set_line_width(3.0);
-                              if(n == -1 || n == size-1)
-                                  border_color.with_a(0.6).to_context(cr_atoms_context);
-                              else
-                                  border_color.to_context(cr_atoms_context);
-                              cr_atoms_context->move_to(x-(n==-1)*draw_width+0.5,y+0.5);
-                              if(ctrl->slope_type == SLOPE_TYPE_FLAT)
-                                  cr_atoms_context->line_to(nextctrl->time*draw_width+(n==size-1)*draw_width+0.5, y+0.5);
-                              else if(ctrl->slope_type == SLOPE_TYPE_LINEAR){
-                                  int next_y =  (double)draw_height*((127.0-nextctrl->value)/(127.0));
-                                  cr_atoms_context->line_to(nextctrl->time*draw_width+(n==size-1)*draw_width+0.5, next_y+0.5);
-                              }
-                              cr_atoms_context->stroke();
+                //draw line to next point
+                cr_atoms_context->set_line_width(3.0);
+                if(n == -1 || n == size-1)
+                    border_color.with_a(0.6).to_context(cr_atoms_context);
+                else
+                    border_color.to_context(cr_atoms_context);
+                cr_atoms_context->move_to(x-(n==-1)*draw_width+0.5,y+0.5);
+                if(ctrl->slope_type == SLOPE_TYPE_FLAT)
+                    cr_atoms_context->line_to(nextctrl->time*draw_width+(n==size-1)*draw_width+0.5, y+0.5);
+                else if(ctrl->slope_type == SLOPE_TYPE_LINEAR){
+                    int next_y =  (double)draw_height*((127.0-nextctrl->value)/(127.0));
+                    cr_atoms_context->line_to(nextctrl->time*draw_width+(n==size-1)*draw_width+0.5, next_y+0.5);
+                }
+                cr_atoms_context->stroke();
 
-                              if(n == -1) continue; //no need to draw -1th atom
+                if(n == -1) continue; //no need to draw -1th atom
 
-                              //draw atom
-                              cr_atoms_context->set_line_width(1.0);
-                              if(ctrl->slope_type == SLOPE_TYPE_FLAT)
-                                  cr_atoms_context->rectangle(x-4.5,y-4.5,11.0,11.0);
-                              else if(ctrl->slope_type == SLOPE_TYPE_LINEAR)
-                                  cr_atoms_context->arc(x+0.5,y+0.5,7.0,0,2*M_PI);
-                              if (selected) selected_atom_color.to_context(cr_atoms_context);
-                              else atom_color.to_context(cr_atoms_context);
-                              cr_atoms_context->fill_preserve();
-                              if (selected) selected_atom_border_color.to_context(cr_atoms_context);
-                              else atom_border_color.to_context(cr_atoms_context);
-                              cr_atoms_context->stroke();
-                        }
-      }
+                //draw atom
+                cr_atoms_context->set_line_width(1.0);
+                if(ctrl->slope_type == SLOPE_TYPE_FLAT)
+                    cr_atoms_context->rectangle(x-4.5,y-4.5,11.0,11.0);
+                else if(ctrl->slope_type == SLOPE_TYPE_LINEAR)
+                    cr_atoms_context->arc(x+0.5,y+0.5,7.0,0,2*M_PI);
+                if (selected) selected_atom_color.to_context(cr_atoms_context);
+                else atom_color.to_context(cr_atoms_context);
+                cr_atoms_context->fill_preserve();
+                if (selected) selected_atom_border_color.to_context(cr_atoms_context);
+                else atom_border_color.to_context(cr_atoms_context);
+                cr_atoms_context->stroke();
+            }
+    }
 
     cr_atoms_context->restore();
 
@@ -1556,7 +1553,6 @@ void PatternWidget::Redraw(int x_dip, int y_dip, int width_dip, int height_dip){
     }
 
     //T.elapsed(t);
-    //*err << (int)t << ENDL;
 
     // T.stop();
     //queue_draw_area(x_dip, y_dip, width_dip, height_dip);

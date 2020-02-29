@@ -22,7 +22,6 @@
 #include "Action.hpp"
 #include "Event.hpp"
 #include "Files.hpp"
-#include "messages.hpp"
 #include "shared.hpp"
 
 
@@ -58,7 +57,7 @@ EventsWidget::EventsWidget(){
     m_TreeView.set_model(m_refTreeModel);
     m_TreeView.set_name("events");
 
-    if (debugging) m_TreeView.append_column(_("ID"),m_columns.col_ID);
+    if (debug) m_TreeView.append_column(_("ID"),m_columns.col_ID);
     //m_TreeView.append_column("prt",m_columns.col_prt);
     //m_TreeView.append_column("TYPE",m_columns.col_type);
     Gtk::CellRendererText* pRenderer = Gtk::manage(new Gtk::CellRendererText());
