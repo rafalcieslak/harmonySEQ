@@ -151,6 +151,10 @@ ActionGUI::ActionGUI()
     NoteSeqs_combo.pack_start(m_col_seqs.name);
     NoteSeqs_combo.signal_changed().connect(std::bind(&ActionGUI::OnNoteSeqComboChanged, this));
 
+    label_preview.set_lines(3);
+    label_preview.set_line_wrap(true);
+    label_preview.set_max_width_chars(30);
+
     signal_show().connect(std::bind(&ActionGUI::OnShow, this));
     signal_hide().connect(std::bind(&ActionGUI::OnHide, this));
 
