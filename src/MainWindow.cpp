@@ -283,6 +283,8 @@ MainWindow::MainWindow()
         column->add_attribute(cell->property_cell_background_rgba(),m_columns_sequencers.col_colour);
         column->set_min_width(32);
         Gtk::CellRendererToggle& tgl = dynamic_cast<Gtk::CellRendererToggle&> (*cell);
+        tgl.set_padding(0, 0);
+        tgl.set_alignment(0.5, 0.5);
         tgl.signal_toggled().connect(std::bind(&MainWindow::OnMutedToggleToggled, this, std::placeholders::_1));
 
         col_count = wTreeView.append_column(_("Channel"), m_columns_sequencers.col_channel);

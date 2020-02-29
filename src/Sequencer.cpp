@@ -28,14 +28,14 @@
 Sequencer::Sequencer()
     : patterns(0)
 {
-    printf("Constructing unnamed sequencer\n");
+    // printf("Constructing unnamed sequencer\n");
     Init();
 }
 
 Sequencer::Sequencer(Glib::ustring _name)
     : patterns(0)
 {
-    printf("Constructing sequencer %s\n", _name.c_str());
+    // printf("Constructing sequencer %s\n", _name.c_str());
     Init();
     name = _name;
 }
@@ -54,7 +54,7 @@ Sequencer::Sequencer(const Sequencer& orig) {
 }
 
 Sequencer::~Sequencer() {
-    printf("Destructing sequencer %s\n", name.c_str());
+    // printf("Destructing sequencer %s\n", name.c_str());
 }
 
 void Sequencer::Init(){

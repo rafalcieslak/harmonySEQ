@@ -110,3 +110,18 @@ eventbox.seq-oncepre {
 checkbutton.seq-oncepre {
     background-color: #eec900;
 }
+
+/* Treeview checks */
+treeview check{
+	min-height: unset;
+	min-width: unset;
+}
+
+treeview.view checked {
+  background-color: rgba(255, 128, 128, 0.3);
+}
+
+treeview check:checked{
+  background-color: rgba(0, 128, 0, 0.5);
+  color: rgba(0, 0, 0, 0.5);
+}
