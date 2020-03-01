@@ -89,9 +89,6 @@ public:
      *@parram n sequencer number*/
     Glib::ustring GetSeqName(int n);
 
-    /**Shows the GUI*/
-    void GUIShowWindow();
-
     /** This signal is emitted by the events thread (or the UI's
      * thread, if the events thread hasn't been implemented yet). It's
      * up to the subscriber to relay work to a different thread. */

@@ -219,7 +219,7 @@ void EventsWidget::OnAddEventClicked(){
 
     row[m_columns.col_connections_using_this_row] = conns;
 
-    ShowEventGUI(event);
+    ShowEventEditor(event);
 
     m_TreeView.get_selection()->select(iter); //select the event that was just added
     Files::SetFileModified(1);
@@ -273,7 +273,7 @@ void EventsWidget::OnAddActionClicked(){
 
     row[m_columns.col_connections_using_this_row] = conns;
 
-    ShowActionGUI(action);
+    ShowActionEditor(action);
 
     row = *iter_selected;
     if (row[m_columns.col_type] == EVENT)
@@ -282,11 +282,11 @@ void EventsWidget::OnAddActionClicked(){
     Files::SetFileModified(1);
 }
 
-void EventsWidget::ShowActionGUI(Action* target){
-    action_gui.set_transient_for(*dynamic_cast<Gtk::Window*>(get_toplevel()));
-    action_gui.Edit(*target);
+void EventsWidget::ShowActionEditor(Action* target){
+    action_editor.set_transient_for(*dynamic_cast<Gtk::Window*>(get_toplevel()));
+    action_editor.Edit(*target);
     action_edit_completed_conn.disconnect();
-    action_edit_completed_conn = action_gui.on_edit_completed.connect(
+    action_edit_completed_conn = action_editor.on_edit_completed.connect(
         [=](const Action& result){
             /* TODO: In future, when actions are polymorphic, we will
              * be able to replace the action with possibly an instance
@@ -297,11 +297,11 @@ void EventsWidget::ShowActionGUI(Action* target){
         });
 }
 
-void EventsWidget::ShowEventGUI(Event* target){
-    event_gui.set_transient_for(*dynamic_cast<Gtk::Window*>(get_toplevel()));
-    event_gui.Edit(*target);
+void EventsWidget::ShowEventEditor(Event* target){
+    event_editor.set_transient_for(*dynamic_cast<Gtk::Window*>(get_toplevel()));
+    event_editor.Edit(*target);
     event_edit_completed_conn.disconnect();
-    event_edit_completed_conn = event_gui.on_edit_completed.connect(
+    event_edit_completed_conn = event_editor.on_edit_completed.connect(
         [=](const Event& result){
             /* TODO: In future, when events are polymorphic, we will
              * be able to replace the event with possibly an instance
@@ -334,10 +334,10 @@ void EventsWidget::OnRowChosen(const Gtk::TreeModel::Path& path, Gtk::TreeViewCo
 
     Gtk::TreeModel::Row row = *iter;
     if(row[m_columns.col_type] == EVENT)
-        ShowEventGUI(Events[row[m_columns.col_ID]]);
+        ShowEventEditor(Events[row[m_columns.col_ID]]);
     else if(row[m_columns.col_type] == ACTION)
         // TODO: The tree model should store pointers / shared pointers to actions.
-        ShowActionGUI(Events[row[m_columns.col_prt]]->actions[row[m_columns.col_ID]]);
+        ShowActionEditor(Events[row[m_columns.col_prt]]->actions[row[m_columns.col_ID]]);
 }
 
 void EventsWidget::UpdateRow(Gtk::TreeModel::Row row){

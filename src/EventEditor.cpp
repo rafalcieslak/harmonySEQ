@@ -17,7 +17,7 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "EventGUI.hpp"
+#include "EventEditor.hpp"
 
 #include "Configuration.hpp"
 #include "Event.hpp"
@@ -26,7 +26,7 @@
 #include "shared.hpp"
 
 
-EventGUI::EventGUI(){
+EventEditor::EventEditor(){
     set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
     set_modal(true);
 
@@ -85,9 +85,9 @@ EventGUI::EventGUI(){
     note_spinbutton.set_increments(1.0,16.0);
     ctrl_spinbutton.set_increments(1.0,16.0);
     osc_tag.set_increments(1.0,16.0);
-    note_spinbutton.signal_value_changed().connect(std::bind(&EventGUI::OnNoteChanged, this));
-    ctrl_spinbutton.signal_value_changed().connect(std::bind(&EventGUI::OnCtrlChanged, this));
-    osc_tag.signal_value_changed().connect(std::bind(&EventGUI::OnOSCPortChanged, this));
+    note_spinbutton.signal_value_changed().connect(std::bind(&EventEditor::OnNoteChanged, this));
+    ctrl_spinbutton.signal_value_changed().connect(std::bind(&EventEditor::OnCtrlChanged, this));
+    osc_tag.signal_value_changed().connect(std::bind(&EventEditor::OnOSCPortChanged, this));
 
     label_type.set_text(_("Type:"));
     label_channel.set_text(_("Channel:"));
@@ -98,20 +98,20 @@ EventGUI::EventGUI(){
     capture.set_label(_("Capture"));
     capture.set_tooltip_markup(_("Cathes next event end fill this one's type and arguments to fit the one triggered.\n<i>Example usage: press this button and then the X key on your keyboard. The event will be automatically set to type: keyboard, key: X.</i>"));
 
-    capture.signal_clicked().connect(std::bind(&EventGUI::OnCaptureClicked, this));
+    capture.signal_clicked().connect(std::bind(&EventEditor::OnCaptureClicked, this));
 
     Types_combo.pack_start(m_columns_event_types.label);
-    Types_combo.signal_changed().connect(std::bind(&EventGUI::OnTypeChanged, this));
+    Types_combo.signal_changed().connect(std::bind(&EventEditor::OnTypeChanged, this));
     Keys_combo.pack_start(m_columns_key_codes.label);
-    Keys_combo.signal_changed().connect(std::bind(&EventGUI::OnKeyChanged, this));
+    Keys_combo.signal_changed().connect(std::bind(&EventEditor::OnKeyChanged, this));
     Channels_combo.pack_start(m_columns_channels.label);
-    Channels_combo.signal_changed().connect(std::bind(&EventGUI::OnChannelChanged, this));
+    Channels_combo.signal_changed().connect(std::bind(&EventEditor::OnChannelChanged, this));
 
     main_box.pack_start(ok_button,Gtk::PACK_SHRINK);
     ok_button.set_label(_("OK"));
-    ok_button.signal_clicked().connect(std::bind(&EventGUI::OnOKClicked, this));
+    ok_button.signal_clicked().connect(std::bind(&EventEditor::OnOKClicked, this));
 
-    signal_show().connect(std::bind(&EventGUI::UpdateEverything, this));
+    signal_show().connect(std::bind(&EventEditor::UpdateEverything, this));
     add_events(Gdk::KEY_PRESS_MASK);
     signal_key_press_event().connect([=](GdkEventKey *e){return OnKeyPress(e);});
     show_all_children(1);
@@ -120,10 +120,10 @@ EventGUI::EventGUI(){
 }
 
 
-EventGUI::~EventGUI(){
+EventEditor::~EventEditor(){
 }
 
-void EventGUI::Edit(const Event& initial_value){
+void EventEditor::Edit(const Event& initial_value){
     initial_value.CopyInto(event);
 
     UpdateEverything();
@@ -131,14 +131,14 @@ void EventGUI::Edit(const Event& initial_value){
     raise();
 }
 
-void EventGUI::OnOKClicked(){
+void EventEditor::OnOKClicked(){
     capture_connection.disconnect();
 
     hide();
     on_edit_completed(event);
 }
 
-void EventGUI::UpdateEverything(){
+void EventEditor::UpdateEverything(){
     UpdateVisibleLines();
 
     /* Prevent type initialization while we're initializing GUI.*/
@@ -183,7 +183,7 @@ void EventGUI::UpdateEverything(){
     label_preview.set_text(event.GetLabel());
 }
 
-void EventGUI::UpdateVisibleLines(){
+void EventEditor::UpdateVisibleLines(){
     int type = event.type;
     line_key.hide();
     line_note.hide();
@@ -217,7 +217,7 @@ void EventGUI::UpdateVisibleLines(){
     resize(2,2);
 }
 
-void EventGUI::InitType(){
+void EventEditor::InitType(){
     if(inhibit_type_initialization) return;
 
     /* Only prepare event values - when we're done, we call UpdateEverything which copies values from event into UI. */
@@ -248,7 +248,7 @@ void EventGUI::InitType(){
     UpdateEverything();
 }
 
-void EventGUI::OnTypeChanged(){
+void EventEditor::OnTypeChanged(){
     if(!Types_combo.get_active()) return;
     Gtk::TreeModel::Row row = *(Types_combo.get_active());
     int type = row[m_columns_event_types.type];
@@ -260,7 +260,7 @@ void EventGUI::OnTypeChanged(){
 
 
 
-void EventGUI::OnChannelChanged(){
+void EventEditor::OnChannelChanged(){
     if(event.type != Event::CONTROLLER &&
        event.type != Event::NOTE)
         return;
@@ -270,7 +270,7 @@ void EventGUI::OnChannelChanged(){
     label_preview.set_text(event.GetLabel());
 }
 
-void EventGUI::OnKeyChanged(){
+void EventEditor::OnKeyChanged(){
     if(event.type != Event::KEYBOARD)
         return;
 
@@ -279,7 +279,7 @@ void EventGUI::OnKeyChanged(){
     label_preview.set_text(event.GetLabel());
 }
 
-void EventGUI::OnCtrlChanged(){
+void EventEditor::OnCtrlChanged(){
     if(event.type != Event::CONTROLLER)
         return;
     event.arg1 = ctrl_spinbutton.get_value();
@@ -288,7 +288,7 @@ void EventGUI::OnCtrlChanged(){
 
 }
 
-void EventGUI::OnNoteChanged(){
+void EventEditor::OnNoteChanged(){
     if(event.type != Event::NOTE)
         return;
     event.arg1 = note_spinbutton.get_value();
@@ -297,7 +297,7 @@ void EventGUI::OnNoteChanged(){
 
 }
 
-void EventGUI::OnOSCPortChanged(){
+void EventEditor::OnOSCPortChanged(){
     if(event.type != Event::OSC)
         return;
     event.arg1 = osc_tag.get_value();
@@ -305,13 +305,13 @@ void EventGUI::OnOSCPortChanged(){
     label_preview.set_text(event.GetLabel());
 }
 
-bool EventGUI::OnKeyPress(GdkEventKey* event){
+bool EventEditor::OnKeyPress(GdkEventKey* event){
     FindAndProcessEvents(Event::KEYBOARD, event->keyval);
 
     return 1;
 }
 
-void EventGUI::OnCaptureClicked(){
+void EventEditor::OnCaptureClicked(){
     if (capture.get_active() == 1){
         capture_connection = on_event_received.connect(
         [=](Event::EventTypes t, int a1, int a2){ DeferWorkToUIThread(

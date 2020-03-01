@@ -17,7 +17,7 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ActionGUI.hpp"
+#include "ActionEditor.hpp"
 
 #include "Action.hpp"
 #include "Files.hpp"
@@ -28,7 +28,7 @@
 #include "shared.hpp"
 
 
-ActionGUI::ActionGUI()
+ActionEditor::ActionEditor()
 {
     set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
     set_modal(true);
@@ -73,9 +73,9 @@ ActionGUI::ActionGUI()
     Gtk::RadioButtonGroup group = on_off_toggle_OFF.get_group();
     on_off_toggle_ON.set_group(group);
     on_off_toggle_TOGGLE.set_group(group);
-    on_off_toggle_OFF.signal_clicked().connect(std::bind(&ActionGUI::OnOnOffToggleChanged, this));
-    on_off_toggle_ON.signal_clicked().connect(std::bind(&ActionGUI::OnOnOffToggleChanged, this));
-    on_off_toggle_TOGGLE.signal_clicked().connect(std::bind(&ActionGUI::OnOnOffToggleChanged, this));
+    on_off_toggle_OFF.signal_clicked().connect(std::bind(&ActionEditor::OnOnOffToggleChanged, this));
+    on_off_toggle_ON.signal_clicked().connect(std::bind(&ActionEditor::OnOnOffToggleChanged, this));
+    on_off_toggle_TOGGLE.signal_clicked().connect(std::bind(&ActionEditor::OnOnOffToggleChanged, this));
 
     line_play.pack_start(play_TOGGLE,Gtk::PACK_SHRINK);
     line_play.pack_start(play_ON,Gtk::PACK_SHRINK);
@@ -83,9 +83,9 @@ ActionGUI::ActionGUI()
     group = play_OFF.get_group();
     play_ON.set_group(group);
     play_TOGGLE.set_group(group);
-    play_OFF.signal_clicked().connect(std::bind(&ActionGUI::OnPlayOnOffToggleClicked, this));
-    play_ON.signal_clicked().connect(std::bind(&ActionGUI::OnPlayOnOffToggleClicked, this));
-    play_TOGGLE.signal_clicked().connect(std::bind(&ActionGUI::OnPlayOnOffToggleClicked, this));
+    play_OFF.signal_clicked().connect(std::bind(&ActionEditor::OnPlayOnOffToggleClicked, this));
+    play_ON.signal_clicked().connect(std::bind(&ActionEditor::OnPlayOnOffToggleClicked, this));
+    play_TOGGLE.signal_clicked().connect(std::bind(&ActionEditor::OnPlayOnOffToggleClicked, this));
 
     line_type.pack_start(Types_combo,Gtk::PACK_SHRINK);
     line_seq.pack_start(AllSeqs_combo,Gtk::PACK_SHRINK);
@@ -100,19 +100,19 @@ ActionGUI::ActionGUI()
 
     notenr_button.set_range(1.0,6.0);
     notenr_button.set_increments(1.0,2.0);
-    notenr_button.signal_value_changed().connect(std::bind(&ActionGUI::OnNoteNrChanged, this));
+    notenr_button.signal_value_changed().connect(std::bind(&ActionEditor::OnNoteNrChanged, this));
     chordseq_button.set_range(-48.0,48.0);
     chordseq_button.set_increments(1.0,12.0);
-    chordseq_button.signal_value_changed().connect(std::bind(&ActionGUI::OnNoteSeqChanged, this));
+    chordseq_button.signal_value_changed().connect(std::bind(&ActionEditor::OnNoteSeqChanged, this));
     pattern_button.set_range(0.0,100.0);
     pattern_button.set_increments(1.0,10.0);
-    pattern_button.signal_value_changed().connect(std::bind(&ActionGUI::OnPatternChanged, this));
+    pattern_button.signal_value_changed().connect(std::bind(&ActionEditor::OnPatternChanged, this));
     tempo_button.set_range(30.0,320.0);
     tempo_button.set_increments(1.0,20.0);
-    tempo_button.signal_value_changed().connect(std::bind(&ActionGUI::OnTempoChanged, this));
+    tempo_button.signal_value_changed().connect(std::bind(&ActionEditor::OnTempoChanged, this));
     octave_spinbutton.set_range(-5.0,5.0);
     octave_spinbutton.set_increments(1.0,2.0);
-    octave_spinbutton.signal_value_changed().connect(std::bind(&ActionGUI::OnOctaveChanged, this));
+    octave_spinbutton.signal_value_changed().connect(std::bind(&ActionEditor::OnOctaveChanged, this));
 
 
     label_type.set_text(_("Type:"));
@@ -131,21 +131,21 @@ ActionGUI::ActionGUI()
     label_octave1.set_text(_("Transpose by "));
     label_octave2.set_text(_(" octave(s)."));
 
-    ok_button.signal_clicked().connect(std::bind(&ActionGUI::OnOKClicked, this));
+    ok_button.signal_clicked().connect(std::bind(&ActionEditor::OnOKClicked, this));
 
     Types_combo.set_model(TreeModel_ActionTypes);
     Types_combo.pack_start(m_columns_action_types.label);
-    Types_combo.signal_changed().connect(std::bind(&ActionGUI::OnTypeChanged, this));
+    Types_combo.signal_changed().connect(std::bind(&ActionEditor::OnTypeChanged, this));
 
     m_ref_treemodel_allseqs = Gtk::ListStore::create(m_col_seqs);
     m_ref_treemodel_noteseqs = Gtk::ListStore::create(m_col_seqs);
 
     AllSeqs_combo.set_model(m_ref_treemodel_allseqs);
     AllSeqs_combo.pack_start(m_col_seqs.name);
-    AllSeqs_combo.signal_changed().connect(std::bind(&ActionGUI::OnAllSeqComboChanged, this));
+    AllSeqs_combo.signal_changed().connect(std::bind(&ActionEditor::OnAllSeqComboChanged, this));
     NoteSeqs_combo.set_model(m_ref_treemodel_noteseqs);
     NoteSeqs_combo.pack_start(m_col_seqs.name);
-    NoteSeqs_combo.signal_changed().connect(std::bind(&ActionGUI::OnNoteSeqComboChanged, this));
+    NoteSeqs_combo.signal_changed().connect(std::bind(&ActionEditor::OnNoteSeqComboChanged, this));
 
     label_preview.set_lines(3);
     label_preview.set_line_wrap(true);
@@ -157,9 +157,9 @@ ActionGUI::ActionGUI()
     chordwidget.SetExpandDetails(1);
     chordwidget.ShowApplyOctave(1);
     chordwidget.Select(&action.chord);
-    action.chord.on_change.connect(std::bind(&ActionGUI::OnChordChanged, this));
+    action.chord.on_change.connect(std::bind(&ActionEditor::OnChordChanged, this));
     // TODO: We can get rid of this signal once Actions are polymorphic and we can listen to action's chord events directly.
-    chordwidget.on_apply_octave_toggled.connect(std::bind(&ActionGUI::OnApplyOctaveToogled, this, std::placeholders::_1));
+    chordwidget.on_apply_octave_toggled.connect(std::bind(&ActionEditor::OnApplyOctaveToogled, this, std::placeholders::_1));
 
     SequencerManager::on_sequencer_list_changed.connect(
         [=](){ DeferWorkToUIThread(
@@ -169,10 +169,10 @@ ActionGUI::ActionGUI()
 }
 
 
-ActionGUI::~ActionGUI(){
+ActionEditor::~ActionEditor(){
 }
 
-void ActionGUI::Edit(const Action& initial_value){
+void ActionEditor::Edit(const Action& initial_value){
     initial_value.CopyInto(action);
 
     SetupTreeModels(); //important that this has to be done before UpdateEverything, otherwise the SetSeqCombos method wouldn't be able to select the sequencer
@@ -181,16 +181,16 @@ void ActionGUI::Edit(const Action& initial_value){
     raise();
 }
 
-void ActionGUI::OnOKClicked(){
+void ActionEditor::OnOKClicked(){
     hide();
     on_edit_completed(action);
 }
 
-void ActionGUI::UpdateSequencerList(){
+void ActionEditor::UpdateSequencerList(){
     SetupTreeModels();
 }
 
-void ActionGUI::UpdateEverything(){
+void ActionEditor::UpdateEverything(){
     UpdateVisibleLines();
 
     /* Prevent type initialization while we're initializing GUI.*/
@@ -269,7 +269,7 @@ void ActionGUI::UpdateEverything(){
     label_preview.set_text(action.GetLabel());
 }
 
-void ActionGUI::UpdateVisibleLines(){
+void ActionEditor::UpdateVisibleLines(){
     int type = action.type;
 
     //Hide all, and show required ones.
@@ -333,7 +333,7 @@ void ActionGUI::UpdateVisibleLines(){
 
 }
 
-void ActionGUI::OnTypeChanged(){
+void ActionEditor::OnTypeChanged(){
     Gtk::TreeModel::Row row = *(Types_combo.get_active());
     int type = row[m_columns_action_types.type];
     action.type = type;
@@ -344,7 +344,7 @@ void ActionGUI::OnTypeChanged(){
     label_preview.set_text(action.GetLabel());
 }
 
-void ActionGUI::SetTargetSeq() {
+void ActionEditor::SetTargetSeq() {
     auto iter = AllSeqs_combo.get_active();
     if(iter){
         action.target_seq = (*(iter))[m_col_seqs.seq];
@@ -353,7 +353,7 @@ void ActionGUI::SetTargetSeq() {
     }
 }
 
-void ActionGUI::InitType(int action_type){
+void ActionEditor::InitType(int action_type){
     if(inhibit_type_initialization) return;
 
     /* Only prepare action values - when we're done, we call UpdateEverything which copies values from action into UI. */
@@ -397,7 +397,7 @@ void ActionGUI::InitType(int action_type){
 }
 
 
-void ActionGUI::OnTempoChanged(){
+void ActionEditor::OnTempoChanged(){
     if(action.type != Action::TEMPO_SET) return;
 
     action.args[1] = tempo_button.get_value();
@@ -405,7 +405,7 @@ void ActionGUI::OnTempoChanged(){
     label_preview.set_text(action.GetLabel());
 }
 
-void ActionGUI::OnAllSeqComboChanged(){
+void ActionEditor::OnAllSeqComboChanged(){
     if(!AllSeqs_combo.get_active()) return; //empty selection
     if(action.type != Action::SEQ_ON_OFF_TOGGLE &&
        action.type != Action::SEQ_PLAY_ONCE &&
@@ -418,7 +418,7 @@ void ActionGUI::OnAllSeqComboChanged(){
     label_preview.set_text(action.GetLabel());
 }
 
-void ActionGUI::OnNoteSeqComboChanged(){
+void ActionEditor::OnNoteSeqComboChanged(){
     if(!NoteSeqs_combo.get_active()) return; //empty selection
     if(action.type != Action::SEQ_CHANGE_ONE_NOTE &&
        action.type != Action::SEQ_CHANGE_CHORD &&
@@ -431,14 +431,14 @@ void ActionGUI::OnNoteSeqComboChanged(){
 
 }
 
-void ActionGUI::OnChordChanged(){
+void ActionEditor::OnChordChanged(){
     if(action.type != Action::SEQ_CHANGE_CHORD)
         return;
 
     label_preview.set_text(action.GetLabel());
 }
 
-void ActionGUI::OnNoteSeqChanged(){
+void ActionEditor::OnNoteSeqChanged(){
     if(action.type != Action::SEQ_CHANGE_ONE_NOTE)
         return;
 
@@ -447,7 +447,7 @@ void ActionGUI::OnNoteSeqChanged(){
     label_preview.set_text(action.GetLabel());
 }
 
-void ActionGUI::OnNoteNrChanged(){
+void ActionEditor::OnNoteNrChanged(){
     if(action.type != Action::SEQ_CHANGE_ONE_NOTE)
         return;
 
@@ -456,7 +456,7 @@ void ActionGUI::OnNoteNrChanged(){
     label_preview.set_text(action.GetLabel());
 }
 
-void ActionGUI::OnOnOffToggleChanged(){
+void ActionEditor::OnOnOffToggleChanged(){
     if(action.type != Action::SEQ_ON_OFF_TOGGLE)
         return;
 
@@ -467,7 +467,7 @@ void ActionGUI::OnOnOffToggleChanged(){
     label_preview.set_text(action.GetLabel());
 }
 
-void ActionGUI::OnPlayOnOffToggleClicked(){
+void ActionEditor::OnPlayOnOffToggleClicked(){
     if(action.type != Action::PLAY_PAUSE)
         return;
 
@@ -478,7 +478,7 @@ void ActionGUI::OnPlayOnOffToggleClicked(){
     label_preview.set_text(action.GetLabel());
 }
 
-void ActionGUI::OnOctaveChanged(){
+void ActionEditor::OnOctaveChanged(){
     if(action.type != Action::SEQ_TRANSPOSE_OCTAVE)
         return;
 
@@ -486,7 +486,7 @@ void ActionGUI::OnOctaveChanged(){
 
     label_preview.set_text(action.GetLabel());
 }
-void ActionGUI::OnPatternChanged(){
+void ActionEditor::OnPatternChanged(){
     if(action.type != Action::SEQ_CHANGE_PATTERN)
         return;
 
@@ -495,7 +495,7 @@ void ActionGUI::OnPatternChanged(){
     label_preview.set_text(action.GetLabel());
 }
 
-void ActionGUI::OnApplyOctaveToogled(bool apply){
+void ActionEditor::OnApplyOctaveToogled(bool apply){
     if(action.type != Action::SEQ_CHANGE_CHORD)
         return;
     action.args[3] = apply;
@@ -505,7 +505,7 @@ void ActionGUI::OnApplyOctaveToogled(bool apply){
 
 //======================================
 
-void ActionGUI::SetupTreeModels(){
+void ActionEditor::SetupTreeModels(){
     m_ref_treemodel_allseqs->clear();
     m_ref_treemodel_noteseqs->clear();
     Gtk::TreeModel::Row row;
@@ -521,7 +521,7 @@ void ActionGUI::SetupTreeModels(){
     }
 }
 
-void ActionGUI::SetSeqCombos(std::shared_ptr<Sequencer> seq){
+void ActionEditor::SetSeqCombos(std::shared_ptr<Sequencer> seq){
     Gtk::TreeModel::iterator iter = m_ref_treemodel_allseqs->get_iter("0");
     bool found = false;
     for (;iter;iter++){

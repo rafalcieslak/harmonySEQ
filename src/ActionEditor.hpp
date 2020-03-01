@@ -17,8 +17,8 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ACTIONGUI_H
-#define	ACTIONGUI_H
+#ifndef ACTIONEDITOR_H
+#define	ACTIONEDITOR_H
 
 #include <memory>
 #include <gtkmm.h>
@@ -33,10 +33,10 @@ namespace bs2 = boost::signals2;
 class Sequencer;
 
 
-class ActionGUI : public Gtk::Window {
+class ActionEditor : public Gtk::Window {
 public:
-    ActionGUI();
-    virtual ~ActionGUI();
+    ActionEditor();
+    virtual ~ActionEditor();
 
     void Edit(const Action& initial_value);
     bs2::signal<void(const Action&)> on_edit_completed;
@@ -136,4 +136,4 @@ private:
     Glib::RefPtr<Gtk::ListStore> m_ref_treemodel_noteseqs;
 };
 
-#endif	/* ACTIONGUI_H */
+#endif	/* ACTIONEDITOR_H */

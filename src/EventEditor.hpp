@@ -17,8 +17,8 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef EVENTGUI_H
-#define	EVENTGUI_H
+#ifndef EVENTEDITOR_H
+#define	EVENTEDITOR_H
 
 #include <boost/signals2.hpp>
 namespace bs2 = boost::signals2;
@@ -28,10 +28,10 @@ namespace bs2 = boost::signals2;
 #include "Event.hpp"
 
 
-class EventGUI :public Gtk::Window{
+class EventEditor :public Gtk::Window{
 public:
-    EventGUI();
-    virtual ~EventGUI();
+    EventEditor();
+    virtual ~EventEditor();
 
     void Edit(const Event& initial_value);
     bs2::signal<void(const Event&)> on_edit_completed;
@@ -90,4 +90,4 @@ private:
 
 };
 
-#endif	/* EVENTGUI_H */
+#endif	/* EVENTEDITOR_H */

@@ -26,8 +26,8 @@
 #include <boost/signals2.hpp>
 namespace bs2 = boost::signals2;
 
-#include "ActionGUI.hpp"
-#include "EventGUI.hpp"
+#include "ActionEditor.hpp"
+#include "EventEditor.hpp"
 
 
 /**List of all items. Used once in the MainWindow*/
@@ -88,12 +88,12 @@ private:
         Gtk::TreeModelColumn<std::vector<bs2::connection>> col_connections_using_this_row;
     };
 
-    void ShowActionGUI(Action* target);
-    ActionGUI action_gui;
+    void ShowActionEditor(Action* target);
+    ActionEditor action_editor;
     bs2::connection action_edit_completed_conn;
 
-    void ShowEventGUI(Event* target);
-    EventGUI event_gui;
+    void ShowEventEditor(Event* target);
+    EventEditor event_editor;
     bs2::connection event_edit_completed_conn;
 
     void UpdateColors();
