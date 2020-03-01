@@ -30,6 +30,8 @@ NoteSequencer::NoteSequencer(const NoteSequencer& s)
                                                 : Sequencer(s)
 {
     s.chord.CopyInto(chord);
+    gate_percent = s.gate_percent;
+    expand_chord = s.expand_chord;
 }
 
 

@@ -43,12 +43,15 @@ Sequencer::Sequencer(const Sequencer& orig) {
     name = orig.name;
     on = orig.on;
     resolution = orig.resolution;
-    patterns = orig.patterns;
+    std::transform(orig.patterns.begin(), orig.patterns.end(), back_inserter(patterns),
+                   [](const std::shared_ptr<AtomContainer>& pattern) { return std::make_shared<AtomContainer>(*pattern); }
+    );
+
     active_pattern = orig.active_pattern;
     channel = orig.channel;
     length_numerator = orig.length_numerator;
     length_denominator = orig.length_denominator;
-    play_from_here_marker = orig.play_from_here_marker;
+    play_from_here_marker = 0;
     play_once_phase = 0;
 }
 
