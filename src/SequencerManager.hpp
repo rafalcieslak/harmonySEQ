@@ -47,6 +47,9 @@ public:
     /* Removes a sequencer from the list. */
     static void Unregister(std::shared_ptr<Sequencer>);
 
+    /* Returns true IFF this sequencer is registered in this manager. */
+    static bool IsRegistered(std::shared_ptr<Sequencer>);
+
     /* Substitutes the internal list of sequencers with the provided
      * list. This is useful e.g. when opening files. */
     static void ReplaceAll(std::vector<std::shared_ptr<Sequencer>>);

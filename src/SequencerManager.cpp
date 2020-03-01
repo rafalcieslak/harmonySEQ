@@ -20,6 +20,8 @@
 
 #include "SequencerManager.hpp"
 
+#include <algorithm>
+
 
 std::vector<std::shared_ptr<Sequencer>> SequencerManager::sequencers;
 std::mutex SequencerManager::sequencers_mtx;
@@ -53,6 +55,13 @@ void SequencerManager::Unregister(std::shared_ptr<Sequencer> seq){
             sequencers.end());
     }
     on_sequencer_list_changed();
+}
+
+bool SequencerManager::IsRegistered(std::shared_ptr<Sequencer> seq){
+    {
+        std::lock_guard lock(sequencers_mtx);
+        return std::find(sequencers.begin(), sequencers.end(), seq) != sequencers.end();
+    }
 }
 
 void SequencerManager::Clear(){

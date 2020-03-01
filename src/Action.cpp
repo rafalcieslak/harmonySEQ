@@ -23,6 +23,7 @@
 #include "Files.hpp"
 #include "Engine.hpp"
 #include "NoteSequencer.hpp"
+#include "SequencerManager.hpp"
 #include "Sequencer.hpp"
 
 extern Engine* engine;
@@ -33,12 +34,19 @@ Action::Action(ActionTypes t, int a1, int a2){
     type = t;
     args[1] = a1;
     args[2] = a2;
-}
 
-Action::Action(const Action& orig){
+    seq_list_changed_conn = SequencerManager::on_sequencer_list_changed.connect(std::bind(&Action::OnSeqListChanged, this));
 }
 
 Action::~Action(){
+    seq_list_changed_conn.disconnect();
+}
+
+void Action::CopyInto(Action& a) const{
+    a.type = type;
+    a.args = args;
+    chord.CopyInto(a.chord);
+    a.target_seq = target_seq;
 }
 
 void Action::Trigger(int data){
@@ -187,4 +195,16 @@ Glib::ustring Action::GetSeqName(int h){
     else
         sprintf(temp,_("%s"),seq->GetName().c_str());
     return temp;
+}
+
+void Action::OnSeqListChanged(){
+    /* TODO: We would prefer a "on_sequencer_unregistered" signal. */
+
+    auto seq = target_seq.lock();
+    if (!seq or !SequencerManager::IsRegistered(seq)){
+        /* Looks like this seq was just removed. Emit a on_changed
+         * signal since our label has just changed, even though action
+         * values did not. */
+        on_changed();
+    }
 }

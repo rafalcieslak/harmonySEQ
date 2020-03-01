@@ -30,6 +30,7 @@
 // TODO: This data structure desperately needs a mutex.
 std::vector<Event *> Events;
 bs2::signal<void()> on_events_list_changed;
+bs2::signal<void(Event::EventTypes, int, int)> on_event_received;
 
 bool event_capturing_mode;
 Event* event_to_capture_to;
@@ -46,12 +47,17 @@ Event::Event(int typ, int a1, int a2){
     arg2 = a2;
 }
 
-
 Event::~Event(){
     if (event_to_capture_to == this) event_to_capture_to = NULL; //if we are being captured to, unset the pointer
     for (unsigned int x = 0; x < actions.size(); x++){
         delete actions[x];
     }
+}
+
+void Event::CopyInto(Event& e) const{
+    e.type = type;
+    e.arg1 = arg1;
+    e.arg2 = arg2;
 }
 
 std::string Event::GetLabel(){
@@ -99,16 +105,8 @@ void Event::Trigger(){
 }
 
 void FindAndProcessEvents(Event::EventTypes ev,int arg1, int arg2){
-    if (event_capturing_mode == true){
-        if (event_to_capture_to != NULL){ //in case the event was deleted, skip to processing the event
-            event_to_capture_to->type = ev;
-            event_to_capture_to->arg1 = arg1;
-            event_to_capture_to->arg2 = arg2;
-            event_to_capture_to->on_changed();
-            event_capturing_mode = 0; //switch the mode off
-            return; //do not process this event
-        }
-    }
+    on_event_received(ev, arg1, arg2);
+
     for (unsigned int x = 0; x < Events.size();x++){
         if (Events[x]==NULL) continue;
         if (Events[x]->type == ev){

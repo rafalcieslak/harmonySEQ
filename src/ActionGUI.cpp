@@ -33,9 +33,6 @@ ActionGUI::ActionGUI()
     set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
     set_modal(true);
 
-    //by defalut default
-    we_are_copying_data_from_parent_action_so_do_not_handle_signals = false;
-
     //window's title
     set_title(_("Action"));
 
@@ -154,83 +151,65 @@ ActionGUI::ActionGUI()
     label_preview.set_line_wrap(true);
     label_preview.set_max_width_chars(30);
 
-    signal_show().connect(std::bind(&ActionGUI::OnShow, this));
-    signal_hide().connect(std::bind(&ActionGUI::OnHide, this));
-
     //Show all children widgets
     show_all_children(1);
 
-
-    chordwidget.Select(&chord);
     chordwidget.SetExpandDetails(1);
     chordwidget.ShowApplyOctave(1);
+    chordwidget.Select(&action.chord);
+    action.chord.on_change.connect(std::bind(&ActionGUI::OnChordChanged, this));
     // TODO: We can get rid of this signal once Actions are polymorphic and we can listen to action's chord events directly.
     chordwidget.on_apply_octave_toggled.connect(std::bind(&ActionGUI::OnApplyOctaveToogled, this, std::placeholders::_1));
-    chord.on_change.connect(std::bind(&ActionGUI::OnChordChanged, this));
 
     SequencerManager::on_sequencer_list_changed.connect(
         [=](){ DeferWorkToUIThread(
             [=](){ UpdateSequencerList(); });});
 
-    //And hide the window at first.
-    shown = 0;
     hide();
-
 }
 
 
 ActionGUI::~ActionGUI(){
 }
 
-void ActionGUI::SwitchTarget(Action* t){
-    target = t;
+void ActionGUI::Edit(const Action& initial_value){
+    initial_value.CopyInto(action);
 
+    SetupTreeModels(); //important that this has to be done before UpdateEverything, otherwise the SetSeqCombos method wouldn't be able to select the sequencer
     UpdateEverything();
+    show();
+    raise();
 }
 
 void ActionGUI::OnOKClicked(){
-    //Updating corresponding row, and hiding the window.
-    if(target) target->on_changed();
     hide();
-
-}
-
-void ActionGUI::OnShow(){
-    shown = 1;
-    SetupTreeModels(); //important that this has to be done befor UpdateEverything, otherwise the SetSeqCombos methou wouldn't be able to select the sequencer
-    UpdateEverything();
-}
-
-void ActionGUI::OnHide(){
-    shown = 0;
+    on_edit_completed(action);
 }
 
 void ActionGUI::UpdateSequencerList(){
-    if (shown){
-        SetupTreeModels();
-        // Maybe this target does not reference a sequencer - but we
-        // don't have to care, since the combo is not visible in such
-        // case.
-        SetSeqCombos(target->target_seq.lock());
-    }
+    SetupTreeModels();
 }
 
 void ActionGUI::UpdateEverything(){
-    if (!target) return;
-    //For following: see we_are_copying_data_from_parent_action_so_do_not_handle_signals delaration.
-    we_are_copying_data_from_parent_action_so_do_not_handle_signals = true;
-
-    SetTypeCombo(target->type);
     UpdateVisibleLines();
 
-    int type = target->type;
-    switch (type){
+    /* Prevent type initialization while we're initializing GUI.*/
+    inhibit_type_initialization = true;
+    for (Gtk::TreeModel::iterator iter = TreeModel_ActionTypes->get_iter("0"); iter; iter++){
+        if ((*iter)[m_columns_action_types.type]==action.type){
+            Types_combo.set_active(iter);
+            break;
+        }
+    }
+    inhibit_type_initialization = false;
+
+    switch (action.type){
         case Action::NONE:
         case Action::SYNC:
             break;
         case Action::SEQ_ON_OFF_TOGGLE:
-            SetSeqCombos(target->target_seq.lock());
-            switch (target->args[2]){
+            SetSeqCombos(action.target_seq.lock());
+            switch (action.args[2]){
                 case 0:
                     on_off_toggle_OFF.set_active(1);
                     break;
@@ -243,28 +222,27 @@ void ActionGUI::UpdateEverything(){
             }
             break;
         case Action::SEQ_CHANGE_PATTERN:
-            SetSeqCombos(target->target_seq.lock());
-            pattern_button.set_value(target->args[2]);
+            SetSeqCombos(action.target_seq.lock());
+            pattern_button.set_value(action.args[2]);
             break;
         case Action::TEMPO_SET:
-            tempo_button.set_value(target->args[1]);
+            tempo_button.set_value(action.args[1]);
             break;
         case Action::SEQ_CHANGE_ONE_NOTE:
-            SetSeqCombos(target->target_seq.lock());
-            notenr_button.set_value(target->args[2]);
-            chordseq_button.set_value(target->args[3]);
+            SetSeqCombos(action.target_seq.lock());
+            notenr_button.set_value(action.args[2]);
+            chordseq_button.set_value(action.args[3]);
             break;
         case Action::SEQ_CHANGE_CHORD:
-            SetSeqCombos(target->target_seq.lock());
-            target->chord.CopyInto(chord);
+            SetSeqCombos(action.target_seq.lock());
             chordwidget.Update();
-            chordwidget.UpdateApplyOctave(target->args[3]);
+            chordwidget.UpdateApplyOctave(action.args[3]);
             break;
         case Action::SEQ_PLAY_ONCE:
-            SetSeqCombos(target->target_seq.lock());
+            SetSeqCombos(action.target_seq.lock());
             break;
         case Action::PLAY_PAUSE:
-            switch(target->args[1]){
+            switch(action.args[1]){
                 case 0:
                     play_OFF.set_active(1);
                     break;
@@ -277,8 +255,8 @@ void ActionGUI::UpdateEverything(){
             }
             break;
         case Action::SEQ_TRANSPOSE_OCTAVE:
-            SetSeqCombos(target->target_seq.lock());
-            octave_spinbutton.set_value(target->args[2]);
+            SetSeqCombos(action.target_seq.lock());
+            octave_spinbutton.set_value(action.args[2]);
             break;
         case Action::TOGGLE_PASS_MIDI:
             break;
@@ -287,16 +265,12 @@ void ActionGUI::UpdateEverything(){
 
 
     }
-    we_are_copying_data_from_parent_action_so_do_not_handle_signals = false;
 
-    label_preview.set_text(target->GetLabel());
+    label_preview.set_text(action.GetLabel());
 }
 
 void ActionGUI::UpdateVisibleLines(){
-    if (!target) return;
-    //if(!Types_combo.get_active()) return; //nothing is selected
-    //Gtk::TreeModel::Row row = *(Types_combo.get_active());
-    int type = target->type;
+    int type = action.type;
 
     //Hide all, and show required ones.
     line_seq.hide();
@@ -360,72 +334,58 @@ void ActionGUI::UpdateVisibleLines(){
 }
 
 void ActionGUI::OnTypeChanged(){
-    if(we_are_copying_data_from_parent_action_so_do_not_handle_signals) return;
     Gtk::TreeModel::Row row = *(Types_combo.get_active());
     int type = row[m_columns_action_types.type];
-    target->type = type;
+    action.type = type;
 
     UpdateVisibleLines();
     InitType(type);
 
-    label_preview.set_text(target->GetLabel());
-    target->on_changed();
-
-    Files::SetFileModified(1);
+    label_preview.set_text(action.GetLabel());
 }
 
 void ActionGUI::SetTargetSeq() {
     auto iter = AllSeqs_combo.get_active();
     if(iter){
-        target->target_seq = (*(iter))[m_col_seqs.seq];
+        action.target_seq = (*(iter))[m_col_seqs.seq];
     }else{
-        target->target_seq.reset();
+        action.target_seq.reset();
     }
 }
 
 void ActionGUI::InitType(int action_type){
+    if(inhibit_type_initialization) return;
 
+    /* Only prepare action values - when we're done, we call UpdateEverything which copies values from action into UI. */
+    /* Don't change selected sequencer reference - it's fine to keep it between type changes. */
+    /* TODO: This should be handled by Action class */
     switch (action_type){
         case Action::NONE:
         case Action::SYNC:
             break;
         case Action::SEQ_ON_OFF_TOGGLE:
-            AllSeqs_combo.set_active(0);
-            SetTargetSeq();
-            on_off_toggle_TOGGLE.set_active(1); //it does not triggler signal_clicked, so we have to set the mode mannually!
-            target->args[2]=2;
+            action.args[2]=2;
             break;
         case Action::SEQ_CHANGE_ONE_NOTE:
-            NoteSeqs_combo.set_active(0);
-            SetTargetSeq();
-            notenr_button.set_value(1.0);
-            target->args[2] = 1;
-            chordseq_button.set_value(0.0);
+            action.args[2] = 1;
+            action.args[3] = 0;
             break;
         case Action::SEQ_CHANGE_CHORD:
-            NoteSeqs_combo.set_active(0);
-            SetTargetSeq();
-            target->args[3] = 0;
-            chordwidget.Update();
+            action.args[3] = 0;
             break;
         case Action::SEQ_CHANGE_PATTERN:
-            AllSeqs_combo.set_active(0);
-            SetTargetSeq();
-            pattern_button.set_value(0.0);
+            action.args[2] = 0;
             break;
         case Action::TEMPO_SET:
-            tempo_button.set_value(DEFAULT_TEMPO);
+            action.args[1] = DEFAULT_TEMPO;
             break;
         case Action::SEQ_PLAY_ONCE:
-            AllSeqs_combo.set_active(0);
             break;
         case Action::PLAY_PAUSE:
-            play_TOGGLE.set_active(1); //it does not triggler signal_clicked, so we have to set the mode mannually!
-            target->args[1]=2;
+            action.args[1] = 2;
             break;
         case Action::SEQ_TRANSPOSE_OCTAVE:
-            NoteSeqs_combo.set_active(0);
-            octave_spinbutton.set_value(1.0);
+            action.args[2] = 1;
             break;
         case Action::TOGGLE_PASS_MIDI:
             break;
@@ -433,153 +393,118 @@ void ActionGUI::InitType(int action_type){
             break;
     }
 
+    UpdateEverything();
 }
 
 
 void ActionGUI::OnTempoChanged(){
-    if(target->type != Action::TEMPO_SET) return;
+    if(action.type != Action::TEMPO_SET) return;
 
-    target->args[1] = tempo_button.get_value();
+    action.args[1] = tempo_button.get_value();
 
-    label_preview.set_text(target->GetLabel());
-    target->on_changed();
-
-    Files::SetFileModified(1);
+    label_preview.set_text(action.GetLabel());
 }
 
 void ActionGUI::OnAllSeqComboChanged(){
-    if(we_are_copying_data_from_parent_action_so_do_not_handle_signals) return;
     if(!AllSeqs_combo.get_active()) return; //empty selection
-    if(target->type != Action::SEQ_ON_OFF_TOGGLE &&
-       target->type != Action::SEQ_PLAY_ONCE &&
-       target->type != Action::SEQ_CHANGE_PATTERN &&
-       target->type != Action::SEQ_TRANSPOSE_OCTAVE)
+    if(action.type != Action::SEQ_ON_OFF_TOGGLE &&
+       action.type != Action::SEQ_PLAY_ONCE &&
+       action.type != Action::SEQ_CHANGE_PATTERN &&
+       action.type != Action::SEQ_TRANSPOSE_OCTAVE)
         return;
 
-    target->target_seq = (*(AllSeqs_combo.get_active()))[m_col_seqs.seq];
+    action.target_seq = (*(AllSeqs_combo.get_active()))[m_col_seqs.seq];
 
-    label_preview.set_text(target->GetLabel());
-    target->on_changed();
-    Files::SetFileModified(1);
-
+    label_preview.set_text(action.GetLabel());
 }
 
 void ActionGUI::OnNoteSeqComboChanged(){
-    if(we_are_copying_data_from_parent_action_so_do_not_handle_signals) return;
     if(!NoteSeqs_combo.get_active()) return; //empty selection
-    if(target->type != Action::SEQ_CHANGE_ONE_NOTE &&
-       target->type != Action::SEQ_CHANGE_CHORD &&
-       target->type != Action::SEQ_TRANSPOSE_OCTAVE)
+    if(action.type != Action::SEQ_CHANGE_ONE_NOTE &&
+       action.type != Action::SEQ_CHANGE_CHORD &&
+       action.type != Action::SEQ_TRANSPOSE_OCTAVE)
         return;
 
-    target->target_seq = (*(NoteSeqs_combo.get_active()))[m_col_seqs.seq];
+    action.target_seq = (*(NoteSeqs_combo.get_active()))[m_col_seqs.seq];
 
-    label_preview.set_text(target->GetLabel());
-    target->on_changed();
-
-    Files::SetFileModified(1);
+    label_preview.set_text(action.GetLabel());
 
 }
 
 void ActionGUI::OnChordChanged(){
-    if(target->type != Action::SEQ_CHANGE_CHORD)
+    if(action.type != Action::SEQ_CHANGE_CHORD)
         return;
 
-    chord.CopyInto(target->chord);
-
-    label_preview.set_text(target->GetLabel());
-    target->on_changed();
-
-    Files::SetFileModified(1);
+    label_preview.set_text(action.GetLabel());
 }
 
 void ActionGUI::OnNoteSeqChanged(){
-    if(target->type != Action::SEQ_CHANGE_ONE_NOTE)
+    if(action.type != Action::SEQ_CHANGE_ONE_NOTE)
         return;
 
-    target->args[3] = chordseq_button.get_value();
+    action.args[3] = chordseq_button.get_value();
 
-    label_preview.set_text(target->GetLabel());
-    target->on_changed();
-
-    Files::SetFileModified(1);
+    label_preview.set_text(action.GetLabel());
 }
 
 void ActionGUI::OnNoteNrChanged(){
-    if(target->type != Action::SEQ_CHANGE_ONE_NOTE)
+    if(action.type != Action::SEQ_CHANGE_ONE_NOTE)
         return;
 
-    target->args[2] = notenr_button.get_value();
+    action.args[2] = notenr_button.get_value();
 
-    label_preview.set_text(target->GetLabel());
-    target->on_changed();
-
-    Files::SetFileModified(1);
+    label_preview.set_text(action.GetLabel());
 }
 
 void ActionGUI::OnOnOffToggleChanged(){
-    if(target->type != Action::SEQ_ON_OFF_TOGGLE)
+    if(action.type != Action::SEQ_ON_OFF_TOGGLE)
         return;
 
-    if(on_off_toggle_OFF.get_active()) target->args[2] = 0;
-    else if(on_off_toggle_ON.get_active()) target->args[2] = 1;
-    else if(on_off_toggle_TOGGLE.get_active()) target->args[2] = 2;
+    if(on_off_toggle_OFF.get_active()) action.args[2] = 0;
+    else if(on_off_toggle_ON.get_active()) action.args[2] = 1;
+    else if(on_off_toggle_TOGGLE.get_active()) action.args[2] = 2;
 
-    label_preview.set_text(target->GetLabel());
-    target->on_changed();
-
-    Files::SetFileModified(1);
+    label_preview.set_text(action.GetLabel());
 }
 
 void ActionGUI::OnPlayOnOffToggleClicked(){
-    if(target->type != Action::PLAY_PAUSE)
+    if(action.type != Action::PLAY_PAUSE)
         return;
 
-    if(play_OFF.get_active()) target->args[1] = 0;
-    else if(play_ON.get_active()) target->args[1] = 1;
-    else if(play_TOGGLE.get_active()) target->args[1] = 2;
+    if(play_OFF.get_active()) action.args[1] = 0;
+    else if(play_ON.get_active()) action.args[1] = 1;
+    else if(play_TOGGLE.get_active()) action.args[1] = 2;
 
-    label_preview.set_text(target->GetLabel());
-    target->on_changed();
-
-    Files::SetFileModified(1);
+    label_preview.set_text(action.GetLabel());
 }
 
 void ActionGUI::OnOctaveChanged(){
-    if(target->type != Action::SEQ_TRANSPOSE_OCTAVE)
+    if(action.type != Action::SEQ_TRANSPOSE_OCTAVE)
         return;
 
-    target->args[2] = octave_spinbutton.get_value();
+    action.args[2] = octave_spinbutton.get_value();
 
-    label_preview.set_text(target->GetLabel());
-    target->on_changed();
-
-    Files::SetFileModified(1);
+    label_preview.set_text(action.GetLabel());
 }
 void ActionGUI::OnPatternChanged(){
-    if(target->type != Action::SEQ_CHANGE_PATTERN)
+    if(action.type != Action::SEQ_CHANGE_PATTERN)
         return;
 
-    target->args[2] = pattern_button.get_value();
+    action.args[2] = pattern_button.get_value();
 
-    label_preview.set_text(target->GetLabel());
-    target->on_changed();
-
-    Files::SetFileModified(1);
+    label_preview.set_text(action.GetLabel());
 }
 
 void ActionGUI::OnApplyOctaveToogled(bool apply){
-    if(target->type != Action::SEQ_CHANGE_CHORD)
+    if(action.type != Action::SEQ_CHANGE_CHORD)
         return;
-    target->args[3] = apply;
+    action.args[3] = apply;
 
-    label_preview.set_text(target->GetLabel());
-    target->on_changed();
-
-    Files::SetFileModified(1);
+    label_preview.set_text(action.GetLabel());
 }
 
 //======================================
+
 void ActionGUI::SetupTreeModels(){
     m_ref_treemodel_allseqs->clear();
     m_ref_treemodel_noteseqs->clear();
@@ -596,35 +521,28 @@ void ActionGUI::SetupTreeModels(){
     }
 }
 
-void ActionGUI::SetTypeCombo(int type){
-    Gtk::TreeModel::iterator iter = TreeModel_ActionTypes->get_iter("0");
-    for (;iter;iter++){
-        if ((*iter)[m_columns_action_types.type]==type){
-            Types_combo.set_active(iter);
-            break;
-        }
-
-    }
-
-}
-
 void ActionGUI::SetSeqCombos(std::shared_ptr<Sequencer> seq){
-    we_are_copying_data_from_parent_action_so_do_not_handle_signals = 1;
     Gtk::TreeModel::iterator iter = m_ref_treemodel_allseqs->get_iter("0");
+    bool found = false;
     for (;iter;iter++){
         std::weak_ptr<Sequencer> s = (*iter)[m_col_seqs.seq];
         if (s.lock() == seq){
             AllSeqs_combo.set_active(iter);
+            found = true;
             break;
         }
     }
+    if(!found) AllSeqs_combo.set_active(0);
+
+    found = false;
     iter = m_ref_treemodel_noteseqs->get_iter("0");
     for (; iter; iter++) {
         std::weak_ptr<Sequencer> s = (*iter)[m_col_seqs.seq];
         if (s.lock() == seq) {
             NoteSeqs_combo.set_active(iter);
+            found = true;
             break;
         }
     }
-    we_are_copying_data_from_parent_action_so_do_not_handle_signals = 0;
+    if(!found) NoteSeqs_combo.set_active(0);
 }

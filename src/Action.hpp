@@ -61,9 +61,10 @@ public:
     /**Constructor.
      *@parram t Action's type
      *@parram a Initial arguments (only two, it's used rarely)*/
-    Action(ActionTypes t, int a1 = 0, int a2 = 0);
-    Action(const Action& orig);
+    Action(ActionTypes t = NONE, int a1 = 0, int a2 = 0);
     virtual ~Action();
+
+    void CopyInto(Action& c) const;
 
     /**Stores the type of this action*/
     int type;
@@ -98,6 +99,13 @@ public:
 
     /** This signal can be emitted by any thread. */
     bs2::signal<void()> on_changed;
+
+    bs2::connection seq_list_changed_conn;
+
+protected:
+    Action(const Action& orig) = delete;
+
+    void OnSeqListChanged();
 };
 
 #endif	/* ACTION_H */

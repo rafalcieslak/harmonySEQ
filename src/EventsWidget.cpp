@@ -283,17 +283,33 @@ void EventsWidget::OnAddActionClicked(){
 }
 
 void EventsWidget::ShowActionGUI(Action* target){
-    action_gui.SwitchTarget(target);
     action_gui.set_transient_for(*dynamic_cast<Gtk::Window*>(get_toplevel()));
-    action_gui.show();
-    action_gui.raise();
+    action_gui.Edit(*target);
+    action_edit_completed_conn.disconnect();
+    action_edit_completed_conn = action_gui.on_edit_completed.connect(
+        [=](const Action& result){
+            /* TODO: In future, when actions are polymorphic, we will
+             * be able to replace the action with possibly an instance
+             * of a different class. */
+            result.CopyInto(*target);
+            target->on_changed();
+            Files::SetFileModified(1);
+        });
 }
 
 void EventsWidget::ShowEventGUI(Event* target){
-    event_gui.SwitchTarget(target);
     event_gui.set_transient_for(*dynamic_cast<Gtk::Window*>(get_toplevel()));
-    event_gui.show();
-    event_gui.raise();
+    event_gui.Edit(*target);
+    event_edit_completed_conn.disconnect();
+    event_edit_completed_conn = event_gui.on_edit_completed.connect(
+        [=](const Event& result){
+            /* TODO: In future, when events are polymorphic, we will
+             * be able to replace the event with possibly an instance
+             * of a different class. */
+            result.CopyInto(*target);
+            target->on_changed();
+            Files::SetFileModified(1);
+        });
 }
 
 void EventsWidget::ColorizeEvent(Gtk::TreeModel::Row row){

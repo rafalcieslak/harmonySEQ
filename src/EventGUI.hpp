@@ -25,7 +25,7 @@ namespace bs2 = boost::signals2;
 
 #include <gtkmm.h>
 
-class Event;
+#include "Event.hpp"
 
 
 class EventGUI :public Gtk::Window{
@@ -33,15 +33,12 @@ public:
     EventGUI();
     virtual ~EventGUI();
 
-
-    void SwitchTarget(Event* t);
+    void Edit(const Event& initial_value);
+    bs2::signal<void(const Event&)> on_edit_completed;
 
 private:
-    /**Flag disabling signal that is called when type is changed, is true during type manual set.*/
-    bool DO_NOT_INIT_TYPE;
-
-    /** The event this GUI currently displays. Note: It can be NULL at times.*/
-    Event *target;
+    /** A helper event for storing internal state and generating preview label text. */
+    Event event;
 
     /** Sets all widgets data to the data from target event. */
     void UpdateEverything();
@@ -50,6 +47,7 @@ private:
     void UpdateVisibleLines();
     /**Sets all default data for given type, used to avoid having events with strange arguments.*/
     void InitType();
+    bool inhibit_type_initialization = false;
 
     bs2::connection capture_connection;
 

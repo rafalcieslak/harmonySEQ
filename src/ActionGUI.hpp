@@ -20,12 +20,16 @@
 #ifndef ACTIONGUI_H
 #define	ACTIONGUI_H
 
+#include <memory>
 #include <gtkmm.h>
 
 #include "Chord.hpp"
 #include "ChordWidget.hpp"
+#include "Action.hpp"
 
-class Action;
+#include <boost/signals2.hpp>
+namespace bs2 = boost::signals2;
+
 class Sequencer;
 
 
@@ -34,27 +38,23 @@ public:
     ActionGUI();
     virtual ~ActionGUI();
 
-    void SwitchTarget(Action* t);
+    void Edit(const Action& initial_value);
+    bs2::signal<void(const Action&)> on_edit_completed;
 
 private:
-    /**Flag disabling reaction on signals, used to set data in widgets without reacting (react only if it was the user that changes the data)*/
-    bool we_are_copying_data_from_parent_action_so_do_not_handle_signals;
-
-    /** An action this GUI currently displays. Note: It can be NULL at times. */
-    Action *target;
+    /** A helper action for storing internal state and generating preview label text. */
+    Action action;
 
     /** Refreshes the GUI according to parent Action */
     void UpdateEverything();
 
-    void OnShow();
-    void OnHide();
-    bool shown;
     void SetupTreeModels();
     /**Hides and shows lines appropieate to the parent action type.*/
     void UpdateVisibleLines();
 
     /**Sets all default data for given type, used to avoid having actions with strange arguments*/
     void InitType(int action_type);
+    bool inhibit_type_initialization = false;
 
     void OnOKClicked();
     void OnTypeChanged();
@@ -62,7 +62,6 @@ private:
     void OnNoteSeqComboChanged();
     void OnTempoChanged();
     void OnVelocityChanged();
-    void SetTypeCombo(int type);
     void SetSeqCombos(std::shared_ptr<Sequencer>);
     void OnChordChanged();
     void OnNoteNrChanged();
@@ -118,7 +117,6 @@ private:
     Gtk::Label label_preview;
     Gtk::HSeparator separator;
 
-    Chord chord;
     ChordWidget chordwidget;
 
     /* Helper method for setting target->target_seq according to selection in ComboBox. */

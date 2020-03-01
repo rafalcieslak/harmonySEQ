@@ -31,16 +31,15 @@ typedef struct _GdkEventKey GdkEventKey;
 class Action;
 class Event;
 
-extern bool event_capturing_mode;
-extern Event* event_to_capture_to;
-
 extern std::vector<Event *> Events;
 
 class Event {
 public:
     Event();
-    Event(int typ, int a1, int a2);
+    Event(int type, int a1, int a2);
     virtual ~Event();
+
+    void CopyInto(Event& c) const;
 
     enum EventTypes{
         NONE = 0,        //no arguments
@@ -81,6 +80,9 @@ bool FindAndProcessEventsKeyPress(GdkEventKey* event);
 
 /**Removes all events, clears whole list*/
 void ClearEvents();
+
+/* Connect to this signal to capture all events. This signal is triggered by events thread.*/
+extern bs2::signal<void(Event::EventTypes, int, int)> on_event_received;
 
 /** Triggered when events list is rebuilt. This is used by some GUI
  * elements to rebuild their list of events. This signal will be moved

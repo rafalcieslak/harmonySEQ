@@ -90,9 +90,11 @@ private:
 
     void ShowActionGUI(Action* target);
     ActionGUI action_gui;
+    bs2::connection action_edit_completed_conn;
 
     void ShowEventGUI(Event* target);
     EventGUI event_gui;
+    bs2::connection event_edit_completed_conn;
 
     void UpdateColors();
 
