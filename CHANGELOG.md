@@ -10,6 +10,7 @@
  - Replaced the build system with CMake.
  - Fixed pattern editor zoom behavior.
  - Removed the not-so-useful ability to customize which colums are displayed on seq list.
+ - Fixed the popup menu on right-clicking a sequencer on the list.
  - Restored tempo flash animation which was disabled before 0.16.
  - Disabled i18n support to allow for cleaning up the build system.
 

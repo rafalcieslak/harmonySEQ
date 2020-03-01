@@ -30,6 +30,21 @@ namespace bs2 = boost::signals2;
 
 class Sequencer;
 
+/* Since some recent GTK version, treeview has this annoying property
+ * that it's internal on_button_press_event returns true on the first
+ * button press over a row - which prevents other handlers from
+ * processing the event. This makes it impossible to implement a
+ * right-click popup menu. To address this issue, we wrap the class
+ * with a custom event handler, that always returns false, allowing
+ * custom handlers to show the popup menu.*/
+class FixedGtkTreeView: public Gtk::TreeView{
+public:
+    virtual bool on_button_press_event(GdkEventButton* event){
+        Gtk::TreeView::on_button_press_event(event);
+        return false;
+    };
+};
+
 class MainWindow: public Gtk::Window{
 
 
@@ -119,7 +134,7 @@ private:
 
     void OnDiodeEvent(DiodeMidiEvent dev);
 
-    Gtk::TreeView wTreeView;
+    FixedGtkTreeView wTreeView;
 
     Glib::RefPtr<Gtk::UIManager> m_refUIManager;
     Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;

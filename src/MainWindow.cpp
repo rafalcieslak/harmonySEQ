@@ -854,9 +854,7 @@ bool MainWindow::OnTreviewButtonPress(GdkEventButton* event){
     Gtk::TreePath path;
     wTreeView.get_path_at_pos(event->x,event->y,path);
     if (!path) return false; // clicked on the empty space
-    if ((event->type == GDK_BUTTON_PRESS or
-        event->type == GDK_2BUTTON_PRESS or
-         event->type == GDK_3BUTTON_PRESS) and event->button == 3){
+    if (event->type == GDK_BUTTON_PRESS and event->button == 3){
         wPopupMenu->show_all();
         wPopupMenu->popup_at_pointer((GdkEvent*)event);
     }
