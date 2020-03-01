@@ -49,9 +49,6 @@ extern SettingsWindow* settingswindow;
 bool CtrlKeyDown;
 bool ShiftKeyDown;
 
-Gtk::TreeModel::iterator row_inserted_by_drag;
-bool seq_list_drag_in_progress;
-
 MainWindow::MainWindow()
 {
     set_name("mainwindow");
@@ -285,15 +282,6 @@ MainWindow::MainWindow()
         col_count = wTreeView.append_column(_("Resolution"), m_columns_sequencers.col_res);
         col_count = wTreeView.append_column_numeric(_("Length"), m_columns_sequencers.col_len,"%g");
         col_count = wTreeView.append_column(_("Chord (notes) / Ctrl. No."), m_columns_sequencers.col_chord);
-
-        //drag and drop enabling
-        wTreeView.enable_model_drag_source();
-        wTreeView.enable_model_drag_dest();
-
-        wTreeView.signal_drag_begin().connect(std::bind(&MainWindow::OnTreeviewDragBegin, this, std::placeholders::_1));
-        wTreeView.signal_drag_end().connect(std::bind(&MainWindow::OnTreeviewDragEnd, this, std::placeholders::_1));
-        TreeModel_sequencers->signal_row_deleted().connect(std::bind(&MainWindow::OnTreeModelRowDeleted, this, std::placeholders::_1));
-        TreeModel_sequencers->signal_row_inserted().connect(std::bind(&MainWindow::OnTreeModelRowInserted, this, std::placeholders::_1, std::placeholders::_2));
 
         //forbids to typesearch
         wTreeView.set_enable_search(0);
@@ -573,10 +561,6 @@ void MainWindow::OnRemoveClicked(){
     std::shared_ptr<Sequencer> seq = GetSelectedSequencer();
     Gtk::TreeModel::iterator iter = GetSelectedSequencerIter();
 
-    //removing the row
-    seq_list_drag_in_progress = 0; //important
-
-
     std::vector<bs2::connection> conns = (*iter)[m_columns_sequencers.col_connections_using_this_row];
     for (auto &conn : conns)
         conn.disconnect();
@@ -590,8 +574,6 @@ void MainWindow::OnRemoveClicked(){
 }
 
 void MainWindow::OnAddNoteSeqClicked(){
-    seq_list_drag_in_progress = 0; //important
-
     int n = SequencerManager::GetCount();
     char temp[20];
     snprintf(temp, 20, _("seq %d"), n+1);
@@ -601,8 +583,6 @@ void MainWindow::OnAddNoteSeqClicked(){
 }
 
 void MainWindow::OnAddControlSeqClicked(){
-    seq_list_drag_in_progress = 0; //important
-
     int n = SequencerManager::GetCount();
     char temp[20];
     snprintf(temp, 20, _("seq %d"), n+1);
@@ -855,83 +835,4 @@ void MainWindow::OnMetronomeToggleClicked(){
 void MainWindow::OnTapTempoClicked(){
     engine->TapTempo();
     tempo_button.set_value(engine->GetTempo());
-}
-
-void MainWindow::OnTreeviewDragBegin(const Glib::RefPtr<Gdk::DragContext>& ct){
-    seq_list_drag_in_progress= 1;
-
-}
-
-void MainWindow::OnTreeviewDragEnd(const Glib::RefPtr<Gdk::DragContext>& ct){
-    seq_list_drag_in_progress = 0;
-
-}
-
-void MainWindow::OnTreeModelRowInserted(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter){
-    if (seq_list_drag_in_progress == 1){
-        //great! drag'n'drop inserted a row!
-        //the point is that it first inserts a row, and then deletes it.
-        row_inserted_by_drag  = iter;
-    }
-}
-
-void MainWindow::OnTreeModelRowDeleted(const Gtk::TreeModel::Path& path){
-    if (seq_list_drag_in_progress == 1){
-        //great! drag'n'drop removed a row!
-
-/* NOTE: Sequencer reordering is disabled while we port handles to sequencer manager.
-
-
-        //if a row was deleted, then we need to update the moved sequencer's row entry.
-        int h = (*row_inserted_by_drag)[m_columns_sequencers.col_handle];
-        seqH(h)->my_row = *row_inserted_by_drag;
-
-        //also, we need to REORDER sequencers in the window
-        //The ID of the moved sequencer
-        int ID = HandleToID(h);
-        //The position it was moved to:
-        int ID2 = 0;
-        //Here we compare the handles assigned to the inserted row, and the 0th row. If equal, it means it was inserted at the beggining, otherwise we cal calculate the position by counting id of above sequencer.
-        if (h != (int)(*TreeModel_sequencers->get_iter("0"))[m_columns_sequencers.col_handle]){
-            //Get the id of sequencer with the row above
-            row_inserted_by_drag--;
-            ID2 = HandleToID ((*row_inserted_by_drag)[m_columns_sequencers.col_handle]);
-            //The point in the line below, is the fact that when we move a sequencer downwards, the position isn't equal to the above's id, as one of the above (the one we moved) was removed.z
-            if (ID > ID2) ID2++;
-        }else{
-            ID2 = 0;
-        }
-
-        //OK, now we know where from and to we moved a seq, we can switch the seq's in vector.
-        if (ID == ID2) return;
-        if (ID < ID2) //moved downwards
-        {
-            Sequencer* temp;
-            temp = seqVector[ID];
-            for (int i = ID; i <= ID2; i++){
-                if (i != ID2) //not the last one, so copy from next
-                    seqVector[i] = seqVector[i+1];
-                else
-                    seqVector[i] = temp;
-            }
-
-        }else{ //moved upwards
-            Sequencer* temp;
-            temp = seqVector[ID];
-            for(int i = ID; i >= ID2; i--){
-                if (i != ID2)//not the last one, so copy from prevoius
-                    seqVector[i] = seqVector[i-1];
-                else
-                    seqVector[i] = temp;
-            }
-
-        }
-
-        //Finally, update seqHandles
-        UpdateSeqHandlesAfterMoving(ID,ID2);
-        RefreshRow(seqH(h)->my_row);
-
-*/
-
-    }
 }

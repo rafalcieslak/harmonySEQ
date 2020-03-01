@@ -78,11 +78,6 @@ private:
     void OnMutedToggleToggled(const Glib::ustring& path);
     void OnNameEdited(const Glib::ustring& path,const Glib::ustring& newtext);
 
-    void OnTreeviewDragBegin(const Glib::RefPtr<Gdk::DragContext>& context);
-    void OnTreeviewDragEnd(const Glib::RefPtr<Gdk::DragContext>& context);
-    void OnTreeModelRowInserted(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter);
-    void OnTreeModelRowDeleted(const Gtk::TreeModel::Path& path);
-
     void OnAddNoteSeqClicked();
     void OnAddControlSeqClicked();
     void OnRemoveClicked();
