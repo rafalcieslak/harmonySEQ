@@ -76,6 +76,8 @@ MainWindow::MainWindow()
     m_refActionGroup->add(Gtk::Action::create("AddCtrlSeq", _("Add control sequencer"),_("Adds a new control seqencer. Control sequencers store a graph of a particular setting, and output it as MIDI control messages.")), std::bind(&MainWindow::OnAddControlSeqClicked, this));
     m_refActionGroup->add(Gtk::Action::create("RemoveSeq", Gtk::Stock::REMOVE, _("Remove"),_("Removes selected sequencer")), std::bind(&MainWindow::OnRemoveClicked, this));
     m_refActionGroup->add(Gtk::Action::create("DuplicateSeq", Gtk::Stock::CONVERT, _("Duplicate"), _("Duplicates selected sequencer")), std::bind(&MainWindow::OnCloneClicked, this));
+    m_refActionGroup->add(Gtk::Action::create("MoveUp", Gtk::Stock::GO_UP, _("Move Up"), _("Moves selected sequencer up")), std::bind(&MainWindow::OnMoveUpClicked, this));
+    m_refActionGroup->add(Gtk::Action::create("MoveDown", Gtk::Stock::GO_DOWN, _("Move Down"), _("Moves selected sequencer down")), std::bind(&MainWindow::OnMoveDownClicked, this));
     m_refActionGroup->add(Gtk::Action::create("About", Gtk::Stock::ABOUT), std::bind(&MainWindow::OnAboutMenuClicked, this));
     m_refActionGroup->add(Gtk::ToggleAction::create("MIDIClock", _("MIDIClock"),_("Toggle MIDI clock and start/stop messages output")));
     m_refActionGroup->add(Gtk::Action::create("Sync", Gtk::Stock::MEDIA_PLAY, _("Sync"),_("Toggle MIDI clock and start/stop messages output")));
@@ -87,6 +89,8 @@ MainWindow::MainWindow()
     m_refActionGroup->add(Gtk::Action::create("seq/PlayOnce", Gtk::Stock::MEDIA_NEXT, _("Play once"), _("Plays the sequence once.")), std::bind(&MainWindow::OnPopupPlayOnce, this));
     m_refActionGroup->add(Gtk::Action::create("seq/Remove", Gtk::Stock::REMOVE, _("Remove"), _("Removes the sequencer.")), std::bind(&MainWindow::OnPopupRemove, this));
     m_refActionGroup->add(Gtk::Action::create("seq/Duplicate", Gtk::Stock::CONVERT, _("Duplicate"), _("Duplicates the sequencer")), std::bind(&MainWindow::OnPopupDuplicate, this));
+    m_refActionGroup->add(Gtk::Action::create("seq/MoveUp", Gtk::Stock::GO_UP, _("Move Up"), _("Moves selected sequencer up.")), std::bind(&MainWindow::OnMoveUpClicked, this));
+    m_refActionGroup->add(Gtk::Action::create("seq/MoveDown", Gtk::Stock::GO_DOWN, _("Move Down"), _("Moves selected sequencer down.")), std::bind(&MainWindow::OnMoveDownClicked, this));
 
     m_refActionGroup->add(Gtk::Action::create("Empty"));
 
@@ -126,6 +130,8 @@ MainWindow::MainWindow()
             "   <toolitem action='AddCtrlSeq'/>"
             "   <toolitem name='RemoveTool' action='RemoveSeq'/>"
             "   <toolitem name='DuplicateTool' action='DuplicateSeq'/>"
+            "   <toolitem name='MoveUp' action='MoveUp'/>"
+            "   <toolitem name='MoveDown' action='MoveDown'/>"
             "   <separator expand='true'/>"
             "   <toolitem name='MIDIClock' action='MIDIClock'/>"
             "   <toolitem name='Sync' action='Sync'/>"
@@ -141,6 +147,8 @@ MainWindow::MainWindow()
             "   <separator/>"
             "   <menuitem action='seq/Duplicate'/>"
             "   <menuitem action='seq/Remove'/>"
+            "   <menuitem action='seq/MoveUp'/>"
+            "   <menuitem action='seq/MoveDown'/>"
             "  </popup>"
             "</ui>";
 
@@ -166,6 +174,10 @@ MainWindow::MainWindow()
     pRemoveTool->set_sensitive(0);
     Gtk::Widget* pDuplicateTool = m_refUIManager->get_widget("/ToolBar/DuplicateTool");
     pDuplicateTool->set_sensitive(0);
+    Gtk::Widget* pMoveUpTool = m_refUIManager->get_widget("/ToolBar/MoveUp");
+    pMoveUpTool->set_sensitive(0);
+    Gtk::Widget* pMoveDownTool = m_refUIManager->get_widget("/ToolBar/MoveDown");
+    pMoveDownTool->set_sensitive(0);
     Gtk::Widget* pPlayPauseTool = m_refUIManager->get_widget("/ToolBar/PlayPauseTool");
     Gtk::ToolItem& PlayPauseTool = dynamic_cast<Gtk::ToolItem&> (*pPlayPauseTool);
     PlayPauseTool.set_is_important(1); // will display text text to the icon
@@ -233,7 +245,7 @@ MainWindow::MainWindow()
     SyncTool.add(sync_button);
     SyncTool.set_homogeneous(0);
     sync_button.set_label(_("Sync"));
-    sync_button.set_tooltip_markup(_("Synchronizes external devices to harmonySEQs output buffer."));
+    sync_button.set_tooltip_markup(_("Synchronizes all sequencers and external devices to harmonySEQs clock."));
     sync_button.signal_clicked().connect(std::bind(&MainWindow::OnSyncClicked, this));
 
     TapTool.remove();
@@ -602,6 +614,51 @@ void MainWindow::OnCloneClicked(){
     AddSequencer(new_seq);
 }
 
+bool MainWindow::MoveSelectedSequencer(int offset, bool dry_run){
+    /* Operating on GtkTreeModel is needlessly difficult, and
+     * documentation is shit. So to keep things simple, we operate on
+     * the list of registered sequencers, and then rebuild the seq
+     * list from scratch. */
+    Gtk::TreeModel::iterator iter = wTreeView.get_selection()->get_selected();
+    if(!iter) return false;
+    std::shared_ptr<Sequencer> current_seq = (*iter)[m_columns_sequencers.col_seq];
+    auto seq_vec = SequencerManager::GetAll();
+
+    auto vec_iter = std::find(seq_vec.begin(), seq_vec.end(), current_seq);
+    if(vec_iter == seq_vec.end()) return false;
+    auto vec_iter2 = vec_iter + offset;
+    if(vec_iter2 < seq_vec.begin() or vec_iter2 >= seq_vec.end()) return false;
+
+    if(!dry_run){
+
+        std::iter_swap(vec_iter, vec_iter2);
+
+        SequencerManager::ReplaceAll(seq_vec);
+        InitTreeData();
+
+        /* Restore selection. */
+        for(iter = TreeModel_sequencers->get_iter("0"); iter; iter++){
+            std::shared_ptr<Sequencer> row_seq = (*iter)[m_columns_sequencers.col_seq];
+            if(row_seq == current_seq){
+                wTreeView.get_selection()->select(iter);
+                break;
+            }
+        }
+
+        /* TODO: Shouldn't this maybe be handled by the sequencer manager? */
+        Files::SetFileModified(1);
+    }
+    return true;
+}
+
+void MainWindow::OnMoveUpClicked(){
+    MoveSelectedSequencer(-1);
+}
+
+void MainWindow::OnMoveDownClicked(){
+    MoveSelectedSequencer(1);
+}
+
 void MainWindow::FlashTempo(){
     auto sc = tempo_button.get_style_context();
 
@@ -649,13 +706,22 @@ bool MainWindow::OnKeyRelease(GdkEventKey* event){
 void MainWindow::OnSelectionChanged(){
     Gtk::TreeModel::iterator iter = wTreeView.get_selection()->get_selected();
     if(iter){
+        std::shared_ptr<Sequencer> seq = (*iter)[m_columns_sequencers.col_seq];
+
         //something is selected
         Gtk::Widget* pRemoveTool = m_refUIManager->get_widget("/ToolBar/RemoveTool");
         pRemoveTool->set_sensitive(1);
         Gtk::Widget* pDuplicateTool = m_refUIManager->get_widget("/ToolBar/DuplicateTool");
         pDuplicateTool->set_sensitive(1);
 
-        std::shared_ptr<Sequencer> seq = (*iter)[m_columns_sequencers.col_seq];
+        /* Udate these tools sensitivity depending on whether it is
+         * possible to move the specified seq in this direction. This
+         * uses the MoveSelectedSequenver function in dry-run mode. */
+        Gtk::Widget* pMoveUpTool = m_refUIManager->get_widget("/ToolBar/MoveUp");
+        pMoveUpTool->set_sensitive(MoveSelectedSequencer(-1, true));
+        Gtk::Widget* pMoveDownTool = m_refUIManager->get_widget("/ToolBar/MoveDown");
+        pMoveDownTool->set_sensitive(MoveSelectedSequencer(1, true));
+
         seqWidget.SelectSeq(seq);
         wFrameNotebook.set_current_page(1);
     } else {
@@ -664,6 +730,11 @@ void MainWindow::OnSelectionChanged(){
         pRemoveTool->set_sensitive(0);
         Gtk::Widget* pDuplicateTool = m_refUIManager->get_widget("/ToolBar/DuplicateTool");
         pDuplicateTool->set_sensitive(0);
+
+        Gtk::Widget* pMoveUpTool = m_refUIManager->get_widget("/ToolBar/MoveUp");
+        pMoveUpTool->set_sensitive(0);
+        Gtk::Widget* pMoveDownTool = m_refUIManager->get_widget("/ToolBar/MoveDown");
+        pMoveDownTool->set_sensitive(0);
 
         seqWidget.SelectNothing();
         wFrameNotebook.set_current_page(0);
@@ -780,18 +851,16 @@ void MainWindow::OnMenuSaveAsClicked(){
 }
 
 bool MainWindow::OnTreviewButtonPress(GdkEventButton* event){
-   Gtk::TreePath path;
-   wTreeView.get_path_at_pos(event->x,event->y,path);
-
-   if (path){
-       // right-clicked on a seq, not on the empty space
-       if( (event->type == GDK_BUTTON_PRESS) && (event->button == 3) )
-           {
-               wPopupMenu->popup(event->button, event->time);
-           }
-   }
-
-  return false;
+    Gtk::TreePath path;
+    wTreeView.get_path_at_pos(event->x,event->y,path);
+    if (!path) return false; // clicked on the empty space
+    if ((event->type == GDK_BUTTON_PRESS or
+        event->type == GDK_2BUTTON_PRESS or
+         event->type == GDK_3BUTTON_PRESS) and event->button == 3){
+        wPopupMenu->show_all();
+        wPopupMenu->popup_at_pointer((GdkEvent*)event);
+    }
+    return false;
 }
 
 void MainWindow::OnPopupRemove(){

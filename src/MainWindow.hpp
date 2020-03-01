@@ -82,6 +82,8 @@ private:
     void OnAddControlSeqClicked();
     void OnRemoveClicked();
     void OnCloneClicked();
+    void OnMoveUpClicked();
+    void OnMoveDownClicked();
     void OnPlayPauseClicked();
     void OnSelectionChanged();
     void OnPassToggleClicked();
@@ -91,6 +93,11 @@ private:
     /**Called when user changed tempo*/
     void TempoChanged();
     void UpdateTempo();
+
+    /* Dry-run is used to test whether move is possible without
+     * actually reorderin synthesizers. This method returns false if
+     * move is not possible, and true otherwise.*/
+    bool MoveSelectedSequencer(int offset, bool dry_run=false);
 
     bool OnTreviewButtonPress(GdkEventButton* event);
 
@@ -114,10 +121,10 @@ private:
 
     Gtk::TreeView wTreeView;
 
-  Glib::RefPtr<Gtk::UIManager> m_refUIManager;
-  Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
+    Glib::RefPtr<Gtk::UIManager> m_refUIManager;
+    Glib::RefPtr<Gtk::ActionGroup> m_refActionGroup;
 
-  Gtk::ScrolledWindow wScrolledWindow;
+    Gtk::ScrolledWindow wScrolledWindow;
 
     Gtk::CheckButton midi_clock_button;
     Gtk::Button sync_button;
