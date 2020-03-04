@@ -1,4 +1,5 @@
 ## harmonyseq 0.17 - UNRELEASED:
+ - Major improvements to harmonySEQ engine architecture, which highly improve stability, and will make maintenance easier in the future.
  - MIDI Clock and Start/Stop messages output support.
  - Added a tempo tap button.
  - HiDPI display support.

@@ -32,6 +32,9 @@ NoteSequencer::NoteSequencer(const NoteSequencer& s)
     s.chord.CopyInto(chord);
     gate_percent = s.gate_percent;
     expand_chord = s.expand_chord;
+
+    chord.on_change.connect(
+        [=](){ on_chord_change(); });
 }
 
 
