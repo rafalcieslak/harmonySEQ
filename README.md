@@ -7,10 +7,6 @@ harmonySEQ operates a number of synchronized sequencers, each with its
 own pattern, repeating looped melodies of different length, duration
 and MIDI channel.
 
-![harmonyseq UI 1](images/screenshot2.png?raw=true)
-![harmonyseq UI 2](images/screenshot3.png?raw=true)
-![harmonyseq UI 3](images/screenshot4.png?raw=true)
-
 Main features include:
 
 - support for complex polyrythms
@@ -25,6 +21,10 @@ Main features include:
 
 As for now harmonySEQ works on Linux only. It uses ALSA (asound)
 library, and GTKmm for graphical interface.
+
+![harmonyseq UI 1](images/screenshot2.png?raw=true)
+![harmonyseq UI 2](images/screenshot3.png?raw=true)
+![harmonyseq UI 3](images/screenshot4.png?raw=true)
 
 No official user documentation exists at the moment, but you can refer
 to UI tooltips - nearly everything has a detailed explaination.
