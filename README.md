@@ -7,7 +7,9 @@ harmonySEQ operates a number of synchronized sequencers, each with its
 own pattern, repeating looped melodies of different length, duration
 and MIDI channel.
 
-![harmonyseq UI](images/screenshot1.png?raw=true)
+![harmonyseq UI 1](images/screenshot2.png?raw=true)
+![harmonyseq UI 2](images/screenshot3.png?raw=true)
+![harmonyseq UI 3](images/screenshot4.png?raw=true)
 
 Main features include:
 
