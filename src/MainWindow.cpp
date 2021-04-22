@@ -21,6 +21,7 @@
 
 #include <functional>
 #include <iostream>
+#include <memory>
 #include <vector>
 
 #include "Configuration.hpp"

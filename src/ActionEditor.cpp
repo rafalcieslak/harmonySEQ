@@ -20,6 +20,7 @@
 #include "ActionEditor.hpp"
 
 #include <functional>
+#include <memory>
 
 #include "Action.hpp"
 #include "Files.hpp"

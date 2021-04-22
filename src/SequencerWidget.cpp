@@ -20,6 +20,7 @@
 #include "SequencerWidget.hpp"
 
 #include <functional>
+#include <memory>
 
 #include "AtomContainer.hpp"
 #include "ControlSequencer.hpp"

@@ -20,6 +20,7 @@
 #include "PatternWidget.hpp"
 
 #include <functional>
+#include <memory>
 #include <set>
 #include <vector>
 

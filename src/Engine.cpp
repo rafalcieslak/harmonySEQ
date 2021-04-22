@@ -21,6 +21,7 @@
 
 #include <iostream>
 #include <map>
+#include <memory>
 #include <utility>
 #include <vector>
 
