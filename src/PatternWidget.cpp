@@ -19,6 +19,7 @@
 
 #include "PatternWidget.hpp"
 
+#include <functional>
 #include <set>
 #include <vector>
 

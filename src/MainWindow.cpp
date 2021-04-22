@@ -19,6 +19,7 @@
 
 #include "MainWindow.hpp"
 
+#include <functional>
 #include <iostream>
 #include <vector>
 

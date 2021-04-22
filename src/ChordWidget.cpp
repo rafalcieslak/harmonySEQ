@@ -19,6 +19,7 @@
 
 #include "ChordWidget.hpp"
 
+#include <functional>
 #include <vector>
 
 #include "Chord.hpp"

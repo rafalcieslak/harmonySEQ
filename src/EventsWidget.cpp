@@ -19,6 +19,7 @@
 
 #include "EventsWidget.hpp"
 
+#include <functional>
 #include <vector>
 
 #include "Action.hpp"

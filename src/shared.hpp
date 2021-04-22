@@ -1,6 +1,7 @@
 #ifndef SHARED_HPP
 #define SHARED_HPP
 
+#include <functional>
 #include <map>
 #include <string>
 #include <functional>

@@ -19,6 +19,8 @@
 
 #include "ActionEditor.hpp"
 
+#include <functional>
+
 #include "Action.hpp"
 #include "Files.hpp"
 #include "NoteSequencer.hpp"

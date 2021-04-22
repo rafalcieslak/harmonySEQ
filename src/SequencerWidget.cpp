@@ -19,6 +19,8 @@
 
 #include "SequencerWidget.hpp"
 
+#include <functional>
+
 #include "AtomContainer.hpp"
 #include "ControlSequencer.hpp"
 #include "Files.hpp"
