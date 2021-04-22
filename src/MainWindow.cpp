@@ -19,6 +19,7 @@
 
 #include "MainWindow.hpp"
 
+#include <algorithm>
 #include <functional>
 #include <iostream>
 #include <memory>

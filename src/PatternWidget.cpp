@@ -19,6 +19,7 @@
 
 #include "PatternWidget.hpp"
 
+#include <algorithm>
 #include <functional>
 #include <memory>
 #include <set>
