@@ -20,8 +20,8 @@
 #ifndef EVENT_H
 #define	EVENT_H
 
-#include <vector>
 #include <string>
+#include <vector>
 
 #include <boost/signals2.hpp>
 namespace bs2 = boost::signals2;

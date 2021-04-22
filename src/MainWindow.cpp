@@ -20,6 +20,7 @@
 #include "MainWindow.hpp"
 
 #include <iostream>
+#include <vector>
 
 #include "Configuration.hpp"
 #include "ControlSequencer.hpp"

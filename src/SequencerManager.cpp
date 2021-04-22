@@ -21,6 +21,7 @@
 #include "SequencerManager.hpp"
 
 #include <algorithm>
+#include <vector>
 
 
 std::vector<std::shared_ptr<Sequencer>> SequencerManager::sequencers;

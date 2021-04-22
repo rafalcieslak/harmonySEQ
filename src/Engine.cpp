@@ -21,6 +21,7 @@
 
 #include <iostream>
 #include <map>
+#include <vector>
 
 #include "AtomContainer.hpp"
 #include "Configuration.hpp"

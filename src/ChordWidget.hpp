@@ -20,6 +20,8 @@
 #ifndef CHORDWIDGET_H
 #define	CHORDWIDGET_H
 
+#include <vector>
+
 #include <gtkmm.h>
 
 #include <boost/signals2.hpp>

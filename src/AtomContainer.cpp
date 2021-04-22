@@ -20,6 +20,7 @@
 #include "AtomContainer.hpp"
 
 #include <algorithm>
+#include <vector>
 
 AtomContainer::AtomContainer(){
 }

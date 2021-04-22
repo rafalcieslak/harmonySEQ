@@ -20,6 +20,7 @@
 #include <map>
 #include <string>
 #include <thread>
+#include <vector>
 
 #include <getopt.h>
 #include <iostream>
