@@ -17,9 +17,9 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <string>
-
 #include "resources.hpp"
+
+#include <string>
 
 Glib::RefPtr< Gdk::Pixbuf > harmonySEQ_logo_48;
 Glib::RefPtr< Gdk::Pixbuf > metronome_icon_24;

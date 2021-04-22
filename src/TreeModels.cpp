@@ -17,10 +17,10 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "TreeModels.hpp"
+
 #include <map>
 #include <string>
-
-#include "TreeModels.hpp"
 
 #include "Action.hpp"
 #include "Event.hpp"
