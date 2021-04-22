@@ -21,6 +21,7 @@
 #include "SequencerManager.hpp"
 
 #include <algorithm>
+#include <mutex>
 #include <vector>
 
 
