@@ -21,6 +21,7 @@
 #include "Chord.hpp"
 
 #include <iostream>
+#include <map>
 
 #include "shared.hpp"
 

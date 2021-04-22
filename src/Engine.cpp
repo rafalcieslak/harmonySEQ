@@ -20,6 +20,7 @@
 #include "Engine.hpp"
 
 #include <iostream>
+#include <map>
 
 #include "AtomContainer.hpp"
 #include "Configuration.hpp"

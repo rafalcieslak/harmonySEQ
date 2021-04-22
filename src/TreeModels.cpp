@@ -17,6 +17,8 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <map>
+
 #include "TreeModels.hpp"
 
 #include "Action.hpp"
