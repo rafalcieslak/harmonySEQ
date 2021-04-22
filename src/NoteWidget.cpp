@@ -20,6 +20,7 @@
 #include "NoteWidget.hpp"
 
 #include <algorithm>
+#include <string>
 
 #include "Chord.hpp"
 

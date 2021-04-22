@@ -20,6 +20,7 @@
 #include "Event.hpp"
 
 #include <iostream>
+#include <string>
 
 #include <gtkmm.h>
 

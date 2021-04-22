@@ -19,6 +19,7 @@
 
 #include <deque>
 #include <mutex>
+#include <string>
 #include <thread>
 
 #include <gtkmm.h>

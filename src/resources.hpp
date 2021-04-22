@@ -20,6 +20,8 @@
 #ifndef RESOURCES_HPP
 #define RESOURCES_HPP
 
+#include <string>
+
 #include <glibmm/ustring.h>
 #include <gdkmm/pixbuf.h>
 

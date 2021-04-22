@@ -22,6 +22,7 @@
 
 #include <iostream>
 #include <map>
+#include <string>
 
 #include "shared.hpp"
 
