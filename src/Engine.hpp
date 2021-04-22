@@ -22,6 +22,7 @@
 #ifndef MIDIDRIVER_H
 #define	MIDIDRIVER_H
 
+#include <atomic>
 #include <deque>
 
 #include <boost/signals2.hpp>
