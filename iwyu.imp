@@ -1,0 +1,10 @@
+[
+  { include: ["@<boost/signals2/.*>", "private", "<boost/signals2.hpp>", "public"] },
+  { include: ["@<boost/smart_ptr/.*>", "private", "<memory>", "public"] },
+  { include: ["@<gtk/.*>", "private", "<gtk/gtk.h>", "public"] },
+  { include: ["@\"gtkmm/.*\"", "private", "\"gtkmm.h\"", "public"] },
+  { include: ["@\"cairomm/.*\"", "private", "\"cairomm/cairomm.h\"", "public"] },
+  { include: ["@\"glibmm/.*\"", "private", "\"glibmm.h\"", "public"] },
+  { include: ["@<alsa/.*>", "private", "<alsa/asoundlib.h>", "public"] },
+  { include: ["@<lo/.*>", "private", "<lo/lo.h>", "public"] },
+]
