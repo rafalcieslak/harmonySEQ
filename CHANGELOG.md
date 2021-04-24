@@ -1,3 +1,7 @@
+## harmonyseq 0.17.1 - (unreleased):
+
+ - Added application metadata and a manpage following advice from Benjamin A. Beasley (#5, #6)
+
 ## harmonyseq 0.17 - (2020-03-04):
  - Major improvements to harmonySEQ engine architecture, which highly improve stability, and will make maintenance easier in the future.
  - MIDI Clock and Start/Stop messages output support.

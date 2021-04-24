@@ -43,10 +43,20 @@ install(
   DESTINATION share/mime/packages/
   )
 
-configure_file(harmonyseq.desktop.in harmonyseq.desktop)
 install(
-  FILES "${PROJECT_BINARY_DIR}/harmonyseq.desktop"
+  FILES "${PROJECT_SOURCE_DIR}/org.cielak.harmonyseq.metainfo.xml"
+  DESTINATION share/metainfo/
+  )
+
+configure_file(org.cielak.harmonyseq.desktop.in org.cielak.harmonyseq.desktop)
+install(
+  FILES "${PROJECT_BINARY_DIR}/org.cielak.harmonyseq.desktop"
   DESTINATION share/applications/
+  )
+
+install(
+  FILES "${PROJECT_SOURCE_DIR}/doc/harmonySEQ.1"
+  DESTINATION share/man/man1/
   )
 
 # Debian package
