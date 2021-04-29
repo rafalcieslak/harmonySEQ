@@ -9,7 +9,7 @@ and MIDI channel.
 
 Main features include:
 
-- support for complex polyrythms
+- support for complex polyrhythms
 - multi-pattern configuration for each sequencer
 - customizable action triggers - exceptionally useful for live
   performances
