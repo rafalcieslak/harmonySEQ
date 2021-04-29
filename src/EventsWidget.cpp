@@ -19,6 +19,9 @@
 
 #include "EventsWidget.hpp"
 
+#include <functional>
+#include <vector>
+
 #include "Action.hpp"
 #include "Event.hpp"
 #include "Files.hpp"

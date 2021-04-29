@@ -21,6 +21,7 @@
 #define	PATTERNWIDGET_H
 
 #include <memory>
+#include <set>
 
 #include <gtkmm.h>
 

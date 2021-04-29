@@ -20,8 +20,8 @@
 #ifndef ACTION_H
 #define	ACTION_H
 
-#include <vector>
 #include <memory>
+#include <vector>
 
 #include "Chord.hpp"
 

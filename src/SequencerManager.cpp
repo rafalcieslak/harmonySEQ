@@ -21,6 +21,8 @@
 #include "SequencerManager.hpp"
 
 #include <algorithm>
+#include <mutex>
+#include <vector>
 
 
 std::vector<std::shared_ptr<Sequencer>> SequencerManager::sequencers;

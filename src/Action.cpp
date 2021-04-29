@@ -19,6 +19,9 @@
 
 #include "Action.hpp"
 
+#include <functional>
+#include <memory>
+
 #include "ControlSequencer.hpp"
 #include "Files.hpp"
 #include "Engine.hpp"

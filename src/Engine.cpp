@@ -19,7 +19,12 @@
 
 #include "Engine.hpp"
 
+#include <algorithm>
 #include <iostream>
+#include <map>
+#include <memory>
+#include <utility>
+#include <vector>
 
 #include "AtomContainer.hpp"
 #include "Configuration.hpp"

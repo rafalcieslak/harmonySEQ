@@ -19,7 +19,11 @@
 
 #include "MainWindow.hpp"
 
+#include <algorithm>
+#include <functional>
 #include <iostream>
+#include <memory>
+#include <vector>
 
 #include "Configuration.hpp"
 #include "ControlSequencer.hpp"

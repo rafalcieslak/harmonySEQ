@@ -22,6 +22,10 @@
 #ifndef MIDIDRIVER_H
 #define	MIDIDRIVER_H
 
+#include <atomic>
+#include <deque>
+#include <map>
+
 #include <boost/signals2.hpp>
 namespace bs2 = boost::signals2;
 

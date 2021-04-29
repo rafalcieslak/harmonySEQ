@@ -19,6 +19,9 @@
 
 #include "TreeModels.hpp"
 
+#include <map>
+#include <string>
+
 #include "Action.hpp"
 #include "Event.hpp"
 #include "shared.hpp"

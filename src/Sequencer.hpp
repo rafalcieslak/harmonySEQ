@@ -21,6 +21,8 @@
 #ifndef SEQUENCER_H
 #define	SEQUENCER_H
 
+#include <vector>
+
 #include <boost/signals2.hpp>
 namespace bs2 = boost::signals2;
 

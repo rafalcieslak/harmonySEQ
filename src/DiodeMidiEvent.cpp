@@ -19,6 +19,8 @@
 
 #include "DiodeMidiEvent.hpp"
 
+#include <memory>
+
 
 DiodeMidiEvent::DiodeMidiEvent(std::weak_ptr<Sequencer> target_, DiodeType type_, double time_, int value_, int color_, int max_res_){
     target = target_;
