@@ -19,6 +19,12 @@
 
 #include "PatternWidget.hpp"
 
+#include <algorithm>
+#include <functional>
+#include <memory>
+#include <set>
+#include <vector>
+
 /* TODO: Replace gettimeofday with more portable GetRealTime which uses Glib. */
 #include <sys/time.h>
 

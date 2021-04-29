@@ -20,6 +20,8 @@
 #include "Event.hpp"
 
 #include <iostream>
+#include <string>
+#include <vector>
 
 #include <gtkmm.h>
 

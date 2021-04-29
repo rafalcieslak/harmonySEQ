@@ -19,6 +19,8 @@
 
 #include "EventEditor.hpp"
 
+#include <functional>
+
 #include "Configuration.hpp"
 #include "Event.hpp"
 #include "Files.hpp"

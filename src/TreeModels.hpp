@@ -20,6 +20,8 @@
 #ifndef TREEMODELS_H
 #define	TREEMODELS_H
 
+#include <vector>
+
 #include <boost/signals2.hpp>
 namespace bs2 = boost::signals2;
 

@@ -19,6 +19,10 @@
 
 #include "ChordWidget.hpp"
 
+#include <functional>
+#include <memory>
+#include <vector>
+
 #include "Chord.hpp"
 #include "Sequencer.hpp"
 #include "TreeModels.hpp"

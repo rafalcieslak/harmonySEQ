@@ -17,8 +17,11 @@
     along with HarmonySEQ.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <chrono>
 #include <deque>
+#include <functional>
 #include <mutex>
+#include <string>
 #include <thread>
 
 #include <gtkmm.h>

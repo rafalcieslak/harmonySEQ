@@ -21,6 +21,7 @@
 #define	ACTIONEDITOR_H
 
 #include <memory>
+
 #include <gtkmm.h>
 
 #include "Chord.hpp"

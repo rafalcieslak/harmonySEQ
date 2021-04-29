@@ -21,6 +21,8 @@
 #ifndef EVENTSWIDGET_H
 #define	EVENTSWIDGET_H
 
+#include <vector>
+
 #include <gtkmm.h>
 
 #include <boost/signals2.hpp>

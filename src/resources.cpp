@@ -19,6 +19,8 @@
 
 #include "resources.hpp"
 
+#include <string>
+
 Glib::RefPtr< Gdk::Pixbuf > harmonySEQ_logo_48;
 Glib::RefPtr< Gdk::Pixbuf > metronome_icon_24;
 Glib::RefPtr< Gdk::Pixbuf > icon_add_note_seq;

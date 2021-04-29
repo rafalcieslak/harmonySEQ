@@ -19,6 +19,9 @@
 
 #include "Sequencer.hpp"
 
+#include <algorithm>
+#include <memory>
+
 #include "AtomContainer.hpp"
 
 

@@ -19,6 +19,8 @@
 #ifndef SEQUENCERWIDGET_H
 #define	SEQUENCERWIDGET_H
 
+#include <vector>
+
 #include <boost/signals2.hpp>
 namespace bs2 = boost::signals2;
 

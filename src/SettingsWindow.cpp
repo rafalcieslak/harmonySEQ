@@ -19,6 +19,8 @@
 
 #include "SettingsWindow.hpp"
 
+#include <functional>
+
 #include "Configuration.hpp"
 #include "shared.hpp"
 

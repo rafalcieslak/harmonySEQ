@@ -22,6 +22,7 @@
 #define	CHORD_H
 
 #include <map>
+#include <string>
 #include <vector>
 
 #include <boost/signals2.hpp>
