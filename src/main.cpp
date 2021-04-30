@@ -25,6 +25,8 @@
 #include <getopt.h>
 #include <iostream>
 
+#include <glibmm/miscutils.h>
+
 #include "Configuration.hpp"
 #include "Files.hpp"
 #include "MainWindow.hpp"
@@ -210,6 +212,11 @@ int main(int argc, char** argv) {
 
     // Initialize GTK
     Gtk::Main gtk_main(argc, argv);
+
+    // For the icon to appear correctly on GNOME/Wayland, this needs to match
+    // the ID used in the AppStream XML and desktop files.
+    // See: https://gitlab.com/inkscape/inkscape/-/issues/539
+    Glib::set_prgname("org.cielak.harmonyseq");
 
     // Initialize the MIDI driver...
     engine = new Engine();

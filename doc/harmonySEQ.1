@@ -1,0 +1,61 @@
+.TH HARMONYSEQ "1" "April 2021" "" "User Commands"
+.SH NAME
+harmonySEQ \- MIDI sequencer designed for live performances
+.SH SYNOPSIS
+.B harmonySEQ
+.RI [ OPTION ...]
+.RI [ FILE ]
+.SH DESCRIPTION
+A MIDI software sequencer designed for live performances and jams.
+.P
+.BR harmonySEQ (1)
+operates a number of synchronized sequencers, each with its own pattern,
+repeating looped melodies of different length, duration and MIDI channel.
+.P
+Main features include:
+.RS +7n
+.IP \(bu 2
+support for complex polyrhythms
+.IP \(bu 2
+multi-pattern configuration for each sequencer
+.IP \(bu 2
+customizable action triggers \(en exceptionally useful for live performances
+.IP \(bu 2
+chord management system which allows to easily organize melodies that sound
+great together
+.IP \(bu 2
+support for sequencing MIDI control messages
+.IP \(bu 2
+an easy-to-use yet powerful interface, with a rich piano-roll pattern editor
+.RE
+.P
+As for now
+.BR harmonySEQ (1)
+works on Linux only.
+.P
+It uses ALSA
+.RB ( asound )
+library, and
+.B GTKmm
+for graphical interface.
+.P
+No official user documentation exists at the moment, but you can refer to UI
+tooltips \(en nearly everything has a detailed explanation.
+.P
+More information can be found on the project\(cqs
+.UR https://harmonyseq.wordpress.com
+website
+.UE .
+.SH OPTIONS
+.TP
+.B \-d, \-\-debug
+enters debug mode, prints lots of debug messeges
+.TP
+.B \-\-pass\-midi
+passes the midi events through the program by default
+.TP
+.B \-\-help
+prints a help message and exits
+.TP
+.B \-\-version
+prints the program version

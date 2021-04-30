@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.cielak.harmonyseq</id>
+
+  <name>harmonySEQ</name>
+  <summary>MIDI sequencer designed for live performances and jams</summary>
+
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+
+  <description>
+    <p>
+      harmonySEQ is a MIDI sequencer that operates a number of
+      synchronized tracks, each with its own pattern, repeating looped
+      melodies of different length, duration and MIDI channel.
+    </p>
+    <p>Main features include:</p>
+    <ul>
+      <li>support for complex polyrhythms</li>
+      <li>multi-pattern configuration for each sequencer</li>
+      <li>customizable action triggers - exceptionally useful for live performances</li>
+      <li>chord management system which allows to easily organize melodies that sound great together</li>
+      <li>support for sequencing MIDI control messages</li>
+      <li>an easy-to-use yet powerful interface, with a rich piano-roll pattern editor</li>
+    </ul>
+  </description>
+
+  <url type="homepage">https://harmonyseq.wordpress.com/</url>
+  <url type="bugtracker">https://github.com/rafalcieslak/harmonySEQ/issues</url>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>Main interface, sequencer pattern view, and events list</caption>
+      <image>https://harmonyseq.files.wordpress.com/2020/03/screenshot2.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Action edit dialog with CC automation editor in the background</caption>
+      <image>https://harmonyseq.files.wordpress.com/2020/03/screenshot3.png</image>
+    </screenshot>
+  </screenshots>
+
+  <launchable type="desktop-id">org.cielak.harmonyseq.desktop</launchable>
+  <provides>
+    <binary>harmonySEQ</binary>
+  </provides>
+</component>

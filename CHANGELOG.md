@@ -1,5 +1,6 @@
 ## harmonyseq 0.17.1 - (unreleased):
 
+ - Added application metadata and a manpage following advice from Benjamin A. Beasley (#5, #6)
  - Improved standard library header inclusions for better portability (#9)
 
 ## harmonyseq 0.17 - (2020-03-04):
